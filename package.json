@@ -1,6 +1,7 @@
 {
   "name": "hangul-next-app",
   "version": "0.1.0",
+  "proxy": "http://103.136.36.27:7860",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,8 +12,11 @@
   "dependencies": {
     "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "http-proxy-middleware": "^2.0.4",
     "install": "^0.13.0",
     "next": "12.1.4",
+    "next-http-proxy-middleware": "^1.2.4",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-toastify": "^8.2.0",

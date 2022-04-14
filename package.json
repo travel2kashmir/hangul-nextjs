@@ -1,7 +1,6 @@
 {
   "name": "hangul-next-app",
   "version": "0.1.0",
-  "proxy": "http://103.136.36.27:7860",
   "private": true,
   "scripts": {
     "dev": "next dev",

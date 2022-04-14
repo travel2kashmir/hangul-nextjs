@@ -3,6 +3,7 @@ import Axios from "axios";
 import bcrypt from 'bcryptjs';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/router'
 
 function Signin() {
 
@@ -12,23 +13,27 @@ function Signin() {
     "password": ''
   });
 
+   /** Router for Redirection **/
+  const router = useRouter();
+
   /** Storing Sign in data in Local Storage **/
-  const LocalSignin=({signinDetails}) =>
-    {
-        localStorage.setItem('Signin Details',JSON.stringify(signinDetails))
-    }
+  const LocalSignin=(whoIsLogged) =>
+    {   
+        localStorage.setItem('Signin Details',JSON.stringify(whoIsLogged))
+       }
+
 
   /** Sign In Submit Function **/
   const submitSignIn = async () => {
     var item = {
       "user_email": signinDetails.email,
     }
-    const response = await fetch('/api/signin/user', {
-    method :'POST',
-    body : JSON.stringify({item}),
-    headers: { 'Content-Type': 'application/json' }})
+
+    /** API POST call to send Sign Details **/
+    Axios.post('/api/signin/user', item, { headers: { 'content-type': 'application/json' } })
       .then(
         async response => {
+          /** Password Encryption **/
           const salt = response.data.salt
           const EncryptedPass = await bcrypt.hash(signinDetails.password, salt)
           if
@@ -49,7 +54,8 @@ function Signin() {
               "email": signinDetails?.email,
               "password": response.data?.user_password
             }
-            Signin(whoIsLogged)
+           LocalSignin(whoIsLogged);
+           router.push('/landing')
           }
           else {
             /** Toast emitter for error wrong email password combination  **/
@@ -169,12 +175,14 @@ function Signin() {
                   Lost Password?
                 </a>
               </div>
-              <button
-                type="submit" onClick={() => {submitSignIn();LocalSignin({signinDetails});}}
+              
+            <button
+                type="submit" onClick={() => {submitSignIn();}}
                 className="font-semibold text-white bg-cyan-600 
               hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
               rounded-lg text-base px-5 py-2 w-full sm:w-auto text-center"
               >
+                
                 Sign in
               </button>
               <div className="text-base font-semibold text-gray-500">
@@ -187,7 +195,6 @@ function Signin() {
           </div>
         </div>
       </div>
-
       {/** Toast Container **/}
       <ToastContainer position="top-center"
         autoClose={5000}

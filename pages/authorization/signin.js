@@ -4,8 +4,20 @@ import bcrypt from 'bcryptjs';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router'
+import en from './en'
+import fr from './fr'
 
 function Signin() {
+  /** Router for Redirection **/
+  const router = useRouter();
+  const {locale} = router
+  const t = locale === 'en'? en:fr;
+
+  /** Function for Internationalisation **/
+  const changelanguage= (e) => {
+  const locale = e.target.value
+  router.push('/', '/', {locale});
+  };
 
   /** State for Sign In **/
   const [signinDetails, setSigninDetails] = useState({
@@ -13,9 +25,7 @@ function Signin() {
     "password": ''
   });
 
-   /** Router for Redirection **/
-  const router = useRouter();
-
+ 
   /** Storing Sign in data in Local Storage **/
   const LocalSignin=(whoIsLogged) =>
     {   
@@ -95,11 +105,19 @@ function Signin() {
        text-gray-700 whitespace-nowrap">
           Hangul
         </span>
+
         <div className="bg-white shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0">
           <div className="p-4 sm:p-8 lg:p-16 space-y-8">
             <h2 className="text-2xl lg:text-3xl font-bold text-gray-700">
-              Sign in
+             {t.title}
             </h2>
+            <select onChange={changelanguage} defaultValue={"locale"}
+            className="bg-gray-50 border border-gray-300 
+            text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
+             focus:border-cyan-600 block w-full p-2.5 ">
+           <option value="en">EN</option>
+           <option value="fr">Fr</option>
+           </select>
              {/** Signin Form **/}
             <form className="mt-8 space-y-6" action="#">
               <div>
@@ -108,7 +126,7 @@ function Signin() {
                    text-gray-700 
                   block mb-2"
                 >
-                  Your email
+                  {t.email}
                 </label>
                 <input
                   type="email"

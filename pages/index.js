@@ -11,13 +11,17 @@ function Signin() {
   /** Router for Redirection **/
   const router = useRouter();
   const {locale} = router
+  
+  /** State for internationalization **/
+  const [lang,setLang]=useState('en')
   const t = locale === 'en'? en:fr;
+  
 
   /** Function for Internationalisation **/
-  const changelanguage= (e) => {
-  const locale = e.target.value
-  router.push('/', '/', {locale});
-  };
+  const changelanguage= (item) => {
+    const locale = item
+    router.push('/', '/', {locale});
+    };
 
   /** State for Sign In **/
   const [signinDetails, setSigninDetails] = useState({
@@ -115,29 +119,10 @@ function Signin() {
             <h2 className="text-2xl lg:text-3xl capitalize font-bold text-gray-700">
               {t.title}
             </h2>
-           
+
             {/** Signin Form **/}
             <form className="mt-8 space-y-6" action="#">
               <div>
-              <label
-              className="text-base font-semibold
-                   text-gray-700 
-                  block mb-2"
-            >
-              {t.language}
-            </label>
-            <select
-              onChange={changelanguage}
-              defaultValue={"locale"}
-              className="bg-gray-50 border border-gray-300 
-            text-gray-900  sm:text-sm rounded-lg focus:ring-cyan-600
-             focus:border-cyan-600 block w-full mb-2  p-2.5 "
-            >
-              <option value="en">English</option>
-              <option value="fr">French</option>
-            </select>
-            </div>
-            <div>
                 <label
                   className="text-base font-semibold
                    text-gray-700 
@@ -231,9 +216,31 @@ function Signin() {
             </form>
           </div>
         </div>
+        <div className="mx-64 mt-2">
+         {lang === "en" ? (
+            <button
+              className="text-teal-600 text-sm"
+              onClick={() => {
+                setLang("fr");
+                changelanguage("fr");
+              }}
+            >
+              French
+            </button>
+          ) : (
+            <button
+              className="text-teal-600 text-sm"
+              onClick={() => {
+                setLang("en");
+                changelanguage("en");
+              }}
+            >
+              English
+            </button>
+          )}
+        </div>
       </div>
 
-           
       {/** Toast Container **/}
       <ToastContainer
         position="top-center"

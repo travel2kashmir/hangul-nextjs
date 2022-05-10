@@ -61,7 +61,7 @@ function Rooms() {
      /* Delete Room Function*/
      const deleteRooms = () =>{
     const url=`/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${actionRoom?.room_id}`
-     axios.delete(url).then((response)=>{
+    axios.delete(url).then((response)=>{
        toast.success(("Room Deleted Successfully!"), {
          position: "top-center",
          autoClose: 5000,
@@ -287,7 +287,19 @@ function Rooms() {
  </div>
 </div>
 </div>
+ {/* Toast Container */}
+ <ToastContainer position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover />
+
 </div>
+
 )
 }
 export default Rooms

@@ -244,7 +244,7 @@ function Room() {
           {/* Room Description */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-              Room Description
+              {t.room} {t.description}
             </h6>
             <div className="pt-6">
               <div className=" md:px-2 mx-auto w-full">

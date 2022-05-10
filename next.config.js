@@ -1,11 +1,17 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  env:{
-    serverURL:"http://103:136:36:27",
-    port:"7860"
-  }
-}
+
 module.exports = {
+ 
+    env:{
+      serverURL:"http://103:136:36:27",
+      port:"7860"
+    }
+  ,
+  webpack: (config) => {
+    config.resolve.fallback = { crypto: 
+    require.resolve("crypto-browserify")};
+    return config;
+  },
   async rewrites() {
     return [
       {
@@ -15,8 +21,15 @@ module.exports = {
     ]
   },
   i18n:{
-    locales:['en', 'fr'],
+    locales:['en', 'fr', 'ar'],
     defaultLocale:'en',
    
+  },
+  future: {
+    webpack5: true,
+  },
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false };
+    return config;
   }
 }

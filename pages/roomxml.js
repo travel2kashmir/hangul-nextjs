@@ -1,0 +1,122 @@
+import React,{useState, useEffect} from 'react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+import english from "./Languages/en";
+import french from "./Languages/fr";
+import arabic from "./Languages/ar";
+import Link from "next/link";
+const logger = require("../services/logger");
+
+function Roomxml() {
+    /** Fetching language from the local storage **/
+   let locale = localStorage.getItem("Language");
+
+   var t;
+   if (locale === "ar") {
+     t = arabic;
+   }
+   if (locale === "en") {
+     t = english;
+   }
+   if (locale === "fr") {
+     t = french;
+   }
+    const [roomXML, setRoomXML] = useState();
+    let currentProperty=JSON.parse(localStorage.getItem('property'))
+   
+    /** Current Property Services fetched from the local storage **/
+    let services = JSON.parse(localStorage.getItem("allPropertyDetails"));
+  
+    /** Current Property Services fetched from the local storage **/
+    let currentroom = JSON.parse(localStorage.getItem("roomxml"));
+
+    const call = () => {
+        toast.success("Data Sent To Google SucessFully", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    }
+
+    useEffect(() => {
+        const fetchXML = async () => {
+               const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom.room_id}/xml`
+               console.log("url " +url)
+               axios.get(url)
+        .then((response)=>{setRoomXML(response.data);
+        logger.info("url  to fetch roomxml hitted successfully")})
+        .catch((error)=>{logger.error("url to fetch roomxml, failed")});  
+    };
+             
+        fetchXML();
+    },)
+
+    const breaker = { "overflowBreak": true }
+    
+  return (
+    <div id="main-content"
+    className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+         {/* Navbar */}
+         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
+                <ol className="inline-flex items-center space-x-1 md:space-x-2">
+                    <li className="inline-flex items-center">
+                            <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                            <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><Link href="/userlanding" >
+                            {t.home}
+                        </Link></span>
+                    </li>
+                    <li>
+                        <div className="flex items-center">
+                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                          <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">  <Link href="/property-summary">{currentProperty.property_name}</Link>
+                          </span> </div>
+                    </li>
+                    <li>
+                        <div className="flex items-center">
+                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                           <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2"> <Link href="/property-roomsxml" className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t.rooms}</Link>XML
+                           </span></div>
+                    </li>
+                    <li>
+                        <div className="flex items-center">
+                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t.room} XML</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+            <h6 className="text-xl  flex leading-none pl-6 pt-2 pb-6 font-bold text-gray-900 ">
+            {t.room} XML
+            </h6>
+            {/* Property XML Form */}
+            {roomXML===undefined?<p>XML is being fetched</p>:
+            <div className="bg-white flex  flex-wrap  sm:px-1 shadow rounded-lg mx-10 py-4 px-12  xl:p-8  2xl:col-span-2">
+                {roomXML !== undefined &&
+                <div>
+                 <div className="text-center flex justify-end">
+                            <button className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 
+                        focus:ring-cyan-200 font-semibold rounded-lg text-sm px-4 py-2 text-center items-center mr-14"
+                                onClick={call}>{t.sendto} Google</button></div>
+                        {roomXML}  </div>
+                   }
+            </div>}
+            {/* Toast Container */}
+            <ToastContainer position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover />
+        </div>
+    )
+   }
+
+export default Roomxml;

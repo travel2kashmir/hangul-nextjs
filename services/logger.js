@@ -1,41 +1,23 @@
-import {createLogger, format, transports} from 'winston';
-import 'winston-daily-rotate-file';
+import pino from 'pino';
+const levels = {
+  http: 10,
+  debug: 20,
+  info: 30,
+  warn: 40,
+  error: 50,
+  fatal: 60,
+};
 
-const getLogger = (fileName = 'application') =>{
-    const fileLogTransport = new transports.DailyRotateFile({
-        fileName: `logs/${fileName}-%Date%.log`,
-        datePattern:'YYYY-MM-DD',
-        zippedArchive: true,
-        maxSize:'20m',
-        maxFiles: '30d',
-    });
-
-    const consoleTransport = new transports.Console({
-        level:process.env.LOG_Level,
-        handleExceptions: false,
-        json: false,
-        colorize: true,
-        foramt: format.printf((i) => `${i.message}`),
-    });
-    
-
-    const logger = createLogger({
-        level:'info',
-        format: format.combine(
-            format.timestamp({
-                format:'YYYY-MM-DD HH:mm:ss'
-            }),
-            format.errors({ stack: true}),
-            format.splat(),
-            format.printf(
-              ({
-                 level, message, label = process.env.NODE_ENV,timestamp})  =>
-                 `${timestamp} [${label}] ${level}: ${message}`
-            )
-        ),
-        defaultMeta: {service: 'my-app'},
-        transports: [consoleTransport],
-    });
-    return logger
-}
-export default getLogger()
+module.exports = pino(
+  {
+    customLevels: levels, // the defined levels
+    useOnlyCustomLevels: true,
+    level: 'debug',
+    prettyPrint: {
+      colorize: true, // colorizes the log
+      levelFirst: true,
+      translateTime: 'yyyy-dd-mm, h:MM:ss TT',
+    },
+  },
+ 
+)

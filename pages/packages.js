@@ -6,36 +6,44 @@ import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from "next/router";
+import Router from "next/router";
+var t;
+var currentProperty;
 
 function Packages() {
     
- /** Fetching language from the local storage **/
-  let locale = localStorage.getItem("Language");
-
-  var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  }
-  
-    /** Router for Redirection **/
-    const router = useRouter();
+    useEffect(()=>{
+        const firstfun=()=>{
+          if (typeof window !== 'undefined'){
+            var locale = localStorage.getItem("Language"); 
+            if (locale === "ar") {
+            t = arabic;
+            }
+            if (locale === "en") {
+            t = english;
+            }
+            if (locale === "fr") {
+              t=french;
+            }
+            /** Current Property Basic Details fetched from the local storage **/
+            currentProperty=JSON.parse(localStorage.getItem('property'))
+   
+          
+          } 
+        }
+        firstfun();
+        Router.push("/packages");
+      },[]) 
 
     const [deletePackage, setDeletePackage] = useState(0)
     const [actionPackage, setActionPackage] = useState({});
     const [allpackages, setAllPackages] = useState([])
-    let currentProperty=JSON.parse(localStorage.getItem('property'))
+   
     
   useEffect(() => {
     const fetchRooms = async () => {
         try {
-            const url = `/api/package/${currentProperty.property_id}`
+            const url = `/api/package/${currentProperty?.property_id}`
             const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
            setAllPackages(response.data) 
         }
@@ -49,7 +57,7 @@ function Packages() {
     }
     fetchRooms();
 }
-    ,)
+    ,[])
 
      /* Delete Package Function*/
      const deletePackages = () => {
@@ -102,33 +110,34 @@ function Packages() {
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                            <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                             <Link href="/landing" >
-                                 {t.home}
+                               <a>  {t?.home}</a>
                         </Link></span>
                     </li>
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                             <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href="/propertysummary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">Taj Vivanta</Link>
+                            <Link href="/propertysummary">
+                               <a>{currentProperty?.property_name}</a></Link>
                       </span>  </div>
                     </li>
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t.property} {t.packages}</span>
+                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.property} {t?.packages}</span>
                         </div>
                     </li>
                 </ol>
             </nav>
             {/* Header */}
             <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t.property} {t.packages}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t?.property} {t?.packages}</h1>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
-                            <label htmlFor="users-search" className="sr-only">{t.search}</label>
+                            <label htmlFor="users-search" className="sr-only">{t?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={t.searchforpackages}>
+                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={t?.searchforpackages}>
                                 </input>
                             </div>
                         </form>
@@ -150,10 +159,10 @@ function Packages() {
                     </div>
                     <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                            
-                            <button className="w-full text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:auto"> <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>{t.add} {t.package} </button>
+                            <button className="w-full text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:auto"> <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>{t?.add} {t?.package} </button>
                         <a href="#" className="  w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                           {t.export}
+                           {t?.export}
                         </a>
                     </div>
                 </div>
@@ -167,13 +176,13 @@ function Packages() {
                                 <thead className="bg-gray-100">
                                     <tr>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {t.package} {t.name}
+                                            {t?.package} {t?.name}
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {t.status}
+                                            {t?.status}
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {t.action}
+                                            {t?.action}
                                         </th>
                                     </tr>
                                 </thead>
@@ -186,17 +195,17 @@ function Packages() {
                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                 <div className="flex items-center">
                                                     <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
-                                                   {t.active}
+                                                   {t?.active}
                                                 </div>
                                             </td>
                                             <td className="p-4 whitespace-nowrap space-x-2">
                                                     <button type="button" data-modal-toggle="edit-user-modal"
                                                        onClick={() => {
                                                         Package({ item}),
-                                                       router.push("/package");
+                                                       Router.push("/package");
                                                        }}  className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
                                                         <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-                                                        {t.edit} {t.package}
+                                                        {t?.edit} {t?.package}
                                                     </button>
                                                 <button type="button"
                                                     onClick={() => {
@@ -204,7 +213,7 @@ function Packages() {
                                                         setActionPackage(item);
                                                     }} data-modal-toggle="delete-user-modal" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
                                                     <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                                                    {t.Delete} {t.package}
+                                                    {t?.Delete} {t?.package}
                                                 </button>
                                             </td>
                                         </tr>

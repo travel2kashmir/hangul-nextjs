@@ -7,30 +7,38 @@ import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 import { useRouter } from "next/router";
 const logger = require("../services/logger");
+var t;
+var currentUser;
+var currentProperty;
 
 function PropertySummary() {
-   /** Fetching language from the local storage **/
-   let locale = localStorage.getItem("Language");
-
-   var t;
-   if (locale === "ar") {
-     t = arabic;
-   }
-   if (locale === "en") {
-     t = english;
-   }
-   if (locale === "fr") {
-     t = french;
-   }
-
   /** State to store Current Property Details **/
   const [allHotelDetails, setAllHotelDetails] = useState([]);
 
   /** Router for Redirection **/
   const router = useRouter();
-
-  /** Current Property Details fetched from the local storage **/
-  let currentProperty = JSON.parse(localStorage.getItem("property"));
+  useEffect(()=>{
+    const firstfun=()=>{
+      if (typeof window !== 'undefined'){
+        var locale = localStorage.getItem("Language"); 
+        if (locale === "ar") {
+        t = arabic;
+        }
+        if (locale === "en") {
+        t = english;
+        }
+        if (locale === "fr") {
+          t=french;
+        } 
+        currentUser = JSON.parse(localStorage.getItem("Signin Details"));
+        /** Current Property Details fetched from the local storage **/
+       currentProperty = JSON.parse(localStorage.getItem("property"));
+      } 
+    }
+    firstfun();
+    router.push("/propertysummary");
+  },[])
+   
 
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
@@ -43,15 +51,13 @@ function PropertySummary() {
         }s/${currentProperty.property_id}`;  
         axios.get(url)
         .then((response)=>{setAllHotelDetails(response.data);
+        localStorage?.setItem("allPropertyDetails", JSON.stringify(response?.data));  
         logger.info("url  to fetch property details hitted successfully")})
         .catch((error)=>{logger.error("url to fetch property details, failed")});  
-    };
-    fetchHotelDetails();
-  },);
-
-  /**  Storing Current Property all Details to Local Storage **/
-  localStorage.setItem("allPropertyDetails", JSON.stringify(allHotelDetails));
-
+    }
+    fetchHotelDetails(); 
+  },[]);
+  
   return (
     <div>
       
@@ -74,7 +80,7 @@ function PropertySummary() {
                   <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
                 <Link href="/landing">
-                  <a>{t.home}</a>
+                  <a>{t?.home}</a>
                 </Link>
               </div>
             </li>
@@ -101,7 +107,7 @@ function PropertySummary() {
         </nav>
 
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-          {t.propertysummary}
+          {t?.propertysummary}
         </h6>
 
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
@@ -123,7 +129,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/basicdetails">{t.seemore}</Link>
+                  <Link href="/basicdetails"><a>{t?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -140,7 +146,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t.address}
+                  {t?.address}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -150,7 +156,7 @@ function PropertySummary() {
                               rounded-lg p-2"
                 >
                   <Link href="/address">
-                    <a>{t.seemore}</a>
+                    <a>{t?.seemore}</a>
                   </Link>
                 </span>
               </div>
@@ -164,7 +170,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.streetaddress}
+                        {t?.streetaddress}
                       </label>
                       <label
                         className="text-xs font-medium  text-gray-900 block mb-1"
@@ -181,7 +187,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.landmark}
+                        {t?.landmark}
                       </label>
                       <label
                         className="text-xs  font-medium  text-gray-900 block mb-1"
@@ -197,7 +203,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.province}
+                        {t?.province}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -213,7 +219,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.latitude}
+                        {t?.latitude}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -229,7 +235,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.longitude}
+                        {t?.longitude}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -245,7 +251,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.postalcode}
+                        {t?.postalcode}
                       </label>
                       <label
                         className="text-xs font-medium text-gray-900 block mb-1"
@@ -261,7 +267,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.precision}
+                        {t?.precision}
                       </label>
                       <label
                         className="text-xs font-semibold  text-gray-900 block mb-1"
@@ -277,7 +283,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t.countrycode}
+                        {t?.countrycode}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -297,7 +303,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t.contact}
+                  {t?.contact}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -307,7 +313,7 @@ function PropertySummary() {
                               rounded-lg p-2"
                 >
                   {" "}
-                  <Link href="/contact">{t.seemore}</Link>
+                  <Link href="/contact"><a>{t?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -319,12 +325,12 @@ function PropertySummary() {
                       return (
                         <tr className="hover:bg-gray-100" key={idx}>
                           <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
-                              {item.contact_type}{" "}
-                            </td>
+                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                              {item?.contact_type}{" "}
+                            </span>
                           </td>
                           <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
-                            {item.contact_data}{" "}
+                            {item?.contact_data}{" "}
                           </td>
                         </tr>
                       );
@@ -342,7 +348,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t.services}
+                  {t?.services}
                 </h3>
               </div>
               <div className="flex items-center justify-end">
@@ -351,12 +357,12 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/services">{t.seemore}</Link>
+                  <Link href="/services"><a>{t?.seemore}</a></Link>
                 </span>
               </div>
             </div>
             <div className="flex flex-wrap">
-              <tr>
+              <span>
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2 "
@@ -369,9 +375,9 @@ function PropertySummary() {
                 >
                   Swimming Pool
                 </button>
-              </tr>
+              </span>
               <br />
-              <tr>
+              <span>
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -384,9 +390,9 @@ function PropertySummary() {
                 >
                   Pets Allowed
                 </button>
-              </tr>
+              </span>
               <br />
-              <tr>
+              <span>
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -399,9 +405,9 @@ function PropertySummary() {
                 >
                   Wifi
                 </button>
-              </tr>
+              </span>
               <br />
-              <tr>
+              <span>
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -414,9 +420,9 @@ function PropertySummary() {
                 >
                   Spa
                 </button>
-              </tr>
+              </span>
               <br />
-              <tr>
+              <span>
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -429,7 +435,7 @@ function PropertySummary() {
                 >
                   Kitchen Available
                 </button>
-              </tr>
+              </span>
             </div>
           </div>
 
@@ -438,7 +444,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t.reviews}
+                  {t?.reviews}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -447,18 +453,17 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/reviews">{t.seemore}</Link>
+                  <Link href="/reviews"><a>{t?.seemore}</a></Link>
                 </span>
               </div>
             </div>
             {allHotelDetails?.Reviews?.map((item, idx) => (
               <div key={idx}>
                 <div className="flex items-center justify-between mb-2">
-                  <div>
                     <span className="text-sm leading-none font-semibold text-gray-800">
                       {item?.review_author}
                     </span>
-                  </div>
+                  
                   <div className="flex-shrink-0">
                     <div className="flex items-center flex-1 justify-end px-2 text-yellow-400 text-sm font-bold">
                       {[...Array(item?.review_rating)].map(
@@ -500,7 +505,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t.gallery}
+                  {t?.gallery}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -509,7 +514,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/gallery">{t.seemore}</Link>
+                  <Link href="/gallery"><a>{t?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -521,7 +526,7 @@ function PropertySummary() {
                     key={idx}
                   >
                     <img
-                      src={item.image_link}
+                      src={item?.image_link}
                       alt="property_image"
                       height= {170} width={350}
                     />

@@ -6,23 +6,40 @@ import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from "next/router";
+var t;
+var currentProperty;
+var currentroom;
+var room;
+import Router from 'next/Router'
 const logger = require("../services/logger");
 
 function Room() {
-  /** Fetching language from the local storage **/
-  let locale = localStorage.getItem("Language");
 
-  var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  }
+   /** Use Effect to fetch details from the Local Storage **/
+   useEffect(()=>{  
+    const firstfun=()=>{
+        if (typeof window !== 'undefined'){
+          var locale = localStorage.getItem("Language");
+          if (locale === "ar") {
+          t = arabic;
+          }
+          if (locale === "en") {
+          t = english;
+          }
+          if (locale === "fr") {
+            t=french;
+          } 
+/** Current Property Basic Details fetched from the local storage **/
+currentroom =JSON.parse(localStorage.getItem('room'))
+/** Current Property Details fetched from the local storage **/
+currentProperty = JSON.parse(localStorage.getItem("property"));
+/** Current Property Basic Details fetched from the local storage **/
+room =JSON.parse(localStorage.getItem('allPropertyDetails'))
+        } }
+           firstfun(); 
+           Router.push("/room")   
+  },[])
+ 
   const [allRoomDetails, setAllRoomDetails] = useState([])
   const [roomfacilities, setRoomfacilities] = useState({})
   const [roomimages, setRoomimages] = useState({})
@@ -35,19 +52,17 @@ function Room() {
   const [enlargeImage, setEnlargeImage] = useState(0)
   const [actionEnlargeImage, setActionEnlargeImage] = useState({})
 
-  let currentProperty=JSON.parse(localStorage.getItem('property'))
-
-  /** Current Property Services fetched from the local storage **/
-  let currentroom = JSON.parse(localStorage.getItem("room"));
-
+ 
   /* Function for Edit Room Images*/
   const updateImageDetails = () => {
+    console.log("Room Details:" +JSON.stringify(allRoomDetails));
     const final_data = {
       "image_id": actionImage?.image_id,
       "image_title": allRoomDetails.image_title,
       "image_description": allRoomDetails.image_description,
       "image_type": allRoomDetails.image_type
     }
+    console.log("Final Data" +JSON.stringify(final_data))
    const url = '/api/images'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -108,8 +123,7 @@ function Room() {
       })
   }
 
-  /** Router for Redirection **/
-  const router = useRouter();
+ 
 
   /* Function to load Room Details when page loads*/
   useEffect(() => {
@@ -209,27 +223,30 @@ function Room() {
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
            <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-           <Link href="/userlanding" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-               {t.home}
-            </Link>
+         <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
+           <Link href="/landing" >
+              <a> {t?.home}</a>
+            </Link></span>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <Link href="/property-summary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">Taj Vivanta</Link>
+             <span className="text-gray-700 text-sm font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <Link href="/propertysummary" ><a>{room?.property_name}</a></Link></span>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <Link href="/property-rooms" className="text-gray-400 ml-1 md:ml-2 font-medium
-               text-sm  " aria-current="page">{t.propertyrooms}</Link>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium
+               text-sm" aria-current="page">
+              <Link href="/rooms"><a>{t?.propertyrooms}</a></Link></span>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t.edit} {t.room}</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.edit} {t?.room}</span>
             </div>
           </li>
         </ol>
@@ -237,14 +254,14 @@ function Room() {
       {/* Title */}
       <div className=" pt-2 px-4">
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-          {t.edit} {t.room}
+          {t?.edit} {t?.room}
         </h6>
        {/* Room Forms */}
        <div className="w-full grid grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 gap-4">
           {/* Room Description */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-              {t.room} {t.description}
+              {t?.room} {t?.description}
             </h6>
             <div className="pt-6">
               <div className=" md:px-2 mx-auto w-full">
@@ -255,7 +272,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t.room} {t.name}
+                       {t?.room} {t?.name}
                       </label>
                       <input
                         type="text"
@@ -273,7 +290,7 @@ function Room() {
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
-                       {t.room} {t.type}
+                       {t?.room} {t?.type}
                       </label>
                       <select
                         defaultValue={allRoomDetails?.room_type_name}
@@ -294,7 +311,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t.room} {t.description}
+                       {t?.room} {t?.description}
                       </label>
                       <textarea rows="2" columns="50"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -314,7 +331,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.room} {t.capacity}
+                        {t?.room} {t?.capacity}
                       </label>
                       <input
                         type="text"
@@ -334,7 +351,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.maximum} {t.number} {t.of} {t.occupants}
+                        {t?.maximum} {t?.number} {t?.of} {t?.occupants}
                       </label>
                       <input
                         type="text"
@@ -354,7 +371,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.minimum} {t.number} {t.of} {t.occupants}
+                        {t?.minimum} {t?.number} {t?.of} {t?.occupants}
                       </label>
                       <input
                         type="text"
@@ -374,7 +391,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t.maximum} {t.age} {t.of} {t.occupants}
+                       {t?.maximum} {t?.age} {t?.of} {t?.occupants}
                       </label>
                       <input
                         type="text"
@@ -394,7 +411,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t.room} {t.length}
+                       {t?.room} {t?.length}
                       </label>
                       <input
                         type="text" defaultValue={allRoomDetails?.room_length}
@@ -413,7 +430,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t.room} {t.breadth}
+                       {t?.room} {t?.breadth}
                       </label>
                       <input
                         type="text"
@@ -433,7 +450,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.room} {t.height}
+                        {t?.room} {t?.height}
                       </label>
                       <input
                         type="text"
@@ -452,7 +469,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.room} {t.area}
+                        {t?.room} {t?.area}
                       </label>
                       <input
                         type="text"
@@ -467,7 +484,7 @@ function Room() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t.room} {t.volume}
+                       {t?.room} {t?.volume}
                       </label>
                       <input
                         type="text"
@@ -486,7 +503,7 @@ function Room() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center mb-1 ease-linear transition-all duration-150"
                         onClick={submitRoomDescriptionEdit} type="button" >
-                       {t.update}</button>
+                       {t?.update}</button>
                     </div>
                   </div>
                 </div>
@@ -497,7 +514,7 @@ function Room() {
           {/* Room Gallery */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-             {t.room} {t.gallery}
+             {t?.room} {t?.gallery}
             </h6>
             <div className="flex flex-wrap" >
               {allRoomDetails?.room_images?.map((item, index) => {
@@ -532,13 +549,13 @@ function Room() {
       <div className="bg-white shadow rounded-lg p-4 mx-4 sm:p-6 xl:p-8 my-3">
           <div className="mx-0 my-6">
             <h4 className="text-xl sm:text-2xl font-semibold text-gray-900">
-              {t.room} {t.services} </h4>     
+              {t?.room} {t?.services} </h4>     
             <div className="sm:flex">
               <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                 <form className="lg:pr-3" action="#" method="GET">
-                  <label htmlFor="users-search" className="sr-only">{t.search}</label>
+                  <label htmlFor="users-search" className="sr-only">{t?.search}</label>
                   <div className="mt-1 relative lg:w-64 xl:w-96">
-                    <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={t.searchforservices}>
+                    <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={t?.searchforservices}>
                     </input>
                   </div>
                 </form>
@@ -546,7 +563,7 @@ function Room() {
               <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                 <button type="button"  onClick={() => setAdd(1)} className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                   <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                  {t.add} {t.service}
+                  {t?.add} {t?.service}
                 </button>
               </div>
             </div>
@@ -561,16 +578,16 @@ function Room() {
                     <thead className="bg-gray-100">
                     <tr>
                       <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {t.service} {t.name}
+                        {t?.service} {t?.name}
                       </th>
                       <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {t.service} {t.description}
+                        {t?.service} {t?.description}
                       </th>
                       <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {t.status}
+                        {t?.status}
                       </th>
                       <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {t.action}
+                        {t?.action}
                       </th>
                     </tr>
                     </thead>
@@ -591,14 +608,14 @@ function Room() {
                                                         <div className="flex items-center">
                                                             <div className="h-2.5 w-2.5 rounded-full bg-green-400 
                                                             mr-2"></div>
-                                                            {t.active}
+                                                            {t?.active}
                                                         </div>
                                                     </td>
                                                     <td className="p-4 whitespace-nowrap space-x-2">
                                                         <button type="button" 
                                                       className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
                                                             <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                                                            {t.delete} {t.service}
+                                                            {t?.delete} {t?.service}
                                                         </button>
                                                     </td>
                         </tr>
@@ -640,7 +657,7 @@ function Room() {
             <div className="bg-white rounded-lg shadow relative">
               <div className="flex items-start justify-between p-5 border-b rounded-t">
                 <h3 className="text-xl font-semibold">
-                  Edit image
+                  Edit image 
                 </h3>
                 <button type="button"
                   onClick={() => setEditImage(0)}
@@ -700,7 +717,7 @@ function Room() {
                 <button
                   onClick={updateImageDetails}
                   className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  type="submit">Edit image</button>
+                  type="submit">Edit image </button>
               </div>
             </div>
           </div>

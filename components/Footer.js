@@ -1,33 +1,40 @@
-import React from 'react'
-import { useRouter } from "next/router";
+import React, {useEffect} from "react";
 import english from "../pages/Languages/en";
 import french from "../pages/Languages/fr";
 import arabic from "../pages/Languages/ar";
-
-function footer() {
-/** Fetching language from the local storage **/
-let locale = localStorage.getItem("Language");
-
 var t;
- if (locale === "ar") {
-   t = arabic;
- }
- if (locale === "en") {
-   t = english;
- }
- if (locale === "fr") {
-   t = french;
- } 
+
+function Footer() {
+    useEffect(()=>{
+        const firstfun=()=>{
+          if (typeof window !== 'undefined'){
+           
+            var locale = localStorage.getItem("Language");
+            
+            if (locale === "ar") {
+            t = arabic;
+            }
+            if (locale === "en") {
+            t = english;
+            }
+            if (locale === "fr") {
+              t=french;
+            } 
+           
+          } 
+        }
+        firstfun();
+      },[])
 
   return (
     <div  className=" bg-gray-50 px-4 relative overflow-y-auto lg:ml-64">
     <footer className="bg-white md:flex md:items-center md:justify-between shadow rounded-lg p-4 md:p-6 xl:p-8 my-6 ">
     <ul className="flex items-center flex-wrap mb-6 md:mb-0">
-        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t.termsandconditions}</a></li>
-        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t.privacypolicy}</a></li>
-        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t.licensing}</a></li>
-        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t.cookiepolicy}</a></li>
-        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline">{t.contact}</a></li>
+        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t?.termsandconditions}</a></li>
+        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t?.privacypolicy}</a></li>
+        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t?.licensing}</a></li>
+        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{t?.cookiepolicy}</a></li>
+        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline">{t?.contact}</a></li>
     </ul>
     <div className="flex sm:justify-center space-x-6">
         <a href="#" className="text-gray-500 hover:text-gray-900">
@@ -58,7 +65,7 @@ var t;
     </div>
 </footer>
 <p className="text-center text-sm text-gray-500 my-10">
-    &copy; 2022 <a href="" className="hover:underline" target="_blank">Hangul </a> {t.allrightsreserved}. 
+    &copy; 2022 <a href="" className="hover:underline" target="_blank">Hangul </a> {t?.allrightsreserved}. 
 </p>
   
 
@@ -67,4 +74,4 @@ var t;
   )
 }
 
-export default footer
+export default Footer

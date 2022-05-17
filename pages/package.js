@@ -4,38 +4,52 @@ import Link from "next/link";
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
+import Router from "next/router";
+var t;
+var currentProperty;
+var currentPackage;
+var property;
 import { ToastContainer, toast } from 'react-toastify';
 
 function Package() {
- /** Fetching language from the local storage **/
-  let locale = localStorage.getItem("Language");
+    
+    useEffect(()=>{
+        const firstfun=()=>{
+          if (typeof window !== 'undefined'){
+            var locale = localStorage.getItem("Language"); 
+            if (locale === "ar") {
+            t = arabic;
+            }
+            if (locale === "en") {
+            t = english;
+            }
+            if (locale === "fr") {
+              t=french;
+            }
+            /** Current Property Basic Details fetched from the local storage **/
+            currentProperty=JSON.parse(localStorage.getItem('property'))
+   
+            /** Current Property Services fetched from the local storage **/
+             property = JSON.parse(localStorage.getItem("allPropertyDetails"));
+          
+             /** To fetch current Package from Local Storage **/
+            currentPackage=JSON.parse(localStorage.getItem('package'))
+          } 
+        }
+        firstfun();
+        Router.push("/package");
+      },[]) 
 
-  var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  }
     const [allPackageDetails, setAllPackageDetails] = useState([])
     const [allBundleDetails, setAllBundleDetails] = useState([])
-
-     /** To fetch current Property from Local Storage **/
-    let currentProperty=JSON.parse(localStorage.getItem('property'))
-
-    /** To fetch current Package from Local Storage **/
-    let currentPackage=JSON.parse(localStorage.getItem('package'))
 
     useEffect(() => {
       const fetchDetails = async () => {
           try {
-              const url = `/api/package/${currentPackage.package_id}`
+              const url = `/api/package/${currentPackage?.package_id}`
               const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
               setAllPackageDetails(response.data)
-              localStorage.setItem("packageDescription", JSON.stringify(allPackageDetails));
+              localStorage.setItem("packageDescription", JSON.stringify(response.data));
           }
           catch (error) {
               if (error.response) {
@@ -65,7 +79,7 @@ function Package() {
       const fetchRoomBundles = async () => {
           try {
               
-              const url = `${ConfigData.SERVER_URL}/package/bundle/${props.package_id.id}`
+              const url = `/api/package/bundle/${currentPackage.package_id}`
               const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
              setAllBundleDetails(response.data)
           }
@@ -95,9 +109,8 @@ function Package() {
       }
       fetchDetails();
       fetchRoomBundles();
-  },)
+  },[])
 
- 
   return (
     <div id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -108,20 +121,21 @@ function Package() {
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                             <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                             <Link href="/landing" >
-                            {t.home}
+                          <a>{t?.home}</a> 
                         </Link></span>
                     </li>
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                            <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2"><Link href="/propertysummary" >{currentProperty?.property_name}</Link>
+                            <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+                                <Link href="/propertysummary"><a>{property?.property_name}</a></Link>
                             </span> </div>
                     </li>
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href="/packages">Property Packages</Link></span>
+                            <Link href="/packages"><a>Property Packages</a></Link></span>
                         </div>
                     </li>
                     <li>
@@ -133,7 +147,7 @@ function Package() {
                 </ol>
             </nav>
             <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-               {t.package} {t.summary}
+               {t?.package} {t?.summary}
             </h6>
             {/* Body */} 
             <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
@@ -147,8 +161,8 @@ function Package() {
                           <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                             <Link href='packagedescription'
-                               >{t.seemore}</Link></span>
+                             <Link href="/packagedescription"
+                               ><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
                     <p className="text-base font-semibold text-gray-500 capitalize truncate">
@@ -187,14 +201,14 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t.package} {t.rates}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.rates}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
                            <Link href = '/packagerates'
-                                >{t.seemore}</Link></span>
+                                ><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
@@ -203,21 +217,22 @@ function Package() {
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     <tr className="hover:bg-gray-100">
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {t.baserate}</td>
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {t?.baserate}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.base_rate_amount}<span className="ml-1 uppercase"> {allPackageDetails?.base_rate_currency}</span></td>
                                     </tr>
                                     <tr className="hover:bg-gray-100">
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t.taxrate}</td>
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.taxrate}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.tax_rate_amount}<span className="ml-1 uppercase"> {allPackageDetails?.tax_rate_currency}</span></td>
                                     </tr>
                                     <tr className="hover:bg-gray-100">
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {t.other} {t.charges}</td>
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {t?.other} {t?.charges}</span>
                                         </td>
-                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.other_charges_amount}<span className="ml-1 uppercase"> {allPackageDetails?.other_charges_currency}</span></td>
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.other_charges_amount}
+                                        <span className="ml-1 uppercase"> {allPackageDetails?.other_charges_currency}</span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -229,7 +244,7 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4">{t.package} {t.rooms}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4">{t?.package} {t?.rooms}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
@@ -237,7 +252,7 @@ function Package() {
                            rounded-lg p-2"> 
                         <Link href= '/package-services'
                          className="text-sm font-sans underline decoration-cyan-600
-             font-semibold text-cyan-600 p-1">{t.seemore}</Link></span>
+             font-semibold text-cyan-600 p-1"><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
@@ -248,7 +263,7 @@ function Package() {
                                         return (
                                             <tr className="hover:bg-gray-100" key={index}>
                                                 <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                    <td className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">{item.room_name}</td>
+                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">{item?.room_name}</span>
                                                 </td></tr>
                                         )
                                     })}
@@ -264,25 +279,25 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4">{t.elite} {t.membership}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4">{t?.elite} {t?.membership}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2">   
-                            <Link href= '/eliterewards'>{t.seemore}</Link></span>
+                            <Link href= '/eliterewards'><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
-                    {allPackageDetails?.membership?.map((item) => {
+                    {allPackageDetails?.membership?.map((item,idx) => {
                         return (
-                            <>
-                                <p className="text-sm font-semibold capitalize text-gray-70 truncate">
+                            <div key={idx}>
+                                <span className="text-sm font-semibold capitalize text-gray-70 truncate">
                                     {item?.program_name}
-                                </p>
-                                <p className="text-sm capitalize font-semibold text-gray-500 my-2">
+                                </span>
+                                <span className="text-sm capitalize font-semibold text-gray-500 my-2">
                                     {item?.program_level}
-                                </p>
-                            </>
+                                </span>
+                            </div>
                         )
                     })}
                 </div>
@@ -291,31 +306,31 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t.package} {t.miles}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.miles}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                            <Link href='/packagemiles'>{t.seemore}</Link></span>
+                            <Link href='/packagemiles'><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {allPackageDetails?.package_miles?.map((item) => {
+                                    {allPackageDetails?.package_miles?.map((item,idx) => {
                                         return (
                                             <>
-                                                <tr className="hover:bg-gray-100">
+                                                <tr className="hover:bg-gray-100" key={idx}>
                                                     <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                        <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t.number} {t.of} {t.miles}</td>
+                                                        <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.number} {t?.of} {t?.miles}</span>
                                                     </td>
                                                     <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">   {item?.number_of_miles}</td>
                                                 </tr>
-                                                <tr className="hover:bg-gray-100">
+                                                <tr className="hover:bg-gray-100" >
                                                     <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                        <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t.miles} {t.provider}</td>
+                                                        <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.miles} {t?.provider}</span>
                                                     </td>
                                                     <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">  {item?.provider}</td>
                                                 </tr>
@@ -332,30 +347,30 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4">{t.property} {t.credit}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4">{t?.property} {t?.credit}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                            <Link href='/propertycredit'>{t.seemore}</Link></span>
+                            <Link href='/propertycredit'><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {allPackageDetails?.package_property_credit?.map((item) => {
+                                    {allPackageDetails?.package_property_credit?.map((item,idx) => {
                                         return (
-                                            <>
-                                                <tr className="hover:bg-gray-100">
+                                           
+                                                <tr className="hover:bg-gray-100" key={idx}>
                                                     <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                        <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t.credit} {t.amount}</td>
+                                                        <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.credit} {t?.amount}</span>
                                                     </td>
                                                     <td className="p-1 whitespace-wrap text-xs uppercase font-medium text-gray-900">{item.property_credit_amount}
                                                         {''} {item.property_credit_currency}</td>
                                                 </tr>
-                                            </>
+                                            
                                         )
                                     })}
                                 </tbody>

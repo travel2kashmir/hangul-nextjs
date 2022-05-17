@@ -6,23 +6,35 @@ import Link from "next/link";
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
+var t;
+var currentProperty;
+var addroom;
+import Router from 'next/Router'
 const logger = require("../services/logger");
 
 function Addroom() {
-
-  /** Fetching language from the local storage **/
-  let locale = localStorage.getItem("Language");
-
- var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  } 
+ /** Use Effect to fetch details from the Local Storage **/
+ useEffect(()=>{  
+  const firstfun=()=>{
+      if (typeof window !== 'undefined'){
+        var locale = localStorage.getItem("Language");
+        if (locale === "ar") {
+        t = arabic;
+        }
+        if (locale === "en") {
+        t = english;
+        }
+        if (locale === "fr") {
+          t=french;
+        } 
+/** Current Property Details fetched from the local storage **/
+currentProperty = JSON.parse(localStorage.getItem("property"));
+/** Current Property Basic Details fetched from the local storage **/
+addroom =JSON.parse(localStorage.getItem('allPropertyDetails'))
+      } }
+         firstfun(); 
+         Router.push("/addroom")   
+},[])
 
   const [roomtypes, setRoomtypes] = useState({})
   const [image, setImage] = useState({})
@@ -31,7 +43,6 @@ function Addroom() {
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
   const [modified, setModified] = useState({})
-  let currentProperty=JSON.parse(localStorage.getItem('property'))
 
     /** To fetch room types **/
     useEffect(() => {
@@ -51,7 +62,7 @@ function Addroom() {
           }
         fetchRoomtypes();
         fetchServices();
-      },)
+      },[])
     
       /*For Room Description*/
       const [allRoomDes, setAllRoomDes] =
@@ -326,27 +337,31 @@ function Addroom() {
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
            <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-           <Link href="/landing" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-               {t.home}
-            </Link>
+          <span  className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
+           <Link href="/landing">
+              <a> {t?.home}</a>
+            </Link></span>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <Link href="/propertysummary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">Taj Vivanta</Link>
+              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href="/propertysummary"><a>{addroom?.property_name}</a></Link>
+              </span>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <Link href="/rooms" className="text-gray-400 ml-1 md:ml-2 font-medium
-               text-sm  " aria-current="page">{t.propertyrooms}</Link>
+             <span className="text-gray-400 ml-1 md:ml-2 font-medium
+               text-sm  " aria-current="page">
+              <Link href="/rooms"><a>{t?.propertyrooms}</a></Link></span>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t.addnewroom}</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.addnewroom}</span>
             </div>
           </li>
         </ol>
@@ -354,13 +369,13 @@ function Addroom() {
       {/* Title */}
       <div className=" pt-2 px-4">
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-          {t.add} {t.room}
+          {t?.add} {t?.room}
         </h6>
         {/* Room Forms */}
         {/* Room Description */}
         <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
           <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-           {t.room} {t.description}
+           {t?.room} {t?.description}
           </h6>
           <div className="pt-6">
             <div className=" md:px-2 mx-auto w-full">
@@ -371,7 +386,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t.room} {t.name}
+                      {t?.room} {t?.name}
                     </label>
                     <input
                       type="text"
@@ -384,15 +399,15 @@ function Addroom() {
                   <div className="relative w-full mb-3">
                     <label className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password">
-                      {t.room} {t.type}
+                      {t?.room} {t?.type}
                     </label>
                     <select
                       onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                      {roomtypes.length === undefined ? <p>loading vallues</p> :
+                      {roomtypes.length === undefined ? <option value="loading">loading values</option> :
                        <>{roomtypes?.map(i => {
                         return (
-                          <option key={i} value={i.room_type_id}>{i.room_type_name}</option>)
+                          <option key={i?.room_type_id} value={i?.room_type_id}>{i?.room_type_name}</option>)
                       }
                       )}</>}
                     </select>
@@ -404,7 +419,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t.room} {t.description}
+                      {t?.room} {t?.description}
                     </label>
                     <textarea rows="2" columns="50"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -418,7 +433,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t.room} {t.capacity}
+                      {t?.room} {t?.capacity}
                     </label>
                     <input
                       type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -432,7 +447,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t.maximum} {t.number} {t.of} {t.occupants}
+                     {t?.maximum} {t?.number} {t?.of} {t?.occupants}
                     </label>
                     <input
                       type="text"
@@ -447,7 +462,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t.minimum} {t.number} {t.of} {t.occupants}
+                     {t?.minimum} {t?.number} {t?.of} {t?.occupants}
                     </label>
                     <input
                       type="text"
@@ -462,7 +477,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t.minimum} {t.age} {t.of} {t.occupants}
+                     {t?.minimum} {t?.age} {t?.of} {t?.occupants}
                     </label>
                     <input
                       type="text"
@@ -477,7 +492,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t.room} {t.length}
+                     {t?.room} {t?.length}
                     </label>
                     <input
                       type="text"
@@ -491,7 +506,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t.room} {t.breadth}
+                      {t?.room} {t?.breadth}
                     </label>
                     <input
                       type="text"
@@ -506,7 +521,7 @@ function Addroom() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t.room} {t.height}
+                     {t?.room} {t?.height}
                     </label>
                     <input
                       type="text"
@@ -521,7 +536,7 @@ function Addroom() {
                      rounded-lg text-sm px-5 py-2 text-center ml-16
                      items-center mb-1 ease-linear transition-all duration-150"
                       onClick={submitRoomDescription} type="button" >
-                      {t.submit}</button>  
+                      {t?.submit}</button>  
                 </div>
               </div>
             </div>
@@ -562,7 +577,7 @@ function Addroom() {
                             </label>
                             <div className="flex">
                                         <input
-                                            type="file"
+                                            type="file"  accept="image/png, image/gif, image/jpeg, image/jpg"
                                             onChange={e => {
                                                 onChangePhoto(e, 'imageFile');
                                               

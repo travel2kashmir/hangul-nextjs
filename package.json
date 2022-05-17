@@ -27,6 +27,9 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-toastify": "^8.2.0",
+    "redux-persist": "^6.0.0",
+    "xml-formatter": "^2.6.1",
+    "xmldom": "^0.6.0",
     "yarn": "^1.22.18"
   },
   "devDependencies": {

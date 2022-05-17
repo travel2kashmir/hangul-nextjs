@@ -6,29 +6,40 @@ import 'react-toastify/dist/ReactToastify.css';
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
+const logger = require("../services/logger");
+var t;
+var currentProperty;
+var propertyxml;
+var xml;
+var format = require('xml-formatter');
+import Router from 'next/router'
 
 function Propertyxml() {
   const [hotelXML, setHotelXML] = useState();
 
-  /** Fetching language from the local storage **/
-  let locale = localStorage.getItem("Language");
-
-  var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  }
-
-  /** Current Property Details fetched from the local storage **/
-  let currentProperty = JSON.parse(localStorage.getItem("property"));
-
-  /** Current Property Details fetched from the local storage **/
-  let propertyxml = JSON.parse(localStorage.getItem("allPropertyDetails"));
+  /** Use Effect to fetch details from the Local Storage **/
+  useEffect(()=>{  
+    const firstfun=()=>{
+        if (typeof window !== 'undefined'){
+          var locale = localStorage.getItem("Language");
+          if (locale === "ar") {
+          t = arabic;
+          }
+          if (locale === "en") {
+          t = english;
+          }
+          if (locale === "fr") {
+            t=french;
+          } 
+/** Current Property Basic Details fetched from the local storage **/
+propertyxml =JSON.parse(localStorage.getItem('allPropertyDetails'))
+/** Current Property Details fetched from the local storage **/
+currentProperty = JSON.parse(localStorage.getItem("property"));
+        } }
+           firstfun(); 
+           Router.push("/propertyxml")   
+  },[])
+    
 
   const call = () => {
     toast.success("Data Sent To Google SucessFully", {
@@ -50,22 +61,24 @@ function Propertyxml() {
           "-"
         )}/${currentProperty.address_city}/${
           currentProperty.property_category
-        }s/${currentProperty.property_id}/xml`;
+        }s/${currentProperty?.property_id}/xml`;
         const response = await axios.get(url, {
           headers: { "Content-Type": "application/xml; charset=utf-8" },
         });
         setHotelXML(response.data);
+       
       } catch (error) {
         if (error.response) {
           logger.error("XML Fetching Failed");
         } else {
-          logger.error();
+          logger.error("XML Fetching Failed");
         }
       }
     };
     fetchXML();
-  });
-  const breaker = { overflowBreak: true };
+  },[]);
+
+ 
 
   return (
     <div>
@@ -86,10 +99,10 @@ function Propertyxml() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
               <Link
-                href="/userlanding"
+                href="/landing"
                 className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
               >
-                <a>{t.home} </a>
+                <a>{t?.home} </a>
               </Link>
             </li>
             <li>
@@ -132,14 +145,14 @@ function Propertyxml() {
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  {t.property} XML
+                  {t?.property} XML
                 </span>
               </div>
             </li>
           </ol>
         </nav>
         <h6 className="text-xl  flex leading-none pl-6 pt-2 pb-6 font-bold text-gray-900 ">
-          {t.property} XML
+          {t?.property} XML
         </h6>
 
         {/* Property XML Form */}
@@ -152,10 +165,13 @@ function Propertyxml() {
                         focus:ring-cyan-200 font-semibold rounded-lg text-sm px-4 py-2 text-center items-center mr-3"
                   onClick={call}
                 >
-                  {t.sendto} Google
+                  {t?.sendto} Google
                 </button>
               </div>
-              <div>{hotelXML} </div>{" "}
+              <div> 
+              {hotelXML}
+
+            </div>{" "}
             </>
           ) : (
             <h3>XML being fetched.Please wait.</h3>
@@ -178,4 +194,4 @@ function Propertyxml() {
   );
 }
 
-export default Propertyxml
+export default Propertyxml   

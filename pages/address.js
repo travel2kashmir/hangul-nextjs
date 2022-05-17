@@ -2,38 +2,45 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+var t;
+var currentProperty;
+var address;
 import Link from "next/link";
+import Router from 'next/router'
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 
+
 function Address() {
+  useEffect(()=>{  
+    const firstfun=()=>{  
+      if (typeof window !== 'undefined'){ 
+        var locale = localStorage.getItem("Language");
+        if (locale === "ar") {
+        t = arabic;
+        }
+        if (locale === "en") {
+        t = english;
+        }
+        if (locale === "fr") {
+          t=french;   
+        } 
+    /** Current Property Basic Details fetched from the local storage **/
+   address=JSON.parse(localStorage.getItem('allPropertyDetails'))
+    /** Current Property Details fetched from the local storage **/
+    currentProperty = JSON.parse(localStorage.getItem("property"));
+    
+      } 
+    }
+    firstfun();
+   Router.push("/address");
+  },[])
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-
-  /** Fetching language from the local storage **/
-  let locale = localStorage.getItem("Language");
-
- var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  } 
-
-  /** Current Property Details fetched from the local storage **/
-  let currentProperty = JSON.parse(localStorage.getItem("property"));
-
-  /** Current Property Address fetched from the local storage **/
-  let address = JSON.parse(localStorage.getItem("allPropertyDetails"));
-
   /* Edit Address Function */
   const submitAddressEdit = () => {
     const final_data = {
-      address_id: allHotelDetails.address[0].address_id,
+      address_id: address?.address[0]?.address_id,
       address_street_address: allHotelDetails.address_street_address,
       address_longitude: allHotelDetails.address_longitude,
       address_latitude: allHotelDetails.address_latitude,
@@ -90,10 +97,10 @@ function Address() {
               href="/landing"
               className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
             >
-              <a>{t.home}</a>
+              <a>{t?.home}</a>
             </Link>
           </li>
-          <li>
+          <li> 
             <div className="flex items-center">
               <svg
                 className="w-6 h-6 text-gray-400"
@@ -130,7 +137,7 @@ function Address() {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                {t.address}
+                {t?.address}
               </span>
             </div>
           </li>
@@ -140,7 +147,7 @@ function Address() {
       {/* Update Address Form */}
       <div className="bg-white shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl  flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-          {t.address}
+          {t?.address}
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"
@@ -166,12 +173,12 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.streetaddress}
+                        {t?.streetaddress}
                       </label>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        value={item.address_street_address}
+                        defaultValue={item.address_street_address}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -187,12 +194,12 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.landmark}
+                        {t?.landmark}
                       </label>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        value={item.address_landmark}
+                        defaultValue={item.address_landmark}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -208,7 +215,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.city}
+                        {t?.city}
                       </label>
                       <select
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -233,7 +240,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t.province}
+                       {t?.province}
                       </label>
                       <select
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -259,14 +266,14 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.latitude}
+                        {t?.latitude}
                       </label>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900
                      sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600
                       block w-full p-2.5"
-                        value={item.address_latitude}
+                        defaultValue={item.address_latitude}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -282,12 +289,12 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.longitude}
+                        {t?.longitude}
                       </label>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        value={item.address_longitude}
+                        defaultValue={item.address_longitude}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -303,12 +310,12 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.postalcode}
+                        {t?.postalcode}
                       </label>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        value={item.address_zipcode}
+                        defaultValue={item.address_zipcode}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -324,12 +331,12 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.precision}
+                        {t?.precision}
                       </label>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        value={item.address_precision}
+                        defaultValue={item.address_precision}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -345,7 +352,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t.country}
+                        {t?.country}
                       </label>
                       <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
                         <option value="IN">India</option>
@@ -380,7 +387,7 @@ function Address() {
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
                       >
-                       {t.update}
+                       {t?.update}
                       </button>
                     </div>
                   </div>

@@ -3,7 +3,7 @@ import Header from './Header'
 import SideBar from './Sidebar'
 import Footer from './Footer'
 
-const layout=({children}) =>{
+const Layout=({children}) =>{
     if(Component.getLayout){
         return Component.getLayout(
             <Component {...pageProps}/>
@@ -20,4 +20,4 @@ return(
 )
 
 }
-export default layout
+export default Layout

@@ -1,29 +1,37 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Link from "next/link";
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
+var t;
+var currentProperty;
+var reviews;
+import Router from 'next/router'
 
 function Reviews() {
-   /** Fetching language from the local storage **/
-   let locale = localStorage.getItem("Language");
-
-   var t;
-   if (locale === "ar") {
-     t = arabic;
-   }
-   if (locale === "en") {
-     t = english;
-   }
-   if (locale === "fr") {
-     t = french;
-   }
-  /** Current Property Details fetched from the local storage **/
-  let currentProperty = JSON.parse(localStorage.getItem("property"));
-
-  /** Current Property Contacts fetched from the local storage **/
-  let reviews = JSON.parse(localStorage.getItem("allPropertyDetails")); 
-
+  useEffect(()=>{  
+    const firstfun=()=>{  
+      if (typeof window !== 'undefined'){ 
+        var locale = localStorage.getItem("Language");
+        if (locale === "ar") {
+        t = arabic;
+        }
+        if (locale === "en") {
+        t = english;
+        }
+        if (locale === "fr") {
+          t=french;   
+        } 
+    /** Current Property Basic Details fetched from the local storage **/
+   reviews =JSON.parse(localStorage.getItem('allPropertyDetails'))
+    /** Current Property Details fetched from the local storage **/
+    currentProperty = JSON.parse(localStorage.getItem("property"));
+    
+      } 
+    }
+    firstfun();
+   Router.push("/reviews");
+  },[])
   return (
     <div id="main-content"
     className="bg-gray-50 pt-24 relative overflow-y-auto lg:ml-64">
@@ -43,7 +51,7 @@ function Reviews() {
               href="/landing"
               className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
             >
-              <a>{t.home}</a>
+              <a>{t?.home}</a>
             </Link>
           </li>
           <li>
@@ -83,7 +91,7 @@ function Reviews() {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                {t.reviews}
+                {t?.reviews}
               </span>
             </div>
           </li>
@@ -91,7 +99,7 @@ function Reviews() {
       </nav>
        {/* Header */}
        <div>
-     <h1 className="text-xl sm:text-2xl mx-2 font-semibold mb-2 text-gray-900">{t.reviews}</h1>
+     <h1 className="text-xl sm:text-2xl mx-2 font-semibold mb-2 text-gray-900">{t?.reviews}</h1>
         </div>
 
             {/* Form Property Reviews */}

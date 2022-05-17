@@ -8,34 +8,36 @@ import english from "./Languages/en"
 import french from "./Languages/fr"
 import arabic from "./Languages/ar"
 const logger = require("../services/logger");     
-
+var t;
+var currentUser;
 const  Landing=() =>{ 
-
-  let locale = localStorage.getItem("Language");
-
- var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  } 
 
   /** Router for Redirection **/
   const router = useRouter();
 
   /** State Intialisation for storing all Properties of Current User **/
   const [ownerdata, setOwnerdata] = useState([]);
-  let currentUser = JSON.parse(localStorage.getItem("Signin Details"));
-  
  
-  
-         
-   
-   
+  useEffect(()=>{
+    const firstfun=()=>{
+      if (typeof window !== 'undefined'){
+       
+        var locale = localStorage.getItem("Language");
+        
+        if (locale === "ar") {
+        t = arabic;
+        }
+        if (locale === "en") {
+        t = english;
+        }
+        if (locale === "fr") {
+          t=french;
+        } 
+        currentUser = JSON.parse(localStorage.getItem("Signin Details"));    
+      } 
+    }
+    firstfun();
+  },[])
 
   /** Use Effect to fetch all the properties of Current user **/
   useEffect(() => {
@@ -59,7 +61,7 @@ const  Landing=() =>{
    
     fetchProperty();
     
-  });
+  },[]);
 
   /**Function to save Current property to be viewed to Local Storage**/
   const LocalProperty = ({ item }) => {
@@ -90,15 +92,15 @@ const  Landing=() =>{
                 }}
                 type="button"
               >
-               {t.signout}
+               {t?.signout}
               </button>
               <div className="text-center mt-16">
                 <p className="capitalize font-semibold text-3xl font-sans sm:mt-12 mx-12 mt-24 mb-6 text-cyan-500">
-                  {t.welcome} {currentUser.name}
+                  {t?.welcome} {currentUser?.name}
                 </p>
               </div>
               <p className="font-semibold text-lg text-gray-500">
-               {t.List} {t.ofproperties}
+               {t?.List} {t?.ofproperties}
               </p>
               <form className=" space-y-1" action="#">
                 <div className="flex flex-col">
@@ -112,25 +114,25 @@ const  Landing=() =>{
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                               {t.property} {t.name}
+                               {t?.property} {t?.name}
                               </th>
                               <th
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                                {t.property} {t.category}
+                                {t?.property} {t?.category}
                               </th>
                               <th
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                                {t.status}
+                                {t?.status}
                               </th>
                               <th
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                                {t.action}
+                                {t?.action}
                               </th>
                             </tr>
                           </thead>
@@ -139,15 +141,15 @@ const  Landing=() =>{
                               return (
                                 <tr className="hover:bg-gray-100" key={idx}>
                                   <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
-                                    {item.property_name}
+                                    {item?.property_name}
                                   </td>
                                   <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
-                                    {item.property_category}
+                                    {item?.property_category}
                                   </td>
                                   <td className="p-1 whitespace-nowrap text-base font-normal text-gray-900">
                                     <div className="flex items-center">
                                       <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                                      {t.active}
+                                      {t?.active}
                                     </div>
                                   </td>
                                   <td className="p-2 whitespace-nowrap space-x-1">
@@ -161,7 +163,7 @@ const  Landing=() =>{
                                              hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                             text-sm inline-flex items-center px-2 py-1.5 text-center"
                                     >
-                                     {t.view}
+                                     {t?.view}
                                     </button>
                                   </td>
                                 </tr>

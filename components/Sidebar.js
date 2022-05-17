@@ -1,23 +1,31 @@
-import React from "react";
+import React, {useEffect} from "react";
 import english from "../pages/Languages/en";
 import french from "../pages/Languages/fr";
 import arabic from "../pages/Languages/ar";
 import Link from 'next/link'
+var t;
 
 const Sidebar = () => {
- /** Fetching language from the local storage **/
- let locale = localStorage.getItem("Language");
-
- var t;
-  if (locale === "ar") {
-    t = arabic;
-  }
-  if (locale === "en") {
-    t = english;
-  }
-  if (locale === "fr") {
-    t = french;
-  } 
+  useEffect(()=>{
+    const firstfun=()=>{
+      if (typeof window !== 'undefined'){
+       
+        var locale = localStorage.getItem("Language");
+        
+        if (locale === "ar") {
+        t = arabic;
+        }
+        if (locale === "en") {
+        t = english;
+        }
+        if (locale === "fr") {
+          t=french;
+        } 
+       
+      } 
+    }
+    firstfun();
+  },[])
 
   return (
       <div
@@ -54,7 +62,7 @@ const Sidebar = () => {
                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                     <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                   </svg>
-                  <span className="ml-3">{t.dashboard}</span>
+                  <span className="ml-3">{t?.dashboard}</span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -70,7 +78,7 @@ const Sidebar = () => {
                     ></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                   <Link href="/basicdetails"><a> {t.basicdetails}</a></Link>
+                   <Link href="/basicdetails"><a> {t?.basicdetails}</a></Link>
                   </span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -86,7 +94,7 @@ const Sidebar = () => {
                     ></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="/address"><a>{t.address}</a></Link></span>
+                  <Link href="/address"><a>{t?.address}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -98,7 +106,7 @@ const Sidebar = () => {
                     <path d="M21 2H6a2 2 0 0 0-2 2v3H2v2h2v2H2v2h2v2H2v2h2v3a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-8 2.999c1.648 0 3 1.351 3 3A3.012 3.012 0 0 1 13 11c-1.647 0-3-1.353-3-3.001 0-1.649 1.353-3 3-3zM19 18H7v-.75c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18z"></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="/contact">{t.contact}</Link></span>
+                  <Link href="/contact"><a>{t?.contact}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -113,7 +121,7 @@ const Sidebar = () => {
                     <path d="M11.25 21V12.75H3V18.75C3 19.9926 4.00736 21 5.25 21H11.25Z" />
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="/gallery">{t.gallery}</Link></span>
+                  <Link href="/gallery"><a>{t?.gallery}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -131,7 +139,7 @@ const Sidebar = () => {
                     ></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="/reviews">{t.reviews}</Link></span>
+                  <Link href="/reviews"><a>{t?.reviews}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -143,7 +151,7 @@ const Sidebar = () => {
                     <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="/services">{t.services}</Link>
+                  <Link href="/services"><a>{t?.services}</a></Link>
                   </span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -163,7 +171,7 @@ const Sidebar = () => {
                   <span className="ml-3 flex-1 whitespace-nowrap">
                   <Link href="/rooms">
                     <a>
-                    {t.rooms}</a>
+                    {t?.rooms}</a>
                     </Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -181,7 +189,7 @@ const Sidebar = () => {
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
                   <Link href="/packages">
-                    <a>{t.packages}</a></Link>
+                    <a>{t?.packages}</a></Link>
                   </span>
                 </li>
               </ul>
@@ -201,7 +209,7 @@ const Sidebar = () => {
                       ></path>
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                    <Link href="/propertysummary">{t.propertysummary}</Link>
+                    <Link href="/propertysummary"><a>{t?.propertysummary}</a></Link>
                     </span>
                   </li>
                   <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -220,7 +228,7 @@ const Sidebar = () => {
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
                    <Link href="/propertyxml ">
-                    <a>{t.propertyxml}</a></Link>
+                    <a>{t?.propertyxml}</a></Link>
                     </span>
                   </li>
                   <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -239,7 +247,7 @@ const Sidebar = () => {
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
                     <Link href="/roomsxml">
-                    <a>{t.roomxml}</a></Link>
+                    <a>{t?.roomxml}</a></Link>
                     </span>
                   </li>
                 </ul>

@@ -63,7 +63,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         }
         fetchRooms();
     }
-        ,)
+        ,[])
     
      /* Delete Room Function*/
      const deleteRooms = () =>{

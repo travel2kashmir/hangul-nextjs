@@ -13,6 +13,7 @@ import Router from 'next/Router'
 const logger = require("../services/logger");
 
 function Addroom() {
+
  /** Use Effect to fetch details from the Local Storage **/
  useEffect(()=>{  
   const firstfun=()=>{
@@ -30,7 +31,8 @@ function Addroom() {
 /** Current Property Details fetched from the local storage **/
 currentProperty = JSON.parse(localStorage.getItem("property"));
 /** Current Property Basic Details fetched from the local storage **/
-addroom =JSON.parse(localStorage.getItem('allPropertyDetails'))
+addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
+
       } }
          firstfun(); 
          Router.push("/addroom")   
@@ -65,25 +67,13 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'))
       },[])
     
       /*For Room Description*/
-      const [allRoomDes, setAllRoomDes] =
-        useState({
-          room_name: '',
-          room_type_id: '',
-          property_id: currentProperty?.property_id,
-          room_description: '',
-          room_capacity: '',
-          maximum_number_of_occupants: '',
-          minimum_number_of_occupants: '',
-          minimum_age_of_occupants: '',
-          room_length: '',
-          room_width: '',
-          room_height: ''
-        });
+      const [allRoomDes, setAllRoomDes] = useState();
     
       /**  Submit Function for Room Description **/
       function submitRoomDescription(e) {
         e.preventDefault()
-        const finalData = { ...allRoomDes }
+        const finalData = { ...allRoomDes }  
+        alert(JSON.stringify(finalData))
        axios.post('/api/room', JSON.stringify(finalData),
           {
             headers: { 'content-type': 'application/json' }
@@ -391,8 +381,8 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'))
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      onChange={e => setAllRoomDes({ ...allRoomDes, room_name: e.target.value })}
-                    />
+                      onChange={e => setAllRoomDes({ ...allRoomDes, room_name: e.target.value ,property_id:currentProperty?.property_id})}
+       />
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -404,10 +394,10 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'))
                     <select
                       onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                      {roomtypes.length === undefined ? <option value="loading">loading values</option> :
+                      {roomtypes.length === undefined ? <option value="loading">Loading values</option> :
                        <>{roomtypes?.map(i => {
                         return (
-                          <option key={i?.room_type_id} value={i?.room_type_id}>{i?.room_type_name}</option>)
+                          <option key={i.room_type_id} value={i.room_type_id}>{i?.room_type_name}</option>)
                       }
                       )}</>}
                     </select>
@@ -423,7 +413,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'))
                     </label>
                     <textarea rows="2" columns="50"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      onChange={e => setAllRoomDes({ ...allRoomDes, room_description: e.target.value })}
+                      onChange={(e) =>{ setAllRoomDes({ ...allRoomDes, room_description: e.target.value }); } }
                     />
                   </div>
                 </div>
@@ -535,7 +525,8 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'))
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center ml-16
                      items-center mb-1 ease-linear transition-all duration-150"
-                      onClick={submitRoomDescription} type="button" >
+                      onClick={(e)=>{
+                       submitRoomDescription(e)}} type="button" >
                       {t?.submit}</button>  
                 </div>
               </div>

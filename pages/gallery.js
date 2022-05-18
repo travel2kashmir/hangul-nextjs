@@ -261,7 +261,7 @@ function Gallery() {
                             <table>
                                 <tr className="pt-1">
                                     <td >
-                                     <span className="pl-1  text-sm">{item.image_title}</span>
+                                     <span className="pl-1  text-sm">{item?.image_title}</span>
                                       
                                     </td>
                                     <td className="flex justify-end">

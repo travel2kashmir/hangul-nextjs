@@ -39,10 +39,12 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
            firstfun(); 
            Router.push("/room")   
   },[])
+
   const onChangePhoto = (e, i) => {
     setImage({ ...image, imageFile: e.target.files[0] })
 }   
   const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [allRoomRates, setAllRoomRates] = useState([])
   const [roomfacilities, setRoomfacilities] = useState({})
   const [roomimages, setRoomimages] = useState({})
   const [addImage, setAddImage] = useState(0)
@@ -55,7 +57,6 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
   const [add, setAdd] = useState(0)
   const [enlargeImage, setEnlargeImage] = useState(0)
   const [actionEnlargeImage, setActionEnlargeImage] = useState({})
-
  
   /* Function for Edit Room Images*/
   const updateImageDetails = () => {
@@ -126,9 +127,6 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
 
       })
   }
-
- 
-
   /* Function to load Room Details when page loads*/
   useEffect(() => {
     const fetchDetails = async () => {
@@ -245,7 +243,6 @@ const submitAddImage = () => {
 
 const submitImageLink = (props) =>{
   const imagedata = [{
-
     image_id: props,
     room_id: currentroom?.room_id
 }]
@@ -319,6 +316,46 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
         });
       })
   }
+  
+   /* Function for Update Room Rates*/
+   const submitRoomRatesEdit = () => {
+    const final_data = {
+      "room_id": currentroom?.room_id,
+      "baserate_currency": allRoomRates?.baserate_currency,
+      "baserate_amount": allRoomRates?.baserate_amount,
+      "tax_currency":allRoomRates?.tax_currency,
+      "tax_amount": allRoomRates?.tax_amount,
+      "otherfees_currency": allRoomRates?.otherfees_currency,
+      "un_rate_id": allRoomRates?.un_rate_id
+    }
+
+    const url = '/api/unconditional_rates'
+    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Room Rates Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      })
+      .catch((error) => {
+       toast.error("Room Rates Update Error! " , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
+  
   return (
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -771,6 +808,159 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
             </div>
           </div>
       </div>
+
+      {/* Room Rates*/}
+      <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+              {t?.room} {t?.rates} 
+            </h6>
+            <div className="pt-6">
+              <div className=" md:px-2 mx-auto w-full">
+              <div className="flex flex-wrap">
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.baserate} {t?.currency}
+                  </label>
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                        setAllRoomRates({ ...allRoomRates, base_rate_currency: e.target.value })
+                      )
+                    }>
+                    <option value="USD" >USD</option>
+                    <option value="INR">INR</option>
+                    <option value="Euro">Euro</option>
+                  </select>
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.baserate} {t?.amount}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    defaultValue={allRoomDetails?.unconditional_rates?.[0]?.baserate_amount}
+                    onChange={
+                      (e) => (
+                        setAllRoomRates({ ...setAllRoomRates, baserate_amount: e.target.value })
+                      )
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.taxrate} {t?.currency}
+                  </label>
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                        setAllRoomDetails({ ...setAllRoomDetails, tax_rate_currency: e.target.value })
+                      )
+                    }>
+                    <option value="USD" >USD</option>
+                    <option value="INR">INR</option>
+                    <option value="Euro">Euro</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.taxrate} {t?.amount}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    defaultValue={allRoomDetails?.unconditional_rates?.[0]?.tax_amount}
+                    onChange={
+                      (e) => (
+                        setAllRoomRates({ ...setAllRoomRates, tax_amount: e.target.value,un_rate_id:allRoomDetails?.unconditional_rates?.[0]?.un_rate_id })
+                      )
+                    } />
+                </div>
+              </div>
+
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.other} {t?.capacity} {t?.currency}
+                  </label>
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                        setAllRoomDetails({ ...allRoomDetails, other_charges_currency: e.target.value })
+                      )
+                    }>
+                    <option value="USD" >USD</option>
+                    <option value="INR">INR</option>
+                    <option value="Euro">Euro</option>
+                  </select>
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.other} {t?.charges} {t?.amount}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    defaultValue={allRoomDetails?.unconditional_rates?.[0]?.otherfees_amount}
+                    onChange={
+                      (e) => (
+                        setAllRoomDetails({ ...allRoomDetails, otherfees_amount: e.target.value })
+                      )
+                    } />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                </div>
+              </div>
+
+              <div className="w-full lg:w-4/12 px-4">
+                <div className="relative w-full ml-4 mb-3"></div></div>
+              <div className="w-full lg:w-2/12 px-4">
+                <div className="relative w-full ml-4 mb-4">
+                  <button onClick={submitRoomRatesEdit}
+                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:rinbg-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center 
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+                    {t?.update}</button>
+                </div>
+              </div>
+
+            </div>
+              </div>
+            </div>
+          </div>
+
 
        {/* Modal Image Enlarge */}
        <div className={enlargeImage === 1 ? 'block' : 'hidden'}>

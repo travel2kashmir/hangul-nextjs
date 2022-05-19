@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import  Link  from 'next/link';
 import axios from "axios";
-import en from "./Languages/en";
-import fr from "./Languages/fr";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "./Languages/en";

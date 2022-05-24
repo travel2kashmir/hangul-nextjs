@@ -528,7 +528,7 @@ function PropertySummary() {
                     <img
                       src={item?.image_link}
                       alt="property_image"
-                      height= {170} width={350}
+                      style={{width:"400px", height:"180px"}}
                     />
                   </div>
                 );

@@ -37,7 +37,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
          firstfun(); 
          Router.push("/addroom")   
 },[])
-
+  const [allRoomDetails, setAllRoomDetails] = useState([])
   const [roomtypes, setRoomtypes] = useState({})
   const [image, setImage] = useState({})
   const [actionImage, setActionImage] = useState({})
@@ -45,6 +45,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
   const [modified, setModified] = useState({})
+  const [allRoomRates, setAllRoomRates] = useState([])
 
     /** To fetch room types **/
     useEffect(() => {
@@ -73,7 +74,6 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
       function submitRoomDescription(e) {
         e.preventDefault()
         const finalData = { ...allRoomDes }  
-        alert(JSON.stringify(finalData))
        axios.post('/api/room', JSON.stringify(finalData),
           {
             headers: { 'content-type': 'application/json' }
@@ -239,7 +239,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
     
         })
           .catch(error => {
-           toast.error("Some thing went wrong \n " + JSON.stringify(error.response.data), {
+           toast.error("Services Error! " + JSON.stringify(error.response.data), {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -319,10 +319,49 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                })
        
        }
+
+  /* Function for Room Rates*/
+   const submitRoomRates= () => {
+    const final_data = {
+      "room_id": roomId,
+      "baserate_currency": allRoomRates?.base_rate_currency,
+      "baserate_amount": allRoomRates?.baserate_amount,
+      "tax_currency":allRoomRates?.tax_rate_currency,
+      "tax_amount": allRoomRates?.tax_amount,
+      "otherfees_amount": allRoomRates?.otherfees_amount,
+      "otherfees_currency": allRoomRates?.otherfees_currency,
+      "un_rate_id": allRoomRates?.un_rate_id
+    }
+    const url = '/api/room_unconditional_rates'
+    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Room Rates Added Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      })
+      .catch((error) => {
+       toast.error("Room Rates  Error! " , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
   return (
     <div id="main-content"
     className="  bg-gray-50  pt-24 relative overflow-y-auto lg:ml-64">
-        {/* Header */}
+      {/* Header */}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
@@ -535,8 +574,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
         </div>
 
         {/* Room Gallery*/}
-        {roomId.length === 0 ? <></> :
-          <>
+        
             <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
               <div className="mx-4">
                 <div className="sm:flex">
@@ -573,7 +611,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                                                 onChangePhoto(e, 'imageFile');
                                               
                                             }}
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full px-2.5"
+                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block py-2 w-full px-2.5"
                                             defaultValue="" />
                                    </div>
                                     <img className="py-2" src={image.image_link} alt='Image_Preview' style={{ height: "200px", width: "450px" }} />
@@ -671,7 +709,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
               </div>
 
               {/* Room Services Table */}
-              <div className="flex flex-col my-4">
+              {/* <div className="flex flex-col my-4">
                 <div className="overflow-x-auto">
                   <div className="align-middle inline-block min-w-full">
                     <div className="shadow overflow-hidden">
@@ -689,7 +727,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                          {services?.map(i,indexedDB => {
+                          {services?.map(i,index => {
                             return (
                               <tr className="hover:bg-gray-100" key={index}>
                                 <td className="p-4 w-4">
@@ -731,9 +769,158 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                      items-center mb-1 ease-linear transition-all duration-150"
                   onClick={submitServices} type="button" >
                   Submit</button>
+              </div> */}
+
+            </div>
+           {/* Room Rates*/}
+            <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+              {t?.room} {t?.rates} 
+            </h6>
+            <div className="pt-6">
+              <div className=" md:px-2 mx-auto w-full">
+              <div className="flex flex-wrap">
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.baserate} {t?.currency}
+                  </label>
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                        setAllRoomRates({...allRoomRates, base_rate_currency: e.target.value })
+                      )
+                    }>
+                    <option value="USD" >USD</option>
+                    <option value="INR">INR</option>
+                    <option value="Euro">Euro</option>
+                  </select>
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.baserate} {t?.amount}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                        setAllRoomRates({...allRoomRates, baserate_amount: e.target.value })
+                      )
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.taxrate} {t?.currency}
+                  </label>
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                        setAllRoomRates({...allRoomRates, tax_rate_currency: e.target.value })
+                      )
+                    }>
+                    <option value="USD" >USD</option>
+                    <option value="INR">INR</option>
+                    <option value="Euro">Euro</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.taxrate} {t?.amount}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllRoomRates({...allRoomRates, tax_amount: e.target.value,un_rate_id:allRoomDetails?.unconditional_rates?.[0]?.un_rate_id })
+                      )
+                    } />
+                </div>
+              </div>
+
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.other} {t?.capacity} {t?.currency}
+                  </label>
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                        setAllRoomRates({...allRoomRates,otherfees_currency: e.target.value })
+                      )
+                    }>
+                    <option value="USD" >USD</option>
+                    <option value="INR">INR</option>
+                    <option value="Euro">Euro</option>
+                  </select>
+                   
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {t?.other} {t?.charges} {t?.amount}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllRoomRates({...allRoomRates, otherfees_amount: e.target.value })
+                      )
+                    } />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                </div>
+              </div>
+
+              <div className="w-full lg:w-4/12 px-4">
+                <div className="relative w-full ml-4 mb-3"></div></div>
+              <div className="w-full lg:w-2/12 px-4">
+                <div className="relative w-full ml-4 mb-4">
+                  <button onClick={submitRoomRates}
+                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:rinbg-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center 
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+                    {t?.submit}</button>
+                </div>
+              </div>
+
+            </div>
               </div>
             </div>
-          </>}
+          </div>
       </div>
 
       {/* Modal Edit Room Service */}

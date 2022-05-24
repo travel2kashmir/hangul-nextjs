@@ -316,7 +316,7 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                    Edit image
+                                   {t?.edit} {t?.image}
                                 </h3>
                                 <button type="button"
                                     onClick={() => setEditImage(0)}
@@ -333,7 +333,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image description
+                                            {t?.image} {t?.description}
                                         </label>
                                         <textarea rows="6" columns="60"
 
@@ -353,7 +353,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image title
+                                           {t?.image} {t?.title}
                                         </label>
                                         <input
                                             type="text"
@@ -376,7 +376,7 @@ function Gallery() {
                                 <button
                                     onClick={() => updateImageDetails()}
                                     className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                                    type="submit">Edit image</button>
+                                    type="submit">{t?.edit} {t?.image}</button>
                             </div>
                         </div>
                     </div>
@@ -390,7 +390,7 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                    Add new image
+                                    {t?.add} {t?.new} {t?.image}
                                 </h3>
                                 <button type="button"
                                     onClick={() => setAddImage(0)}
@@ -409,7 +409,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image Upload
+                                            {t?.image} {t?.upload}
                                         </label>
                                         <div className="flex">
                                         <input
@@ -424,7 +424,7 @@ function Gallery() {
                                     </div> 
                                     <div className="col-span-6 sm:col-span-3">
                                     <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
-                                               onClick={uploadImage}>Upload</button></div>
+                                               onClick={uploadImage}>{t?.upload}</button></div>
                                     </div>
                                     <img className="py-2" src={image.image_link} alt='Image_Preview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
@@ -432,7 +432,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image Title
+                                            {t?.image} {t?.title}
                                         </label>
                                         <input
                                             type="text"
@@ -445,7 +445,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image Description
+                                            {t?.image} {t?.description}
                                         </label>
                                         <textarea rows="2" columns="60"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value }))}
@@ -457,7 +457,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image Category
+                                           {t?.image} {t?.category}
                                         </label>
                                         <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_category: e.target.value }))}>
@@ -473,7 +473,7 @@ function Gallery() {
  <button
                                     onClick={()=>{submitAddImage(); setAddImage(0)}}
                                     className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                                    type="submit">Add image</button>
+                                    type="submit">{t?.add} {t?.image}</button>
                             </div>
                         </div>
                     </div>
@@ -496,15 +496,15 @@ function Gallery() {
                             <div className="p-6 pt-0 text-center">
                                 <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
-                                    Are you sure you want to delete <span className="font-semibold">{actionImage?.image_title}</span> image?
+                                    {t?.areyousureyouwanttodelete}
                                 </h3>
                                 <button onClick={() => submitDelete()} className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                                    Yes, I`m sure
+                                    {t?.yesiamsure}
                                 </button>
                                 <button
                                     onClick={() => setdeleteImage(0)}
                                     className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                    No, cancel
+                                    {t?.nocancel}
                                 </button>
                             </div>
                         </div>

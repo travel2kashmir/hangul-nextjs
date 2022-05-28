@@ -61,9 +61,10 @@ function Packages() {
 
      /* Delete Package Function*/
      const deletePackages = () => {
-        const url = `/api/package./${actionPackage?.package_id}`
+        const url = `/api/package/${actionPackage?.package_id}`
+        alert(JSON.stringify(url))
        axios.delete(url).then((response) => {
-           toast.success(("Room Deleted Successfully!"), {
+           toast.success(("Package Deleted Successfully!"), {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,

@@ -244,7 +244,7 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4">{t?.package} {t?.rooms}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4">{t?.package} {t?.services}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
@@ -259,14 +259,24 @@ function Package() {
                         <div className="shadow overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {allBundleDetails?.map((item,index) => {
-                                        return (
+                                  
                                             <tr className="hover:bg-gray-100" key={index}>
                                                 <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">{item?.room_name}</span>
+                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Breakfast Included</span>
+                                                </td>
+                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Parking Type</span>
+                                                </td>
+                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Internet Included</span>
+                                                </td>
+                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Airport Shuttle </span>
+                                                </td>
+                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Transportation Charges</span>
                                                 </td></tr>
-                                        )
-                                    })}
+                                      
                                 </tbody>
                             </table>
                         </div>

@@ -76,48 +76,8 @@ function Ratecondition() {
               </span>
             </div>
           </li>
-          <li>
-            <div className="flex items-center">
-              <svg
-                className="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/packages">
-                  <a>{t?.packages}</a>
-                </Link>
-              </span>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <svg
-                className="w-6 h-6 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/package">
-                  <a> {currentPackageDetails?.package_name}</a>
-                </Link>
-              </span>
-            </div>
-          </li>
+        
+         
           <li>
             <div className="flex items-center">
               <svg
@@ -176,9 +136,55 @@ function Ratecondition() {
               </div>
 
               <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3"></div>
+                <div className="relative w-full mb-3">
+                <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                   Rate Description
+                  </label>
+                  <textarea rows="2" columns="50"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    onChange={
+                      (e) => (
+                          setAllHotelDetails({ ...allHotelDetails, description_body: e.target.value })
+                      )
+                  }
+                  
+                  />
+                </div>
               </div>
-             
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                   Program Name
+                  </label>
+                  <select
+                        className="shadow-sm bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        onChange={(e) =>
+                          setAllHotelDetails({
+                            ...allHotelDetails,
+                            address_city: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="srinagar">Select Program</option>
+                        <option value="baramulla">Baramulla</option>
+                        <option value="budgam">Budgam</option>
+                        <option value="pahalgam">Pahalgam</option>
+                        <option value="gulmarg">Gulmarg</option>
+                      </select>
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                
+                 
+                </div>
+              </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
               <h6 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
@@ -218,6 +224,18 @@ function Ratecondition() {
                         htmlFor="grid-password"
                       >
                         Maximum User Percentage
+                      </label>
+                      <label
+                        className="text-sm font-medium text-gray-900 block mb-8"
+                        htmlFor="grid-password"
+                      >
+                       User Signed In
+                      </label>
+                      <label
+                        className="text-sm font-medium text-gray-900 block mb-8"
+                        htmlFor="grid-password"
+                      >
+                        Is Domestic
                       </label>
                     </div>
                   </div>
@@ -269,6 +287,36 @@ function Ratecondition() {
                         <option value="gulmarg">Gulmarg</option>
                       </select>
                       <select
+                        className="shadow-sm bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        onChange={(e) =>
+                          setAllHotelDetails({
+                            ...allHotelDetails,
+                            address_city: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="srinagar">Select</option>
+                        <option value="baramulla">Baramulla</option>
+                        <option value="budgam">Budgam</option>
+                        <option value="pahalgam">Pahalgam</option>
+                        <option value="gulmarg">Gulmarg</option>
+                      </select>
+                       <select
+                        className="shadow-sm bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        onChange={(e) =>
+                          setAllHotelDetails({
+                            ...allHotelDetails,
+                            address_city: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="srinagar">Select</option>
+                        <option value="baramulla">Baramulla</option>
+                        <option value="budgam">Budgam</option>
+                        <option value="pahalgam">Pahalgam</option>
+                        <option value="gulmarg">Gulmarg</option>
+                      </select>
+                       <select
                         className="shadow-sm bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={(e) =>
                           setAllHotelDetails({

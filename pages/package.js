@@ -260,7 +260,7 @@ function Package() {
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                   
-                                            <tr className="hover:bg-gray-100" key={index}>
+                                            <tr className="hover:bg-gray-100" >
                                                 <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                                     <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Breakfast Included</span>
                                                 </td>

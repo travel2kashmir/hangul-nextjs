@@ -7,13 +7,20 @@ import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 import Router from "next/router";
+const logger = require("../services/logger");  
 var t;
 var currentProperty;
 var  currentPackageDetails;
+var max_age=[];
+var final=[]
 
 function Addpackage() {
+  const [packageId, setPackageId] = useState()
+  const [maxChild, setMaxChild] = useState([])
   const [allPackageDetails, setAllPackageDetails] = useState([])
-  const [disp, setDisp] = useState(1);
+  const [disp, setDisp] = useState(0);
+  const[packageServices,setPackageServices]= useState([])
+
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -35,9 +42,99 @@ function Addpackage() {
     firstfun();
     Router.push("/addpackage");
   },[]) 
+
+  useEffect(() => {
+    const fetchPackageServices = async () => {
+    const url = `/api/package/package_services`
+    axios.get(url)
+    .then((response)=>{setPackageServices(response.data);
+      logger.info("url  to fetch package services hitted successfully")})
+      .catch((error)=>{logger.error("url to fetch package services, failed")});  
+    }
+    fetchPackageServices();
+   
+  },[])
+
+   /** Function submit max age **/
+  const submitAge = () =>{
+  max_age.forEach((item)=>{
+  const temp={
+    package_id: packageId,
+    max_age_of_child_guest:item
+  }
+ final.push(temp);
+ });
+ const final_data = {"max_age_child": final}
+ const url = '/api/package/max_age_children'
+    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Max Age Child Added Successfully!!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      })
+      .catch((error) => {
+       toast.error("Max Child Age Error! " , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }) 
+  }
+
+   /* Function for Room Rates*/
+   const submitPackageRates= () => {
+    const final_data = {
+      "package_id": packageId,
+      "base_rate_currency": allPackageDetails?.base_rate_currency,
+      "base_rate_amount": allPackageDetails?.base_rate_amount,
+      "tax_rate_currency":allPackageDetails?.tax_rate_currency,
+      "tax_rate_amount":allPackageDetails?.tax_rate_amount,
+      "other_charges_amount": allPackageDetails?.other_charges_amount,
+      "other_charges_currency": allPackageDetails?.other_charges_currency
+    }
+    alert(JSON.stringify(final_data));
+    const url = '/api/package/package_rate'
+    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Package Rates Added Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      })
+      .catch((error) => {
+       toast.error("Package Rates  Error! " , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
+
+   /** Function submit Package Description **/
   const submitPackageDescription = () => {
     const final_data = {
-          "package_id":allPackageDetails?.package_id,
+          "property_id": currentProperty?.property_id,
           "package_name": allPackageDetails?.package_name,
           "package_description":allPackageDetails?.package_description,
           "charge_currency":allPackageDetails?.charge_currency,
@@ -47,7 +144,6 @@ function Addpackage() {
           "max_number_of_intended_occupants": allPackageDetails?.max_number_of_intended_occupants,
           "max_number_of_adult_guest":allPackageDetails?.max_number_of_adult_guest
         }  
-     alert(JSON.stringify(final_data))
      const url = '/api/package/package_description'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
@@ -60,7 +156,10 @@ function Addpackage() {
                   draggable: true,
                   progress: undefined,
                 });
-          })
+                setPackageId(response.data.package_id);
+                  setDisp(1);      
+          }  
+          )
           .catch((error) => {
              toast.error("Package Error!", {
                   position: "top-center",
@@ -73,28 +172,167 @@ function Addpackage() {
                 });      
           })
   }
-      /** Function to cancel room images**/
-      const removeImage = (index) => {
-        const filteredImages = imageData.filter((i, id) => i.index !== index)
-         setImageData(filteredImages)
-        }
-      /** For Images**/
-      const imageTemplate = {
-        property_id: currentProperty?.property_id,
-        image_link: '',
-        image_title: '',
-        image_description: '',
-        image_category: '',
-        imageFile: ''
-      }
+
+   /** Function to cancel package mile **/
+   const removeMile = (index) => {
+    const filteredMiles = mileData.filter((i, id) => i.index !== index)
+     setMileData(filteredMiles)
+    }   
+
+    /** For Miles**/
+    const milesTemplate = {
+      package_id: packageId,
+      number_of_miles: '',
+      miles_provider: '',
+    }  
   
-      /* Mapping Index of each image*/
-      const [imageData, setImageData] = useState([imageTemplate]?.map((i, id) => { return { ...i, index: id } }))
+    /* Mapping Index of each mile*/
+      const [mileData, setMileData] = useState([milesTemplate]?.map((i, id) => { return { ...i, index: id } }))
     
-   /** Function to add room images**/
-   const addPhotos = () => {
-    setImageData([...imageData, imageTemplate]?.map((i, id) => { return { ...i, index: id } }))
+   /** Function to add mile **/
+   const addMiles = () => {
+    setMileData([...mileData, milesTemplate]?.map((i, id) => { return { ...i, index: id } }))
   }
+
+   /** Function to cancel room images **/
+   const removeProgram = (index) => {
+    const filteredPrograms = programData.filter((i, id) => i.index !== index)
+     setProgramData(filteredPrograms)
+    }   
+
+    /** For Miles**/
+    const programTemplate = {
+      package_id: packageId,
+      program_name: '',
+      program_level: '',
+    }  
+  
+    /* Mapping Index of each mile*/
+      const [programData, setProgramData] = useState([programTemplate]?.map((i, id) => { return { ...i, index: id } }))
+    
+   /** Function to add mile **/
+   const addProgram = () => {
+    setProgramData([...programData, programTemplate]?.map((i, id) => { return { ...i, index: id } }))
+  }
+
+   /** Function to submit package miles **/
+   const submitPackageMiles = () => {
+    const packagemiledata = [{
+       /* To be fetched from context */
+       package_id: packageId,
+       number_of_miles:allPackageDetails?.number_of_miles,
+       provider: allPackageDetails?.provider
+     }]
+     const finalImage = { "package_miles": packagemiledata }
+    axios.post(`/api/package/package_miles`, finalImage).then(response => {
+       toast.success(JSON.stringify(response.data.message), {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     }).catch(error => {
+     toast.error("Package Miles Error!", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     });
+ 
+   }
+
+ /** Function to submit package miles **/
+ const submitPackageProgram = () => {
+  const programdata = [{
+     /* To be fetched from context */
+    program_name:allPackageDetails?.program_name ,
+    program_level:allPackageDetails?.program_level
+   }]
+   const finalProgram = { "program_membership_master": programdata }
+  axios.post(`/api/package/package_membership_master`, finalProgram).then(response => {
+    console.log("Package Program Master Success!")
+     const program_data = { "program_id": response.data.program_id, "package_id": packageId }
+     const final = { "package_program": [program_data] }
+     axios.post('/api/package/package_membership_link', final, {
+       headers: { 'content-type': 'application/json' }
+     }).then(response => {
+      toast.success("Package Programs Added Successfully!", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+       .catch(error => {
+        toast.error("Packages Program Error!", {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+         });
+       });
+   }).catch(error => {
+   toast.error("Packages Program Error!", {
+       position: "top-center",
+       autoClose: 5000,
+       hideProgressBar: false,
+       closeOnClick: true,
+       pauseOnHover: true,
+       draggable: true,
+       progress: undefined,
+     });
+   });
+
+ }
+
+ /* Function for Room Rates*/
+ const submitPackagePropertyCredit= () => {
+  const current_data = [{
+    "package_id": packageId,
+    "property_credit_currency": allPackageDetails?.property_credit_currency,
+    "property_credit_amount": allPackageDetails?.property_credit_amount
+  }]
+  const final_data= {"property_credit": current_data}
+  alert(JSON.stringify(final_data));
+  const url = '/api/package/package_property_credit'
+  axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+    ((response) => {
+      toast.success("Package Property Credit Added Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+    })
+    .catch((error) => {
+     toast.error("Package Property Credit Error! " , {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+}
 
   return (
     <div id="main-content"
@@ -135,7 +373,7 @@ function Addpackage() {
       </nav>
      
      {/* Package Details Form */}
-     <div id='1' className={disp===1?'block':'hidden'}>
+     <div id='0' className={disp===0?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
      <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
@@ -220,6 +458,7 @@ function Addpackage() {
                           setAllPackageDetails({ ...allPackageDetails, charge_currency: e.target.value })
                       )
                   }>
+                     <option selected >Select charge currency</option>
                     <option value="web" >Web</option>
                     <option value="hotel">hotel</option>
                     <option value="installment">installment</option>
@@ -234,7 +473,7 @@ function Addpackage() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  {t?.refundable}
+                  {t?.refundable} {packageId}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
@@ -242,12 +481,14 @@ function Addpackage() {
                         setAllPackageDetails({ ...allPackageDetails, refundable: e.target.value })
                     )
                 }>
-                    <option value="yes" >Yes</option>
-                    <option value="no">No</option>
+                     <option Selected >Select refundable</option>
+                    <option value={true} >Yes</option>
+                    <option value= {false}>No</option>
                   </select>
                 </div>
               </div>
-
+               {allPackageDetails?.refundable==='true'?
+               <>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
@@ -277,9 +518,9 @@ function Addpackage() {
                  {t?.refundable} {t?.till} {t?.time}
                   </label>
                   <input
-                    type="text"
+                    type="time" step="2"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   
+                    
                     onChange={
                       (e) => (
                           setAllPackageDetails({ ...allPackageDetails,  refundable_until_time: e.target.value })
@@ -288,6 +529,7 @@ function Addpackage() {
                   />
                 </div>   
               </div>
+              </>:<></>}
 
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
@@ -321,23 +563,31 @@ function Addpackage() {
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
-                      (e) => (
-                          setAllPackageDetails({ ...allPackageDetails,max_number_of_adult_guest: e.target.value })
-                      )
+                      (e) => {
+                          setAllPackageDetails({ ...allPackageDetails,max_number_of_adult_guest: e.target.value })                          
+                      }
                   }/>
                 </div>
               </div>
+             
               <div className="w-full lg:w-10/12 px-4">
                 <div className="relative w-full ml-4 mb-4"></div></div>
               <div className="w-full lg:w-2/12 px-4">
                 <div className="relative w-full ml-4 mb-4">
                   <button onClick={() => {
-                              setDisp(2);
+                                submitPackageDescription();
+                                if(allPackageDetails?.max_number_of_intended_occupants-
+                                  allPackageDetails?.max_number_of_adult_guest >= 1)
+                                setDisp(1);
+                                else{
+                                  setDisp(2);
+                                }
                             }}
                     className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 mt-4 text-center flex-end
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button" >
                   Next</button>
                 </div>
               </div>
@@ -346,6 +596,89 @@ function Addpackage() {
         </div>
       </div>
       </div>
+
+      {/* Maximum Age Children Form */}
+     <div id='1' className={disp===1?'block':'hidden'}>
+       {final=[]} {max_age=[]}
+     <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+     <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Description</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rates</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Miles</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
+            </div>
+        </div>
+       {allPackageDetails?.max_number_of_intended_occupants-
+                            allPackageDetails?.max_number_of_adult_guest >= 1 ? 
+              <> 
+              {[...Array(allPackageDetails?.max_number_of_intended_occupants-
+                            allPackageDetails?.max_number_of_adult_guest)]
+                            ?.map((item, index) => (               
+              <div className="w-full lg:w-6/12 px-4" key={index}>
+              <div className="relative w-full mb-3">
+                <label
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                  htmlFor="grid-password"
+                >
+                 Maximum Age Of Child
+                 </label>
+                 <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                     onChange={(e)=>
+                      max_age[index]=e.target.value
+                  }>
+                     <option selected >Select </option>
+                    <option value="1" >1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5" >5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9" >9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+              </div>
+            
+            </div>
+              ))}
+            </>
+            :<></>}
+
+<div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center ml-16
+                     items-center mb-1 ease-linear transition-all duration-150"
+                     onClick={() => {
+                      setDisp(2); submitAge();
+                    }} type="button" >
+                        Next</button>
+                    </div>
+       </div>
+     </div>
+     
      {/*  Package Rates Form */}
      <div id='2' className={disp===2?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
@@ -354,7 +687,6 @@ function Addpackage() {
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
-           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rates</div>
@@ -396,6 +728,7 @@ function Addpackage() {
                         setAllPackageDetails({ ...allPackageDetails, base_rate_currency: e.target.value })
                       )
                     }>
+                     <option selected >Select Baserate currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -436,6 +769,7 @@ function Addpackage() {
                         setAllPackageDetails({ ...allPackageDetails, tax_rate_currency: e.target.value })
                       )
                     }>
+                   <option selected >Select Taxrate currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -468,7 +802,7 @@ function Addpackage() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.capacity} {t?.currency}
+                    {t?.other} {t?.other} {t?.currency} 
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -476,12 +810,14 @@ function Addpackage() {
                         setAllPackageDetails({ ...allPackageDetails, other_charges_currency: e.target.value })
                       )
                     }>
+                   <option selected >Select other charges currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
                   </select>
                 </div>
               </div>
+
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
@@ -499,25 +835,29 @@ function Addpackage() {
                       )
                     } />
                 </div>
-              </div>    
+              </div> 
+
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                 <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
                     focus:ring-4 focus:ring-slate-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
                      onClick={() => {
-                      setDisp(1);
+                      submitPackageRates();
+                      setDisp(3);
                     }}type="button" >
-                    Previous</button>
+                    Skip</button>
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
                       setDisp(3);
+                      submitPackageRates();
                     }} type="button" >
                     Next</button>
                 </div>
+
             </div>
           </div>
         </div>
@@ -561,7 +901,7 @@ function Addpackage() {
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <button type="button" onClick={addPhotos}
+                    <button type="button" onClick={addMiles}
                       className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                       <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
                       {t?.add} {t?.miles}
@@ -571,7 +911,7 @@ function Addpackage() {
               </div>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
-          {imageData?.map((imageData, index) => (
+          {mileData?.map((mileData, index) => (
             <div className="flex flex-wrap" key={index}>
 
               <div className="w-full lg:w-6/12 px-4">
@@ -587,7 +927,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_amount: e.target.value })
+                        setAllPackageDetails({ ...allPackageDetails, number_of_miles: e.target.value })
                       )
                     } /> 
                 </div>
@@ -605,7 +945,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_amount: e.target.value })
+                        setAllPackageDetails({ ...allPackageDetails,provider: e.target.value })
                       )
                     } />
                 </div>
@@ -622,14 +962,11 @@ function Addpackage() {
                     focus:ring-4 focus:ring-white-200 font-semibold
                      rounded-lg text-sm px-3 py-2  border border-gray-300 text-center 
                      items-center mb-1 ml-16 ease-linear transition-all duration-150"
-                            onClick={() => removeImage(imageData?.index)} type="button" >
+                            onClick={() => removeMile(mileData?.index)} type="button" >
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                             Cancel</button>
                         </div> 
-
-            </div> ))}
-            
-               
+            </div> ))}     
              
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
             <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
@@ -637,20 +974,20 @@ function Addpackage() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
-                      setDisp(2);
+                      setDisp(4);
                     }} type="button" >
-                    Previous</button>
+                    Skip</button>
                       <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center ml-16
                      items-center mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
+                      submitPackageMiles();
                       setDisp(4);
                     }} type="button" >
                         Next</button>
                     </div>
           </div>
-         
         </div>
       </div>
       </div>
@@ -693,7 +1030,7 @@ function Addpackage() {
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <button type="button" onClick={addPhotos}
+                    <button type="button" onClick={addProgram}
                       className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                       <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
                       {t?.add} {t?.program}
@@ -704,7 +1041,7 @@ function Addpackage() {
 
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
-          {imageData?.map((imageData, index) => (
+          {programData?.map((programData, index) => (
             <div className="flex flex-wrap" key={index}>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
@@ -719,7 +1056,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_amount: e.target.value })
+                        setAllPackageDetails({ ...allPackageDetails, program_name: e.target.value })
                       )
                     } /> 
                 </div>
@@ -737,7 +1074,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_amount: e.target.value })
+                        setAllPackageDetails({ ...allPackageDetails, program_level: e.target.value })
                       )
                     } />
                 </div>
@@ -754,7 +1091,7 @@ function Addpackage() {
                     focus:ring-4 focus:ring-white-200 font-semibold
                      rounded-lg text-sm px-3 py-2  border border-gray-300 text-center 
                      items-center mb-1 ml-16 ease-linear transition-all duration-150"
-                            onClick={() => removeImage(imageData?.index)} type="button" >
+                            onClick={() => removeProgram(programData?.index)} type="button" >
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                             Cancel</button>
                         </div> 
@@ -766,14 +1103,15 @@ function Addpackage() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
-                      setDisp(3);
+                      setDisp(5);
                     }} type="button" >
-                    Previous</button>
+                    Skip</button>
                       <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center ml-16
                      items-center mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
+                       submitPackageProgram();
                       setDisp(5);
                     }}
                       type="button" >
@@ -815,8 +1153,6 @@ function Addpackage() {
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
             </div>
         </div>
-        
-        
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {t?.property} {t?.credit}
         </h6>
@@ -832,14 +1168,17 @@ function Addpackage() {
                   >
                     {t?.credit} {t?.currency}
                   </label>
-                  <input
-                    type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   onChange={
-                      (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_amount: e.target.value })
-                      )
-                    } /> 
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  onChange={
+                    (e) => (
+                      setAllPackageDetails({ ...allPackageDetails, property_credit_currency: e.target.value })
+                    )
+                  }   >
+                     <option selected >Select Credit Currency</option>
+                    <option value="USD" >USD</option>
+                    <option value="INR">INR</option>
+                    <option value="Euro">Euro</option>
+                  </select>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -855,7 +1194,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_amount: e.target.value })
+                        setAllPackageDetails({ ...allPackageDetails, property_credit_amount: e.target.value })
                       )
                     } />
                 </div>
@@ -866,14 +1205,15 @@ function Addpackage() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
                      onClick={() => {
-                      setDisp(4);
+                      setDisp(6);
                     }}type="button" >
-                    Previous</button>
+                    Skip</button>
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
+                       submitPackagePropertyCredit();
                       setDisp(6);
                     }} type="button" >
                     Next</button>
@@ -917,103 +1257,48 @@ function Addpackage() {
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
          Package Services
          </h6>
-         <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
+         {/* Packages Table */}
+         <div className="flex flex-col my-4">
+                <div className="overflow-x-auto">
+                    <div className="align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                            <table className="table-fixed min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-100">
+                                    <tr>
+                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                            Service Name
+                                        </th>
+                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                           Service Value
+                                        </th>
+                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                            {t?.action}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                {packageServices?.map((item,idx) => (
+                                        <tr className="hover:bg-gray-100" key={idx} >
+                                            <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
+                                                <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">{item?.package_service_name}</td>
+                                            </td>
+                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                <div className="flex items-center">
+                                                    <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
+                                                   {t?.active}
+                                                </div>
+                                            </td>
+                                            
+                                        </tr>
+                                  )
+                                  )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                    Breakfast Included
-                  </label>
-                </div>
-             
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                   Parking Available
-                  </label>
-                </div>
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                  Internet Available
-                  </label>
-                </div>
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                   Airport Transportation Included
-                  </label>
-                </div>
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                   Car Rental
-                  </label>
-                </div>
-              </div>   
-              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
-                    focus:ring-4 focus:ring-slate-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
-                     onClick={() => {
-                      setDisp(5);
-                    }}type="button" >
-                    Previous</button>
+            </div>  
+              <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 

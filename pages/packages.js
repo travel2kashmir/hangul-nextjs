@@ -62,7 +62,6 @@ function Packages() {
      /* Delete Package Function*/
      const deletePackages = () => {
         const url = `/api/package/${actionPackage?.package_id}`
-        alert(JSON.stringify(url))
        axios.delete(url).then((response) => {
            toast.success(("Package Deleted Successfully!"), {
                 position: "top-center",
@@ -73,15 +72,6 @@ function Packages() {
                 draggable: true,
                 progress: undefined,
             });
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
         })
             .catch((error) => {
                 toast.error(("Package Delete Error!"), {

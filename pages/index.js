@@ -183,7 +183,7 @@ function Signin() {
                   id="password"
                   onChange={(e) =>
                     setSigninDetails({
-                      ...signinDetails,
+                      ...signinDetails,    
                       password: e.target.value,
                     })
                   }

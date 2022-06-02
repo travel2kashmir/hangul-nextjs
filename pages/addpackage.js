@@ -12,14 +12,20 @@ var t;
 var currentProperty;
 var  currentPackageDetails;
 var max_age=[];
-var final=[]
+var final=[];
+var service_name=[];
+var service_value=[];
+
+
 
 function Addpackage() {
   const [packageId, setPackageId] = useState()
-  const [maxChild, setMaxChild] = useState([])
+ const [maxChild, setMaxChild] = useState([])
+ const [allRooms, setAllRooms] = useState([])
   const [allPackageDetails, setAllPackageDetails] = useState([])
   const [disp, setDisp] = useState(0);
   const[packageServices,setPackageServices]= useState([])
+
 
   useEffect(()=>{
     const firstfun=()=>{
@@ -54,7 +60,27 @@ function Addpackage() {
     fetchPackageServices();
    
   },[])
+  
+  useEffect(() => {
+    const fetchRooms = async () => {
+        try {
+            const url = `/api/rooms/${currentProperty.property_id}`
+            const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+           setAllRooms(response.data)
+           
+        }
+        catch (error) {
 
+            if (error.response) {
+                } 
+            else {
+            }
+        }
+    }
+    fetchRooms();
+}
+    ,[])
+ 
    /** Function submit max age **/
   const submitAge = () =>{
   max_age.forEach((item)=>{
@@ -90,6 +116,49 @@ function Addpackage() {
           progress: undefined,
         });
       }) 
+  }
+
+  /** Function package services **/
+  const submitPackageServices = () =>{
+    var total={};
+    let text = [];
+
+for (let i = 0; i < service_name.length; i++) {
+  const temp = {
+  'package_id':packageId,
+  'service_id':service_name[i],
+  'value': service_value[i]
+  };
+  text.push(temp) 
+}
+total={"package_services":text}
+alert(JSON.stringify(total))
+const url = '/api/package/package_service_link'
+    axios.post(url, total, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Package Services Added Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      })
+      .catch((error) => {
+       toast.error("Package Services Error! " , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }) 
+         
   }
 
    /* Function for Room Rates*/
@@ -172,7 +241,38 @@ function Addpackage() {
                 });      
           })
   }
-
+  /** Function submit Package Rooms **/
+  const submitPackageRooms = () => {
+  const datas = allRooms.filter(item => item.check === true)
+  const post = datas.map(item => item.room_id)
+  
+  const roomData = post.map((item) => {
+    return { "package_id": packageId, "room_id": item }
+  })
+  const finalData = {"package_room-link": roomData}
+  alert(JSON.stringify(finalData))
+  axios.post(`/api/package/package_room_link`, finalData).then(response => {
+    toast.success("Package Rooms Added Successfully!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }).catch(error => {
+  toast.error("Package Rooms Error!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  });
+  }
    /** Function to cancel package mile **/
    const removeMile = (index) => {
     const filteredMiles = mileData.filter((i, id) => i.index !== index)
@@ -245,7 +345,6 @@ function Addpackage() {
          progress: undefined,
        });
      });
- 
    }
 
  /** Function to submit package miles **/
@@ -298,7 +397,7 @@ function Addpackage() {
 
  }
 
- /* Function for Room Rates*/
+ /* Function for Package Property Credit */
  const submitPackagePropertyCredit= () => {
   const current_data = [{
     "package_id": packageId,
@@ -333,6 +432,7 @@ function Addpackage() {
       });
     })
 }
+
 
   return (
     <div id="main-content"
@@ -679,6 +779,88 @@ function Addpackage() {
        </div>
      </div>
      
+      {/* Package Rooms Form */}
+     <div id='9' className={disp===9?'block':'hidden'}>
+     <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+     <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Description</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rates</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Miles</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
+            </div>
+        </div>
+        {allRooms?.map((item, index) => {
+                return (
+        
+        <div className="flex flex-row items-start" key={index}>
+                <div className="flex items-center h-5">
+                  <input
+                   onClick={() => {
+                    setAllRooms(allRooms?.map((i) => {
+                      if (i?.room_id === item?.room_id) {
+                        i.check = !i.check
+                      }
+                      return i
+                    }))
+
+                  }}
+                    id="remember"
+                    aria-describedby="remember"
+                    name={"remember" +index}
+                    type="checkbox"
+                    className="bg-gray-50 
+                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                    rounded"
+                    required
+                  />
+                </div>
+                <div className="text-sm ml-3">
+                  <label className="text-sm font-semibold text-gray-700">
+                    {item?.room_name} -{item?.room_type_name}
+                  </label>
+                </div>
+               
+              </div>
+              )})}
+               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+            
+                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center ml-16
+                     items-center mb-1 ease-linear transition-all duration-150"
+                     onClick={() => {
+                       submitPackageRooms();
+                    }}
+                      type="button" >
+                        Next</button>
+                    </div>
+           
+     </div>
+    </div>
+     
      {/*  Package Rates Form */}
      <div id='2' className={disp===2?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
@@ -687,24 +869,28 @@ function Addpackage() {
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
+            </div>
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Miles</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
             </div>
         </div>
@@ -844,7 +1030,7 @@ function Addpackage() {
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
                      onClick={() => {
                       submitPackageRates();
-                      setDisp(3);
+                      setDisp(9);
                     }}type="button" >
                     Skip</button>
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
@@ -871,26 +1057,30 @@ function Addpackage() {
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
+            </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
                Package Rates</div>
             </div>
            
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Miles</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
             </div>
         </div>
@@ -999,27 +1189,31 @@ function Addpackage() {
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
+            </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
                Package Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
                 Package Miles</div>
             </div>
             
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
+                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">5</button>
                  <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Elite Membership</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
             </div>
         </div>
@@ -1225,12 +1419,16 @@ function Addpackage() {
       </div>
        {/* Package Services */}
        <div id='6' className={disp===6?'block':'hidden'}>
+      { service_name.length=0} 
+           {service_value.length=0}
+       
        <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
        <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
+            
            
                
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1259,6 +1457,11 @@ function Addpackage() {
          </h6>
          {/* Packages Table */}
          <div className="flex flex-col my-4">
+          
+           {packageServices?.map((i)=>{
+            service_name.push(i.package_service_id);
+            service_value.push(false)
+           })}
                 <div className="overflow-x-auto">
                     <div className="align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden">
@@ -1272,7 +1475,7 @@ function Addpackage() {
                                            Service Value
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {t?.action}
+                                            
                                         </th>
                                     </tr>
                                 </thead>
@@ -1283,17 +1486,61 @@ function Addpackage() {
                                                 <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">{item?.package_service_name}</td>
                                             </td>
                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                                <div className="flex items-center">
-                                                    <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
-                                                   {t?.active}
+                                            <div className="flex">
+                                                <div className="form-check ml-4 form-check-inline">
+                                                    <input type="radio"
+                                                     onChange={(e) => {
+                                                       service_name[idx]=item?.package_service_id;
+                                                       service_value[idx]=true;
+                                                     }}
+                                                        className="form-check-input form-check-input 
+                                                         appearance-none rounded-full h-3 w-3 border 
+                                                         border-gray-300 
+                                                         bg-white checked:bg-blue-600 
+                                                         checked:border-blue-600 focus:outline-none
+                                                          transition duration-200 mt-2  align-top
+                                                           bg-no-repeat bg-center bg-contain float-left
+                                                            mr-2 cursor-pointer" value="yes"
+                                                            name={"who"+idx}  id='ip1' />
+                                                    <label
+                                                        className="form-check-label inline-block 
+                                                      text-gray-700 text-base pr-2 "
+                                                        htmlFor="ip1">
+                                                        Yes
+                                                    </label>
                                                 </div>
+                                                <div className="form-check ml-8 form-check-inline">
+                                                    <input type="radio" id='ip2' value="no"
+                                                    onChange={(e) => {
+                                                      service_name[idx]=item?.package_service_id;
+                                                      service_value[idx]=false;
+                                                    }}
+                                                      className="form-check-input form-check-input appearance-none 
+                                                         rounded-full h-3 w-3 border border-gray-300
+                                                          bg-white checked:bg-blue-600 checked:border-blue-600
+                                                           focus:outline-none transition duration-200 mt-2 
+                                                            align-top bg-no-repeat bg-center bg-contain float-left mb-2
+                                                             mr-1 ml-2 cursor-pointer" checked
+                                                        name={"who"+idx} />
+                                                    <label
+                                                        className="form-check-label inline-block 
+                                                        text-gray-700 text-base  "
+                                                        htmlFor="ip2"
+                                                    >
+                                                        No</label>
+                                                </div>
+                                            </div>
                                             </td>
-                                            
-                                        </tr>
+                                      </tr>
                                   )
                                   )}
                                 </tbody>
+                                
                             </table>
+                            <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+          
+                     
+                    </div>
                         </div>
                     </div>
                 </div>
@@ -1303,7 +1550,10 @@ function Addpackage() {
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button" >
+                     onClick={() => {
+                     submitPackageServices();
+                      
+                     }} type="button" >
                     Submit</button>
                 </div>
          </div>

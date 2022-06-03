@@ -201,7 +201,7 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.rates}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.rooms} and {t?.rates}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
@@ -250,7 +250,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                        <Link href= '/package-services'
+                        <Link href= '/packageservices'
                          className="text-sm font-sans underline decoration-cyan-600
              font-semibold text-cyan-600 p-1"><a>{t?.seemore}</a></Link></span>
                         </div>

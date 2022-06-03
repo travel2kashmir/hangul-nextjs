@@ -10,8 +10,14 @@ import Router from "next/router";
 var t;
 var currentProperty;
 var currentPackageRates;
+const logger = require("../services/logger"); 
+
+
 
 function PackageRates() {
+  const[packageServices,setPackageServices]= useState([])
+  const [allRooms, setAllRooms] = useState([])
+
   /** Fetching language from the local storage **/
   useEffect(()=>{
     const firstfun=()=>{
@@ -34,6 +40,26 @@ function PackageRates() {
     firstfun();
     Router.push("/packagerates");
   },[]) 
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+        try {
+            const url = `/api/rooms/${currentProperty.property_id}`
+            const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+           setAllRooms(response.data)
+           
+        }
+        catch (error) {
+
+            if (error.response) {
+                } 
+            else {
+            }
+        }
+    }
+    fetchRooms();
+}
+    ,[])
   
     const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
    
@@ -74,6 +100,41 @@ function PackageRates() {
       })
   }
 
+  const editRooms = () => {
+    const final_data = {
+      "package_id" : currentPackageRates?.package_rate_id,
+      "base_rate_currency": allPackageRateDetails?.base_rate_currency,
+      "base_rate_amount": allPackageRateDetails?.base_rate_amount,
+      "tax_rate_currency": allPackageRateDetails?.tax_rate_currency,
+      "tax_rate_amount": allPackageRateDetails?.tax_rate_amount,
+      "other_charges_currency": allPackageRateDetails?.other_charges_currency,
+      "other_charges_amount": allPackageRateDetails?.other_charges_amount
+    }
+   const url = '/api/package/package_rates'
+    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+       toast.success("Package Rates Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+      .catch((error) => {
+       toast.error("Package Rates Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
   return (
     <div id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -116,6 +177,57 @@ function PackageRates() {
           </li>
     </ol>
       </nav>
+
+     {/*  Package Rooms Form */}
+   <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-4">
+          Package Rooms 
+          <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
+        </h6>
+        {allRooms?.map((item, index) => {
+                return (
+        
+        <div className="flex flex-row ml-6 items-start" key={index}>
+                <div className="flex items-center h-5">
+                  <input
+                   onClick={() => {
+                    setAllRooms(allRooms?.map((i) => {
+                      if (i?.room_id === item?.room_id) {
+                        i.check = !i.check
+                      }
+                      return i
+                    }))
+
+                  }}
+                    id="remember"
+                    aria-describedby="remember"
+                    name={"remember" +index}
+                    type="checkbox"
+                    className="bg-gray-50 
+                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                    rounded"
+                    required
+                  />
+                </div>
+                <div className="text-sm ml-3">
+                  <label className="text-sm font-semibold text-gray-700">
+                    {item?.room_name} -{item?.room_type_name}
+                  </label>
+                </div>
+               
+              </div>
+              )})}  
+
+<div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
+                    focus:ring-4 focus:ring-slate-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center 
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
+                     onClick={() => {
+                      editRooms();
+                    }}type="button" >
+                    Skip</button></div>
+      </div>
    {/*  Package Rates Form */}
    <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
@@ -269,7 +381,7 @@ function PackageRates() {
           </div>
         </div>
       </div>
-      
+     
       {/* Toast Container */}
       <ToastContainer position="top-center"
         autoClose={5000}

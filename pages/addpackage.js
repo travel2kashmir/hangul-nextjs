@@ -94,27 +94,10 @@ function Addpackage() {
  const url = '/api/package/max_age_children'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Max Age Child Added Successfully!!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-
+        logger.info("Package max age children success");
       })
       .catch((error) => {
-       toast.error("Max Child Age Error! " , {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        logger.error("Max age child error");
       }) 
   }
 
@@ -132,11 +115,10 @@ for (let i = 0; i < service_name.length; i++) {
   text.push(temp) 
 }
 total={"package_services":text}
-alert(JSON.stringify(total))
 const url = '/api/package/package_service_link'
     axios.post(url, total, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Package Services Added Successfully!", {
+        toast.success("Package Added Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -148,7 +130,7 @@ const url = '/api/package/package_service_link'
 
       })
       .catch((error) => {
-       toast.error("Package Services Error! " , {
+       toast.error("Package Error! " , {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -172,31 +154,14 @@ const url = '/api/package/package_service_link'
       "other_charges_amount": allPackageDetails?.other_charges_amount,
       "other_charges_currency": allPackageDetails?.other_charges_currency
     }
-    alert(JSON.stringify(final_data));
     const url = '/api/package/package_rate'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Package Rates Added Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        logger.info("Package rates success");
 
       })
       .catch((error) => {
-       toast.error("Package Rates  Error! " , {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        logger.error("Package rates error");
       })
   }
 
@@ -216,61 +181,27 @@ const url = '/api/package/package_service_link'
      const url = '/api/package/package_description'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
-            toast.success("New Package Description Added Successfully!", {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });
+            logger.info("Package description success");
                 setPackageId(response.data.package_id);
                   setDisp(1);      
           }  
           )
           .catch((error) => {
-             toast.error("Package Error!", {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });      
+            logger.error("Package description error");      
           })
   }
   /** Function submit Package Rooms **/
   const submitPackageRooms = () => {
   const datas = allRooms.filter(item => item.check === true)
   const post = datas.map(item => item.room_id)
-  
   const roomData = post.map((item) => {
     return { "package_id": packageId, "room_id": item }
   })
   const finalData = {"package_room-link": roomData}
-  alert(JSON.stringify(finalData))
   axios.post(`/api/package/package_room_link`, finalData).then(response => {
-    toast.success("Package Rooms Added Successfully!", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    logger.info("Package rooms success");
   }).catch(error => {
-  toast.error("Package Rooms Error!", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    logger.error("Package rooms error");
   });
   }
    /** Function to cancel package mile **/
@@ -325,25 +256,9 @@ const url = '/api/package/package_service_link'
      }]
      const finalImage = { "package_miles": packagemiledata }
     axios.post(`/api/package/package_miles`, finalImage).then(response => {
-       toast.success(JSON.stringify(response.data.message), {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
+      logger.info("Package miles success");
      }).catch(error => {
-     toast.error("Package Miles Error!", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
+      logger.error("Package miles error");
      });
    }
 
@@ -362,37 +277,11 @@ const url = '/api/package/package_service_link'
      axios.post('/api/package/package_membership_link', final, {
        headers: { 'content-type': 'application/json' }
      }).then(response => {
-      toast.success("Package Programs Added Successfully!", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
+      logger.info("Package program success");
      })
        .catch(error => {
-        toast.error("Packages Program Error!", {
-           position: "top-center",
-           autoClose: 5000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           progress: undefined,
-         });
+        logger.error("Package program error");
        });
-   }).catch(error => {
-   toast.error("Packages Program Error!", {
-       position: "top-center",
-       autoClose: 5000,
-       hideProgressBar: false,
-       closeOnClick: true,
-       pauseOnHover: true,
-       draggable: true,
-       progress: undefined,
-     });
    });
 
  }
@@ -405,31 +294,14 @@ const url = '/api/package/package_service_link'
     "property_credit_amount": allPackageDetails?.property_credit_amount
   }]
   const final_data= {"property_credit": current_data}
-  alert(JSON.stringify(final_data));
   const url = '/api/package/package_property_credit'
   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     ((response) => {
-      toast.success("Package Property Credit Added Successfully!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      logger.info("Package property credit success");
 
     })
     .catch((error) => {
-     toast.error("Package Property Credit Error! " , {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      logger.error("Package property credit error");
     })
 }
 
@@ -480,9 +352,10 @@ const url = '/api/package/package_service_link'
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Description</div>
             </div>
+            
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rates</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rooms and Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
@@ -708,7 +581,7 @@ const url = '/api/package/package_service_link'
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rates</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rooms and Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
@@ -778,44 +651,45 @@ const url = '/api/package/package_service_link'
                     </div>
        </div>
      </div>
-     
-      {/* Package Rooms Form */}
-     <div id='9' className={disp===9?'block':'hidden'}>
-     <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+    
+     {/*  Package Rooms and Rates Form */}
+     <div id='2' className={disp===2?'block':'hidden'}>
+     <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
      <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Description</div>
+     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
-            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+          
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms and Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rates</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Miles</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
             </div>
         </div>
-        {allRooms?.map((item, index) => {
+        
+        <h6 className="text-xl flex leading-none pb-4 pl-6 pt-2 font-bold text-gray-900 mb-2">
+          {t?.rooms} and Rates
+         </h6>
+         {allRooms?.map((item, index) => {
                 return (
         
-        <div className="flex flex-row items-start" key={index}>
+        <div className="flex flex-row ml-6 items-start" key={index}>
                 <div className="flex items-center h-5">
                   <input
                    onClick={() => {
@@ -845,58 +719,6 @@ const url = '/api/package/package_service_link'
                
               </div>
               )})}
-               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-            
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                       submitPackageRooms();
-                    }}
-                      type="button" >
-                        Next</button>
-                    </div>
-           
-     </div>
-    </div>
-     
-     {/*  Package Rates Form */}
-     <div id='2' className={disp===2?'block':'hidden'}>
-     <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-     <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
-            </div>
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rates</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Miles</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
-            </div>
-        </div>
-        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {t?.packagerates} 
-         </h6>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
             <div className="flex flex-wrap">
@@ -1030,7 +852,7 @@ const url = '/api/package/package_service_link'
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
                      onClick={() => {
                       submitPackageRates();
-                      setDisp(9);
+                      setDisp(3);
                     }}type="button" >
                     Skip</button>
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
@@ -1040,6 +862,7 @@ const url = '/api/package/package_service_link'
                      onClick={() => {
                       setDisp(3);
                       submitPackageRates();
+                      submitPackageRooms();
                     }} type="button" >
                     Next</button>
                 </div>
@@ -1057,30 +880,27 @@ const url = '/api/package/package_service_link'
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
-            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
-            </div>
+          
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
-               Package Rates</div>
+               Package Rooms and Rates</div>
             </div>
            
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Miles</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Property Credit</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Services</div>
             </div>
         </div>
@@ -1189,14 +1009,11 @@ const url = '/api/package/package_service_link'
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
-            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Package Rooms</div>
-            </div>
+            
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
-               Package Rates</div>
+               Package Rooms and Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
@@ -1319,19 +1136,18 @@ const url = '/api/package/package_service_link'
        <div id='5' className={disp===5?'block':'hidden'}>
        <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
        <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+       <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
-           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rates</div>
-            </div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rooms and Rates</div>
+            </div> 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Miles</div>
-            </div>
+            </div> 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Elite Membership</div>
@@ -1420,20 +1236,16 @@ const url = '/api/package/package_service_link'
        {/* Package Services */}
        <div id='6' className={disp===6?'block':'hidden'}>
       { service_name.length=0} 
-           {service_value.length=0}
-       
+           {service_value.length=0}0 
        <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
        <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Package Description</div>
             </div>
-            
-           
-               
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rates</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Package Rooms and Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
@@ -1483,7 +1295,9 @@ const url = '/api/package/package_service_link'
                                 {packageServices?.map((item,idx) => (
                                         <tr className="hover:bg-gray-100" key={idx} >
                                             <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                                                <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">{item?.package_service_name}</td>
+                                                <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
+                                                {"  " + item?.package_service_name?.replace(/_+/g, ' ')}
+                                                  </td>
                                             </td>
                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                             <div className="flex">

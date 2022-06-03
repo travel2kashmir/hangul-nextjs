@@ -7,10 +7,15 @@ import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 import Router from "next/router";
+const logger = require("../services/logger"); 
 var t;
 var currentProperty;
 var  currentPackageDetails;
+var service_name=[];
+var service_value=[];
+
 function Packageservices() {
+  const[packageServices,setPackageServices]= useState([])
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -32,6 +37,60 @@ function Packageservices() {
         firstfun();
         Router.push("/packageservices");
       },[]) 
+
+      useEffect(() => {
+        const fetchPackageServices = async () => {
+        const url = `/api/package/package_services_link/${currentPackageDetails?.package_id}`
+        axios.get(url)
+        .then((response)=>{setPackageServices(response.data);
+          logger.info("url  to fetch package services hitted successfully")})
+          .catch((error)=>{logger.error("url to fetch package services, failed")});  
+        }
+        fetchPackageServices();
+       
+      },[])
+
+      /** Function package services **/
+  const submitPackageServices = () =>{
+    var total={};
+    let text = [];
+
+for (let i = 0; i < service_name.length; i++) {
+  const temp = {
+  'package_id':packageId,
+  'service_id':service_name[i],
+  'value': service_value[i]
+  };
+  text.push(temp) 
+}
+total={"package_services":text}
+const url = '/api/package/package_service_link'
+    axios.post(url, total, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Package Added Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      })
+      .catch((error) => {
+       toast.error("Package Error! " , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }) 
+         
+  }
   return (
     <div
     id="main-content"
@@ -146,108 +205,115 @@ function Packageservices() {
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
          Package Services
          </h6>
-         <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
+         {/* Packages Table */}
+         <div className="flex flex-col my-4">
+          
+           {packageServices?.map((i)=>{
+            service_name.push(i.package_service_id);
+            service_value.push(false)
+           })}
+                <div className="overflow-x-auto">
+                    <div className="align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                            <table className="table-fixed min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-100">
+                                    <tr>
+                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                            Service Name
+                                        </th>
+                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                           Service Value
+                                        </th>
+                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                            
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                {packageServices?.map((item,idx) => (
+                                        <tr className="hover:bg-gray-100" key={idx} >
+                                            <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
+                                                <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
+                                                {"  " + item?.package_service_name?.replace(/_+/g, ' ')}
+                                                  </td>
+                                            </td>
+                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                            <div className="flex">
+                                                <div className="form-check ml-4 form-check-inline">
+                                                    
+                                                    
+                                                    <input type="radio"
+                                                     onChange={(e) => {
+                                                       service_name[idx]=item?.package_service_id;
+                                                       service_value[idx]=true;
+                                                     }}
+                                                        className="form-check-input form-check-input 
+                                                         appearance-none rounded-full h-3 w-3 border 
+                                                         border-gray-300 
+                                                         bg-white checked:bg-blue-600 
+                                                         checked:border-blue-600 focus:outline-none
+                                                          transition duration-200 mt-2  align-top
+                                                           bg-no-repeat bg-center bg-contain float-left
+                                                            mr-2 cursor-pointer" value="yes"
+                                                            name={"who"+idx} checked={item?.value===true
+                                                              ?true:false}  id='ip1' />
+                                                    <label
+                                                        className="form-check-label inline-block 
+                                                      text-gray-700 text-base pr-2 "
+                                                        htmlFor="ip1">
+                                                        Yes
+                                                    </label>
+                                                </div>
+                                                <div className="form-check ml-8 form-check-inline">
+                                                    <input type="radio" id='ip2' value="no"
+                                                    onChange={(e) => {
+                                                      service_name[idx]=item?.package_service_id;
+                                                      service_value[idx]=false;
+                                                    }}
+                                                      className="form-check-input form-check-input appearance-none 
+                                                         rounded-full h-3 w-3 border border-gray-300
+                                                          bg-white checked:bg-blue-600 checked:border-blue-600
+                                                           focus:outline-none transition duration-200 mt-2 
+                                                            align-top bg-no-repeat bg-center bg-contain float-left mb-2
+                                                             mr-1 ml-2 cursor-pointer"
+                                                             checked={item?.value===false  
+                                                            ?true:false} 
+                                                        name={"who"+idx} />
+                                                    <label
+                                                        className="form-check-label inline-block 
+                                                        text-gray-700 text-base  "
+                                                        htmlFor="ip2"
+                                                    >
+                                                        No</label>
+                                                </div>
+                                            </div>
+                                            </td>
+                                      </tr>
+                                  )
+                                  )}
+                                </tbody>
+                                
+                            </table>
+                            <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+          
+                     
+                    </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                    Breakfast Included
-                  </label>
-                </div>
-             
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                   Parking Available
-                  </label>
-                </div>
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                  Internet Available
-                  </label>
-                </div>
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                   Airport Transportation Included
-                  </label>
-                </div>
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                   Car Rental
-                  </label>
-                </div>
-              </div>   
-              <div className="flex flex-wrap mt-10">
-              <div className="w-full lg:w-10/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+            </div>  
+              <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
+                  <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
+                     onClick={() => {
+                     submitPackageServices();
+                      
+                     }} type="button" >
                     {t?.update}</button>
-                </div>
-              </div> 
-              </div>
+                </div>   
+             
          </div>
     
     

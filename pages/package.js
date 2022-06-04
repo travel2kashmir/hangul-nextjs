@@ -165,36 +165,51 @@ function Package() {
                                ><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
-                    <p className="text-base font-semibold text-gray-500 capitalize truncate">
-                        {allPackageDetails?.package_name} In {currentProperty?.property_name}
-                    </p>
-                    <p className="text-sm font-medium text-gray-90  line-clamp-10 ">
-                        {allPackageDetails?.package_description}
-                    </p>
-                    <p className="text-sm capitalize font-semibold text-gray-500 pt-1 truncate">
-                        Payment Holder- {allPackageDetails?.charge_currency}
-                    </p>
-                    <p className="text-sm font-semibold text-gray-500 my-1 truncate">
-                        Refundable till, {allPackageDetails?.refundable_until_days} days {allPackageDetails?.refundable_until_time}
-                    </p>
-                    <div className="flex my-1">
-                        <p className="text-sm font-semibold text-gray-500 truncate">
-                            {allPackageDetails?.max_number_of_intended_occupants} Occupants
-                        </p>
-                        <p className="text-sm font-semibold ml-20 text-gray-500 truncate">
-                            {allPackageDetails?.max_number_of_adult_guest} Adults
-                        </p>
+                    <div className="align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                            <table className="table-fixed min-w-full divide-y divide-gray-200">
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Package Description</span>
+                                        </td>
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.package_name}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Occupants</span>
+                                        </td>
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.max_number_of_intended_occupants}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {t?.other} {t?.charges}</span>
+                                        </td>
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.other_charges_amount}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Adults</span>
+                                        </td>
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.max_number_of_intended_occupants}
+                                      </td>
+                                    </tr>
+                                    <tr >
+                                        <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Refund till</span>
+                                        </td>
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.refundable_until_days}days, {allPackageDetails?.refundable_until_time}
+                                      </td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div className="flex">
-                        <span className="text-sm font-semibold mr-1 text-gray-500">Child Age-</span>
-                        {allPackageDetails?.max_age_children?.map((item,idx) => {
-                            return (
-                                <span className="text-sm font-semibold text-gray-500" key={idx}>
-                                    {item.max_age_of_child_guest}years<span className="ml-1"></span>
-                                </span>
-                            )
-                        })}
-                    </div>
+                   
                 </div>
 
                 {/* Package Rates */}
@@ -215,19 +230,19 @@ function Package() {
                         <div className="shadow overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    <tr className="hover:bg-gray-100">
+                                    <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                             <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {t?.baserate}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.base_rate_amount}<span className="ml-1 uppercase"> {allPackageDetails?.base_rate_currency}</span></td>
                                     </tr>
-                                    <tr className="hover:bg-gray-100">
+                                    <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                             <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.taxrate}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.tax_rate_amount}<span className="ml-1 uppercase"> {allPackageDetails?.tax_rate_currency}</span></td>
                                     </tr>
-                                    <tr className="hover:bg-gray-100">
+                                    <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                             <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {t?.other} {t?.charges}</span>
                                         </td>
@@ -240,7 +255,7 @@ function Package() {
                     </div>
                 </div>
 
-                {/* Package Room Bundles */}
+                {/* Package Services */}
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
@@ -255,32 +270,47 @@ function Package() {
              font-semibold text-cyan-600 p-1"><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
-                    <div className="align-middle inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
-                            <table className="table-fixed min-w-full divide-y divide-gray-200">
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                  
-                                            <tr className="hover:bg-gray-100" >
-                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Breakfast Included</span>
-                                                </td>
-                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Parking Type</span>
-                                                </td>
-                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Internet Included</span>
-                                                </td>
-                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Airport Shuttle </span>
-                                                </td>
-                                                <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                                    <span className="p-1 whitespace-wrap text-xs capitalize font-semibold text-gray-500">Transportation Charges</span>
-                                                </td></tr>
-                                      
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div className="flex flex-wrap">
+              <span>
+                <button
+                  className="text-sm  font-semibold  text-cyan-700 
+                            bg-gray-200 rounded-lg p-2 mx-1  mb-2 "
+                >
+                  Breakfast Included
+                </button>
+                <button
+                  className="text-sm  font-semibold  text-cyan-700 
+                            bg-gray-200 rounded-lg p-2 mx-1  mb-2"
+                >
+                 Parking Available
+                </button>
+              </span>
+              <br />
+              <span>
+                <button
+                  className="text-sm  font-semibold  text-cyan-700 
+                            bg-gray-200 rounded-lg p-2 mx-1  mb-2"
+                >
+                  Internet Included
+                </button>
+                <button
+                  className="text-sm  font-semibold  text-cyan-700 
+                            bg-gray-200 rounded-lg p-2 mx-1  mb-2"
+                >
+                  Airport Shuttle
+                </button>
+              </span>
+              <br />
+              <span>
+                <button
+                  className="text-sm  font-semibold  text-cyan-700 
+                            bg-gray-200 rounded-lg p-2 mx-1  mb-2"
+                >
+                 Transportation Charges
+                </button>
+              </span>
+             
+            </div>
                 </div>
             </div>
 
@@ -298,18 +328,33 @@ function Package() {
                             <Link href= '/eliterewards'><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
-                    {allPackageDetails?.membership?.map((item,idx) => {
-                        return (
-                            <div key={idx}>
-                                <span className="text-sm font-semibold capitalize text-gray-70 truncate">
-                                    {item?.program_name}
-                                </span>
-                                <span className="text-sm capitalize font-semibold text-gray-500 my-2">
-                                    {item?.program_level}
-                                </span>
-                            </div>
-                        )
-                    })}
+
+<div className="align-middle inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                            <table className="table-fixed min-w-full divide-y divide-gray-200">
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {allPackageDetails?.membership?.map((item,idx) => {
+                                        return (
+                                            <>
+                                                <tr  key={idx}>
+                                                    <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                                        <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.program} {t?.name}</span>
+                                                    </td>
+                                                    <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{item?.program_name}</td>
+                                                </tr>
+                                                <tr >
+                                                    <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                                        <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.program} {t?.level}</span>
+                                                    </td>
+                                                    <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">   {item?.program_level}</td>
+                                                </tr>
+                                            </>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Package Miles */}
@@ -332,13 +377,13 @@ function Package() {
                                     {allPackageDetails?.package_miles?.map((item,idx) => {
                                         return (
                                             <>
-                                                <tr className="hover:bg-gray-100" key={idx}>
+                                                <tr  key={idx}>
                                                     <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                                         <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.number} {t?.of} {t?.miles}</span>
                                                     </td>
                                                     <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">   {item?.number_of_miles}</td>
                                                 </tr>
-                                                <tr className="hover:bg-gray-100" >
+                                                <tr >
                                                     <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                                         <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.miles} {t?.provider}</span>
                                                     </td>

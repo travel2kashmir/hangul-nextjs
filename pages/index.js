@@ -72,15 +72,7 @@ function Signin() {
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
         if (EncryptedPass === response.data.user_password) {
           /** Toast emitter Sign in Successfull **/
-          toast.success(response?.data?.user_name + "  logged in ", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+         logger.info("Login Successful!");
           const whoIsLogged = {
             id: response.data.user_id,
             name: response.data.user_name,

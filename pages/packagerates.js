@@ -10,13 +10,17 @@ import Router from "next/router";
 var t;
 var currentProperty;
 var currentPackageRates;
+var resArr=[]
 const logger = require("../services/logger"); 
-
-
+var id=[];
+var filtered=[]
 
 function PackageRates() {
+  const [fill,setFill]=useState([])
   const[packageServices,setPackageServices]= useState([])
   const [allRooms, setAllRooms] = useState([])
+   const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
+  
 
   /** Fetching language from the local storage **/
   useEffect(()=>{
@@ -35,6 +39,7 @@ function PackageRates() {
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
         currentPackageRates=JSON.parse(localStorage.getItem('packageDescription'))
+        
       } 
     }
     firstfun();
@@ -47,6 +52,7 @@ function PackageRates() {
             const url = `/api/rooms/${currentProperty.property_id}`
             const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
            setAllRooms(response.data)
+           console.log(JSON.stringify(allRooms))
            
         }
         catch (error) {
@@ -58,11 +64,36 @@ function PackageRates() {
         }
     }
     fetchRooms();
+    const fetchPackageRooms = async () => {
+      try {
+          const url = `/api/rooms/${currentProperty.property_id}`
+          const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+         setAllRooms(response.data)
+         console.log(JSON.stringify(allRooms))
+         
+      }
+      catch (error) {
+
+          if (error.response) {
+              } 
+          else {
+          }
+      }
+  }
+  
 }
     ,[])
   
-    const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
-   
+    const filtering= async() => {    
+    const rooms =  currentPackageRates?.package_rooms?.map(i=>i.room_id)
+    allRooms?.map((i,idx)=> {
+    if(!rooms?.includes(i.room_id)){
+     filtered.push(i)
+    
+    }
+     })?.filter(i=> i !== undefined)
+     setFill(filtered)
+    }
   /* Edit Package Rate Function */
   const submitPackageRateEdit = () => {
     const final_data = {
@@ -184,7 +215,7 @@ function PackageRates() {
           Package Rooms 
           <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
         </h6>
-        {allRooms?.map((item, index) => {
+        {currentPackageRates?.package_rooms?.map((item, index) => {
                 return (
         
         <div className="flex flex-row ml-6 items-start" key={index}>
@@ -202,7 +233,7 @@ function PackageRates() {
                     id="remember"
                     aria-describedby="remember"
                     name={"remember" +index}
-                    type="checkbox"
+                    type="checkbox" checked
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
@@ -210,26 +241,74 @@ function PackageRates() {
                   />
                 </div>
                 <div className="text-sm ml-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                    {item?.room_name} -{item?.room_type_name}
+                  <label className="text-sm font-semibold capitalize text-gray-700">
+                    {item?.room_name} 
                   </label>
                 </div>
                
               </div>
-              )})}  
+              )})}
+               
+           <button className=" sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-xs px-3 py-1 text-center mt-2
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
+                     onClick={() => {
+                     filtering()
+                      
+                    }}type="button" >
+                   Add more rooms</button>
+                   
+                   {fill?.map((item, index) => {
+                return (
+                  <div key={index}>
+                     <div className="flex flex-row ml-6 items-start" key={index}>
+                <div className="flex items-center h-5">
+                  <input
+                   onClick={() => {
+                    setAllRooms(allRooms?.map((i) => {
+                      if (i?.room_id === item?.room_id) {
+                        i.check = !i.check
+                      }
+                      return i
+                    }))
 
-<div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
-                    focus:ring-4 focus:ring-slate-200 font-semibold
+                  }}
+                    id="remember"
+                    aria-describedby="remember"
+                    name={"remember" +index}
+                    type="checkbox" 
+                    className="bg-gray-50 
+                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                    rounded"
+                    required
+                  />
+                </div>
+                <div className="text-sm ml-3">
+                  <label className="text-sm font-semibold capitalize text-gray-700">
+                    {item?.room_name} 
+                  </label>
+                </div>
+               
+              </div>
+                  </div>
+             ) })}  
+
+
+    <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
                      onClick={() => {
-                      editRooms();
+                      // editRooms();
+                      
                     }}type="button" >
-                    Skip</button></div>
+                    {t?.update}</button>
+   </div>
       </div>
    {/*  Package Rates Form */}
-   <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+   <div className="bg-white shadow rounded-lg mt-4 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {t?.packagerates} 
           <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
@@ -251,6 +330,7 @@ function PackageRates() {
                         setAllPackageRateDetails({ ...allPackageRateDetails, base_rate_currency: e.target.value })
                       )
                     }>
+                     <option selected >Select baserate currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -292,6 +372,7 @@ function PackageRates() {
                         setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_currency: e.target.value })
                       )
                     }>
+                    <option selected >Select taxrate currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -325,7 +406,7 @@ function PackageRates() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.capacity} {t?.currency}
+                    {t?.other} {t?.charges} {t?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -333,6 +414,7 @@ function PackageRates() {
                         setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_currency: e.target.value })
                       )
                     }>
+                     <option selected >Select other charges currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>

@@ -1235,8 +1235,8 @@ const url = '/api/package/package_service_link'
       </div>
        {/* Package Services */}
        <div id='6' className={disp===6?'block':'hidden'}>
-      { service_name.length=0} 
-           {service_value.length=0}0 
+       <span className="hidden">{ service_name.length=0} 
+           {service_value.length=0} </span>
        <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
        <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">

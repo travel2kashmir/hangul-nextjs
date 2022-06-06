@@ -9,6 +9,10 @@ var t;
 var currentProperty;
 var currentPackage;
 var property;
+var id=[];
+var filtered=[]
+var resArr=[]
+var currentPackageRooms=[]
 import { ToastContainer, toast } from 'react-toastify';
 
 function Package() {
@@ -34,14 +38,18 @@ function Package() {
           
              /** To fetch current Package from Local Storage **/
             currentPackage=JSON.parse(localStorage.getItem('package'))
+
+            currentPackageRooms=JSON.parse(localStorage.getItem('packageDescription'))
           } 
         }
         firstfun();
         Router.push("/package");
       },[]) 
 
+    const [allRooms, setAllRooms] = useState([])
     const [allPackageDetails, setAllPackageDetails] = useState([])
     const [allBundleDetails, setAllBundleDetails] = useState([])
+    const [fill,setFill]=useState([])
 
     useEffect(() => {
       const fetchDetails = async () => {
@@ -109,6 +117,23 @@ function Package() {
       }
       fetchDetails();
       fetchRoomBundles();
+      const fetchRooms = async () => {
+        try {
+            const url = `/api/rooms/${currentProperty.property_id}`
+            const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+           setAllRooms(response.data)
+           console.log(JSON.stringify(allRooms))
+           
+        }
+        catch (error) {
+
+            if (error.response) {
+                } 
+            else {
+            }
+        }
+    }
+    fetchRooms();
   },[])
 
   return (
@@ -222,7 +247,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                           <Link href = '/packagerates'
+                         <Link href = '/packagerates' 
                                 ><a>{t?.seemore}</a></Link></span>
                         </div>
                     </div>
@@ -253,6 +278,28 @@ function Package() {
                             </table>
                         </div>
                     </div>
+                    <div className="align-middle pt-4 inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                            <table className="table-fixed min-w-full divide-y divide-gray-200">
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                <tr className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                <span className=" whitespace-wrap text-xs font-semibold text-gray-500">Package Rooms</span>
+                                 </tr>
+                                    {allPackageDetails?.package_rooms?.map((item,idx) => {
+                                        return (
+                                            <>
+                                                <tr  key={idx}> 
+                                                    <td className="p-2 capitalize whitespace-wrap text-xs font-medium text-gray-900">{item?.room_name}</td>
+                                                </tr>
+                                                
+                                            </>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                   
                 </div>
 
                 {/* Package Services */}
@@ -329,7 +376,7 @@ function Package() {
                         </div>
                     </div>
 
-<div className="align-middle inline-block min-w-full">
+                    <div className="align-middle inline-block min-w-full">
                         <div className="shadow overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">

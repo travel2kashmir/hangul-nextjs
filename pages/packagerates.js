@@ -11,16 +11,17 @@ var t;
 var currentProperty;
 var currentPackageRates;
 var resArr=[]
+var currentFilteredRooms;
 const logger = require("../services/logger"); 
 var id=[];
-var filtered=[]
+
 
 function PackageRates() {
-  const [fill,setFill]=useState([])
+  
   const[packageServices,setPackageServices]= useState([])
   const [allRooms, setAllRooms] = useState([])
-   const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
-  
+  const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
+  const[room,setRoom]= useState([])
 
   /** Fetching language from the local storage **/
   useEffect(()=>{
@@ -40,7 +41,7 @@ function PackageRates() {
         currentProperty=JSON.parse(localStorage.getItem('property'))
         currentPackageRates=JSON.parse(localStorage.getItem('packageDescription'))
         
-      } 
+    } 
     }
     firstfun();
     Router.push("/packagerates");
@@ -48,52 +49,69 @@ function PackageRates() {
 
   useEffect(() => {
     const fetchRooms = async () => {
-        try {
-            const url = `/api/rooms/${currentProperty.property_id}`
-            const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-           setAllRooms(response.data)
-           console.log(JSON.stringify(allRooms))
-           
-        }
-        catch (error) {
-
-            if (error.response) {
-                } 
-            else {
-            }
-        }
-    }
-    fetchRooms();
-    const fetchPackageRooms = async () => {
       try {
-          const url = `/api/rooms/${currentProperty.property_id}`
-          const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-         setAllRooms(response.data)
-         console.log(JSON.stringify(allRooms))
-         
+        const url = `/api/rooms/${currentProperty.property_id}`;
+        const response = await axios.get(url, {
+          headers: { accept: "application/json" },
+        });
+        setAllRooms(response.data);
+        console.log(JSON.stringify(allRooms));
+      } catch (error) {
+        if (error.response) {
+        } else {
+        }
       }
-      catch (error) {
+    };
+    fetchRooms();
+  }, []);
+  
+    /* Edit Package Rate Function */
+    const submitPackageRoomsEdit = () => {
+   const url = `/api/package/${currentPackageRates?.package_id}/rooms`
+    axios.delete(url, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+      logger.info("Delete success");
+      submitUpdatedRooms();
+      })
+      .catch((error) => {
+       logger.info("Delete error")
+      })
 
-          if (error.response) {
-              } 
-          else {
-          }
-      }
   }
-  
-}
-    ,[])
-  
-    const filtering= async() => {    
-    const rooms =  currentPackageRates?.package_rooms?.map(i=>i.room_id)
-    allRooms?.map((i,idx)=> {
-    if(!rooms?.includes(i.room_id)){
-     filtered.push(i)
-    
-    }
-     })?.filter(i=> i !== undefined)
-     setFill(filtered)
-    }
+
+  const submitUpdatedRooms = () => {
+    const datas = allRooms.filter(item => item.check === true)
+    const post = datas.map(item => item.room_id)
+    const roomData = post.map((item) => {
+      return { "package_id": currentPackageRates?.package_id, "room_id": item }
+    })
+    const finalData = {"package_room_link": roomData}
+    const url = '/api/package/package_room_link'
+    axios.put(url, finalData, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Package Rooms updated successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      })
+      .catch((error) => {
+       toast.error("Package Rooms update error! " , {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }) 
+  }
   /* Edit Package Rate Function */
   const submitPackageRateEdit = () => {
     const final_data = {
@@ -215,54 +233,10 @@ function PackageRates() {
           Package Rooms 
           <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
         </h6>
-        {currentPackageRates?.package_rooms?.map((item, index) => {
+        {allRooms?.map((item, index) => {
                 return (
         
         <div className="flex flex-row ml-6 items-start" key={index}>
-                <div className="flex items-center h-5">
-                  <input
-                   onClick={() => {
-                    setAllRooms(allRooms?.map((i) => {
-                      if (i?.room_id === item?.room_id) {
-                        i.check = !i.check
-                      }
-                      return i
-                    }))
-
-                  }}
-                    id="remember"
-                    aria-describedby="remember"
-                    name={"remember" +index}
-                    type="checkbox" checked
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm ml-3">
-                  <label className="text-sm font-semibold capitalize text-gray-700">
-                    {item?.room_name} 
-                  </label>
-                </div>
-               
-              </div>
-              )})}
-               
-           <button className=" sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-xs px-3 py-1 text-center mt-2
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
-                     onClick={() => {
-                     filtering()
-                      
-                    }}type="button" >
-                   Add more rooms</button>
-                   
-                   {fill?.map((item, index) => {
-                return (
-                  <div key={index}>
-                     <div className="flex flex-row ml-6 items-start" key={index}>
                 <div className="flex items-center h-5">
                   <input
                    onClick={() => {
@@ -291,8 +265,7 @@ function PackageRates() {
                 </div>
                
               </div>
-                  </div>
-             ) })}  
+              )})}
 
 
     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
@@ -301,7 +274,7 @@ function PackageRates() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
                      onClick={() => {
-                      // editRooms();
+                      submitPackageRoomsEdit();
                       
                     }}type="button" >
                     {t?.update}</button>

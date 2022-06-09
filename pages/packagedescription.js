@@ -7,6 +7,7 @@ import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 import Router from "next/router";
+const logger = require("../services/logger");
 var t;
 var currentProperty;
 var max_age=[];   
@@ -54,7 +55,6 @@ function Packagedescription() {
           "max_number_of_adult_guest": packageDetails?.max_number_of_adult_guest
       }  
      const url = '/api/package/package_description'
-     alert(JSON.stringify(final_data))
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
             toast.success("Package Description Updated Successfully!", {

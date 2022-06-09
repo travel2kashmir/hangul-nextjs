@@ -14,8 +14,7 @@ function Roombundle() {
   const [allRooms, setAllRooms] = useState([])
   const [allPackages, setAllPackages] = useState([])
   const[roomBundle,setRoomBundle] = useState([])
-  const [checked, setChecked] = useState(roomBundle?.breakfast_included==false)
-
+  const[bundle,setBundle] = useState([])
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -87,7 +86,84 @@ function Roombundle() {
     fetchRoomBundle();
     }
         ,[])
+     /* Edit Package Edit Function */
+   const submitPackageEdit = () => {
+    const final_data = {
+          "room_bundle_id":roomBundle?.room_bundle_id,
+          "rate_master_id":roomBundle?.rate_master_id,
+          "room_id": bundle?.room_id,
+          "package_id":bundle?.package_id,
+          "breakfast_included":bundle?.breakfast_included,
+          "parking_included": bundle?.parking_included,
+          "internet_included":bundle?.internet_included,
+          "rate_master_id":bundle?.rate_master_id
+      }  
 
+     const url = '/api/package/room_bundle'
+     alert(JSON.stringify(final_data))
+      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+          ((response) => {
+            toast.success("Room Bundles Updated Successfully!", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+          })
+
+          .catch((error) => {
+             toast.error("Room Bundles Update Error!", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });      
+          })
+  }   
+  const submitBundleRateEdit = () => {
+    const final_data = {
+      "base_rate_currency":bundle?.base_rate_currency,
+      "rate_master_id":roomBundle?.rate_master_id,
+      "base_rate_amount": bundle?.base_rate_amount,
+      "tax_currency":bundle?.tax_currency,
+      "tax_amount":bundle?.tax_amount,
+      "other_fees_currency": bundle?.other_fees_currency,
+      "other_fees_amount":bundle?.other_fees_amount,
+      
+  }  
+  const url = '/api/package/rate_master'
+  
+  axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+  ((response) => {
+    toast.success("Package Bundle Rates Updated Successfully!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  })
+
+  .catch((error) => {
+     toast.error("Room Bundles Rates Update Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });      
+  })
+  }
   return (
     <div id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -131,14 +207,19 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.room} {t?.name}
+                    {t?.room} {t?.name} 
                   </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   >
-                  <option selected >{roomBundle?.room_name}</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
+                  <select
+                    onClick={(e) => setBundle({ ...bundle, room_id: e.target.value })}
+                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900
+                         sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                        <option value={roomBundle?.room_id}>{roomBundle?.room_name}</option>
+                        {allRooms?.map(i => {
+                          return (
+                            <option key={i} value={i.room_id}>{i.room_name}</option>)
+                        }
+                        )}
+                      </select>
                 </div>
               </div>
               
@@ -148,14 +229,18 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.package} {t?.name}
-                  </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   >
-                    <option value="USD" >{roomBundle?.package_name}</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
+                    {t?.package} {t?.name} 
+                    </label>
+                  <select
+                   onClick={(e) => setBundle({ ...bundle, package_id: e.target.value })}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                      <option value={roomBundle?.package_id}>{roomBundle?.package_name}</option>
+                      {allPackages?.map(i => {
+                        return (
+                          <option key={i} value={i.package_id}>{i.package_name}</option>)
+                      }
+                      )}
+                    </select>
                 </div>
               </div>
                
@@ -170,7 +255,12 @@ function Roombundle() {
                   <input
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                 defaultValue={roomBundle?.base_rate_amount}/> 
+                 defaultValue={roomBundle?.base_rate_amount}
+                 onChange={
+                  (e) => (
+                    setBundle({ ...bundle, base_rate_amount: e.target.value })
+                  )
+                }/> 
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -181,11 +271,11 @@ function Roombundle() {
                   >
                     {t?.baserate} {t?.currency}
                   </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  <select className="shadow-sm bg-gray-50  border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue = {roomBundle?.base_rate_currency}
                   onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_currency: e.target.value })
+                        setBundle({ ...bundle, base_rate_currency: e.target.value })
                       )
                     }>
                     <option value="USD" >USD</option>
@@ -206,6 +296,11 @@ function Roombundle() {
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    defaultValue = {roomBundle?.tax_amount}
+                   onChange={
+                    (e) => (
+                      setBundle({ ...bundle, tax_amount: e.target.value })
+                    )
+                  }
                 /> 
                 </div>
               </div>
@@ -220,7 +315,7 @@ function Roombundle() {
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_currency: e.target.value })
+                        setBundle({ ...bundle, tax_currency: e.target.value })
                       )
                     }
                     >
@@ -241,7 +336,12 @@ function Roombundle() {
                   <input
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                 defaultValue={roomBundle?.other_fees_amount}/> 
+                    onChange={
+                      (e) => (
+                        setBundle({ ...bundle, other_fees_currency: e.target.value })
+                      )
+                    }
+                defaultValue={roomBundle?.other_fees_amount}/> 
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -255,7 +355,7 @@ function Roombundle() {
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, other_charges_currency: e.target.value })
+                        setBundle({ ...bundle, other_fees_currency: e.target.value })
                       )
                     }>
                     <option selected >{roomBundle?.other_fees_currency}</option>
@@ -272,69 +372,168 @@ function Roombundle() {
                   >
                     {t?.services} 
                   </label>
-                  <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember"
-                    type="checkbox" checked={roomBundle?.breakfast_included==true} 
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
+                 
+                
+                <div className="flex py-2 items-start">
+                  <label className="text-sm  pr-2 font-semibold text-gray-700">
                     Breakfast Included
                   </label>
-                </div>
-             
-                <div className="flex items-center h-5">
                   <input
                     id="remember"
                     aria-describedby="remember"
-                    name="remember"  
-                    type="checkbox" checked={roomBundle?.parking_included==true}
+                    name="remember" value={true}
+                    
+                    type="radio" onChange={
+                      (e) => (
+                        setBundle({ ...bundle, breakfast_included: e.target.value })
+                      )
+                    }
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
                     required
                   />
-                </div>
-                <div className="text-sm mx-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                   Parking Available
+                  <label className="text-sm font-semibold px-1 text-gray-700">
+                 Yes
                   </label>
-                </div>
-                <div className="flex items-center h-5">
                   <input
                     id="remember"
                     aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
+                    name="remember" 
+                    type="radio" 
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded" checked={roomBundle?.internet_included==true}
-                    
+                    rounded" value={false}  
+                    onChange={
+                      (e) => (
+                        setBundle({ ...bundle, breakfast_included: e.target.value })
+                      )
+                    } 
                     required
                   />
+                  <label className="text-sm px-1 font-semibold text-gray-700">
+                    No
+                  </label>  
                 </div>
-                <div className="text-sm ml-3">
-                  <label className="text-sm font-semibold text-gray-700">
-                  Internet Available
+             
+                <div className="flex py-2 items-start">
+                  <label className="text-sm pr-2 font-semibold  text-gray-700">
+                    Parking Included
                   </label>
-                </div>
+                  <input
+                    id="remember"
+                    aria-describedby="remember"
+                    name="remember" value={true}
+                    type="radio" 
+                    onChange={
+                      (e) => (
+                        setBundle({ ...bundle, parking_included: e.target.value })
+                      )
+                    }
+                    className="bg-gray-50 
+                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                    rounded"
+                    required
+                  />
+                  <label className="text-sm px-1 font-semibold text-gray-700">
+                 Yes
+                  </label>
+                  <input
+                    id="remember"   onChange={
+                      (e) => (
+                        setBundle({ ...bundle, parking_included: e.target.value })
+                      )
+                    } 
+                    aria-describedby="remember"
+                    name="remember" value={false}
+                    type="radio" 
+                    className="bg-gray-50 
+                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                    rounded"
+                    required
+                  />
+                  <label className="text-sm px-1 font-semibold text-gray-700">
+                    No
+                  </label>
+                 </div>
+                
+                 <div className="flex py-2 items-start">
+                 <label className="text-sm pr-2  font-semibold text-gray-700">
+                    Internet Included
+                  </label> 
+                  <input
+                    id="remember"
+                    aria-describedby="remember"
+                    name="remember" 
+                    type="radio" value={true}
+                    onChange={
+                      (e) => (
+                        setBundle({ ...bundle, internet_included: e.target.value })
+                      )
+                    }
+                    className="bg-gray-50 
+                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                    rounded"
+                    required
+                  />
+                  <label className="text-sm font-semibold px-1 text-gray-700">
+                 Yes
+                  </label>
+                  <input
+                    id="remember"
+                    aria-describedby="remember"
+                    name="remember" 
+                    type="radio" value={false}
+                    onChange={
+                      (e) => (
+                        setBundle({ ...bundle, internet_included: e.target.value })
+                      )
+                    }
+                    className="bg-gray-50 
+                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                    rounded"
+                    required
+                  />
+                  <label className="text-sm px-1 font-semibold text-gray-700">
+                    No
+                  </label>
+                 </div>
               </div>
                     </div> 
                      </div> 
+                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button
+                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center 
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
+                  onClick={() => {
+                  
+                    submitBundleRateEdit();
+                  }}
+                  type="button"
+                >
+                 {t?.update}
+                </button>
+              </div>
           </div>
           </div>
+
           </div>
-          
+        {/* Toast Container */}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />   
       </div>
-      </div>
+    
   )
 }
 

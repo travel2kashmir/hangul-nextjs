@@ -16,8 +16,6 @@ var final=[];
 var service_name=[];
 var service_value=[];
 
-
-
 function Addpackage() {
   const [packageId, setPackageId] = useState()
  const [maxChild, setMaxChild] = useState([])

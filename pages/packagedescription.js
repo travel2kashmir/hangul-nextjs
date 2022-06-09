@@ -9,9 +9,12 @@ import arabic from "./Languages/ar";
 import Router from "next/router";
 var t;
 var currentProperty;
+var max_age=[];   
+var final=[];
 var  currentPackageDetails;
 
 function Packagedescription() {
+  const [disp, setDisp] = useState(0);
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -34,22 +37,24 @@ function Packagedescription() {
     firstfun();
     Router.push("/packagedescription");
   },[]) 
+
   const [allPackageDetails, setAllPackageDetails] = useState([])
-    /* Edit Basic Details Function */
+  const [packageDetails, setPackageDetails] = useState([])
+    /* Edit Package Edit Function */
    const submitPackageEdit = () => {
     const final_data = {
           "package_id":allPackageDetails?.package_id,
-          "package_name": allPackageDetails?.package_name,
-          "package_description":allPackageDetails?.package_description,
-          "charge_currency":allPackageDetails?.charge_currency,
-          "refundable": allPackageDetails?.refundable,
-          "refundable_until_days": allPackageDetails?.refundable_until_days,
-          "refundable_until_time": allPackageDetails?.refundable_until_time,
-          "max_number_of_intended_occupants": allPackageDetails?.max_number_of_intended_occupants,
-          "max_number_of_adult_guest": allPackageDetails?.max_number_of_adult_guest
+          "package_name": packageDetails?.package_name,
+          "package_description":packageDetails?.package_description,
+          "charge_currency":packageDetails?.charge_currency,
+          "refundable": packageDetails?.refundable,
+          "refundable_until_days": packageDetails?.refundable_until_days,
+          "refundable_until_time": packageDetails?.refundable_until_time,
+          "max_number_of_intended_occupants": packageDetails?.max_number_of_intended_occupants,
+          "max_number_of_adult_guest": packageDetails?.max_number_of_adult_guest
       }  
-     
      const url = '/api/package/package_description'
+     alert(JSON.stringify(final_data))
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
             toast.success("Package Description Updated Successfully!", {
@@ -74,11 +79,28 @@ function Packagedescription() {
                 });      
           })
   }
+  /** Function submit max age **/
+  const submitAge = () =>{
+    max_age.forEach((item)=>{
+    const temp={
+      package_id: packageId,
+      max_age_of_child_guest:item
+    }
+   final.push(temp);
+   });
+   const final_data = {"max_age_child": final}
+   const url = '/api/package/max_age_children'
+      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          logger.info("Package max age children success");
+        })
+        .catch((error) => {
+          logger.error("Max age child error");
+        }) 
+    }
   return (
-    <div
-      id="main-content"
-      className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
-    >
+    <div id="main-content"
+      className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
@@ -184,7 +206,7 @@ function Packagedescription() {
         </ol>
       </nav>
       {/* Package Details Form */}
-      <div className="bg-white shadow rounded-lg mx-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+      <div className="bg-white shadow rounded-lg mx-10 my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {t?.package} {t?.description}
           <svg
@@ -217,8 +239,8 @@ function Packagedescription() {
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     defaultValue={allPackageDetails?.package_name}
                     onChange={(e) =>
-                      setAllPackageDetails({
-                        ...allPackageDetails,
+                      setPackageDetails({
+                        ...packageDetails,
                         package_name: e.target.value,
                       })
                     }
@@ -240,8 +262,8 @@ function Packagedescription() {
                     className="shadow-sm bg-gray-50 border capitalize border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     defaultValue={allPackageDetails?.package_description}
                     onChange={(e) =>
-                      setAllPackageDetails({
-                        ...allPackageDetails,
+                      setPackageDetails({
+                        ...packageDetails,
                         package_description: e.target.value,
                       })
                     }
@@ -260,8 +282,8 @@ function Packagedescription() {
                   <select
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={(e) =>
-                      setAllPackageDetails({
-                        ...allPackageDetails,
+                      setPackageDetails({
+                        ...packageDetails,
                         charge_currency: e.target.value,
                       })
                     }
@@ -285,8 +307,8 @@ function Packagedescription() {
                   <select
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={(e) =>
-                      setAllPackageDetails({
-                        ...allPackageDetails,
+                      setPackageDetails({
+                        ...packageDetails,
                         refundable: e.target.value,
                       })
                     }
@@ -311,8 +333,8 @@ function Packagedescription() {
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         defaultValue={allPackageDetails?.refundable_until_days}
                         onChange={(e) =>
-                          setAllPackageDetails({
-                            ...allPackageDetails,
+                          setPackageDetails({
+                            ...packageDetails,
                             refundable_until_days: e.target.value,
                           })
                         }
@@ -329,12 +351,12 @@ function Packagedescription() {
                         {t?.refundable} {t?.till} {t?.time}
                       </label>
                       <input
-                        type="time"
+                        type="time" step="2"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         defaultValue={allPackageDetails?.refundable_until_time}
                         onChange={(e) =>
-                          setAllPackageDetails({
-                            ...allPackageDetails,
+                          setPackageDetails({
+                            ...packageDetails,
                             refundable_until_time: e.target.value,
                           })
                         }
@@ -357,8 +379,8 @@ function Packagedescription() {
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={(e) =>
-                      setAllPackageDetails({
-                        ...allPackageDetails,
+                      setPackageDetails({
+                        ...packageDetails,
                         max_number_of_intended_occupants: e.target.value,
                       })
                     }
@@ -382,38 +404,14 @@ function Packagedescription() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     defaultValue={allPackageDetails?.max_number_of_adult_guest}
                     onChange={(e) =>
-                      setAllPackageDetails({
-                        ...allPackageDetails,
+                      setPackageDetails({
+                        ...packageDetails,
                         max_number_of_adult_guest: e.target.value,
                       })
                     }
                   />
                 </div>
               </div>
-
-              {/* <div className="w-full lg:w-6/12 px-4">
-              {allPackageDetails?.max_age_children.map((item, idx) => {
-                return (
-                <div className="relative w-full mb-3" key={idx}>
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                  {t?.maximum}  {t?.age}  {t?.of} {t?.child}
-                  </label>   
-                  <input
-                    type="text"
-                    className="shadow-sm bg-gray-50 mb-2 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   defaultValue={item.max_age_of_child_guest} 
-                  onChange={
-                    (e) => (
-                        setAllPackageDetails({ ...allPackageDetails,max_age_child_guest: e.target.value })
-                    )
-                } />
-                </div>
-                 )
-                })}
-              </div> */}
 
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                 <button
@@ -423,6 +421,9 @@ function Packagedescription() {
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                   onClick={() => {
                     submitPackageEdit();
+                    if(allPackageDetails?.max_number_of_intended_occupants-
+                      allPackageDetails?.max_number_of_adult_guest >= 1)
+                    setDisp(1);
                   }}
                   type="button"
                 >
@@ -432,7 +433,87 @@ function Packagedescription() {
             </div>
           </div>
         </div>
+
       </div>
+      <div id='1' className={disp===1?'block':'hidden'}>
+       {final=[]} {max_age=[]}
+      {allPackageDetails?.max_number_of_intended_occupants-
+                            allPackageDetails?.max_number_of_adult_guest >= 1 ? 
+                            <>
+      <div className="bg-white shadow rounded-lg mx-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
+         Maximum Age of Children
+          <svg
+            className="ml-2 h-6 mb-2 w-6 font-semibold"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+            <path
+              fillRule="evenodd"
+              d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+        </h6>
+        <div className="pt-6">
+          <div className=" md:px-4 mx-auto w-full">
+            <div className="flex flex-wrap">
+        
+            <div className="w-full lg:w-6/12 px-4">
+              {allPackageDetails?.max_age_children?.map((item, idx) => {
+                return (
+                <div className="relative w-full mb-3" key={idx}>
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                  {t?.maximum}  {t?.age}  {t?.of} {t?.child}
+                  </label>   
+                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                     onChange={(e)=>
+                      max_age[index]=e.target.value
+                  }>
+                     <option selected >{item?.max_age_of_child_guest} </option>
+                    <option value="1" >1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5" >5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9" >9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+                </div>
+                 )
+                })}
+              </div>
+              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button
+                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center 
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
+                  onClick={() => {
+                    submitAge();
+                  }}
+                  type="button"
+                >
+                 {t?.update}
+                </button>
+              </div>   
+            </div>
+            </div>
+            </div>
+        </div>
+        </>:
+        <></>}
+        </div>
       {/* Toast Container */}
       <ToastContainer
         position="top-center"

@@ -11,6 +11,11 @@ var t;
 var currentProperty;
 var  currentPackageDetails;
 function Roombundle() {
+  const [allRooms, setAllRooms] = useState([])
+  const [allPackages, setAllPackages] = useState([])
+  const[roomBundle,setRoomBundle] = useState([])
+  const [checked, setChecked] = useState(roomBundle?.breakfast_included==false)
+
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -32,6 +37,57 @@ function Roombundle() {
         firstfun();
         Router.push("/roombundle");
       },[]) 
+    
+      useEffect(() => {
+        const fetchRooms = async () => {
+            try {
+                const url = `/api/rooms/${currentProperty.property_id}`
+                const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+               setAllRooms(response.data)
+               
+            }
+            catch (error) {
+    
+                if (error.response) {
+                    } 
+                else {
+                }
+            }
+        }
+        fetchRooms();
+        const fetchPackages = async () => {
+          try {
+              const url = `/api/package/${currentProperty?.property_id}`
+              const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+             setAllPackages(response.data) 
+          }
+          catch (error) {
+              if (error.response) {
+                 } 
+              else {
+                 }
+          }
+  
+      }
+      fetchPackages();
+      const fetchRoomBundle = async () => {
+        try {
+            const url = `/api/room_bundle/rb007`
+            const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+           setRoomBundle(response.data) 
+        }
+        catch (error) {
+            if (error.response) {
+               } 
+            else {
+               }
+        }
+
+    }
+    fetchRoomBundle();
+    }
+        ,[])
+
   return (
     <div id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -64,7 +120,7 @@ function Roombundle() {
       </nav>
       <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         {t?.room} Bundle
+         {t?.room} Bundle 
          </h6>
          <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -79,7 +135,7 @@ function Roombundle() {
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    >
-                    <option value="USD" >Select Room</option>
+                  <option selected >{roomBundle?.room_name}</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
                   </select>
@@ -96,7 +152,7 @@ function Roombundle() {
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    >
-                    <option value="USD" >Select Package</option>
+                    <option value="USD" >{roomBundle?.package_name}</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
                   </select>
@@ -114,7 +170,7 @@ function Roombundle() {
                   <input
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                 /> 
+                 defaultValue={roomBundle?.base_rate_amount}/> 
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -126,7 +182,8 @@ function Roombundle() {
                     {t?.baserate} {t?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    onChange={
+                  defaultValue = {roomBundle?.base_rate_currency}
+                  onChange={
                       (e) => (
                         setAllPackageDetails({ ...allPackageDetails, other_charges_currency: e.target.value })
                       )
@@ -148,7 +205,8 @@ function Roombundle() {
                   <input
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                 /> 
+                   defaultValue = {roomBundle?.tax_amount}
+                /> 
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -164,8 +222,9 @@ function Roombundle() {
                       (e) => (
                         setAllPackageDetails({ ...allPackageDetails, other_charges_currency: e.target.value })
                       )
-                    }>
-                    <option value="USD" >USD</option>
+                    }
+                    >
+                    <option selected >{roomBundle?.tax_currency}</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
                   </select>
@@ -182,7 +241,7 @@ function Roombundle() {
                   <input
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                 /> 
+                 defaultValue={roomBundle?.other_fees_amount}/> 
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -199,7 +258,7 @@ function Roombundle() {
                         setAllPackageDetails({ ...allPackageDetails, other_charges_currency: e.target.value })
                       )
                     }>
-                    <option value="USD" >USD</option>
+                    <option selected >{roomBundle?.other_fees_currency}</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
                   </select>
@@ -219,7 +278,7 @@ function Roombundle() {
                     id="remember"
                     aria-describedby="remember"
                     name="remember"
-                    type="checkbox"
+                    type="checkbox" checked={roomBundle?.breakfast_included==true} 
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
@@ -236,8 +295,8 @@ function Roombundle() {
                   <input
                     id="remember"
                     aria-describedby="remember"
-                    name="remember"
-                    type="checkbox"
+                    name="remember"  
+                    type="checkbox" checked={roomBundle?.parking_included==true}
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
@@ -257,7 +316,8 @@ function Roombundle() {
                     type="checkbox"
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
+                    rounded" checked={roomBundle?.internet_included==true}
+                    
                     required
                   />
                 </div>
@@ -272,6 +332,7 @@ function Roombundle() {
           </div>
           </div>
           </div>
+          
       </div>
       </div>
   )

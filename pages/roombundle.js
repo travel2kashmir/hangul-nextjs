@@ -10,6 +10,8 @@ import Router from "next/router";
 var t;
 var currentProperty;
 var  currentPackageDetails;
+const logger = require("../services/logger");
+
 function Roombundle() {
   const [allRooms, setAllRooms] = useState([])
   const [allPackages, setAllPackages] = useState([])
@@ -100,31 +102,15 @@ function Roombundle() {
       }  
 
      const url = '/api/package/room_bundle'
-     alert(JSON.stringify(final_data))
+   
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
-            toast.success("Room Bundles Updated Successfully!", {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });
+            logger.info("Room bundle updated successfully")
           })
 
           .catch((error) => {
-             toast.error("Room Bundles Update Error!", {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });      
-          })
+             logger.error("Room bundle update error")     
+          }) 
   }   
   const submitBundleRateEdit = () => {
     const final_data = {
@@ -141,7 +127,7 @@ function Roombundle() {
   
   axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
   ((response) => {
-    toast.success("Package Bundle Rates Updated Successfully!", {
+    toast.success("Package Bundle  Updated Successfully!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -189,14 +175,14 @@ function Roombundle() {
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.room} Bundle</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.room} {t?.bundle}</span>
             </div>
           </li>
         </ol>
       </nav>
       <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         {t?.room} Bundle 
+         {t?.room} {t?.bundle}
          </h6>
          <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -331,14 +317,14 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.charges} {t?.rate}
+                    {t?.other} {t?.charges} {t?.rate} 
                   </label>
                   <input
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setBundle({ ...bundle, other_fees_currency: e.target.value })
+                        setBundle({ ...bundle, other_fees_amount: e.target.value })
                       )
                     }
                 defaultValue={roomBundle?.other_fees_amount}/> 
@@ -394,7 +380,7 @@ function Roombundle() {
                     required
                   />
                   <label className="text-sm font-semibold px-1 text-gray-700">
-                 Yes
+                 {t?.yes}
                   </label>
                   <input
                     id="remember"
@@ -412,7 +398,7 @@ function Roombundle() {
                     required
                   />
                   <label className="text-sm px-1 font-semibold text-gray-700">
-                    No
+                    {t?.no}
                   </label>  
                 </div>
              
@@ -436,7 +422,7 @@ function Roombundle() {
                     required
                   />
                   <label className="text-sm px-1 font-semibold text-gray-700">
-                 Yes
+                  {t?.yes}
                   </label>
                   <input
                     id="remember"   onChange={
@@ -453,7 +439,7 @@ function Roombundle() {
                     required
                   />
                   <label className="text-sm px-1 font-semibold text-gray-700">
-                    No
+                  {t?.no}
                   </label>
                  </div>
                 
@@ -477,7 +463,7 @@ function Roombundle() {
                     required
                   />
                   <label className="text-sm font-semibold px-1 text-gray-700">
-                 Yes
+                  {t?.yes}
                   </label>
                   <input
                     id="remember"
@@ -495,7 +481,7 @@ function Roombundle() {
                     required
                   />
                   <label className="text-sm px-1 font-semibold text-gray-700">
-                    No
+                  {t?.no}
                   </label>
                  </div>
               </div>
@@ -508,7 +494,7 @@ function Roombundle() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                   onClick={() => {
-                  
+                  submitPackageEdit();
                     submitBundleRateEdit();
                   }}
                   type="button"

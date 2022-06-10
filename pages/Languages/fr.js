@@ -125,6 +125,20 @@ export default {
   areyousureyouwanttodelete:"Etes-vous sûr que vous voulez Supprimer?",
   yesiamsure:'Oui, je suis sûr',
   nocancel:'Non, annuler',
-  searchforprograms:'Rechercher Programmes'
+  searchforprograms:'Rechercher Programmes',
+  propertypackages:'Forfaits Immobiliers',
+  packagedescription:'Descriptif Du Colis',
+  occupants:'Je Est Heureux',
+  searchformiles:'rechercher des kilomètres',
+  yes:'Oui',
+  no:'Non',
+  level:'Niveau',
+  summary:'ملخص',
+  and:'et',
+  next:'Suivant',
+  skip:'Sauter',
+  bundle:'Paquet',
+  imageupload:'Hargement Des Images',
+  
 
 };

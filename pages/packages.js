@@ -217,7 +217,7 @@ function Packages() {
                 </div>
             </div>
             {/* Modal Delete */}
-            <div className={deletePackage===1?"block":"hidden"}>
+            <div className={deletePackage===1?"block":"hidden"}>  
             <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full" >
                 <div className="relative w-full max-w-md px-4 h-full md:h-auto">
                     <div className="bg-white rounded-lg shadow relative">
@@ -229,15 +229,15 @@ function Packages() {
                         <div className="p-6 pt-0 text-center">
                             <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
-                                Are you sure you want to delete this package ?</h3>
+                              {t?.areyousureyouwanttodelete}</h3>
                             <button 
                             onClick={()=>{deletePackages();setDeletePackage(0)}}
                              className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                                Yes, I`m sure
+                               {t?.yesiamsure}
                             </button>
                             <button 
                             onClick={()=>setDeletePackage(0)} className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                No, cancel
+                                {t?.nocancel}
                             </button>
                         </div>
                     </div>

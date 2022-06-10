@@ -130,5 +130,18 @@ export default {
   areyousureyouwanttodelete:'Are you sure you want to Delete?',
   yesiamsure: 'Yes, I`m sure',
   nocancel:'No, cancel',
-  searchforprograms:'Search for programs'
+  searchforprograms:'Search for programs',
+  propertypackages: 'Property Packages',
+  packagedescription:'Package Description',
+  occupants:'Occupants',
+  searchformiles:'Search for miles',
+  yes:'yes',
+  no:'no',
+  level:'Level',
+  summary:'Summary',
+  and:'and',
+  next:'Next',
+  skip:'Skip',
+  bundle:'Bundle',
+  imageupload:'Image Upload'
 };

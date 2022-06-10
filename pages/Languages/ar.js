@@ -53,9 +53,9 @@ export default {
     propertybrand: "اسم  بَصَم",
     establisheddate: "أُسّسَ  أَرَّخ",
     starrating:" نظام النجوم",
-    descriptiontitle: "بطولة تَصوِير",
-    description: "تَصوِير",
-    descriptiondate: " أَرَّخ تَصوِير",
+    descriptiontitle: "بطولة تَحْميل ",
+    description: "تَحْميل",
+    descriptiondate: "تَحْميل أَرَّخ ",
     update:' أَجَدّ',
     country:' إِقلِيم',
     value: 'اِحْتَرَم',
@@ -123,7 +123,24 @@ export default {
     areyousureyouwanttodelete:"?هل أنت متأكد أنك تريد حذف",
     yesiamsure:'نعم أنا متأكد',
     nocancel:'لا إلغاء',
-    searchforprograms:'البرامج البحث عن'
+    searchforprograms:'البرامج البحث عن',
+    propertypackages:'حزم الممتلكات',
+    packagedescription:'حزمة الوصف',
+    occupants:'شاغلين',
+    searchformiles:'البحث عن أميال',
+    yes:'نعم',
+    no:'رقم',
+    level:'مستوى',
+    summary:'ملخص',
+    and:'و',
+    next:'التالي',
+    skip:'يتخطى',
+    bundle:'حزمة',
+    imageupload:'لتخزين الصور',
+    image:'تَصَوُّر ',
+    titl:'عَنْوَنَ',
+    upload:'تَحْميل'
+
   
   };
   

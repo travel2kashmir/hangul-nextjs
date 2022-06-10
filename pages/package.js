@@ -160,7 +160,7 @@ function Package() {
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href="/packages"><a>Property Packages</a></Link></span>
+                            <Link href="/packages"><a>{t?.propertypackages}</a></Link></span>
                         </div>
                     </li>
                     <li>
@@ -196,14 +196,14 @@ function Package() {
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Package Description</span>
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.packagedescription}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.package_name}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Occupants</span>
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.occupants}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.max_number_of_intended_occupants}
                                         </td>
@@ -217,19 +217,18 @@ function Package() {
                                     </tr>
                                     <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Adults</span>
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.adult}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.max_number_of_intended_occupants}
                                       </td>
                                     </tr>
                                     <tr >
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Refund till</span>
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{t?.refundable} {t?.till}</span>
                                         </td>
-                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.refundable_until_days}days, {allPackageDetails?.refundable_until_time}
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.refundable_until_days}{t?.days}, {allPackageDetails?.refundable_until_time}
                                       </td>
-                                    </tr>
-                                   
+                                    </tr> 
                                 </tbody>
                             </table>
                         </div>
@@ -241,7 +240,7 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.rooms} and {t?.rates}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.rooms} {t?.and} {t?.rates}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
@@ -283,7 +282,7 @@ function Package() {
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                 <tr className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                <span className=" whitespace-wrap text-xs font-semibold text-gray-500">Package Rooms</span>
+                                <span className=" whitespace-wrap text-xs font-semibold text-gray-500">{t?.package} {t?.rooms}</span>
                                  </tr>
                                     {allPackageDetails?.package_rooms?.map((item,idx) => {
                                         return (

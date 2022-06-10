@@ -333,7 +333,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                           Image {t?.description}
+                                           {t?.image} {t?.description}
                                         </label>
                                         <textarea rows="6" columns="60"
 
@@ -353,7 +353,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                           Image title
+                                           {t?.image} {t?.titl}
                                         </label>
                                         <input
                                             type="text"
@@ -390,7 +390,7 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                   Add new image
+                                  {t?.addnewimage} 
                                 </h3>
                                 <button type="button"
                                     onClick={() => setAddImage(0)}
@@ -409,7 +409,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image upload
+                                            {t?.imageupload} 
                                         </label>
                                         <div className="flex">
                                         <input
@@ -424,7 +424,7 @@ function Gallery() {
                                     </div> 
                                     <div className="col-span-6 sm:col-span-3">
                                     <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
-                                               onClick={uploadImage}>Upload</button></div>
+                                               onClick={uploadImage}>{t?.upload}</button></div>
                                     </div>
                                     <img className="py-2" src={image.image_link} alt='Image_Preview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
@@ -432,7 +432,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image title
+                                            {t?.image} {t?.titl}
                                         </label>
                                         <input
                                             type="text"
@@ -445,7 +445,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            Image {t?.description}
+                                            {t?.image} {t?.description}
                                         </label>
                                         <textarea rows="2" columns="60"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value }))}

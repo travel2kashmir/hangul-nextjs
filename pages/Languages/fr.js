@@ -139,6 +139,8 @@ export default {
   skip:'Sauter',
   bundle:'Paquet',
   imageupload:'Hargement Des Images',
-  
+  image:'Image',
+  titl:'titre',
+  upload:'Télécharger'
 
 };

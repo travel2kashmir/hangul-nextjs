@@ -47,11 +47,8 @@ function Contact() {
     contact_data: "",
     property_id: currentProperty?.property_id,
   };
-  const [contact, setContact] = useState(
-    [conTemp]?.map((i, id) => {
-      return { ...i, index: id };
-    })
-  );
+
+  const [contact, setContact] = useState([]);
 
   const onChange = (e, index, i) => {
     setContact(
@@ -66,6 +63,7 @@ function Contact() {
 
   /* Function Edit Contact*/
   const submitContactEdit = (props) => {
+    if (allHotelDetails.length !== 0){
     const final_data = {
       contact_id: props,
       contact_type: allHotelDetails.contact_type,
@@ -84,6 +82,7 @@ function Contact() {
           draggable: true,
           progress: undefined,
         });
+        setAllHotelDetails([])
       })
       .catch((error) => {
         toast.error("Contact Update Error!", {
@@ -96,18 +95,18 @@ function Contact() {
           progress: undefined,
         });
       });
+    }
   };
 
   /* Function Add Contact*/
   function submitContactAdd(e) {
     e.preventDefault();
-    const contactdata = contact?.map((i) => {
-      return {
+    if (contact.length !== 0){
+    const contactdata = [{
         property_id: currentProperty?.property_id,
-        contact_type: i.contact_type,
-        contact_data: i.contact_data,
-      };
-    });
+        contact_type: contact?.contact_type,
+        contact_data: contact?.contact_data
+    }];
     const finalContact = { contacts: contactdata };
     axios
       .post(`/api/contact`, JSON.stringify(finalContact), {
@@ -123,6 +122,7 @@ function Contact() {
           draggable: true,
           progress: undefined,
         });
+       setContact([])
       })
       .catch((error) => {
         toast.error("Contact Add Error!", {
@@ -135,6 +135,7 @@ function Contact() {
           progress: undefined,
         });
       });
+    }
   }
 
   /* Function Delete Contact*/
@@ -285,7 +286,7 @@ function Contact() {
                       scope="col"
                       className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
-                      {t?.contact} {t?.name}
+                      {t?.contact} {t?.name} 
                     </th>
                     <th
                       scope="col"
@@ -477,7 +478,8 @@ function Contact() {
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
                 <button
                   className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center"
-                  onClick={() => submitContactEdit(editContact?.contact_id)}
+                  onClick={() => {submitContactEdit(editContact?.contact_id);
+                   setUpdateContact(0)}}
                   type="submit"
                 >
                   {t?.update}
@@ -514,8 +516,8 @@ function Contact() {
                   </svg>
                 </button>
               </div>
-              {contact?.map((contact, index) => (
-                <div className="p-6 space-y-6" key={index}>
+            
+                <div className="p-6 space-y-6" >
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
                       <label
@@ -525,9 +527,12 @@ function Contact() {
                        {t?.contact} {t?.type}
                       </label>
                       <select
-                        onChange={(e) =>
-                          onChange(e, contact?.index, "contact_type")
-                        }
+                       onChange={(e) =>
+                        setContact({
+                          ...contact,
+                          contact_type: e.target.value,
+                        })
+                      }
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       >
                         <option selected>Select contact type</option>
@@ -552,19 +557,23 @@ function Contact() {
                         name="last-name"
                         id="last-name"
                         onChange={(e) =>
-                          onChange(e, contact?.index, "contact_data")
+                          setContact({
+                            ...contact,
+                            contact_data: e.target.value,
+                          })
                         }
+                        
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         required
                       />
                     </div>
                   </div>
                 </div>
-              ))}
+              
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
                 <button
                   className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  onClick={submitContactAdd}
+                   onClick={(e) => {submitContactAdd(e);setView(0)}}
                   type="submit"
                 >
                  {t?.add} {t?.contact}
@@ -620,13 +629,14 @@ function Contact() {
                  {t?.areyousureyouwanttodelete}
                 </h3>
                 <button
-                  onClick={() => submitDelete(editContact?.contact_id)}
+                  onClick={(e) => { submitDelete(editContact?.contact_id);
+                    setDeleteContact(0)}}
                   className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2"
                 >
                   {t?.yesiamsure}
                 </button>
                 <button
-                  onClick={() => setDeleteContact(0)}
+                  onClick={() =>  setDeleteContact(0)}
                   className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center"
                   data-modal-toggle="delete-user-modal"
                 >

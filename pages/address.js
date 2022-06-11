@@ -39,6 +39,7 @@ function Address() {
   const [allHotelDetails, setAllHotelDetails] = useState([]);
   /* Edit Address Function */
   const submitAddressEdit = () => {
+    if (allHotelDetails.length !== 0){
     const final_data = {
       address_id: address?.address[0]?.address_id,
       address_street_address: allHotelDetails.address_street_address,
@@ -64,6 +65,7 @@ function Address() {
           draggable: true,
           progress: undefined,
         });
+        setAllHotelDetails([])
       })
       .catch((error) => {
         toast.error("Address Update Error!", {
@@ -76,6 +78,7 @@ function Address() {
           progress: undefined,
         });
       });
+    }
   };
 
   return (
@@ -114,8 +117,8 @@ function Address() {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                {address?.property_name}
+              <span className="text-gray-700 text-sm font-medium hover:text-gray-900 ml-1 md:ml-2">
+                {address?.property_name} 
               </span>
             </div>
           </li>

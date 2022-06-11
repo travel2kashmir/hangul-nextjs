@@ -12,13 +12,11 @@ var services;
 import Router from 'next/router'
 import arabic from "./Languages/ar";
 
-
 function Services() {
-    const [allHotelDetails, setAllHotelDetails] = useState({})
     const [additionalServices, setAdditionalServices] = useState({})
     const [edit, setEdit] = useState(0)
     const [actionService, setActionService] = useState({})
-    const [modified, setModified] = useState({})
+    const [modified, setModified] = useState([])
     const [addEdit, setAddEdit] = useState(0)
     const [addDel, setAddDel] = useState(0)
     const [add, setAdd] = useState(0)
@@ -58,8 +56,10 @@ function Services() {
        fetchAdditionalServices();
        
     },[])
+
     /*Function to edit additional services*/
     const editAdditionalServices = () => {
+        if (modified.length !== 0){
         const final_data = {
             "add_service_id": actionService.add_service_id,
             "property_id": currentProperty?.property_id,
@@ -79,6 +79,7 @@ function Services() {
                     draggable: true,
                     progress: undefined,
                 });
+                setModified([])
             })
             .catch((error) => {
                
@@ -91,12 +92,13 @@ function Services() {
                     draggable: true,
                     progress: undefined,
                 });
-            })
+            })}
 
     }
 
     /* Function to edit services*/
     const updateServices = () => {
+        if (modified.length !== 0){
         const final_data = {
             "service_id": actionService.service_id,
             "property_id": currentProperty?.property_id,
@@ -117,6 +119,7 @@ function Services() {
                     draggable: true,
                     progress: undefined,
                 });
+                setModified([])
             })
             .catch((error) => {
                toast.error("Service Update Error!", {
@@ -129,6 +132,7 @@ function Services() {
                     progress: undefined,
                 });
             })
+        }
     }
 
     /* Function to delete additional service */
@@ -166,10 +170,13 @@ function Services() {
                 });
             })
     }
+    
  /*Function to add additional service*/
  const newAdditionalService = ()=>
  {
+    if (modified.length !== 0){
      const final_data ={
+        
          "additional_service": [ { 
          "property_id": currentProperty?.property_id,
          "add_service_name": modified.add_service_name,
@@ -190,6 +197,7 @@ function Services() {
                  draggable: true,
                  progress: undefined,
              });
+             setModified([])
          })
          .catch((error) => {
              toast.error("Additional Services Add Error! " , {
@@ -201,7 +209,7 @@ function Services() {
                  draggable: true,
                  progress: undefined,
              });
-         })
+         })}
      
  }
   
@@ -273,7 +281,7 @@ function Services() {
      
             <div className="bg-white shadow rounded-lg mx-6 mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
             <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t?.services}</h1>   
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t?.services} {modified?.length}</h1>   
             </div>
             {/* Services Table */}
             <div className="flex flex-col my-4">
@@ -475,6 +483,7 @@ function Services() {
                                             <div className="flex">
                                                 <div className="form-check form-check-inline">
                                                     <input type="radio"
+                                                    
                                                         onChange={(e) => (setModified({ ...modified, service_value: e.target.value }))}
                                                         className="form-check-input form-check-input 
                                                          appearance-none rounded-full h-4 w-4 border 
@@ -519,6 +528,7 @@ function Services() {
                                                 <div className="form-check form-check-inline">
                                                     <input type="radio"
                                                         onChange={(e) => (setModified({ ...modified, status: true }))}
+                                                    
                                                         className="form-check-input form-check-input 
                                                          appearance-none rounded-full h-4 w-4 border 
                                                          border-gray-300 
@@ -556,7 +566,7 @@ function Services() {
                                         <div className="col-span-6 sm:col-span-3">
                                             <label htmlFor="service_comment" className="text-sm font-medium text-gray-900 block mb-2">
                                                 Service Description</label>
-                                            <textarea rows="2" columns="50"
+                                            <textarea rows="2" columns="50"     defaultValue={actionService?.service_comment}
                                                 id="service_comment" onChange={(e) => (setModified({ ...modified, service_comment: e.target.value }))} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
                                         </div>
 
@@ -611,6 +621,7 @@ function Services() {
                                                     case 'ser0020': return (<div>
                                                         {/*Swimming Pool*/}
                                                         <select onClick={(e) => setModified({ ...modified, service_value: e.target.value })} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                                                            <option selected>{actionService?.service_value}</option>
                                                             <option value="Indoors">Indoors</option>
                                                             <option value="Outdoors">Outdoors</option>
                                                             <option value="Indoors and outdoors">Indoors and Outdoors</option>
@@ -620,6 +631,7 @@ function Services() {
                                                     case 'ser0022': return (<div>
                                                         {/*Wifi Type*/}
                                                         <select onClick={(e) => setModified({ ...modified, service_value: e.target.value })} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                                                        <option selected>{actionService?.service_value}</option>
                                                             <option value="No payment required">No Payment Required</option>
                                                             <option value="Paid">Paid</option>
                                                             <option value="Not available">Not available</option>

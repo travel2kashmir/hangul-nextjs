@@ -50,6 +50,7 @@ export default function BasicDetails()
 
   /* Edit Basic Details Function */
   const submitBasicEdit = () => {
+    if (allHotelDetails.length !== 0){
     const final_data = {
          "property_id": currentProperty?.property_id,
          "property_name": allHotelDetails.property_name?.toLowerCase(),
@@ -73,6 +74,7 @@ export default function BasicDetails()
                  draggable: true,
                  progress: undefined,
                });
+              setAllHotelDetails([])
          })
          .catch((error) => {
             toast.error("Basic Details Update Error!", {
@@ -85,6 +87,7 @@ export default function BasicDetails()
                  progress: undefined,
                });      
          })
+        }
  } 
  
   return (
@@ -129,7 +132,7 @@ export default function BasicDetails()
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.propertyname}
+                    {t?.propertyname} 
                   </label>
                   <input
                     type="text"
@@ -294,7 +297,7 @@ export default function BasicDetails()
               <div className="w-full lg:w-2/12 px-4">
                 <div className="relative w-full ml-4 mb-4">
                   <button
-                    onClick={submitBasicEdit}
+                  onClick={submitBasicEdit}
                     className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 

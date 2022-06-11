@@ -37,7 +37,7 @@ function Gallery() {
         firstfun();
        Router.push("/gallery");
       },[])
-    const [allHotelDetails, setAllHotelDetails] = useState({})
+    const [allHotelDetails, setAllHotelDetails] = useState([])
     const [image, setImage] = useState({})
     const [editImage, setEditImage] = useState(0)
     const [deleteImage, setdeleteImage] = useState(0)
@@ -80,12 +80,13 @@ function Gallery() {
 
     /* Function to add images*/
     const submitAddImage = () => {
+     if (allHotelDetails.length !== 0){
        const imagedata = [{
             property_id: currentProperty?.property_id,
             image_link: image.image_link,
             image_title: actionImage.image_title,
             image_descripiton: actionImage.image_description,
-            image_category: actionImage.image_category
+            image_category: "outside"
         }]
         const finalImage = { "images": imagedata }
        axios.post(`/api/gallery`, finalImage).then(response => {
@@ -97,8 +98,12 @@ function Gallery() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-            });
-
+            }
+            
+            
+          
+            );
+            setAllHotelDetails([]);
         }).catch(error => {
           toast.error(" Gallery Error", {
                 position: "top-center",
@@ -110,11 +115,12 @@ function Gallery() {
                 progress: undefined,
             });
         });
-
+    }
     }
     
     /* Function to edit images*/
     const updateImageDetails = () => {
+        if (allHotelDetails.length !== 0){
         const final_data = {
             "image_id": actionImage?.image_id,
             "image_title": allHotelDetails.image_title,
@@ -134,7 +140,7 @@ function Gallery() {
                     draggable: true,
                     progress: undefined,
                 });
-
+              setAllHotelDetails([])
             })
             .catch((error) => {
                toast.error("Gallery Update Error! " , {
@@ -148,6 +154,7 @@ function Gallery() {
                 });
 
             })
+        }
     }
     
     /* Function to delete images*/
@@ -255,8 +262,8 @@ function Gallery() {
             <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
                 {gallery?.images?.map((item,idx) => {
                     return (
-                        <div className="block text-blueGray-600 text-xs mt-8 font-bold " key={idx} style={{  marginLeft: "35px" }}>
-                            <button onClick={()=>{setEnlargeImage(1); setActionEnlargeImage(item)}}> <img src={item.image_link} alt='pic_room' style={{ height: "170px", width: "320px" }} />
+                        <div className="block text-blueGray-600 text-xs mt-6 font-bold " key={idx} style={{  marginLeft: "35px" }}>
+                            <button onClick={()=>{setEnlargeImage(1); setActionEnlargeImage(item)}}> <img src={item.image_link} alt='pic_room' style={{ height: "250px", width: "400px" }} />
                             </button>
                             <table>
                                 <tr className="pt-1">
@@ -327,7 +334,7 @@ function Gallery() {
                             <div className="p-6 space-y-6">
                                 <div className="grid grid-cols-6 gap-6">
                                     <div className="col-span-6 sm:col-span-3">
-                                        <img src={actionImage?.image_link} alt='property_image'  height= {"200"} width={400}  />
+                                        <img src={actionImage?.image_link} alt='property_image'  height= {"200"} width={"400"}  />
                                     </div> <div className="col-span-6 sm:col-span-3">
                                         <label
                                             className="text-sm font-medium text-gray-900 block mb-2"
@@ -426,7 +433,7 @@ function Gallery() {
                                     <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
                                                onClick={uploadImage}>{t?.upload}</button></div>
                                     </div>
-                                    <img className="py-2" src={image.image_link} alt='Image_Preview' style={{ height: "80px", width: "600px" }} />
+                                    <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
                                         <label
                                             className="text-sm font-medium text-gray-900 block mb-2"
@@ -452,21 +459,7 @@ function Gallery() {
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                             defaultValue="" />
                                     </div>
-                                    <div className="col-span-6 sm:col-span-3">
-                                        <label
-                                            className="text-sm font-medium text-gray-900 block mb-2"
-                                            htmlFor="grid-password"
-                                        >
-                                           {t?.image} {t?.category}
-                                        </label>
-                                        <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                                            onChange={(e) => (setActionImage({ ...actionImage, image_category: e.target.value }))}>
-                                            <option selected>Select image Category</option>
-                                            <option value='room'>Room</option>
-                                            <option value='outside'>Outside</option>
-                                        </select>
-
-                                    </div>
+                                   
                                 </div>
                             </div>
 <div className="items-center p-6 border-t border-gray-200 rounded-b">

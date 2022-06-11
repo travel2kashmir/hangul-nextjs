@@ -143,5 +143,9 @@ export default {
   next:'Next',
   skip:'Skip',
   bundle:'Bundle',
-  imageupload:'Image Upload'
+  imageupload:'Image Upload',
+  upload:'Upload',
+  addnewimage:'Add new Image',
+  image:'Image',
+  titl:'title'
 };

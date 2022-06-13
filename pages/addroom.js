@@ -40,7 +40,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
   const [allRoomDetails, setAllRoomDetails] = useState([])
   const [roomtypes, setRoomtypes] = useState({})
   const [image, setImage] = useState({})
-  const [actionImage, setActionImage] = useState({})
+  const [actionImage, setActionImage] = useState([])
   const [services, setServices] = useState([]) 
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
@@ -68,16 +68,18 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
       },[])
     
       /*For Room Description*/
-      const [allRoomDes, setAllRoomDes] = useState();
+      const [allRoomDes, setAllRoomDes] = useState([]);
     
       /**  Submit Function for Room Description **/
-      function submitRoomDescription(e) {
-        e.preventDefault()
-        const finalData = { ...allRoomDes }  
+      function submitRoomDescription(e) {  
+      if (allRoomDes.length !== 0){  
+      e.preventDefault()
+      const finalData = { ...allRoomDes }  
        axios.post('/api/room', JSON.stringify(finalData),
           {
             headers: { 'content-type': 'application/json' }
-          }).then(response => {
+          })
+          .then(response => {
            toast.success("Room created successfully", {
               position: "top-center",
               autoClose: 5000,
@@ -88,6 +90,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
               progress: undefined,
             });
             setRoomId(response.data.room_id)
+            setAllRoomDes([])
           })
           .catch(error => {
            toast.error("Room Description Error! ", {
@@ -101,6 +104,18 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
             });
           }
           )
+        }
+        else{
+          toast.error("Please fill the room details ", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
       }
     
       /** For Images**/
@@ -156,6 +171,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
     
       /** Function to submit room images **/
       const submitRoomImages = () => {
+        if (actionImage.length !== 0){  
        const imagedata = [{
           /* To be fetched from context */
           property_id: currentProperty?.property_id,
@@ -189,6 +205,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
               draggable: true,
               progress: undefined,
             });
+            setActionImage([])
           })
             .catch(error => {
              toast.error("Some thing went wrong \n " + JSON.stringify(error.response.roomdes), {
@@ -212,7 +229,19 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
             progress: undefined,
           });
         });
-    
+      }
+   
+    else{
+      toast.error("Please fill the room image details ", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
       }
     
      /* Add Existing Services*/
@@ -322,6 +351,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
 
   /* Function for Room Rates*/
    const submitRoomRates= () => {
+    if (allRoomRates.length !== 0){  
     const final_data = {
       "room_id": roomId,
       "baserate_currency": allRoomRates?.base_rate_currency,
@@ -344,7 +374,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
           draggable: true,
           progress: undefined,
         });
-
+        setAllRoomRates([])
       })
       .catch((error) => {
        toast.error("Room Rates  Error! " , {
@@ -358,6 +388,18 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
         });
       })
   }
+  else{
+    toast.error("Please fill the room rates details", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    }); 
+  }
+}
   return (
     <div id="main-content"
     className="  bg-gray-50  pt-24 relative overflow-y-auto lg:ml-64">
@@ -574,7 +616,6 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
         </div>
 
         {/* Room Gallery*/}
-        
             <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
               <div className="mx-4">
                 <div className="sm:flex">
@@ -602,7 +643,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                               className="text-sm font-medium text-gray-900 block mb-2"
                               htmlFor="grid-password"
                             >
-                              Image Upload
+                              Image Upload {JSON.stringify(actionImage)}
                             </label>
                             <div className="flex">
                                         <input
@@ -685,8 +726,8 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
             </div>
 
             {/* Room Services */}
-            <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
-              <div className="mx-0 my-6">
+            {/* <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
+              {/* <div className="mx-0 my-6">
                 <h4 className="text-xl sm:text-2xl font-semibold text-gray-900">
                   Room Services</h4>
                 <div className="sm:flex">
@@ -706,7 +747,7 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Room Services Table */}
               {/* <div className="flex flex-col my-4">
@@ -769,11 +810,11 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                      items-center mb-1 ease-linear transition-all duration-150"
                   onClick={submitServices} type="button" >
                   Submit</button>
-              </div> */}
+              </div> 
 
-            </div>
+            </div> */}
            {/* Room Rates*/}
-            <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <div className="bg-white mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {t?.room} {t?.rates} 
             </h6>
@@ -904,19 +945,14 @@ addroom =JSON.parse(localStorage.getItem('allPropertyDetails'));
                 </div>
               </div>
 
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button onClick={submitRoomRates}
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:rinbg-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                    {t?.submit}</button>
-                </div>
-              </div>
-
+              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center ml-16
+                     items-center mb-1 ease-linear transition-all duration-150"
+                        onClick={submitRoomRates} type="button" >
+                        Submit</button>
+                    </div>
             </div>
               </div>
             </div>

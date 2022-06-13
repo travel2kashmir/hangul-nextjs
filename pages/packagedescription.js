@@ -41,8 +41,10 @@ function Packagedescription() {
 
   const [allPackageDetails, setAllPackageDetails] = useState([])
   const [packageDetails, setPackageDetails] = useState([])
+
     /* Edit Package Edit Function */
    const submitPackageEdit = () => {
+    if (packageDetails.length !== 0){
     const final_data = {
           "package_id":allPackageDetails?.package_id,
           "package_name": packageDetails?.package_name,
@@ -66,6 +68,7 @@ function Packagedescription() {
                   draggable: true,
                   progress: undefined,
                 });
+                setPackageDetails([])
           })
           .catch((error) => {
              toast.error("Package Description Update Error!", {
@@ -78,6 +81,18 @@ function Packagedescription() {
                   progress: undefined,
                 });      
           })
+        }
+        else{
+          toast.error("Please fill the package details", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }); 
+        }
   }
   /** Function submit max age **/
   const submitAge = () =>{

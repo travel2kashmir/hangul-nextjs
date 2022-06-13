@@ -17,8 +17,6 @@ var id=[];
 
 
 function PackageRates() {
-  
-  const[packageServices,setPackageServices]= useState([])
   const [allRooms, setAllRooms] = useState([])
   const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
   const[room,setRoom]= useState([])
@@ -114,6 +112,7 @@ function PackageRates() {
   }
   /* Edit Package Rate Function */
   const submitPackageRateEdit = () => {
+    if (allPackageRateDetails.length !== 0){ 
     const final_data = {
       "package_rate_id" : currentPackageRates?.package_rate_id,
       "base_rate_currency": allPackageRateDetails?.base_rate_currency,
@@ -135,6 +134,7 @@ function PackageRates() {
           draggable: true,
           progress: undefined,
         });
+        setAllPackageRateDetails([])
       })
       .catch((error) => {
        toast.error("Package Rates Error!", {
@@ -147,9 +147,12 @@ function PackageRates() {
           progress: undefined,
         });
       })
+    }
+  
   }
 
   const editRooms = () => {
+    if (allPackageRateDetails.length !== 0){
     const final_data = {
       "package_id" : currentPackageRates?.package_rate_id,
       "base_rate_currency": allPackageRateDetails?.base_rate_currency,
@@ -171,6 +174,7 @@ function PackageRates() {
           draggable: true,
           progress: undefined,
         });
+        setAllPackageRateDetails([])
       })
       .catch((error) => {
        toast.error("Package Rates Error!", {
@@ -183,6 +187,7 @@ function PackageRates() {
           progress: undefined,
         });
       })
+    }
   }
   return (
     <div id="main-content"
@@ -418,19 +423,17 @@ function PackageRates() {
                 </div>
               </div>
 
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button
-                    onClick={submitPackageRateEdit}
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
+                     onClick={() => {
+                      submitPackageRateEdit();
+                      
+                    }}type="button" >
                     {t?.update}</button>
-                </div>
-              </div>
+   </div>
 
             </div>
           </div>

@@ -33,10 +33,11 @@ function Propertycredit() {
     firstfun();
     Router.push("/propertycredit");
   },[]) 
-  const [propertycredit, setPropertyCredit] = useState({});
+  const [propertycredit, setPropertyCredit] = useState([]);
 
   /* Function Edit Property Credit*/
   const submitPropertyCreditEdit = () => {
+    if (propertycredit.length !== 0){
     const final_data = {
       "property_credit_id": currentPropertyCredit?.package_property_credit[0]?.property_credit_id,
       "property_credit_currency": propertycredit.property_credit_currency,
@@ -55,6 +56,7 @@ function Propertycredit() {
           draggable: true,
           progress: undefined,
         });
+        setPropertyCredit([])
       })
       .catch((error) => {
        toast.error("Property Credit Error!", {
@@ -67,7 +69,7 @@ function Propertycredit() {
           progress: undefined,
         });
       })
-
+    }
   }
 
   return (
@@ -168,24 +170,14 @@ function Propertycredit() {
                 </div>
               </div>
 
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                </div>
-              </div>
-
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                focus:ring-4 focus:ring-cyan-200 font-semibold
-                 rounded-lg text-sm px-5 py-2 text-center 
-                 items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                    onClick={submitPropertyCreditEdit} type="button" >
-                   {t?.update}</button>
-                </div>
-              </div>
+              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center ml-16
+                     items-center mb-1 ease-linear transition-all duration-150"
+                        onClick={submitPropertyCreditEdit} type="button" >
+                       {t?.update}</button>
+                    </div>
 
             </div>
           </div>

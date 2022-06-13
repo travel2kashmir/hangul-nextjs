@@ -38,11 +38,12 @@ function Eliterewards() {
   const [updateProgram, setUpdateProgram] = useState(0)
   const [deleteProgram, setDeleteProgram] = useState(0)
   const [editProgram, setEditProgram] = useState({});
-  const [program, setProgram] = useState({});
-  const [modified, setModified] = useState({})
+  const [program, setProgram] = useState([]);
+  const [modified, setModified] = useState([])
 
   /* Function Edit Program*/
   const submitProgramEdit = (props) => {
+    if (program.length !== 0){
     const final_data = {
       "program_id":props,
       "program_name": program.program_name,
@@ -60,6 +61,7 @@ function Eliterewards() {
          draggable: true,
            progress: undefined,
        });
+       setProgram([])
      })
       .catch((error) => {
          toast.error("Elite Program Update Error!", {
@@ -72,6 +74,7 @@ function Eliterewards() {
            progress: undefined,
          });
        })
+       }
    }
 
    /* Function htmlFor Delete Room Images*/
@@ -107,6 +110,7 @@ function Eliterewards() {
   
   /** Function to submit program add **/
   const submitProgramAdd = () => { 
+    if (modified.length !== 0){
     const programdata = [{
       /* To be fetched from context */
       program_name: modified.program_name,
@@ -129,6 +133,7 @@ function Eliterewards() {
           draggable: true,
           progress: undefined,
         });
+        setModified([])
       })
         .catch(error => {
            toast.error(" Elite Program Add Error!", {
@@ -152,7 +157,7 @@ function Eliterewards() {
         progress: undefined,
       });
     });
-
+    }
   }
 
   return (

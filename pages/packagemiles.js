@@ -38,13 +38,14 @@ function Packagemiles() {
   const [updateMile, setUpdateMile] = useState(0)
   const [deleteMile, setDeleteMile] = useState(0)
   const [editMile, setEditMile] = useState({});
-  const [mile, setMile] = useState({});
-  const [modified, setModified] = useState({})
+  const [mile, setMile] = useState([]);
+  const [modified, setModified] = useState([])
 
  
 
     /* Function Edit Mile*/
   const submitMileEdit = (props) => { 
+    if (mile.length !== 0){
     const final_data = {
        "mile_id": props,
        "number_of_miles": mile.number_of_miles,
@@ -62,6 +63,7 @@ function Packagemiles() {
            draggable: true,
            progress: undefined,
          });
+         setMile([])
        })
        .catch((error) => {
          toast.error("Package Miles Update Error! " , {
@@ -76,6 +78,7 @@ function Packagemiles() {
        })
  
    }
+  }
  
    const submitDelete = () => {
     const url = `/api/package/${editMile.mile_id}`
@@ -109,6 +112,7 @@ function Packagemiles() {
  
    /* Edit Basic Details Function */
    const submitMileAdd = () => {
+    if (modified.length !== 0){
      const programdata = [{
      "package_id": currentMiles?.package_id,
      "number_of_miles": modified.number_of_miles,
@@ -128,6 +132,7 @@ function Packagemiles() {
                  draggable: true,
                  progress: undefined,
                });
+            setModified([])
          })
          .catch((error) => {
             toast.error("Package Miles Add Error!", {
@@ -140,6 +145,7 @@ function Packagemiles() {
                  progress: undefined,
                });      
          })
+ }
  }
  
   return (

@@ -150,7 +150,7 @@ function Address() {
       {/* Update Address Form */}
       <div className="bg-white shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl  flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-          {t?.address}
+          {t?.address} {allHotelDetails.length}
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"

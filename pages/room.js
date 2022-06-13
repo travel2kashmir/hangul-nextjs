@@ -44,6 +44,7 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
     setImage({ ...image, imageFile: e.target.files[0] })
 }   
   const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomfacilities, setRoomfacilities] = useState({})
   const [roomimages, setRoomimages] = useState({})
@@ -61,6 +62,7 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
   /* Function for Edit Room Images*/
   const updateImageDetails = () => {
     console.log("Room Details:" +JSON.stringify(allRoomDetails));
+    if (allRoomDetails.length !== 0){
     const final_data = {
       "image_id": actionImage?.image_id,
       "image_title": allRoomDetails.image_title,
@@ -81,7 +83,7 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
           draggable: true,
           progress: undefined,
         });
-
+       setAllRoomDetails([])
       })
       .catch((error) => {
         toast.error("Room Gallery Update Error!", {
@@ -95,6 +97,7 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
         });
 
       })
+    }
   }
 
   /* Function for Delete Room Images*/
@@ -133,7 +136,7 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
       const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom.room_id}`
       console.log("url " +url)
       axios.get(url)
-      .then((response)=>{setAllRoomDetails(response.data);
+      .then((response)=>{setRoomDetails(response.data);
       logger.info("url  to fetch room hitted successfully")})
       .catch((error)=>{logger.error("url to fetch room, failed")}); 
     }
@@ -204,6 +207,7 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
 
 /* Function to add images*/
 const submitAddImage = () => {
+  if (actionImage.length !== 0){
   const imagedata = [{
        property_id: currentProperty?.property_id,
        image_link: image?.image_link,
@@ -216,7 +220,7 @@ const submitAddImage = () => {
   axios.post(`/api/gallery`, finalImage)
   .then(response => {
   
-      toast.success("Image Added Successfully!", {
+      toast.success("Image Added Successfully!", {   
            position: "top-center",
            autoClose: 5000,
            hideProgressBar: false,
@@ -225,6 +229,8 @@ const submitAddImage = () => {
            draggable: true,
            progress: undefined,
        });
+       setActionImage([])
+
        submitImageLink(response?.data?.image_id);
    })
    .catch(error => {
@@ -238,7 +244,7 @@ const submitAddImage = () => {
            progress: undefined,
        });
    });
-
+  }
 }
 
 const submitImageLink = (props) =>{
@@ -274,8 +280,10 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       })
 
 }
+
   /* Function for Update Room Description*/
   const submitRoomDescriptionEdit = () => {
+    if (allRoomDetails.length !== 0){
     const final_data = {
       "room_id": currentroom?.room_id,
       "room_name": allRoomDetails.room_name,
@@ -289,7 +297,6 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       "room_width": allRoomDetails.room_width,
       "room_height": allRoomDetails.room_height
     }
-
     const url = '/api/room'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -302,7 +309,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           draggable: true,
           progress: undefined,
         });
-
+     setAllRoomDetails([])
       })
       .catch((error) => {
        toast.error("Room Description Update Error! " , {
@@ -315,20 +322,23 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           progress: undefined,
         });
       })
+    }
   }
   
    /* Function for Update Room Rates*/
    const submitRoomRatesEdit = () => {
+    if (allRoomRates.length !== 0){  
     const final_data = {
       "room_id": currentroom?.room_id,
-      "baserate_currency": allRoomRates?.baserate_currency,
+      "baserate_currency": allRoomRates?.base_rate_currency,
       "baserate_amount": allRoomRates?.baserate_amount,
-      "tax_currency":allRoomRates?.tax_currency,
+      "tax_currency":allRoomRates?.tax_rate_currency,
       "tax_amount": allRoomRates?.tax_amount,
-      "otherfees_currency": allRoomRates?.otherfees_currency,
-      "un_rate_id": allRoomRates?.un_rate_id
+      "otherfees_currency": allRoomRates?.other_fees_currency,
+      "otherfees_amount": allRoomRates?.otherfees_amount,
+      "un_rate_id": roomDetails?.unconditional_rates?.[0]?.un_rate_id
     }
-
+  alert("Final" +JSON.stringify(final_data))
     const url = '/api/unconditional_rates'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -341,6 +351,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           draggable: true,
           progress: undefined,
         });
+        setAllRoomRates([])
 
       })
       .catch((error) => {
@@ -354,6 +365,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           progress: undefined,
         });
       })
+    }
   }
   
   return (
@@ -395,7 +407,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       {/* Title */}
       <div className=" pt-2 px-4">
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-          {t?.edit} {t?.room}
+          {t?.edit} {t?.room} 
         </h6>
        {/* Room Forms */}
        <div className="w-full grid grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 gap-4">
@@ -417,7 +429,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       </label>
                       <input
                         type="text"
-                        defaultValue={allRoomDetails?.room_name}
+                        defaultValue={roomDetails?.room_name}
                         onChange={
                           (e) => (
                             setAllRoomDetails({ ...allRoomDetails, room_name: e.target.value })
@@ -431,13 +443,13 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
-                       {t?.room} {t?.type}
+                       {t?.room} {t?.type} 
                       </label>
                       <select
-                        defaultValue={allRoomDetails?.room_type_name}
+                        defaultValue={roomDetails?.room_type}
                         onClick={(e) => setAllRoomDetails({ ...allRoomDetails, room_type_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                        <option value={allRoomDetails?.room_type_id}>{allRoomDetails?.room_type}</option>
+                        <option value={roomDetails?.room_type}>{roomDetails?.room_type}</option>
                         {roomtypes?.map(i => {
                           return (
                             <option key={i} value={i.room_type_id}>{i.room_type_name}</option>)
@@ -461,7 +473,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value })
                           )
                         }
-                        defaultValue={allRoomDetails?.room_description}
+                        defaultValue={roomDetails?.room_description}
                       />
                     </div>
                   </div>
@@ -477,7 +489,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={allRoomDetails?.room_capacity}
+                        defaultValue={roomDetails?.room_capacity}
                         onChange={
                           (e) => (
                             setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value })
@@ -497,7 +509,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={allRoomDetails?.maximum_number_of_occupants}
+                        defaultValue={roomDetails?.maximum_number_of_occupants}
                         onChange={
                           (e) => (
                             setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value })
@@ -517,7 +529,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={allRoomDetails?.minimum_number_of_occupants}
+                        defaultValue={roomDetails?.minimum_number_of_occupants}
                         onChange={
                           (e) => (
                             setAllRoomDetails({ ...allRoomDetails, minimum_number_of_occupants: e.target.value })
@@ -537,7 +549,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={allRoomDetails?.minimum_age_of_occupants}
+                        defaultValue={roomDetails?.minimum_age_of_occupants}
                         onChange={
                           (e) => (
                             setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value })
@@ -555,7 +567,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                        {t?.room} {t?.length}
                       </label>
                       <input
-                        type="text" defaultValue={allRoomDetails?.room_length}
+                        type="text" defaultValue={roomDetails?.room_length}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
                           (e) => (
@@ -576,7 +588,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={allRoomDetails?.room_width}
+                        defaultValue={roomDetails?.room_width}
                         onChange={
                           (e) => (
                             setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value })
@@ -601,7 +613,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value })
                           )
                         }
-                        defaultValue={allRoomDetails?.room_height} />
+                        defaultValue={roomDetails?.room_height} />
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-2">
@@ -615,7 +627,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={allRoomDetails?.carpet_area} readOnly="readonly"
+                        defaultValue={roomDetails?.carpet_area} readOnly="readonly"
                       />
                     </div>
                   </div>
@@ -630,23 +642,10 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={allRoomDetails?.room_volume} readOnly="readonly" />
+                        defaultValue={roomDetails?.room_volume} readOnly="readonly" />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
-                    <div className="relative w-full mb-3"></div></div>
-                  <div className="w-full lg:w-4/12 px-2">
-                    <div className="relative w-full ml-4 mb-1"></div></div>
-                  <div className="w-full lg:w-2/12 pr-4 pt-2">
-                    <div className="relative w-full mb-4">
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center mb-1 ease-linear transition-all duration-150"
-                        onClick={submitRoomDescriptionEdit} type="button" >
-                       {t?.update}</button>
-                    </div>
-                  </div>
+                
                 </div>
               </div>
             </div>
@@ -697,7 +696,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                 </div>
            
             <div className="flex flex-wrap" >
-              {allRoomDetails?.room_images?.map((item, index) => {
+              {roomDetails?.room_images?.map((item, index) => {
                 return (
                   <div className="block text-blueGray-600 text-xs pt-2 px-2 " key={index}>
                    <button onClick={()=>{setEnlargeImage(1); setActionEnlargeImage(item)}}><img src={item.image_link} alt='pic_room'  height= {170} width={210} />
@@ -848,10 +847,10 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={allRoomDetails?.unconditional_rates?.[0]?.baserate_amount}
+                    defaultValue={roomDetails?.unconditional_rates?.[0]?.baserate_amount}
                     onChange={
                       (e) => (
-                        setAllRoomRates({ ...setAllRoomRates, baserate_amount: e.target.value })
+                        setAllRoomRates({ ...allRoomRates, baserate_amount: e.target.value })
                       )
                     }
                   />
@@ -869,7 +868,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setAllRoomDetails({ ...setAllRoomDetails, tax_rate_currency: e.target.value })
+                        setAllRoomRates({...allRoomRates, tax_rate_currency: e.target.value })
                       )
                     }>
                     <option value="USD" >USD</option>
@@ -890,10 +889,10 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={allRoomDetails?.unconditional_rates?.[0]?.tax_amount}
+                    defaultValue={roomDetails?.unconditional_rates?.[0]?.tax_amount}
                     onChange={
                       (e) => (
-                        setAllRoomRates({ ...setAllRoomRates, tax_amount: e.target.value,un_rate_id:allRoomDetails?.unconditional_rates?.[0]?.un_rate_id })
+                        setAllRoomRates({ ...allRoomRates, tax_amount: e.target.value,un_rate_id:allRoomDetails?.unconditional_rates?.[0]?.un_rate_id })
                       )
                     } />
                 </div>
@@ -910,7 +909,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setAllRoomDetails({ ...allRoomDetails, other_charges_currency: e.target.value })
+                        setAllRoomRates({ ...allRoomRates, other_fees_currency: e.target.value })
                       )
                     }>
                     <option value="USD" >USD</option>
@@ -930,10 +929,10 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={allRoomDetails?.unconditional_rates?.[0]?.otherfees_amount}
+                    defaultValue={roomDetails?.unconditional_rates?.[0]?.otherfees_amount}
                     onChange={
                       (e) => (
-                        setAllRoomDetails({ ...allRoomDetails, otherfees_amount: e.target.value })
+                        setAllRoomRates({ ...allRoomRates, otherfees_amount: e.target.value })
                       )
                     } />
                 </div>
@@ -943,17 +942,20 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                 </div>
               </div>
 
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button onClick={submitRoomRatesEdit}
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:rinbg-4 focus:ring-cyan-200 font-semibold
+              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button
+                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                    {t?.update}</button>
-                </div>
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
+                  onClick={() => {
+                    submitRoomRatesEdit();
+                    
+                  }}
+                  type="button"
+                >
+                 {t?.update}
+                </button>
               </div>
 
             </div>
@@ -1017,7 +1019,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                                                 onChangePhoto(e, 'imageFile');
                                               
                                             }}
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full px-2.5"
+                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5"
                                             defaultValue="" />
                                            
                                     </div> 
@@ -1025,7 +1027,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                                     <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
                                                onClick={uploadImage}>Upload</button></div>
                                     </div>
-                                    <img className="py-2" src={image?.image_link} alt='Image_Preview' style={{ height: "80px", width: "600px" }} />
+                                    <img className="py-2" src={image?.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
                                         <label
                                             className="text-sm font-medium text-gray-900 block mb-2"
@@ -1036,7 +1038,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                                         <input
                                             type="text"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value }))}
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full px-2.5"
+                                            className="shadow-sm py-2 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full px-2.5"
                                             placeholder="Image Title" />
                                     </div>
                                     <div className="col-span-6 sm:col-span-3">

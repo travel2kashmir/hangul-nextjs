@@ -17,6 +17,7 @@ function Roombundle() {
   const [allPackages, setAllPackages] = useState([])
   const[roomBundle,setRoomBundle] = useState([])
   const[bundle,setBundle] = useState([])
+  const[rate,setRate] = useState([])
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -88,8 +89,11 @@ function Roombundle() {
     fetchRoomBundle();
     }
         ,[])
+
      /* Edit Package Edit Function */
+
    const submitPackageEdit = () => {
+    if (bundle.length !== 0){
     const final_data = {
           "room_bundle_id":roomBundle?.room_bundle_id,
           "rate_master_id":roomBundle?.rate_master_id,
@@ -100,34 +104,51 @@ function Roombundle() {
           "internet_included":bundle?.internet_included,
           "rate_master_id":bundle?.rate_master_id
       }  
-
      const url = '/api/package/room_bundle'
-   
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
-            logger.info("Room bundle updated successfully")
+            toast.success("Package Bundle  Updated Successfully!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setBundle([])
           })
-
           .catch((error) => {
-             logger.error("Room bundle update error")     
+            toast.error("Room Bundles Update Error!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });    
           }) 
+        }
   }   
+
+   /* Edit Bundle Rate Function */
   const submitBundleRateEdit = () => {
+    if (rate.length !== 0){
     const final_data = {
-      "base_rate_currency":bundle?.base_rate_currency,
+      "base_rate_currency":rate?.base_rate_currency,
       "rate_master_id":roomBundle?.rate_master_id,
-      "base_rate_amount": bundle?.base_rate_amount,
-      "tax_currency":bundle?.tax_currency,
-      "tax_amount":bundle?.tax_amount,
-      "other_fees_currency": bundle?.other_fees_currency,
-      "other_fees_amount":bundle?.other_fees_amount,
+      "base_rate_amount": rate?.base_rate_amount,
+      "tax_currency":rate?.tax_currency,
+      "tax_amount":rate?.tax_amount,
+      "other_fees_currency": rate?.other_fees_currency,
+      "other_fees_amount":rate?.other_fees_amount,
       
   }  
   const url = '/api/package/rate_master'
-  
   axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
   ((response) => {
-    toast.success("Package Bundle  Updated Successfully!", {
+    toast.success("Package Room Bundle Updated Successfully!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -136,10 +157,10 @@ function Roombundle() {
       draggable: true,
       progress: undefined,
     });
+    setRate([])
   })
-
   .catch((error) => {
-     toast.error("Room Bundles Rates Update Error!", {
+     toast.error("Room Room Bundle Update Error!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -149,7 +170,9 @@ function Roombundle() {
           progress: undefined,
         });      
   })
+}
   }
+
   return (
     <div id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -244,7 +267,7 @@ function Roombundle() {
                  defaultValue={roomBundle?.base_rate_amount}
                  onChange={
                   (e) => (
-                    setBundle({ ...bundle, base_rate_amount: e.target.value })
+                    setRate({ ...ratee, base_rate_amount: e.target.value })
                   )
                 }/> 
                 </div>
@@ -261,7 +284,7 @@ function Roombundle() {
                   defaultValue = {roomBundle?.base_rate_currency}
                   onChange={
                       (e) => (
-                        setBundle({ ...bundle, base_rate_currency: e.target.value })
+                        setRate({ ...rate, base_rate_currency: e.target.value })
                       )
                     }>
                     <option value="USD" >USD</option>
@@ -284,7 +307,7 @@ function Roombundle() {
                    defaultValue = {roomBundle?.tax_amount}
                    onChange={
                     (e) => (
-                      setBundle({ ...bundle, tax_amount: e.target.value })
+                      setRate({ ...rate, tax_amount: e.target.value })
                     )
                   }
                 /> 
@@ -301,7 +324,7 @@ function Roombundle() {
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setBundle({ ...bundle, tax_currency: e.target.value })
+                        setRate({ ...rate, tax_currency: e.target.value })
                       )
                     }
                     >
@@ -324,7 +347,7 @@ function Roombundle() {
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setBundle({ ...bundle, other_fees_amount: e.target.value })
+                        setRate({ ...rate, other_fees_amount: e.target.value })
                       )
                     }
                 defaultValue={roomBundle?.other_fees_amount}/> 
@@ -341,7 +364,7 @@ function Roombundle() {
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setBundle({ ...bundle, other_fees_currency: e.target.value })
+                        setRate({ ...rate, other_fees_currency: e.target.value })
                       )
                     }>
                     <option selected >{roomBundle?.other_fees_currency}</option>
@@ -371,7 +394,7 @@ function Roombundle() {
                     
                     type="radio" onChange={
                       (e) => (
-                        setBundle({ ...bundle, breakfast_included: e.target.value })
+                        setRate({ ...rate, breakfast_included: e.target.value })
                       )
                     }
                     className="bg-gray-50 
@@ -413,7 +436,7 @@ function Roombundle() {
                     type="radio" 
                     onChange={
                       (e) => (
-                        setBundle({ ...bundle, parking_included: e.target.value })
+                        setRate({ ...rate, parking_included: e.target.value })
                       )
                     }
                     className="bg-gray-50 
@@ -454,7 +477,7 @@ function Roombundle() {
                     type="radio" value={true}
                     onChange={
                       (e) => (
-                        setBundle({ ...bundle, internet_included: e.target.value })
+                        setRate({ ...rate, internet_included: e.target.value })
                       )
                     }
                     className="bg-gray-50 
@@ -494,8 +517,8 @@ function Roombundle() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                   onClick={() => {
-                  submitPackageEdit();
-                    submitBundleRateEdit();
+                 if(bundle.length != 0) {submitPackageEdit();}
+                 if(rate.length != 0) { submitBundleRateEdit();}
                   }}
                   type="button"
                 >

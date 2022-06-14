@@ -12,6 +12,8 @@ var currentProperty;
 var  currentPackageDetails;
 
 function Ratecondition() {
+  const [userRateDetails,setUserRateDetails]=useState([])
+
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -33,6 +35,43 @@ function Ratecondition() {
     firstfun();
     Router.push("/ratecondition");
   },[]) 
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+        try {
+            const url = `/api/rate_rule/rr003`
+            const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+            setUserRateDetails(response.data)
+        }
+        catch (error) {
+            if (error.response) {
+                toast.error("Package Error!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+            } else {
+                toast.error("Package Error!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+            }
+        }
+
+    }
+    
+    fetchDetails();
+  
+},[])
   return (
     <div
       id="main-content"
@@ -104,7 +143,7 @@ function Ratecondition() {
       </nav>
       <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          Rate Condition
+          Rate Condition {JSON.stringify(userRateDetails)}
         </h6>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -126,6 +165,7 @@ function Ratecondition() {
                           })
                         }
                       >
+                       <option selected > {userRateDetails?.user_rate_condition[0]?.UserRateCondition_op}</option>
                         <option value="srinagar">Select Rate Condition</option>
                         <option value="baramulla">Baramulla</option>
                         <option value="budgam">Budgam</option>
@@ -142,9 +182,11 @@ function Ratecondition() {
                     htmlFor="grid-password"
                   >
                    Rate Description
+                  
                   </label>
                   <textarea rows="2" columns="50"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"   
+                   defaultValue={userRateDetails?.user_rate_condition[0]?.Description}
                     onChange={
                       (e) => (
                           setAllHotelDetails({ ...allHotelDetails, description_body: e.target.value })
@@ -164,12 +206,14 @@ function Ratecondition() {
                   </label>
                   <select
                         className="shadow-sm bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                       
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_city: e.target.value,
                           })
                         }
+                      
                       >
                         <option value="srinagar">Select Program</option>
                         <option value="baramulla">Baramulla</option>

@@ -24,7 +24,6 @@ function Addpackage() {
   const [disp, setDisp] = useState(0);
   const[packageServices,setPackageServices]= useState([])
 
-
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -81,6 +80,7 @@ function Addpackage() {
  
    /** Function submit max age **/
   const submitAge = () =>{
+    if (max_age.length !== 0){ 
   max_age.forEach((item)=>{
   const temp={
     package_id: packageId,
@@ -93,14 +93,18 @@ function Addpackage() {
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
         logger.info("Package max age children success");
-      })
+        setDisp(2);   
+      } 
+     )
       .catch((error) => {
         logger.error("Max age child error");
       }) 
   }
+}
 
   /** Function package services **/
   const submitPackageServices = () =>{
+   
     var total={};
     let text = [];
 
@@ -125,7 +129,6 @@ const url = '/api/package/package_service_link'
           draggable: true,
           progress: undefined,
         });
-
       })
       .catch((error) => {
        toast.error("Package Error! " , {
@@ -138,11 +141,12 @@ const url = '/api/package/package_service_link'
           progress: undefined,
         });
       }) 
-         
-  }
+    }       
+  
 
    /* Function for Room Rates*/
    const submitPackageRates= () => {
+    if (allPackageDetails.length !== 0){
     const final_data = {
       "package_id": packageId,
       "base_rate_currency": allPackageDetails?.base_rate_currency,
@@ -156,15 +160,16 @@ const url = '/api/package/package_service_link'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
         logger.info("Package rates success");
-
+         allPackageDetails([])
       })
       .catch((error) => {
         logger.error("Package rates error");
       })
   }
-
+   }
    /** Function submit Package Description **/
   const submitPackageDescription = () => {
+    if(allPackageDetails != 0){
     const final_data = {
           "property_id": currentProperty?.property_id,
           "package_name": allPackageDetails?.package_name,
@@ -181,15 +186,33 @@ const url = '/api/package/package_service_link'
           ((response) => {
             logger.info("Package description success");
                 setPackageId(response.data.package_id);
-                  setDisp(1);      
+                if(allPackageDetails?.max_number_of_intended_occupants-
+                  allPackageDetails?.max_number_of_adult_guest >= 1)
+                setDisp(1);
+                else{
+                  setDisp(2);
+                }    
           }  
           )
           .catch((error) => {
             logger.error("Package description error");      
           })
+        }
+        else{
+          toast.error("Please fill the package description", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
   }
   /** Function submit Package Rooms **/
   const submitPackageRooms = () => {
+    if (allRooms.length !== 0){
   const datas = allRooms.filter(item => item.check === true)
   const post = datas.map(item => item.room_id)
   const roomData = post.map((item) => {
@@ -198,10 +221,12 @@ const url = '/api/package/package_service_link'
   const finalData = {"package_room-link": roomData}
   axios.post(`/api/package/package_room_link`, finalData).then(response => {
     logger.info("Package rooms success");
+    setDisp(3);
   }).catch(error => {
     logger.error("Package rooms error");
   });
   }
+}
    /** Function to cancel package mile **/
    const removeMile = (index) => {
     const filteredMiles = mileData.filter((i, id) => i.index !== index)
@@ -246,6 +271,7 @@ const url = '/api/package/package_service_link'
 
    /** Function to submit package miles **/
    const submitPackageMiles = () => {
+    if(allPackageDetails != 0){
     const packagemiledata = [{
        /* To be fetched from context */
        package_id: packageId,
@@ -255,13 +281,16 @@ const url = '/api/package/package_service_link'
      const finalImage = { "package_miles": packagemiledata }
     axios.post(`/api/package/package_miles`, finalImage).then(response => {
       logger.info("Package miles success");
+      setAllPackageDetails([])
+      setDisp(4);
      }).catch(error => {
       logger.error("Package miles error");
      });
    }
-
+  }
  /** Function to submit package miles **/
  const submitPackageProgram = () => {
+  if(allPackageDetails != 0){
   const programdata = [{
      /* To be fetched from context */
     program_name:allPackageDetails?.program_name ,
@@ -276,16 +305,19 @@ const url = '/api/package/package_service_link'
        headers: { 'content-type': 'application/json' }
      }).then(response => {
       logger.info("Package program success");
+      setAllPackageDetails([])
+      setDisp(5);
      })
        .catch(error => {
         logger.error("Package program error");
        });
    });
-
+  }
  }
 
  /* Function for Package Property Credit */
  const submitPackagePropertyCredit= () => {
+  if(allPackageDetails != 0){
   const current_data = [{
     "package_id": packageId,
     "property_credit_currency": allPackageDetails?.property_credit_currency,
@@ -296,13 +328,14 @@ const url = '/api/package/package_service_link'
   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     ((response) => {
       logger.info("Package property credit success");
-
+       setAllPackageDetails([]);
+       setDisp(6);
     })
     .catch((error) => {
       logger.error("Package property credit error");
     })
 }
-
+ }
 
   return (
     <div id="main-content"
@@ -541,27 +574,21 @@ const url = '/api/package/package_service_link'
                 </div>
               </div>
              
-              <div className="w-full lg:w-10/12 px-4">
-                <div className="relative w-full ml-4 mb-4"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button onClick={() => {
-                                submitPackageDescription();
-                                if(allPackageDetails?.max_number_of_intended_occupants-
-                                  allPackageDetails?.max_number_of_adult_guest >= 1)
-                                setDisp(1);
-                                else{
-                                  setDisp(2);
-                                }
-                            }}
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button
+                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 mt-4 text-center flex-end
+                     rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button" >
-                  {t?.next}</button>
-                </div>
-              </div>
+                  onClick={() => {
+                    submitPackageDescription();
+                  }}
+                  type="button"
+                >
+                 {t?.next}
+                </button>
+              </div> 
+
             </div>
           </div>
         </div>
@@ -643,7 +670,7 @@ const url = '/api/package/package_service_link'
                      rounded-lg text-sm px-5 py-2 text-center ml-16
                      items-center mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
-                      setDisp(2); submitAge();
+                      submitAge();
                     }} type="button" >
                         {t?.next}</button>
                     </div>
@@ -849,7 +876,6 @@ const url = '/api/package/package_service_link'
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
                      onClick={() => {
-                      submitPackageRates();
                       setDisp(3);
                     }}type="button" >
                     {t?.skip}</button>
@@ -858,9 +884,11 @@ const url = '/api/package/package_service_link'
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
-                      setDisp(3);
-                      submitPackageRates();
-                      submitPackageRooms();
+                    
+                      if (allRooms.length !== 0){
+                      submitPackageRates();}
+                      if(allRooms.length !== 0){
+                      submitPackageRooms();}
                     }} type="button" >
                     {t?.next}</button>
                 </div>
@@ -991,7 +1019,7 @@ const url = '/api/package/package_service_link'
                      items-center mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
                       submitPackageMiles();
-                      setDisp(4);
+                      
                     }} type="button" >
                         {t?.next}</button>
                     </div>
@@ -1121,7 +1149,7 @@ const url = '/api/package/package_service_link'
                      items-center mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
                        submitPackageProgram();
-                      setDisp(5);
+                     
                     }}
                       type="button" >
                         {t?.next}</button>
@@ -1222,7 +1250,7 @@ const url = '/api/package/package_service_link'
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
                        submitPackagePropertyCredit();
-                      setDisp(6);
+                    
                     }} type="button" >
                     {t?.next}</button>
                 </div>

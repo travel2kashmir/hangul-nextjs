@@ -36,7 +36,9 @@ function Address() {
     firstfun();
    Router.push("/address");
   },[])
+
   const [allHotelDetails, setAllHotelDetails] = useState([]);
+  
   /* Edit Address Function */
   const submitAddressEdit = () => {
     if (allHotelDetails.length !== 0){

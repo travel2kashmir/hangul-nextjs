@@ -10,7 +10,7 @@ var t;
 var currentProperty;
 var currentroom;
 var room;
-import Router from 'next/Router'
+import Router from 'next/router'
 const logger = require("../services/logger");
 
 function Room() {
@@ -42,7 +42,8 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
 
   const onChangePhoto = (e, i) => {
     setImage({ ...image, imageFile: e.target.files[0] })
-}   
+}  
+ 
   const [allRoomDetails, setAllRoomDetails] = useState([])
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])

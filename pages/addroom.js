@@ -9,7 +9,7 @@ import arabic from "./Languages/ar";
 var t;
 var currentProperty;
 var addroom;
-import Router from 'next/Router'
+import Router from 'next/router'
 const logger = require("../services/logger");
 
 function Addroom() {

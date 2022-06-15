@@ -10,6 +10,7 @@ import Router from "next/router";
 var t;
 var currentProperty;
 var  currentPackageDetails;
+var currentPackage;
 const logger = require("../services/logger");
 
 function Roombundle() {
@@ -18,6 +19,7 @@ function Roombundle() {
   const[roomBundle,setRoomBundle] = useState([])
   const[bundle,setBundle] = useState([])
   const[rate,setRate] = useState([])
+  
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -34,6 +36,7 @@ function Roombundle() {
             /** Current Property Basic Details fetched from the local storage **/
             currentProperty=JSON.parse(localStorage.getItem('property'))  
             currentPackageDetails=JSON.parse(localStorage.getItem('packageDescription'))
+            currentPackage=JSON.parse(localStorage.getItem('currentPackage'))
           } 
         }
         firstfun();
@@ -74,7 +77,7 @@ function Roombundle() {
       fetchPackages();
       const fetchRoomBundle = async () => {
         try {
-            const url = `/api/room_bundle/rb007`
+            const url = `/api/room_bundle/${currentPackage.room_bundle_id}`
             const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
            setRoomBundle(response.data) 
         }
@@ -287,6 +290,7 @@ function Roombundle() {
                         setRate({ ...rate, base_rate_currency: e.target.value })
                       )
                     }>
+                    <option selected> {roomBundle?.base_rate_currency}</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -329,6 +333,7 @@ function Roombundle() {
                     }
                     >
                     <option selected >{roomBundle?.tax_currency}</option>
+                    <option value="USD">USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
                   </select>
@@ -368,6 +373,7 @@ function Roombundle() {
                       )
                     }>
                     <option selected >{roomBundle?.other_fees_currency}</option>
+                    <option value="USD">USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
                   </select>

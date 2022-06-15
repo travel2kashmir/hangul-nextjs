@@ -10,7 +10,7 @@ var t;
 var currentProperty;
 var currentroom;
 var room;
-import Router from 'next/Router'
+import Router from 'next/router'
 const logger = require("../services/logger");
 
 function Room() {

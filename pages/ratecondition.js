@@ -165,7 +165,7 @@ function Ratecondition() {
                           })
                         }
                       >
-                       <option selected > {userRateDetails?.user_rate_condition[0]?.UserRateCondition_op}</option>
+                     
                         <option value="srinagar">Select Rate Condition</option>
                         <option value="baramulla">Baramulla</option>
                         <option value="budgam">Budgam</option>
@@ -186,7 +186,7 @@ function Ratecondition() {
                   </label>
                   <textarea rows="2" columns="50"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"   
-                   defaultValue={userRateDetails?.user_rate_condition[0]?.Description}
+                  
                     onChange={
                       (e) => (
                           setAllHotelDetails({ ...allHotelDetails, description_body: e.target.value })

@@ -27,8 +27,6 @@ function Gallery() {
             if (locale === "fr") {
               t=french;   
             } 
-        /** Current Property Basic Details fetched from the local storage **/
-       gallery =JSON.parse(localStorage.getItem('allPropertyDetails'))
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
         
@@ -38,6 +36,7 @@ function Gallery() {
        Router.push("/gallery");
       },[])
     const [allHotelDetails, setAllHotelDetails] = useState([])
+    const [gallery, setGallery] = useState([])
     const [image, setImage] = useState({})
     const [editImage, setEditImage] = useState(0)
     const [deleteImage, setdeleteImage] = useState(0)
@@ -45,8 +44,23 @@ function Gallery() {
     const [addImage, setAddImage] = useState(0)
     const [enlargeImage, setEnlargeImage] = useState(0)
     const [actionEnlargeImage, setActionEnlargeImage] = useState({})
-
-
+  
+     /* Function call to fetch Current Property Details when page loads */
+  const fetchHotelDetails = async () => { 
+    const url = `/api/${currentProperty.address_province.replace(
+      /\s+/g,
+      "-"
+    )}/${currentProperty.address_city}/${
+      currentProperty.property_category
+    }s/${currentProperty.property_id}`;  
+    axios.get(url)
+    .then((response)=>{setGallery(response.data);
+    logger.info("url  to fetch property details hitted successfully")})
+    .catch((error)=>{logger.error("url to fetch property details, failed")});  
+}
+  useEffect(() => {
+    fetchHotelDetails(); 
+  },[]);
     const onChangePhoto = (e, i) => {
         setImage({ ...image, imageFile: e.target.files[0] })
     }
@@ -80,7 +94,7 @@ function Gallery() {
 
     /* Function to add images*/
     const submitAddImage = () => {
-     if (allHotelDetails.length !== 0){
+     if (actionImage.length !== 0){
        const imagedata = [{
             property_id: currentProperty?.property_id,
             image_link: image.image_link,
@@ -103,7 +117,10 @@ function Gallery() {
             
           
             );
-            setAllHotelDetails([]);
+            fetchHotelDetails(); 
+            Router.push("/gallery");
+            setAddImage(0)
+            setActionImage([]);
         }).catch(error => {
           toast.error(" Gallery Error", {
                 position: "top-center",
@@ -140,6 +157,8 @@ function Gallery() {
                     draggable: true,
                     progress: undefined,
                 });
+                fetchHotelDetails(); 
+                Router.push("/gallery");
               setAllHotelDetails([])
             })
             .catch((error) => {
@@ -172,6 +191,8 @@ function Gallery() {
                     draggable: true,
                     progress: undefined,
                 });
+                fetchHotelDetails(); 
+                Router.push("/gallery");
 
             })
             .catch((error) => {
@@ -464,7 +485,7 @@ function Gallery() {
                             </div>
 <div className="items-center p-6 border-t border-gray-200 rounded-b">
  <button
-                                    onClick={()=>{submitAddImage(); setAddImage(0)}}
+                                    onClick={()=>{submitAddImage(); }}
                                     className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                     type="submit">{t?.add} {t?.image}</button>
                             </div>

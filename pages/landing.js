@@ -156,7 +156,7 @@ const  Landing=() =>{
                                     <button
                                       type="button"
                                       onClick={() => {
-                                        LocalProperty({ item });
+                                        LocalProperty({ item});
                                         router.push("/propertysummary");
                                       }}
                                       className="text-white bg-cyan-600

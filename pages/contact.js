@@ -10,8 +10,10 @@ var t;
 var currentProperty;
 var contacts;
 import Router from 'next/router'
+const logger = require("../services/logger");
 
 function Contact() {
+
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -25,8 +27,6 @@ function Contact() {
         if (locale === "fr") {
           t=french;   
         } 
-    /** Current Property Basic Details fetched from the local storage **/
-   contacts =JSON.parse(localStorage.getItem('allPropertyDetails'))
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
     
@@ -41,6 +41,22 @@ function Contact() {
   const [deleteContact, setDeleteContact] = useState(0);
   const [editContact, setEditContact] = useState({});
 
+  const fetchHotelDetails = async () => { 
+    const url = `/api/${currentProperty.address_province.replace(
+      /\s+/g,
+      "-"
+    )}/${currentProperty.address_city}/${
+      currentProperty.property_category
+    }s/${currentProperty.property_id}`;  
+    axios.get(url)
+    .then((response)=>{setContacts(response.data);
+    logger.info("url  to fetch property details hitted successfully")})
+    .catch((error)=>{logger.error("url to fetch property details, failed")});  
+}
+  useEffect(() => {
+   
+    fetchHotelDetails(); 
+  },[]);
   
   const conTemp = {
     contact_type: "",
@@ -49,6 +65,7 @@ function Contact() {
   };
 
   const [contact, setContact] = useState([]);
+  const [contacts, setContacts] = useState([]);
 
   const onChange = (e, index, i) => {
     setContact(
@@ -82,6 +99,8 @@ function Contact() {
           draggable: true,
           progress: undefined,
         });
+        fetchHotelDetails(); 
+        Router.push("/contact");
         setAllHotelDetails([])
       })
       .catch((error) => {
@@ -122,6 +141,8 @@ function Contact() {
           draggable: true,
           progress: undefined,
         });
+        fetchHotelDetails(); 
+        Router.push("/contact");
        setContact([])
       })
       .catch((error) => {
@@ -153,6 +174,8 @@ function Contact() {
           draggable: true,
           progress: undefined,
         });
+        fetchHotelDetails(); 
+        Router.push("/contact");
       })
       .catch((error) => {
         toast.error("Contact Delete Error!", {

@@ -51,7 +51,6 @@ function PropertySummary() {
         }s/${currentProperty.property_id}`;  
         axios.get(url)
         .then((response)=>{setAllHotelDetails(response.data);
-        localStorage?.setItem("allPropertyDetails", JSON.stringify(response?.data));  
         logger.info("url  to fetch property details hitted successfully")})
         .catch((error)=>{logger.error("url to fetch property details, failed")});  
     }

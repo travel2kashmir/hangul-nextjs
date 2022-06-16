@@ -7,7 +7,6 @@ import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 var t;
 var currentProperty;
-var basicDetails;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../services/logger");
@@ -15,6 +14,7 @@ const logger = require("../services/logger");
 export default function BasicDetails() 
  {
 
+  const [basicDetails, setBasicDetails] = useState([]);
  /** Fetching language from the local storage **/
  useEffect(()=>{  
   const firstfun=()=>{  
@@ -30,8 +30,6 @@ export default function BasicDetails()
         t=french;
         
       } 
-  /** Current Property Basic Details fetched from the local storage **/
-  basicDetails=JSON.parse(localStorage.getItem('allPropertyDetails'))
   /** Current Property Details fetched from the local storage **/
   currentProperty = JSON.parse(localStorage.getItem("property"));
   
@@ -41,7 +39,23 @@ export default function BasicDetails()
  Router.push("/basicdetails");
 },[])
 
+const fetchBasicDetails = async () => { 
+  const url = `/api/${currentProperty.address_province.replace(
+    /\s+/g,
+    "-"
+  )}/${currentProperty.address_city}/${
+    currentProperty.property_category
+  }s/${currentProperty.property_id}`;  
+  axios.get(url)
+  .then((response)=>{setBasicDetails(response.data);
+  logger.info("url  to fetch property details hitted successfully")})
+  .catch((error)=>{logger.error("url to fetch property details, failed")});  
+}
+ /* Function call to fetch Current Property Details when page loads */
+ useEffect(() => {
  
+  fetchBasicDetails(); 
+},[]);
 
   const current = new Date();
   let month = current.getMonth()+1;
@@ -74,6 +88,8 @@ export default function BasicDetails()
                  draggable: true,
                  progress: undefined,
                });
+               fetchBasicDetails(); 
+               Router.push("/basicdetails");
               setAllHotelDetails([])
          })
          .catch((error) => {
@@ -287,24 +303,20 @@ export default function BasicDetails()
                  />
                 </div>
               </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                </div>
-              </div>
-
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button
-                  onClick={submitBasicEdit}
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button
+                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                {t?.update}</button>
-                </div>
-              </div>
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
+                  onClick={() => {
+                    submitBasicEdit();
+                  }}
+                  type="button"
+                >
+                 {t?.update}
+                </button>
+              </div>  
 
             </div>
           </div>

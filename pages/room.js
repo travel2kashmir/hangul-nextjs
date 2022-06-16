@@ -30,14 +30,12 @@ function Room() {
             t=french;
           } 
 /** Current Property Basic Details fetched from the local storage **/
-currentroom =JSON.parse(localStorage.getItem('room'))
+currentroom =localStorage.getItem('RoomId');
 /** Current Property Details fetched from the local storage **/
 currentProperty = JSON.parse(localStorage.getItem("property"));
-/** Current Property Basic Details fetched from the local storage **/
-room =JSON.parse(localStorage.getItem('allPropertyDetails'))
         } }
-           firstfun(); 
-           Router.push("/room")   
+firstfun(); 
+ Router.push("/room")   
   },[])
 
   const onChangePhoto = (e, i) => {
@@ -47,7 +45,6 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
   const [allRoomDetails, setAllRoomDetails] = useState([])
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
-  const [roomfacilities, setRoomfacilities] = useState({})
   const [roomimages, setRoomimages] = useState({})
   const [addImage, setAddImage] = useState(0)
   const [roomtypes, setRoomtypes] = useState([])
@@ -84,6 +81,8 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
           draggable: true,
           progress: undefined,
         });
+        fetchDetails(); 
+        Router.push("/room");
        setAllRoomDetails([])
       })
       .catch((error) => {
@@ -116,10 +115,12 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
           draggable: true,
           progress: undefined,
         });
-
+        fetchImages();
+        fetchDetails(); 
+        Router.push("/room");
       })
       .catch((error) => {
-        toast.error("Some thing went wrong in Delete\n " + JSON.stringify(error.response.data), {
+        toast.error("Image delete error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -131,52 +132,43 @@ room =JSON.parse(localStorage.getItem('allPropertyDetails'))
 
       })
   }
+  const fetchDetails = async () => {
+    const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
+    console.log("url " +url)
+    axios.get(url)
+    .then((response)=>{setRoomDetails(response.data);
+    logger.info("url  to fetch room hitted successfully")})
+    .catch((error)=>{logger.error("url to fetch room, failed")}); 
+  }
+  const fetchImages = async () => {
+    const url = `/api/images/${currentProperty?.property_id}`
+    console.log("url " +url)
+    axios.get(url)
+  .then((response)=>{setRoomimages(response.data);
+   logger.info("url  to fetch room images hitted successfully")})
+   .catch((error)=>{logger.error("url to fetch room images, failed")}); 
+  }
+  const fetchRoomtypes = async () => {
+    const url = `/api/room-types`
+    console.log("url " +url)
+    axios.get(url)
+  .then((response)=>{setRoomtypes(response.data);
+   logger.info("url  to fetch room types hitted successfully")})
+   .catch((error)=>{logger.error("url to fetch roomtypes, failed")}); 
+  }
+  const fetchServices = async () => {
+    const url = `/additional_services/${currentProperty?.property_id}`
+    axios.get(url)
+  .then((response)=>{setServices(response.data);
+   logger.info("url  to fetch room types hitted successfully")})
+   .catch((error)=>{logger.error("url to fetch roomtypes, failed")}); 
+  }
   /* Function to load Room Details when page loads*/
   useEffect(() => {
-    const fetchDetails = async () => {
-      const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom.room_id}`
-      console.log("url " +url)
-      axios.get(url)
-      .then((response)=>{setRoomDetails(response.data);
-      logger.info("url  to fetch room hitted successfully")})
-      .catch((error)=>{logger.error("url to fetch room, failed")}); 
-    }
-    const fetchRoomfacilities = async () => {
-      const url = `/api/room-services/${currentProperty?.property_id}`
-      console.log("url " +url)
-      axios.get(url)
-    .then((response)=>{setRoomfacilities(response.data);
-     logger.info("url  to fetch room services hitted successfully")})
-     .catch((error)=>{logger.error("url to fetch room services, failed")}); 
-    }
-    const fetchImages = async () => {
-      const url = `/api/images/${currentProperty?.property_id}`
-      console.log("url " +url)
-      axios.get(url)
-    .then((response)=>{setRoomimages(response.data);
-     logger.info("url  to fetch room images hitted successfully")})
-     .catch((error)=>{logger.error("url to fetch room images, failed")}); 
-    }
-    const fetchRoomtypes = async () => {
-      const url = `/api/room-types`
-      console.log("url " +url)
-      axios.get(url)
-    .then((response)=>{setRoomtypes(response.data);
-     logger.info("url  to fetch room types hitted successfully")})
-     .catch((error)=>{logger.error("url to fetch roomtypes, failed")}); 
-    }
-    const fetchServices = async () => {
-      const url = `/additional_services/${currentProperty?.property_id}`
-      axios.get(url)
-    .then((response)=>{setServices(response.data);
-     logger.info("url  to fetch room types hitted successfully")})
-     .catch((error)=>{logger.error("url to fetch roomtypes, failed")}); 
-    }
     fetchServices();
     fetchRoomtypes();
     fetchImages();
     fetchDetails();
-    fetchRoomfacilities();
   },[])
 
    /* Function to upload image*/
@@ -251,7 +243,7 @@ const submitAddImage = () => {
 const submitImageLink = (props) =>{
   const imagedata = [{
     image_id: props,
-    room_id: currentroom?.room_id
+    room_id: currentroom
 }]
 const finalImage = { "room_images": imagedata }
 
@@ -266,7 +258,9 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           draggable: true,
           progress: undefined,
         });
-
+        fetchImages(); 
+        fetchDetails();
+        Router.push("/room");
       })
       .catch((error) => {
        toast.error("Room Description Update Error! " , {
@@ -286,7 +280,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
   const submitRoomDescriptionEdit = () => {
     if (allRoomDetails.length !== 0){
     const final_data = {
-      "room_id": currentroom?.room_id,
+      "room_id": currentroom,
       "room_name": allRoomDetails.room_name,
       "room_type_id": allRoomDetails.room_type_id,
       "room_description": allRoomDetails.room_description,
@@ -310,6 +304,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           draggable: true,
           progress: undefined,
         });
+      fetchDetails(); 
+      Router.push("/room");
      setAllRoomDetails([])
       })
       .catch((error) => {
@@ -330,7 +326,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
    const submitRoomRatesEdit = () => {
     if (allRoomRates.length !== 0){  
     const final_data = {
-      "room_id": currentroom?.room_id,
+      "room_id": currentroom,
       "baserate_currency": allRoomRates?.base_rate_currency,
       "baserate_amount": allRoomRates?.baserate_amount,
       "tax_currency":allRoomRates?.tax_rate_currency,
@@ -339,7 +335,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       "otherfees_amount": allRoomRates?.otherfees_amount,
       "un_rate_id": roomDetails?.unconditional_rates?.[0]?.un_rate_id
     }
-  alert("Final" +JSON.stringify(final_data))
+ 
     const url = '/api/unconditional_rates'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -352,6 +348,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           draggable: true,
           progress: undefined,
         });
+        fetchDetails(); 
+        Router.push("/room");
         setAllRoomRates([])
 
       })
@@ -385,15 +383,14 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-             <span className="text-gray-700 text-sm font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/propertysummary" ><a>{room?.property_name}</a></Link></span>
+             <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <Link href="/propertysummary" ><a>{currentProperty?.property_name}</a></Link></span>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium
-               text-sm" aria-current="page">
+              <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
               <Link href="/rooms"><a>{t?.propertyrooms}</a></Link></span>
             </div>
           </li>
@@ -410,17 +407,17 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {t?.edit} {t?.room} 
         </h6>
-       {/* Room Forms */}
-       <div className="w-full grid grid-cols-1 xl:grid-cols-1 2xl:grid-cols-1 gap-4">
+      
+     
           {/* Room Description */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+          <div className="bg-white shadow rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 ">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {t?.room} {t?.description}
             </h6>
             <div className="pt-6">
               <div className=" md:px-2 mx-auto w-full">
                 <div className="flex flex-wrap">
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -440,7 +437,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
@@ -459,7 +456,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       </select>
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -479,7 +476,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                     </div>
                   </div>
 
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -499,7 +496,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -519,7 +516,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -539,7 +536,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -559,7 +556,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -578,7 +575,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       /></div>
                   </div>
 
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -598,7 +595,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -617,7 +614,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                         defaultValue={roomDetails?.room_height} />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -632,7 +629,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       />
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-2">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className="text-sm font-medium text-gray-900 block mb-2"
@@ -646,14 +643,28 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                         defaultValue={roomDetails?.room_volume} readOnly="readonly" />
                     </div>
                   </div>
-                
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button
+                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center 
+                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
+                  onClick={() => {
+                    submitRoomDescriptionEdit();
+                    
+                  }}
+                  type="button"
+                >
+                 {t?.update}
+                </button>
+              </div> 
                 </div>
               </div>
             </div>
           </div>
 
           {/* Room Gallery */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3">
+          <div className="bg-white shadow rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
           <h6 className="text-base  flex leading-none mb-2 pt-2 font-semibold text-gray-800 ">
                  {t?.room}  {t?.gallery}
                 </h6>
@@ -722,11 +733,10 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
               })}
             </div>
           </div>
-        </div>
-      </div>
+       
       
       {/* Room Services Table */}
-      <div className="bg-white shadow rounded-lg p-4 mx-4 sm:p-6 xl:p-8 my-3">
+      <div className="bg-white hidden shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3">
           <div className="mx-0 my-6">
             <h4 className="text-xl sm:text-2xl font-semibold text-gray-900">
               {t?.room} {t?.services} </h4>     
@@ -810,7 +820,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       </div>
 
       {/* Room Rates*/}
-      <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+      <div className="bg-white shadow rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {t?.room} {t?.rates} 
             </h6>
@@ -958,13 +968,13 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                  {t?.update}
                 </button>
               </div>
-
             </div>
               </div>
             </div>
           </div>
-
-
+          </div>
+       
+     
        {/* Modal Image Enlarge */}
        <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
              <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">

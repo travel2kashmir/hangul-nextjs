@@ -8,18 +8,19 @@ import french from "./Languages/fr";
 const logger = require("../services/logger");
 var t;
 var currentProperty;
-var services;
 import Router from 'next/router'
 import arabic from "./Languages/ar";
 
 function Services() {
     const [additionalServices, setAdditionalServices] = useState({})
+    const [services, setServices] = useState([])
     const [edit, setEdit] = useState(0)
     const [actionService, setActionService] = useState({})
     const [modified, setModified] = useState([])
     const [addEdit, setAddEdit] = useState(0)
     const [addDel, setAddDel] = useState(0)
     const [add, setAdd] = useState(0)
+  
 
     useEffect(()=>{  
         const firstfun=()=>{
@@ -43,16 +44,28 @@ function Services() {
                Router.push("/services")   
       },[])
 
-      useEffect(()=>{
-        const fetchAdditionalServices = async () => {           
-            const url = `/api/additional_services/${currentProperty.property_id}`
-                axios.get(url)
-                .then((response)=>{setAdditionalServices(response.data);
-                localStorage?.setItem("additionalServices", JSON.stringify(response?.data));  
-                logger.info("url  to fetch additional services hitted successfully")})
-                .catch((error)=>{logger.error("url to fetch additional services, failed")});  
-            }
-               
+    /* Function call to fetch Current Property Details when page loads */
+  const fetchHotelDetails = async () => { 
+    const url = `/api/${currentProperty.address_province.replace(
+      /\s+/g,
+      "-"
+    )}/${currentProperty.address_city}/${
+      currentProperty.property_category
+    }s/${currentProperty.property_id}`;  
+    axios.get(url)
+    .then((response)=>{setServices(response.data);
+    logger.info("url  to fetch property details hitted successfully")})
+    .catch((error)=>{logger.error("url to fetch property details, failed")});  
+}
+  const fetchAdditionalServices = async () => {           
+    const url = `/api/additional_services/${currentProperty.property_id}`
+        axios.get(url)
+        .then((response)=>{setAdditionalServices(response.data);  
+        logger.info("url  to fetch additional services hitted successfully")})
+        .catch((error)=>{logger.error("url to fetch additional services, failed")});  
+    }
+      useEffect(()=>{ 
+        fetchHotelDetails();       
        fetchAdditionalServices();
        
     },[])
@@ -62,10 +75,10 @@ function Services() {
         if (modified.length !== 0){
         const final_data = {
             "add_service_id": actionService.add_service_id,
+            "add_service_name":modified.add_service_name,
             "property_id": currentProperty?.property_id,
-            "service_value": modified.service_value,
-            "service_comment": modified.service_comment,
-            "status": modified.status
+            "add_service_comment": modified.add_service_comment,
+            "status": modified.active
         }
       const url = '/api/additional_services'
         axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -79,6 +92,8 @@ function Services() {
                     draggable: true,
                     progress: undefined,
                 });
+                fetchAdditionalServices(); 
+                Router.push("/services");
                 setModified([])
             })
             .catch((error) => {
@@ -119,6 +134,8 @@ function Services() {
                     draggable: true,
                     progress: undefined,
                 });
+                fetchHotelDetails(); 
+                Router.push("/services");
                 setModified([])
             })
             .catch((error) => {
@@ -148,6 +165,8 @@ function Services() {
                 draggable: true,
                 progress: undefined,
             });
+            fetchAdditionalServices(); 
+            Router.push("/services");
             toast.error("Error" , {
                 position: "top-center",
                 autoClose: 5000,
@@ -183,11 +202,9 @@ function Services() {
          "add_service_comment": modified.add_service_comment,
          "status": true
      }]}
-   
      const url = '/api/additional_services'
      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-         ((response) => {
-           
+         ((response) => {  
              toast.success("Service Added Successfully!", {
                  position: "top-center",
                  autoClose: 5000,
@@ -197,7 +214,9 @@ function Services() {
                  draggable: true,
                  progress: undefined,
              });
-             setModified([])
+             fetchAdditionalServices(); 
+             Router.push("/services");
+            setModified([])
          })
          .catch((error) => {
              toast.error("Additional Services Add Error! " , {
@@ -281,7 +300,7 @@ function Services() {
      
             <div className="bg-white shadow rounded-lg mx-6 mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
             <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t?.services} {modified?.length}</h1>   
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t?.services} </h1>   
             </div>
             {/* Services Table */}
             <div className="flex flex-col my-4">

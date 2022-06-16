@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 var t;
 var currentProperty;
-var address;
+const logger = require("../services/logger");
 import Link from "next/link";
 import Router from 'next/router'
 import english from "./Languages/en";
@@ -26,11 +26,8 @@ function Address() {
         if (locale === "fr") {
           t=french;   
         } 
-    /** Current Property Basic Details fetched from the local storage **/
-   address=JSON.parse(localStorage.getItem('allPropertyDetails'))
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
-    
       } 
     }
     firstfun();
@@ -38,7 +35,24 @@ function Address() {
   },[])
 
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-  
+  const [address, setAddress] = useState([]);
+  /* Function call to fetch Current Property Details when page loads */
+  const fetchHotelDetails = async () => { 
+    const url = `/api/${currentProperty.address_province.replace(
+      /\s+/g,
+      "-"
+    )}/${currentProperty.address_city}/${
+      currentProperty.property_category
+    }s/${currentProperty.property_id}`;  
+    axios.get(url)
+    .then((response)=>{setAddress(response.data);
+    logger.info("url  to fetch property details hitted successfully")})
+    .catch((error)=>{logger.error("url to fetch property details, failed")});  
+}
+  useEffect(() => {
+    fetchHotelDetails(); 
+  },[]);
+
   /* Edit Address Function */
   const submitAddressEdit = () => {
     if (allHotelDetails.length !== 0){
@@ -67,6 +81,8 @@ function Address() {
           draggable: true,
           progress: undefined,
         });
+        fetchHotelDetails(); 
+        Router.push("/address");
         setAllHotelDetails([])
       })
       .catch((error) => {
@@ -152,7 +168,7 @@ function Address() {
       {/* Update Address Form */}
       <div className="bg-white shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl  flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-          {t?.address} {allHotelDetails.length}
+          {t?.address}
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"
@@ -367,35 +383,20 @@ function Address() {
                       </select>
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3"></div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3"></div>
-                  </div>
-                  <div className="w-full lg:w-4/12 px-4">
-                    <div className="relative w-full ml-4 mb-3"></div>
-                  </div>
-                  <div className="w-full lg:w-2/12 px-4">
-                    <div className="relative w-full ml-4 mb-4">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                      ></path>
-                      <button
-                        onClick={submitAddressEdit}
-                        className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <button
+                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
+                     rounded-lg text-sm px-5 py-2 text-center mt-20
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                      >
-                       {t?.update}
-                      </button>
-                    </div>
-                  </div>
+                  onClick={() => {
+                   submitAddressEdit();
+                  }}
+                  type="button"
+                >
+                 {t?.update}
+                </button>
+              </div>  
                 </div>
               </div>
             </div>

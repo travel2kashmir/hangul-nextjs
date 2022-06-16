@@ -19,7 +19,7 @@ function Roombundle() {
   const[roomBundle,setRoomBundle] = useState([])
   const[bundle,setBundle] = useState([])
   const[rate,setRate] = useState([])
-  
+  const[parking,setParking]= useState(false)
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -102,11 +102,12 @@ function Roombundle() {
           "rate_master_id":roomBundle?.rate_master_id,
           "room_id": bundle?.room_id,
           "package_id":bundle?.package_id,
-          "breakfast_included":bundle?.breakfast_included,
-          "parking_included": bundle?.parking_included,
-          "internet_included":bundle?.internet_included,
+          "breakfast_included":parking,
+          "parking_included":parking,
+          "internet_included":parking,
           "rate_master_id":bundle?.rate_master_id
       }  
+      alert("final_data" +JSON.stringify(final_data))
      const url = '/api/package/room_bundle'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
@@ -387,132 +388,75 @@ function Roombundle() {
                   >
                     {t?.services} 
                   </label>
-                 
-                
-                <div className="flex py-2 items-start">
-                  <label className="text-sm  pr-2 font-semibold text-gray-700">
-                    Breakfast Included
-                  </label>
+                  <div className="flex flex-row ml-6 items-start" >
+                <div className="flex items-center h-5">
                   <input
+                   onClick={() => {setParking(!parking)
+                  }}
                     id="remember"
                     aria-describedby="remember"
-                    name="remember" value={true}
-                    
-                    type="radio" onChange={
-                      (e) => (
-                        setRate({ ...rate, breakfast_included: e.target.value })
-                      )
-                    }
+                    name={"remember"}
+                    type="checkbox" 
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
                     required
                   />
-                  <label className="text-sm font-semibold px-1 text-gray-700">
-                 {t?.yes}
-                  </label>
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember" 
-                    type="radio" 
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded" value={false}  
-                    onChange={
-                      (e) => (
-                        setBundle({ ...bundle, breakfast_included: e.target.value })
-                      )
-                    } 
-                    required
-                  />
-                  <label className="text-sm px-1 font-semibold text-gray-700">
-                    {t?.no}
-                  </label>  
                 </div>
-             
-                <div className="flex py-2 items-start">
-                  <label className="text-sm pr-2 font-semibold  text-gray-700">
-                    Parking Included
+                <div className="text-sm ml-3">
+                  <label className="text-sm font-semibold capitalize text-gray-700">
+                Parking Included
                   </label>
+                </div>
+               
+              </div>
+              <div className="flex flex-row ml-6 items-start" >
+                <div className="flex items-center h-5">
                   <input
+                 onClick={() => {setParking(!parking)
+                 }}
                     id="remember"
                     aria-describedby="remember"
-                    name="remember" value={true}
-                    type="radio" 
-                    onChange={
-                      (e) => (
-                        setRate({ ...rate, parking_included: e.target.value })
-                      )
-                    }
+                    name={"remember"}
+                    type="checkbox" 
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
                     required
                   />
-                  <label className="text-sm px-1 font-semibold text-gray-700">
-                  {t?.yes}
+                </div>
+                <div className="text-sm ml-3">
+                  <label className="text-sm font-semibold capitalize text-gray-700">
+               Breakfast Included
                   </label>
+                </div>
+               
+              </div>
+              <div className="flex flex-row ml-6 items-start">
+                <div className="flex items-center h-5">
                   <input
-                    id="remember"   onChange={
-                      (e) => (
-                        setBundle({ ...bundle, parking_included: e.target.value })
-                      )
-                    } 
+                   onClick={() => {setParking(!parking)
+                   }}
+                    id="remember"
                     aria-describedby="remember"
-                    name="remember" value={false}
-                    type="radio" 
+                    name={"remember" }
+                    type="checkbox" 
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
                     required
                   />
-                  <label className="text-sm px-1 font-semibold text-gray-700">
-                  {t?.no}
+                </div>
+                <div className="text-sm ml-3">
+                  <label className="text-sm font-semibold capitalize text-gray-700">
+               Internet Included
                   </label>
-                 </div>
+                </div>
+               
+              </div>
+                </div>  
                 
-                 <div className="flex py-2 items-start">
-                 <label className="text-sm pr-2  font-semibold text-gray-700">
-                    Internet Included
-                  </label> 
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember" 
-                    type="radio" value={true}
-                    onChange={
-                      (e) => (
-                        setRate({ ...rate, internet_included: e.target.value })
-                      )
-                    }
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                  <label className="text-sm font-semibold px-1 text-gray-700">
-                  {t?.yes}
-                  </label>
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    name="remember" 
-                    type="radio" value={false}
-                    onChange={
-                      (e) => (
-                        setBundle({ ...bundle, internet_included: e.target.value })
-                      )
-                    }
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                  <label className="text-sm px-1 font-semibold text-gray-700">
-                  {t?.no}
-                  </label>
-                 </div>
+               
               </div>
                     </div> 
                      </div> 
@@ -534,7 +478,7 @@ function Roombundle() {
           </div>
           </div>
 
-          </div>
+        
         {/* Toast Container */}
       <ToastContainer
         position="top-center"

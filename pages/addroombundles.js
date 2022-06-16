@@ -133,6 +133,7 @@ function Addroombundles() {
               rate_plan_id:rateId + bundle?.package_id
             }];
             const final_data={room_bundle: datas}
+            alert(JSON.stringify(final_data))
             const url = "/api/package/room_bundle";
             axios
               .post(url, final_data, {
@@ -451,8 +452,7 @@ function Addroombundles() {
         <div className="flex flex-row ml-6 items-start" >
                 <div className="flex items-center h-5">
                   <input
-                   onClick={() => {setParking(!parking)
-                  }}
+                  onChange={(e) => setParking(e.target.checked)}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
@@ -473,8 +473,7 @@ function Addroombundles() {
               <div className="flex flex-row ml-6 items-start" >
                 <div className="flex items-center h-5">
                   <input
-                 onClick={() => {setParking(!parking)
-                 }}
+                 onChange={(e) => setParking(e.target.checked)}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
@@ -495,8 +494,7 @@ function Addroombundles() {
               <div className="flex flex-row ml-6 items-start">
                 <div className="flex items-center h-5">
                   <input
-                   onClick={() => {setParking(!parking)
-                   }}
+                   onChange={(e) => setParking(e.target.checked)}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember" }

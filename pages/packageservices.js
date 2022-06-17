@@ -13,9 +13,12 @@ var currentProperty;
 var  currentPackageDetails;
 var service_name=[];
 var service_value=[];
+var currentPackage;
 
 function Packageservices() {
   const[packageServices,setPackageServices]= useState([])
+  const[currentPackageDetails,setCurrentPackageDetails]= useState([])
+
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -35,19 +38,51 @@ function Packageservices() {
           } 
         }
         firstfun();
+        currentPackage=localStorage.getItem('packageId')
         Router.push("/packageservices");
       },[]) 
 
-      useEffect(() => {
-        const fetchPackageServices = async () => {
-        const url = `/api/package/package_services_link/${currentPackageDetails?.package_id}`
+      const fetchPackageServices = async () => {
+        const url = `/api/package/package_services_link/${currentPackage}`
         axios.get(url)
         .then((response)=>{setPackageServices(response.data);
           logger.info("url  to fetch package services hitted successfully")})
           .catch((error)=>{logger.error("url to fetch package services, failed")});  
         }
-        fetchPackageServices();
-       
+        const fetchDetails = async () => {
+          try {
+              const url = `/api/package/${currentPackage}`
+              const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+              setCurrentPackageDetails(response.data)
+          }
+          catch (error) {
+              if (error.response) {
+                  toast.error("Package Error!", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+              } else {
+                  toast.error("Package Error!", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+              }
+          }
+      
+      }
+      useEffect(() => {
+      fetchPackageServices();
+      fetchDetails(); 
       },[])
 
    /** Function package services **/
@@ -58,13 +93,15 @@ function Packageservices() {
 for (let i = 0; i < service_name.length; i++) {
   
   const temp = {
-  'package_id': currentPackageDetails?.package_id,
-  'package_service_id':service_name[i],
-  'service_value': service_value[i]
+  'package_id': currentPackage,
+  'service_id':service_name[i],
+  'value': service_value[i],
+  "status": true
   };
   text.push(temp) 
 }
 total={"package_services":text}
+alert(JSON.stringify(total))
 const url = '/api/package/package_service_link'
     axios.put(url, total, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -77,7 +114,8 @@ const url = '/api/package/package_service_link'
           draggable: true,
           progress: undefined,
         });
-
+        fetchPackageServices(); 
+        Router.push("/packageservices");
       })
       .catch((error) => {
        toast.error("Package Services Update Error! " , {
@@ -92,6 +130,7 @@ const url = '/api/package/package_service_link'
       }) 
          
   }
+
   return (
     <div
       id="main-content"

@@ -52,7 +52,6 @@ function Package() {
               const url = `/api/package/${currentPackage}`
               const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
               setAllPackageDetails(response.data)
-              localStorage.setItem("packageDescription", JSON.stringify(response.data));
           }
           catch (error) {
               if (error.response) {

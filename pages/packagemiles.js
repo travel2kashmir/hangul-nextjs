@@ -9,7 +9,7 @@ import arabic from "./Languages/ar";
 import Router from "next/router";
 var t;
 var currentProperty;
-var  currentMiles;
+var currentPackage;
 
 function Packagemiles() {
    /** Fetching language from the local storage **/
@@ -28,20 +28,56 @@ function Packagemiles() {
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
-       currentMiles=JSON.parse(localStorage.getItem('packageDescription'))
+        currentPackage=localStorage.getItem('packageId')
       } 
     }
     firstfun();
+    currentPackage=localStorage.getItem('packageId')
     Router.push("/packagemiles");
   },[]) 
+
   const [view, setView] = useState(0)
   const [updateMile, setUpdateMile] = useState(0)
   const [deleteMile, setDeleteMile] = useState(0)
   const [editMile, setEditMile] = useState({});
   const [mile, setMile] = useState([]);
   const [modified, setModified] = useState([])
+  const [currentMiles, setCurrentMiles] = useState([])
 
- 
+  const fetchDetails = async () => {
+    try {
+        const url = `/api/package/${currentPackage}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+        setCurrentMiles(response.data)
+    }
+    catch (error) {
+        if (error.response) {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        } else {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        }
+    }
+
+}
+  useEffect(()=>{
+  fetchDetails();
+  },[])
 
     /* Function Edit Mile*/
   const submitMileEdit = (props) => { 
@@ -63,6 +99,8 @@ function Packagemiles() {
            draggable: true,
            progress: undefined,
          });
+         fetchDetails(); 
+        Router.push("/packagemiles");
          setMile([])
        })
        .catch((error) => {
@@ -94,7 +132,8 @@ function Packagemiles() {
            draggable: true,
            progress: undefined,
          });
- 
+         fetchDetails(); 
+        Router.push("/packagemiles");
        })
        .catch((error) => {
         toast.error("Package Miles Delete Error!", {
@@ -113,12 +152,14 @@ function Packagemiles() {
    /* Edit Basic Details Function */
    const submitMileAdd = () => {
     if (modified.length !== 0){
-     const programdata = [{
-     "package_id": currentMiles?.package_id,
+     const program = [{
+     "package_id": currentPackage,
      "number_of_miles": modified.number_of_miles,
-     "provider": modified.provider  
+     "provider": modified.provider, 
+     "status" :true
      }]
-     const finalProgram = { "package_miles": programdata }
+     const finalProgram = { "package_miles": program }
+     alert(JSON.stringify(finalProgram))
     const url = `/api/package/package_miles`
      axios.post(url, finalProgram, { header: { "content-type": "application/json" } })
      .then
@@ -132,6 +173,8 @@ function Packagemiles() {
                  draggable: true,
                  progress: undefined,
                });
+               fetchDetails(); 
+               Router.push("/packagemiles");
             setModified([])
          })
          .catch((error) => {

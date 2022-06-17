@@ -39,9 +39,7 @@ function Packages() {
     const [actionPackage, setActionPackage] = useState({});
     const [allpackages, setAllPackages] = useState([])
    
-    
-  useEffect(() => {
-    const fetchRooms = async () => {
+    const fetchPackages = async () => {
         try {
             const url = `/api/package/${currentProperty?.property_id}`
             const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
@@ -54,8 +52,10 @@ function Packages() {
                }
         }
 
-    }
-    fetchRooms();
+    }  
+
+  useEffect(() => { 
+    fetchPackages();
 }
     ,[])
 
@@ -72,6 +72,8 @@ function Packages() {
                 draggable: true,
                 progress: undefined,
             });
+            fetchPackages(); 
+            Router.push("/packages");
         })
             .catch((error) => {
                 toast.error(("Package Delete Error!"), {

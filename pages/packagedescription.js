@@ -12,10 +12,11 @@ var t;
 var currentProperty;
 var max_age=[];   
 var final=[];
-var  currentPackageDetails;
+var currentPackage;
 
 function Packagedescription() {
   const [disp, setDisp] = useState(0);
+
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -31,8 +32,7 @@ function Packagedescription() {
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))  
-        setAllPackageDetails(JSON.parse(localStorage.getItem('packageDescription')))
-       
+        currentPackage=localStorage.getItem('packageId')
       } 
     }
     firstfun();
@@ -42,6 +42,40 @@ function Packagedescription() {
   const [allPackageDetails, setAllPackageDetails] = useState([])
   const [packageDetails, setPackageDetails] = useState([])
 
+  const fetchDetails = async () => {
+    try {
+        const url = `/api/package/${currentPackage}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+        setAllPackageDetails(response.data)
+    }
+    catch (error) {
+        if (error.response) {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        } else {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        }
+    }
+
+}
+  useEffect(()=>{
+  fetchDetails();
+  },[])
     /* Edit Package Edit Function */
    const submitPackageEdit = () => {
     if (packageDetails.length !== 0){
@@ -68,6 +102,8 @@ function Packagedescription() {
                   draggable: true,
                   progress: undefined,
                 });
+                fetchDetails(); 
+                Router.push("/packagedescription");
                 setPackageDetails([])
           })
           .catch((error) => {

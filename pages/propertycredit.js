@@ -9,7 +9,9 @@ import arabic from "./Languages/ar";
 import Router from "next/router";
 var t;
 var currentProperty;
-var currentPropertyCredit
+var currentPropertyCredit;
+var currentPackage;
+var i=0;
 
 function Propertycredit() {
   useEffect(()=>{
@@ -27,19 +29,19 @@ function Propertycredit() {
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
-        currentPropertyCredit =JSON.parse(localStorage.getItem('packageDescription'))
-      } 
+        currentPackage=localStorage.getItem('packageId')
+       } 
     }
     firstfun();
     Router.push("/propertycredit");
   },[]) 
   const [propertycredit, setPropertyCredit] = useState([]);
-
+  const [currentPropertyCredit, setCurrentPropertyCredit] = useState([]);
   /* Function Edit Property Credit*/
   const submitPropertyCreditEdit = () => {
     if (propertycredit.length !== 0){
     const final_data = {
-      "property_credit_id": currentPropertyCredit?.package_property_credit[0]?.property_credit_id,
+      "property_credit_id": currentPackage,
       "property_credit_currency": propertycredit.property_credit_currency,
       "property_credit_amount": propertycredit.property_credit_amount
     }
@@ -57,6 +59,8 @@ function Propertycredit() {
           progress: undefined,
         });
         setPropertyCredit([])
+        fetchDetails(); 
+        Router.push("/propertycredit");
       })
       .catch((error) => {
        toast.error("Property Credit Error!", {
@@ -71,7 +75,40 @@ function Propertycredit() {
       })
     }
   }
+  const fetchDetails = async () => {
+    try {
+        const url = `/api/package/${currentPackage}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+        setCurrentPropertyCredit(response.data)
+    }
+    catch (error) {
+        if (error.response) {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        } else {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        }
+    }
 
+}
+  useEffect(()=>{
+  fetchDetails();
+  },[])
   return (
     <div  id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -143,7 +180,7 @@ function Propertycredit() {
                      text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
                       focus:border-cyan-600 block w-full p-2.5"
                     onChange={(e) => (setPropertyCredit({ ...propertycredit, property_credit_currency: e.target.value }))}>
-                    <option selected >{currentPropertyCredit?.package_property_credit[0]?.property_credit_currency}</option>
+                    <option selected >{currentPropertyCredit?.package_property_credit?.[i]?.property_credit_currency}</option>
                     <option value="INR" >INR</option>
                     <option value="Dollar">Dollar</option>
                     <option value="Euro" >Euro</option>
@@ -165,7 +202,7 @@ function Propertycredit() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900
                  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600
                   block w-full p-2.5"
-                    defaultValue={currentPropertyCredit?.package_property_credit[0]?.property_credit_amount}
+                    defaultValue={currentPropertyCredit?.package_property_credit?.[i]?.property_credit_amount}
                     onChange={(e) => (setPropertyCredit({ ...propertycredit, property_credit_amount: e.target.value }))} />
                 </div>
               </div>

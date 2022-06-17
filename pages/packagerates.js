@@ -14,12 +14,13 @@ var resArr=[]
 var currentFilteredRooms;
 const logger = require("../services/logger"); 
 var id=[];
-
+var currentPackage;
 
 function PackageRates() {
   const [allRooms, setAllRooms] = useState([])
   const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
   const[room,setRoom]= useState([])
+  const[currentPackageRates,setCurrentPackageRates]= useState([])
 
   /** Fetching language from the local storage **/
   useEffect(()=>{
@@ -37,14 +38,44 @@ function PackageRates() {
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
-        currentPackageRates=JSON.parse(localStorage.getItem('packageDescription'))
-        
+        currentPackage=localStorage.getItem('packageId')        
     } 
     }
     firstfun();
     Router.push("/packagerates");
   },[]) 
 
+  const fetchDetails = async () => {
+    try {
+        const url = `/api/package/${currentPackage}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+        setCurrentPackageRates(response.data)
+    }
+    catch (error) {
+        if (error.response) {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        } else {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        }
+    }
+
+}
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -60,12 +91,13 @@ function PackageRates() {
         }
       }
     };
+    fetchDetails();
     fetchRooms();
   }, []);
   
     /* Edit Package Rate Function */
     const submitPackageRoomsEdit = () => {
-   const url = `/api/package/${currentPackageRates?.package_id}/rooms`
+   const url = `/api/package/${currentPackage}/rooms`
     axios.delete(url, { header: { "content-type": "application/json" } }).then
       ((response) => {
       logger.info("Delete success");
@@ -81,7 +113,7 @@ function PackageRates() {
     const datas = allRooms.filter(item => item.check === true)
     const post = datas.map(item => item.room_id)
     const roomData = post.map((item) => {
-      return { "package_id": currentPackageRates?.package_id, "room_id": item }
+      return { "package_id": currentPackage, "room_id": item }
     })
     const finalData = {"package_room_link": roomData}
     const url = '/api/package/package_room_link'

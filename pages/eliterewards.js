@@ -9,7 +9,8 @@ import arabic from "./Languages/ar";
 import Router from "next/router";
 var t;
 var currentProperty;
-var currentEliteProgram;
+var currentPackage;
+
 
 function Eliterewards() {
    /** Fetching language from the local storage **/
@@ -32,14 +33,52 @@ function Eliterewards() {
       } 
     }
     firstfun();
+    currentPackage=localStorage.getItem('packageId')
     Router.push("/eliterewards");
   },[]) 
+
   const [view, setView] = useState(0)
   const [updateProgram, setUpdateProgram] = useState(0)
   const [deleteProgram, setDeleteProgram] = useState(0)
   const [editProgram, setEditProgram] = useState({});
   const [program, setProgram] = useState([]);
   const [modified, setModified] = useState([])
+  const [currentEliteProgram, setCurrentEliteProgram] = useState([])
+  
+  const fetchDetails = async () => {
+    try {
+        const url = `/api/package/${currentPackage}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+        setCurrentEliteProgram(response.data)
+    }
+    catch (error) {
+        if (error.response) {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        } else {
+            toast.error("Package Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+        }
+    }
+
+}
+  useEffect(()=>{
+  fetchDetails();
+  },[])
 
   /* Function Edit Program*/
   const submitProgramEdit = (props) => {
@@ -61,6 +100,8 @@ function Eliterewards() {
          draggable: true,
            progress: undefined,
        });
+       fetchDetails(); 
+       Router.push("/eliterewards");
        setProgram([])
      })
       .catch((error) => {
@@ -92,7 +133,8 @@ function Eliterewards() {
           draggable: true,
           progress: undefined,
         });
-
+        fetchDetails(); 
+       Router.push("/eliterewards");
       })
       .catch((error) => {
        toast.error("Elite Program Delete Error!", {
@@ -117,10 +159,13 @@ function Eliterewards() {
       program_level: modified.program_level
     }]
     const finalProgram = { "package_membership_master": programdata }
-   axios.post(`/api/package/package_membership_master`, finalProgram).then(response => {
+    alert(JSON.stringify(finalProgram))
+    axios.post(`/api/package/package_membership_master`, finalProgram).then(response => {
       console.log("Program_id" +response.data.program_id)
-      const program_data = { "program_id": response.data.program_id, "package_id":currentEliteProgram?.package_id }
+      const program_data = { "program_id": response.data.program_id, "package_id":currentPackage,
+    "status":true }
       const final = { "package_membership_link": [program_data] }
+      alert(JSON.stringify(final))
       axios.post('/api/package/package_membership_link', final, {
         headers: { 'content-type': 'application/json' }
       }).then(response => {
@@ -133,6 +178,8 @@ function Eliterewards() {
           draggable: true,
           progress: undefined,
         });
+        fetchDetails(); 
+        Router.push("/eliterewards");
         setModified([])
       })
         .catch(error => {

@@ -9,9 +9,7 @@ const Sidebar = () => {
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
-       
         var locale = localStorage.getItem("Language");
-        
         if (locale === "ar") {
         language = arabic;
         }
@@ -21,7 +19,6 @@ const Sidebar = () => {
         if (locale === "fr") {
           language = french;
         } 
-       
       } 
     }
     firstfun();

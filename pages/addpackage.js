@@ -179,7 +179,8 @@ const url = '/api/package/package_service_link'
           "refundable_until_days": allPackageDetails?.refundable_until_days,
           "refundable_until_time": allPackageDetails?.refundable_until_time,
           "max_number_of_intended_occupants": allPackageDetails?.max_number_of_intended_occupants,
-          "max_number_of_adult_guest":allPackageDetails?.max_number_of_adult_guest
+          "max_number_of_adult_guest":allPackageDetails?.max_number_of_adult_guest,
+          "status":true
         }  
      const url = '/api/package/package_description'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then

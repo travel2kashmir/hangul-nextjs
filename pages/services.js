@@ -3,13 +3,13 @@ import axios from "axios";
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "./Languages/en";
-import french from "./Languages/fr";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
 const logger = require("../services/logger");
 var t;
 var currentProperty;
 import Router from 'next/router'
-import arabic from "./Languages/ar";
+import arabic from "../components/Languages/ar"
 
 function Services() {
     const [additionalServices, setAdditionalServices] = useState({})
@@ -57,6 +57,7 @@ function Services() {
     logger.info("url  to fetch property details hitted successfully")})
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
 }
+
   const fetchAdditionalServices = async () => {           
     const url = `/api/additional_services/${currentProperty.property_id}`
         axios.get(url)
@@ -64,6 +65,7 @@ function Services() {
         logger.info("url  to fetch additional services hitted successfully")})
         .catch((error)=>{logger.error("url to fetch additional services, failed")});  
     }
+    
       useEffect(()=>{ 
         fetchHotelDetails();       
        fetchAdditionalServices();

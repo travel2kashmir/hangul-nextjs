@@ -3,9 +3,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 var t;
 var currentProperty;
 var contacts;
@@ -124,7 +124,8 @@ function Contact() {
     const contactdata = [{
         property_id: currentProperty?.property_id,
         contact_type: contact?.contact_type,
-        contact_data: contact?.contact_data
+        contact_data: contact?.contact_data,
+        status:true
     }];
     const finalContact = { contacts: contactdata };
     axios

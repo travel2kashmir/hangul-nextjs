@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
 import Link from "next/link";
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 import Router from "next/router";
 var t;
 var currentProperty;
@@ -234,7 +234,7 @@ function Package() {
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
-                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.rooms} {t?.and} {t?.rates}</h3>
+                            <h3 className="text-base font-bold text-gray-900 mb-4">  {t?.package} {t?.rates}</h3>
                         </div>
                         <div className="flex items-center justify-end flex-1">
                         <span  className="text-sm font-sans underline decoration-cyan-600
@@ -271,27 +271,7 @@ function Package() {
                             </table>
                         </div>
                     </div>
-                    <div className="align-middle pt-4 inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
-                            <table className="table-fixed min-w-full divide-y divide-gray-200">
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                <tr className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                <span className=" whitespace-wrap text-xs font-semibold text-gray-500">{t?.package} {t?.rooms}</span>
-                                 </tr>
-                                    {allPackageDetails?.package_rooms?.map((item,idx) => {
-                                        return (
-                                            <>
-                                                <tr  key={idx}> 
-                                                    <td className="p-2 capitalize whitespace-wrap text-xs font-medium text-gray-900">{item?.room_name}</td>
-                                                </tr>
-                                                
-                                            </>
-                                        )
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                   
                    
                 </div>
 
@@ -473,6 +453,44 @@ function Package() {
                         </div>
                     </div>
                 </div>
+                
+                 {/* Package Rooms */}
+                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="flex items-center justify-between mb-4">
+                        <div className="flex-shrink-0">
+                            <h3 className="text-base font-bold text-gray-900 mb-4"> {t?.package} {t?.rooms}</h3>
+                        </div>
+                        <div className="flex items-center justify-end flex-1">
+                        <span  className="text-sm font-sans underline decoration-cyan-600
+                          font-semibold text-cyan-600
+                           rounded-lg p-2"> 
+                         <Link href = '/packagerooms' 
+                                ><a>{t?.seemore}</a></Link></span>
+                        </div>
+                    </div>
+                <div className="align-middle pt-4 inline-block min-w-full">
+                        <div className="shadow overflow-hidden">
+                            <table className="table-fixed min-w-full divide-y divide-gray-200">
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                <tr className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                <span className=" whitespace-wrap text-xs font-semibold text-gray-500">{t?.package} {t?.rooms}</span>
+                                 </tr>
+                                    {allPackageDetails?.package_rooms?.map((item,idx) => {
+                                        return (
+                                            <>
+                                                <tr  key={idx}> 
+                                                    <td className="p-2 capitalize whitespace-wrap text-xs font-medium text-gray-900">{item?.room_name}</td>
+                                                </tr>
+                                                
+                                            </>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                   
             </div>
     </div>
   )

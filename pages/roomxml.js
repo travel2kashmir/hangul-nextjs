@@ -3,9 +3,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import Router from "next/router";
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 import Link from "next/link";
 var t;
 var currentProperty;

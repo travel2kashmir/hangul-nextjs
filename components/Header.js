@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import english from "../pages/Languages/en";
-import french from "../pages/Languages/fr";
-import arabic from "../pages/Languages/ar";
+import english from "./Languages/en";
+import french from "./Languages/fr";
+import arabic from "./Languages/ar";
 import { useRouter } from "next/router";
 import Link from 'next/link'
 var t;

@@ -3,9 +3,9 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 var t;
 var currentProperty;
 var addroom;
@@ -72,8 +72,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
       function submitRoomDescription(e) {  
       if (allRoomDes.length !== 0){  
       e.preventDefault()
-      const finalData = { ...allRoomDes }  
-       axios.post('/api/room', JSON.stringify(finalData),
+      const finalData = { ...allRoomDes, status:true }  
+     axios.post('/api/room', JSON.stringify(finalData),
           {
             headers: { 'content-type': 'application/json' }
           })
@@ -153,7 +153,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
            setImage({ ...image, image_link: response?.data?.secure_url })
           })
           .catch(error => {
-            toast.error("Room Error", {
+            toast.error("Room error", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -180,15 +180,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         }]
         const finalImage = { "images": imagedata }
        axios.post(`/api/gallery`, finalImage).then(response => {
-          toast.success(JSON.stringify(response.data.message), {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
+         
           const image_data = { "image_id": response.data.image_id, "room_id": roomId }
           const final = { "room_images": [image_data] }
           axios.post('/api/room-images', final, {
@@ -206,7 +198,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
             setActionImage([])
           })
             .catch(error => {
-             toast.error("Some thing went wrong \n " + JSON.stringify(error.response.roomdes), {
+             toast.error("Gallery error", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -217,7 +209,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
               });
             });
         }).catch(error => {
-        toast.error("Some thing went wrong \n " + JSON.stringify(error.response.data), {
+        toast.error("Gallery error!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -266,7 +258,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
     
         })
           .catch(error => {
-           toast.error("Services Error! " + JSON.stringify(error.response.data), {
+           toast.error("Services error! " , {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,

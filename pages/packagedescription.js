@@ -3,9 +3,9 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 import Router from "next/router";
 const logger = require("../services/logger");
 var t;
@@ -490,6 +490,7 @@ function Packagedescription() {
        {final=[]} {max_age=[]}
       {allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest >= 1 ? 
+                            
                             <>
       <div className="bg-white shadow rounded-lg mx-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
@@ -513,9 +514,9 @@ function Packagedescription() {
             <div className="flex flex-wrap">
         
             <div className="w-full lg:w-6/12 px-4">
-              {allPackageDetails?.max_age_children?.map((item, idx) => {
+              {allPackageDetails?.max_age_children?.map((item, index) => {
                 return (
-                <div className="relative w-full mb-3" key={idx}>
+                <div className="relative w-full mb-3" key={index}>
                   <label
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"

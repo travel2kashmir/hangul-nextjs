@@ -1,14 +1,16 @@
-import React, {useEffect} from "react";
+import React,{useState, useEffect} from "react";
+import axios from 'axios';
 import Link from "next/link";
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 var t;
 var currentProperty;
-var reviews;
 import Router from 'next/router'
+const logger = require("../services/logger");
 
 function Reviews() {
+  const [reviews, setReviews] = useState([]);
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -22,16 +24,30 @@ function Reviews() {
         if (locale === "fr") {
           t=french;   
         } 
-    /** Current Property Basic Details fetched from the local storage **/
-   reviews =JSON.parse(localStorage.getItem('allPropertyDetails'))
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
-    
       } 
     }
     firstfun();
    Router.push("/reviews");
   },[])
+
+  useEffect(() => {
+    fetchReviews(); 
+  },[]);
+
+  const fetchReviews = async () => { 
+    const url = `/api/${currentProperty.address_province.replace(
+      /\s+/g,
+      "-"
+    )}/${currentProperty.address_city}/${
+      currentProperty.property_category
+    }s/${currentProperty.property_id}`;  
+    axios.get(url)
+    .then((response)=>{setReviews(response.data);
+    logger.info("url  to fetch property details hitted successfully")})
+    .catch((error)=>{logger.error("url to fetch property details, failed")});  
+  }
   return (
     <div id="main-content"
     className="bg-gray-50 pt-24 relative overflow-y-auto lg:ml-64">

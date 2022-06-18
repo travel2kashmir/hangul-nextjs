@@ -3,9 +3,9 @@ import  Link  from 'next/link';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 import Router from "next/router";
 var t;
 var currentProperty;
@@ -264,59 +264,6 @@ function PackageRates() {
     </ol>
       </nav>
 
-     {/*  Package Rooms Form */}
-   <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-4">
-          {t?.package} {t?.rooms}
-          <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-        </h6>
-        {allRooms?.map((item, index) => {
-                return (
-        
-        <div className="flex flex-row ml-6 items-start" key={index}>
-                <div className="flex items-center h-5">
-                  <input
-                   onClick={() => {
-                    setAllRooms(allRooms?.map((i) => {
-                      if (i?.room_id === item?.room_id) {
-                        i.check = !i.check
-                      }
-                      return i
-                    }))
-
-                  }}
-                    id="remember"
-                    aria-describedby="remember"
-                    name={"remember" +index}
-                    type="checkbox" 
-                    className="bg-gray-50 
-                   border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                    rounded"
-                    required
-                  />
-                </div>
-                <div className="text-sm ml-3">
-                  <label className="text-sm font-semibold capitalize text-gray-700">
-                    {item?.room_name} 
-                  </label>
-                </div>
-               
-              </div>
-              )})}
-
-
-    <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
-                     onClick={() => {
-                      submitPackageRoomsEdit();
-                      
-                    }}type="button" >
-                    {t?.update}</button>
-   </div>
-      </div>
    {/*  Package Rates Form */}
    <div className="bg-white shadow rounded-lg mt-4 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">

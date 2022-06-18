@@ -3,9 +3,9 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 import Router from "next/router";
 const logger = require("../services/logger"); 
 var t;
@@ -101,7 +101,6 @@ for (let i = 0; i < service_name.length; i++) {
   text.push(temp) 
 }
 total={"package_services":text}
-alert(JSON.stringify(total))
 const url = '/api/package/package_service_link'
     axios.put(url, total, { header: { "content-type": "application/json" } }).then
       ((response) => {

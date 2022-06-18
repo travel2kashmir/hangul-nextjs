@@ -7,9 +7,9 @@ var currentProperty;
 const logger = require("../services/logger");
 import Link from "next/link";
 import Router from 'next/router'
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 
 
 function Address() {

@@ -2,9 +2,9 @@ import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import Link from "next/link";
 import Router from "next/router";
-import english from "./Languages/en";
-import french from "./Languages/fr";
-import arabic from "./Languages/ar";
+import english from "../components/Languages/en"
+import french from "../components/Languages/fr"
+import arabic from "../components/Languages/ar"
 var t;
 var currentProperty;
 var property;

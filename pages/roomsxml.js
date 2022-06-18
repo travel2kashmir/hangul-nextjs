@@ -5,7 +5,7 @@ import Router from "next/router";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
-var t;
+var language;
 var currentProperty;
 var property;
 
@@ -15,13 +15,13 @@ function Roomsxml() {
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language"); 
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;
+          language = french;
         }
         /** Current Property Basic Details fetched from the local storage **/
         property=JSON.parse(localStorage.getItem('allPropertyDetails')) 
@@ -66,7 +66,7 @@ function Roomsxml() {
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                             <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                             <Link href="/landing">
-                            <a>{t?.home}</a>
+                            <a>{language?.home}</a>
                         </Link></span>
                     </li>
                     <li>
@@ -84,20 +84,20 @@ function Roomsxml() {
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                             <span className="text-gray-400 ml-1 md:ml-2
                              font-medium text-sm  " aria-current="page">
-                                 {t?.property} {t?.rooms}</span>
+                                 {language?.property} {language?.rooms}</span>
                         </div>
                     </li>
                 </ol>
             </nav>
             {/* Header */}
             <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t?.property} {t?.rooms}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.property} {language?.rooms}</h1>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
-                            <label htmlFor="users-search" className="sr-only">{t?.search}</label>
+                            <label htmlFor="users-search" className="sr-only">{language?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={t?.searchforrooms}>
+                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.searchforrooms}>
                                 </input>
                             </div>
                         </form>
@@ -120,7 +120,7 @@ function Roomsxml() {
                        
                         <a href="#" className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                           {t?.export}
+                           {language?.export}
                         </a>
                     </div>
                 </div>
@@ -134,16 +134,16 @@ function Roomsxml() {
                                 <thead className="bg-gray-100">
                                     <tr>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {t?.room} {t?.name}
+                                            {language?.room} {language?.name}
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                           {t?.room} {t?.type}
+                                           {language?.room} {language?.type}
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {t?.status}
+                                            {language?.status}
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                           {t?.action}
+                                           {language?.action}
                                         </th>
                                     </tr>
                                 </thead>
@@ -157,7 +157,7 @@ function Roomsxml() {
                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                 <div className="flex items-center">
                                                     <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
-                                                   {t?.active}
+                                                   {language?.active}
                                                 </div>
                                             </td>
                                             <td className="p-4 whitespace-nowrap space-x-2"> 
@@ -169,7 +169,7 @@ function Roomsxml() {
                                                     Router.push("/roomxml");
                                                     }} data-modal-toggle="edit-user-modal"
                                                      >
-                                                  {t?.view} XML
+                                                  {language?.view} XML
                                                     </button>
                                               </td>
                                         </tr>

@@ -24,16 +24,16 @@ function Signin() {
   
   /** State for internationalization **/
   const [lang, setLang] = useState("en");
-  var t;
+  var language;
   if (locale === "en"){
-     t = english 
+     language = english 
    
   }
   if(locale === "ar"){
-     t = arabic 
+     language = arabic 
   }
   if(locale === "fr"){
-    t = french
+    language = french
   }
   
   /** Function for Internationalisation **/
@@ -132,7 +132,7 @@ function Signin() {
         <div className="bg-white shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0">
           <div className="p-4 sm:p-8 lg:p-16 space-y-8">
             <h2 className="text-2xl lg:text-3xl capitalize font-bold text-gray-700">
-              {t.title}
+              {language?.title}
             </h2>
 
             {/** Signin Form **/}
@@ -143,7 +143,7 @@ function Signin() {
                    text-gray-700 
                   block mb-2"
                 >
-                  {t.email}
+                  {language?.email}
                 </label>
                 <input
                   type="email"
@@ -158,7 +158,7 @@ function Signin() {
                       email: e.target.value,
                     })
                   }
-                  placeholder={t.enteremail}
+                  placeholder={language?.enteremail}
                   required
                 ></input>
               </div>
@@ -167,7 +167,7 @@ function Signin() {
                   className="text-base font-semibold
                    text-gray-700 block mb-2"
                 >
-                  {t.password}
+                  {language?.password}
                 </label>
                 <input
                   type="password"
@@ -179,7 +179,7 @@ function Signin() {
                       password: e.target.value,
                     })
                   }
-                  placeholder={t.enterpassword}
+                  placeholder={language?.enterpassword}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   required
                 ></input>
@@ -199,7 +199,7 @@ function Signin() {
                 </div>
                 <div className="text-sm ml-3">
                   <label className="text-sm font-semibold text-gray-700">
-                    {t.remember}
+                    {language?.remember}
                   </label>
                 </div>
                 <a
@@ -207,7 +207,7 @@ function Signin() {
                   className="text-sm font-semibold
                    text-teal-500 hover:underline  ml-auto"
                 >
-                  {t.lost}
+                  {language?.lost}
                 </a>
               </div>
 
@@ -220,12 +220,12 @@ function Signin() {
               hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
               rounded-lg text-base px-5 py-2 capitalize w-full sm:w-auto text-center"
               >
-                {t.title}
+                {language?.title}
               </button>
               <div className="text-base font-semibold text-gray-500">
-                {t.remember}
+                {language?.remember}
                 <a href="" className="text-teal-500 hover:underline px-2">
-                  {t.create}
+                  {language?.create}
                 </a>
               </div>
             </form>

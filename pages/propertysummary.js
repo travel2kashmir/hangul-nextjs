@@ -7,7 +7,7 @@ import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import { useRouter } from "next/router";
 const logger = require("../services/logger");
-var t;
+var language;
 var currentUser;
 var currentProperty;
 
@@ -22,13 +22,13 @@ function PropertySummary() {
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language"); 
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;
+          language = french;
         } 
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
@@ -79,7 +79,7 @@ function PropertySummary() {
                   <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
                 <Link href="/landing">
-                  <a>{t?.home}</a>
+                  <a>{language?.home}</a>
                 </Link>
               </div>
             </li>
@@ -106,7 +106,7 @@ function PropertySummary() {
         </nav>
 
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-          {t?.propertysummary}
+          {language?.propertysummary}
         </h6>
 
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
@@ -128,7 +128,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/basicdetails"><a>{t?.seemore}</a></Link>
+                  <Link href="/basicdetails"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -145,7 +145,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t?.address}
+                  {language?.address}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -155,7 +155,7 @@ function PropertySummary() {
                               rounded-lg p-2"
                 >
                   <Link href="/address">
-                    <a>{t?.seemore}</a>
+                    <a>{language?.seemore}</a>
                   </Link>
                 </span>
               </div>
@@ -169,7 +169,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.streetaddress}
+                        {language?.streetaddress}
                       </label>
                       <label
                         className="text-xs font-medium  text-gray-900 block mb-1"
@@ -186,7 +186,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.landmark}
+                        {language?.landmark}
                       </label>
                       <label
                         className="text-xs  font-medium  text-gray-900 block mb-1"
@@ -202,7 +202,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.province}
+                        {language?.province}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -218,7 +218,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.latitude}
+                        {language?.latitude}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -234,7 +234,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.longitude}
+                        {language?.longitude}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -250,7 +250,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.postalcode}
+                        {language?.postalcode}
                       </label>
                       <label
                         className="text-xs font-medium text-gray-900 block mb-1"
@@ -266,7 +266,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.precision}
+                        {language?.precision}
                       </label>
                       <label
                         className="text-xs font-semibold  text-gray-900 block mb-1"
@@ -282,7 +282,7 @@ function PropertySummary() {
                         className="text-xs font-semibold text-gray-500 block mb-1"
                         htmlFor="grid-password"
                       >
-                        {t?.countrycode}
+                        {language?.countrycode}
                       </label>
                       <label
                         className="text-xs  font-medium text-gray-900 block mb-1"
@@ -302,7 +302,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t?.contact}
+                  {language?.contact}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -312,7 +312,7 @@ function PropertySummary() {
                               rounded-lg p-2"
                 >
                   {" "}
-                  <Link href="/contact"><a>{t?.seemore}</a></Link>
+                  <Link href="/contact"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -347,7 +347,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t?.services}
+                  {language?.services}
                 </h3>
               </div>
               <div className="flex items-center justify-end">
@@ -356,7 +356,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/services"><a>{t?.seemore}</a></Link>
+                  <Link href="/services"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -443,7 +443,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t?.reviews}
+                  {language?.reviews}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -452,7 +452,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/reviews"><a>{t?.seemore}</a></Link>
+                  <Link href="/reviews"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -504,7 +504,7 @@ function PropertySummary() {
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {t?.gallery}
+                  {language?.gallery}
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">
@@ -513,7 +513,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/gallery"><a>{t?.seemore}</a></Link>
+                  <Link href="/gallery"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
-var t;
+var language;
 var currentProperty;
 import Router from 'next/router'
 const logger = require("../services/logger");
@@ -16,13 +16,13 @@ function Reviews() {
       if (typeof window !== 'undefined'){ 
         var locale = localStorage.getItem("Language");
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;   
+          language = french;   
         } 
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -67,7 +67,7 @@ function Reviews() {
               href="/landing"
               className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
             >
-              <a>{t?.home}</a>
+              <a>{language?.home}</a>
             </Link>
           </li>
           <li>
@@ -107,7 +107,7 @@ function Reviews() {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                {t?.reviews}
+                {language?.reviews}
               </span>
             </div>
           </li>
@@ -115,7 +115,7 @@ function Reviews() {
       </nav>
        {/* Header */}
        <div>
-     <h1 className="text-xl sm:text-2xl mx-2 font-semibold mb-2 text-gray-900">{t?.reviews}</h1>
+     <h1 className="text-xl sm:text-2xl mx-2 font-semibold mb-2 text-gray-900">{language?.reviews}</h1>
         </div>
 
             {/* Form Property Reviews */}

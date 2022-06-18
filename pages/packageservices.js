@@ -8,7 +8,7 @@ import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import Router from "next/router";
 const logger = require("../services/logger"); 
-var t;
+var language;
 var currentProperty;
 var  currentPackageDetails;
 var service_name=[];
@@ -24,13 +24,13 @@ function Packageservices() {
           if (typeof window !== 'undefined'){
             var locale = localStorage.getItem("Language"); 
             if (locale === "ar") {
-            t = arabic;
+            language = arabic;
             }
             if (locale === "en") {
-            t = english;
+            language=english;
             }
             if (locale === "fr") {
-              t=french;
+              language = french;
             }
             /** Current Property Basic Details fetched from the local storage **/
             currentProperty=JSON.parse(localStorage.getItem('property'))  
@@ -148,7 +148,7 @@ const url = '/api/package/package_service_link'
             </svg>
             <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
               <Link href="/landing">
-                <a> {t?.home}</a>
+                <a> {language?.home}</a>
               </Link>
             </span>
           </li>
@@ -189,7 +189,7 @@ const url = '/api/package/package_service_link'
               </svg>
               <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
                 <Link href="/packages">
-                  <a>{t?.packages}</a>
+                  <a>{language?.packages}</a>
                 </Link>
               </span>
             </div>
@@ -233,7 +233,7 @@ const url = '/api/package/package_service_link'
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                {t?.package} {t?.services}
+                {language?.package} {language?.services}
               </span>
             </div>
           </li>
@@ -241,7 +241,7 @@ const url = '/api/package/package_service_link'
       </nav>
       <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
-          {t?.package} {t?.services}
+          {language?.package} {language?.services}
         </h6>
         <span className="hidden">
           {(service_name.length = 0)}
@@ -263,19 +263,19 @@ const url = '/api/package/package_service_link'
                         scope="col"
                         className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                       >
-                        {t?.service} {t?.name}
+                        {language?.service} {language?.name}
                       </th>
                       <th
                         scope="col"
                         className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                       >
-                        {t?.service} {t?.value}
+                        {language?.service} {language?.value}
                       </th>
                       <th
                         scope="col"
                         className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                       >
-                        {t?.service} {t?.edit}
+                        {language?.service} {language?.edit}
                       </th>
                     </tr>
                   </thead>
@@ -290,7 +290,7 @@ const url = '/api/package/package_service_link'
                         </td>
 
                         <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
-                          {item?.value === true ? <>{t?.yes}</> : <> {t?.no}</>}
+                          {item?.value === true ? <>{language?.yes}</> : <> {language?.no}</>}
                         </td>
 
                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
@@ -319,7 +319,7 @@ const url = '/api/package/package_service_link'
                                                       text-gray-700 text-base pr-2 "
                                 htmlFor="ip1"
                               >
-                                {t?.yes}
+                                {language?.yes}
                               </label>
                             </div>
                             <div className="form-check ml-8 form-check-inline">
@@ -344,7 +344,7 @@ const url = '/api/package/package_service_link'
                                                         text-gray-700 text-base  "
                                 htmlFor="ip2"
                               >
-                                {t?.no}
+                                {language?.no}
                               </label>
                             </div>
                           </div>
@@ -369,7 +369,7 @@ const url = '/api/package/package_service_link'
             }}
             type="button"
           >
-            {t?.update}
+            {language?.update}
           </button>
         </div>
       </div>

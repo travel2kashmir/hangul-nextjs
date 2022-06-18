@@ -7,7 +7,7 @@ import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 const logger = require("../services/logger");
-var t;
+var language;
 var currentProperty;
 var propertyxml;
 var xml;
@@ -23,13 +23,13 @@ function Propertyxml() {
         if (typeof window !== 'undefined'){
           var locale = localStorage.getItem("Language");
           if (locale === "ar") {
-          t = arabic;
+          language = arabic;
           }
           if (locale === "en") {
-          t = english;
+          language=english;
           }
           if (locale === "fr") {
-            t=french;
+            language = french;
           } 
 /** Current Property Basic Details fetched from the local storage **/
 propertyxml =JSON.parse(localStorage.getItem('allPropertyDetails'))
@@ -102,7 +102,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                 href="/landing"
                 className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
               >
-                <a>{t?.home} </a>
+                <a>{language?.home} </a>
               </Link>
             </li>
             <li>
@@ -145,14 +145,14 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  {t?.property} XML
+                  {language?.property} XML
                 </span>
               </div>
             </li>
           </ol>
         </nav>
         <h6 className="text-xl  flex leading-none pl-6 pt-2 pb-6 font-bold text-gray-900 ">
-          {t?.property} XML
+          {language?.property} XML
         </h6>
 
         {/* Property XML Form */}
@@ -165,7 +165,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                         focus:ring-cyan-200 font-semibold rounded-lg text-sm px-4 py-2 text-center items-center mr-3"
                   onClick={call}
                 >
-                  {t?.sendto} Google
+                  {language?.sendto} Google
                 </button>
               </div>
               <div> 

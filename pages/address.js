@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-var t;
+var language;
 var currentProperty;
 const logger = require("../services/logger");
 import Link from "next/link";
@@ -18,13 +18,13 @@ function Address() {
       if (typeof window !== 'undefined'){ 
         var locale = localStorage.getItem("Language");
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;   
+          language = french;   
         } 
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -118,7 +118,7 @@ function Address() {
               href="/landing"
               className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
             >
-              <a>{t?.home}</a>
+              <a>{language?.home}</a>
             </Link>
           </li>
           <li> 
@@ -158,7 +158,7 @@ function Address() {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                {t?.address}
+                {language?.address}
               </span>
             </div>
           </li>
@@ -168,7 +168,7 @@ function Address() {
       {/* Update Address Form */}
       <div className="bg-white shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl  flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-          {t?.address}
+          {language?.address}
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"
@@ -194,7 +194,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.streetaddress}
+                        {language?.streetaddress}
                       </label>
                       <input
                         type="text"
@@ -215,7 +215,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.landmark}
+                        {language?.landmark}
                       </label>
                       <input
                         type="text"
@@ -236,7 +236,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.city}
+                        {language?.city}
                       </label>
                       <select
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -261,7 +261,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                       {t?.province}
+                       {language?.province}
                       </label>
                       <select
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -287,7 +287,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.latitude}
+                        {language?.latitude}
                       </label>
                       <input
                         type="text"
@@ -310,7 +310,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.longitude}
+                        {language?.longitude}
                       </label>
                       <input
                         type="text"
@@ -331,7 +331,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.postalcode}
+                        {language?.postalcode}
                       </label>
                       <input
                         type="text"
@@ -352,7 +352,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.precision}
+                        {language?.precision}
                       </label>
                       <input
                         type="text"
@@ -373,7 +373,7 @@ function Address() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.country}
+                        {language?.country}
                       </label>
                       <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
                         <option value="IN">India</option>
@@ -394,7 +394,7 @@ function Address() {
                   }}
                   type="button"
                 >
-                 {t?.update}
+                 {language?.update}
                 </button>
               </div>  
                 </div>

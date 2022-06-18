@@ -8,7 +8,7 @@ import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import Router from "next/router";
 const logger = require("../services/logger");  
-var t;
+var language;
 var currentProperty;
 var  currentPackageDetails;
 var max_age=[];
@@ -29,13 +29,13 @@ function Addpackage() {
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language"); 
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;
+          language = french;
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))  
@@ -346,7 +346,7 @@ const url = '/api/package/package_service_link'
               <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
               <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
               <Link href="/landing" >
-            <a> {t?.home}</a>
+            <a> {language?.home}</a>
             </Link>
             </span>
           </li>
@@ -362,14 +362,14 @@ const url = '/api/package/package_service_link'
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-               <Link href="/packages"><a>{t?.packages}</a></Link></span>
+               <Link href="/packages"><a>{language?.packages}</a></Link></span>
             </div>      
           </li>
          
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">Add {t?.package} </span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">Add {language?.package} </span>
             </div>
           </li>
         </ol>
@@ -381,32 +381,32 @@ const url = '/api/package/package_service_link'
      <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{t?.packagedescription}</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.packagedescription}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.rooms} {t?.and} {t?.rates}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.miles}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.miles}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.elite} {t?.membership}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.property} {t?.credit}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.package} {t?.services}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
             </div>
         </div>
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         {t?.package} {t?.description}
+         {language?.package} {language?.description}
          </h6>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -417,7 +417,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.package} {t?.name}
+                    {language?.package} {language?.name}
                   </label>
                   <input
                     type="text"
@@ -437,7 +437,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.package} {t?.description}
+                    {language?.package} {language?.description}
                   </label>
                   <textarea rows="2" columns="50"
                     className="shadow-sm bg-gray-50 border capitalize border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -454,7 +454,7 @@ const url = '/api/package/package_service_link'
                 <div className="relative w-full mb-3">
                   <label className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password">
-                    {t?.paymentholder}
+                    {language?.paymentholder}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                      onChange={
@@ -477,7 +477,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  {t?.refundable} {packageId}
+                  {language?.refundable} {packageId}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
@@ -499,7 +499,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                   {t?.refundable} {t?.till} {t?.days}
+                   {language?.refundable} {language?.till} {language?.days}
                   </label>
                   <input
                     type="text"
@@ -519,7 +519,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                 {t?.refundable} {t?.till} {t?.time}
+                 {language?.refundable} {language?.till} {language?.time}
                   </label>
                   <input
                     type="time" step="2"
@@ -541,7 +541,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  {t?.number} {t?.of} {t?.occupants}
+                  {language?.number} {language?.of} {language?.occupants}
                   </label>
                   <input
                     type="text"
@@ -561,7 +561,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                   {t?.number} {t?.of} {t?.adult}
+                   {language?.number} {language?.of} {language?.adult}
                    </label>
                   <input
                     type="text"
@@ -585,7 +585,7 @@ const url = '/api/package/package_service_link'
                   }}
                   type="button"
                 >
-                 {t?.next}
+                 {language?.next}
                 </button>
               </div> 
 
@@ -602,27 +602,27 @@ const url = '/api/package/package_service_link'
      <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{t?.packagedescription}</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.packagedescription}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.rooms} {t?.and} {t?.rates}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.miles}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.miles}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.elite} {t?.membership}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.property} {t?.credit}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.package} {t?.services}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
             </div>
         </div>
        {allPackageDetails?.max_number_of_intended_occupants-
@@ -672,44 +672,44 @@ const url = '/api/package/package_service_link'
                      onClick={() => {
                       submitAge();
                     }} type="button" >
-                        {t?.next}</button>
+                        {language?.next}</button>
                     </div>
        </div>
      </div>
     
-     {/*   {t?.package} {t?.rooms} {t?.and} {t?.rates} Form */}
+     {/*   {language?.package} {language?.rooms} {language?.and} {language?.rates} Form */}
      <div id='2' className={disp===2?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
      <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.packagedescription}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
             </div>
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> {t?.package} {t?.rooms} {t?.and} {t?.rates}</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.miles}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.miles}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.elite} {t?.membership}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.property} {t?.credit}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.package} {t?.services}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
             </div>
         </div>
         
         <h6 className="text-xl flex leading-none pb-4 pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {t?.rooms} and Rates
+          {language?.rooms} and Rates
          </h6>
          {allRooms?.map((item, index) => {
                 return (
@@ -753,7 +753,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} {t?.currency}
+                    {language?.baserate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -774,7 +774,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} {t?.amount}
+                    {language?.baserate} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -794,7 +794,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate} {t?.currency}
+                    {language?.taxrate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -816,7 +816,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate} {t?.amount}
+                    {language?.taxrate} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -835,7 +835,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.other} {t?.currency} 
+                    {language?.other} {language?.other} {language?.currency} 
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -857,7 +857,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.charges} {t?.amount}
+                    {language?.other} {language?.charges} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -878,7 +878,7 @@ const url = '/api/package/package_service_link'
                      onClick={() => {
                       setDisp(3);
                     }}type="button" >
-                    {t?.skip}</button>
+                    {language?.skip}</button>
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
@@ -890,7 +890,7 @@ const url = '/api/package/package_service_link'
                       if(allRooms.length !== 0){
                       submitPackageRooms();}
                     }} type="button" >
-                    {t?.next}</button>
+                    {language?.next}</button>
                 </div>
 
             </div>
@@ -904,43 +904,43 @@ const url = '/api/package/package_service_link'
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.packagedescription}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
             </div>
           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
-                {t?.package} {t?.rooms} {t?.and} {t?.rates}</div>
+                {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
             </div>
            
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> {t?.package} {t?.miles}</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> {language?.package} {language?.miles}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.elite} {t?.membership}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.property} {t?.credit}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.package} {t?.services}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
             </div>
         </div>
           <div className="mx-4">
                 <div className="sm:flex">
                   <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-                    {t?.package} {t?.miles}
+                    {language?.package} {language?.miles}
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                     <button type="button" onClick={addMiles}
                       className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                       <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      {t?.add} {t?.miles}
+                      {language?.add} {language?.miles}
                     </button>
                   </div>
                 </div>
@@ -956,7 +956,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.number} {t?.of} {t?.miles}
+                    {language?.number} {language?.of} {language?.miles}
                   </label>
                   <input
                     type="text"
@@ -974,7 +974,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.miles} {t?.provider}
+                    {language?.miles} {language?.provider}
                   </label>
                   <input
                     type="text"
@@ -1012,7 +1012,7 @@ const url = '/api/package/package_service_link'
                      onClick={() => {
                       setDisp(4);
                     }} type="button" >
-                    {t?.skip}</button>
+                    {language?.skip}</button>
                       <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center ml-16
@@ -1021,7 +1021,7 @@ const url = '/api/package/package_service_link'
                       submitPackageMiles();
                       
                     }} type="button" >
-                        {t?.next}</button>
+                        {language?.next}</button>
                     </div>
           </div>
         </div>
@@ -1033,44 +1033,44 @@ const url = '/api/package/package_service_link'
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.packagedescription}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
-                {t?.package} {t?.rooms} {t?.and} {t?.rates}</div>
+                {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
-                {t?.package} {t?.miles}</div>
+                {language?.package} {language?.miles}</div>
             </div>
             
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">5</button>
-                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{t?.elite} {t?.membership}</div>
+                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.elite} {language?.membership}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.property} {t?.credit}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.package} {t?.services}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
             </div>
         </div>
         <div className="mx-4">
                 <div className="sm:flex">
                   <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-                  {t?.elite} {t?.membership}
+                  {language?.elite} {language?.membership}
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                     <button type="button" onClick={addProgram}
                       className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                       <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      {t?.add} {t?.program}
+                      {language?.add} {language?.program}
                     </button>
                   </div>
                 </div>
@@ -1086,7 +1086,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.program} {t?.name}
+                    {language?.program} {language?.name}
                   </label>
                   <input
                     type="text"
@@ -1104,7 +1104,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.program} {t?.level}
+                    {language?.program} {language?.level}
                   </label>
                   <input
                     type="text"
@@ -1142,7 +1142,7 @@ const url = '/api/package/package_service_link'
                      onClick={() => {
                       setDisp(5);
                     }} type="button" >
-                    {t?.skip}</button>
+                    {language?.skip}</button>
                       <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center ml-16
@@ -1152,7 +1152,7 @@ const url = '/api/package/package_service_link'
                      
                     }}
                       type="button" >
-                        {t?.next}</button>
+                        {language?.next}</button>
                     </div>
           </div>
         </div>
@@ -1164,33 +1164,33 @@ const url = '/api/package/package_service_link'
        <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.packagedescription}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.rooms} {t?.and} {t?.rates}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
             </div> 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.miles}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.miles}</div>
             </div> 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.elite} {t?.membership}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
             </div>
            
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">5</button>
                  <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">
-                 {t?.property} {t?.credit}</div>
+                 {language?.property} {language?.credit}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.package} {t?.services}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
             </div>
         </div>
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {t?.property} {t?.credit}
+          {language?.property} {language?.credit}
         </h6>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -1202,7 +1202,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.credit} {t?.currency}
+                    {language?.credit} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   onChange={
@@ -1223,7 +1223,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.credit} {t?.amount}
+                    {language?.credit} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -1243,7 +1243,7 @@ const url = '/api/package/package_service_link'
                      onClick={() => {
                       setDisp(6);
                     }}type="button" >
-                    {t?.skip}</button>
+                    {language?.skip}</button>
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
@@ -1252,7 +1252,7 @@ const url = '/api/package/package_service_link'
                        submitPackagePropertyCredit();
                     
                     }} type="button" >
-                    {t?.next}</button>
+                    {language?.next}</button>
                 </div>
             </div>
           </div>
@@ -1267,31 +1267,31 @@ const url = '/api/package/package_service_link'
        <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.packagedescription}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
             </div>
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {t?.package} {t?.rooms} {t?.and} {t?.rates}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.package} {t?.miles}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.miles}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.elite} {t?.membership}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{t?.property} {t?.credit}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">6</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{t?.package} {t?.services}</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.package} {language?.services}</div>
             </div>
         </div>   
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
-         {t?.package} {t?.services}
+         {language?.package} {language?.services}
          </h6>
          {/* Packages Table */}
          <div className="flex flex-col my-4">
@@ -1307,10 +1307,10 @@ const url = '/api/package/package_service_link'
                                 <thead className="bg-gray-100">
                                     <tr>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {t?.service} {t?.name}
+                                            {language?.service} {language?.name}
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                           {t?.service} {t?.value}
+                                           {language?.service} {language?.value}
                                         </th>
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
                                             
@@ -1346,7 +1346,7 @@ const url = '/api/package/package_service_link'
                                                         className="form-check-label inline-block 
                                                       text-gray-700 text-base pr-2 "
                                                         htmlFor="ip1">
-                                                       {t?.yes}
+                                                       {language?.yes}
                                                     </label>
                                                 </div>
                                                 <div className="form-check ml-8 form-check-inline">
@@ -1367,7 +1367,7 @@ const url = '/api/package/package_service_link'
                                                         text-gray-700 text-base  "
                                                         htmlFor="ip2"
                                                     >
-                                                       {t?.no}</label>
+                                                       {language?.no}</label>
                                                 </div>
                                             </div>
                                             </td>
@@ -1394,7 +1394,7 @@ const url = '/api/package/package_service_link'
                      submitPackageServices();
                       
                      }} type="button" >
-                   {t?.submit}</button>
+                   {language?.submit}</button>
                 </div>
          </div>
          </div>

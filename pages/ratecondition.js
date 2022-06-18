@@ -7,7 +7,7 @@ import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import Router from "next/router";
-var t;
+var language;
 var currentProperty;
 var  currentPackageDetails;
 
@@ -19,13 +19,13 @@ function Ratecondition() {
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language"); 
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;
+          language = french;
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))  
@@ -90,7 +90,7 @@ function Ratecondition() {
             </svg>
             <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
               <Link href="/landing">
-                <a> {t?.home}</a>
+                <a> {language?.home}</a>
               </Link>
             </span>
           </li>
@@ -400,7 +400,7 @@ function Ratecondition() {
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                    {t?.update}</button>
+                    {language?.update}</button>
                 </div>
               </div>
             </div>
@@ -475,7 +475,7 @@ function Ratecondition() {
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                    {t?.update}</button>
+                    {language?.update}</button>
                 </div>
               </div>
             </div>
@@ -547,7 +547,7 @@ function Ratecondition() {
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                    {t?.update}</button>
+                    {language?.update}</button>
                 </div>
               </div>
             </div>
@@ -566,7 +566,7 @@ function Ratecondition() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} {t?.currency}
+                    {language?.baserate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -586,7 +586,7 @@ function Ratecondition() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} {t?.amount}
+                    {language?.baserate} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -606,7 +606,7 @@ function Ratecondition() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate} {t?.currency}
+                    {language?.taxrate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -627,7 +627,7 @@ function Ratecondition() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate} {t?.amount}
+                    {language?.taxrate} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -647,7 +647,7 @@ function Ratecondition() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.capacity} {t?.currency}
+                    {language?.other} {language?.capacity} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -667,7 +667,7 @@ function Ratecondition() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.charges} {t?.amount}
+                    {language?.other} {language?.charges} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -810,7 +810,7 @@ function Ratecondition() {
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                    {t?.update}</button>
+                    {language?.update}</button>
                 </div>
               </div>
 

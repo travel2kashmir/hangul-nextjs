@@ -6,7 +6,7 @@ import Link from "next/link";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
-var t;
+var language;
 var currentProperty;
 var addroom;
 import Router from 'next/router'
@@ -20,13 +20,13 @@ function Addroom() {
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language");
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;
+          language = french;
         } 
 /** Current Property Details fetched from the local storage **/
 currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -400,7 +400,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
            <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
           <span  className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
            <Link href="/landing">
-              <a> {t?.home}</a>
+              <a> {language?.home}</a>
             </Link></span>
           </li>
           <li>
@@ -415,13 +415,13 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
              <span className= "text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="/rooms"><a>{t?.propertyrooms}</a></Link></span>
+              <Link href="/rooms"><a>{language?.propertyrooms}</a></Link></span>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.addnewroom}</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.addnewroom}</span>
             </div>
           </li>
         </ol>
@@ -429,13 +429,13 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
       {/* Title */}
       <div className=" pt-2 px-4">
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-          {t?.add} {t?.room}
+          {language?.add} {language?.room}
         </h6>
         {/* Room Forms */}
         {/* Room Description */}
         <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
           <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-           {t?.room} {t?.description}
+           {language?.room} {language?.description}
           </h6>
           <div className="pt-6">
             <div className=" md:px-2 mx-auto w-full">
@@ -446,7 +446,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t?.room} {t?.name}
+                      {language?.room} {language?.name}
                     </label>
                     <input
                       type="text"
@@ -459,7 +459,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                   <div className="relative w-full mb-3">
                     <label className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password">
-                      {t?.room} {t?.type}
+                      {language?.room} {language?.type}
                     </label>
                     <select
                       onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
@@ -479,7 +479,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t?.room} {t?.description}
+                      {language?.room} {language?.description}
                     </label>
                     <textarea rows="2" columns="50"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -493,7 +493,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t?.room} {t?.capacity}
+                      {language?.room} {language?.capacity}
                     </label>
                     <input
                       type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -507,7 +507,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t?.maximum} {t?.number} {t?.of} {t?.occupants}
+                     {language?.maximum} {language?.number} {language?.of} {language?.occupants}
                     </label>
                     <input
                       type="text"
@@ -522,7 +522,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t?.minimum} {t?.number} {t?.of} {t?.occupants}
+                     {language?.minimum} {language?.number} {language?.of} {language?.occupants}
                     </label>
                     <input
                       type="text"
@@ -537,7 +537,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t?.minimum} {t?.age} {t?.of} {t?.occupants}
+                     {language?.minimum} {language?.age} {language?.of} {language?.occupants}
                     </label>
                     <input
                       type="text"
@@ -552,7 +552,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t?.room} {t?.length}
+                     {language?.room} {language?.length}
                     </label>
                     <input
                       type="text"
@@ -566,7 +566,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {t?.room} {t?.breadth}
+                      {language?.room} {language?.breadth}
                     </label>
                     <input
                       type="text"
@@ -581,7 +581,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                     {t?.room} {t?.height}
+                     {language?.room} {language?.height}
                     </label>
                     <input
                       type="text"
@@ -597,7 +597,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                      items-center mb-1 ease-linear transition-all duration-150"
                       onClick={(e)=>{
                        submitRoomDescription(e)}} type="button" >
-                      {t?.submit}</button>  
+                      {language?.submit}</button>  
                 </div>
               </div>
             </div>
@@ -805,7 +805,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
            {/* Room Rates*/}
             <div className="bg-white mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
-              {t?.room} {t?.rates} 
+              {language?.room} {language?.rates} 
             </h6>
             <div className="pt-6">
               <div className=" md:px-2 mx-auto w-full">
@@ -816,7 +816,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} {t?.currency}
+                    {language?.baserate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -836,7 +836,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} {t?.amount}
+                    {language?.baserate} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -856,7 +856,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate} {t?.currency}
+                    {language?.taxrate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -877,7 +877,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate} {t?.amount}
+                    {language?.taxrate} {language?.amount}
                   </label>
                   <input
                     type="text"
@@ -896,7 +896,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.capacity} {t?.currency}
+                    {language?.other} {language?.capacity} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -917,7 +917,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.charges} {t?.amount}
+                    {language?.other} {language?.charges} {language?.amount}
                   </label>
                   <input
                     type="text"

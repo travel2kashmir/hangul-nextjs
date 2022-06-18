@@ -6,7 +6,7 @@ import Link from "next/link";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
-var t;
+var language;
 var currentProperty;
 var contacts;
 import Router from 'next/router'
@@ -19,13 +19,13 @@ function Contact() {
       if (typeof window !== 'undefined'){ 
         var locale = localStorage.getItem("Language");
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;   
+          language = french;   
         } 
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -212,7 +212,7 @@ function Contact() {
               href="/landing"
               className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
             >
-              <a>{t?.home}</a>
+              <a>{language?.home}</a>
             </Link>
           </li>
           <li>
@@ -252,7 +252,7 @@ function Contact() {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                {t?.contact}
+                {language?.contact}
               </span>
             </div>
           </li>
@@ -260,13 +260,13 @@ function Contact() {
       </nav>
       {/* Header */}
       <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{t?.contact}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.contact}</h1>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
-                            <label htmlFor="users-search" className="sr-only">{t?.search}</label>
+                            <label htmlFor="users-search" className="sr-only">{language?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={t?.search}>
+                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.search}>
                                 </input>
                             </div>
                         </form>
@@ -289,11 +289,11 @@ function Contact() {
                         <button type="button" 
                         onClick={()=>setView(1)}  className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                            {t?.add} {t?.contact}
+                            {language?.add} {language?.contact}
                         </button>
                         <span className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                            {t?.export}
+                            {language?.export}
                         </span>
                     </div>
                 </div>
@@ -310,25 +310,25 @@ function Contact() {
                       scope="col"
                       className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
-                      {t?.contact} {t?.name} 
+                      {language?.contact} {language?.name} 
                     </th>
                     <th
                       scope="col"
                       className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
-                      {t?.contact} {t?.value}
+                      {language?.contact} {language?.value}
                     </th>
                     <th
                       scope="col"
                       className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
-                      {t?.status}
+                      {language?.status}
                     </th>
                     <th
                       scope="col"
                       className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
-                      {t?.action}
+                      {language?.action}
                     </th>
                   </tr>
                 </thead>
@@ -362,7 +362,7 @@ function Contact() {
                               className="h-2.5 w-2.5 rounded-full bg-green-400 
                                                             mr-2"
                             ></div>
-                            {t?.active}
+                            {language?.active}
                           </div>
                         </td>
                         <td className="p-4 whitespace-nowrap space-x-2">
@@ -387,7 +387,7 @@ function Contact() {
                                 clipRule="evenodd"
                               ></path>
                             </svg>
-                            {t?.edit} {t?.contact}
+                            {language?.edit} {language?.contact}
                           </button>
                           <button
                             type="button"
@@ -409,7 +409,7 @@ function Contact() {
                                 clipRule="evenodd"
                               ></path>
                             </svg>
-                            {t?.delete} {t?.contact}
+                            {language?.delete} {language?.contact}
                           </button>
                         </td>
                       </tr>
@@ -457,7 +457,7 @@ function Contact() {
                       htmlFor="first-name"
                       className="text-sm font-medium text-gray-900 block mb-2"
                     >
-                      {t?.contact} {t?.type}
+                      {language?.contact} {language?.type}
                     </label>
                     <select
                       onChange={(e) =>
@@ -481,7 +481,7 @@ function Contact() {
                       htmlFor="last-name"
                       className="text-sm font-medium text-gray-900 block mb-2"
                     >
-                      {t?.contact} {t?.value}
+                      {language?.contact} {language?.value}
                     </label>
                     <input
                       type="text"
@@ -506,7 +506,7 @@ function Contact() {
                    setUpdateContact(0)}}
                   type="submit"
                 >
-                  {t?.update}
+                  {language?.update}
                 </button>
               </div>
             </div>
@@ -520,7 +520,7 @@ function Contact() {
           <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
             <div className="bg-white rounded-lg shadow relative">
               <div className="flex items-start justify-between p-5 border-b rounded-t">
-                <h3 className="text-xl font-semibold">{t?.add} {t?.new} {t?.contact}</h3>
+                <h3 className="text-xl font-semibold">{language?.add} {language?.new} {language?.contact}</h3>
                 <button
                   type="button"
                   onClick={() => setView(0)}
@@ -548,7 +548,7 @@ function Contact() {
                         htmlFor="first-name"
                         className="text-sm font-medium text-gray-900 block mb-2"
                       >
-                       {t?.contact} {t?.type}
+                       {language?.contact} {language?.type}
                       </label>
                       <select
                        onChange={(e) =>
@@ -574,7 +574,7 @@ function Contact() {
                         htmlFor="last-name"
                         className="text-sm font-medium text-gray-900 block mb-2"
                       >
-                        {t?.contact} {t?.value}
+                        {language?.contact} {language?.value}
                       </label>
                       <input
                         type="text"
@@ -600,7 +600,7 @@ function Contact() {
                    onClick={(e) => {submitContactAdd(e);setView(0)}}
                   type="submit"
                 >
-                 {t?.add} {t?.contact}
+                 {language?.add} {language?.contact}
                 </button>
               </div>
             </div>
@@ -650,21 +650,21 @@ function Contact() {
                   ></path>
                 </svg>
                 <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
-                 {t?.areyousureyouwanttodelete}
+                 {language?.areyousureyouwanttodelete}
                 </h3>
                 <button
                   onClick={(e) => { submitDelete(editContact?.contact_id);
                     setDeleteContact(0)}}
                   className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2"
                 >
-                  {t?.yesiamsure}
+                  {language?.yesiamsure}
                 </button>
                 <button
                   onClick={() =>  setDeleteContact(0)}
                   className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center"
                   data-modal-toggle="delete-user-modal"
                 >
-                  {t?.nocancel}
+                  {language?.nocancel}
                 </button>
               </div>
             </div>

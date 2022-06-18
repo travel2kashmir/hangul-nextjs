@@ -7,7 +7,7 @@ import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import Router from "next/router";
-var t;
+var language;
 var currentProperty;
 var  currentPackageDetails;
 var currentPackage;
@@ -25,13 +25,13 @@ function Roombundle() {
           if (typeof window !== 'undefined'){
             var locale = localStorage.getItem("Language"); 
             if (locale === "ar") {
-            t = arabic;
+            language = arabic;
             }
             if (locale === "en") {
-            t = english;
+            language=english;
             }
             if (locale === "fr") {
-              t=french;
+              language = french;
             }
             /** Current Property Basic Details fetched from the local storage **/
             currentProperty=JSON.parse(localStorage.getItem('property'))  
@@ -186,7 +186,7 @@ function Roombundle() {
               <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
               <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
               <Link href="/landing" >
-            <a> {t?.home}</a>
+            <a> {language?.home}</a>
             </Link>
             </span>
           </li>
@@ -202,14 +202,14 @@ function Roombundle() {
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.room} {t?.bundle}</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.room} {language?.bundle}</span>
             </div>
           </li>
         </ol>
       </nav>
       <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         {t?.room} {t?.bundle}
+         {language?.room} {language?.bundle}
          </h6>
          <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -220,7 +220,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.room} {t?.name} 
+                    {language?.room} {language?.name} 
                   </label>
                   <select
                     onClick={(e) => setBundle({ ...bundle, room_id: e.target.value })}
@@ -242,7 +242,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.package} {t?.name} 
+                    {language?.package} {language?.name} 
                     </label>
                   <select
                    onClick={(e) => setBundle({ ...bundle, package_id: e.target.value })}
@@ -263,7 +263,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} 
+                    {language?.baserate} 
                   </label>
                   <input
                     type="text"
@@ -282,7 +282,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.baserate} {t?.currency}
+                    {language?.baserate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50  border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue = {roomBundle?.base_rate_currency}
@@ -304,7 +304,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate}
+                    {language?.taxrate}
                   </label>
                   <input
                     type="text"
@@ -324,7 +324,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.taxrate} {t?.currency}
+                    {language?.taxrate} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -346,7 +346,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.charges} {t?.rate} 
+                    {language?.other} {language?.charges} {language?.rate} 
                   </label>
                   <input
                     type="text"
@@ -365,7 +365,7 @@ function Roombundle() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.other} {t?.charges} {t?.currency}
+                    {language?.other} {language?.charges} {language?.currency}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -386,7 +386,7 @@ function Roombundle() {
                     className="text-medium font-bold text-gray-900 block mt-4 mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.services} 
+                    {language?.services} 
                   </label>
                   <div className="flex flex-row ml-6 items-start" >
                 <div className="flex items-center h-5">
@@ -472,7 +472,7 @@ function Roombundle() {
                   }}
                   type="button"
                 >
-                 {t?.update}
+                 {language?.update}
                 </button>
               </div>
           </div>

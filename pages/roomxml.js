@@ -7,7 +7,7 @@ import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import Link from "next/link";
-var t;
+var language;
 var currentProperty;
 var services;
 var currentroom;
@@ -19,13 +19,13 @@ function Roomxml() {
           if (typeof window !== 'undefined'){
             var locale = localStorage.getItem("Language"); 
             if (locale === "ar") {
-            t = arabic;
+            language = arabic;
             }
             if (locale === "en") {
-            t = english;
+            language=english;
             }
             if (locale === "fr") {
-              t=french;
+              language = french;
             }
             /** Current Property Basic Details fetched from the local storage **/
             currentProperty=JSON.parse(localStorage.getItem('property'))
@@ -80,7 +80,7 @@ function Roomxml() {
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                             <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
                                 <Link href="/landing" >
-                            <a>{t?.home}</a>
+                            <a>{language?.home}</a>
                         </Link></span>
                     </li>
                     <li>
@@ -94,19 +94,19 @@ function Roomxml() {
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                            <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2"> 
-                           <Link href="/roomsxml"><a>{t?.rooms}</a></Link>XML
+                           <Link href="/roomsxml"><a>{language?.rooms}</a></Link>XML
                            </span></div>
                     </li>
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.room} XML</span>
+                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.room} XML</span>
                         </div>
                     </li>
                 </ol>
             </nav>
             <h6 className="text-xl  flex leading-none pl-6 pt-2 pb-6 font-bold text-gray-900 ">
-            {t?.room} XML
+            {language?.room} XML
             </h6>
             {/* Property XML Form */}
             {roomXML===undefined?<p>XML is being fetched</p>:
@@ -116,7 +116,7 @@ function Roomxml() {
                  <div className="text-center flex justify-end">
                             <button className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 
                         focus:ring-cyan-200 font-semibold rounded-lg text-sm px-4 py-2 text-center items-center mr-14"
-                                onClick={call}>{t?.sendto} Google</button></div>
+                                onClick={call}>{language?.sendto} Google</button></div>
                         {roomXML}  </div>
                    }
             </div>}

@@ -8,7 +8,7 @@ import arabic from "../components/Languages/ar"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../services/logger");
-var t;
+var language;
 var currentProperty;
 var gallery;
 import Router from 'next/router'
@@ -19,13 +19,13 @@ function Gallery() {
           if (typeof window !== 'undefined'){ 
             var locale = localStorage.getItem("Language");
             if (locale === "ar") {
-            t = arabic;
+            language = arabic;
             }
             if (locale === "en") {
-            t = english;
+            language=english;
             }
             if (locale === "fr") {
-              t=french;   
+              language = french;   
             } 
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -217,7 +217,7 @@ function Gallery() {
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
               <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-              <Link href="/landing" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{t?.home}</a>
+              <Link href="/landing" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
             </Link>
           </li>
           <li>
@@ -229,7 +229,7 @@ function Gallery() {
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{t?.gallery}</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.gallery}</span>
             </div>
           </li>
         </ol>
@@ -238,14 +238,14 @@ function Gallery() {
      {/* Header */}
      <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
                 <h6 className="text-xl mb-2 flex leading-none pl-4 pt-2 font-bold text-gray-900 ">
-                   {t?.gallery}
+                   {language?.gallery}
                 </h6>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
-                            <label htmlFor="users-search" className="sr-only">{t?.search}</label>
+                            <label htmlFor="users-search" className="sr-only">{language?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={t?.searchforimages}>
+                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.searchforimages}>
                                 </input>
                             </div>
                         </form>
@@ -269,11 +269,11 @@ function Gallery() {
                             onClick={() => setAddImage(1)}
                             data-modal-toggle="add-user-modal" className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                            {t?.add} {t?.image}
+                            {language?.add} {language?.image}
                         </button>
                         <a href="#" className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                            {t?.export}
+                            {language?.export}
                         </a>
                     </div>
                 </div>
@@ -344,7 +344,7 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                   {t?.edit} {t?.image}
+                                   {language?.edit} {language?.image}
                                 </h3>
                                 <button type="button"
                                     onClick={() => setEditImage(0)}
@@ -361,7 +361,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                           {t?.image} {t?.description}
+                                           {language?.image} {language?.description}
                                         </label>
                                         <textarea rows="6" columns="60"
 
@@ -381,7 +381,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                           {t?.image} {t?.titl}
+                                           {language?.image} {language?.titl}
                                         </label>
                                         <input
                                             type="text"
@@ -404,7 +404,7 @@ function Gallery() {
                                 <button
                                     onClick={() => updateImageDetails()}
                                     className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                                    type="submit">{t?.edit} {t?.image}</button>
+                                    type="submit">{language?.edit} {language?.image}</button>
                             </div>
                         </div>
                     </div>
@@ -418,7 +418,7 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                  {t?.addnewimage} 
+                                  {language?.addnewimage} 
                                 </h3>
                                 <button type="button"
                                     onClick={() => setAddImage(0)}
@@ -437,7 +437,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            {t?.imageupload} 
+                                            {language?.imageupload} 
                                         </label>
                                         <div className="flex">
                                         <input
@@ -452,7 +452,7 @@ function Gallery() {
                                     </div> 
                                     <div className="col-span-6 sm:col-span-3">
                                     <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
-                                               onClick={uploadImage}>{t?.upload}</button></div>
+                                               onClick={uploadImage}>{language?.upload}</button></div>
                                     </div>
                                     <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
@@ -460,7 +460,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            {t?.image} {t?.titl}
+                                            {language?.image} {language?.titl}
                                         </label>
                                         <input
                                             type="text"
@@ -473,7 +473,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            {t?.image} {t?.description}
+                                            {language?.image} {language?.description}
                                         </label>
                                         <textarea rows="2" columns="60"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value }))}
@@ -487,7 +487,7 @@ function Gallery() {
  <button
                                     onClick={()=>{submitAddImage(); }}
                                     className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                                    type="submit">{t?.add} {t?.image}</button>
+                                    type="submit">{language?.add} {language?.image}</button>
                             </div>
                         </div>
                     </div>
@@ -510,15 +510,15 @@ function Gallery() {
                             <div className="p-6 pt-0 text-center">
                                 <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
-                                    {t?.areyousureyouwanttodelete}
+                                    {language?.areyousureyouwanttodelete}
                                 </h3>
                                 <button onClick={() => submitDelete()} className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                                    {t?.yesiamsure}
+                                    {language?.yesiamsure}
                                 </button>
                                 <button
                                     onClick={() => setdeleteImage(0)}
                                     className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                    {t?.nocancel}
+                                    {language?.nocancel}
                                 </button>
                             </div>
                         </div>

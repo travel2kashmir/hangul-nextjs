@@ -8,7 +8,7 @@ import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 const logger = require("../services/logger");     
-var t;
+var language;
 var currentUser;
 const  Landing=() =>{ 
 
@@ -25,13 +25,13 @@ const  Landing=() =>{
         var locale = localStorage.getItem("Language");
         
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;
+          language = french;
         } 
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));    
       } 
@@ -92,15 +92,15 @@ const  Landing=() =>{
                 }}
                 type="button"
               >
-               {t?.signout}
+               {language?.signout}
               </button>
               <div className="text-center mt-16">
                 <p className="capitalize font-semibold text-3xl font-sans sm:mt-12 mx-12 mt-24 mb-6 text-cyan-500">
-                  {t?.welcome} {currentUser?.name}
+                  {language?.welcome} {currentUser?.name}
                 </p>
               </div>
               <p className="font-semibold text-lg text-gray-500">
-               {t?.List} {t?.ofproperties}
+               {language?.List} {language?.ofproperties}
               </p>
               <form className=" space-y-1" action="#">
                 <div className="flex flex-col">
@@ -114,25 +114,25 @@ const  Landing=() =>{
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                               {t?.property} {t?.name}
+                               {language?.property} {language?.name}
                               </th>
                               <th
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                                {t?.property} {t?.category}
+                                {language?.property} {language?.category}
                               </th>
                               <th
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                                {t?.status}
+                                {language?.status}
                               </th>
                               <th
                                 scope="col"
                                 className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                               >
-                                {t?.action}
+                                {language?.action}
                               </th>
                             </tr>
                           </thead>
@@ -149,7 +149,7 @@ const  Landing=() =>{
                                   <td className="p-1 whitespace-nowrap text-base font-normal text-gray-900">
                                     <div className="flex items-center">
                                       <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                                      {t?.active}
+                                      {language?.active}
                                     </div>
                                   </td>
                                   <td className="p-2 whitespace-nowrap space-x-1">
@@ -163,7 +163,7 @@ const  Landing=() =>{
                                              hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                             text-sm inline-flex items-center px-2 py-1.5 text-center"
                                     >
-                                     {t?.view}
+                                     {language?.view}
                                     </button>
                                   </td>
                                 </tr>

@@ -8,7 +8,7 @@ import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import Router from "next/router";
 const logger = require("../services/logger");
-var t;
+var language;
 var currentProperty;
 var max_age=[];   
 var final=[];
@@ -22,13 +22,13 @@ function Packagedescription() {
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language"); 
         if (locale === "ar") {
-        t = arabic;
+        language = arabic;
         }
         if (locale === "en") {
-        t = english;
+        language=english;
         }
         if (locale === "fr") {
-          t=french;
+          language = french;
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))  
@@ -165,7 +165,7 @@ function Packagedescription() {
             </svg>
             <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
               <Link href="/landing">
-                <a> {t?.home}</a>
+                <a> {language?.home}</a>
               </Link>
             </span>
           </li>
@@ -206,7 +206,7 @@ function Packagedescription() {
               </svg>
               <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
                 <Link href="/packages">
-                  <a>{t?.packages}</a>
+                  <a>{language?.packages}</a>
                 </Link>
               </span>
             </div>
@@ -250,7 +250,7 @@ function Packagedescription() {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                {t?.package} {t?.description}
+                {language?.package} {language?.description}
               </span>
             </div>
           </li>
@@ -259,7 +259,7 @@ function Packagedescription() {
       {/* Package Details Form */}
       <div className="bg-white shadow rounded-lg mx-10 my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {t?.package} {t?.description}
+          {language?.package} {language?.description}
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"
@@ -283,7 +283,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.package} {t?.name}
+                    {language?.package} {language?.name}
                   </label>
                   <input
                     type="text"
@@ -305,7 +305,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.package} {t?.description}
+                    {language?.package} {language?.description}
                   </label>
                   <textarea
                     rows="2"
@@ -328,7 +328,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.paymentholder}
+                    {language?.paymentholder}
                   </label>
                   <select
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -353,7 +353,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.refundable}
+                    {language?.refundable}
                   </label>
                   <select
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -377,7 +377,7 @@ function Packagedescription() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.refundable} {t?.till} {t?.days}
+                        {language?.refundable} {language?.till} {language?.days}
                       </label>
                       <input
                         type="text"
@@ -399,7 +399,7 @@ function Packagedescription() {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        {t?.refundable} {t?.till} {t?.time}
+                        {language?.refundable} {language?.till} {language?.time}
                       </label>
                       <input
                         type="time" step="2"
@@ -424,7 +424,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.number} {t?.of} {t?.occupants}
+                    {language?.number} {language?.of} {language?.occupants}
                   </label>
                   <input
                     type="text"
@@ -448,7 +448,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {t?.number} {t?.of} {t?.adult}
+                    {language?.number} {language?.of} {language?.adult}
                   </label>
                   <input
                     type="text"
@@ -478,7 +478,7 @@ function Packagedescription() {
                   }}
                   type="button"
                 >
-                 {t?.update}
+                 {language?.update}
                 </button>
               </div>
             </div>
@@ -521,7 +521,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  {t?.maximum}  {t?.age}  {t?.of} {t?.child}
+                  {language?.maximum}  {language?.age}  {language?.of} {language?.child}
                   </label>   
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                      onChange={(e)=>
@@ -556,7 +556,7 @@ function Packagedescription() {
                   }}
                   type="button"
                 >
-                 {t?.update}
+                 {language?.update}
                 </button>
               </div>   
             </div>

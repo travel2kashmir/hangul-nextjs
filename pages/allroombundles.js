@@ -195,7 +195,7 @@ function Allroombundles() {
          </span>
          <span className="  w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
              <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-             {language?.export}
+           Import
          </span>
      </div>
  </div>
@@ -209,6 +209,13 @@ function Allroombundles() {
              <table className="table-fixed min-w-full divide-y divide-gray-200">
                  <thead className="bg-gray-100">
                      <tr>
+                    <th scope="col" className="p-4">
+                      <div className="flex items-center">
+                        <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                      </div>
+                    </th>
                          <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
                              {language?.room} {language?.name}
                          </th>
@@ -216,7 +223,7 @@ function Allroombundles() {
                              {language?.package} {language?.name}
                          </th>
                          <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                             {language?.status}
+                            Status
                          </th>
                          <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
                              {language?.action}
@@ -226,10 +233,17 @@ function Allroombundles() {
                  <tbody className="bg-white divide-y divide-gray-200">
                      {allBundles?.map((allBundles,index) => (
                          <tr className="hover:bg-gray-100" key={index}>
+                          
+                         <td className="p-4 w-4">
+                           <div className="flex items-center">
+                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                           </div>
+                         </td>
                              <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                                 <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{allBundles?.room_name} </td>
+                                 <td className="p-4 whitespace-nowrap capitalize text-base font-medium text-gray-900">{allBundles?.room_name} </td>
                              </td>
-                             <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{allBundles?.package_name} </td>
+                             <td className="p-4 whitespace-nowrap capitalize text-base font-medium text-gray-900">{allBundles?.package_name} </td>
                              <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                  <div className="flex items-center">
                                      <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>

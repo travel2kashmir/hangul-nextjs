@@ -102,6 +102,7 @@ function Addroombundles() {
         other_fees_currency: rate?.other_fees_currency,
         other_fees_amount: rate?.other_fees_amount,
         rate_type: "room_bundle"
+       
       }];
       const final_data={rate_master: data}
       alert("final" +JSON.stringify(final_data))
@@ -130,7 +131,8 @@ function Addroombundles() {
               internet_included:parking,
               rate_master_id: rateId,
               property_id:currentProperty?.property_id,
-              rate_plan_id:rateId + bundle?.package_id
+              rate_plan_id:rateId + bundle?.package_id,
+              status:true
             }];
             const final_data={room_bundle: datas}
             alert(JSON.stringify(final_data))
@@ -358,7 +360,7 @@ function Addroombundles() {
                       setRate({ ...rate, base_rate_currency: e.target.value })
                     }
                   >
-                    <option selected> {roomBundle?.base_rate_currency}</option>
+                    <option selected> Select base rate currency</option>
                     <option value="USD">USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -396,6 +398,7 @@ function Addroombundles() {
                       setRate({ ...rate, tax_currency: e.target.value })
                     }
                   >
+                     <option selected> Select tax rate currency</option>
                     <option value="USD">USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -433,6 +436,7 @@ function Addroombundles() {
                       setRate({ ...rate, other_fees_currency: e.target.value })
                     }
                   >
+                     <option selected> Select other charges currency</option>
                     <option value="USD">USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>

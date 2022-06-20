@@ -340,9 +340,9 @@ function Packagedescription() {
                     }
                   >
                     <option value="web">Web</option>
-                    <option value="hotel">hotel</option>
-                    <option value="installment">installment</option>
-                    <option value="deposit">deposit</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="installment">Installment</option>
+                    <option value="deposit">Deposit</option>
                   </select>
                 </div>
               </div>

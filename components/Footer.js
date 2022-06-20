@@ -1,8 +1,11 @@
 import React, {useEffect} from "react";
+//import {execSync} from "child_process";
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 var language;
+const gitCommand = "git rev-parse HEAD";
+
 
 function Footer() {
     useEffect(()=>{
@@ -35,7 +38,7 @@ function Footer() {
         <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{language?.licensing}</a></li>
         <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{language?.cookiepolicy}</a></li>
         <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline">{language?.contact}</a></li>
-    </ul>
+        </ul>
     <div className="flex sm:justify-center space-x-6">
         <a href="#" className="text-gray-500 hover:text-gray-900">
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

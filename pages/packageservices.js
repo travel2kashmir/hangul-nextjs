@@ -295,7 +295,7 @@ const url = '/api/package/package_service_link'
 
                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                           <div className="flex">
-                            <div className="form-check ml-4 form-check-inline">
+                          <div className="form-check ml-4 form-check-inline">
                               <input
                                 type="radio"
                                 onChange={(e) => {

@@ -93,6 +93,7 @@ function Addpackage() {
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
         logger.info("Package max age children success");
+       
         setDisp(2);   
       } 
      )
@@ -112,7 +113,8 @@ for (let i = 0; i < service_name.length; i++) {
   const temp = {
   'package_id':packageId,
   'service_id':service_name[i],
-  'value': service_value[i]
+  'value': service_value[i],
+  'status':true
   };
   text.push(temp) 
 }
@@ -189,7 +191,7 @@ const url = '/api/package/package_service_link'
                 setPackageId(response.data.package_id);
                 if(allPackageDetails?.max_number_of_intended_occupants-
                   allPackageDetails?.max_number_of_adult_guest >= 1)
-                setDisp(1);
+                  setDisp(2);
                 else{
                   setDisp(2);
                 }    
@@ -211,6 +213,7 @@ const url = '/api/package/package_service_link'
           });
         }
   }
+
   /** Function submit Package Rooms **/
   const submitPackageRooms = () => {
     if (allRooms.length !== 0){
@@ -465,9 +468,9 @@ const url = '/api/package/package_service_link'
                   }>
                      <option selected >Select charge currency</option>
                     <option value="web" >Web</option>
-                    <option value="hotel">hotel</option>
-                    <option value="installment">installment</option>
-                    <option value="deposit">deposit</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="installment">Installment</option>
+                    <option value="deposit">Deposit</option>
                   </select>
                 </div>
               </div>
@@ -574,58 +577,11 @@ const url = '/api/package/package_service_link'
                   }/>
                 </div>
               </div>
-             
-              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button
-                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                  onClick={() => {
-                    submitPackageDescription();
-                  }}
-                  type="button"
-                >
-                 {language?.next}
-                </button>
-              </div> 
-
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-
-      {/* Maximum Age Children Form */}
-     <div id='1' className={disp===1?'block':'hidden'}>
-       {final=[]} {max_age=[]}
-     <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-     <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.packagedescription}</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.miles}</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
-            </div>
-        </div>
+              {allPackageDetails?.max_number_of_intended_occupants-
+                            allPackageDetails?.max_number_of_adult_guest >= 1 ? <>
+                 {final=[]} {max_age=[]}
+    
+     
        {allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest >= 1 ? 
               <> 
@@ -671,12 +627,21 @@ const url = '/api/package/package_service_link'
                      rounded-lg text-sm px-5 py-2 text-center ml-16
                      items-center mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
+                      submitPackageDescription();
                       submitAge();
                     }} type="button" >
                         {language?.next}</button>
-                    </div>
-       </div>
-     </div>
+                   
+       </div></>:<></>}
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+     
     
      {/*   {language?.package} {language?.rooms} {language?.and} {language?.rates} Form */}
      <div id='2' className={disp===2?'block':'hidden'}>

@@ -53,7 +53,6 @@ const fetchBasicDetails = async () => {
 }
  /* Function call to fetch Current Property Details when page loads */
  useEffect(() => {
- 
   fetchBasicDetails(); 
 },[]);
 

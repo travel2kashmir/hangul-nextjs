@@ -18,7 +18,7 @@ var currentPackage;
 function Packageservices() {
   const[packageServices,setPackageServices]= useState([])
   const[currentPackageDetails,setCurrentPackageDetails]= useState([])
-
+  
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -46,7 +46,9 @@ function Packageservices() {
         const url = `/api/package/package_services_link/${currentPackage}`
         axios.get(url)
         .then((response)=>{setPackageServices(response.data);
-          logger.info("url  to fetch package services hitted successfully")})
+          logger.info("url  to fetch package services hitted successfully")
+        }
+       )   
           .catch((error)=>{logger.error("url to fetch package services, failed")});  
         }
         const fetchDetails = async () => {
@@ -87,20 +89,7 @@ function Packageservices() {
 
    /** Function package services **/
   const submitPackageServices = () =>{
-    var total={};
-    let text = [];
-
-for (let i = 0; i < service_name.length; i++) {
-  
-  const temp = {
-  'package_id': currentPackage,
-  'service_id':service_name[i],
-  'value': service_value[i],
-  "status": true
-  };
-  text.push(temp) 
-}
-total={"package_services":text}
+var total={"package_services": packageServices}
 const url = '/api/package/package_service_link'
     axios.put(url, total, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -269,12 +258,6 @@ const url = '/api/package/package_service_link'
                         scope="col"
                         className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                       >
-                        {language?.service} {language?.value}
-                      </th>
-                      <th
-                        scope="col"
-                        className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
-                      >
                         {language?.service} {language?.edit}
                       </th>
                     </tr>
@@ -283,68 +266,39 @@ const url = '/api/package/package_service_link'
                     {packageServices?.map((item, idx) => (
                       <tr className="hover:bg-gray-100" key={idx}>
                         <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                          <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
+                          <span className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
                             {"  " +
                               item?.package_service_name?.replace(/_+/g, " ")}
-                          </td>
-                        </td>
-
-                        <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
-                          {item?.value === true ? <>{language?.yes}</> : <> {language?.no}</>}
+                          </span>
                         </td>
 
                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                           <div className="flex">
-                          <div className="form-check ml-4 form-check-inline">
-                              <input
-                                type="radio"
-                                onChange={(e) => {
-                                  service_name[idx] = item?.service_id;
-                                  service_value[idx] = true;
-                                }}
-                                className="form-check-input form-check-input 
-                                                         appearance-none rounded-full h-3 w-3 border 
-                                                         border-gray-300 
-                                                         bg-white checked:bg-blue-600 
-                                                         checked:border-blue-600 focus:outline-none
-                                                          transition duration-200 mt-2  align-top
-                                                           bg-no-repeat bg-center bg-contain float-left
-                                                            mr-2 cursor-pointer"
-                                value="yes"
-                                name={"who" + idx}
-                                id="ip1"
-                              />
-                              <label
-                                className="form-check-label inline-block 
-                                                      text-gray-700 text-base pr-2 "
-                                htmlFor="ip1"
-                              >
-                                {language?.yes}
-                              </label>
-                            </div>
-                            <div className="form-check ml-8 form-check-inline">
-                              <input
-                                type="radio"
-                                id="ip2"
-                                value="no"
-                                onChange={(e) => {
-                                  service_name[idx] = item?.service_id;
-                                  service_value[idx] = false;
-                                }}
-                                className="form-check-input form-check-input appearance-none 
-                                                         rounded-full h-3 w-3 border border-gray-300
-                                                          bg-white checked:bg-blue-600 checked:border-blue-600
-                                                           focus:outline-none transition duration-200 mt-2 
-                                                            align-top bg-no-repeat bg-center bg-contain float-left mb-2
-                                                             mr-1 ml-2 cursor-pointer"
-                                name={"who" + idx}
-                              />
-                              <label
-                                className="form-check-label inline-block 
-                                                        text-gray-700 text-base  "
-                                htmlFor="ip2"
-                              >
-                                {language?.no}
+                            <div className="form-check ml-4 form-check-inline">
+                          
+                              <label htmlFor={"default-toggle"+idx} className="inline-flex relative items-center cursor-pointer">
+                              
+                            <input type="checkbox" value={item?.value} checked={item.value===true}
+                              onChange={() => {
+                                setPackageServices(packageServices?.map((i) => {
+                                  
+                                  if (i?.service_id === item?.service_id) {
+                                    i.value = !i.value
+                                 }
+                                  return i
+                                }))
+                             }}
+
+                                 id={"default-toggle"+idx} className="sr-only peer"   />
+                                
+                                <div
+                                 className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+ peer-checked:after:translate-x-full 
+                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+
                               </label>
                             </div>
                           </div>

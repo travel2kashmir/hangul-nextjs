@@ -3,9 +3,9 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../../../components/Languages/en"
+import french from "../../../../components/Languages/fr"
+import arabic from "../../../../components/Languages/ar"
 import Router from "next/router";
 var language;
 var currentProperty;
@@ -33,7 +33,7 @@ function Packagemiles() {
     }
     firstfun();
     currentPackage=localStorage.getItem('packageId')
-    Router.push("/packagemiles");
+    Router.push("./packagemiles");
   },[]) 
 
   const [view, setView] = useState(0)
@@ -100,7 +100,7 @@ function Packagemiles() {
            progress: undefined,
          });
          fetchDetails(); 
-        Router.push("/packagemiles");
+        Router.push("./packagemiles");
          setMile([])
        })
        .catch((error) => {
@@ -133,7 +133,7 @@ function Packagemiles() {
            progress: undefined,
          });
          fetchDetails(); 
-        Router.push("/packagemiles");
+        Router.push("./packagemiles");
        })
        .catch((error) => {
         toast.error("Package Miles Delete Error!", {
@@ -174,7 +174,7 @@ function Packagemiles() {
                  progress: undefined,
                });
                fetchDetails(); 
-               Router.push("/packagemiles");
+               Router.push("./packagemiles");
             setModified([])
          })
          .catch((error) => {
@@ -208,21 +208,21 @@ function Packagemiles() {
           <div className="flex items-center">
             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
             <span className="text-gray-700 text-sm font-medium hover:text-gray-900 capitalize ml-1 md:ml-2">
-            <Link href="/propertysummary" ><a>{currentProperty?.property_name}</a></Link></span>
+            <Link href="../../propertysummary" ><a>{currentProperty?.property_name}</a></Link></span>
           </div>
         </li>
         <li>
           <div className="flex items-center">
             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
             <span className="text-gray-700 text-sm font-medium hover:text-gray-900 capitalize ml-1 md:ml-2">
-            <Link href="/packages"><a>{language?.packages}</a></Link></span>
+            <Link href="../../packages"><a>{language?.packages}</a></Link></span>
           </div>
         </li>
         <li>
           <div className="flex items-center">
             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
             <span className="text-gray-700 text-sm font-medium hover:text-gray-900 capitalize ml-1 md:ml-2">
-            <Link href="/package"><a>{currentMiles?.package_name}</a></Link></span>
+            <Link href="../package"><a>{currentMiles?.package_name}</a></Link></span>
           </div>
         </li>
         <li>

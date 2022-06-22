@@ -3,11 +3,11 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../../components/Languages/en"
+import french from "../../../components/Languages/fr"
+import arabic from "../../../components/Languages/ar"
 import Router from "next/router";
-const logger = require("../services/logger");  
+const logger = require("../../../services/logger");  
 var language;
 var currentProperty;
 var  currentPackageDetails;
@@ -43,7 +43,7 @@ function Addpackage() {
       } 
     }
     firstfun();
-    Router.push("/addpackage");
+    Router.push("./addpackage");
   },[]) 
 
   useEffect(() => {
@@ -358,7 +358,7 @@ const url = '/api/package/package_service_link'
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/propertysummary" ><a>{currentProperty?.property_name}</a></Link>
+                <Link href="../propertysummary" ><a>{currentProperty?.property_name}</a></Link>
               </span>
             </div>
           </li>
@@ -366,7 +366,7 @@ const url = '/api/package/package_service_link'
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-               <Link href="/packages"><a>{language?.packages}</a></Link></span>
+               <Link href="../packages"><a>{language?.packages}</a></Link></span>
             </div>      
           </li>
          

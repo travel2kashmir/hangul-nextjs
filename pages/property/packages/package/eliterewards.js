@@ -3,9 +3,9 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../../../components/Languages/en"
+import french from "../../../../components/Languages/fr"
+import arabic from "../../../../components/Languages/ar"
 import Router from "next/router";
 var language;
 var currentProperty;
@@ -34,7 +34,7 @@ function Eliterewards() {
     }
     firstfun();
     currentPackage=localStorage.getItem('packageId')
-    Router.push("/eliterewards");
+    Router.push("./eliterewards");
   },[]) 
 
   const [view, setView] = useState(0)
@@ -101,7 +101,7 @@ function Eliterewards() {
            progress: undefined,
        });
        fetchDetails(); 
-       Router.push("/eliterewards");
+       Router.push("./eliterewards");
        setProgram([])
      })
       .catch((error) => {
@@ -134,7 +134,7 @@ function Eliterewards() {
           progress: undefined,
         });
         fetchDetails(); 
-       Router.push("/eliterewards");
+       Router.push("./eliterewards");
       })
       .catch((error) => {
        toast.error("Elite Program Delete Error!", {
@@ -165,7 +165,7 @@ function Eliterewards() {
       const program_data = { "program_id": response.data.program_id, "package_id":currentPackage,
     "status":true }
       const final = { "package_membership_link": [program_data] }
-      alert(JSON.stringify(final))
+
       axios.post('/api/package/package_membership_link', final, {
         headers: { 'content-type': 'application/json' }
       }).then(response => {
@@ -179,7 +179,7 @@ function Eliterewards() {
           progress: undefined,
         });
         fetchDetails(); 
-        Router.push("/eliterewards");
+        Router.push("./eliterewards");
         setModified([])
       })
         .catch(error => {
@@ -224,7 +224,7 @@ function Eliterewards() {
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="/propertysummary" ><a>{currentProperty?.property_name}</a></Link>
+              <Link href="../../propertysummary" ><a>{currentProperty?.property_name}</a></Link>
               </span>
             </div>
           </li>
@@ -232,7 +232,7 @@ function Eliterewards() {
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="/packages" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href="../../packages" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
               <a> {language?.packages}</a></Link>
               </span></div>
           </li>
@@ -240,7 +240,7 @@ function Eliterewards() {
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href='/package' className="text-gray-700 text-sm capitalize   font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href='"../package"' className="text-gray-700 text-sm capitalize   font-medium hover:text-gray-900 ml-1 md:ml-2">
               <a>{currentEliteProgram?.package_name}</a></Link>
               </span>
             </div>

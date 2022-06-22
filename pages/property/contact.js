@@ -100,7 +100,7 @@ function Contact() {
           progress: undefined,
         });
         fetchHotelDetails(); 
-        Router.push("/contact");
+        Router.push("./contact");
         setAllHotelDetails([])
       })
       .catch((error) => {
@@ -143,7 +143,7 @@ function Contact() {
           progress: undefined,
         });
         fetchHotelDetails(); 
-        Router.push("/contact");
+        Router.push("./contact");
        setContact([])
       })
       .catch((error) => {
@@ -176,7 +176,7 @@ function Contact() {
           progress: undefined,
         });
         fetchHotelDetails(); 
-        Router.push("/contact");
+        Router.push("./contact");
       })
       .catch((error) => {
         toast.error("Contact Delete Error!", {
@@ -229,9 +229,10 @@ function Contact() {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                {contacts?.property_name}
-              </span>
+              <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href="./propertysummary">
+                <a>{contacts?.property_name}</a>
+              </Link></span>
             </div>
           </li>
           <li>
@@ -329,7 +330,7 @@ function Contact() {
                       scope="col"
                       className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
-                      {language?.status}
+                      Status
                     </th>
                     <th
                       scope="col"

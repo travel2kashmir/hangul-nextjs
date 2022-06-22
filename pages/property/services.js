@@ -3,13 +3,13 @@ import axios from "axios";
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-const logger = require("../services/logger");
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+const logger = require("../../services/logger");
 var language;
 var currentProperty;
 import Router from 'next/router'
-import arabic from "../components/Languages/ar"
+import arabic from "../../components/Languages/ar"
 
 function Services() {
     const [additionalServices, setAdditionalServices] = useState({})
@@ -41,7 +41,7 @@ function Services() {
    currentProperty = JSON.parse(localStorage.getItem("property"));
             } }
                firstfun(); 
-               Router.push("/services")   
+               Router.push("./services")   
       },[])
 
     /* Function call to fetch Current Property Details when page loads */
@@ -95,7 +95,7 @@ function Services() {
                     progress: undefined,
                 });
                 fetchAdditionalServices(); 
-                Router.push("/services");
+                Router.push("./services");
                 setModified([])
             })
             .catch((error) => {
@@ -137,7 +137,7 @@ function Services() {
                     progress: undefined,
                 });
                 fetchHotelDetails(); 
-                Router.push("/services");
+                Router.push("./services");
                 setModified([])
             })
             .catch((error) => {
@@ -168,7 +168,7 @@ function Services() {
                 progress: undefined,
             });
             fetchAdditionalServices(); 
-            Router.push("/services");
+            Router.push("./services");
             toast.error("Error" , {
                 position: "top-center",
                 autoClose: 5000,
@@ -217,7 +217,7 @@ function Services() {
                  progress: undefined,
              });
              fetchAdditionalServices(); 
-             Router.push("/services");
+             Router.push("./services");
             setModified([])
          })
          .catch((error) => {
@@ -270,9 +270,10 @@ function Services() {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                {services?.property_name}
-              </span>
+              <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href="./propertysummary" >
+               <a> {services?.property_name}</a>
+              </Link></span>
             </div>
           </li>
           <li>

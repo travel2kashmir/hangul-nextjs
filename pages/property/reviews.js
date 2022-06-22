@@ -1,13 +1,13 @@
 import React,{useState, useEffect} from "react";
 import axios from 'axios';
 import Link from "next/link";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 var language;
 var currentProperty;
 import Router from 'next/router'
-const logger = require("../services/logger");
+const logger = require("../../services/logger");
 
 function Reviews() {
   const [reviews, setReviews] = useState([]);
@@ -29,7 +29,7 @@ function Reviews() {
       } 
     }
     firstfun();
-   Router.push("/reviews");
+   Router.push("./reviews");
   },[])
 
   useEffect(() => {
@@ -84,9 +84,10 @@ function Reviews() {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                {reviews?.property_name}
-              </span>
+              <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href="./propertysummary" >
+              <a>  {reviews?.property_name}</a>
+              </Link></span>
             </div>
           </li>
           <li>

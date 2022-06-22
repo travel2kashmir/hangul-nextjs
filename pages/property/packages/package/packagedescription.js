@@ -3,11 +3,11 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../../../components/Languages/en"
+import french from "../../../../components/Languages/fr"
+import arabic from "../../../../components/Languages/ar"
 import Router from "next/router";
-const logger = require("../services/logger");
+const logger = require("../../../../services/logger");
 var language;
 var currentProperty;
 var max_age=[];   
@@ -36,7 +36,7 @@ function Packagedescription() {
       } 
     }
     firstfun();
-    Router.push("/packagedescription");
+    Router.push("./packagedescription");
   },[]) 
 
   const [allPackageDetails, setAllPackageDetails] = useState([])
@@ -103,7 +103,7 @@ function Packagedescription() {
                   progress: undefined,
                 });
                 fetchDetails(); 
-                Router.push("/packagedescription");
+                Router.push("./packagedescription");
                 setPackageDetails([])
           })
           .catch((error) => {
@@ -184,7 +184,7 @@ function Packagedescription() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/propertysummary">
+                <Link href="../../propertysummary">
                   <a>{currentProperty?.property_name}</a>
                 </Link>
               </span>
@@ -205,7 +205,7 @@ function Packagedescription() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/packages">
+                <Link href="../../packages">
                   <a>{language?.packages}</a>
                 </Link>
               </span>
@@ -226,7 +226,7 @@ function Packagedescription() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/package">
+                <Link href="../package">
                   <a> {allPackageDetails?.package_name}</a>
                 </Link>
               </span>

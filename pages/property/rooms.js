@@ -3,9 +3,9 @@ import axios from "axios";
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 var language;
 var currentProperty;
 import Router  from "next/router";
@@ -31,7 +31,7 @@ function Rooms() {
 currentProperty = JSON.parse(localStorage.getItem("property"));
         } }
            firstfun(); 
-           Router.push("/rooms")   
+           Router.push("./rooms")   
   },[])
 
     const [allrooms, setAllRooms] = useState([])
@@ -77,7 +77,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
          progress: undefined,
        });
        fetchRooms(); 
-       Router.push("/rooms");
+       Router.push("./rooms");
        })
         .catch((error)=>{ 
          toast.error(("Room Delete Error!"), {
@@ -132,8 +132,9 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                {currentProperty?.property_name}
-              </span>
+              <Link href="./propertysummary" >
+               <a> {currentProperty?.property_name}</a>
+              </Link></span>
             </div>
           </li>
           <li>
@@ -192,7 +193,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
      <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
       < span className="w-full text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:auto "  >
              <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-             <Link href="/addroom"> 
+             <Link href="./rooms/addroom"> 
              <a>{language?.add} {language?.room} </a>
         </Link>
          </span>
@@ -257,7 +258,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                                      <button type="button" data-modal-toggle="edit-user-modal"
                                          onClick={() => {
                                           CurrentRoom(allrooms?.room_id),
-                                         Router.push("/room");
+                                         Router.push("./rooms/room");
                                          }}  className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
                                          <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
                                          {language?.edit} {language?.room}

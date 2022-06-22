@@ -82,7 +82,7 @@ function Address() {
           progress: undefined,
         });
         fetchHotelDetails(); 
-        Router.push("/address");
+        Router.push("./address");
         setAllHotelDetails([])
       })
       .catch((error) => {
@@ -135,9 +135,10 @@ function Address() {
                   clipRule="evenodd"
                 ></path>
               </svg>
-              <span className="text-gray-700 text-sm font-medium hover:text-gray-900 ml-1 md:ml-2">
-                {address?.property_name} 
-              </span>
+              <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href="./propertysummary" >
+              <a>  {address?.property_name} </a>
+              </Link></span>
             </div>
           </li>
           <li>

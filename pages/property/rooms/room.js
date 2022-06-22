@@ -1,9 +1,9 @@
 import React, {useEffect, useState } from 'react';
 import axios from "axios";
 import Link from "next/link";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../../components/Languages/en"
+import french from "../../../components/Languages/fr"
+import arabic from "../../../components/Languages/ar"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 var language;
@@ -11,7 +11,7 @@ var currentProperty;
 var currentroom;
 var room;
 import Router from 'next/router'
-const logger = require("../services/logger");
+const logger = require("../../../services/logger");
 
 function Room() {
 
@@ -35,7 +35,7 @@ currentroom =localStorage.getItem('RoomId');
 currentProperty = JSON.parse(localStorage.getItem("property"));
         } }
 firstfun(); 
- Router.push("/room")   
+ Router.push("./room")   
   },[])
 
   const onChangePhoto = (e, i) => {
@@ -82,7 +82,7 @@ firstfun();
           progress: undefined,
         });
         fetchDetails(); 
-        Router.push("/room");
+      Router.push("./room");
        setAllRoomDetails([])
       })
       .catch((error) => {
@@ -117,7 +117,7 @@ firstfun();
         });
         fetchImages();
         fetchDetails(); 
-        Router.push("/room");
+      Router.push("./room");
       })
       .catch((error) => {
         toast.error("Image delete error", {
@@ -260,7 +260,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
         });
         fetchImages(); 
         fetchDetails();
-        Router.push("/room");
+      Router.push("./room");
       })
       .catch((error) => {
        toast.error("Room Description Update Error! " , {
@@ -305,7 +305,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           progress: undefined,
         });
       fetchDetails(); 
-      Router.push("/room");
+    Router.push("./room");
      setAllRoomDetails([])
       })
       .catch((error) => {
@@ -349,7 +349,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           progress: undefined,
         });
         fetchDetails(); 
-        Router.push("/room");
+      Router.push("./room");
         setAllRoomRates([])
 
       })
@@ -384,14 +384,14 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
              <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="/propertysummary" ><a>{currentProperty?.property_name}</a></Link></span>
+                <Link href="../propertysummary" ><a>{currentProperty?.property_name}</a></Link></span>
             </div>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="/rooms"><a>{language?.propertyrooms}</a></Link></span>
+              <Link href="../rooms"><a>{language?.propertyrooms}</a></Link></span>
             </div>
           </li>
           <li>

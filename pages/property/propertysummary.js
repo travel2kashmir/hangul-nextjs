@@ -97,9 +97,9 @@ function PropertySummary() {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <a className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
                   {allHotelDetails?.property_name}
-                </a>
+                </span>
               </div>
             </li>
           </ol>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
 import Link from "next/link";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../../components/Languages/en"
+import french from "../../../components/Languages/fr"
+import arabic from "../../../components/Languages/ar"
 import Router from "next/router";
 var language;
 var currentProperty;
@@ -38,7 +38,7 @@ function Package() {
           } 
         }
         firstfun();
-        Router.push("/package");
+        Router.push("./package");
       },[]) 
 
     const [allRooms, setAllRooms] = useState([])
@@ -147,14 +147,14 @@ function Package() {
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                             <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                                <Link href="/propertysummary"><a>{currentProperty?.property_name}</a></Link>
+                                <Link href="../propertysummary"><a>{currentProperty?.property_name}</a></Link>
                             </span> </div>
                     </li>
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                              <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href="/packages"><a>{language?.propertypackages}</a></Link></span>
+                            <Link href="../packages"><a>{language?.propertypackages}</a></Link></span>
                         </div>
                     </li>
                     <li>
@@ -180,7 +180,7 @@ function Package() {
                           <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                             <Link href="/packagedescription"
+                             <Link href="./package/packagedescription"
                                ><a>{language?.seemore}</a></Link></span>
                         </div>
                     </div>
@@ -240,7 +240,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                         <Link href = '/packagerates' 
+                         <Link href = './package/packagerates' 
                                 ><a>{language?.seemore}</a></Link></span>
                         </div>
                     </div>
@@ -285,7 +285,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                        <Link href= '/packageservices'
+                        <Link href= './package/packageservices'
                          className="text-sm font-sans underline decoration-cyan-600
              font-semibold text-cyan-600 p-1"><a>{language?.seemore}</a></Link></span>
                         </div>
@@ -345,7 +345,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2">   
-                            <Link href= '/eliterewards'><a>{language?.seemore}</a></Link></span>
+                            <Link href= './package/eliterewards'><a>{language?.seemore}</a></Link></span>
                         </div>
                     </div>
 
@@ -387,7 +387,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                            <Link href='/packagemiles'><a>{language?.seemore}</a></Link></span>
+                            <Link href='./package/packagemiles'><a>{language?.seemore}</a></Link></span>
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
@@ -428,7 +428,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                            <Link href='/propertycredit'><a>{language?.seemore}</a></Link></span>
+                            <Link href='./package/propertycredit'><a>{language?.seemore}</a></Link></span>
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
@@ -464,7 +464,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                         <Link href = '/packagerooms' 
+                         <Link href = './packagerooms' 
                                 ><a>{language?.seemore}</a></Link></span>
                         </div>
                     </div>

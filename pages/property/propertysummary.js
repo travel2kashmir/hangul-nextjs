@@ -2,11 +2,11 @@ import React from "react";
 import { useState,useEffect } from "react";
 import axios from 'axios';
 import Link from "next/link";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 import { useRouter } from "next/router";
-const logger = require("../services/logger");
+const logger = require("../../services/logger");
 var language;
 var currentUser;
 var currentProperty;
@@ -36,7 +36,7 @@ function PropertySummary() {
       } 
     }
     firstfun();
-    router.push("/propertysummary");
+    router.push("./propertysummary");
   },[])
    
 

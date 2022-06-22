@@ -157,7 +157,7 @@ const  Landing=() =>{
                                       type="button"
                                       onClick={() => {
                                         LocalProperty({ item});
-                                        router.push("/propertysummary");
+                                        router.push("./property/propertysummary");
                                       }}
                                       className="text-white bg-cyan-600
                                              hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg

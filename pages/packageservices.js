@@ -245,18 +245,18 @@ const url = '/api/package/package_service_link'
           <div className="overflow-x-auto">
             <div className="align-middle inline-block min-w-full">
               <div className="shadow overflow-hidden">
-                <table className="table-fixed min-w-full divide-y divide-gray-200">
+                <table className="table-fixed min-w-full divide-y mx-8 divide-gray-200">
                   <thead className="bg-gray-100">
                     <tr>
                       <th
                         scope="col"
-                        className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
+                        className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
                       >
                         {language?.service} {language?.name}
                       </th>
                       <th
                         scope="col"
-                        className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
+                        className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
                       >
                         {language?.service} {language?.edit}
                       </th>
@@ -265,14 +265,14 @@ const url = '/api/package/package_service_link'
                   <tbody className="bg-white divide-y divide-gray-200">
                     {packageServices?.map((item, idx) => (
                       <tr className="hover:bg-gray-100" key={idx}>
-                        <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                          <span className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
+                        <td className="py-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
+                          <span className="py-4 px-2 whitespace-nowrap text-base font-medium capitalize text-gray-900">
                             {"  " +
                               item?.package_service_name?.replace(/_+/g, " ")}
                           </span>
                         </td>
 
-                        <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                        <td className="px-2 py-4 whitespace-nowrap text-base font-normal text-gray-900">
                           <div className="flex">
                             <div className="form-check ml-4 form-check-inline">
                           
@@ -294,7 +294,7 @@ const url = '/api/package/package_service_link'
                                 <div
                                  className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
                                  dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
- peer-checked:after:translate-x-full 
+                                 peer-checked:after:translate-x-full 
                                  peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
                                  after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
                                   after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>

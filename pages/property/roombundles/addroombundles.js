@@ -3,15 +3,15 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../../components/Languages/en"
+import french from "../../../components/Languages/fr"
+import arabic from "../../../components/Languages/ar"
 import Router from "next/router";
 var language;
 var currentProperty;
 var currentPackageDetails;
 var rateId;
-const logger = require("../services/logger");
+const logger = require("../../../services/logger");
 
 function Addroombundles() {
   const [allRooms, setAllRooms] = useState([]);

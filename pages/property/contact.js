@@ -3,14 +3,14 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 var language;
 var currentProperty;
 var contacts;
 import Router from 'next/router'
-const logger = require("../services/logger");
+const logger = require("../../services/logger");
 
 function Contact() {
 
@@ -33,7 +33,7 @@ function Contact() {
       } 
     }
     firstfun();
-   Router.push("/contact");
+   Router.push("./contact");
   },[])
   const [allHotelDetails, setAllHotelDetails] = useState([]);
   const [view, setView] = useState(0);

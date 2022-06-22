@@ -4,12 +4,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 var language;
 var currentProperty;
-const logger = require("../services/logger");
+const logger = require("../../services/logger");
 import Link from "next/link";
 import Router from 'next/router'
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 
 
 function Address() {
@@ -31,7 +31,7 @@ function Address() {
       } 
     }
     firstfun();
-   Router.push("/address");
+   Router.push("./address");
   },[])
 
   const [allHotelDetails, setAllHotelDetails] = useState([]);

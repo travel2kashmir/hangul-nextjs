@@ -2,12 +2,12 @@ import React from 'react'
 import { useState,useEffect } from "react";
 import axios from 'axios';
 import Link from "next/link";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const logger = require("../services/logger");
+const logger = require("../../services/logger");
 var language;
 var currentProperty;
 var gallery;
@@ -33,7 +33,7 @@ function Gallery() {
           } 
         }
         firstfun();
-       Router.push("/gallery");
+       Router.push("./gallery");
       },[])
     const [allHotelDetails, setAllHotelDetails] = useState([])
     const [gallery, setGallery] = useState([])

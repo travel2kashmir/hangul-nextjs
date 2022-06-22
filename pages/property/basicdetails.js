@@ -2,14 +2,14 @@ import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import Link from "next/link";
 import Router from 'next/router'
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
 var language;
 var currentProperty;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const logger = require("../services/logger");
+const logger = require("../../services/logger");
 
 export default function BasicDetails() 
  {
@@ -36,7 +36,7 @@ export default function BasicDetails()
     } 
   }
   firstfun();
- Router.push("/basicdetails");
+ Router.push("./basicdetails");
 },[])
 
 const fetchBasicDetails = async () => { 

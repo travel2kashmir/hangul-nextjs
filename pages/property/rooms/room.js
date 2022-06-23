@@ -2,6 +2,9 @@ import React, {useEffect, useState } from 'react';
 import axios from "axios";
 import Link from "next/link";
 import english from "../../../components/Languages/en"
+import Header from "../../../components/Header"
+import Footer from "../../../components/Footer"
+import Sidebar from "../../../components/Structure/Sidebar"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
 import { ToastContainer, toast } from 'react-toastify';
@@ -132,6 +135,7 @@ firstfun();
 
       })
   }
+
   const fetchDetails = async () => {
     const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
     console.log("url " +url)
@@ -140,6 +144,7 @@ firstfun();
     logger.info("url  to fetch room hitted successfully")})
     .catch((error)=>{logger.error("url to fetch room, failed")}); 
   }
+
   const fetchImages = async () => {
     const url = `/api/images/${currentProperty?.property_id}`
     console.log("url " +url)
@@ -148,6 +153,7 @@ firstfun();
    logger.info("url  to fetch room images hitted successfully")})
    .catch((error)=>{logger.error("url to fetch room images, failed")}); 
   }
+
   const fetchRoomtypes = async () => {
     const url = `/api/room-types`
     console.log("url " +url)
@@ -156,6 +162,7 @@ firstfun();
    logger.info("url  to fetch room types hitted successfully")})
    .catch((error)=>{logger.error("url to fetch roomtypes, failed")}); 
   }
+
   const fetchServices = async () => {
     const url = `/additional_services/${currentProperty?.property_id}`
     axios.get(url)
@@ -163,6 +170,7 @@ firstfun();
    logger.info("url  to fetch room types hitted successfully")})
    .catch((error)=>{logger.error("url to fetch roomtypes, failed")}); 
   }
+  
   /* Function to load Room Details when page loads*/
   useEffect(() => {
     fetchServices();
@@ -368,6 +376,9 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
   }
   
   return (
+    <>
+    <Header/>
+    <Sidebar/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
         {/* Header */}
@@ -1195,7 +1206,16 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
         pauseOnHover />
 
     </div>
+    <Footer/>
+    </>
   )
 }
 
 export default Room
+Room.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

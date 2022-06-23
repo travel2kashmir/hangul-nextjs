@@ -5,7 +5,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
-import arabic from "../../../components/Languages/ar"
+import arabic from "../../../components/Languages/ar";
+import Header from "../../../components/Header"
+import Footer from "../../../components/Footer"
+import Sidebar from "../../../components/Structure/Sidebar"
 import Router from "next/router";
 const logger = require("../../../services/logger");  
 var language;
@@ -342,6 +345,9 @@ const url = '/api/package/package_service_link'
  }
 
   return (
+    <>
+    <Header/>
+    <Sidebar/>
     <div id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
      <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -1375,6 +1381,8 @@ const url = '/api/package/package_service_link'
         pauseOnHover />
     
       </div>
+      <Footer/>
+      </>
   )
 }
 

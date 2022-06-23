@@ -6,6 +6,9 @@ import Link from "next/link";
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
+import Header from "../../../components/Header"
+import Footer from "../../../components/Footer"
+import Sidebar from "../../../components/Structure/Sidebar"
 var language;
 var currentProperty;
 var addroom;
@@ -391,6 +394,9 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
   }
 }
   return (
+    <>
+    <Header/>
+    <Sidebar/>
     <div id="main-content"
     className="  bg-gray-50  pt-24 relative overflow-y-auto lg:ml-64">
       {/* Header */}
@@ -1094,6 +1100,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         draggable
         pauseOnHover />
     </div>
+   <Footer/>
+   </>
   )
 }
 

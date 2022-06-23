@@ -10,7 +10,6 @@ const Layout=({children}) =>{
         )
     }
 return(
-
     <>
     <Header/>
     <SideBar/>

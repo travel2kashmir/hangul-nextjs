@@ -128,7 +128,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/basicdetails"><a>{language?.seemore}</a></Link>
+                  <Link href="./basicdetails"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -154,7 +154,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/address">
+                  <Link href="./address">
                     <a>{language?.seemore}</a>
                   </Link>
                 </span>
@@ -312,7 +312,7 @@ function PropertySummary() {
                               rounded-lg p-2"
                 >
                   {" "}
-                  <Link href="/contact"><a>{language?.seemore}</a></Link>
+                  <Link href="./contact"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -356,7 +356,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/services"><a>{language?.seemore}</a></Link>
+                  <Link href="./services"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -452,7 +452,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/reviews"><a>{language?.seemore}</a></Link>
+                  <Link href="./reviews"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
@@ -513,7 +513,7 @@ function PropertySummary() {
                              font-semibold text-cyan-600
                               rounded-lg p-2"
                 >
-                  <Link href="/gallery"><a>{language?.seemore}</a></Link>
+                  <Link href="./gallery"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>

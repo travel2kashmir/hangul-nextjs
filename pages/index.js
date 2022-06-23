@@ -81,7 +81,7 @@ function Signin() {
           };
           LocalSignin(whoIsLogged);
 
-          router.push("/landing");
+          router.push("./property/landing");
           
         } else { 
           /** Toast emitter for error wrong email password combination  **/

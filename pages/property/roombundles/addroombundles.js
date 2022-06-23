@@ -7,6 +7,9 @@ import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
 import Router from "next/router";
+import Header from "../../../components/Structure/Header"
+import Footer from "../../../components/Footer"
+import Sidebar from "../../../components/Structure/Sidebar"
 var language;
 var currentProperty;
 var currentPackageDetails;
@@ -182,6 +185,9 @@ function Addroombundles() {
   };
 
   return (
+    <>
+    <Header/>
+    <Sidebar/>
     <div
       id="main-content"
       className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
@@ -552,6 +558,8 @@ function Addroombundles() {
         pauseOnHover
       />
     </div>
+    <Footer/>
+    </>
   );
 }
 

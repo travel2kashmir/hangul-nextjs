@@ -8,6 +8,9 @@ import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
 import Router from "next/router";
 const logger = require("../../../../services/logger"); 
+import Header from "../../../../components/SubStructure/Header"
+import Footer from "../../../../components/Footer"
+import Sidebar from "../../../../components/SubStructure/Sidebar"
 var language;
 var currentProperty;
 var  currentPackageDetails;
@@ -120,6 +123,9 @@ const url = '/api/package/package_service_link'
   }
 
   return (
+    <>
+    <Header/>
+    <Sidebar/>
     <div
       id="main-content"
       className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
@@ -340,6 +346,8 @@ const url = '/api/package/package_service_link'
         pauseOnHover
       />
     </div>
+    <Footer/>
+      </>
   );
 }
 

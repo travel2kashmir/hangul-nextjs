@@ -5,7 +5,10 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
-import arabic from "../../../../components/Languages/ar"
+import arabic from "../../../../components/Languages/ar";
+import Header from "../../../../components/SubStructure/Header"
+import Footer from "../../../../components/Footer"
+import Sidebar from "../../../../components/SubStructure/Sidebar"
 import Router from "next/router";
 var language;
 var currentProperty;
@@ -192,6 +195,9 @@ function Packagemiles() {
  }
  
   return (
+    <>
+    <Header/>
+    <Sidebar/>
     <div id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
       {/* Navbar */}
@@ -468,6 +474,8 @@ function Packagemiles() {
       pauseOnFocusLoss
       draggable
       pauseOnHover /></div>
+       <Footer/>
+      </>
   )
 }
 

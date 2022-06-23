@@ -4,10 +4,10 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
-const logger = require("../services/logger");     
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
+const logger = require("../../services/logger");     
 var language;
 var currentUser;
 const  Landing=() =>{ 
@@ -157,7 +157,7 @@ const  Landing=() =>{
                                       type="button"
                                       onClick={() => {
                                         LocalProperty({ item});
-                                        router.push("./property/propertysummary");
+                                        router.push("./propertysummary");
                                       }}
                                       className="text-white bg-cyan-600
                                              hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg

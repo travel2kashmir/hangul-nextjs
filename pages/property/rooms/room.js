@@ -2,7 +2,7 @@ import React, {useEffect, useState } from 'react';
 import axios from "axios";
 import Link from "next/link";
 import english from "../../../components/Languages/en"
-import Header from "../../../components/Header"
+import Header from "../../../components/Structure/Header"
 import Footer from "../../../components/Footer"
 import Sidebar from "../../../components/Structure/Sidebar"
 import french from "../../../components/Languages/fr"

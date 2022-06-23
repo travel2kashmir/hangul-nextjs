@@ -44,6 +44,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
   const [services, setServices] = useState([]) 
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
+  const [disp, setDisp] = useState(0);
   const [modified, setModified] = useState({})
   const [allRoomRates, setAllRoomRates] = useState([])
 
@@ -91,7 +92,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
               progress: undefined,
             });
             setRoomId(response.data.room_id)
-            setAllRoomDes([])
+            setAllRoomDes([]);
+            setDisp(1);
           })
           .catch(error => {
            toast.error("Room Description Error! ", {
@@ -198,7 +200,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
               draggable: true,
               progress: undefined,
             });
-            setActionImage([])
+            setActionImage([]);
+            setDisp(2);
           })
             .catch(error => {
              toast.error("Gallery error", {
@@ -439,7 +442,23 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         </h6>
         {/* Room Forms */}
         {/* Room Description */}
+        <div id='0' className={disp===0?'block':'hidden'}>
         <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+        <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Description</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Gallery</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Rates</div>
+            </div>
+        </div>
           <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
            {language?.room} {language?.description}
           </h6>
@@ -609,9 +628,26 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
             </div>
           </div>
         </div>
-
+       </div>
         {/* Room Gallery*/}
+        <div id='1' className={disp===1?'block':'hidden'}>
             <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Description</div>
+            </div>
+          
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Room Gallery </div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Rates</div>
+            </div>
+           
+        </div>
               <div className="mx-4">
                 <div className="sm:flex">
                   <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
@@ -650,7 +686,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block py-2 w-full px-2.5"
                                             defaultValue="" />
                                    </div>
-                                    <img className="py-2" src={image.image_link} alt='Image_Preview' style={{ height: "200px", width: "450px" }} />
+                                    <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "200px", width: "450px" }} />
                                     <div className="col-span-6 sm:col-span-3">
                                     <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
                                                onClick={uploadImage}>Upload</button></div>
@@ -719,7 +755,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                 </div>
               </div>
             </div>
-
+        </div>
             {/* Room Services */}
             {/* <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
               {/* <div className="mx-0 my-6">
@@ -809,7 +845,26 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 
             </div> */}
            {/* Room Rates*/}
+           <div id='2' className={disp===2?'block':'hidden'}>
             <div className="bg-white mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Description</div>
+            </div>
+          
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+               Room Gallery</div>
+            </div>
+           
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Rates</div>
+            </div>
+            
+        </div>
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {language?.room} {language?.rates} 
             </h6>
@@ -953,7 +1008,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
             </div>
           </div>
       </div>
-
+     </div>
       {/* Modal Edit Room Service */}
       <div className="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="add-user-modal">
         <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">

@@ -165,7 +165,7 @@ function Roomsxml() {
                                                      className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
                                                     onClick={() => {
                                                      RoomXML({ item}),
-                                                    Router.push("/roomxml");
+                                                    Router.push("./roomsxml/roomxml");
                                                     }} data-modal-toggle="edit-user-modal"
                                                      >
                                                   {language?.view} XML

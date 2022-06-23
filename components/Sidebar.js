@@ -231,7 +231,7 @@ const Sidebar = () => {
                       ></path>
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                   <Link href="/propertyxml ">
+                   <Link href="./propertyxml ">
                     <a>{language?.propertyxml}</a></Link>
                     </span>
                   </li>
@@ -250,7 +250,7 @@ const Sidebar = () => {
                       ></path>
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                    <Link href="/roomsxml">
+                    <Link href="./roomsxml">
                     <a>{language?.roomxml}</a></Link>
                     </span>
                   </li>

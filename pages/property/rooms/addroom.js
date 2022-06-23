@@ -181,7 +181,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
           image_link: image.image_link,
           image_title: actionImage.image_title,
           image_descripiton: actionImage.image_description,
-          image_category: actionImage.image_category
+          image_category: "room"
         }]
         const finalImage = { "images": imagedata }
        axios.post(`/api/gallery`, finalImage).then(response => {
@@ -663,11 +663,23 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                   </div>
                 </div>
               </div>
+             
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
                   <div>
-                    {imageData?.map((imageData, index) => (
+                    {imageData?.map((imageData, index) => (<>
+                       <div className={imageData?.index === 0 ? "hidden":"block"}>
+                       <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
+                         <button className="sm:inline-flex  text-gray-800  
+                    font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
+                    rounded-lg text-sm px-1 py-1 text-center 
+                    items-center mb-1 ml-16 ease-linear transition-all duration-150"
+                           onClick={() => removeImage(imageData?.index)} type="button" >
+                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                           </button>
+                       </div></div>
                       <div className="flex flex-wrap" key={index}>
+                       
                         <div className="w-full lg:w-6/12 px-4">
                           <div className="relative w-full mb-3">
                             <label
@@ -686,12 +698,16 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block py-2 w-full px-2.5"
                                             defaultValue="" />
                                    </div>
-                                    <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "200px", width: "450px" }} />
-                                    <div className="col-span-6 sm:col-span-3">
+                                   <div className="col-span-6 sm:col-span-3">
                                     <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
-                                               onClick={uploadImage}>Upload</button></div>
+                                               onClick={uploadImage}>Upload</button></div>    
                           </div>
                         </div>
+                        <div className="w-full lg:w-6/12 px-4">
+                          <div className="relative w-full ">
+                        <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "150px", width: "400px" }} />
+                                   
+                                               </div></div>
                         <div className="w-full lg:w-6/12 px-4">
                           <div className="relative w-full mb-3">
                             <label className="text-sm font-medium text-gray-900 block mb-2"
@@ -718,31 +734,9 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                           </div>
                         </div>
 
-                        <div className="w-full lg:w-6/12 px-4 pb-4">
-                          <div className="relative w-full mb-3">
-                            <label
-                              className="text-sm font-medium text-gray-900 block sm:mb-8 mb-2"
-                              htmlFor="grid-password"
-                            >
-                              Image Category
-                            </label>
-                            <input
-                              type="text" className=" shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                              defaultValue="room" readOnly="readonly"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                          <button className="sm:inline-flex  text-gray-800 bg-gray-200 hover:bg-gray-400 
-                    focus:ring-4 focus:ring-white-200 font-semibold
-                     rounded-lg text-sm px-3 py-2  border border-gray-300 text-center 
-                     items-center mb-1 ml-16 ease-linear transition-all duration-150"
-                            onClick={() => removeImage(imageData?.index)} type="button" >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            Cancel</button>
-                        </div>
-                      </div>))}
+                     
+                      
+                      </div></>))}
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold

@@ -3,10 +3,10 @@ import axios from "axios";
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../components/Languages/en"
-import french from "../components/Languages/fr"
-import arabic from "../components/Languages/ar"
-const logger = require("../services/logger");
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
+const logger = require("../../services/logger");
 var language;
 var currentProperty;
 var propertyxml;
@@ -31,13 +31,12 @@ function Propertyxml() {
           if (locale === "fr") {
             language = french;
           } 
-/** Current Property Basic Details fetched from the local storage **/
-propertyxml =JSON.parse(localStorage.getItem('allPropertyDetails'))
+
 /** Current Property Details fetched from the local storage **/
 currentProperty = JSON.parse(localStorage.getItem("property"));
         } }
            firstfun(); 
-           Router.push("/propertyxml")   
+           Router.push("./propertyxml")   
   },[])
     
 
@@ -99,7 +98,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
               <Link
-                href="/landing"
+                href="./landing"
                 className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
               >
                 <a>{language?.home} </a>
@@ -119,12 +118,13 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <Link
-                  href="/propertysummary"
-                  className="text-gray-700 text-sm  capitalize font-medium hover:text-gray-900 ml-1 md:ml-2"
+                <span   className="text-gray-700 text-sm  capitalize font-medium hover:text-gray-900 ml-1 md:ml-2"
                 >
-                  <a>{propertyxml?.property_name}</a>
-                </Link>
+                <Link
+                  href="./propertysummary"
+                >
+                  <a>{currentProperty?.property_name}</a>
+                </Link></span>
               </div>
             </li>
             <li>

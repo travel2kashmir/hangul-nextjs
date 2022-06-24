@@ -82,11 +82,11 @@ function Addpackage() {
     ,[])
  
    /** Function submit max age **/
-  const submitAge = () =>{
+  const submitAge = (props) =>{
     if (max_age.length !== 0){ 
   max_age.forEach((item)=>{
   const temp={
-    package_id: packageId,
+    package_id: props,
     max_age_of_child_guest:item
   }
  final.push(temp);
@@ -96,7 +96,6 @@ function Addpackage() {
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
         logger.info("Package max age children success");
-       
         setDisp(2);   
       } 
      )
@@ -191,10 +190,13 @@ const url = '/api/package/package_service_link'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
             logger.info("Package description success");
-                setPackageId(response.data.package_id);
+                setPackageId(response?.data?.package_id);
                 if(allPackageDetails?.max_number_of_intended_occupants-
                   allPackageDetails?.max_number_of_adult_guest >= 1)
+                 { 
+                  submitAge(response.data.package_id);
                   setDisp(2);
+                }
                 else{
                   setDisp(2);
                 }    
@@ -283,13 +285,15 @@ const url = '/api/package/package_service_link'
        /* To be fetched from context */
        package_id: packageId,
        number_of_miles:allPackageDetails?.number_of_miles,
-       provider: allPackageDetails?.provider
+       provider: allPackageDetails?.provider,
+       status:true
      }]
      const finalImage = { "package_miles": packagemiledata }
     axios.post(`/api/package/package_miles`, finalImage).then(response => {
       logger.info("Package miles success");
-      setAllPackageDetails([])
       setDisp(4);
+      setAllPackageDetails([])
+    
      }).catch(error => {
       logger.error("Package miles error");
      });
@@ -301,19 +305,21 @@ const url = '/api/package/package_service_link'
   const programdata = [{
      /* To be fetched from context */
     program_name:allPackageDetails?.program_name ,
-    program_level:allPackageDetails?.program_level
+    program_level:allPackageDetails?.program_level,
+    status:true
    }]
    const finalProgram = { "program_membership_master": programdata }
   axios.post(`/api/package/package_membership_master`, finalProgram).then(response => {
     console.log("Package Program Master Success!")
-     const program_data = { "program_id": response.data.program_id, "package_id": packageId }
+     const program_data = { "program_id": response.data.program_id, "package_id": packageId}
      const final = { "package_program": [program_data] }
      axios.post('/api/package/package_membership_link', final, {
        headers: { 'content-type': 'application/json' }
      }).then(response => {
       logger.info("Package program success");
-      setAllPackageDetails([])
       setDisp(5);
+      setAllPackageDetails([])
+      
      })
        .catch(error => {
         logger.error("Package program error");
@@ -583,14 +589,14 @@ const url = '/api/package/package_service_link'
                   }/>
                 </div>
               </div>
-              {allPackageDetails?.max_number_of_intended_occupants-
-                            allPackageDetails?.max_number_of_adult_guest >= 1 ? <>
-                 {final=[]} {max_age=[]}
+              
+             
     
      
        {allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest >= 1 ? 
               <> 
+                  {final=[]} {max_age=[]}
               {[...Array(allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest)]
                             ?.map((item, index) => (               
@@ -627,6 +633,7 @@ const url = '/api/package/package_service_link'
             </>
             :<></>}
 
+
 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
@@ -634,11 +641,11 @@ const url = '/api/package/package_service_link'
                      items-center mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
                       submitPackageDescription();
-                      submitAge();
+                     
                     }} type="button" >
                         {language?.next}</button>
                    
-       </div></>:<></>}
+       </div>
               
 
             </div>
@@ -920,6 +927,17 @@ const url = '/api/package/package_service_link'
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
           {mileData?.map((mileData, index) => (
+              <>
+              <div className={mileData?.index === 0 ? "hidden":"block"}>
+                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
+                          <button className="sm:inline-flex  text-gray-800  
+                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
+                     rounded-lg text-sm px-1 py-1 text-center 
+                     items-center mb-1 ml-16 ease-linear transition-all duration-150"
+                     onClick={() => removeMile(mileData?.index)} type="button" >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                            </button>
+                        </div></div>
             <div className="flex flex-wrap" key={index}>
 
               <div className="w-full lg:w-6/12 px-4">
@@ -963,18 +981,8 @@ const url = '/api/package/package_service_link'
                 </div>
               </div>
 
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-                <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                          <button className="sm:inline-flex  text-gray-800 bg-gray-200 hover:bg-gray-400 
-                    focus:ring-4 focus:ring-white-200 font-semibold
-                     rounded-lg text-sm px-3 py-2  border border-gray-300 text-center 
-                     items-center mb-1 ml-16 ease-linear transition-all duration-150"
-                            onClick={() => removeMile(mileData?.index)} type="button" >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            Cancel</button>
-                        </div> 
-            </div> ))}     
+              
+            </div> </>))}     
              
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
             <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
@@ -1051,6 +1059,17 @@ const url = '/api/package/package_service_link'
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
           {programData?.map((programData, index) => (
+            <>
+             <div className={programData?.index === 0 ? "hidden":"block"}>
+                       <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
+                         <button className="sm:inline-flex  text-gray-800  
+                    font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
+                    rounded-lg text-sm px-1 py-1 text-center 
+                    items-center mb-1 ml-16 ease-linear transition-all duration-150"
+                    onClick={() => removeProgram(programData?.index)} type="button" >
+                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                           </button>
+                       </div></div>
             <div className="flex flex-wrap" key={index}>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
@@ -1078,14 +1097,22 @@ const url = '/api/package/package_service_link'
                   >
                     {language?.program} {language?.level}
                   </label>
-                  <input
-                    type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  <select  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
                         setAllPackageDetails({ ...allPackageDetails, program_level: e.target.value })
                       )
-                    } />
+                    }
+                     >
+                      <option selected >Select Program Name</option>
+                      <option value="gold" >Gold</option>
+                      <option value="silver">Silver</option>
+                      <option value="platinium" >Platinium</option>
+                      <option value="diamond">Diamond</option>
+                      <option value="titanium">Titanium</option>
+                      <option value="ambassador">Ambassador</option>
+                    </select>
+               
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -1093,19 +1120,12 @@ const url = '/api/package/package_service_link'
                 </div>
               </div>
 
-              <div className="w-full lg:w-4/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-                <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                          <button className="sm:inline-flex  text-gray-800 bg-gray-200 hover:bg-gray-400 
-                    focus:ring-4 focus:ring-white-200 font-semibold
-                     rounded-lg text-sm px-3 py-2  border border-gray-300 text-center 
-                     items-center mb-1 ml-16 ease-linear transition-all duration-150"
-                            onClick={() => removeProgram(programData?.index)} type="button" >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            Cancel</button>
-                        </div> 
+             
 
-            </div>))}
+            </div>
+            
+            </>
+            ))}
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
             <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
                     focus:ring-4 focus:ring-slate-200 font-semibold

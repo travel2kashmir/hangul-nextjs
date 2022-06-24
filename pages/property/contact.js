@@ -304,10 +304,10 @@ function Contact() {
         <div className="overflow-x-auto">
           <div className="align-middle inline-block min-w-full">
             <div className="shadow overflow-hidden">
-              <table className="table-fixed min-w-full  divide-y divide-gray-200">
+              <table className="table-fixed min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-100">
                   <tr>
-                  <th scope="col" className="p-4 xs:px-1 xs:py-2">
+                  <th scope="col" className="p-4">
                       <div className="flex items-center">
                         <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
                           className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
@@ -316,25 +316,25 @@ function Contact() {
                     </th>
                     <th
                       scope="col"
-                      className="p-4 xs:px-1 xs:py-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
                     Description
                     </th>
                     <th
                       scope="col"
-                      className="p-4 xs:px-1 xs:py-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
                     Details
                     </th>
                     <th
                       scope="col"
-                      className="p-4 xs:px-1 xs:py-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
                       Status
                     </th>
                     <th
                       scope="col"
-                      className="p-4 xs:px-1 xs:py-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase"
                     >
                       {language?.action}
                     </th>
@@ -344,31 +344,31 @@ function Contact() {
                   {contacts?.contacts?.map((item, idx) => {
                     return (
                       <tr className="hover:bg-gray-100" key={idx}>
-                         <td className="p-4 sm:xs-1 xs:py-2 w-4">
+                         <td className="p-4 w-4">
                            <div className="flex items-center">
                              <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                              <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                            </div>
                          </td>
                         <td
-                          className="p-4 xs:px-1 xs:py-2 flex items-center whitespace-nowrap space-x-6
+                          className="p-4 flex items-center whitespace-nowrap space-x-6
                                                      mr-12 lg:mr-0"
                         >
                           <td
-                            className="p-4 xs:px-1 xs:py-2 whitespace-nowrap text-base font-medium
+                            className="p-4 whitespace-nowrap text-base font-medium
                                                          text-gray-900"
                           >
                             {item.contact_type}{" "}
                           </td>
                         </td>
                         <td
-                          className="p-4 xs:px-1 xs:py-2 whitespace-nowrap text-base font-medium
+                          className="p-4 whitespace-nowrap text-base font-medium
                                                      text-gray-900"
                         >
                           {item.contact_data}{" "}
                         </td>
                         <td
-                          className="p-4 xs:px-1 xs:py-2 whitespace-nowrap text-base font-normal 
+                          className="p-4 whitespace-nowrap text-base font-normal 
                                                     text-gray-900"
                         >
                           <div className="flex items-center">
@@ -379,7 +379,7 @@ function Contact() {
                             {language?.active}
                           </div>
                         </td>
-                        <td className="p-4 xs:px-1 xs:py-2 whitespace-nowrap space-x-2">
+                        <td className="p-4 whitespace-nowrap space-x-2">
                           <button
                             type="button"
                             onClick={() => {

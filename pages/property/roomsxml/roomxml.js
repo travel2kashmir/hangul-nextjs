@@ -5,7 +5,10 @@ import axios from "axios";
 import Router from "next/router";
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
-import arabic from "../../../components/Languages/ar"
+import arabic from "../../../components/Languages/ar";
+import Header from "../../../components/Structure/Header"
+import Footer from "../../../components/Footer"
+import Sidebar from "../../../components/Structure/Sidebar"
 import Link from "next/link";
 var language;
 var currentProperty;
@@ -70,6 +73,9 @@ function Roomxml() {
     const breaker = { "overflowBreak": true }
     
   return (
+    <>
+    <Header/>
+    <Sidebar/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
          {/* Navbar */}
@@ -86,7 +92,7 @@ function Roomxml() {
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                           <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">  
-                          <Link href="../property-summary"><a>{currentProperty?.property_name}</a></Link>
+                          <Link href="../propertysummary"><a>{currentProperty?.property_name}</a></Link>
                           </span> </div>
                     </li>
                     <li>
@@ -130,6 +136,8 @@ function Roomxml() {
                 draggable
                 pauseOnHover />
         </div>
+        <Footer/>
+   </>
     )
    }
 

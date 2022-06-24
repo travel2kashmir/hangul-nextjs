@@ -282,7 +282,8 @@ function Package() {
                 </div>
 
                 {/* Package Services */}
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+               
+                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4">{language?.package} {language?.services}</h3>

@@ -57,6 +57,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         }
     }
 }
+
     useEffect(() => {
        
         fetchRooms();

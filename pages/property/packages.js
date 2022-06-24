@@ -72,7 +72,7 @@ function Packages() {
                 progress: undefined,
             });
             fetchPackages(); 
-            Router.push("/packages");
+            Router.push("./packages");
         })
             .catch((error) => {
                 toast.error(("Package Delete Error!"), {

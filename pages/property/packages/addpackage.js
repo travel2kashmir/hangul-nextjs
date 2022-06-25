@@ -305,13 +305,12 @@ const url = '/api/package/package_service_link'
   const programdata = [{
      /* To be fetched from context */
     program_name:allPackageDetails?.program_name ,
-    program_level:allPackageDetails?.program_level,
-    status:true
+    program_level:allPackageDetails?.program_level
    }]
    const finalProgram = { "program_membership_master": programdata }
   axios.post(`/api/package/package_membership_master`, finalProgram).then(response => {
     console.log("Package Program Master Success!")
-     const program_data = { "program_id": response.data.program_id, "package_id": packageId}
+     const program_data = { "program_id": response.data.program_id, "package_id": packageId, status:true}
      const final = { "package_program": [program_data] }
      axios.post('/api/package/package_membership_link', final, {
        headers: { 'content-type': 'application/json' }

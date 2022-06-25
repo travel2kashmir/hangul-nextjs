@@ -55,7 +55,7 @@ function Navbar() {
               </div>
 
               <li className="text-2xl text-cyan-600 font-bold flex items-center lg:ml-2.5">
-                <span className="self-center whitespace-nowrap">hangul</span>
+                <span className="self-center whitespace-nowrap">enGage</span>
               </li>
               <form action="#" method="GET" className="hidden lg:block lg:pl-32">
                 <label htmlFor="topbar-search" className="sr-only text-sm font-semibold">{language?.search}</label>

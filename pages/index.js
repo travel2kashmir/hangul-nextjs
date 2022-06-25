@@ -126,7 +126,7 @@ function Signin() {
           className="self-center text-3xl  mb-4 mt-2 tracking-normal font-bold
        text-gray-700 whitespace-nowrap"
         >
-          Hangul
+          enGage
         </span>
 
         <div className="bg-white shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0">

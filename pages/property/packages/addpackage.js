@@ -48,15 +48,16 @@ function Addpackage() {
     firstfun();
     Router.push("./addpackage");
   },[]) 
-
-  useEffect(() => {
-    const fetchPackageServices = async () => {
+  const fetchPackageServices = async () => {
     const url = `/api/package/package_services`
     axios.get(url)
-    .then((response)=>{setPackageServices(response.data);
+    .then((response)=>{response.data.map(i=>i.value=false);
+     setPackageServices(response.data);
       logger.info("url  to fetch package services hitted successfully")})
-      .catch((error)=>{logger.error("url to fetch package services, failed")});  
+      .catch((error)=>{logger.error("url to fetch package services, failed")}); 
+      
     }
+  useEffect(() => {
     fetchPackageServices();
    
   },[])
@@ -105,26 +106,30 @@ function Addpackage() {
   }
 }
 
-  /** Function package services **/
-  const submitPackageServices = () =>{
-   
-    var total={};
-    let text = [];
-
-for (let i = 0; i < service_name.length; i++) {
-  const temp = {
-  'package_id':packageId,
-  'service_id':service_name[i],
-  'value': service_value[i],
-  'status':true
-  };
-  text.push(temp) 
-}
-total={"package_services":text}
-const url = '/api/package/package_service_link'
+   /** Function package services **/
+   const submitPackageServices = () => {
+    packageServices.map(
+      (i)=>(i.status=i.value,i.package_id=packageId)
+    )
+    var total = { "package_services": packageServices }
+    
+    const url = '/api/package/package_service_link'
     axios.post(url, total, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Package Added Successfully!", {
+        toast.success("Package services added successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        fetchPackageServices();
+      
+      })
+      .catch((error) => {
+        toast.error("Package Services Add Error! ", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -134,20 +139,9 @@ const url = '/api/package/package_service_link'
           progress: undefined,
         });
       })
-      .catch((error) => {
-       toast.error("Package Error! " , {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }) 
-    }       
-  
 
+  }      
+  
    /* Function for Room Rates*/
    const submitPackageRates= () => {
     if (allPackageDetails.length !== 0){
@@ -163,14 +157,31 @@ const url = '/api/package/package_service_link'
     const url = '/api/package/package_rate'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        logger.info("Package rates success");
+        toast.success("Package rates added successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
          allPackageDetails([])
       })
       .catch((error) => {
-        logger.error("Package rates error");
+        toast.error("Package Rates Add Error! ", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       })
   }
    }
+
    /** Function submit Package Description **/
   const submitPackageDescription = () => {
     if(allPackageDetails != 0){
@@ -203,7 +214,15 @@ const url = '/api/package/package_service_link'
           }  
           )
           .catch((error) => {
-            logger.error("Package description error");      
+            toast.error("Package Description Add Error! ", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
           })
         }
         else{
@@ -270,6 +289,7 @@ const url = '/api/package/package_service_link'
       program_level: '',
     }  
   
+    
     /* Mapping Index of each mile*/
       const [programData, setProgramData] = useState([programTemplate]?.map((i, id) => { return { ...i, index: id } }))
     
@@ -290,15 +310,93 @@ const url = '/api/package/package_service_link'
      }]
      const finalImage = { "package_miles": packagemiledata }
     axios.post(`/api/package/package_miles`, finalImage).then(response => {
-      logger.info("Package miles success");
+      toast.success("Package miles added successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       setDisp(4);
       setAllPackageDetails([])
     
      }).catch(error => {
-      logger.error("Package miles error");
+      toast.error("Package miles add error! ", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
      });
    }
   }
+
+   /** For Additional Services**/
+   const serviceTemplate = {
+    package_id: packageId,
+   add_package_service_name: '',
+   add_package_service_description: '',
+  }  
+
+   /* Mapping Index of each mile*/
+   const [serviceData, setServiceData] = useState([serviceTemplate]?.map((i, id) => { return { ...i, index: id } }))
+
+    
+    const addService = () => {
+      setServiceData([...serviceData, serviceTemplate]?.map((i, id) => { return { ...i, index: id } }))
+    }
+
+   /** Function to cancel room images **/
+   const removeService = (index) => {
+    const filteredServices = serviceData.filter((i, id) => i.index !== index)
+     setServiceData(filteredServices)
+    }   
+
+     /** Function to submit package miles **/
+ const submitAdditionalPackageServices = () => {
+  if(allPackageDetails != 0){
+  const servicedata = [{
+     /* To be fetched from context */
+     package_id:packageId,
+    add_package_service_name:allPackageDetails?. add_package_service_name,
+    add_package_service_description:allPackageDetails?.add_package_service_description,
+    status:true
+   }]
+   const finalProgram = { "additional_package_services": servicedata }
+  axios.post(`/api/package/additional_package_services`, finalProgram)
+  .then((response) => {
+    toast.success("Additional package services added successfully!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+   Router.push('../packages') 
+  
+  })
+  .catch((error) => {
+    toast.error("Additional package services error! ", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  })
+
+  }
+ }
+
  /** Function to submit package miles **/
  const submitPackageProgram = () => {
   if(allPackageDetails != 0){
@@ -315,13 +413,29 @@ const url = '/api/package/package_service_link'
      axios.post('/api/package/package_membership_link', final, {
        headers: { 'content-type': 'application/json' }
      }).then(response => {
-      logger.info("Package program success");
+      toast.success("Package programs added successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
       setDisp(5);
       setAllPackageDetails([])
       
      })
        .catch(error => {
-        logger.error("Package program error");
+        toast.error("Package programs add error! ", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
        });
    });
   }
@@ -339,12 +453,28 @@ const url = '/api/package/package_service_link'
   const url = '/api/package/package_property_credit'
   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     ((response) => {
-      logger.info("Package property credit success");
+      toast.success("Package credit added successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
        setAllPackageDetails([]);
        setDisp(6);
     })
     .catch((error) => {
-      logger.error("Package property credit error");
+      toast.error("Package credit add error! ", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     })
 }
  }
@@ -492,7 +622,7 @@ const url = '/api/package/package_service_link'
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  {language?.refundable} {packageId}
+                  {language?.refundable} 
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
@@ -559,7 +689,8 @@ const url = '/api/package/package_service_link'
                   {language?.number} {language?.of} {language?.occupants}
                   </label>
                   <input
-                    type="text"
+                    type="number" 
+                   
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
@@ -579,7 +710,7 @@ const url = '/api/package/package_service_link'
                    {language?.number} {language?.of} {language?.adult}
                    </label>
                   <input
-                    type="text"
+                     type="number" 
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => {
@@ -849,14 +980,7 @@ const url = '/api/package/package_service_link'
               </div> 
 
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
-                    focus:ring-4 focus:ring-slate-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
-                     onClick={() => {
-                      setDisp(3);
-                    }}type="button" >
-                    {language?.skip}</button>
+                
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
@@ -876,6 +1000,7 @@ const url = '/api/package/package_service_link'
         </div>
       </div>
       </div>
+
       {/* Package Miles */}
       <div id='3' className={disp===3?'block':'hidden'}>
       <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
@@ -1006,6 +1131,7 @@ const url = '/api/package/package_service_link'
         </div>
       </div>
       </div>
+
       {/* Elite Membership */}
       <div id='4' className={disp===4?'block':'hidden'}>
       <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
@@ -1118,9 +1244,6 @@ const url = '/api/package/package_service_link'
                 <div className="relative w-full mb-3">
                 </div>
               </div>
-
-             
-
             </div>
             
             </>
@@ -1149,6 +1272,7 @@ const url = '/api/package/package_service_link'
         </div>
       </div>
       </div>
+
        {/* Property Credit */}
        <div id='5' className={disp===5?'block':'hidden'}>
        <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
@@ -1241,7 +1365,6 @@ const url = '/api/package/package_service_link'
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
                        submitPackagePropertyCredit();
-                    
                     }} type="button" >
                     {language?.next}</button>
                 </div>
@@ -1250,12 +1373,11 @@ const url = '/api/package/package_service_link'
         </div>
       </div>
       </div>
+
        {/* Package Services */}
        <div id='6' className={disp===6?'block':'hidden'}>
-       <span className="hidden">{ service_name.length=0} 
-           {service_value.length=0} </span>
        <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-       <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
@@ -1280,102 +1402,87 @@ const url = '/api/package/package_service_link'
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">6</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.package} {language?.services}</div>
             </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Additional Package Services</div>
+            </div>
         </div>   
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
          {language?.package} {language?.services}
          </h6>
-         {/* Packages Table */}
          <div className="flex flex-col my-4">
           
-           {packageServices?.map((i)=>{
-            service_name.push(i.package_service_id);
-            service_value.push(false)
-           })}
-                <div className="overflow-x-auto">
-                    <div className="align-middle inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
-                            <table className="table-fixed min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-100">
-                                    <tr>
-                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            {language?.service} {language?.name}
-                                        </th>
-                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                           {language?.service} {language?.value}
-                                        </th>
-                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                            
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
-                                {packageServices?.map((item,idx) => (
-                                        <tr className="hover:bg-gray-100" key={idx} >
-                                            <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                                                <td className="p-4 whitespace-nowrap text-base font-medium capitalize text-gray-900">
-                                                {"  " + item?.package_service_name?.replace(/_+/g, ' ')}
-                                                  </td>
-                                            </td>
-                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                            <div className="flex">
-                                                <div className="form-check ml-4 form-check-inline">
-                                                    <input type="radio"
-                                                     onChange={(e) => {
-                                                       service_name[idx]=item?.package_service_id;
-                                                       service_value[idx]=true;
-                                                     }}
-                                                        className="form-check-input form-check-input 
-                                                         appearance-none rounded-full h-3 w-3 border 
-                                                         border-gray-300 
-                                                         bg-white checked:bg-blue-600 
-                                                         checked:border-blue-600 focus:outline-none
-                                                          transition duration-200 mt-2  align-top
-                                                           bg-no-repeat bg-center bg-contain float-left
-                                                            mr-2 cursor-pointer" value="yes"
-                                                            name={"who"+idx}  id='ip1' />
-                                                    <label
-                                                        className="form-check-label inline-block 
-                                                      text-gray-700 text-base pr-2 "
-                                                        htmlFor="ip1">
-                                                       {language?.yes}
-                                                    </label>
-                                                </div>
-                                                <div className="form-check ml-8 form-check-inline">
-                                                    <input type="radio" id='ip2' value="no"
-                                                    onChange={(e) => {
-                                                      service_name[idx]=item?.package_service_id;
-                                                      service_value[idx]=false;
-                                                    }}
-                                                      className="form-check-input form-check-input appearance-none 
-                                                         rounded-full h-3 w-3 border border-gray-300
-                                                          bg-white checked:bg-blue-600 checked:border-blue-600
-                                                           focus:outline-none transition duration-200 mt-2 
-                                                            align-top bg-no-repeat bg-center bg-contain float-left mb-2
-                                                             mr-1 ml-2 cursor-pointer" checked
-                                                        name={"who"+idx} />
-                                                    <label
-                                                        className="form-check-label inline-block 
-                                                        text-gray-700 text-base  "
-                                                        htmlFor="ip2"
-                                                    >
-                                                       {language?.no}</label>
-                                                </div>
-                                            </div>
-                                            </td>
-                                      </tr>
-                                  )
-                                  )}
-                                </tbody>
-                                
-                            </table>
-                            <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-          
-                     
-                    </div>
-                        </div>
-                    </div>
+            <div className="overflow-x-auto">
+              <div className="align-middle inline-block min-w-full">
+                <div className="shadow overflow-hidden">
+                  <table className="table-fixed min-w-full divide-y mx-8 divide-gray-200">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                        >
+                          {language?.service} {language?.name}
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                        >
+                          {language?.service} {language?.edit}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {packageServices?.map((item, idx) => (
+                        <tr className="hover:bg-gray-100" key={idx}>
+                          <td className="py-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
+                            <span className="py-4 px-2 whitespace-nowrap text-base font-medium capitalize text-gray-900">
+                              {"  " +
+                                item?.package_service_name?.replace(/_+/g, " ")}
+                            </span>
+                          </td>
+
+                          <td className="px-2 py-4 whitespace-nowrap text-base font-normal text-gray-900">
+                            <div className="flex">
+                              <div className="form-check ml-4 form-check-inline">
+
+                                <label htmlFor={"default-toggle" + idx} className="inline-flex relative items-center cursor-pointer">
+                                    {item?.value}
+                                  <input type="checkbox" value={item?.value}
+                                    onChange={() => {
+                                      setPackageServices(packageServices?.map((i) => {
+
+                                        if (i?.package_service_id === item?.package_service_id) {
+                                          i.value = !i.value
+     
+                                        }
+                                        return i
+                                      }))
+                                    }}
+
+                                    id={"default-toggle" + idx} className="sr-only peer" />
+
+                                  <div
+                                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                                 peer-checked:after:translate-x-full 
+                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+
+                                </label>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto"></div>
                 </div>
-            </div>  
+              </div>
+            </div>
+          </div>  
               <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
@@ -1383,12 +1490,143 @@ const url = '/api/package/package_service_link'
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={() => {
                      submitPackageServices();
-                      
+                     setDisp(7);
                      }} type="button" >
                    {language?.submit}</button>
                 </div>
          </div>
          </div>
+         
+          {/* Additional Package Services */}
+       <div id='7' className={disp===7?'block':'hidden'}>
+         <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+         <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
+            </div>
+                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.miles}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+                {language?.package} {language?.services}
+                 </div>
+            </div>
+
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">7</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Additional Package Services</div>
+            </div>
+        </div> 
+         <div className="mx-4">
+                <div className="sm:flex">
+                  <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+                 Additional Package Services
+                  </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                  </div>
+                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                    <button type="button" onClick={addService}
+                      className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
+                      <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
+                      {language?.add} {language?.program}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-6">
+          <div className=" md:px-4 mx-auto w-full">
+          {serviceData?.map((serviceData, index) => (
+            <>
+             <div className={serviceData?.index === 0 ? "hidden":"block"}>
+                       <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
+                         <button className="sm:inline-flex  text-gray-800  
+                    font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
+                    rounded-lg text-sm px-1 py-1 text-center 
+                    items-center mb-1 ml-16 ease-linear transition-all duration-150"
+                    onClick={() => removeService(serviceData?.index)} type="button" >
+                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                           </button>
+                       </div></div>
+            <div className="flex flex-wrap" key={index}>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.service} {language?.name}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllPackageDetails({ ...allPackageDetails, add_package_service_name: e.target.value })
+                      )
+                    } /> 
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.service} {language?.description}
+                  </label>
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllPackageDetails({ ...allPackageDetails, add_package_service_description: e.target.value })
+                      )
+                    } /> 
+               
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                </div>
+              </div>
+            </div>
+            
+            </>
+            ))}
+            <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+           
+                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
+                    focus:ring-4 focus:ring-cyan-200 font-semibold
+                     rounded-lg text-sm px-5 py-2 text-center ml-16
+                     items-center mb-1 ease-linear transition-all duration-150"
+                     onClick={() => {
+                       submitAdditionalPackageServices();
+                     
+                    }}
+                      type="button" >
+                       Submit</button>
+                    </div>
+          </div>
+        </div>
+              </div>
+              </div>
+         
       <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}

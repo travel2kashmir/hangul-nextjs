@@ -190,7 +190,7 @@ function Allroombundles() {
      <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
       < span className="w-full text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:auto "  >
              <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-             <Link href="./roombundles/addroombundles.js"> 
+             <Link href="./roombundles/addroombundles"> 
              <a>{language?.add} {language?.room} bundle </a>
         </Link>
          </span>

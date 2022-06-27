@@ -203,18 +203,19 @@ function Package() {
                                     </tr>
                                     <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">Charge currency</span>
+                                        </td>
+                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.charge_currency}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                             <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{language?.occupants}</span>
                                         </td>
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.max_number_of_intended_occupants}
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500"> {language?.other} {language?.charges}</span>
-                                        </td>
-                                        <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.other_charges_amount}
-                                      </td>
-                                    </tr>
+                                   
                                     <tr>
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                             <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{language?.adult}</span>
@@ -222,6 +223,8 @@ function Package() {
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.max_number_of_intended_occupants}
                                       </td>
                                     </tr>
+                                   { allPackageDetails?.refundable === "true" ?
+                                   <>
                                     <tr >
                                         <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                                             <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">{language?.refundable} {language?.till}</span>
@@ -229,6 +232,7 @@ function Package() {
                                         <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">{allPackageDetails?.refundable_until_days}{language?.days}, {allPackageDetails?.refundable_until_time}
                                       </td>
                                     </tr> 
+                                    </>:<></>}
                                 </tbody>
                             </table>
                         </div>
@@ -471,7 +475,7 @@ function Package() {
                         <span  className="text-sm font-sans underline decoration-cyan-600
                           font-semibold text-cyan-600
                            rounded-lg p-2"> 
-                         <Link href = './packagerooms' 
+                         <Link href = './package/packagerooms' 
                                 ><a>{language?.seemore}</a></Link></span>
                         </div>
                     </div>

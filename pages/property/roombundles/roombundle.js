@@ -23,6 +23,7 @@ function Roombundle() {
   const[bundle,setBundle] = useState([])
   const[rate,setRate] = useState([])
   const[parking,setParking]= useState(false)
+
     useEffect(()=>{
         const firstfun=()=>{
           if (typeof window !== 'undefined'){
@@ -99,15 +100,15 @@ function Roombundle() {
      /* Edit Package Edit Function */
 
    const submitPackageEdit = () => {
-    if (bundle.length !== 0){
+    
     const final_data = {
           "room_bundle_id":roomBundle?.room_bundle_id,
           "rate_master_id":roomBundle?.rate_master_id,
           "room_id": bundle?.room_id,
           "package_id":bundle?.package_id,
-          "breakfast_included":parking,
-          "parking_included":parking,
-          "internet_included":parking,
+          "breakfast_included":roomBundle?.breakfast_included,
+          "parking_included":roomBundle?.parking_included,
+          "internet_included":roomBundle?.internet_included,
           "rate_master_id":bundle?.rate_master_id
       }  
       alert("final_data" +JSON.stringify(final_data))
@@ -136,7 +137,7 @@ function Roombundle() {
               progress: undefined,
             });    
           }) 
-        }
+        
   }   
 
    /* Edit Bundle Rate Function */
@@ -223,7 +224,7 @@ function Roombundle() {
       </nav>
       <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         {language?.room} {language?.bundle}
+         {language?.room} {language?.bundle} 
          </h6>
          <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -285,7 +286,7 @@ function Roombundle() {
                  defaultValue={roomBundle?.base_rate_amount}
                  onChange={
                   (e) => (
-                    setRate({ ...ratee, base_rate_amount: e.target.value })
+                    setRate({ ...rate, base_rate_amount: e.target.value })
                   )
                 }/> 
                 </div>
@@ -404,9 +405,9 @@ function Roombundle() {
                   </label>
                   <div className="flex flex-row ml-6 items-start" >
                 <div className="flex items-center h-5">
-                  <input
-                   onClick={() => {setParking(!parking)
-                  }}
+                  <input  value={roomBundle?.parking_included} checked={roomBundle?.parking_included === true}
+                  
+                  onChange={()=>(setRoomBundle({...roomBundle,parking_included:!roomBundle.parking_included}))}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
@@ -419,21 +420,21 @@ function Roombundle() {
                 </div>
                 <div className="text-sm ml-3">
                   <label className="text-sm font-semibold capitalize text-gray-700">
-                Parking Included
+                Parking Included 
                   </label>
                 </div>
                
               </div>
               <div className="flex flex-row ml-6 items-start" >
                 <div className="flex items-center h-5">
-                  <input
-                 onClick={() => {setParking(!parking)
-                 }}
+                  <input 
+                  checked={roomBundle?.breakfast_included === true}
+                  onChange={()=>(setRoomBundle({...roomBundle,breakfast_included:!roomBundle.breakfast_included}))}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
                     type="checkbox" 
-                    className="bg-gray-50 
+                    className="bg-gray-50
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
                     required
@@ -441,19 +442,19 @@ function Roombundle() {
                 </div>
                 <div className="text-sm ml-3">
                   <label className="text-sm font-semibold capitalize text-gray-700">
-               Breakfast Included
+               Breakfast Included 
                   </label>
                 </div>
                
               </div>
               <div className="flex flex-row ml-6 items-start">
                 <div className="flex items-center h-5">
-                  <input
-                   onClick={() => {setParking(!parking)
-                   }}
+                  <input value={roomBundle?.internet_included} 
+                  checked={roomBundle?.internet_included === true}
+                  onChange={()=>(setRoomBundle({...roomBundle,internet_included:!roomBundle.internet_included}))}
                     id="remember"
                     aria-describedby="remember"
-                    name={"remember" }
+                    name={"remember" } 
                     type="checkbox" 
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
@@ -463,7 +464,7 @@ function Roombundle() {
                 </div>
                 <div className="text-sm ml-3">
                   <label className="text-sm font-semibold capitalize text-gray-700">
-               Internet Included
+               Internet Included  
                   </label>
                 </div>
                
@@ -481,8 +482,8 @@ function Roombundle() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                   onClick={() => {
-                 if(bundle.length != 0) {submitPackageEdit();}
-                 if(rate.length != 0) { submitBundleRateEdit();}
+                   submitPackageEdit();
+                 submitBundleRateEdit();
                   }}
                   type="button"
                 >

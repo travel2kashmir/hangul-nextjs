@@ -108,14 +108,13 @@ function Addroombundles() {
        
       }];
       const final_data={rate_master: data}
-      alert("final" +JSON.stringify(final_data))
       const url = "/api/package/rates_master";
       axios
         .post(url, final_data, {
           header: { "content-type": "application/json" },
         })
         .then((response) => {
-          toast.success("Package Room Bundle Updated Successfully!", {
+          toast.success("Room bundle added successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -138,22 +137,13 @@ function Addroombundles() {
               status:true
             }];
             const final_data={room_bundle: datas}
-            alert(JSON.stringify(final_data))
             const url = "/api/package/room_bundle";
             axios
               .post(url, final_data, {
                 header: { "content-type": "application/json" },
               })
               .then((response) => {
-                toast.success("Package Bundle  Updated Successfully!", {
-                  position: "top-center",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                });
+               logger.info("Bundle success")
                 setBundle([]);
               })
               .catch((error) => {
@@ -539,7 +529,7 @@ function Addroombundles() {
                 }}
                 type="button"
               >
-                {language?.update}
+                {language?.submit}
               </button>
             </div>
           </div>

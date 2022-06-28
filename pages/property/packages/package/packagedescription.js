@@ -20,6 +20,8 @@ var currentPackage;
 function Packagedescription() {
   const [disp, setDisp] = useState([]);
   const [flag, setFlag] = useState([]);
+  const [age, setAge] = useState([]);
+
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
@@ -125,6 +127,7 @@ function Packagedescription() {
 
   /** Function submit max age **/
   const submitAge = () => {
+    if(age.length !== 0){
     axios.delete(`/api/package/${allPackageDetails?.package_id}/max_age`)
       .then((response) => {
         logger.info("max age delete success");
@@ -157,7 +160,7 @@ function Packagedescription() {
       .catch((error) => {
         logger.error("max age delete error")
       });
-
+    }
   }
 
   return (
@@ -541,7 +544,7 @@ function Packagedescription() {
                           <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                          sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={(e) =>
-                              max_age[index] = e.target.value
+                             (max_age[index] = e.target.value,setAge(1))
                             }>
                             <option selected >{item?.max_age_of_child_guest} </option>
                             <option value="1" >1</option>

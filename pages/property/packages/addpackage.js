@@ -1523,7 +1523,7 @@ function Addpackage() {
                      submitPackageServices();
                      setDisp(7);
                      }} type="button" >
-                   {language?.submit}</button>
+                   {language?.next}</button>
                 </div>
          </div>
          </div>

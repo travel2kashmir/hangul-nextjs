@@ -18,8 +18,8 @@ var final=[];
 var currentPackage;
 
 function Packagedescription() {
-  const [disp, setDisp] = useState(0);
-
+  const [disp, setDisp] = useState([]);
+  const [flag, setFlag] = useState([]);
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -36,6 +36,7 @@ function Packagedescription() {
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))  
         currentPackage=localStorage.getItem('packageId')
+        setDisp([])
       } 
     }
     firstfun();
@@ -55,13 +56,14 @@ function Packagedescription() {
        setAllPackageDetails(response.data)
        })
        .catch((error) => {
-        logger.info("Delete error")
+        logger.info("Package fetch error")
        })
  
    }
   useEffect(()=>{
   fetchDetails();
   },[])
+
     /* Edit Package Edit Function */
    const submitPackageEdit = () => {
     if (flag.length !== 0){
@@ -116,6 +118,7 @@ function Packagedescription() {
           }); 
         }
   }
+
   /** Function submit max age **/
   const submitAge = () =>{
     max_age.forEach((item)=>{
@@ -135,6 +138,7 @@ function Packagedescription() {
           logger.error("Max age child error");
         }) 
     }
+
   return (
     <>
     <Header/>
@@ -279,10 +283,10 @@ function Packagedescription() {
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     defaultValue={allPackageDetails?.package_name}
                     onChange={(e) =>
-                      setPackageDetails({
-                        ...packageDetails,
-                        package_name: e.target.value,
-                      })
+                      setAllPackageDetails({
+                        ...allPackageDetails,
+                        package_name: e.target.value
+                      },setFlag(1))
                     }
                   />
                 </div>
@@ -302,10 +306,10 @@ function Packagedescription() {
                     className="shadow-sm bg-gray-50 border capitalize border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     defaultValue={allPackageDetails?.package_description}
                     onChange={(e) =>
-                      setPackageDetails({
-                        ...packageDetails,
+                      setAllPackageDetails({
+                        ...allPackageDetails,
                         package_description: e.target.value,
-                      })
+                      },setFlag(1))
                     }
                   />
                 </div>
@@ -322,10 +326,10 @@ function Packagedescription() {
                   <select
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={(e) =>
-                      setPackageDetails({
-                        ...packageDetails,
+                      setAllPackageDetails({
+                        ...allPackageDetails,
                         charge_currency: e.target.value,
-                      })
+                      },setFlag(1))
                     }
                   >
                     <option value="web">Web</option>
@@ -350,7 +354,7 @@ function Packagedescription() {
                       setAllPackageDetails({
                        ...allPackageDetails,
                         refundable: e.target.value,
-                      })
+                      },setFlag(1))
                     }
                   >
                     {allPackageDetails?.refundable == "true" 
@@ -378,10 +382,10 @@ function Packagedescription() {
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         defaultValue={allPackageDetails?.refundable_until_days}
                         onChange={(e) =>
-                          setPackageDetails({
-                            ...packageDetails,
+                          setAllPackageDetails({
+                            ...allPackageDetails,
                             refundable_until_days: e.target.value,
-                          })
+                          },setFlag(1))
                         }
                       />
                     </div>
@@ -400,8 +404,8 @@ function Packagedescription() {
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         defaultValue={allPackageDetails?.refundable_until_time}
                         onChange={(e) =>
-                          setPackageDetails({
-                            ...packageDetails,
+                          setAllPackageDetails({
+                            ...allPackageDetails,
                             refundable_until_time: e.target.value,
                           })
                         }
@@ -412,6 +416,7 @@ function Packagedescription() {
               ) : (
                 <></>
               )}
+
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
@@ -427,7 +432,7 @@ function Packagedescription() {
                       setAllPackageDetails({
                         ...allPackageDetails,
                         max_number_of_intended_occupants: e.target.value,
-                      })
+                      },setFlag(1),setDisp(1))
                     }
                     defaultValue={
                       allPackageDetails?.max_number_of_intended_occupants
@@ -452,12 +457,13 @@ function Packagedescription() {
                       setAllPackageDetails({
                         ...allPackageDetails,
                         max_number_of_adult_guest: e.target.value,
-                      })
+                      },setFlag(1),setDisp(1))
                     }
                   />
                 </div>
               </div>
            
+              {disp.length !== 0?<>
               {allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest >= 1 ? 
               <> 
@@ -473,7 +479,8 @@ function Packagedescription() {
                 >
                  Maximum Age Of Child
                  </label>
-                 <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                 <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
+                 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                      onChange={(e)=>
                       max_age[index]=e.target.value
                   }>
@@ -497,6 +504,44 @@ function Packagedescription() {
               ))}
             </>
             :<></>}
+            </>:<></>}
+
+            {disp.length === 0?<>
+              {allPackageDetails?.max_age_children?.map((item, idx) => {
+                    return (
+                      <div className="w-full lg:w-6/12 px-4" key={idx}>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                         Maximum Age Of Child
+                         </label>
+                         <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
+                         sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                             onChange={(e)=>
+                              max_age[index]=e.target.value
+                          }>
+                             <option selected >{item?.max_age_of_child_guest} </option>
+                            <option value="1" >1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" >5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9" >9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                          </select>
+                      </div>
+                    
+                    </div> 
+                      );
+                    })}
+            </>:<></>}
 
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                 <button

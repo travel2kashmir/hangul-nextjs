@@ -746,7 +746,8 @@ function Addpackage() {
                   {final=[]} {max_age=[]}
               {[...Array(allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest)]
-                            ?.map((item, index) => (               
+                            ?.map((item, index) => ( 
+                      
               <div className="w-full lg:w-6/12 px-4" key={index}>
               <div className="relative w-full mb-3">
                 <label
@@ -776,7 +777,7 @@ function Addpackage() {
               </div>
             
             </div>
-              ))}
+             ))}
             </>
             :<></>}
 

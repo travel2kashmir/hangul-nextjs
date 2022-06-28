@@ -11,6 +11,7 @@ import Footer from "../../../../components/Footer"
 import Sidebar from "../../../../components/SubStructure/Sidebar"
 import Router from "next/router";
 var language;
+const logger = require("../../../../services/logger");
 var currentProperty;
 var currentPropertyCredit;
 var currentPackage;
@@ -78,37 +79,19 @@ function Propertycredit() {
       })
     }
   }
-  const fetchDetails = async () => {
-    try {
-        const url = `/api/package/${currentPackage}`
-        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-        setCurrentPropertyCredit(response.data)
-    }
-    catch (error) {
-        if (error.response) {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        } else {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        }
-    }
-
-}
+  /* Edit Package Fetch Function */
+  const fetchDetails = async  () => {
+    const url = `/api/package/${currentPackage}`
+     axios.get(url, { header: { "content-type": "application/json" } }).then
+       ((response) => {
+       logger.info("package success");
+       setCurrentPropertyCredit(response.data)
+       })
+       .catch((error) => {
+        logger.info("Delete error")
+       })
+ 
+   }
   useEffect(()=>{
   fetchDetails();
   },[])
@@ -244,3 +227,12 @@ function Propertycredit() {
 }
 
 export default Propertycredit
+Propertycredit.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

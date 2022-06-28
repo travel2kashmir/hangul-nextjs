@@ -21,7 +21,7 @@ var service_value=[];
 
 function Addpackage() {
   const [packageId, setPackageId] = useState()
- const [maxChild, setMaxChild] = useState([])
+ const [service, setService] = useState([])
  const [allRooms, setAllRooms] = useState([])
   const [allPackageDetails, setAllPackageDetails] = useState([])
   const [disp, setDisp] = useState(0);
@@ -166,19 +166,20 @@ function Addpackage() {
           draggable: true,
           progress: undefined,
         });
-         allPackageDetails([])
+        setAllPackageDetails([])     
+        })
+        .catch((error) => {
+          toast.error("Package Rates Add Error! ", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
       })
-      .catch((error) => {
-        toast.error("Package Rates Add Error! ", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      })
+     
   }
    }
 
@@ -359,12 +360,12 @@ function Addpackage() {
 
      /** Function to submit package miles **/
  const submitAdditionalPackageServices = () => {
-  if(allPackageDetails != 0){
+  if(service.length !== 0){
   const servicedata = [{
      /* To be fetched from context */
      package_id:packageId,
-    add_package_service_name:allPackageDetails?. add_package_service_name,
-    add_package_service_description:allPackageDetails?.add_package_service_description,
+    add_package_service_name:service?.add_package_service_name,
+    add_package_service_description:service?.add_package_service_description,
     status:true
    }]
    const finalProgram = { "additional_package_services": servicedata }
@@ -394,6 +395,18 @@ function Addpackage() {
     });
   })
 
+  }
+  else{
+    toast.success("Package added successfully!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    Router.push('../packages') 
   }
  }
 
@@ -523,7 +536,7 @@ function Addpackage() {
      {/* Package Details Form */}
      <div id='0' className={disp===0?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-     <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.packagedescription}</div>
@@ -548,6 +561,10 @@ function Addpackage() {
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Additional Package Services</div>
             </div>
         </div>
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
@@ -789,7 +806,7 @@ function Addpackage() {
      {/*   {language?.package} {language?.rooms} {language?.and} {language?.rates} Form */}
      <div id='2' className={disp===2?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-     <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
@@ -814,6 +831,10 @@ function Addpackage() {
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Additional Package Services</div>
             </div>
         </div>
         
@@ -1004,7 +1025,7 @@ function Addpackage() {
       {/* Package Miles */}
       <div id='3' className={disp===3?'block':'hidden'}>
       <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-      <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+      <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
@@ -1031,6 +1052,10 @@ function Addpackage() {
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Additional Package Services</div>
             </div>
         </div>
           <div className="mx-4">
@@ -1135,7 +1160,7 @@ function Addpackage() {
       {/* Elite Membership */}
       <div id='4' className={disp===4?'block':'hidden'}>
       <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-      <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+      <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
@@ -1163,6 +1188,10 @@ function Addpackage() {
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Additional Package Services</div>
             </div>
         </div>
         <div className="mx-4">
@@ -1276,7 +1305,7 @@ function Addpackage() {
        {/* Property Credit */}
        <div id='5' className={disp===5?'block':'hidden'}>
        <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-       <div className="relative before:hidden  before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
@@ -1302,6 +1331,10 @@ function Addpackage() {
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">7</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Additional Package Services</div>
             </div>
         </div>
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
@@ -1410,8 +1443,7 @@ function Addpackage() {
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
          {language?.package} {language?.services}
          </h6>
-         <div className="flex flex-col my-4">
-          
+         <div className="flex flex-col my-4"> 
             <div className="overflow-x-auto">
               <div className="align-middle inline-block min-w-full">
                 <div className="shadow overflow-hidden">
@@ -1459,9 +1491,7 @@ function Addpackage() {
                                         return i
                                       }))
                                     }}
-
                                     id={"default-toggle" + idx} className="sr-only peer" />
-
                                   <div
                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
                                  dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
@@ -1577,7 +1607,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, add_package_service_name: e.target.value })
+                        setService({...service, add_package_service_name: e.target.value })
                       )
                     } /> 
                 </div>
@@ -1595,7 +1625,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, add_package_service_description: e.target.value })
+                        setService({...service, add_package_service_description: e.target.value })
                       )
                     } /> 
                
@@ -1644,3 +1674,12 @@ function Addpackage() {
 }
 
 export default Addpackage
+Addpackage.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

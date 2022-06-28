@@ -142,3 +142,12 @@ function Roomxml() {
    }
 
 export default Roomxml;
+Roomxml.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+  
+  
+  }

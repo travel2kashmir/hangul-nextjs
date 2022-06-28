@@ -1155,3 +1155,12 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 }
 
 export default Addroom
+Addroom.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

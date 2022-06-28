@@ -81,39 +81,9 @@ function Package() {
           }
 
       }
-      const fetchRoomBundles = async () => {
-          try {
-              
-              const url = `/api/package/bundle/${currentPackage.package_id}`
-              const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-             setAllBundleDetails(response.data)
-          }
-          catch (error) {
-              if (error.response) {
-                  toast.error("PackageError!", {
-                      position: "top-center",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                    });
-              } else {
-                  toast.error("Package Error!", {
-                      position: "top-center",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                    });
-              }
-          }
-      }
+     
       fetchDetails();
-      fetchRoomBundles();
+     
       const fetchRooms = async () => {
         try {
             const url = `/api/rooms/${currentProperty.property_id}`
@@ -510,3 +480,12 @@ function Package() {
 }
 
 export default Package
+Package.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+  
+  
+  }

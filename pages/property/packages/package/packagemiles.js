@@ -10,6 +10,7 @@ import Header from "../../../../components/SubStructure/Header"
 import Footer from "../../../../components/Footer"
 import Sidebar from "../../../../components/SubStructure/Sidebar"
 import Router from "next/router";
+const logger = require("../../../../services/logger");
 var language;
 var currentProperty;
 var currentPackage;
@@ -47,37 +48,19 @@ function Packagemiles() {
   const [modified, setModified] = useState([])
   const [currentMiles, setCurrentMiles] = useState([])
 
-  const fetchDetails = async () => {
-    try {
-        const url = `/api/package/${currentPackage}`
-        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-        setCurrentMiles(response.data)
-    }
-    catch (error) {
-        if (error.response) {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        } else {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        }
-    }
+ /* Edit Package Fetch Function */
+ const fetchDetails = async  () => {
+  const url = `/api/package/${currentPackage}`
+   axios.get(url, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+     logger.info("package success");
+     setCurrentMiles(response.data)
+     })
+     .catch((error) => {
+      logger.info("Delete error")
+     })
 
-}
+ }
   useEffect(()=>{
   fetchDetails();
   },[])
@@ -162,7 +145,6 @@ function Packagemiles() {
      "status" :true
      }]
      const finalProgram = { "package_miles": program }
-     alert(JSON.stringify(finalProgram))
     const url = `/api/package/package_miles`
      axios.post(url, finalProgram, { header: { "content-type": "application/json" } })
      .then
@@ -480,3 +462,12 @@ function Packagemiles() {
 }
 
 export default Packagemiles
+Packagemiles.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

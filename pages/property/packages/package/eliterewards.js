@@ -13,7 +13,7 @@ import Router from "next/router";
 var language;
 var currentProperty;
 var currentPackage;
-
+const logger = require("../../../../services/logger");
 
 function Eliterewards() {
    /** Fetching language from the local storage **/
@@ -32,7 +32,7 @@ function Eliterewards() {
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
-        currentEliteProgram=JSON.parse(localStorage.getItem('packageDescription'))
+        currentPackage=localStorage.getItem('packageId')
       } 
     }
     firstfun();
@@ -48,37 +48,20 @@ function Eliterewards() {
   const [modified, setModified] = useState([])
   const [currentEliteProgram, setCurrentEliteProgram] = useState([])
   
-  const fetchDetails = async () => {
-    try {
-        const url = `/api/package/${currentPackage}`
-        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-        setCurrentEliteProgram(response.data)
-    }
-    catch (error) {
-        if (error.response) {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        } else {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        }
-    }
+ /* Edit Package Fetch Function */
+ const fetchDetails = async  () => {
+  const url = `/api/package/${currentPackage}`
+   axios.get(url, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+     logger.info("package success");
+     setCurrentEliteProgram(response.data)
+     })
+     .catch((error) => {
+      logger.info("package error")
+     })
 
-}
+ }
+
   useEffect(()=>{
   fetchDetails();
   },[])
@@ -103,8 +86,10 @@ function Eliterewards() {
          draggable: true,
            progress: undefined,
        });
+      
        fetchDetails(); 
        Router.push("./eliterewards");
+       setUpdateProgram(0);
        setProgram([])
      })
       .catch((error) => {
@@ -125,33 +110,34 @@ function Eliterewards() {
   const submitDelete = () => {
     const url = `/api/package/${currentEliteProgram?.package_id}/${editProgram.program_id}`
     axios.delete(url).then
-      ((response) => {
-        setDeleteProgram(0)
-        toast.success("Elite Program Deleted Successfully", {
-          position: "top-center",
+    ((response) => {
+    toast.success("Elite Program deleted successfully!", {
+     position: "top-center",
+   autoClose: 5000,
+   hideProgressBar: false,
+          closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+          progress: undefined,
+      });
+      fetchDetails(); 
+      Router.push("./eliterewards");
+     setDeleteProgram(0);
+      setProgram([])
+    })
+     .catch((error) => {
+        toast.error("Elite program delete error!", {
+         position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
-          closeOnClick: true,
+        closeOnClick: true,
           pauseOnHover: true,
-          draggable: true,
+        draggable: true,
           progress: undefined,
         });
-        fetchDetails(); 
-       Router.push("./eliterewards");
       })
-      .catch((error) => {
-       toast.error("Elite Program Delete Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-
-      })
-  }
+      }
+  
   
   /** Function to submit program add **/
   const submitProgramAdd = () => { 
@@ -162,7 +148,6 @@ function Eliterewards() {
       program_level: modified.program_level
     }]
     const finalProgram = { "package_membership_master": programdata }
-    alert(JSON.stringify(finalProgram))
     axios.post(`/api/package/package_membership_master`, finalProgram).then(response => {
       console.log("Program_id" +response.data.program_id)
       const program_data = { "program_id": response.data.program_id, "package_id":currentPackage,
@@ -182,6 +167,7 @@ function Eliterewards() {
           progress: undefined,
         });
         fetchDetails(); 
+        setView(0);
         Router.push("./eliterewards");
         setModified([])
       })
@@ -246,7 +232,7 @@ function Eliterewards() {
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href='"../package"' className="text-gray-700 text-sm capitalize   font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <Link href="../package" className="text-gray-700 text-sm capitalize   font-medium hover:text-gray-900 ml-1 md:ml-2">
               <a>{currentEliteProgram?.package_name}</a></Link>
               </span>
             </div>
@@ -517,8 +503,13 @@ function Eliterewards() {
   )
 }
 
-
-
-
-
 export default Eliterewards
+Eliterewards.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

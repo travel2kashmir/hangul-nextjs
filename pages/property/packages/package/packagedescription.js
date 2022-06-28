@@ -45,37 +45,20 @@ function Packagedescription() {
   const [allPackageDetails, setAllPackageDetails] = useState([])
   const [packageDetails, setPackageDetails] = useState([])
 
-  const fetchDetails = async () => {
-    try {
-        const url = `/api/package/${currentPackage}`
-        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-        setAllPackageDetails(response.data)
-    }
-    catch (error) {
-        if (error.response) {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        } else {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        }
-    }
-
-}
+  
+  /* Edit Package Fetch Function */
+  const fetchDetails = async  () => {
+    const url = `/api/package/${currentPackage}`
+     axios.get(url, { header: { "content-type": "application/json" } }).then
+       ((response) => {
+       logger.info("package success");
+       setAllPackageDetails(response.data)
+       })
+       .catch((error) => {
+        logger.info("Delete error")
+       })
+ 
+   }
   useEffect(()=>{
   fetchDetails();
   },[])
@@ -263,7 +246,7 @@ function Packagedescription() {
         </ol>
       </nav>
       {/* Package Details Form */}
-      <div className="bg-white shadow rounded-lg mx-10 my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+      <div className="bg-white shadow rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.package} {language?.description}
           <svg
@@ -289,7 +272,7 @@ function Packagedescription() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {language?.package} {language?.name}
+                    {language?.package} {language?.name} 
                   </label>
                   <input
                     type="text"
@@ -364,12 +347,17 @@ function Packagedescription() {
                   <select
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={(e) =>
-                      setPackageDetails({
-                        ...packageDetails,
+                      setAllPackageDetails({
+                        allPackageDetails,
                         refundable: e.target.value,
                       })
                     }
                   >
+                    {allPackageDetails?.refundable == "true" 
+                    ?
+                    <option value={true}>Yes</option>
+                 : <option value={false}>No</option> }
+                    
                     <option value={true}>Yes</option>
                     <option value={false}>No</option>
                   </select>
@@ -436,8 +424,8 @@ function Packagedescription() {
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={(e) =>
-                      setPackageDetails({
-                        ...packageDetails,
+                      setAllPackageDetails({
+                        ...allPackageDetails,
                         max_number_of_intended_occupants: e.target.value,
                       })
                     }
@@ -461,79 +449,35 @@ function Packagedescription() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     defaultValue={allPackageDetails?.max_number_of_adult_guest}
                     onChange={(e) =>
-                      setPackageDetails({
-                        ...packageDetails,
+                      setAllPackageDetails({
+                        ...allPackageDetails,
                         max_number_of_adult_guest: e.target.value,
                       })
                     }
                   />
                 </div>
               </div>
-
-              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button
-                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                  onClick={() => {
-                    submitPackageEdit();
-                    if(allPackageDetails?.max_number_of_intended_occupants-
-                      allPackageDetails?.max_number_of_adult_guest >= 1)
-                    setDisp(1);
-                  }}
-                  type="button"
-                >
-                 {language?.update}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div id='1' className={disp===1?'block':'hidden'}>
-       {final=[]} {max_age=[]}
-      {allPackageDetails?.max_number_of_intended_occupants-
+           
+              {allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest >= 1 ? 
-                            
-                            <>
-      <div className="bg-white shadow rounded-lg mx-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Maximum Age of Children
-          <svg
-            className="ml-2 h-6 mb-2 w-6 font-semibold"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
-            <path
-              fillRule="evenodd"
-              d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-              clipRule="evenodd"
-            ></path>
-          </svg>
-        </h6>
-        <div className="pt-6">
-          <div className=" md:px-4 mx-auto w-full">
-            <div className="flex flex-wrap">
-        
-            <div className="w-full lg:w-6/12 px-4">
-              {allPackageDetails?.max_age_children?.map((item, index) => {
-                return (
-                <div className="relative w-full mb-3" key={index}>
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                  {language?.maximum}  {language?.age}  {language?.of} {language?.child}
-                  </label>   
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+              <> 
+                  {final=[]} {max_age=[]}
+              {[...Array(allPackageDetails?.max_number_of_intended_occupants-
+                            allPackageDetails?.max_number_of_adult_guest)]
+                            ?.map((item, index) => (               
+              <div className="w-full lg:w-6/12 px-4" key={index}>
+              <div className="relative w-full mb-3">
+                <label
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                  htmlFor="grid-password"
+                >
+                 Maximum Age Of Child
+                 </label>
+                 <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                      onChange={(e)=>
                       max_age[index]=e.target.value
                   }>
-                     <option selected >{item?.max_age_of_child_guest} </option>
+                     <option selected >Select </option>
                     <option value="1" >1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -547,10 +491,13 @@ function Packagedescription() {
                     <option value="11">11</option>
                     <option value="12">12</option>
                   </select>
-                </div>
-                 )
-                })}
               </div>
+            
+            </div>
+              ))}
+            </>
+            :<></>}
+
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                 <button
                   className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
@@ -558,20 +505,18 @@ function Packagedescription() {
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                   onClick={() => {
-                    submitAge();
-                  }}
+                    submitPackageEdit();}}
                   type="button"
                 >
                  {language?.update}
                 </button>
-              </div>   
+              </div>
             </div>
-            </div>
-            </div>
+          </div>
         </div>
-        </>:
-        <></>}
-        </div>
+
+      </div>
+     
       {/* Toast Container */}
       <ToastContainer
         position="top-center"
@@ -591,3 +536,12 @@ function Packagedescription() {
 }
 
 export default Packagedescription
+Packagedescription.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

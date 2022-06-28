@@ -72,37 +72,19 @@ function Packageservices() {
       )
       .catch((error) => { logger.error("url to fetch additional package services, failed") });
   }
-  const fetchDetails = async () => {
-    try {
-      const url = `/api/package/${currentPackage}`
-      const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-      setCurrentPackageDetails(response.data)
-    }
-    catch (error) {
-      if (error.response) {
-        toast.error("Package Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } else {
-        toast.error("Package Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-    }
+ /* Edit Package Fetch Function */
+ const fetchDetails = async  () => {
+  const url = `/api/package/${currentPackage}`
+   axios.get(url, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+     logger.info("package success");
+     setAllPackageDetails(response.data)
+     })
+     .catch((error) => {
+      logger.info("Delete error")
+     })
 
-  }
+ }
   useEffect(() => {
     fetchPackageServices();
     fetchDetails();
@@ -339,7 +321,7 @@ function Packageservices() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="/package">
+                  <Link href="../package">
                     <a> {currentPackageDetails?.package_name}</a>
                   </Link>
                 </span>
@@ -760,3 +742,12 @@ function Packageservices() {
 }
 
 export default Packageservices
+Packageservices.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

@@ -47,38 +47,19 @@ function PackageRates() {
     firstfun();
     Router.push("./packagerates");
   },[]) 
+/* Edit Package Fetch Function */
+const fetchDetails = async  () => {
+  const url = `/api/package/${currentPackage}`
+   axios.get(url, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+     logger.info("package success");
+     setCurrentPackageRates(response.data)
+     })
+     .catch((error) => {
+      logger.info("Delete error")
+     })
 
-  const fetchDetails = async () => {
-    try {
-        const url = `/api/package/${currentPackage}`
-        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-        setCurrentPackageRates(response.data)
-    }
-    catch (error) {
-        if (error.response) {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        } else {
-            toast.error("Package Error!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-        }
-    }
-
-}
+ }
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -442,3 +423,12 @@ function PackageRates() {
 }
 
 export default PackageRates
+PackageRates.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

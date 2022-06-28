@@ -43,22 +43,21 @@ function Allroombundles() {
   const CurrentPackage = ({ allBundles }) => {
     localStorage.setItem("currentPackage", JSON.stringify(allBundles));
   };
+  const fetchBundles = async () => {
+    try {
+        const url = `/api/room_bundle/${currentProperty.property_id}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+       setAllBundles(response.data)
+    }
+    catch (error) {
 
-      useEffect(() => {
-        const fetchBundles = async () => {
-            try {
-                const url = `/api/room_bundle/${currentProperty.property_id}`
-                const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-               setAllBundles(response.data)
-            }
-            catch (error) {
-
-                if (error.response) {
-                    } 
-                else {
-                }
-            }
+        if (error.response) {
+            } 
+        else {
         }
+    }
+}
+      useEffect(() => {
         fetchBundles();
     }
         ,[])
@@ -77,6 +76,7 @@ function Allroombundles() {
            draggable: true,
            progress: undefined,
          });
+         fetchBundles();
          })
           .catch((error)=>{ 
            toast.error(("Room Bundle Delete Error!"), {

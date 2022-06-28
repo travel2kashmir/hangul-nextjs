@@ -22,7 +22,8 @@ function Roombundle() {
   const[roomBundle,setRoomBundle] = useState([])
   const[bundle,setBundle] = useState([])
   const[rate,setRate] = useState([])
-  const[parking,setParking]= useState(false)
+  const[flag,setFlag] = useState([])
+ 
 
     useEffect(()=>{
         const firstfun=()=>{
@@ -100,7 +101,7 @@ function Roombundle() {
      /* Edit Package Edit Function */
 
    const submitPackageEdit = () => {
-    
+    if (bundle.length !== 0 || flag.length !== 0){
     const final_data = {
           "room_bundle_id":roomBundle?.room_bundle_id,
           "rate_master_id":roomBundle?.rate_master_id,
@@ -125,6 +126,7 @@ function Roombundle() {
               progress: undefined,
             });
             setBundle([])
+            setFlag([])
           })
           .catch((error) => {
             toast.error("Room Bundles Update Error!", {
@@ -135,8 +137,8 @@ function Roombundle() {
               pauseOnHover: true,
               draggable: true,
               progress: undefined,
-            });    
-          }) 
+            });   
+          }) }
         
   }   
 
@@ -407,7 +409,7 @@ function Roombundle() {
                 <div className="flex items-center h-5">
                   <input  value={roomBundle?.parking_included} checked={roomBundle?.parking_included === true}
                   
-                  onChange={()=>(setRoomBundle({...roomBundle,parking_included:!roomBundle.parking_included}))}
+                  onChange={()=>(setRoomBundle({...roomBundle,parking_included:!roomBundle.parking_included},setFlag(1)))}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
@@ -429,7 +431,7 @@ function Roombundle() {
                 <div className="flex items-center h-5">
                   <input 
                   checked={roomBundle?.breakfast_included === true}
-                  onChange={()=>(setRoomBundle({...roomBundle,breakfast_included:!roomBundle.breakfast_included}))}
+                  onChange={()=>(setRoomBundle({...roomBundle,breakfast_included:!roomBundle.breakfast_included},setFlag(1)))}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
@@ -451,7 +453,7 @@ function Roombundle() {
                 <div className="flex items-center h-5">
                   <input value={roomBundle?.internet_included} 
                   checked={roomBundle?.internet_included === true}
-                  onChange={()=>(setRoomBundle({...roomBundle,internet_included:!roomBundle.internet_included}))}
+                  onChange={()=>(setRoomBundle({...roomBundle,internet_included:!roomBundle.internet_included},setFlag(1)))}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember" } 
@@ -513,3 +515,12 @@ function Roombundle() {
 }
 
 export default Roombundle
+Roombundle.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

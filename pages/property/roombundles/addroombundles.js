@@ -554,3 +554,12 @@ function Addroombundles() {
 }
 
 export default Addroombundles;
+Addroombundles.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

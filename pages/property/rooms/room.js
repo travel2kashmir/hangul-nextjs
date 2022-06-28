@@ -414,14 +414,14 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
         </ol>
       </nav>
       {/* Title */}
-      <div className=" pt-2 px-4">
+      <div className=" pt-2">
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.edit} {language?.room} 
         </h6>
       
      
           {/* Room Description */}
-          <div className="bg-white shadow rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 ">
+          <div className="bg-white shadow rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {language?.room} {language?.description}
             </h6>
@@ -1219,3 +1219,4 @@ Room.getLayout = function PageLayout(page){
     </>
   )
   }
+ 

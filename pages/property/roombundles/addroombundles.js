@@ -23,6 +23,8 @@ function Addroombundles() {
   const [bundle, setBundle] = useState([]);
   const [rate, setRate] = useState([]);
   const[parking,setParking]= useState(false)
+  const[breakfast,setBreakfast]= useState(false)
+  const[internet,setInternet]= useState(false)
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== "undefined") {
@@ -124,18 +126,20 @@ function Addroombundles() {
             progress: undefined,
           });
           rateId = response.data.rate_master_id;
+         Router.push('../allroombundles');
           if (bundle.length !== 0) {
             const datas = [{
              room_id: bundle?.room_id,
               package_id: bundle?.package_id,
-              breakfast_included: parking,
+              breakfast_included: breakfast,
               parking_included: parking,
-              internet_included:parking,
+              internet_included:internet,
               rate_master_id: rateId,
               property_id:currentProperty?.property_id,
               rate_plan_id:rateId + bundle?.package_id,
               status:true
             }];
+          
             const final_data={room_bundle: datas}
             const url = "/api/package/room_bundle";
             axios
@@ -159,9 +163,10 @@ function Addroombundles() {
               });
           }
           setRate([]);
+          Router.push('../allroombundles');
         })
         .catch((error) => {
-          toast.error("Room Bundle Update Error!", {
+          toast.error("Room Bundle Add Error!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -452,7 +457,7 @@ function Addroombundles() {
         <div className="flex flex-row ml-6 items-start" >
                 <div className="flex items-center h-5">
                   <input
-                  onChange={(e) => setParking(e.target.checked)}
+                  onChange={(e) => setParking(!parking)}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
@@ -473,7 +478,7 @@ function Addroombundles() {
               <div className="flex flex-row ml-6 items-start" >
                 <div className="flex items-center h-5">
                   <input
-                 onChange={(e) => setParking(e.target.checked)}
+                 onChange={(e) => setBreakfast(!breakfast)}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember"}
@@ -494,7 +499,7 @@ function Addroombundles() {
               <div className="flex flex-row ml-6 items-start">
                 <div className="flex items-center h-5">
                   <input
-                   onChange={(e) => setParking(e.target.checked)}
+                   onChange={(e) => setInternet(!internet)}
                     id="remember"
                     aria-describedby="remember"
                     name={"remember" }

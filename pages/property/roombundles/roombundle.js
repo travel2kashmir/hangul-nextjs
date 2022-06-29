@@ -99,7 +99,6 @@ function Roombundle() {
         ,[])
 
      /* Edit Package Edit Function */
-
    const submitPackageEdit = () => {
     if (bundle.length !== 0 || flag.length !== 0){
     const final_data = {
@@ -112,7 +111,7 @@ function Roombundle() {
           "internet_included":roomBundle?.internet_included,
           "rate_master_id":bundle?.rate_master_id
       }  
-      alert("final_data" +JSON.stringify(final_data))
+     
      const url = '/api/package/room_bundle'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {

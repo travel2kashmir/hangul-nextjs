@@ -5,6 +5,7 @@ import Router from 'next/router'
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import Button from "../../components/Button";
 var language;
 var currentProperty;
 import { ToastContainer, toast } from "react-toastify";
@@ -13,7 +14,11 @@ const logger = require("../../services/logger");
 
 export default function BasicDetails() 
  {
-
+  const Primary ={
+    label: language?.update,
+     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
+     
+}
   const [basicDetails, setBasicDetails] = useState([]);
  /** Fetching language from the local storage **/
  useEffect(()=>{  
@@ -303,18 +308,7 @@ const fetchBasicDetails = async () => {
                 </div>
               </div>
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button
-                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                  onClick={() => {
-                    submitBasicEdit();
-                  }}
-                  type="button"
-                >
-                 {language?.update}
-                </button>
+              <Button Primary={Primary}  onClick={submitBasicEdit}/>
               </div>  
 
             </div>

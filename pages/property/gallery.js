@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 import Button from "../../components/Button";
 import Link from "next/link";
@@ -15,27 +15,27 @@ var gallery;
 import Router from 'next/router'
 
 function Gallery() {
-    useEffect(()=>{  
-        const firstfun=()=>{  
-          if (typeof window !== 'undefined'){ 
-            var locale = localStorage.getItem("Language");
-            if (locale === "ar") {
-            language = arabic;
+    useEffect(() => {
+        const firstfun = () => {
+            if (typeof window !== 'undefined') {
+                var locale = localStorage.getItem("Language");
+                if (locale === "ar") {
+                    language = arabic;
+                }
+                if (locale === "en") {
+                    language = english;
+                }
+                if (locale === "fr") {
+                    language = french;
+                }
+                /** Current Property Details fetched from the local storage **/
+                currentProperty = JSON.parse(localStorage.getItem("property"));
+
             }
-            if (locale === "en") {
-            language=english;
-            }
-            if (locale === "fr") {
-              language = french;   
-            } 
-        /** Current Property Details fetched from the local storage **/
-        currentProperty = JSON.parse(localStorage.getItem("property"));
-        
-          } 
         }
         firstfun();
-       Router.push("./gallery");
-      },[])
+        Router.push("./gallery");
+    }, [])
     const [allHotelDetails, setAllHotelDetails] = useState([])
     const [gallery, setGallery] = useState([])
     const [image, setImage] = useState({})
@@ -45,42 +45,61 @@ function Gallery() {
     const [addImage, setAddImage] = useState(0)
     const [enlargeImage, setEnlargeImage] = useState(0)
     const [actionEnlargeImage, setActionEnlargeImage] = useState({})
-  
-     /* Function call to fetch Current Property Details when page loads */
-  const fetchHotelDetails = async () => { 
-    const url = `/api/${currentProperty.address_province.replace(
-      /\s+/g,
-      "-"
-    )}/${currentProperty.address_city}/${
-      currentProperty.property_category
-    }s/${currentProperty.property_id}`;  
-    axios.get(url)
-    .then((response)=>{setGallery(response.data);
-    logger.info("url  to fetch property details hitted successfully")})
-    .catch((error)=>{logger.error("url to fetch property details, failed")});  
-}
-  useEffect(() => {
-    fetchHotelDetails(); 
-  },[]);
+
+    /* Function call to fetch Current Property Details when page loads */
+    const fetchHotelDetails = async () => {
+        const url = `/api/${currentProperty.address_province.replace(
+            /\s+/g,
+            "-"
+        )}/${currentProperty.address_city}/${currentProperty.property_category
+            }s/${currentProperty.property_id}`;
+        axios.get(url)
+            .then((response) => {
+                setGallery(response.data);
+                logger.info("url  to fetch property details hitted successfully")
+            })
+            .catch((error) => { logger.error("url to fetch property details, failed") });
+    }
+
+   
+    
+    useEffect(() => {
+        fetchHotelDetails();
+    }, []);
     const onChangePhoto = (e, i) => {
         setImage({ ...image, imageFile: e.target.files[0] })
     }
 
-    const AddImage ={
+    const AddImage = {
         label: "Add image",
-         color: "bg-cyan-600 text-white  hover:bg-cyan-700",
-         icon:   <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-         
+        color: "bg-cyan-600 text-white  hover:bg-cyan-700",
+        icon: <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
+
     }
-    const Add ={
+    const Add = {
         label: "Add image",
-         color: "bg-cyan-600 text-white  hover:bg-cyan-700", 
+        color: "bg-cyan-600 text-white  hover:bg-cyan-700",
     }
 
-    const Upload ={
+    const Edit = {
+        label: "Edit image",
+        color: "bg-cyan-600 text-white  hover:bg-cyan-700",
+    }
+
+    const Delete ={
+        label: language?.yesiamsure,
+         color: "bg-red-600 hover:bg-red-800 text-white ",
+      }
+      
+      const Cancel ={
+        label: language?.nocancel,
+         color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
+      }
+
+    const Upload = {
         label: "Upload",
-         color: "text-white bg-gray-600 hover:bg-gray-700 mt-2",
-        
+        color: "text-white bg-gray-600 hover:bg-gray-700 mt-2",
+
     }
     /* Function to upload image*/
     const uploadImage = () => {
@@ -91,7 +110,7 @@ function Gallery() {
 
         axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
             .then(response => {
-               setImage({ ...image, image_link: response?.data?.secure_url })
+                setImage({ ...image, image_link: response?.data?.secure_url })
             })
             .catch(error => {
                 toast.error("Image Upload Error! ", {
@@ -111,91 +130,91 @@ function Gallery() {
 
     /* Function to add images*/
     const submitAddImage = () => {
-     if (actionImage.length !== 0){
-       const imagedata = [{
-            property_id: currentProperty?.property_id,
-            image_link: image.image_link,
-            image_title: actionImage.image_title,
-            image_descripiton: actionImage.image_description,
-            image_category: "outside"
-        }]
-        const finalImage = { "images": imagedata }
-       axios.post(`/api/gallery`, finalImage).then(response => {
-           toast.success("Image Added Successfully!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            }
-            );
-            fetchHotelDetails(); 
-            Router.push("./gallery");
-            setAddImage(0)
-            setActionImage([]);
-        }).catch(error => {
-          toast.error(" Gallery Error", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
+        if (actionImage.length !== 0) {
+            const imagedata = [{
+                property_id: currentProperty?.property_id,
+                image_link: image.image_link,
+                image_title: actionImage.image_title,
+                image_descripiton: actionImage.image_description,
+                image_category: "outside"
+            }]
+            const finalImage = { "images": imagedata }
+            axios.post(`/api/gallery`, finalImage).then(response => {
+                toast.success("Image Added Successfully!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                }
+                );
+                fetchHotelDetails();
+                Router.push("./gallery");
+                setAddImage(0)
+                setActionImage([]);
+            }).catch(error => {
+                toast.error(" Gallery Error", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             });
-        });
+        }
     }
-    }
-    
+
     /* Function to edit images*/
     const updateImageDetails = () => {
-        if (allHotelDetails.length !== 0){
-        const final_data = {
-            "image_id": actionImage?.image_id,
-            "image_title": allHotelDetails.image_title,
-            "image_description": allHotelDetails.image_description,
-            "image_type": allHotelDetails.image_type
-        }
-       const url = '/api/images'
-        axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
-            ((response) => {
-                setEditImage(0);
-              toast.success("Gallery Updated Successfully!", {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                fetchHotelDetails(); 
-                Router.push("./gallery");
-              setAllHotelDetails([])
-            })
-            .catch((error) => {
-               toast.error("Gallery Update Error! " , {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+        if (allHotelDetails.length !== 0) {
+            const final_data = {
+                "image_id": actionImage?.image_id,
+                "image_title": allHotelDetails.image_title,
+                "image_description": allHotelDetails.image_description,
+                "image_type": allHotelDetails.image_type
+            }
+            const url = '/api/images'
+            axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+                ((response) => {
+                    setEditImage(0);
+                    toast.success("Gallery Updated Successfully!", {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    fetchHotelDetails();
+                    Router.push("./gallery");
+                    setAllHotelDetails([])
+                })
+                .catch((error) => {
+                    toast.error("Gallery Update Error! ", {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
 
-            })
+                })
         }
     }
-    
+
     /* Function to delete images*/
     const submitDelete = () => {
         const url = `/api/${actionImage.image_id}`
         axios.delete(url).then
             ((response) => {
-               setdeleteImage(0)
+                setdeleteImage(0)
                 toast.success("Image Deleted Successfully", {
                     position: "top-center",
                     autoClose: 5000,
@@ -205,7 +224,7 @@ function Gallery() {
                     draggable: true,
                     progress: undefined,
                 });
-                fetchHotelDetails(); 
+                fetchHotelDetails();
                 Router.push("./gallery");
 
             })
@@ -223,39 +242,39 @@ function Gallery() {
             })
     }
 
-  return (
-    <div id="main-content"
-    className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
-        {/* Navbar */}
-      <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-        <ol className="inline-flex items-center space-x-1 md:space-x-2">
-          <li className="inline-flex items-center">
-              <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-              <Link href="./landing" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-            </Link>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="./propertysummary" >
-              <a> {gallery?.property_name}</a></Link>
-              </span>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.gallery}</span>
-            </div>
-          </li>
-        </ol>
-      </nav>
-    
-     {/* Header */}
-     <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+    return (
+        <div id="main-content"
+            className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+            {/* Navbar */}
+            <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
+                <ol className="inline-flex items-center space-x-1 md:space-x-2">
+                    <li className="inline-flex items-center">
+                        <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                        <Link href="./landing" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                        </Link>
+                    </li>
+                    <li>
+                        <div className="flex items-center">
+                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                            <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+                                <Link href="./propertysummary" >
+                                    <a> {gallery?.property_name}</a></Link>
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <div className="flex items-center">
+                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.gallery}</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+            {/* Header */}
+            <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
                 <h6 className="text-xl mb-2 flex leading-none pl-4 pt-2 font-bold text-gray-900 ">
-                   {language?.gallery}
+                    {language?.gallery}
                 </h6>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
@@ -282,71 +301,71 @@ function Gallery() {
                         </div>
                     </div>
                     <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={AddImage}   onClick={() => setAddImage(1)}/>
+                        <Button Primary={AddImage} onClick={() => setAddImage(1)} />
                         <a href="#" className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                           Import
+                            Import
                         </a>
                     </div>
                 </div>
-           
 
-            {/* Gallery Form */}
-            <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
-                {gallery?.images?.map((item,idx) => {
-                    return (
-                        <div className="block text-blueGray-600 text-xs mt-6 font-bold " key={idx} style={{  marginLeft: "35px" }}>
-                            <button onClick={()=>{setEnlargeImage(1); setActionEnlargeImage(item)}}> <img src={item.image_link} alt='pic_room' style={{ height: "250px", width: "400px" }} />
-                            </button>
-                            <table>
-                                <tr className="pt-1">
-                                    <td >
-                                     <span className="pl-1  text-sm">{item?.image_title}</span>
-                                      
-                                    </td>
-                                    <td className="flex justify-end">
-                                        <button
-                                            onClick={() => { setEditImage(1); setActionImage(item) }}
-                                            className="text-gray-500   hover:text-gray-900 
+
+                {/* Gallery Form */}
+                <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
+                    {gallery?.images?.map((item, idx) => {
+                        return (
+                            <div className="block text-blueGray-600 text-xs mt-6 font-bold " key={idx} style={{ marginLeft: "35px" }}>
+                                <button onClick={() => { setEnlargeImage(1); setActionEnlargeImage(item) }}> <img src={item.image_link} alt='pic_room' style={{ height: "250px", width: "400px" }} />
+                                </button>
+                                <table>
+                                    <tr className="pt-1">
+                                        <td >
+                                            <span className="pl-1  text-sm">{item?.image_title}</span>
+
+                                        </td>
+                                        <td className="flex justify-end">
+                                            <button
+                                                onClick={() => { setEditImage(1); setActionImage(item) }}
+                                                className="text-gray-500   hover:text-gray-900 
                                          cursor-pointer hover:bg-gray-100 rounded ">
-                                            <svg className=" h-5  w-5 font-semibold "
-                                                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-                                        </button>
-                                        <button
-                                            onClick={() => { setdeleteImage(1); setActionImage(item) }} className="text-gray-500  hover:text-gray-900
+                                                <svg className=" h-5  w-5 font-semibold "
+                                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
+                                            </button>
+                                            <button
+                                                onClick={() => { setdeleteImage(1); setActionImage(item) }} className="text-gray-500  hover:text-gray-900
                                          cursor-pointer  hover:bg-gray-100 rounded">
-                                            <svg className="  w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                                                <svg className="  w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        )
+                    }
                     )
-                }
-                )
-                }
+                    }
 
+                </div>
             </div>
-            </div>
-             {/* Modal Image Enlarge */}
-             <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
-             <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            {/* Modal Image Enlarge */}
+            <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
+                <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
                         <div className="bg-gray-100 rounded-lg shadow relative">
                             <div className="flex justify-between p-5 border-b rounded-t">
-                            <h3 className="text-xl font-semibold">
-                            {actionEnlargeImage.image_title}     
+                                <h3 className="text-xl font-semibold">
+                                    {actionEnlargeImage.image_title}
                                 </h3>
-                              <button type="button"
+                                <button type="button"
                                     onClick={() => setEnlargeImage(0)}
                                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="user-modal">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button> </div>
-                                <div> <img src={actionEnlargeImage.image_link} alt='pic_room' style={{ height: "350px", width: "650px" }} />
-                               </div>   
-                          </div>
+                            <div> <img src={actionEnlargeImage.image_link} alt='pic_room' style={{ height: "350px", width: "650px" }} />
+                            </div>
+                        </div>
                     </div>
-                </div> 
+                </div>
             </div>
 
             {/* Modal edit */}
@@ -356,7 +375,7 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                   {language?.edit} {language?.image}
+                                    {language?.edit} {language?.image}
                                 </h3>
                                 <button type="button"
                                     onClick={() => setEditImage(0)}
@@ -367,13 +386,13 @@ function Gallery() {
                             <div className="p-6 space-y-6">
                                 <div className="grid grid-cols-6 gap-6">
                                     <div className="col-span-6 sm:col-span-3">
-                                        <img src={actionImage?.image_link} alt='property_image'  height= {"200"} width={"400"}  />
+                                        <img src={actionImage?.image_link} alt='property_image' height={"200"} width={"400"} />
                                     </div> <div className="col-span-6 sm:col-span-3">
                                         <label
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                           {language?.image} {language?.description}
+                                            {language?.image} {language?.description}
                                         </label>
                                         <textarea rows="6" columns="60"
 
@@ -393,7 +412,7 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                           {language?.image} {language?.titl}
+                                            {language?.image} {language?.titl}
                                         </label>
                                         <input
                                             type="text"
@@ -413,10 +432,7 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                                <button
-                                    onClick={() => updateImageDetails()}
-                                    className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                                    type="submit">{language?.edit} {language?.image}</button>
+                            <Button Primary={Edit}   onClick={() => updateImageDetails()}/>
                             </div>
                         </div>
                     </div>
@@ -430,7 +446,7 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                  {language?.addnewimage} 
+                                    {language?.addnewimage}
                                 </h3>
                                 <button type="button"
                                     onClick={() => setAddImage(0)}
@@ -449,21 +465,21 @@ function Gallery() {
                                             className="text-sm font-medium text-gray-900 block mb-2"
                                             htmlFor="grid-password"
                                         >
-                                            {language?.imageupload} 
+                                            {language?.imageupload}
                                         </label>
                                         <div className="flex">
-                                        <input
-                                            type="file" name="myImage" accept="image/png, image/gif, image/jpeg, image/jpg"
-                                            onChange={e => {
-                                                onChangePhoto(e, 'imageFile');
-                                              
-                                            }}
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5"
-                                            defaultValue="" />
-                                           
-                                    </div> 
-                                    <div className="col-span-6 sm:col-span-3">
-                                    <Button Primary={Upload}   onClick={uploadImage}/></div>
+                                            <input
+                                                type="file" name="myImage" accept="image/png, image/gif, image/jpeg, image/jpg"
+                                                onChange={e => {
+                                                    onChangePhoto(e, 'imageFile');
+
+                                                }}
+                                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5"
+                                                defaultValue="" />
+
+                                        </div>
+                                        <div className="col-span-6 sm:col-span-3">
+                                            <Button Primary={Upload} onClick={uploadImage} /></div>
                                     </div>
                                     <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
@@ -491,11 +507,11 @@ function Gallery() {
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                             defaultValue="" />
                                     </div>
-                                   
+
                                 </div>
                             </div>
-<div className="items-center p-6 border-t border-gray-200 rounded-b">
-<Button Primary={Add} onClick={()=>{submitAddImage(); }}/>
+                            <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                                <Button Primary={Add} onClick={() => { submitAddImage(); }} />
 
                             </div>
                         </div>
@@ -521,21 +537,15 @@ function Gallery() {
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
                                     {language?.areyousureyouwanttodelete}
                                 </h3>
-                                <button onClick={() => submitDelete()} className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                                    {language?.yesiamsure}
-                                </button>
-                                <button
-                                    onClick={() => setdeleteImage(0)}
-                                    className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                                    {language?.nocancel}
-                                </button>
+                                <Button Primary={Delete} onClick={() => submitDelete()}/>
+                                <Button Primary={Cancel}   onClick={() => setdeleteImage(0)}/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-             {/* Toast Container */}
+            {/* Toast Container */}
             <ToastContainer position="top-center"
                 autoClose={5000}
                 hideProgressBar={false}
@@ -546,8 +556,8 @@ function Gallery() {
                 draggable
                 pauseOnHover />
         </div>
-    
-  )
+
+    )
 }
 
 export default Gallery

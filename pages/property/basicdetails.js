@@ -6,6 +6,7 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Button from "../../components/Button";
+import shape from "../../components/ButtonStructure";
 var language;
 var currentProperty;
 import { ToastContainer, toast } from "react-toastify";
@@ -14,11 +15,7 @@ const logger = require("../../services/logger");
 
 export default function BasicDetails() 
  {
-  const Primary ={
-    label: language?.update,
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-     
-}
+  
   const [basicDetails, setBasicDetails] = useState([]);
  /** Fetching language from the local storage **/
  useEffect(()=>{  
@@ -37,7 +34,6 @@ export default function BasicDetails()
       } 
   /** Current Property Details fetched from the local storage **/
   currentProperty = JSON.parse(localStorage.getItem("property"));
-  
     } 
   }
   firstfun();
@@ -308,7 +304,7 @@ const fetchBasicDetails = async () => {
                 </div>
               </div>
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-              <Button Primary={Primary}  onClick={submitBasicEdit}/>
+              <Button Primary={shape?.Update}  onClick={submitBasicEdit}/>
               </div>  
 
             </div>

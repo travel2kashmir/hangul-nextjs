@@ -9,6 +9,7 @@ import arabic from "../../components/Languages/ar"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
+import shape from "../../components/ButtonStructure";
 var language;
 var currentProperty;
 var gallery;
@@ -76,30 +77,11 @@ function Gallery() {
         icon: <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
 
     }
-    const Add = {
-        label: "Add image",
-        color: "bg-cyan-600 text-white  hover:bg-cyan-700",
-    }
-
-    const Edit = {
-        label: "Edit image",
-        color: "bg-cyan-600 text-white  hover:bg-cyan-700",
-    }
-
-    const Delete ={
-        label: language?.yesiamsure,
-         color: "bg-red-600 hover:bg-red-800 text-white ",
-      }
-      
-      const Cancel ={
-        label: language?.nocancel,
-         color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
-      }
+    
 
     const Upload = {
         label: "Upload",
         color: "text-white bg-gray-600 hover:bg-gray-700 mt-2",
-
     }
     /* Function to upload image*/
     const uploadImage = () => {
@@ -432,7 +414,7 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                            <Button Primary={Edit}   onClick={() => updateImageDetails()}/>
+                            <Button Primary={shape?.Update}   onClick={() => updateImageDetails()}/>
                             </div>
                         </div>
                     </div>
@@ -511,7 +493,7 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                                <Button Primary={Add} onClick={() => { submitAddImage(); }} />
+                                <Button Primary={shape?.Add} onClick={() => { submitAddImage(); }} />
 
                             </div>
                         </div>
@@ -537,8 +519,8 @@ function Gallery() {
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
                                     {language?.areyousureyouwanttodelete}
                                 </h3>
-                                <Button Primary={Delete} onClick={() => submitDelete()}/>
-                                <Button Primary={Cancel}   onClick={() => setdeleteImage(0)}/>
+                                <Button Primary={shape?.Delete} onClick={() => submitDelete()}/>
+                                <Button Primary={shape?.Cancel}   onClick={() => setdeleteImage(0)}/>
                             </div>
                         </div>
                     </div>

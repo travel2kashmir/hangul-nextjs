@@ -10,6 +10,7 @@ import arabic from "../../components/Languages/ar"
 var language;
 var currentProperty;
 var contacts;
+import shape from "../../components/ButtonStructure";
 import Router from 'next/router'
 const logger = require("../../services/logger");
 
@@ -45,25 +46,6 @@ function Contact() {
      
 }
 
-const Edit ={
-  label: language?.update,
-   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-}
-
-const Add ={
-  label: "Add Contact",
-   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-}
-
-const Delete ={
-  label: language?.yesiamsure,
-   color: "bg-red-600 hover:bg-red-800 text-white ",
-}
-
-const Cancel ={
-  label: language?.nocancel,
-   color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
-}
 
 const EditContact ={
   label: "Edit Contact",
@@ -164,6 +146,7 @@ const DeleteContact ={
           progress: undefined,
         });
         fetchHotelDetails(); 
+        setUpdateContact(0)
         Router.push("./contact");
         setAllHotelDetails([])
       })
@@ -177,6 +160,7 @@ const DeleteContact ={
           draggable: true,
           progress: undefined,
         });
+        setUpdateContact(0)
       });
     }
   };
@@ -206,6 +190,7 @@ const DeleteContact ={
           draggable: true,
           progress: undefined,
         });
+        setView(0)
         fetchHotelDetails(); 
         Router.push("./contact");
        setContact([])
@@ -220,6 +205,7 @@ const DeleteContact ={
           draggable: true,
           progress: undefined,
         });
+        setView(0)
       });
     }
   }
@@ -240,6 +226,7 @@ const DeleteContact ={
           progress: undefined,
         });
         fetchHotelDetails(); 
+        setDeleteContact(0)
         Router.push("./contact");
       })
       .catch((error) => {
@@ -252,6 +239,7 @@ const DeleteContact ={
           draggable: true,
           progress: undefined,
         });
+        setDeleteContact(0)
       });
   };
 
@@ -537,8 +525,8 @@ const DeleteContact ={
                 </div>
               </div>
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <Button Primary={Edit}  onClick={() => {submitContactEdit(editContact?.contact_id);
-                   setUpdateContact(0)}} />
+              <Button Primary={shape?.Update}  onClick={() => {submitContactEdit(editContact?.contact_id)
+                   }} />
               </div>
             </div>
           </div>
@@ -626,7 +614,7 @@ const DeleteContact ={
                 </div>
               
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <Button Primary={Add}   onClick={(e) => {submitContactAdd(e);setView(0)}}/>
+              <Button Primary={shape?.Add}   onClick={(e) => {submitContactAdd(e)}}/>
               </div>
             </div>
           </div>
@@ -677,9 +665,9 @@ const DeleteContact ={
                 <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
                  {language?.areyousureyouwanttodelete}
                 </h3>
-                <Button Primary={Delete}  onClick={(e) => { submitDelete(editContact?.contact_id);
-                    setDeleteContact(0)}}/>
-               <Button Primary={Cancel}   onClick={() =>  setDeleteContact(0)}/>
+                <Button Primary={shape?.Delete}  onClick={(e) => { submitDelete(editContact?.contact_id);
+                    }}/>
+               <Button Primary={shape?.Cancel}   onClick={() =>  setDeleteContact(0)}/>
               </div>
             </div>
           </div>

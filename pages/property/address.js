@@ -11,14 +11,10 @@ import Router from 'next/router'
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-
+import shape from "../../components/ButtonStructure";
 
 function Address() {
-  const Primary ={
-    label: language?.update,
-     color: "bg-cyan-600 text-white  hover:bg-cyan-700",
-     
-}
+ 
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -391,7 +387,7 @@ function Address() {
                     </div>
                   </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={Primary}  onClick={submitAddressEdit}/>
+                  <Button Primary={shape?.Update}  onClick={submitAddressEdit}/>
               </div>  
                 </div>
               </div>

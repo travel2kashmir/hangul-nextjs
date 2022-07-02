@@ -9,8 +9,6 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 var language;
 var currentProperty;
-var contacts;
-import shape from "../../components/ButtonStructure";
 import Router from 'next/router'
 const logger = require("../../services/logger");
 
@@ -525,7 +523,7 @@ const DeleteContact ={
                 </div>
               </div>
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <Button Primary={shape?.Update}  onClick={() => {submitContactEdit(editContact?.contact_id)
+              <Button Primary={language?.Update}  onClick={() => {submitContactEdit(editContact?.contact_id)
                    }} />
               </div>
             </div>
@@ -614,7 +612,7 @@ const DeleteContact ={
                 </div>
               
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <Button Primary={shape?.Add}   onClick={(e) => {submitContactAdd(e)}}/>
+              <Button Primary={language?.Add}   onClick={(e) => {submitContactAdd(e)}}/>
               </div>
             </div>
           </div>
@@ -665,9 +663,9 @@ const DeleteContact ={
                 <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
                  {language?.areyousureyouwanttodelete}
                 </h3>
-                <Button Primary={shape?.Delete}  onClick={(e) => { submitDelete(editContact?.contact_id);
+                <Button Primary={language?.Delete}  onClick={(e) => { submitDelete(editContact?.contact_id);
                     }}/>
-               <Button Primary={shape?.Cancel}   onClick={() =>  setDeleteContact(0)}/>
+               <Button Primary={language?.Cancel}   onClick={() =>  setDeleteContact(0)}/>
               </div>
             </div>
           </div>

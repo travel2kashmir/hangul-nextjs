@@ -9,7 +9,6 @@ import arabic from "../../components/Languages/ar"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
-import shape from "../../components/ButtonStructure";
 var language;
 var currentProperty;
 var gallery;
@@ -414,7 +413,7 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                            <Button Primary={shape?.Update}   onClick={() => updateImageDetails()}/>
+                            <Button Primary={language?.Update}   onClick={() => updateImageDetails()}/>
                             </div>
                         </div>
                     </div>
@@ -493,7 +492,7 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                                <Button Primary={shape?.Add} onClick={() => { submitAddImage(); }} />
+                                <Button Primary={language?.Add} onClick={() => { submitAddImage(); }} />
 
                             </div>
                         </div>
@@ -519,8 +518,8 @@ function Gallery() {
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
                                     {language?.areyousureyouwanttodelete}
                                 </h3>
-                                <Button Primary={shape?.Delete} onClick={() => submitDelete()}/>
-                                <Button Primary={shape?.Cancel}   onClick={() => setdeleteImage(0)}/>
+                                <Button Primary={language?.Delete} onClick={() => submitDelete()}/>
+                                <Button Primary={language?.Cancel}   onClick={() => setdeleteImage(0)}/>
                             </div>
                         </div>
                     </div>

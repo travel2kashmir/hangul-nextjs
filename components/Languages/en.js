@@ -56,6 +56,23 @@ export default {
   starrating: "Star Rating",
   descriptiontitle: "Description title",
   description: "Description",
+  "Update" :{
+    label: "Update",
+     color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+},
+"Delete" :{
+  label:'yesiamsure',
+   color: "bg-red-600 hover:bg-red-800 text-white ",
+},
+
+"Cancel" :{
+  label: 'nocancel',
+   color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
+},
+"Add" :{
+  label:Add,
+   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
+},
   descriptiondate: "Description Date",
   update:'Update',
   country:'Country',

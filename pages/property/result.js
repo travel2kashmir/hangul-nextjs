@@ -70,6 +70,7 @@ function Result() {
       }
     }
   }
+  
   useEffect(() => {
     fetchDetails();
     fetchBundles();

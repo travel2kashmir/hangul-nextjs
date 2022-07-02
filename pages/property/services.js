@@ -106,15 +106,6 @@ const Edit = {
     color: "bg-cyan-600 text-white  hover:bg-cyan-700",
 }
 
-const Delete ={
-    label: language?.yesiamsure,
-     color: "bg-red-600 hover:bg-red-800 text-white ",
-  }
-  
-  const Cancel ={
-    label: language?.nocancel,
-     color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
-  }
 
   const fetchAdditionalServices = async () => {           
     const url = `/api/additional_services/${currentProperty.property_id}`

@@ -1,4 +1,21 @@
 export default {
+  "Update" :{
+    label:' أَجَدّ',
+     color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+},
+"Delete" :{
+  label:'نعم أنا متأكد',
+   color: "bg-red-600 hover:bg-red-800 text-white ",
+},
+
+"Cancel" :{
+  label: 'لا إلغاء',
+   color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
+},
+"Add" :{
+  label:' أَتْبَع',
+   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
+},
     title: "العنوان",
     email: "البريد الإلكتروني",
     password: "كلمه السر",

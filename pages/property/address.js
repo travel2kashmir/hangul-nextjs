@@ -11,7 +11,6 @@ import Router from 'next/router'
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-import shape from "../../components/ButtonStructure";
 
 function Address() {
  
@@ -387,7 +386,7 @@ function Address() {
                     </div>
                   </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={shape?.Update}  onClick={submitAddressEdit}/>
+                  <Button Primary={language?.Update}  onClick={submitAddressEdit}/>
               </div>  
                 </div>
               </div>

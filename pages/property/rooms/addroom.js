@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
+import Button  from '../../../components/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from "next/link";
@@ -44,7 +45,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
   const [services, setServices] = useState([]) 
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
-  const [disp, setDisp] = useState(0);
+  const [disp, setDisp] = useState(1);
   const [modified, setModified] = useState({})
   const [allRoomRates, setAllRoomRates] = useState([])
 
@@ -616,13 +617,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                   </div>
                 </div>
                 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <button className="sm:inline-flex justify-end  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                      onClick={(e)=>{
-                       submitRoomDescription(e)}} type="button" >
-                      {language?.submit}</button>  
+                <Button Primary={language?.Submit}    onClick={(e)=>{
+                       submitRoomDescription(e)}}/>
                 </div>
               </div>
             </div>
@@ -655,11 +651,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <button type="button" onClick={addPhotos}
-                      className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                      <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      Add image
-                    </button>
+                    <Button Primary={language?.AddImage}  onClick={addPhotos}  />
                   </div>
                 </div>
               </div>
@@ -738,12 +730,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                       
                       </div></>))}
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                        onClick={submitRoomImages} type="button" >
-                        Submit</button>
+                    <Button Primary={language?.Submit} onClick={submitRoomImages} />
                     </div>
                   </div>
                 </div>
@@ -990,12 +977,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
               </div>
 
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                        onClick={submitRoomRates} type="button" >
-                        Submit</button>
+              <Button Primary={language?.Submit}     onClick={submitRoomRates} />         
                     </div>
             </div>
               </div>
@@ -1104,6 +1086,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                             </div>
                         </div>
                         <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                        <Button Primary={language?.Submit}     onClick={submitRoomImages} />
+                 
                             <button 
                             onClick={()=>{newAdditionalService(); setAdd(0);}}
                             className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center" type="submit">

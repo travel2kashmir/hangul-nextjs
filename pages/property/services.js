@@ -209,6 +209,7 @@ function Services() {
                  draggable: true,
                  progress: undefined,
              });
+             
              fetchAdditionalServices(); 
              Router.push("./services");
             setModified([])
@@ -790,6 +791,7 @@ function Services() {
             </div>
             {/* Modal Add */}
             <div className={add === 1 ? 'block' : 'hidden'}>
+               
             <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                 <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
                     <div className="bg-white rounded-lg shadow relative">
@@ -820,7 +822,7 @@ function Services() {
                         </div>
 
                         <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                        <Button Primary={language?.EditService}  onClick={()=>{newAdditionalService(); setAdd(0);}}/>
+                        <Button Primary={language?.Add}  onClick={()=>{newAdditionalService(); setAdd(0);}}/>
                         </div>
                     </div>
                 </div>

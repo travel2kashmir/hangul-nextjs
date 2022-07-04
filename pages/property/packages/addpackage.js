@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
+import Button from '../../../components/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../components/Languages/en"
@@ -13,11 +14,10 @@ import Router from "next/router";
 const logger = require("../../../services/logger");  
 var language;
 var currentProperty;
-var  currentPackageDetails;
+var currentPackageDetails;
 var max_age=[];
 var final=[];
-var service_name=[];
-var service_value=[];
+
 
 function Addpackage() {
   const [packageId, setPackageId] = useState()
@@ -783,15 +783,13 @@ function Addpackage() {
 
 
 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                      submitPackageDescription();
                      
-                    }} type="button" >
-                        {language?.next}</button>
+                        <Button Primary={language?.Next}  
+                                                     onClick={() => {
+                                                      submitPackageDescription();
+                                                     
+                                                    }}/>  
+                                                
                    
        </div>
               
@@ -1002,19 +1000,14 @@ function Addpackage() {
               </div> 
 
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                
-                  <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
+                    <Button Primary={language?.Next}  
+                                        onClick={() => {
                     
-                      if (allRooms.length !== 0){
-                      submitPackageRates();}
-                      if(allRooms.length !== 0){
-                      submitPackageRooms();}
-                    }} type="button" >
-                    {language?.next}</button>
+                                          if (allRooms.length !== 0){
+                                          submitPackageRates();}
+                                          if(allRooms.length !== 0){
+                                          submitPackageRooms();}
+                                        }}             /> 
                 </div>
 
             </div>
@@ -1135,23 +1128,17 @@ function Addpackage() {
             </div> </>))}     
              
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-            <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
-                    focus:ring-4 focus:ring-slate-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                      setDisp(4);
-                    }} type="button" >
-                    {language?.skip}</button>
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                      submitPackageMiles();
-                      
-                    }} type="button" >
-                        {language?.next}</button>
+         
+                    <Button Primary={language?.Skip}  
+                          onClick={() => {
+                            setDisp(4);   }}  
+                           />
+                       
+                        <Button Primary={language?.Next}  
+                           onClick={() => {
+                            submitPackageMiles();
+                            
+                          }}                     /> 
                     </div>
           </div>
         </div>
@@ -1279,24 +1266,17 @@ function Addpackage() {
             </>
             ))}
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-            <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
-                    focus:ring-4 focus:ring-slate-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                      setDisp(5);
-                    }} type="button" >
-                    {language?.skip}</button>
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                       submitPackageProgram();
-                     
-                    }}
-                      type="button" >
-                        {language?.next}</button>
+          
+                    
+                    <Button Primary={language?.Skip}  
+                          onClick={() => {
+                            setDisp(5);   }}  
+                           />
+                        <Button Primary={language?.Next}  
+                           onClick={() => {
+                            submitPackageProgram();
+                          
+                         }}            /> 
                     </div>
           </div>
         </div>
@@ -1385,14 +1365,11 @@ function Addpackage() {
                 </div>
               </div>
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex  text-white bg-slate-600 hover:bg-slate-700 
-                    focus:ring-4 focus:ring-slate-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
-                     onClick={() => {
-                      setDisp(6);
-                    }}type="button" >
-                    {language?.skip}</button>
+              
+                    <Button Primary={language?.Skip}  
+                          onClick={() => {
+                            setDisp(6);   }}  
+                           />
                   <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center 
@@ -1515,15 +1492,11 @@ function Addpackage() {
             </div>
           </div>  
               <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                     submitPackageServices();
-                     setDisp(7);
-                     }} type="button" >
-                   {language?.next}</button>
+                   <Button Primary={language?.Next}  
+                          onClick={() => {
+                            submitPackageServices();
+                            setDisp(7);
+                            }}       /> 
                 </div>
          </div>
          </div>
@@ -1641,17 +1614,11 @@ function Addpackage() {
             </>
             ))}
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-           
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                       submitAdditionalPackageServices();
-                     
-                    }}
-                      type="button" >
-                       Submit</button>
+                       <Button Primary={language?.Submit}  
+                           onClick={() => {
+                            submitAdditionalPackageServices();
+                          
+                         }}     /> 
                     </div>
           </div>
         </div>

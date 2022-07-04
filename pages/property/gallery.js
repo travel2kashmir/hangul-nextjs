@@ -116,10 +116,13 @@ function Gallery() {
                     progress: undefined,
                 }
                 );
+               
                 fetchHotelDetails();
                 Router.push("./gallery");
                 setAddImage(0)
                 setActionImage([]);
+                
+                
             }).catch(error => {
                 toast.error(" Gallery Error", {
                     position: "top-center",

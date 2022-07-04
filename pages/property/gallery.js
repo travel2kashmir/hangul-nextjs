@@ -11,7 +11,6 @@ import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
 var language;
 var currentProperty;
-var gallery;
 import Router from 'next/router'
 
 function Gallery() {
@@ -59,29 +58,15 @@ function Gallery() {
                 logger.info("url  to fetch property details hitted successfully")
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
-    }
-
-   
-    
+    }  
     useEffect(() => {
         fetchHotelDetails();
     }, []);
+
     const onChangePhoto = (e, i) => {
         setImage({ ...image, imageFile: e.target.files[0] })
     }
-
-    const AddImage = {
-        label: "Add image",
-        color: "bg-cyan-600 text-white  hover:bg-cyan-700",
-        icon: <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-
-    }
     
-
-    const Upload = {
-        label: "Upload",
-        color: "text-white bg-gray-600 hover:bg-gray-700 mt-2",
-    }
     /* Function to upload image*/
     const uploadImage = () => {
         const imageDetails = image.imageFile
@@ -282,7 +267,7 @@ function Gallery() {
                         </div>
                     </div>
                     <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                        <Button Primary={AddImage} onClick={() => setAddImage(1)} />
+                        <Button Primary={language?.AddImage} onClick={() => setAddImage(1)} />
                         <a href="#" className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
                             Import
@@ -460,7 +445,7 @@ function Gallery() {
 
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
-                                            <Button Primary={Upload} onClick={uploadImage} /></div>
+                                            <Button Primary={language?.Upload} onClick={uploadImage} /></div>
                                     </div>
                                     <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">

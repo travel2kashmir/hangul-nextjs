@@ -783,24 +783,14 @@ function Addpackage() {
 
 
 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                     
-                        <Button Primary={language?.Next}  
-                                                     onClick={() => {
-                                                      submitPackageDescription();
-                                                     
-                                                    }}/>  
-                                                
-                   
-       </div>
-              
-
-            </div>
+ <Button Primary={language?.Next} onClick={() => { submitPackageDescription(); }}/>  
+   </div>
+   </div>
           </div>
         </div>
       </div>
       </div>
 
-     
     
      {/*   {language?.package} {language?.rooms} {language?.and} {language?.rates} Form */}
      <div id='2' className={disp===2?'block':'hidden'}>
@@ -1064,6 +1054,7 @@ function Addpackage() {
                       <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
                       {language?.add} {language?.miles}
                     </button>
+                    <Button Primary={language?.AddMiles}  onClick={addMiles} />
                   </div>
                 </div>
               </div>
@@ -1123,23 +1114,11 @@ function Addpackage() {
                 <div className="relative w-full mb-3">
                 </div>
               </div>
-
-              
-            </div> </>))}     
-             
+            </div> </>))}      
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-         
-                    <Button Primary={language?.Skip}  
-                          onClick={() => {
-                            setDisp(4);   }}  
-                           />
-                       
-                        <Button Primary={language?.Next}  
-                           onClick={() => {
-                            submitPackageMiles();
-                            
-                          }}                     /> 
-                    </div>
+           <Button Primary={language?.Skip}   onClick={() => {setDisp(4);}} />
+            <Button Primary={language?.Next} onClick={() => {submitPackageMiles() }}/> 
+           </div>
           </div>
         </div>
       </div>
@@ -1189,12 +1168,8 @@ function Addpackage() {
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <button type="button" onClick={addProgram}
-                      className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                      <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      {language?.add} {language?.program}
-                    </button>
-                  </div>
+                  <Button Primary={language?.AddProgram} onClick={addProgram} />
+                    </div>
                 </div>
               </div>
 
@@ -1266,18 +1241,9 @@ function Addpackage() {
             </>
             ))}
             <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-          
-                    
-                    <Button Primary={language?.Skip}  
-                          onClick={() => {
-                            setDisp(5);   }}  
-                           />
-                        <Button Primary={language?.Next}  
-                           onClick={() => {
-                            submitPackageProgram();
-                          
-                         }}            /> 
-                    </div>
+           <Button Primary={language?.Skip} onClick={() => { setDisp(5); }} />
+           <Button Primary={language?.Next}   onClick={() => {  submitPackageProgram();}} /> 
+       </div>
           </div>
         </div>
       </div>
@@ -1365,19 +1331,8 @@ function Addpackage() {
                 </div>
               </div>
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-              
-                    <Button Primary={language?.Skip}  
-                          onClick={() => {
-                            setDisp(6);   }}  
-                           />
-                  <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                     onClick={() => {
-                       submitPackagePropertyCredit();
-                    }} type="button" >
-                    {language?.next}</button>
+               <Button Primary={language?.Skip} onClick={() => { setDisp(6); }} />
+                    <Button Primary={language?.Next}   onClick={() => {submitPackagePropertyCredit(); }} />
                 </div>
             </div>
           </div>
@@ -1492,11 +1447,7 @@ function Addpackage() {
             </div>
           </div>  
               <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
-                   <Button Primary={language?.Next}  
-                          onClick={() => {
-                            submitPackageServices();
-                            setDisp(7);
-                            }}       /> 
+                   <Button Primary={language?.Next}  onClick={() => {submitPackageServices();setDisp(7); }}       /> 
                 </div>
          </div>
          </div>

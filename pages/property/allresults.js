@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
 import Button from "../../components/Button";
+import Sidebar  from "../../components/Sidebar";
 import Table from "../../components/Table/TableList";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -104,6 +105,7 @@ function Allresults()
     
   return (
     <div>
+      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
 

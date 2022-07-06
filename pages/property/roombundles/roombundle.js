@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
+import Button from '../../../components/Button'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../components/Languages/en"
@@ -154,7 +155,8 @@ function Roombundle() {
       "other_fees_amount":rate?.other_fees_amount,
       
   }  
-  const url = '/api/package/rate_master'
+  
+  const url = '/api/package/rates_master'
   axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
   ((response) => {
     toast.success("Package Room Bundle Updated Successfully!", {
@@ -169,7 +171,7 @@ function Roombundle() {
     setRate([])
   })
   .catch((error) => {
-     toast.error("Room Room Bundle Update Error!", {
+     toast.error("Room  Bundle Update Error!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -477,19 +479,8 @@ function Roombundle() {
                     </div> 
                      </div> 
                      <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button
-                  className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                  onClick={() => {
-                   submitPackageEdit();
-                 submitBundleRateEdit();
-                  }}
-                  type="button"
-                >
-                 {language?.update}
-                </button>
+               
+                <Button Primary={language?.Update}    onClick={() => { submitPackageEdit();  submitBundleRateEdit(); }} /> 
               </div>
           </div>
           </div>

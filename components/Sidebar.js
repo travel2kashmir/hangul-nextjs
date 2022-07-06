@@ -1,11 +1,13 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
 import Link from 'next/link'
 var language;
 
-const Sidebar = () => {
+const Sidebar = (args) => {
+  const { item } = args;
+  const [link,setLink]=useState('')
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -22,6 +24,7 @@ const Sidebar = () => {
       } 
     }
     firstfun();
+   
   },[])
 
   return (
@@ -75,7 +78,8 @@ const Sidebar = () => {
                     ></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                   <Link href="./basicdetails"><a> {language?.basicdetails}</a></Link>
+                    <Link href={{pathname:args?.Primary?.basicdetails, query: { id: 1 }}}><a> {language?.basicdetails}</a></Link>  
+                  
                   </span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -91,7 +95,7 @@ const Sidebar = () => {
                     ></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="./address"><a>{language?.address}</a></Link></span>
+                  <Link href={{pathname:args?.Primary?.address, query: { id: 1 }}}><a>{language?.address}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -103,7 +107,7 @@ const Sidebar = () => {
                     <path d="M21 2H6a2 2 0 0 0-2 2v3H2v2h2v2H2v2h2v2H2v2h2v3a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1zm-8 2.999c1.648 0 3 1.351 3 3A3.012 3.012 0 0 1 13 11c-1.647 0-3-1.353-3-3.001 0-1.649 1.353-3 3-3zM19 18H7v-.75c0-2.219 2.705-4.5 6-4.5s6 2.281 6 4.5V18z"></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="./contact"><a>{language?.contact}</a></Link></span>
+                  <Link href={{pathname:args?.Primary?.contact, query: { id: 1 }}}><a>{language?.contact}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -118,7 +122,7 @@ const Sidebar = () => {
                     <path d="M11.25 21V12.75H3V18.75C3 19.9926 4.00736 21 5.25 21H11.25Z" />
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="./gallery"><a>{language?.gallery}</a></Link></span>
+                  <Link href={{pathname:args?.Primary?.gallery, query: { id: 1 }}}><a>{language?.gallery}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -136,7 +140,7 @@ const Sidebar = () => {
                     ></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="./reviews"><a>{language?.reviews}</a></Link></span>
+                  <Link href={{pathname:args?.Primary?.reviews, query: { id: 1 }}}><a>{language?.reviews}</a></Link></span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
@@ -148,7 +152,7 @@ const Sidebar = () => {
                     <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="./services"><a>{language?.services}</a></Link>
+                  <Link href={{pathname:args?.Primary?.services, query: { id: 1 }}}><a>{language?.services}</a></Link>
                   </span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -166,7 +170,7 @@ const Sidebar = () => {
                   </svg>
                   <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="./rooms">
+                  <Link href={{pathname:args?.Primary?.rooms, query: { id: 1 }}}>
                     <a>
                     {language?.rooms}</a>
                     </Link></span>
@@ -185,21 +189,21 @@ const Sidebar = () => {
                     ></path>
                   </svg>
                   <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href="./packages">
+                  <Link href={{pathname:args?.Primary?.packages, query: { id: 1 }}}>
                     <a>{language?.packages}</a></Link>
                   </span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clipRule="evenodd"></path></svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                    <Link href="./allroombundles">
+                    <Link href={{pathname:args?.Primary?.roombundles, query: { id: 1 }}}>
                     <a>Room Bundles</a></Link>
                       </span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clipRule="evenodd"></path></svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                    <Link href="./result">
+                    <Link href={{pathname:args?.Primary?.result, query: { id: 1 }}}>
                     <a>Result</a></Link>
                       </span>
                 </li>
@@ -220,7 +224,7 @@ const Sidebar = () => {
                       ></path>
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                    <Link href="./propertysummary"><a>{language?.propertysummary}</a></Link>
+                    <Link  href={{pathname:args?.Primary?.propertysummary, query: { id: 1 }}}><a>{language?.propertysummary}</a></Link>
                     </span>
                   </li>
                   <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -238,7 +242,7 @@ const Sidebar = () => {
                       ></path>
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                   <Link href="./propertyxml ">
+                   <Link  href={{pathname:args?.Primary?.propertyxml, query: { id: 1 }}}>
                     <a>{language?.propertyxml}</a></Link>
                     </span>
                   </li>
@@ -257,7 +261,7 @@ const Sidebar = () => {
                       ></path>
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                    <Link href="./roomsxml">
+                    <Link href={{pathname:args?.Primary?.roomsxml, query: { id: 1 }}}>
                     <a>{language?.roomxml}</a></Link>
                     </span>
                   </li>

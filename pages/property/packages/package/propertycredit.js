@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Button from '../../../../components/Button';
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
@@ -197,12 +198,8 @@ function Propertycredit() {
               </div>
 
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center ml-16
-                     items-center mb-1 ease-linear transition-all duration-150"
-                        onClick={submitPropertyCreditEdit} type="button" >
-                       {language?.update}</button>
+                       <Button Primary={language?.Update}  onClick={submitPropertyCreditEdit}  />
+                
                     </div>
 
             </div>

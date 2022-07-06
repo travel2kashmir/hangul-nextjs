@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Sidebar  from "../../components/Sidebar";
 import axios from "axios";
 import Button from '../../components/Button'
 import Link from "next/link";
@@ -94,6 +95,8 @@ function Packages() {
   };
 
   return (
+    <>
+    <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
       {/* Navbar */}
@@ -267,6 +270,7 @@ function Packages() {
                 draggable
                 pauseOnHover />
     </div>
+    </>
   )
 }
 

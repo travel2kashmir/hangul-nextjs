@@ -6,17 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
+import Button from '../../../../components/Button'
 import Header from "../../../../components/SubStructure/Header"
 import Footer from "../../../../components/Footer"
 import Sidebar from "../../../../components/SubStructure/Sidebar"
 import Router from "next/router";
 var language;
 var currentProperty;
-var currentPackageRates;
-var resArr=[]
-var currentFilteredRooms;
 const logger = require("../../../../services/logger"); 
-var id=[];
 var currentPackage;
 
 function PackageRates() {
@@ -388,19 +385,9 @@ const fetchDetails = async  () => {
                 <div className="relative w-full mb-3">
                 </div>
               </div>
-
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
-                     onClick={() => {
-                      submitPackageRateEdit();
-                      
-                    }}type="button" >
-                    {language?.update}</button>
+                  <Button Primary={language?.Update} onClick={() => {submitPackageRateEdit(); }} />
    </div>
-
             </div>
           </div>
         </div>

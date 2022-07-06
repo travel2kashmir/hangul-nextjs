@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import Button from '../../../../components/Button';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
@@ -251,12 +252,8 @@ function Packagemiles() {
           </div>
         </div>
         <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-          <button type="button" onClick={() => setView(1)}
-            className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-            <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-            {language?.add} {language?.miles}
-          </button>
-          <span className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
+        <Button Primary={language?.AddMiles}  onClick={() => setView(1)} />
+         <span className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
             {language?.export}
           </span>
@@ -307,23 +304,11 @@ function Packagemiles() {
                           </div>
                         </td>
                         <td className="p-4 whitespace-nowrap space-x-2">
-                          <button type="button" onClick={() => {
-                            setUpdateMile(1);
-                            setEditMile(item);
-                          }}
-                            className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
-                            <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-                            {language?.edit} {language?.miles}
-                          </button>
-                          <button type="button" onClick={() => {
-                            setDeleteMile(1);
-                            setEditMile(item);
-                          }}
-                            className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
-                            <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                            {language?.delete} {language?.miles}
-                          </button>
-                        </td>
+                          <Button Primary={language?.EditMile}  onClick={() => { setUpdateMile(1); setEditMile(item);
+                          }} />
+                          <Button Primary={language?.DeleteMile}  onClick={() => {setDeleteMile(1); setEditMile(item);
+                          }}  />
+                              </td>
                       </tr>
                     )
                   })}
@@ -371,8 +356,7 @@ function Packagemiles() {
               </div>
             </div>
             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <button className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center"
-                onClick={() => { setUpdateMile(0); submitMileEdit(editMile?.mile_id) }} type="submit">{language?.update}</button>
+             <Button Primary={language?.Update}   onClick={() => { setUpdateMile(0); submitMileEdit(editMile?.mile_id) }}/>
             </div>
           </div>
         </div>
@@ -411,8 +395,7 @@ function Packagemiles() {
             </div>
 
             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <button className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                 onClick={submitMileAdd} type="submit">{language?.add} {language?.miles}</button>
+             <Button Primary={language?.Add}   onClick={submitMileAdd} />   
             </div>
           </div>
         </div>
@@ -433,14 +416,9 @@ function Packagemiles() {
               <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
                {language?.areyousureyouwanttodelete}</h3>
-              <button onClick={() => submitDelete()} className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                {language?.yesiamsure}
-              </button>
-              <button
-                onClick={() => setDeleteMile(0)} className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-               {language?.nocancel}
-              </button>
-            </div>
+              <Button Primary={language?.Delete} onClick={() => submitDelete()}/>
+              <Button Primary={language?.Cancel}    onClick={() => setDeleteMile(0)} />
+           </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Sidebar  from "../../components/Sidebar";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
@@ -206,6 +207,9 @@ function Result() {
   }
 
   return (
+    <>
+    
+    <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
       className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
 
@@ -443,6 +447,7 @@ function Result() {
         pauseOnHover />
 
     </div>
+    </>
   )
 }
 

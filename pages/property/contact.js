@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Sidebar  from "../../components/Sidebar";
 import Button from "../../components/Button";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -242,6 +243,8 @@ const DeleteContact ={
   };
 
   return (
+    <>
+    <Sidebar  Primary={english?.Side}/>
     <div
       id="main-content"
       className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
@@ -685,6 +688,7 @@ const DeleteContact ={
         pauseOnHover
       />
     </div>
+    </>
   );
 }
 

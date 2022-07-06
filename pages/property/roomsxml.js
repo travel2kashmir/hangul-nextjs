@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import Link from "next/link";
 import Router from "next/router";
+import Sidebar  from "../../components/Sidebar";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
@@ -56,6 +57,9 @@ function Roomsxml() {
       ,)
     
   return (
+    <>
+    
+    <Sidebar  Primary={english?.Side}/>
     <div  id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
    {/* Navbar */}
@@ -181,6 +185,7 @@ function Roomsxml() {
                 </div>
             </div>
         </div>
+        </>
     )
 
 }

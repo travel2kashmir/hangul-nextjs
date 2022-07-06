@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import  Link  from 'next/link';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
+import Button from '../../../../components/Button';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
@@ -294,15 +295,9 @@ function Packagerooms() {
 
 
     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" 
-                     onClick={() => {
-                      submitPackageRoomsEdit();
-                      
-                    }}type="button" >
-                    {language?.update}</button>
+                    <Button Primary={language?.Update} onClick={() => {submitPackageRoomsEdit();   
+                    }} />
+                
    </div>
       </div>
        {/* Toast Container */}

@@ -1,4 +1,5 @@
 import React, { useState,useEffect } from 'react';
+import Sidebar  from "../../components/Sidebar";
 import axios from 'axios';
 import Link from "next/link";
 import Router from 'next/router'
@@ -106,6 +107,8 @@ const fetchBasicDetails = async () => {
  } 
  
   return (
+    <>
+    <Sidebar  Primary={english?.Side}/>
       <div id="main-content"
       className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
       {/* Navbar */}
@@ -327,6 +330,7 @@ const fetchBasicDetails = async () => {
    
    
     </div>
+    </>
   )
 }
 

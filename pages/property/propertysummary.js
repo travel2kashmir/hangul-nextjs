@@ -1,4 +1,5 @@
 import React from "react";
+import Sidebar  from "../../components/Sidebar";
 import { useState,useEffect } from "react";
 import axios from 'axios';
 import Link from "next/link";
@@ -59,7 +60,7 @@ function PropertySummary() {
   
   return (
     <div>
-      
+      <Sidebar  Primary={english?.Side}/>
       {/* Body */}
       <div
         id="main-content"

@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import Sidebar  from "../../components/Sidebar";
+import Header  from "../../components/Header";
 import Button from "../../components/Button";
 import Link from "next/link";
 import english from "../../components/Languages/en"
@@ -214,6 +215,7 @@ function Gallery() {
 
     return (
         <>
+     <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
             className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">

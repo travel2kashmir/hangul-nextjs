@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar  from "../../components/Sidebar";
+import Header  from "../../components/Header";
 import axios from "axios";
 import Link from "next/link";
+import TableList from '../../components/Table/TableList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "../../components/Button";
@@ -36,7 +38,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
            Router.push("./rooms")   
   },[])
 
-
+    const[gen,setGen] = useState([])
     const [allrooms, setAllRooms] = useState([])
     const [deleteRoom, setDeleteRoom] = useState(0)
     const [actionRoom,setActionRoom]=useState({});
@@ -48,9 +50,24 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 
   const fetchRooms = async () => {
     try {
+      var genData=[];
         const url = `/api/rooms/${currentProperty.property_id}`
         const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
        setAllRooms(response.data)
+      response?.data?.map((item)=>{
+        var temp={
+          name:item.room_name,
+          type:item.room_type_name,
+          status:item.status,
+          id:item.room_id
+        }
+        
+        genData.push(temp)
+        
+
+      }
+      )
+      setGen(genData);
     }
     catch (error) {
 
@@ -69,7 +86,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
     
      /* Delete Room Function*/
      const deleteRooms = () =>{
-    const url=`/api/${actionRoom?.room_id}`
+    const url=`/api/${actionRoom?.id}`
     axios.delete(url).then((response)=>{
        toast.success(("Room Deleted Successfully!"), {
          position: "top-center",
@@ -100,6 +117,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
     
   return (
     <>
+     <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -170,7 +188,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
    
  {/* Header */}
  <div className="mx-4">
- <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.property} {language?.rooms}</h1>
+ <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.property} {language?.rooms}
+</h1>
  <div className="sm:flex">
      <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
          <form className="lg:pr-3" action="#" method="GET">
@@ -211,65 +230,35 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
  <div className="overflow-x-auto">
      <div className="align-middle inline-block min-w-full">
          <div className="shadow overflow-hidden">
-             <table className="table-fixed min-w-full divide-y divide-gray-200">
-                 <thead className="bg-gray-100">
-                     <tr>
-                     <th scope="col" className="p-4">
-                      <div className="flex items-center">
-                        <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
-                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                        <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-                      </div>
-                    </th>
-                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                             {language?.room} {language?.name}
-                         </th>
-                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                             {language?.room} {language?.type}
-                         </th>
-                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                             {language?.status}
-                         </th>
-                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                             {language?.action}
-                         </th>
-                     </tr>
-                 </thead>
-                 <tbody className="bg-white divide-y divide-gray-200">
-                     {allrooms?.map((allrooms,index) => (
-                         <tr className="hover:bg-gray-100" key={index}>
-                             <td className="p-4 w-4">
-                           <div className="flex items-center">
-                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                           </div>
-                         </td>
-                             <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                                 <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{allrooms?.room_name} </td>
-                             </td>
-                             <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{allrooms?.room_type_name} </td>
-                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                 <div className="flex items-center">
-                                     <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
-                                    {language?.active}
-                                 </div>
-                             </td>
-                             <td className="p-4 whitespace-nowrap space-x-2"> 
-                                
-                             <Button Primary={language?.EditRoom} onClick={() => {
-                                          CurrentRoom(allrooms?.room_id),
-                                         Router.push("./rooms/room");
-                                         }}/>
-                                 <Button Primary={language?.DeleteRoom} onClick={()=>{
-                                         setDeleteRoom(1);
-                                         setActionRoom(allrooms);
-                                         }}  />
-                             </td>
-                         </tr>
-                     )
-                     )}
-                 </tbody>
-             </table>
+         <table className="table-fixed min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-100">
+                            <tr>
+                            <th scope="col" className="p-4">
+                             <div className="flex items-center">
+                               <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                 className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                               <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                             </div>
+                           </th>
+                                <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                    Name
+                                </th>
+                                <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                   Type
+                                </th>
+                                <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                   Status
+                                </th>
+                                <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
+                                   Action
+                                </th>
+                            </tr>
+                        </thead>
+          <TableList Primary={gen} Edit={language?.EditRoom} Delete={language?.DeleteRoom} 
+          EditButton={(item) => {
+            alert("id" +item?.id); CurrentRoom(item?.id),Router.push("./rooms/room"); }}
+          DeleteButton={(item)=>{setDeleteRoom(1);setActionRoom(item); }}/> 
+          </table>
          </div>
      </div>
  </div>

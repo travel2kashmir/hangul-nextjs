@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import Sidebar  from "../../components/Sidebar";
+import Header  from "../../components/Header";
 import Button from '../../components/Button'
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
@@ -96,6 +97,7 @@ function Allroombundles() {
  
   return (
     <>
+     <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">

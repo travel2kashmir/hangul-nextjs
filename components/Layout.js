@@ -1,6 +1,4 @@
 import { Component } from 'react'
-import Header from './Header'
-import SideBar from './Sidebar'
 import Footer from './Footer'
 
 const Layout=({children}) =>{
@@ -11,8 +9,7 @@ const Layout=({children}) =>{
     }
 return(
     <>
-    <Header/>
-  
+    
     {children}
     <Footer/>
     </>

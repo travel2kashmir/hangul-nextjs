@@ -182,8 +182,8 @@ function Addroombundles() {
 
   return (
     <>
-    <Header/>
-    <Sidebar/>
+    <Header Primary={english?.Side1}/>
+    <Sidebar Primary={english?.Side1}/>
     <div
       id="main-content"
       className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"

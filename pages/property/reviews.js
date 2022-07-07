@@ -2,6 +2,7 @@ import React,{useState, useEffect} from "react";
 import axios from 'axios';
 import Link from "next/link";
 import Sidebar  from "../../components/Sidebar";
+import Header  from "../../components/Header";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
@@ -51,6 +52,7 @@ function Reviews() {
   }
   return (
     <>
+     <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
     className="bg-gray-50 pt-24 relative overflow-y-auto lg:ml-64">

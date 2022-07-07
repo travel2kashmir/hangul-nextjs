@@ -45,7 +45,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
   const [services, setServices] = useState([]) 
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
-  const [disp, setDisp] = useState(1);
+  const [disp, setDisp] = useState(0);
   const [modified, setModified] = useState({})
   const [allRoomRates, setAllRoomRates] = useState([])
 
@@ -399,8 +399,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 }
   return (
     <>
-    <Header/>
-    <Sidebar/>
+    <Header  Primary={english?.Side1}/>
+    <Sidebar Primary={english?.Side1}/>
     <div id="main-content"
     className="  bg-gray-50  pt-24 relative overflow-y-auto lg:ml-64">
       {/* Header */}

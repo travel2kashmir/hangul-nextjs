@@ -1,5 +1,6 @@
 import React from "react";
 import Sidebar  from "../../components/Sidebar";
+import Header  from "../../components/Header";
 import { useState,useEffect } from "react";
 import axios from 'axios';
 import Link from "next/link";
@@ -60,6 +61,7 @@ function PropertySummary() {
   
   return (
     <div>
+       <Header Primary={english?.Side}/>
       <Sidebar  Primary={english?.Side}/>
       {/* Body */}
       <div

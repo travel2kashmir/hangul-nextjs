@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import Sidebar  from "../../components/Sidebar";
 import Link from "next/link";
+import Header  from "../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../components/Languages/en"
@@ -10,8 +11,6 @@ import arabic from "../../components/Languages/ar"
 const logger = require("../../services/logger");
 var language;
 var currentProperty;
-var propertyxml;
-var xml;
 var format = require('xml-formatter');
 import Router from 'next/router'
 
@@ -82,6 +81,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 
   return (
     <div>
+      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
       <div
         id="main-content"

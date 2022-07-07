@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar  from "../../components/Sidebar";
 import Button from "../../components/Button";
+import TableList  from "../../components/Table/TableList";
 import { ToastContainer, toast } from "react-toastify";
+import Header  from "../../components/Header";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
 import english from "../../components/Languages/en"
@@ -15,7 +17,7 @@ const logger = require("../../services/logger");
 
 function Contact() {
 
-
+  const[gen,setGen] = useState([])
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -87,6 +89,7 @@ const DeleteContact ={
   const [editContact, setEditContact] = useState({});
 
   const fetchHotelDetails = async () => { 
+    var genData=[];
     const url = `/api/${currentProperty.address_province.replace(
       /\s+/g,
       "-"
@@ -95,7 +98,19 @@ const DeleteContact ={
     }s/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setContacts(response.data);
-    logger.info("url  to fetch property details hitted successfully")})
+   
+    {response.data?.contacts?.map((item) => {
+      var temp={
+        name:item.contact_type,
+        type:item.contact_data,
+        status:item.status,
+        id:item.contact_id
+      }
+      genData.push(temp)
+    })
+    setGen(genData);
+  }
+  })
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
 }
 
@@ -244,6 +259,7 @@ const DeleteContact ={
 
   return (
     <>
+     <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div
       id="main-content"
@@ -314,7 +330,8 @@ const DeleteContact ={
       </nav>
       {/* Header */}
       <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.contact}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.contact}
+                {JSON.stringify(gen)}</h1>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
@@ -389,59 +406,12 @@ const DeleteContact ={
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {contacts?.contacts?.map((item, idx) => {
-                    return (
-                      <tr className="hover:bg-gray-100" key={idx}>
-                         <td className="p-4 w-4">
-                           <div className="flex items-center">
-                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                           </div>
-                         </td>
-                        <td
-                          className="p-4 flex items-center whitespace-nowrap space-x-6
-                                                     mr-12 lg:mr-0"
-                        >
-                          <td
-                            className="p-4 whitespace-nowrap text-base font-medium
-                                                         text-gray-900"
-                          >
-                            {item.contact_type}{" "}
-                          </td>
-                        </td>
-                        <td
-                          className="p-4 whitespace-nowrap text-base font-medium
-                                                     text-gray-900"
-                        >
-                          {item.contact_data}{" "}
-                        </td>
-                        <td
-                          className="p-4 whitespace-nowrap text-base font-normal 
-                                                    text-gray-900"
-                        >
-                          <div className="flex items-center">
-                            <div
-                              className="h-2.5 w-2.5 rounded-full bg-green-400 
-                                                            mr-2"
-                            ></div>
-                            {language?.active}
-                          </div>
-                        </td>
-                        <td className="p-4 whitespace-nowrap space-x-2">
-                        <Button Primary={language?.EditContact}    onClick={() => {
-                              setUpdateContact(1);
-                              setEditContact(item);
-                            }}/>
-                          <Button Primary={language?.DeleteContact}  onClick={() => {
-                              setDeleteContact(1);
-                              setEditContact(item);
-                            }}/>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
+                <TableList Primary={gen} Edit={language?.EditRoom} Delete={language?.DeleteRoom} 
+          EditButton={(item) => {
+              setUpdateContact(1);
+            setEditContact(item); }}
+          DeleteButton={(item)=>{setDeleteContact(1);
+            setEditContact(item); }}/> 
               </table>
             </div>
           </div>
@@ -494,7 +464,7 @@ const DeleteContact ={
                       }
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     >
-                      <option selected>{editContact?.contact_type}</option>
+                      <option selected>{editContact?.name}</option>
                       <option value="phone">Phone</option>
                       <option value="email">Email</option>
                       <option value="website">Website</option>
@@ -512,7 +482,7 @@ const DeleteContact ={
                     <input
                       type="text"
                       id="last-name"
-                      defaultValue={editContact?.contact_data}
+                      defaultValue={editContact?.type}
                       onChange={(e) =>
                         setAllHotelDetails({
                           ...allHotelDetails,
@@ -526,7 +496,7 @@ const DeleteContact ={
                 </div>
               </div>
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <Button Primary={language?.Update}  onClick={() => {submitContactEdit(editContact?.contact_id)
+              <Button Primary={language?.Update}  onClick={() => {submitContactEdit(editContact?.id)
                    }} />
               </div>
             </div>
@@ -666,7 +636,7 @@ const DeleteContact ={
                 <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
                  {language?.areyousureyouwanttodelete}
                 </h3>
-                <Button Primary={language?.Delete}  onClick={(e) => { submitDelete(editContact?.contact_id);
+                <Button Primary={language?.Delete}  onClick={(e) => { submitDelete(editContact?.id);
                     }}/>
                <Button Primary={language?.Cancel}   onClick={() =>  setDeleteContact(0)}/>
               </div>

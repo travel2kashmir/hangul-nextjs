@@ -98,8 +98,8 @@ function Propertycredit() {
   },[])
   return (
     <>
-    <Header/>
-    <Sidebar/>
+    <Header Primary={english?.Side2}/>
+    <Sidebar  Primary={english?.Side2}/>
     <div  id="main-content"
     className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
        {/* Navbar */}

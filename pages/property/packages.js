@@ -73,7 +73,7 @@ function Packages() {
 
     /* Delete Package Function*/
     const deletePackages = () => {
-        const url = `/api/package/${actionPackage?.package_id}`
+        const url = `/api/package/${actionPackage?.id}`
         axios.delete(url).then((response) => {
             toast.success(("Package Deleted Successfully!"), {
                 position: "top-center",
@@ -207,7 +207,7 @@ function Packages() {
                                     </thead>
                                     <TableList Primary={gen} Edit={language?.EditRoom} Delete={language?.DeleteRoom}
                                         EditButton={(item) => {
-                                            alert("id" + item?.id); Package(item?.id), Router.push("./packages/package");
+                                           Package(item?.id), Router.push("./packages/package");
                                         }}
                                         DeleteButton={(item) => { setDeletePackage(1); setActionPackage(item); }} />
 

@@ -256,7 +256,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
                         </thead>
           <TableList Primary={gen} Edit={language?.EditRoom} Delete={language?.DeleteRoom} 
           EditButton={(item) => {
-            alert("id" +item?.id); CurrentRoom(item?.id),Router.push("./rooms/room"); }}
+             CurrentRoom(item?.id),Router.push("./rooms/room"); }}
           DeleteButton={(item)=>{setDeleteRoom(1);setActionRoom(item); }}/> 
           </table>
          </div>

@@ -13,6 +13,9 @@ const TableList = (args) =>{
                              <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
                                  <span className="p-4 capitalize whitespace-nowrap text-base font-medium text-gray-900">{item?.name} </span>
                              </td>
+                             {item?.description !== undefined ?
+                              <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{item?.description} </td>
+                              : <></>}
                              {item?.type  !== undefined ?
                              <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{item?.type} </td>
                              : <></>}

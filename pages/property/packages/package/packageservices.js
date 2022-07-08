@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
+import TableList from '../../../../components/Table/TableList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from '../../../../components/Button'
@@ -14,7 +15,6 @@ import Footer from "../../../../components/Footer"
 import Sidebar from "../../../../components/SubStructure/Sidebar"
 var language;
 var currentProperty;
-var currentPackageDetails;
 var service_name = [];
 var service_value = [];
 var currentPackage;
@@ -23,10 +23,10 @@ function Packageservices() {
   const [packageServices, setPackageServices] = useState([])
   const [additionalPackageServices, setAdditionalPackageServices] = useState([])
   const [allPackageDetails, setAllPackageDetails] = useState([])
-  const [edit, setEdit] = useState(0)
-  const [actionService, setActionService] = useState({})
+ const [actionService, setActionService] = useState({})
   const [modified, setModified] = useState([])
   const [addEdit, setAddEdit] = useState(0)
+  const[gen,setGen] = useState([])
   const [addDel, setAddDel] = useState(0)
   const [add, setAdd] = useState(0)
 
@@ -62,16 +62,32 @@ function Packageservices() {
       )
       .catch((error) => { logger.error("url to fetch package services, failed") });
   }
+
   const fetchAdditionalPackageServices = async () => {
+    var geneData=[];  
     const url = `/api/package/additional_package_services/${currentPackage}`
     axios.get(url)
       .then((response) => {
         setAdditionalPackageServices(response.data);
         logger.info("url  to fetch additional package services hitted successfully")
+        {response.data?.map((item) => {
+          var temp={
+            name:item.add_package_service_name,
+            type:item.add_package_service_description,
+            status:item.status,
+            id:item.add_package_service_id
+          }
+          geneData.push(temp)
+        })
+        setGen(geneData);
+        
+      }
+
       }
       )
       .catch((error) => { logger.error("url to fetch additional package services, failed") });
   }
+
  /* Edit Package Fetch Function */
  const fetchDetails = async  () => {
   const url = `/api/package/${currentPackage}`
@@ -86,9 +102,9 @@ function Packageservices() {
 
  }
   useEffect(() => {
-    fetchPackageServices();
-    fetchDetails();
     fetchAdditionalPackageServices();
+    fetchPackageServices();
+    fetchDetails();  
   }, [])
 
   /** Function package services **/
@@ -127,7 +143,7 @@ function Packageservices() {
   const editAdditionalPackageServices = () => {
     if (modified.length !== 0) {
       const data = [{
-        "add_package_service_id": actionService.add_package_service_id,
+        "add_package_service_id": actionService.id,
         "add_package_service_name": modified.add_package_service_name,
         "package_id": currentPackage,
         "add_package_service_description": modified.add_package_service_description,
@@ -211,7 +227,7 @@ function Packageservices() {
   
   /* Function to delete additional service */
   const deleteAdditionalService = () => {
-    const url = `/api/package/${actionService?.add_package_service_id}`
+    const url = `/api/package/${actionService?.id}`
     axios.delete(url).then((response) => {
       toast.success(("Additional Package Service Deleted Successfully!"), {
         position: "top-center",
@@ -507,44 +523,14 @@ function Packageservices() {
                               {language?.action}
                             </th></tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {additionalPackageServices.length === undefined ? <></> :
-                            <>
-                              {additionalPackageServices.map((i, index) => (
-                                <tr className="hover:bg-gray-100" key={index}>
-                                  <td className="p-4 w-4">
-                                    <div className="flex items-center">
-                                      <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                                      <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                    </div>
-                                  </td>
-                                  <td className="px-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                                    <span className="px-4 py-3 capitalize whitespace-nowrap text-sm font-medium text-gray-900">{i.add_package_service_name}</span>
-                                  </td>
-                                  <td className="px-4 py-3 capitalize whitespace-wrap text-xs font-medium text-gray-900">
-                                    {i.add_package_service_description}
-                                  </td>
-                                  <td className="px-4 py-3 whitespace-nowrap text-base font-normal text-gray-900">
-                                    {i.status === true ?
-                                      <div className="flex items-center">
-                                        <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
-                                        {language?.active}
-                                      </div> :
-                                      <div className="flex items-center">
-                                        <div className="h-2.5 w-2.5 rounded-full bg-red-600 mr-2"></div>
-                                        {language?.inactive}
-                                      </div>}
-                                  </td>
-                                  <td className="px-4 py-2 whitespace-nowrap space-x-2">
-                                   <Button Primary={language?.EditService}   onClick={() => { setAddEdit(1); setActionService(i) }}/>
-                                   <Button Primary={language?.DeleteService}  onClick={() => { setAddDel(1); setActionService(i) }}/>
-                                   
-                                  </td>
-                                </tr>
-                              ))}
-                            </>
-                          }
-                        </tbody>
+                        <TableList Primary={gen} Edit={language?.EditService} Delete={language?.DeleteService}
+                                                  EditButton={(i) => {
+                                                    setAddEdit(1); setActionService(i)
+                                                  }}
+                                                  DeleteButton={(i) => {
+                                                    setAddDel(1); setActionService(i)
+    
+                                              }} /> 
                       </table>
                     </div>
                   </div>
@@ -573,14 +559,14 @@ function Packageservices() {
                       <label htmlFor="first-name" className="text-sm capitalize font-medium text-gray-900 block mb-2">{language?.service} {language?.name}</label>
                       <input type="text"
                         onChange={(e) => setModified({ ...modified, add_package_service_name: e.target.value })}
-                        defaultValue={actionService?.add_package_service_name}
+                        defaultValue={actionService?.name}
                         name="first-name" id="first-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label htmlFor="last-name" className="text-sm capitalize font-medium text-gray-900 block mb-2">Service Description</label>
                       <textarea rows="2"
                         onChange={(e) => setModified({ ...modified, add_package_service_description: e.target.value })}
-                        defaultValue={actionService?.add_package_service_description} columns="50" name="last-name" id="last-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                        defaultValue={actionService?.type} columns="50" name="last-name" id="last-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label htmlFor="name" className="text-base pr-2 font-semibold text-gray-900 block mb-2">Status</label>

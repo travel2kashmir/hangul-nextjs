@@ -98,6 +98,7 @@ const DeleteContact ={
     }s/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setContacts(response.data);
+   
     {response.data?.contacts?.map((item) => {
       var temp={
         name:item.contact_type,
@@ -330,7 +331,7 @@ const DeleteContact ={
       {/* Header */}
       <div className="mx-4">
                 <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.contact}
-                {JSON.stringify(gen)}</h1>
+              </h1>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">

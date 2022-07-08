@@ -244,7 +244,7 @@ function Allroombundles() {
                  </thead>
                  <TableList Primary={gen} Edit={language?.EditRoom} Delete={language?.DeleteRoom} 
                  EditButton={(item) => {
-                  alert("id" +item?.id); CurrentPackage({item}),Router.push("./roombundles/roombundle"); }}
+                 CurrentPackage({item}),Router.push("./roombundles/roombundle"); }}
                 DeleteButton={(item)=>{setDeleteBundle(1);setActionBundle(item); }}/> 
              </table>
          </div>

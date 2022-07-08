@@ -98,7 +98,6 @@ const DeleteContact ={
     }s/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setContacts(response.data);
-   
     {response.data?.contacts?.map((item) => {
       var temp={
         name:item.contact_type,

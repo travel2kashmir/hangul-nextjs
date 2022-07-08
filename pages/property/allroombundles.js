@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
+import TableList from '../../components/Table/TableList';
 import Sidebar  from "../../components/Sidebar";
 import Header  from "../../components/Header";
 import Button from '../../components/Button'
@@ -16,6 +17,7 @@ var  currentPackageDetails;
 const logger = require("../../services/logger");
 
 function Allroombundles() {
+  const[gen,setGen] = useState([])
   const [allBundles, setAllBundles] = useState([])
   const [deleteBundle, setDeleteBundle] = useState(0)
   const [actionBundle,setActionBundle]=useState({});
@@ -43,23 +45,31 @@ function Allroombundles() {
       },[]) 
 
   /**Function to save Current property to be viewed to Local Storage**/
-  const CurrentPackage = ({ allBundles }) => {
-    localStorage.setItem("currentPackage", JSON.stringify(allBundles));
+  const CurrentPackage = ({ item }) => {
+    localStorage.setItem("currentPackage", JSON.stringify(item));
   };
-  const fetchBundles = async () => {
-    try {
-        const url = `/api/room_bundle/${currentProperty.property_id}`
-        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-       setAllBundles(response.data)
-    }
-    catch (error) {
 
-        if (error.response) {
-            } 
-        else {
-        }
+  const fetchBundles = async () => {
+    var genData=[];
+    const url = `/api/room_bundle/${currentProperty.property_id}`;  
+    axios.get(url)
+    .then((response)=>{setAllBundles(response.data);
+    {response.data?.map((item) => {
+      var temp={
+        name:item.room_name,
+        type:item.package_name,
+        status:item.status,
+        id:item.room_bundle_id
+      }
+      genData.push(temp)
+    })
+    setGen(genData);
     }
+    })
+    .catch((error)=>{logger.error("url to fetch property details, failed")});  
 }
+
+
       useEffect(() => {
         fetchBundles();
     }
@@ -68,7 +78,7 @@ function Allroombundles() {
   
      /* Delete Room Function*/
      const deleteRoomBundle = () =>{
-      const url=`/api/package/${actionBundle?.room_bundle_id}`
+      const url=`/api/package/${actionBundle?.id}`
       axios.delete(url).then((response)=>{
          toast.success(("Room Bundle Deleted Successfully!"), {
            position: "top-center",
@@ -232,35 +242,10 @@ function Allroombundles() {
                          </th>
                      </tr>
                  </thead>
-                 <tbody className="bg-white divide-y divide-gray-200">
-                     {allBundles?.map((allBundles,index) => (
-                         <tr className="hover:bg-gray-100" key={index}>
-                          
-                         <td className="p-4 w-4">
-                           <div className="flex items-center">
-                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                           </div>
-                         </td>
-                             <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
-                                 <td className="p-4 whitespace-nowrap capitalize text-base font-medium text-gray-900">{allBundles?.room_name} </td>
-                             </td>
-                             <td className="p-4 whitespace-nowrap capitalize text-base font-medium text-gray-900">{allBundles?.package_name} </td>
-                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                 <div className="flex items-center">
-                                     <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
-                                    {language?.active}
-                                 </div>
-                             </td>
-                             <td className="p-4 whitespace-nowrap space-x-2">    
-                                     <Button Primary={language?.EditRoomBundle} onClick={() => {CurrentPackage({allBundles}),Router.push("./roombundles/roombundle"); }}/> 
-                                     <Button Primary={language?.DeleteRoomBundle} onClick={()=>{ setDeleteBundle(1); setActionBundle(allBundles); }}  /> 
-                                
-                             </td>
-                         </tr>
-                     )
-                     )}
-                 </tbody>
+                 <TableList Primary={gen} Edit={language?.EditRoom} Delete={language?.DeleteRoom} 
+                 EditButton={(item) => {
+                  alert("id" +item?.id); CurrentPackage({item}),Router.push("./roombundles/roombundle"); }}
+                DeleteButton={(item)=>{setDeleteBundle(1);setActionBundle(item); }}/> 
              </table>
          </div>
      </div>

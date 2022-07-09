@@ -213,6 +213,46 @@ label: "Delete Contact",
    ></path>
  </svg>
 },
+"AddRateRule" :{
+  label: "Add Rate Rule",
+   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
+   icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
+   
+},
+ "EditRateRule" :{
+  label: "Edit Rate Rule",
+   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
+   icon:<svg
+   className="mr-2 h-5 w-5"
+   fill="currentColor"
+   viewBox="0 0 20 20"
+   xmlns="http://www.w3.org/2000/svg"
+ >
+   <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+   <path
+     fillRule="evenodd"
+     d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+     clipRule="evenodd"
+   ></path>
+ </svg>
+},
+
+ "DeleteRateRule" :{
+  label: "Delete Rate Rule",
+   color: "bg-red-600 hover:bg-red-800 text-white ",
+   icon: <svg
+   className="mr-2 h-5 w-5"
+   fill="currentColor"
+   viewBox="0 0 20 20"
+   xmlns="http://www.w3.org/2000/svg"
+ >
+   <path
+     fillRule="evenodd"
+     d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+     clipRule="evenodd"
+   ></path>
+ </svg>
+},
  "AddRoom" :{
   label: "Add Room",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
@@ -393,7 +433,8 @@ label: "Delete Contact",
  result:'./allresults',
 propertysummary:'./propertysummary',
 propertyxml:'./propertyxml',
-roomsxml:'./roomsxml'
+roomsxml:'./roomsxml',
+raterules:'./raterules'
 },
 
 
@@ -411,7 +452,8 @@ roomsxml:'./roomsxml'
   result:'../allresults',
  propertysummary:'../propertysummary',
 propertyxml:'../propertyxml',
-roomsxml:'../roomsxml'
+roomsxml:'../roomsxml',
+raterules:'../raterules'
  },
  
  "Side2":{
@@ -428,7 +470,8 @@ roomsxml:'../roomsxml'
   result:'../../allresults',
  propertysummary:'../..propertysummary',
  propertyxml:'../../propertyxml',
-roomsxml:'../../roomsxml'
+roomsxml:'../../roomsxml',
+raterules:'../../raterules'
  },
   descriptiondate: "Description Date",
   update:'Update',

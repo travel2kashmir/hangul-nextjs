@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
+import Sidebar from "../components/Sidebar";
+import Header from "../components/Header"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../components/Languages/en"
@@ -9,7 +11,7 @@ import arabic from "../components/Languages/ar"
 import Router from "next/router";
 var language;
 var currentProperty;
-var  currentPackageDetails;
+
 
 function Ratecondition() {
   const [userRateDetails,setUserRateDetails]=useState([])
@@ -29,8 +31,7 @@ function Ratecondition() {
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))  
-        currentPackageDetails=JSON.parse(localStorage.getItem('packageDescription'))
-      } 
+        } 
     }
     firstfun();
     Router.push("/ratecondition");

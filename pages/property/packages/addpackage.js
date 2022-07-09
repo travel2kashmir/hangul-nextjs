@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
-import Button from '../../../components/Button'
+import Button from '../../../components/Button';
+import Sidebar from '../../../components/Sidebar'
+import Header from '../../../components/Header'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../components/Languages/en"

@@ -9,6 +9,8 @@ import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
 import Router from "next/router";
 import Footer from "../../../components/Footer"
+import Sidebar from '../../../components/Sidebar'
+import Header from '../../../components/Header'
 var language;
 var currentProperty;
 var currentPackageDetails;

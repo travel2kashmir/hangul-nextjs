@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
+import Sidebar from '../../../components/Sidebar'
+import Header from '../../../components/Header'
 import Footer from "../../../components/Footer"
 import Router from "next/router";
 var language;

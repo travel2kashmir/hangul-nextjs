@@ -7,7 +7,9 @@ import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar";
 import Button from '../../../../components/Button';
-import Footer from "../../../../components/Footer"
+import Footer from "../../../../components/Footer";
+import Sidebar from '../../../../components/Sidebar';
+import Header from '../../../../components/Header'
 import Router from "next/router";
 var language;
 var currentProperty;

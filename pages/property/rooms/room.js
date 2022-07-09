@@ -3,7 +3,9 @@ import axios from "axios";
 import Link from "next/link";
 import Button  from '../../../components/Button';
 import english from "../../../components/Languages/en"
-import Footer from "../../../components/Footer"
+import Footer from "../../../components/Footer";
+import Sidebar from '../../../components/Sidebar'
+import Header from '../../../components/Header'
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
 import { ToastContainer, toast } from 'react-toastify';

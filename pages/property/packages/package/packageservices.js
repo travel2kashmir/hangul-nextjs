@@ -9,6 +9,8 @@ import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
 import Router from "next/router";
+import Sidebar from '../../../../components/Sidebar';
+import Header from '../../../../components/Header'
 const logger = require("../../../../services/logger");
 import Footer from "../../../../components/Footer"
 var language;

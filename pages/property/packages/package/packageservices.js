@@ -10,9 +10,7 @@ import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
 import Router from "next/router";
 const logger = require("../../../../services/logger");
-import Header from "../../../../components/SubStructure/Header"
 import Footer from "../../../../components/Footer"
-import Sidebar from "../../../../components/SubStructure/Sidebar"
 var language;
 var currentProperty;
 var service_name = [];

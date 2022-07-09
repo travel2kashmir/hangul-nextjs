@@ -6,11 +6,12 @@ import Router from "next/router";
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar";
-import Footer from "../../../components/Footer"
+import Footer from "../../../components/Footer";
+import Sidebar from '../../../components/Sidebar';
+import Header from '../../../components/Header';
 import Link from "next/link";
 var language;
 var currentProperty;
-var services;
 var currentroom;
 const logger = require("../../../services/logger");
 

@@ -47,7 +47,7 @@
     "postcss": "^8.4.12",
     "tailwindcss": "^3.0.23"
   },
-  "pre-commit":[
+  "pre-commit": [
     "lint"
   ]
 }

@@ -12,6 +12,10 @@ module.exports = {
     require.resolve("crypto-browserify")};
     return config;
   },
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    version: '12.1.4',
+  },
   async rewrites() {
     return [
       {

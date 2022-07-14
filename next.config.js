@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
+const withGitInfo = require('next-gitinfo')
 
+module.exports = withGitInfo()
 module.exports = {
  
     env:{

@@ -7,6 +7,7 @@
     "node": "16.13.1"
   },
   "scripts": {
+    "git-info": "node components/gitInfo.js",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -44,6 +45,7 @@
     "autoprefixer": "^10.4.4",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.4",
+    "next-gitinfo": "^1.1.0",
     "postcss": "^8.4.12",
     "tailwindcss": "^3.0.23"
   },

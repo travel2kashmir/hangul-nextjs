@@ -1,10 +1,7 @@
-/** @type {import('next').NextConfig} */
-const withGitInfo = require('next-gitinfo')
 
-module.exports = withGitInfo()
+/** @type {import('next').NextConfig} */
 module.exports = {
- 
-    env:{
+ env:{
       serverURL:"http://103:136:36:27",
       port:"7860"
     }

@@ -7,13 +7,10 @@
     "node": "16.13.1"
   },
   "scripts": {
-    "git-info": "node components/gitInfo.js",
-    "start-server": "next dev",
+    "dev": "next dev",
     "build": "next build",
-    "start-dev": "next start",
-    "lint": "next lint",
-    "dev":"npm-run-all --serial git-info start-server",
-    "start":"npm-run-all --serial git-info start-dev"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@nrwl/next": "^14.0.2",
@@ -23,11 +20,11 @@
     "child_process": "^1.0.2",
     "crypto-browserify": "^3.12.0",
     "fast-xml-parser": "^4.0.7",
+    "gridjs": "^5.0.2",
     "http-proxy-middleware": "^2.0.4",
     "install": "^0.13.0",
     "next": "12.1.4",
     "next-http-proxy-middleware": "^1.2.4",
-    "npm-run-all": "^4.1.5",
     "nprogress": "^0.2.0",
     "pino": "^6.14.0",
     "pino-pretty": "^7.6.1",
@@ -48,11 +45,7 @@
     "autoprefixer": "^10.4.4",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.4",
-    "next-gitinfo": "^1.1.0",
     "postcss": "^8.4.12",
     "tailwindcss": "^3.0.23"
-  },
-  "pre-commit": [
-    "lint"
-  ]
+  }
 }

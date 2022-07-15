@@ -7,10 +7,10 @@ import TableList from '../../components/Table/TableList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "../../components/Button";
-// import english from "../../components/Languages/en"
-// import french from "../../components/Languages/fr"
-// import arabic from "../../components/Languages/ar"
-import {english, french, arabic} from "../../components/Languages/Languages"
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
+// import {english, french, arabic} from "../../components/Languages/Languages"
 var language;
 var currentProperty;
 import Router  from "next/router";
@@ -148,7 +148,7 @@ function Raterules() {
    
  {/* Header */}
  <div className="mx-4">
- <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.property} {language?.rooms}
+ <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Rate Rules
 </h1>
  <div className="sm:flex">
      <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
@@ -203,9 +203,7 @@ function Raterules() {
                                 <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
                                     Name
                                 </th>
-                                <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                   Type
-                                </th>
+                               
                                 <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
                                    Status
                                 </th>

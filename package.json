@@ -10,9 +10,10 @@
     "git-info": "node components/gitInfo.js",
     "start-server": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start-dev": "next start",
     "lint": "next lint",
-    "dev":"npm-run-all --serial git-info start-server"
+    "dev":"npm-run-all --serial git-info start-server",
+    "start":"npm-run-all --serial git-info start-dev"
   },
   "dependencies": {
     "@nrwl/next": "^14.0.2",

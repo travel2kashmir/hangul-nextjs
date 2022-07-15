@@ -1,8 +1,7 @@
-/** @type {import('next').NextConfig} */
 
+/** @type {import('next').NextConfig} */
 module.exports = {
- 
-    env:{
+ env:{
       serverURL:"http://103:136:36:27",
       port:"7860"
     }
@@ -11,6 +10,10 @@ module.exports = {
     config.resolve.fallback = { crypto: 
     require.resolve("crypto-browserify")};
     return config;
+  },
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    version: '12.1.4',
   },
   async rewrites() {
     return [

@@ -3,9 +3,11 @@ import React, {useEffect} from "react";
 import english from "./Languages/en";
 import french from "./Languages/fr";
 import arabic from "./Languages/ar";
+import getConfig from 'next/config';
+import generatedGitInfo from './generatedGitInfo.json';
 var language;
 const gitCommand = "git rev-parse HEAD";
-
+const { publicRuntimeConfig } = getConfig();
 
 function Footer() {
     useEffect(()=>{
@@ -37,7 +39,10 @@ function Footer() {
         <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{language?.privacypolicy}</a></li>
         <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{language?.licensing}</a></li>
         <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{language?.cookiepolicy}</a></li>
-        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline">{language?.contact}</a></li>
+        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline mr-4 md:mr-6">{language?.contact}</a></li>
+        <li><a href="#" className="text-sm font-normal text-gray-500 hover:underline">v:{publicRuntimeConfig?.version}#{generatedGitInfo.gitBranch}@{generatedGitInfo.gitCommitHash}
+          
+          </a></li>
         </ul>
     <div className="flex sm:justify-center space-x-6">
         <a href="#" className="text-gray-500 hover:text-gray-900">

@@ -9,6 +9,7 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import { useRouter } from "next/router";
 const logger = require("../../services/logger");
+import Button from "../../components/Button"
 var language;
 var currentUser;
 var currentProperty;
@@ -71,10 +72,11 @@ const sendLink = () =>{
     uuid:`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`,
     property_id:currentProperty.property_id,
     address_id:allHotelDetails.address[0].address_id,
-    theme_id:theme
+    theme_id:theme,
+    lang:localStorage?.getItem("Language")
   
   }
-  alert(JSON.stringify(data))
+ 
   axios.post('/api/property_page',data).then((response)=>alert(JSON.stringify(response.data))).catch((error)=>alert(error))
 }  
   
@@ -126,14 +128,19 @@ const sendLink = () =>{
             </li>
           </ol>
         </nav>
-          <div><button onClick={()=>{setBgColor(theme1); setTheme(theme1);}}>theme1||</button>
-          <button onClick={()=>{setBgColor(theme2); setTheme(theme2);}}>theme2||</button>
-          <button onClick={()=>{setBgColor(theme3); setTheme(theme3);}}>theme3||</button>
-          <button onClick={()=>{setBgColor(theme4); setTheme(theme4);}}>theme4||</button>
-          <button onClick={()=>{setBgColor(theme5); setTheme(theme5);}}>theme5</button>
-          <br/>bg color:{JSON.stringify(bgColor)} || theme:{JSON.stringify(theme)} || {uri}
-         <button className="mx-4 border-2 border-orange-800 bg-cyan-600 hover:bg-cyan-700 text-white" onClick={()=>{ setUri(`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`);
-         sendLink(); setUnique(1)}}>Generate url for page</button>
+          <div>
+          
+          <button onClick={()=>{setBgColor(theme1); setTheme(theme1);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme1</button>
+          <button onClick={()=>{setBgColor(theme2); setTheme(theme2);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme2</button>
+          <button onClick={()=>{setBgColor(theme3); setTheme(theme3);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme3</button>
+          <button onClick={()=>{setBgColor(theme4); setTheme(theme4);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme4</button>
+          <button onClick={()=>{setBgColor(theme5); setTheme(theme5);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme5</button>
+        
+         <button className="mx-4 border-2 border-orange-800 bg-cyan-600 hover:bg-cyan-700 text-white" onClick={()=>{ 
+          setUri(`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`);
+         sendLink();
+          setUnique(1)}}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate url for page</button>
           </div>
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.propertysummary}

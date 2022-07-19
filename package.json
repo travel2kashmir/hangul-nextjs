@@ -12,7 +12,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev":"npm-run-all --serial git-info start-server"
+    "dev": "npm-run-all --serial git-info start-server"
   },
   "dependencies": {
     "@nrwl/next": "^14.0.2",

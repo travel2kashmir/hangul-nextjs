@@ -10,20 +10,31 @@ import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import $ from "jquery"
+var url;
 var language;
 var currentProperty;
+var contacts = [];
+var address = '/api/jammu-and-kashmir/srinagar/hotels/t2k001'
 import Router from 'next/router'
 const logger = require("../../services/logger");
-import { Grid } from "gridjs";
-import "gridjs/dist/theme/mermaid.css";
+
 
 
 function Contact() {
 
-  const[gen,setGen] = useState([])
-
   const wrapperRef = useRef(null);
-
+  const[gen,setGen] = useState([])
+  const [allHotelDetails, setAllHotelDetails] = useState([]);
+  const [view, setView] = useState(0);
+  const [updateContact, setUpdateContact] = useState({
+    "edit":0,
+    "id":''
+  });
+  const [deleteContact, setDeleteContact] = useState(0);
+  const [editContact, setEditContact] = useState({});
+  const [contacts, setContacts] = useState([]);
+  const [contact, setContact] = useState([]);
 
   useEffect(()=>{  
     const firstfun=()=>{  
@@ -41,221 +52,87 @@ function Contact() {
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
     
+    $(document).on('click', '.edit', function() {
+      $(this).parent().siblings('td.data').each(function() {
+        var content = $(this).html();
+        $(this).html('<input value="'  + content + '"   />');
+      }); 
+      $(this).siblings('.save').show();
+      $(this).siblings('.delete').hide();
+      $(this).hide();
+    });
+    
+    $(document).on('click', '.save', function() {
+      
+      $('input').each(function() {
+        var content = $(this).val();
+        $(this).html(content);
+        $(this).contents().unwrap();
+      });
+      $(this).siblings('.edit').show();
+      $(this).siblings('.delete').show();
+      $(this).hide();
+      
+    });
+    
+    $(document).on('click', '.delete', function() {
+      $(this).parents('tr').remove();
+
+    });
+    $( document ).ready(function() {
+      $('input').each(function() {
+        var content = $(this).val();
+       
+        $(this).html(content);
+        $(this).contents().unwrap();
+      });
+      $(this).siblings('.edit').show();
+      $(this).siblings('.delete').show();
+      $(this).siblings('.save').hide();
+    
+    });
+   
       } 
     }
     firstfun();
-    
+
    Router.push("./grid");
   },[])
-
-  const AddContact ={
-    label: "Add Contact",
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-     icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-     
-}
-
-
-const EditContact ={
-  label: "Edit Contact",
-   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-   icon:<svg
-   className="mr-2 h-5 w-5"
-   fill="currentColor"
-   viewBox="0 0 20 20"
-   xmlns="http://www.w3.org/2000/svg"
- >
-   <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
-   <path
-     fillRule="evenodd"
-     d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-     clipRule="evenodd"
-   ></path>
- </svg>
-}
-
-const DeleteContact ={
-  label: "Delete Contact",
-   color: "bg-red-600 hover:bg-red-800 text-white ",
-   icon: <svg
-   className="mr-2 h-5 w-5"
-   fill="currentColor"
-   viewBox="0 0 20 20"
-   xmlns="http://www.w3.org/2000/svg"
- >
-   <path
-     fillRule="evenodd"
-     d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-     clipRule="evenodd"
-   ></path>
- </svg>
-}
-  const [allHotelDetails, setAllHotelDetails] = useState([]);
-  const [view, setView] = useState(0);
-  const [updateContact, setUpdateContact] = useState(0);
-  const [deleteContact, setDeleteContact] = useState(0);
-  const [editContact, setEditContact] = useState({});
+  
+ const editor = (idx)=>{
  
-  useEffect(() => {
+
+ }
+
+  const fetchHotelDetails = async () => { 
+    var genData=[];
+    const url = `/api/${currentProperty.address_province.replace(
+      /\s+/g,
+      "-"
+    )}/${currentProperty.address_city}/${
+      currentProperty.property_category
+    }s/${currentProperty.property_id}`;  
+    axios.get(url)
+    .then((response)=>{setContacts(response.data.contacts);
    
-    grid.render(wrapperRef.current);
-  },[]);
-  
-  const conTemp = {
-    contact_type: "",
-    contact_data: "",
-    property_id: currentProperty?.property_id,
-  };
-
-  const [contact, setContact] = useState([]);
-  const [contacts, setContacts] = useState([]);
-  
-  const onChange = (e, index, i) => {
-    setContact(
-      contact?.map((item, id) => {
-        if (item.index === index) {
-          item[i] = e.target.value;
-        }
-        return item;
-      })
-    );
-  };
-
-  /* Function Edit Contact*/
-  const submitContactEdit = (props) => {
-    if (allHotelDetails.length !== 0){
-    const final_data = {
-      contact_id: props,
-      contact_type: allHotelDetails.contact_type,
-      contact_data: allHotelDetails.contact_data,
-    };
-    const url = "/api/contact";
-    axios
-      .put(url, final_data, { header: { "content-type": "application/json" } })
-      .then((response) => {
-        toast.success("Contact Updated Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        fetchHotelDetails(); 
-        setUpdateContact(0)
-        Router.push("./contact");
-        setAllHotelDetails([])
-      })
-      .catch((error) => {
-        toast.error("Contact Update Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setUpdateContact(0)
-      });
-    }
-  };
-
-  /* Function Add Contact*/
-  function submitContactAdd(e) {
-    e.preventDefault();
-    if (contact.length !== 0){
-    const contactdata = [{
-        property_id: currentProperty?.property_id,
-        contact_type: contact?.contact_type,
-        contact_data: contact?.contact_data,
-        status:true
-    }];
-    const finalContact = { contacts: contactdata };
-    axios
-      .post(`/api/contact`, JSON.stringify(finalContact), {
-        headers: { "content-type": "application/json" },
-      })
-      .then((response) => {
-        toast.success("Contact Added Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setView(0)
-        fetchHotelDetails(); 
-        Router.push("./contact");
-       setContact([])
-      })
-      .catch((error) => {
-        toast.error("Contact Add Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setView(0)
-      });
-    }
+    {response.data?.contacts?.map((item) => {
+      var temp={
+        name:item.contact_type,
+        type:item.contact_data,
+        status:item.status,
+        id:item.contact_id
+      }
+      genData.push(temp)
+    })
+    setGen(genData);
   }
+  })
+    .catch((error)=>{logger.error("url to fetch property details, failed")});  
+}
+useEffect(() => {
+  fetchHotelDetails(); 
+},[]);
 
-  /* Function Delete Contact*/
-  const submitDelete = (props) => {
-    const url = `/api/${props}`;
-    axios
-      .delete(url)
-      .then((response) => {
-        toast.success("Contact Deleted Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        fetchHotelDetails(); 
-        setDeleteContact(0)
-        Router.push("./contact");
-      })
-      .catch((error) => {
-        toast.error("Contact Delete Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setDeleteContact(0)
-      });
-  };
-
- 
-  
- const grid = new Grid({
-    columns: ['Name', 'Type', 'Status'],
-    search: true,
-    pagination: true,
-    sorting: true,
-    server: {
-      url:`/api/jammu-and-kashmir/srinagar/hotels/t2k001`,
-      then: response => response.contacts.map(item => 
-        [item.contact_type, item.contact_data, item.status == true ? "Active" : "Inactive" ]
-      )
-    } 
-  });
- 
- 
   return (
     <>
      <Header Primary={english?.Side}/>
@@ -336,7 +213,8 @@ const DeleteContact ={
                         <form className="lg:pr-3" action="#" method="GET">
                             <label htmlFor="users-search" className="sr-only">{language?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.search}>
+                                <input type="text" name="email" id="users-search" 
+                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.search}>
                                 </input>
                             </div>
                         </form>
@@ -369,12 +247,107 @@ const DeleteContact ={
         <div className="overflow-x-auto">
           <div className="align-middle inline-block min-w-full">
             <div className="shadow overflow-hidden">
-            <div ref={wrapperRef} />
-              
-            </div>
-          </div>
-        </div>
-      </div>
+      <table className="table data table-fixed min-w-full divide-y divide-gray-200">
+  <thead className="bg-gray-100">
+    <tr>
+      <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
+      <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Email</th>
+       <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+      <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Actions 
+                     </th>
+    </tr>
+  </thead>
+  {/* <tbody className="bg-white divide-y divide-gray-200">
+  {contacts?.map((item,idx) => ( <>{(updateContact?.edit===1 && updateContact?.id===idx)?
+  <>
+  <tr>
+    <td className="data p-4 text-left text-sm font-semibold  ">
+        
+     <input type="text" defaultValue={item?.contact_type}></input> </td></tr></>:
+     <>
+     <tr>
+    <td className="data p-4 text-left text-sm font-semibold  ">
+        
+     {item?.contact_type} </td></tr></>}
+    <tr className="hover:bg-gray-100" key={idx}>
+      <td className="data p-4 text-left text-sm font-semibold  ">
+        
+     {item?.contact_type} </td>
+      <td className="data p-4 text-left text-sm font-semibold  ">
+      {item?.contact_data}
+    </td>
+    
+    {item?.type  !== undefined ?
+                             <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{item?.type} </td>
+                             : <></>}
+                             {item?.status == true ? 
+                             <td className="  whitespace-nowrap text-base font-normal text-gray-900">
+                                 <span className="flex items-center">
+                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
+                                     <td className=" data p-4 whitespace-nowrap text-base font-normal text-gray-900">Active</td>
+                                 </span>
+                             </td>:
+                             <td className="data  whitespace-nowrap text-base font-normal text-gray-900">
+                                 <span className="flex items-center">
+                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
+                                     <td className="data  whitespace-nowrap text-base font-normal text-gray-900">  Inactive</td>
+                                 </span>
+                             </td>}
+      <td className="p-4 whitespace-nowrap space-x-2">
+        
+        <button className=" bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white sm:inline-flex  
+            focus:ring-4 focus:ring-cyan-200 font-semibold
+             rounded-lg text-sm px-5 py-2 text-center 
+             items-center  mb-1 ease-linear transition-all duration-150 " onClick={(item)=>{setEditContact(item);setUpdateContact({...updateContact,edit:1,id:idx})}}>Edit</button>
+        <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white sm:inline-flex  
+            focus:ring-4 focus:ring-red-500 font-semibold
+             rounded-lg text-sm px-5 py-2 text-center 
+             items-center  mb-1 ease-linear transition-all duration-150">Delete</button>
+      </td>
+    </tr>
+  ))}
+  </tbody> */}
+   <tbody className="bg-white divide-y divide-gray-200">
+    {contacts?.map((item,idx)=>(
+      <>
+      {updateContact?.edit===1 && updateContact?.id===idx?
+        <>
+         <tr className="hover:bg-gray-100">
+              <td className="data p-4 text-left text-sm font-semibold  ">
+              <input type="text" defaultValue={item?.contact_type}></input></td>
+              <td className="data p-4 text-left text-sm font-semibold  ">
+              <input type="text" defaultValue={item?.contact_data}></input> </td>
+              <button >Save</button>
+              <button onClick={()=>{setUpdateContact({...updateContact,edit:0,id:''})} }>Cancel</button>
+              </tr>
+        </>:
+     <>
+     <tr>
+    <td className="data p-4 text-left text-sm font-semibold  ">
+     {item?.contact_type} 
+     </td>
+     <td className="data p-4 text-left text-sm font-semibold  ">
+     {item?.contact_data} 
+     </td>
+     <button onClick={(item)=>{setEditContact(item);setUpdateContact({...updateContact,edit:1,id:idx})}}>Edit</button>
+     <button >Delete</button>
+     
+     </tr>
+     </>}
+     </>
+    ))
+  }
+   </tbody>
+</table>
+</div>
+</div></div></div>
+   
+
+
 
       {/* Modals Popups for Edit, Add and Delete Contact */}
       {/* Modal Edit */}

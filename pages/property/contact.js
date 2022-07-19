@@ -257,6 +257,8 @@ const DeleteContact ={
       });
   };
 
+  
+
   return (
     <>
      <Header Primary={english?.Side}/>
@@ -406,7 +408,7 @@ const DeleteContact ={
                     </th>
                   </tr>
                 </thead>
-                <TableList Primary={gen} Edit={language?.EditRoom} Delete={language?.DeleteRoom} 
+                <TableList Primary={gen} Edit={language?.EditContact} Delete={language?.DeleteContact} 
           EditButton={(item) => {
               setUpdateContact(1);
             setEditContact(item); }}

@@ -19,7 +19,7 @@ function Services() {
     const [additionalServices, setAdditionalServices] = useState({})
     const [services, setServices] = useState([])
     const [edit, setEdit] = useState(0)
-    const [actionService, setActionService] = useState({})
+    const [actionService, setActionService] = useState([])
     const [modified, setModified] = useState([])
     const [addEdit, setAddEdit] = useState(0)
     const [addDel, setAddDel] = useState(0)
@@ -156,13 +156,13 @@ function Services() {
 
     /* Function to edit services*/
     const updateServices = () => {
-        if (modified.length !== 0) {
+       
             const final_data = {
                 "service_id": actionService.id,
                 "property_id": currentProperty?.property_id,
-                "service_value": modified.service_value,
-                "service_comment": modified.service_comment,
-                "status": modified.status
+                "service_value": actionService.type,
+                "service_comment": actionService.service_comment,
+                "status": actionService.status
             }
 
             const url = '/api/services'
@@ -192,7 +192,7 @@ function Services() {
                         progress: undefined,
                     });
                 })
-        }
+        
     }
 
     /* Function to delete additional service */
@@ -489,16 +489,15 @@ function Services() {
                                             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                         </button>
                                     </div>
-
-                                    <div className="p-6 space-y-6">
+                                    
+                                    <div className="py-6 px-10 space-y-6">
                                         <div className="grid grid-cols-6 gap-6">
                                             <div className="col-span-6 sm:col-span-3">
                                                 <label htmlFor="name" className="text-base pr-2 font-semibold text-gray-900 block mb-2">{actionService?.name}</label>
                                                 <div className="flex">
                                                     <div className="form-check form-check-inline">
                                                         <input type="radio"
-
-                                                            onChange={(e) => (setModified({ ...modified, service_value: e.target.value }))}
+                                                            onChange={(e) => (setActionService({ ...actionService, type: e.target.value }))}
                                                             className="form-check-input form-check-input 
                                                          appearance-none rounded-full h-4 w-4 border 
                                                          border-gray-300 
@@ -507,7 +506,7 @@ function Services() {
                                                           transition duration-200 mt-2  align-top
                                                            bg-no-repeat bg-center bg-contain float-left
                                                             mr-2 cursor-pointer"
-
+                                                                      checked={actionService?.type === "yes"}
                                                             value="yes"
                                                             name="who" id='ip1' />
                                                         <label
@@ -519,14 +518,15 @@ function Services() {
                                                     </div>
                                                     <div className="form-check form-check-inline">
                                                         <input type="radio" id='ip2' value="no"
-                                                            onChange={(e) => (setModified({ ...modified, service_value: e.target.value }))}
+                                                            onChange={(e) => (setActionService({ ...actionService, type: e.target.value }))}
                                                             className="form-check-input form-check-input appearance-none 
                                                          rounded-full h-4 w-4 border border-gray-300
                                                           bg-white checked:bg-blue-600 checked:border-blue-600
                                                            focus:outline-none transition duration-200 mt-2 
                                                             align-top bg-no-repeat bg-center bg-contain float-left mb-2
                                                              mr-1 ml-2 cursor-pointer"
-                                                            name="who" />
+                                                            name="who"
+                                                            checked={actionService?.type === "no"} />
                                                         <label
                                                             className="form-check-label inline-block 
                                                         text-gray-700 text-base  "
@@ -536,53 +536,34 @@ function Services() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-span-6 sm:col-span-3">
-                                                <label htmlFor="name" className="text-base pr-2 font-semibold text-gray-900 block mb-2">Status</label>
-                                                <div className="flex">
-                                                    <div className="form-check form-check-inline">
-                                                        <input type="radio"
-                                                            onChange={(e) => (setModified({ ...modified, status: true }))}
-
-                                                            className="form-check-input form-check-input 
-                                                         appearance-none rounded-full h-4 w-4 border 
-                                                         border-gray-300 
-                                                         bg-white checked:bg-blue-600 
-                                                         checked:border-blue-600 focus:outline-none
-                                                          transition duration-200 mt-2  align-top
-                                                           bg-no-repeat bg-center bg-contain float-left
-                                                            mr-2 cursor-pointer"
-                                                            value="Active"
-                                                            name="status" id='st' />
-                                                        <label
-                                                            className="form-check-label inline-block 
-                                                         text-gray-700 text-base pr-2 "
-                                                            htmlFor="st">
-                                                            Active
-                                                        </label>
-                                                    </div>
-                                                    <div className="form-check form-check-inline">
-                                                        <input type="radio" id='st2' value="Inactive"
-                                                            onChange={(e) => (setModified({ ...modified, status: false }))}
-                                                            className="form-check-input form-check-input appearance-none 
-                                                   rounded-full h-4 w-4 border border-gray-300
-                                                    bg-white checked:bg-blue-600 checked:border-blue-600
-                                                     focus:outline-none transition duration-200 mt-2 
-                                                      align-top bg-no-repeat bg-center bg-contain float-left mb-2
-                                                       mr-1 ml-2 cursor-pointer" name="status" />
-                                                        <label
-                                                            className="form-check-label inline-block text-gray-700 text-base  "
-                                                            htmlFor="st2"
-                                                        >
-                                                            Inactive</label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        
                                             <div className="col-span-6 sm:col-span-3">
                                                 <label htmlFor="service_comment" className="text-sm font-medium text-gray-900 block mb-2">
                                                     Service Description</label>
                                                 <textarea rows="2" columns="50" defaultValue={actionService?.description}
-                                                    id="service_comment" onChange={(e) => (setModified({ ...modified, service_comment: e.target.value }))} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                                                    id="service_comment" onChange={(e) => (setActionService({ ...actionService, description: e.target.value }))} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
                                             </div>
+                                            <div className="flex col-span-6 sm:col-span-3">
+                                                <label htmlFor="name" className="text-base pr-2  text-gray-900 block mb-2">Status</label>
+                                                <div className="flex">
+                           <div className="form-check mx-2 form-check-inline">
+
+                                <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
+                                  <input type="checkbox" value={actionService?.status} checked={actionService.status === true}
+                                  onChange={(e) => (setActionService({ ...actionService, status: !actionService.status }))}
+                                    id={"default-toggle" } className="sr-only peer" />
+                                  <div
+                                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                                 peer-checked:after:translate-x-full 
+                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label> 
+                              </div>
+                              </div>
+                             </div>
+
 
                                         </div>
                                     </div>
@@ -599,7 +580,7 @@ function Services() {
                                 <div className="bg-white rounded-lg shadow relative">
                                     <div className="flex items-start justify-between p-5 border-b rounded-t">
                                         <h3 className="text-xl font-semibold">
-                                            Edit service
+                                            Edit service {JSON.stringify(actionService)}
                                         </h3>
                                         <button type="button" onClick={() => setEdit(0)}
                                             className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="user-modal">
@@ -610,12 +591,13 @@ function Services() {
                                     <div className="p-6 space-y-6">
                                         <div className="grid grid-cols-6 gap-6">
                                             <div className="col-span-6 sm:col-span-3">
-                                                <label htmlFor="first-name" className="text-sm capitalize font-medium text-gray-900 block mb-2">{actionService?.local_service_name}</label>
+                                                <label htmlFor="first-name" className="text-sm capitalize font-medium text-gray-900 block mb-2">{actionService?.name}</label>
                                                 {(() => {
-                                                    switch (actionService?.service_id) {
+                                                    switch (actionService?.id) {
                                                         case 'ser0016': return (<div>
                                                             {/*Kitchen Availability*/}
-                                                            <select onClick={(e) => setModified({ ...modified, service_value: e.target.value })} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                                                            <select onClick={(e) => setActionService({ ...actionService, service_value: e.target.value })} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                                                            <option selected >{actionService.type}</option>
                                                                 <option value="Available in all rooms">Available in all rooms</option>
                                                                 <option value="Available in some rooms">Available in some rooms</option>
                                                                 <option value="Not available">Not available</option>
@@ -624,6 +606,7 @@ function Services() {
                                                         case 'ser0017': return (<div>
                                                             {/*Parking Type*/}
                                                             <select onClick={(e) => setModified({ ...modified, service_value: e.target.value })} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                                                            <option selected >{actionService?.description}</option>
                                                                 <option value="No payment required">No Payment Required</option>
                                                                 <option value="Paid">Paid</option>
                                                                 <option value="Not available">Not available</option>
@@ -632,7 +615,7 @@ function Services() {
                                                         case 'ser0020': return (<div>
                                                             {/*Swimming Pool*/}
                                                             <select onClick={(e) => setModified({ ...modified, service_value: e.target.value })} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                                                                <option selected>{actionService?.service_value}</option>
+                                                            <option selected >{actionService?.description}</option>
                                                                 <option value="Indoors">Indoors</option>
                                                                 <option value="Outdoors">Outdoors</option>
                                                                 <option value="Indoors and outdoors">Indoors and Outdoors</option>
@@ -642,7 +625,7 @@ function Services() {
                                                         case 'ser0022': return (<div>
                                                             {/*Wifi Type*/}
                                                             <select onClick={(e) => setModified({ ...modified, service_value: e.target.value })} className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                                                                <option selected>{actionService?.service_value}</option>
+                                                            <option selected >{actionService?.description}</option>
                                                                 <option value="No payment required">No Payment Required</option>
                                                                 <option value="Paid">Paid</option>
                                                                 <option value="Not available">Not available</option>
@@ -659,46 +642,26 @@ function Services() {
                                                     defaultValue={actionService?.description}
                                                     onChange={(e) => (setModified({ ...modified, service_comment: e.target.value }))} columns="50" id="last-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
                                             </div>
-                                            <div className="col-span-6 sm:col-span-3">
-                                                <label htmlFor="name" className="text-base pr-2 font-semibold text-gray-900 block mb-2">Status</label>
+                                          <div className="flex col-span-6 sm:col-span-3">
+                                                <label htmlFor="name" className="text-base pr-2  text-gray-900 block mb-2">Status</label>
                                                 <div className="flex">
-                                                    <div className="form-check form-check-inline">
-                                                        <input type="radio"
-                                                            onChange={(e) => (setModified({ ...modified, status: true }))}
-                                                            className="form-check-input form-check-input 
-                                                         appearance-none rounded-full h-4 w-4 border 
-                                                         border-gray-300 
-                                                         bg-white checked:bg-blue-600 
-                                                         checked:border-blue-600 focus:outline-none
-                                                          transition duration-200 mt-2  align-top
-                                                           bg-no-repeat bg-center bg-contain float-left
-                                                            mr-2 cursor-pointer"
-                                                            value="Active"
-                                                            name="status" id='st' />
-                                                        <label
-                                                            className="form-check-label inline-block 
-                                                         text-gray-700 text-base pr-2 "
-                                                            htmlFor="st">
-                                                            Active
-                                                        </label>
-                                                    </div>
-                                                    <div className="form-check form-check-inline">
-                                                        <input type="radio" id='st2' value="Inactive"
-                                                            onChange={(e) => (setModified({ ...modified, status: false }))}
-                                                            className="form-check-input form-check-input appearance-none 
-                                                   rounded-full h-4 w-4 border border-gray-300
-                                                    bg-white checked:bg-blue-600 checked:border-blue-600
-                                                     focus:outline-none transition duration-200 mt-2 
-                                                      align-top bg-no-repeat bg-center bg-contain float-left mb-2
-                                                       mr-1 ml-2 cursor-pointer" name="status" />
-                                                        <label
-                                                            className="form-check-label inline-block text-gray-700 text-base  "
-                                                            htmlFor="st2"
-                                                        >
-                                                            Inactive</label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                           <div className="form-check mx-2 form-check-inline">
+
+                                <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
+                                  <input type="checkbox" value={actionService?.status} checked={actionService.status === true}
+                                  onChange={(e) => (setActionService({ ...actionService, status: !actionService.status }))}
+                                    id={"default-toggle" } className="sr-only peer" />
+                                  <div
+                                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                                 peer-checked:after:translate-x-full 
+                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label> 
+                              </div>
+                              </div>
+                             </div>    
                                         </div>
                                     </div>
                                     <div className="items-center p-6 border-t border-gray-200 rounded-b">

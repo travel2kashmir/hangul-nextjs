@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
@@ -153,10 +154,12 @@ const  Landing=() =>{
                                     </div>
                                   </td>
                                   <td className="p-2 whitespace-nowrap space-x-1">
-                                    <button
+                                         <button
                                       type="button"
                                       onClick={() => {
                                         LocalProperty({ item});
+                                        data:item,
+                                       
                                         router.push("./propertysummary");
                                       }}
                                       className="text-white bg-cyan-600
@@ -164,7 +167,9 @@ const  Landing=() =>{
                                             text-sm inline-flex items-center px-2 py-1.5 text-center"
                                     >
                                      {language?.view}
+
                                     </button>
+                                   
                                   </td>
                                 </tr>
                               );

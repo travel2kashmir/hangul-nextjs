@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import Sidebar  from "../../components/Sidebar";
 import Header  from "../../components/Header";
 import { useState,useEffect } from "react";
@@ -16,7 +16,7 @@ var currentProperty;
 function PropertySummary() {
   /** State to store Current Property Details **/
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-
+ 
   /** Router for Redirection **/
   const router = useRouter();
   useEffect(()=>{
@@ -35,13 +35,18 @@ function PropertySummary() {
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
        currentProperty = JSON.parse(localStorage.getItem("property"));
+      
+        
+      
       } 
     }
     firstfun();
+
     router.push("./propertysummary");
+  
   },[])
    
-
+ 
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     const fetchHotelDetails = async () => { 

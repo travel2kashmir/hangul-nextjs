@@ -10,12 +10,10 @@ import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-import $ from "jquery"
-var url;
 var language;
 var currentProperty;
-var contacts = [];
-var address = '/api/jammu-and-kashmir/srinagar/hotels/t2k001'
+var current_page = 1;
+var obj_per_page = 2;
 import Router from 'next/router'
 const logger = require("../../services/logger");
 
@@ -32,10 +30,12 @@ function Contact() {
     "id":''
   });
   const [deleteContact, setDeleteContact] = useState(0);
+  const [viewDel, setViewDel] = useState(0);
   const [editContact, setEditContact] = useState({});
   const [contacts, setContacts] = useState([]);
   const [contact, setContact] = useState([]);
-
+  const [isChecked, setIsChecked] = useState([]);
+  
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -51,46 +51,7 @@ function Contact() {
         } 
     /** Current Property Details fetched from the local storage **/
     currentProperty = JSON.parse(localStorage.getItem("property"));
-    
-    $(document).on('click', '.edit', function() {
-      $(this).parent().siblings('td.data').each(function() {
-        var content = $(this).html();
-        $(this).html('<input value="'  + content + '"   />');
-      }); 
-      $(this).siblings('.save').show();
-      $(this).siblings('.delete').hide();
-      $(this).hide();
-    });
-    
-    $(document).on('click', '.save', function() {
-      
-      $('input').each(function() {
-        var content = $(this).val();
-        $(this).html(content);
-        $(this).contents().unwrap();
-      });
-      $(this).siblings('.edit').show();
-      $(this).siblings('.delete').show();
-      $(this).hide();
-      
-    });
-    
-    $(document).on('click', '.delete', function() {
-      $(this).parents('tr').remove();
-
-    });
-    $( document ).ready(function() {
-      $('input').each(function() {
-        var content = $(this).val();
-       
-        $(this).html(content);
-        $(this).contents().unwrap();
-      });
-      $(this).siblings('.edit').show();
-      $(this).siblings('.delete').show();
-      $(this).siblings('.save').hide();
-    
-    });
+   
    
       } 
     }
@@ -98,11 +59,72 @@ function Contact() {
 
    Router.push("./grid");
   },[])
+   /* Function Add Contact*/
+   function submitContactAdd(e) {
+    e.preventDefault();
+    if (contact.length !== 0){
+    const contactdata = [{
+        property_id: currentProperty?.property_id,
+        contact_type: contact?.contact_type,
+        contact_data: contact?.contact_data,
+        status:true
+    }];
+    const finalContact = { contacts: contactdata };
+    axios
+      .post(`/api/contact`, JSON.stringify(finalContact), {
+        headers: { "content-type": "application/json" },
+      })
+      .then((response) => {
+        toast.success("Contact Added Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setView(0)
+        fetchHotelDetails(); 
+        Router.push("./grid");
+       setContact([])
+      })
+      .catch((error) => {
+        toast.error("Contact Add Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setView(0)
+      });
+    }
+  }
   
- const editor = (idx)=>{
- 
-
- }
+  function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("td");
+  
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 1; i < tr.length; i++) {
+      td = tr[i];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
 
   const fetchHotelDetails = async () => { 
     var genData=[];
@@ -127,14 +149,43 @@ function Contact() {
     setGen(genData);
   }
   })
-    .catch((error)=>{logger.error("url to fetch property details, failed")});  
+    .catch((error)=>{logger.error("url to fetch property details, failed")}); 
+  
+    
 }
 useEffect(() => {
   fetchHotelDetails(); 
+ 
 },[]);
 
+const handlecheckbox =  (e) => {
+  const{name, checked} = e.target;
+  setViewDel(1);
+ if(name === "allSelect"){
+  let tempCon = contacts.map((item) =>{
+    return{...item, isChecked: checked}
+  });
+  setContacts(tempCon)
+  console.log(JSON.stringify(name))
+}
+  else{
+    let tempCon = contacts.map((item) => 
+    item.contact_id === name ? { ...item, isChecked: checked}:item
+    );
+    setContacts(tempCon)
+    console.log(name)
+  }
+ 
+ 
+}
+
+const allDelete = async() =>{
+  
+  console.log(contacts)
+}
   return (
     <>
+    
      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div
@@ -213,7 +264,7 @@ useEffect(() => {
                         <form className="lg:pr-3" action="#" method="GET">
                             <label htmlFor="users-search" className="sr-only">{language?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" 
+                                <input type="text" name="email" id="myInput" onKeyUp={myFunction}
                                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.search}>
                                 </input>
                             </div>
@@ -222,9 +273,11 @@ useEffect(() => {
                             <span className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
                             </span>
-                            <span href="#" className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+                            {viewDel === 1?
+                            <span onClick={allDelete} className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                            </span>
+                            </span> :<></>}
+                           
                             <span className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                             </span>
@@ -247,13 +300,23 @@ useEffect(() => {
         <div className="overflow-x-auto">
           <div className="align-middle inline-block min-w-full">
             <div className="shadow overflow-hidden">
-      <table className="table data table-fixed min-w-full divide-y divide-gray-200">
+      <table className="table data table-fixed min-w-full divide-y divide-gray-200"  id="myTable">
   <thead className="bg-gray-100">
     <tr>
+    <th scope="col" className="p-4">
+                      <div className="flex items-center">
+                        <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                        name="allSelect" checked={contacts?.filter(item => item?.isChecked !== true).length < 1}
+                        onChange={(e)=>{handlecheckbox(e); setViewDel(1);}}
+                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                           rounded"  />
+                        <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                      </div>
+                    </th>
       <th scope="col"
-                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Name{contacts?.length}</th>
       <th scope="col"
-                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Email</th>
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Details</th>
        <th scope="col"
                       className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
       <th scope="col"
@@ -261,78 +324,71 @@ useEffect(() => {
                      </th>
     </tr>
   </thead>
-  {/* <tbody className="bg-white divide-y divide-gray-200">
-  {contacts?.map((item,idx) => ( <>{(updateContact?.edit===1 && updateContact?.id===idx)?
-  <>
-  <tr>
-    <td className="data p-4 text-left text-sm font-semibold  ">
-        
-     <input type="text" defaultValue={item?.contact_type}></input> </td></tr></>:
-     <>
-     <tr>
-    <td className="data p-4 text-left text-sm font-semibold  ">
-        
-     {item?.contact_type} </td></tr></>}
-    <tr className="hover:bg-gray-100" key={idx}>
-      <td className="data p-4 text-left text-sm font-semibold  ">
-        
-     {item?.contact_type} </td>
-      <td className="data p-4 text-left text-sm font-semibold  ">
-      {item?.contact_data}
-    </td>
-    
-    {item?.type  !== undefined ?
-                             <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{item?.type} </td>
-                             : <></>}
-                             {item?.status == true ? 
-                             <td className="  whitespace-nowrap text-base font-normal text-gray-900">
-                                 <span className="flex items-center">
-                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
-                                     <td className=" data p-4 whitespace-nowrap text-base font-normal text-gray-900">Active</td>
-                                 </span>
-                             </td>:
-                             <td className="data  whitespace-nowrap text-base font-normal text-gray-900">
-                                 <span className="flex items-center">
-                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
-                                     <td className="data  whitespace-nowrap text-base font-normal text-gray-900">  Inactive</td>
-                                 </span>
-                             </td>}
-      <td className="p-4 whitespace-nowrap space-x-2">
-        
-        <button className=" bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white sm:inline-flex  
-            focus:ring-4 focus:ring-cyan-200 font-semibold
-             rounded-lg text-sm px-5 py-2 text-center 
-             items-center  mb-1 ease-linear transition-all duration-150 " onClick={(item)=>{setEditContact(item);setUpdateContact({...updateContact,edit:1,id:idx})}}>Edit</button>
-        <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white sm:inline-flex  
-            focus:ring-4 focus:ring-red-500 font-semibold
-             rounded-lg text-sm px-5 py-2 text-center 
-             items-center  mb-1 ease-linear transition-all duration-150">Delete</button>
-      </td>
-    </tr>
-  ))}
-  </tbody> */}
-   <tbody className="bg-white divide-y divide-gray-200">
+ 
+   <tbody className="bg-white divide-y divide-gray-200" id="TableList" >
     {contacts?.map((item,idx)=>(
       <>
       {updateContact?.edit===1 && updateContact?.id===idx?
         <>
          <tr className="hover:bg-gray-100">
+         <td className="p-4 w-4">
+                           <span className="flex items-center">
+                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                           </span>
+                         </td>
               <td className="data p-4 text-left text-sm font-semibold  ">
-              <input type="text" defaultValue={item?.contact_type}></input></td>
+             {item?.contact_type}</td>
               <td className="data p-4 text-left text-sm font-semibold  ">
               <input type="text" defaultValue={item?.contact_data}></input> </td>
+              {item?.status == true ? 
+                      <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                 <span className="flex items-center">
+                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
+                                     <input type="text" defaultValue="Active"></input>
+                                 </span>
+                             </td>:
+                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                 <span className="flex items-center">
+                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
+                                     <input type="text" defaultValue="Inactive"></input>
+                                 </span>
+                             </td>}
               <button >Save</button>
               <button onClick={()=>{setUpdateContact({...updateContact,edit:0,id:''})} }>Cancel</button>
               </tr>
         </>:
      <>
      <tr>
+     <td className="p-4 w-4">
+                           <span className="flex items-center">
+                             <input id="checkbox-1" name={item.contact_id}  checked={item.isChecked || false}
+                             onChange={(e)=>{handlecheckbox(e); setViewDel(1);}}
+                             aria-describedby="checkbox-1" type="checkbox" 
+                             className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4
+                              w-4 rounded" />
+                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                           </span>
+                         </td>
     <td className="data p-4 text-left text-sm font-semibold  ">
      {item?.contact_type} 
      </td>
      <td className="data p-4 text-left text-sm font-semibold  ">
      {item?.contact_data} 
      </td>
+     {item?.status == true ? 
+     <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                 <span className="flex items-center">
+                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
+                                    Active
+                                 </span>
+                             </td>:
+                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                 <span className="flex items-center">
+                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
+                                   Inactive
+                                 </span>
+                             </td>}
      <button onClick={(item)=>{setEditContact(item);setUpdateContact({...updateContact,edit:1,id:idx})}}>Edit</button>
      <button >Delete</button>
      
@@ -346,7 +402,27 @@ useEffect(() => {
 </div>
 </div></div></div>
    
-
+<div className="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
+<div className="flex items-center mb-4 sm:mb-0">
+<a href="#" className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+<svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+</a>
+<a href="#" className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center mr-2">
+<svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+</a>
+<span className="text-sm font-normal text-gray-500">Showing <span className="text-gray-900 font-semibold">1-20</span> of <span className="text-gray-900 font-semibold">2290</span></span>
+</div>
+<div className="flex items-center space-x-3">
+<a href="#" className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+<svg className="-ml-1 mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
+<button >Previous</button>
+</a>
+<a href="#" className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
+<button >Next</button>
+<svg className="-mr-1 ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+</a>
+</div>
+</div>
 
 
       {/* Modals Popups for Edit, Add and Delete Contact */}

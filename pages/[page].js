@@ -9,8 +9,6 @@ import en from "../components/Languages/en"
 import fr from "../components/Languages/fr"
 import ar from "../components/Languages/ar"
 import { useRouter } from "next/router";
-import Image from 'next/image'
-import loader from '../images/loader.png'
 const logger = require("../services/logger");
 var language;
 var currentUser;

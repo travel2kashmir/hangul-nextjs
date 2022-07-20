@@ -9,6 +9,8 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import { useRouter } from "next/router";
 const logger = require("../../services/logger");
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Button from "../../components/Button"
 var language;
 var currentUser;
@@ -74,11 +76,29 @@ const sendLink = () =>{
     address_id:allHotelDetails.address[0].address_id,
     theme_id:theme,
     lang:localStorage?.getItem("Language")
-  
   }
  
-  axios.post('/api/property_page',data).then((response)=>alert(JSON.stringify(response.data))).catch((error)=>alert(error))
-}  
+  axios.post('/api/property_page',data).then(
+    (response)=>
+  {toast.success("Page Updated Successfully!", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+}).catch((error)=> toast.error("Unique URL Update Error!", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  }))
+  }  
   
   return (
     <div>
@@ -587,6 +607,16 @@ const sendLink = () =>{
         </div>
 
       </div>
+    {/* Toast Container */}
+ <ToastContainer position="top-center"
+       autoClose={5000}
+       hideProgressBar={false}
+       newestOnTop={false}
+       closeOnClick
+       rtl={false}
+       pauseOnFocusLoss
+       draggable
+       pauseOnHover />
     </div>
   );
 }

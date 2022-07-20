@@ -4,7 +4,6 @@ import Sidebar from "../components/Sidebar";
 import Website_head from "../components/Website_head";
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import Link from "next/link";
 import en from "../components/Languages/en"
 import fr from "../components/Languages/fr"
 import ar from "../components/Languages/ar"
@@ -493,7 +492,7 @@ function page() {
    </div>
  </div>
    
- }</>
+ } </>
   );
 }
 export default page;

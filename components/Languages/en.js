@@ -1,4 +1,5 @@
 export default {
+  addbasicdetails:"Add Basic Details",
   page:"page",
   title: "sign in",
   email: "your email",
@@ -69,7 +70,11 @@ export default {
   label:'yes, I am sure',
    color: "bg-red-600 hover:bg-red-800 text-white mx-2 ",
 },
-
+"Addnewproperty":{
+  label:"Add New Property",
+  color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+}
+,
 "Cancel" :{
   label: 'No cancel',
    color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",

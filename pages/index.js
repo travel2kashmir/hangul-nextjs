@@ -7,42 +7,42 @@ import { useRouter } from "next/router";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
-const logger = require("../services/logger");     
-    
+const logger = require("../services/logger");
+
 function Signin() {
   /** Router for Redirection **/
   const router = useRouter();
   const { locale } = router;
 
-  useEffect(()=>{
-   const setLanguage = async () => {
-   localStorage.setItem("Language", "en");
+  useEffect(() => {
+    const setLanguage = async () => {
+      localStorage.setItem("Language", "en");
     };
-    setLanguage(); 
+    setLanguage();
   }
-  ,[])
-  
+    , [])
+
   /** State for internationalization **/
   const [lang, setLang] = useState("en");
   var language;
-  if (locale === "en"){
-     language = english 
-   
+  if (locale === "en") {
+    language = english
+
   }
-  if(locale === "ar"){
-     language = arabic 
+  if (locale === "ar") {
+    language = arabic
   }
-  if(locale === "fr"){
+  if (locale === "fr") {
     language = french
   }
-  
+
   /** Function for Internationalisation **/
   const changelanguage = (item) => {
     const locale = item;
     /** Language selected stored to the localstorage **/
     localStorage.setItem("Language", locale);
     router.push("/", "/", { locale });
-    logger.info("Language fetched: " +locale);
+    logger.info("Language fetched: " + locale);
   };
 
   /** State for Sign In **/
@@ -67,23 +67,32 @@ function Signin() {
       headers: { "content-type": "application/json" },
     })
       .then(async (response) => {
-        /** Password Encryption **/
-        const salt = response.data.salt;
+        /** Password Decryption **/
+       const salt = response.data.salt;
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
-        if (EncryptedPass === response.data.user_password) {
+        if (EncryptedPass === response.data.password) {
           /** Toast emitter Sign in Successfull **/
-         logger.info("Login Successful!");
+          logger.info("Login Successful!");
           const whoIsLogged = {
-            id: response.data.user_id,
-            name: response.data.user_name,
+            id: response.data.id,
+            name: response.data.name,
             email: signinDetails?.email,
-            password: response.data?.user_password,
+            password: response.data?.password,
+            admin_type: response.data?.admin_type
           };
-          LocalSignin(whoIsLogged);
+          {/*To re-direct to required module*/ }
+          if (response.data.id.match(/admin00.[0-9]*/g)) {
+            LocalSignin(whoIsLogged);
+            router.push("./admin/adminLanding")
+          }
+          else {
+            LocalSignin(whoIsLogged);
+            router.push("./property/landing");
+          }
 
-          router.push("./property/landing");
-          
-        } else { 
+
+
+        } else {
           /** Toast emitter for error wrong email password combination  **/
           toast.error("Please check your email and password", {
             position: "top-center",
@@ -94,15 +103,15 @@ function Signin() {
             draggable: true,
             progress: undefined,
           });
-          
+
           logger.error('Incorrect email and password combination.')
-                    
+
         }
       })
 
       .catch((error) => {
-        logger.error('Sign In error!' );
-       
+        logger.error('Sign In error!');
+
         /** Toast emitter for Sign in error  **/
         toast.error("Sign in Error!", {
           position: "top-center",
@@ -113,7 +122,7 @@ function Signin() {
           draggable: true,
           progress: undefined,
         });
-       });
+      });
   };
 
   return (
@@ -175,7 +184,7 @@ function Signin() {
                   id="password"
                   onChange={(e) =>
                     setSigninDetails({
-                      ...signinDetails,    
+                      ...signinDetails,
                       password: e.target.value,
                     })
                   }
@@ -292,7 +301,7 @@ function Signin() {
                   changelanguage("fr");
                 }}
               >
-               Français
+                Français
               </button>
             </div>
           ) : (
@@ -319,10 +328,10 @@ function Signin() {
 
 export default Signin;
 
-Signin.getLayout = function PageLayout(page){
-  return(
+Signin.getLayout = function PageLayout(page) {
+  return (
     <>
-    {page}
+      {page}
     </>
   )
 

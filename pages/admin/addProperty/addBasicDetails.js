@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
 
 
-function addBasicDetails() {
+function AddBasicDetails() {
     const [basicDetails, setBasicDetails] = useState([]);
     const [allHotelDetails, setAllHotelDetails] = useState([]);
     const [address,setAddress]=useState([]);
@@ -37,7 +37,7 @@ function addBasicDetails() {
         }
         firstfun();
 
-        Router.push("./addBasicDetails");
+        Router.push("./AddBasicDetails");
     }, [])
 
     //finding current date 
@@ -488,4 +488,4 @@ const submitBasic = () => {
     )
 }
 
-export default addBasicDetails
+export default AddBasicDetails

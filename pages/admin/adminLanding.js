@@ -13,7 +13,7 @@ var language;
 var currentUser;
 
 
-function adminLanding() {
+function AdminLanding() {
 
     const router = useRouter();
 
@@ -41,7 +41,7 @@ function adminLanding() {
             }
         }
         firstfun();
-        router.push('./adminLanding')
+        router.push('./AdminLanding')
     }, [])
     return (
         <div>
@@ -107,10 +107,10 @@ function adminLanding() {
     );
 }
 
-export default adminLanding
+export default AdminLanding
 
 
-adminLanding.getLayout = function PageLayout(page) {
+AdminLanding.getLayout = function PageLayout(page) {
     return (
         <>
             {page}

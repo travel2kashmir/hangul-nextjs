@@ -20,7 +20,7 @@ function AdminLanding() {
     /** State Intialisation for storing all Properties of Current User **/
     const [ownerdata, setOwnerdata] = useState([]);
     const newProperty= () => {
-        router.push('./addProperty/addBasicDetails');
+        router.push('./addProperty/AddBasicDetails');
     }
     useEffect(() => {
         const firstfun = () => {

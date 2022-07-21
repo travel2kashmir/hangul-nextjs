@@ -52,8 +52,19 @@ function PropertySummary() {
     router.push("./propertysummary");
   },[])
    
+const initialtheme = () =>{
+  var url;
+      url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`;
+      axios.get(url)
+        .then((response) => {
+         setTheme(response.data.theme_id);
+         setBgColor(response.data.theme_id);
+          logger.info("url  to fetch property details hitted successfully")
+        })
+        .catch((error) => { logger.error("url to fetch property details, failed") });
 
-  /* Function call to fetch Current Property Details when page loads */
+}
+/* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     const fetchHotelDetails = async () => { 
         const url = `/api/${currentProperty.address_province.replace(
@@ -67,8 +78,12 @@ function PropertySummary() {
         logger.info("url  to fetch property details hitted successfully")})
         .catch((error)=>{logger.error("url to fetch property details, failed")});  
     }
-    fetchHotelDetails(); 
-  },[currentProperty]);
+    if(allHotelDetails.length===0)fetchHotelDetails(); 
+    if(allHotelDetails.length!=0)initialtheme();
+  },[allHotelDetails]);
+
+
+
 const sendLink = () =>{
   const data={
     uuid:`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`,
@@ -156,7 +171,7 @@ const sendLink = () =>{
           <button onClick={()=>{setBgColor(theme4); setTheme(theme4);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme4</button>
           <button onClick={()=>{setBgColor(theme5); setTheme(theme5);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme5</button>
         
-         <button className="mx-4 border-2 border-orange-800 bg-cyan-600 hover:bg-cyan-700 text-white" onClick={()=>{ 
+         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{ 
           setUri(`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`);
          sendLink();
           setUnique(1)}}

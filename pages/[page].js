@@ -15,7 +15,7 @@ var currentUser;
 var currentProperty;
 var flag = false;
 
-function page() {
+function Page() {
   /** State to store Current Property Details **/
   var theme1 = "bg-red-200";
   var theme2 = "bg-rose-400";
@@ -490,8 +490,8 @@ function page() {
  } </>
   );
 }
-export default page;
-page.getLayout = function PageLayout(page) {
+export default Page;
+Page.getLayout = function PageLayout(page) {
   return (
     <>
       {page}

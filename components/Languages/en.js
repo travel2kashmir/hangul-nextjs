@@ -1,4 +1,5 @@
 export default {
+  page:"page",
   title: "sign in",
   email: "your email",
   password: "your password",

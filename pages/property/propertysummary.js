@@ -68,7 +68,7 @@ function PropertySummary() {
         .catch((error)=>{logger.error("url to fetch property details, failed")});  
     }
     fetchHotelDetails(); 
-  },[]);
+  },[currentProperty]);
 const sendLink = () =>{
   const data={
     uuid:`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`,
@@ -160,7 +160,7 @@ const sendLink = () =>{
           setUri(`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`);
          sendLink();
           setUnique(1)}}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate url for page</button>
+          >Generate url for page</button>
           </div>
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.propertysummary}

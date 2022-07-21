@@ -83,7 +83,7 @@ function Signin() {
           {/*To re-direct to required module*/ }
           if (response.data.id.match(/admin00.[0-9]*/g)) {
             LocalSignin(whoIsLogged);
-           // router.push("./admin/AdminLanding")
+            router.push("./admin/AdminLanding")
           }
           else {
             LocalSignin(whoIsLogged);

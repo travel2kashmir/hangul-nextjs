@@ -51,6 +51,7 @@ export default {
   licensing: "Licensing",
   cookiepolicy: "Cookie Policy",
   home: "Home",
+  Province: "Province",
   propertyname: "Property Name",
   propertycategory: "Property Category",
   propertybrand: "Property Brand",

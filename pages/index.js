@@ -68,6 +68,7 @@ function Signin() {
     })
       .then(async (response) => {
         /** Password Decryption **/
+        
        const salt = response.data.salt;
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
         if (EncryptedPass === response.data.password) {

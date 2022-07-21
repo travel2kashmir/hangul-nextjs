@@ -68,7 +68,6 @@ function Signin() {
     })
       .then(async (response) => {
         /** Password Decryption **/
-        
        const salt = response.data.salt;
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
         if (EncryptedPass === response.data.password) {
@@ -84,7 +83,7 @@ function Signin() {
           {/*To re-direct to required module*/ }
           if (response.data.id.match(/admin00.[0-9]*/g)) {
             LocalSignin(whoIsLogged);
-            router.push("./admin/adminLanding")
+            router.push("./admin/AdminLanding")
           }
           else {
             LocalSignin(whoIsLogged);

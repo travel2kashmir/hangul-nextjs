@@ -172,7 +172,7 @@ const sendLink = () =>{
               <div className="flex items-start justify-between p-5 border-b rounded-t">
                  
               
-       unique page address is /{uri}
+       unique page address is https://hangul-v3.herokuapp.com/{uri}
         <br/><button onClick={()=>setUnique(0)}>close</button>
         </div>
         </div>

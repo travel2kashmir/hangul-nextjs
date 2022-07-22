@@ -462,7 +462,19 @@ propertyxml:'../propertyxml',
 roomsxml:'../roomsxml',
 raterules:'../raterules'
  },
- 
+ "Sideadmin":{
+basicdetails:'./addbasicdetails',
+contact:'./addcontacts',
+gallery:'./addimages',
+reviews:'./addreviews',
+services: './addservices',
+rooms:'./addroom',
+packages:'../addpackage',
+roombundles:'./addroombundles',
+raterules:'../../property/addraterule',
+propertyxml:'../../property/propertyxml',
+roomsxml:'../../property/roomsxml'
+},
  "Side2":{
   basicdetails:'../../basicdetails',
   address:'../../address',

@@ -7,6 +7,7 @@ import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
 import Button from "../../../components/Button";
+import Sidebar  from "../../../components/Sidebar";
 var language;
 var currentProperty;
 import { ToastContainer, toast } from "react-toastify";
@@ -16,8 +17,27 @@ const logger = require("../../../services/logger");
 
 function AddBasicDetails() {
     const [basicDetails, setBasicDetails] = useState([]);
-    const [allHotelDetails, setAllHotelDetails] = useState([]);
-    const [address,setAddress]=useState([]);
+    const [allHotelDetails, setAllHotelDetails] = useState({
+      property_name:'',
+      property_category:'',
+      property_brand:'',
+      established_year:'',
+      star_rating:'',
+      description_title:'',
+      description_body:'',
+      descriptionDate:''
+    });
+    const [address,setAddress]=useState({
+      address_street_address:'',
+      address_landmark:'',
+      address_city:'',
+      address_province:'',
+      address_latitude:'',
+      address_longitude:'',
+      address_zipcode:'',
+      address_precision:'',
+      country:''
+    });
     /** Fetching language from the local storage **/
     useEffect(() => {
         const firstfun = () => {
@@ -43,16 +63,105 @@ function AddBasicDetails() {
     //finding current date 
     const current = new Date();
     let month = current.getMonth()+1;
-    const descriptionDate = `${current.getDate()}/${month<+10?`0${month}`:`${month()+1}`}/${current.getFullYear()}`;
-const submitBasic = () => {
-    //alert("submit button pressed"+JSON.stringify(allHotelDetails))
-    //alert("address submit button pressed"+JSON.stringify(address))
+    var descriptionDate = `${current.getDate()}/${month<+10?`0${month}`:`${month()+1}`}/${current.getFullYear()}`;
+
+    const validateBasicDetails = (allHotelDetails,address)=>{
+     //detect empty values in basic details
+      for(let item in allHotelDetails)
+     { 
+      if((allHotelDetails[item]==='')&&(item!="descriptionDate"))
+      { 
+        return `insert value of ${item}`
+      }
+     }
+     //detect empty values in address
+     for(let item in address)
+     {
+      if(address[item]==='')
+      {console.log(item)
+        return `insert value of ${item}`
+      }
+     }
+     //check  date  established 
+    if((allHotelDetails?.established_year.slice(0,4)>current.getFullYear()))
+     {
+      return 'Established year is greater than current year'
+     }
+     //check star rating
+    if((parseInt(allHotelDetails.star_rating)<0)||(parseInt(allHotelDetails.star_rating)>7)||(allHotelDetails.star_rating===''))
+     {
+      return 'Enter star rating between 0 to 7'
+     }
+    //check latitudes 
+    if((address?.address_latitude<-90)||(address?.address_latitude>90))
+    {
+      return 'The value of latitude should be between -90 to +90'
+    }
+    //check longitude 
+    
+     if((address?.address_longitude<-180)||(address?.address_longitude >180))
+     {
+       return 'The value of latitude should be between -180 to +180'
+     }
+     //check zip code
+     if((!address.address_zipcode.match('^[1-9][0-9]{5}$')))
+     {
+      return 'Please Enter Valid Indian Zip code'
+     }
+     //check precision
+    if(address.address_precision<0 || address.address_precision>1000)
+     {
+      return 'Precision should be between 0-1000'
+     }
+    return true;
+     }
+
+
+    //to send data to database
+    const submitBasic = () => {
+    
+    const valid=validateBasicDetails(allHotelDetails,address);
+      if(valid===true)
+    {
     const propertydata = { "address": [address] }
     const finalData = { ...allHotelDetails, ...propertydata }
     console.log(JSON.stringify(finalData), 'finaldata')
+    axios.post('/api/basic',finalData).then((response)=>{
+      localStorage.setItem("property_id",JSON.stringify(response?.data?.property_id));
+      toast.success("Property Added Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }).catch(()=>{toast.error("Property Add Error!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });})
+  }
+    else{
+      toast.error(valid, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
-    return (
+    }
+return (
         <div><Header Primary={english?.Side} />
+        <Sidebar  Primary={english?.Sideadmin}/>
          <div id="main-content"
       className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
       {/* Navbar */}
@@ -186,7 +295,7 @@ const submitBasic = () => {
                             if(e.target.value>=0 && e.target.value<=7)
                             setAllHotelDetails({ ...allHotelDetails, star_rating: e.target.value })
                             else
-                            e.target.value=""
+                            e.target.value=0
                     }
                     }
                   />
@@ -449,7 +558,9 @@ const submitBasic = () => {
                       >
                         {language?.country}
                       </label>
-                      <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                      <select 
+                      onClick={(e)=>setAddress({...address,country:e.target.value})}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
                         <option value="IN">India</option>
                         <option value="PK">Pakistan</option>
                         <option value="UN">United States of America</option>

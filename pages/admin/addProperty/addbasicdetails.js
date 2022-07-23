@@ -25,7 +25,7 @@ function AddBasicDetails() {
       star_rating:'',
       description_title:'',
       description_body:'',
-      descriptionDate:''
+      description_date:''
     });
     const [address,setAddress]=useState({
       address_street_address:'',
@@ -61,15 +61,15 @@ function AddBasicDetails() {
     }, [])
 
     //finding current date 
-    const current = new Date();
+    var current = new Date();
     let month = current.getMonth()+1;
     var descriptionDate = `${current.getDate()}/${month<+10?`0${month}`:`${month()+1}`}/${current.getFullYear()}`;
-
+    
     const validateBasicDetails = (allHotelDetails,address)=>{
      //detect empty values in basic details
       for(let item in allHotelDetails)
      { 
-      if((allHotelDetails[item]==='')&&(item!="descriptionDate"))
+      if((allHotelDetails[item]==='')&&(item!="description_date"))
       { 
         return `insert value of ${item}`
       }
@@ -119,7 +119,7 @@ function AddBasicDetails() {
 
     //to send data to database
     const submitBasic = () => {
-    
+      setAllHotelDetails({...allHotelDetails,description_date:current})
     const valid=validateBasicDetails(allHotelDetails,address);
       if(valid===true)
     {
@@ -160,7 +160,7 @@ function AddBasicDetails() {
     }
     }
 return (
-        <div><Header Primary={english?.Side} />
+        <div><Header Primary={english?.Sideadmin} />
         <Sidebar  Primary={english?.Sideadmin}/>
          <div id="main-content"
       className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
@@ -203,8 +203,7 @@ return (
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={basicDetails?.property_name}
-                    onChange={
+                 onChange={
                         (e) => (
                             setAllHotelDetails({ ...allHotelDetails, property_name: e.target.value })
                         )
@@ -219,7 +218,7 @@ return (
                    {language?.propertycategory}
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   defaultValue={basicDetails?.property_category}
+                   
                   onChange={
                     (e) => (
                         setAllHotelDetails({ ...allHotelDetails, property_category: e.target.value })
@@ -244,7 +243,6 @@ return (
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={basicDetails?.property_brand}
                     onChange={
                         (e) => (
                             setAllHotelDetails({ ...allHotelDetails, property_brand: e.target.value })
@@ -265,7 +263,6 @@ return (
                   <input
                     type="Date"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={basicDetails?.established_year}
                     onChange={
                         (e) => (
                             setAllHotelDetails({ ...allHotelDetails, established_year: e.target.value })
@@ -289,7 +286,6 @@ return (
                     max="7"
                     pattern="\[0-7]"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={basicDetails?.star_rating}
                     onChange={
                         (e) => {
                             if(e.target.value>=0 && e.target.value<=7)
@@ -313,7 +309,6 @@ return (
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    defaultValue={basicDetails?.description_title}
                     onChange={
                         (e) => (
                             setAllHotelDetails({ ...allHotelDetails, description_title: e.target.value })
@@ -338,7 +333,6 @@ return (
                           setAllHotelDetails({ ...allHotelDetails, description_body: e.target.value })
                       )
                   }
-                  defaultValue={basicDetails?.description_body} 
                   />
                 </div>
               </div>
@@ -354,7 +348,6 @@ return (
 
                   <input type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    
                    defaultValue={descriptionDate}
                  />
                 </div>
@@ -570,7 +563,7 @@ return (
                   </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   {Button !== 'undefined' ?
-              <Button Primary={language?.Update}  onClick={submitBasic}/>
+              <Button Primary={language?.Submit}  onClick={submitBasic}/>
               :<></>
                 }
               </div>  

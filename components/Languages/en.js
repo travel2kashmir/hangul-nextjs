@@ -103,6 +103,10 @@ label: "Edit Contact",
 </svg>
 },
 
+"Contact":{
+  tablename: "Contact",
+  
+},
 "DeleteContact" :{
 label: "Delete Contact",
  color: "bg-red-600 hover:bg-red-800 text-white ",

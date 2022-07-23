@@ -33,8 +33,7 @@ function Contact() {
   const [editContact, setEditContact] = useState({});
   const [contacts, setContacts] = useState([]);
   const [contact, setContact] = useState([]);
-  const [showlow, setShowlow] = useState(1);
-  const [showhigh, setShowhigh] = useState(3);
+ 
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
@@ -162,10 +161,10 @@ function Contact() {
     const { name, checked } = e.target;
     setViewDel(1);
     if (name === "allSelect") {
-      let tempCon = contacts.map((item) => {
+      let tempCon = gen.map((item) => {
         return {...item, isChecked: checked }
       });
-      setContacts(tempCon)
+      setGen(tempCon)
       console.log(contacts)
     }
     else {
@@ -188,8 +187,8 @@ function Contact() {
         const start = (page - 1) * itemsPerPage;
        
      // alert(JSON.stringify(page))  ;
-        return contacts.slice(start, start + itemsPerPage);
-      }, [page,contacts]);
+        return gen.slice(start, start + itemsPerPage);
+      }, [page,gen]);
 
   return (
     <>
@@ -307,128 +306,128 @@ function Contact() {
         </div>
         {/* Contact Table */}
         <div className="flex flex-col mt-8">
-          <div className="overflow-x-auto">
-            <div className="align-middle inline-block min-w-full">
-              <div className="shadow overflow-hidden">
-                <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th scope="col" className="p-4">
-                        <div className="flex items-center">
-                          <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
-                            name="allSelect" checked={contacts?.filter(item => item?.isChecked !== true).length < 1}
-                            onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
-                            className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                           rounded"  />
-                          <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-                        </div>
-                      </th>
-                      <th scope="col"
-                        className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
-                      <th scope="col"
-                        className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Details</th>
-                      <th scope="col"
-                        className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
-                      <th scope="col"
-                        className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Actions
-                      </th>
-                    </tr>
-                  </thead>
+        <div className="overflow-x-auto">
+          <div className="align-middle inline-block min-w-full">
+            <div className="shadow overflow-hidden">
+              <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th scope="col" className="p-4">
+                      <div className="flex items-center">
+                        <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                          name="allSelect" checked={contacts?.filter(item => item?.isChecked !== true).length < 1}
+                          onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
+                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                         rounded"  />
+                        <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                      </div>
+                    </th>
+                    <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
+                    <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Details</th>
+                    <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                    <th scope="col"
+                      className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Actions
+                    </th>
+                  </tr>
+                </thead>
 
-                  <tbody className="bg-white divide-y divide-gray-200" id="TableList" >
-                    {displayData?.map((item, idx) => (
-                      <>
-                        {updateContact?.edit === 1 && updateContact?.id === idx ?
-                          <>
-                            <tr className="hover:bg-gray-100">
-                              <td className="p-4 w-4">
-                                <span className="flex items-center">
-                                  <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                                  <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                </span>
-                              </td>
-                              <td className="data p-4 text-left text-sm font-semibold  ">
-                                {item?.contact_type}</td>
-                              <td className="data p-4 text-left text-sm font-semibold  ">
-                                <input type="text" className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" defaultValue={item?.contact_data}></input> </td>
+                <tbody className="bg-white divide-y divide-gray-200" id="TableList" >
+                  {displayData?.map((item, idx) => (
+                    <>
+                      {updateContact?.edit === 1 && updateContact?.id === idx ?
+                        <>
+                          <tr className="hover:bg-gray-100">
+                            <td className="p-4 w-4">
+                              <span className="flex items-center">
+                                <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                              </span>
+                            </td>
+                            <td className="data p-4 text-left text-sm font-semibold  ">
+                              {item?.name}</td>
+                            <td className="data p-4 text-left text-sm font-semibold  ">
+                              <input type="text" className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" defaultValue={item?.type}></input> </td>
 
-                              <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                <div className="flex">
-                                  <div className="form-check mx-2 form-check-inline">
+                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                              <div className="flex">
+                                <div className="form-check mx-2 form-check-inline">
 
-                                    <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
-                                      <input type="checkbox" value={item?.status} checked={item.status === true}
+                                  <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
+                                    <input type="checkbox" value={item?.status} checked={item.status === true}
 
-                                        id={"default-toggle"} className="sr-only peer" />
-                                      <div
-                                        className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
-                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
-                                 peer-checked:after:translate-x-full 
-                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
-                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                    </label>
-                                  </div>
+                                      id={"default-toggle"} className="sr-only peer" />
+                                    <div
+                                      className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                               dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                               peer-checked:after:translate-x-full 
+                               peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                               after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                                after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                  </label>
                                 </div>
-                              </td>
-                              <td className="p-4 whitespace-nowrap space-x-2">
-                                <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex  font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" >Save</button>
-                                <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                  onClick={() => { setUpdateContact({ ...updateContact, edit: 0, id: '' }) }}>Cancel</button>
-                              </td>
-                            </tr>
-                          </> :
-                          <>
-                            <tr>
-                              <td className="p-4 w-4">
+                              </div>
+                            </td>
+                            <td className="p-4 whitespace-nowrap space-x-2">
+                              <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex  font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" >Save</button>
+                              <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                onClick={() => { setUpdateContact({ ...updateContact, edit: 0, id: '' }) }}>Cancel</button>
+                            </td>
+                          </tr>
+                        </> :
+                        <>
+                          <tr>
+                            <td className="p-4 w-4">
+                              <span className="flex items-center">
+                                <input id="checkbox-1" name={item.contact_id} checked={item.isChecked || false}
+                                  onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
+                                  aria-describedby="checkbox-1" type="checkbox"
+                                  className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4
+                            w-4 rounded" />
+                                <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                              </span>
+                            </td>
+                            <td className="data p-4 text-left text-sm font-semibold  ">
+                              {item?.name}
+                            </td>
+                            <td className="data p-4 text-left text-sm font-semibold  ">
+                              {item?.type}
+                            </td>
+                            {item?.status == true ?
+                              <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                 <span className="flex items-center">
-                                  <input id="checkbox-1" name={item.contact_id} checked={item.isChecked || false}
-                                    onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
-                                    aria-describedby="checkbox-1" type="checkbox"
-                                    className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4
-                              w-4 rounded" />
-                                  <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                  <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
+                                  Active
                                 </span>
-                              </td>
-                              <td className="data p-4 text-left text-sm font-semibold  ">
-                                {item?.contact_type}
-                              </td>
-                              <td className="data p-4 text-left text-sm font-semibold  ">
-                                {item?.contact_data}
-                              </td>
-                              {item?.status == true ?
-                                <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                  <span className="flex items-center">
-                                    <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
-                                    Active
-                                  </span>
-                                </td> :
-                                <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                  <span className="flex items-center">
-                                    <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
-                                    Inactive
-                                  </span>
-                                </td>}
-                                <td className="p-4 whitespace-nowrap space-x-2"> 
-                              <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
-              font-semibold
-             rounded-lg text-sm px-5 py-2 text-center 
-             items-center ease-linear transition-all duration-150"
-                               onClick={(item) => { setEditContact(item); setUpdateContact({ ...updateContact, edit: 1, id: idx }) }}>Edit</button>
-                              <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white  sm:inline-flex  
+                              </td> :
+                              <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                <span className="flex items-center">
+                                  <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
+                                  Inactive
+                                </span>
+                              </td>}
+                              <td className="p-4 whitespace-nowrap space-x-2"> 
+                            <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
             font-semibold
-             rounded-lg text-sm px-5 py-2 text-center 
-             items-center ease-linear transition-all duration-150" >Delete</button>
+           rounded-lg text-sm px-5 py-2 text-center 
+           items-center ease-linear transition-all duration-150"
+                             onClick={(item) => { setEditContact(item); setUpdateContact({ ...updateContact, edit: 1, id: idx }) }}>Edit</button>
+                            <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white  sm:inline-flex  
+          font-semibold
+           rounded-lg text-sm px-5 py-2 text-center 
+           items-center ease-linear transition-all duration-150" >Delete</button>
 </td>
-                            </tr>
-                          </>}
-                      </>
-                    ))
-                    }
-                  </tbody>
-                </table>
-              </div>
-            </div></div></div>
+                          </tr>
+                        </>}
+                    </>
+                  ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div></div></div>
 
         <div className="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
           <div className="flex items-center mb-4 sm:mb-0">

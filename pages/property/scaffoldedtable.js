@@ -94,7 +94,44 @@ function Scaffold() {
         });
     }
   }
+ /* Function Edit Contact*/
+ const submitContactEdit = (props) => {
+  
+  const final_data = {
+    contact_id: props.id,
+    contact_data: props.type,
+    status: props.status
+  };
 
+  const url = "/api/contact";
+  axios
+    .put(url, final_data, { header: { "content-type": "application/json" } })
+    .then((response) => {
+      toast.success("Contact Updated Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      fetchHotelDetails(); 
+      Router.push("./scaffoldedtable");
+    })
+    .catch((error) => {
+      toast.error("Contact Update Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+  
+};
 
   const fetchHotelDetails = async () => {
     var genData = [];
@@ -130,10 +167,38 @@ function Scaffold() {
 
   }, []);
 
+  const submitContactDelete = (props) => {
+    const url = `/api/${props}`;
+    axios
+      .delete(url)
+      .then((response) => {
+        toast.success("Contact Deleted Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        fetchHotelDetails(); 
+        setDeleteContact(0)
+        Router.push("./scaffoldedtable");
+      })
+      .catch((error) => {
+        toast.error("Contact Delete Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setDeleteContact(0)
+      });
+  };
 
- 
-  
-  
   return (
     <>
 
@@ -207,7 +272,8 @@ function Scaffold() {
           </ol>
         </nav>
         {/* Header */}
-        <Table  gen={gen} setGen={setGen} add={()=> setView(1)} /> 
+        <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit}
+        delete={submitContactDelete}/> 
 
 
         {/* Modals Popups for Edit, Add and Delete Contact */}

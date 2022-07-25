@@ -113,19 +113,19 @@ function PropertySummary() {
           </ol>
         </nav>
 
-        <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
+        <h6 className="text-lg pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.propertysummary}
         </h6>
 
-        <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
+        <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
-                <span className="text-xl sm:text-xl leading-none font-bold text-gray-800">
+                <span className="text-xl sm:text-lg leading-none font-bold text-gray-800">
                   {allHotelDetails?.property_name}
                 </span>
-                <h3 className="text-base font-normal text-gray-500">
+                <h3 className="text-xs font-normal text-gray-500">
                   {allHotelDetails?.star_rating}-Star{" "}
                   {allHotelDetails?.property_category}
                 </h3>
@@ -140,10 +140,10 @@ function PropertySummary() {
                 </span>
               </div>
             </div>
-            <p className="text-base font-semibold text-gray-500 truncate">
+            <p className="text-sm font-semibold text-gray-500 truncate">
               {allHotelDetails?.description_title}
             </p>
-            <p className="text-sm font-medium text-gray-90  line-clamp-10 ">
+            <p className="text-xs font-medium text-gray-90  line-clamp-10 ">
               {allHotelDetails?.description_body}
             </p>
           </div>
@@ -324,19 +324,19 @@ function PropertySummary() {
                 </span>
               </div>
             </div>
-            <div className="align-middle inline-block  min-w-full">
+            <div className="align-middle inline-block min-w-full">
               <div className="shadow overflow-hidden">
-                <table className="table-fixed min-w-full divide-y divide-gray-200">
-                  <tbody className="bg-white divide-y divide-gray-200">
+                <table className="table-fixed min-w-full">
+                  <tbody className="bg-white">
                     {allHotelDetails?.contacts?.map((item, idx) => {
                       return (
                         <tr className="hover:bg-gray-100" key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className=" flex items-center  space-x-2 mr-2 lg:mr-0">
+                            <span className="p-1.5 text-xs font-semibold text-gray-500">
                               {item?.contact_type}{" "}
                             </span>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-1.5  text-xs font-medium text-gray-900">
                             {item?.contact_data}{" "}
                           </td>
                         </tr>
@@ -351,7 +351,7 @@ function PropertySummary() {
 
         <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
           {/* Services */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+          <div className="bg-white shadow  w-full rounded-lg p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">

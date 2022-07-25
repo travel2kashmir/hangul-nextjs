@@ -7,84 +7,93 @@ import { useRouter } from "next/router";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
-const logger = require("../services/logger");     
-    
+const logger = require("../services/logger");
+
 function Signin() {
-  /** Router for Redirection **/
+  /* Router for Redirection */
   const router = useRouter();
   const { locale } = router;
 
-  useEffect(()=>{
-   const setLanguage = async () => {
-   localStorage.setItem("Language", "en");
+  useEffect(() => {
+    const setLanguage = async () => {
+      localStorage.setItem("Language", "en");
     };
-    setLanguage(); 
+    setLanguage();
   }
-  ,[])
-  
-  /** State for internationalization **/
+    , [])
+
+  /* State for internationalization */
   const [lang, setLang] = useState("en");
   var language;
-  if (locale === "en"){
-     language = english 
-   
+  if (locale === "en") {
+    language = english
+
   }
-  if(locale === "ar"){
-     language = arabic 
+  if (locale === "ar") {
+    language = arabic
   }
-  if(locale === "fr"){
+  if (locale === "fr") {
     language = french
   }
-  
-  /** Function for Internationalisation **/
+
+  /* Function for Internationalisation */
   const changelanguage = (item) => {
     const locale = item;
-    /** Language selected stored to the localstorage **/
+    /* Language selected stored to the localstorage */
     localStorage.setItem("Language", locale);
     router.push("/", "/", { locale });
-    logger.info("Language fetched: " +locale);
+    logger.info("Language fetched: " + locale);
   };
 
-  /** State for Sign In **/
+  /* State for Sign In */
   const [signinDetails, setSigninDetails] = useState({
     email: "",
     password: "",
   });
 
-  /** Storing Sign in data in Local Storage **/
+  /* Storing Sign in data in Local Storage */
   const LocalSignin = (whoIsLogged) => {
     localStorage.setItem("Signin Details", JSON.stringify(whoIsLogged));
   };
 
-  /** Sign In Submit Function **/
+  /* Sign In Submit Function */
   const submitSignIn = async (item) => {
     var item = {
       user_email: signinDetails.email,
     };
 
-    /** API POST call to send Sign Details **/
+    /* API POST call to send Sign Details */
     Axios.post("/api/signin/user", item, {
       headers: { "content-type": "application/json" },
     })
       .then(async (response) => {
-        /** Password Encryption **/
-        const salt = response.data.salt;
+        /* Password Decryption */
+       const salt = response.data.salt;
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
-        if (EncryptedPass === response.data.user_password) {
-          /** Toast emitter Sign in Successfull **/
-         logger.info("Login Successful!");
+        if (EncryptedPass === response.data.password) {
+          /* Toast emitter Sign in Successfull */
+          logger.info("Login Successful!");
           const whoIsLogged = {
-            id: response.data.user_id,
-            name: response.data.user_name,
+            id: response.data.id,
+            name: response.data.name,
             email: signinDetails?.email,
-            password: response.data?.user_password,
+            password: response.data?.password,
+            admin_type: response.data?.admin_type
           };
-          LocalSignin(whoIsLogged);
+          {/To re-direct to required module/ }
+          if (response.data.id.match(/admin00.[0-9]*/g)) {
+            LocalSignin(whoIsLogged);
+            router.push("./admin/adminLanding")
+          }
+          else {
+            LocalSignin(whoIsLogged);
+            router.push("./property/landing");
+          }
 
-          router.push("./property/landing");
-          
-        } else { 
-          /** Toast emitter for error wrong email password combination  **/
+
+
+        } else {
+          /* Toast emitter for error wrong email password combination  */
           toast.error("Please check your email and password", {
             position: "top-center",
             autoClose: 5000,
@@ -94,16 +103,16 @@ function Signin() {
             draggable: true,
             progress: undefined,
           });
-          
+
           logger.error('Incorrect email and password combination.')
-                    
+
         }
       })
 
       .catch((error) => {
-        logger.error('Sign In error!' );
-       
-        /** Toast emitter for Sign in error  **/
+        logger.error('Sign In error!');
+
+        /* Toast emitter for Sign in error  */
         toast.error("Sign in Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -113,7 +122,7 @@ function Signin() {
           draggable: true,
           progress: undefined,
         });
-       });
+      });
   };
 
   return (
@@ -135,7 +144,7 @@ function Signin() {
               {language?.title}
             </h2>
 
-            {/** Signin Form **/}
+            {/* Signin Form */}
             <form className="mt-8 space-y-6" action="#">
               <div>
                 <label
@@ -175,7 +184,7 @@ function Signin() {
                   id="password"
                   onChange={(e) =>
                     setSigninDetails({
-                      ...signinDetails,    
+                      ...signinDetails,
                       password: e.target.value,
                     })
                   }
@@ -292,7 +301,7 @@ function Signin() {
                   changelanguage("fr");
                 }}
               >
-               Français
+                Français
               </button>
             </div>
           ) : (
@@ -301,7 +310,7 @@ function Signin() {
         </div>
       </div>
 
-      {/** Toast Container **/}
+      {/* Toast Container */}
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -318,6 +327,16 @@ function Signin() {
 }
 
 export default Signin;
+
+Signin.getLayout = function PageLayout(page) {
+  return (
+    <>
+      {page}
+    </>
+  )
+
+
+}
 
 Signin.getLayout = function PageLayout(page){
   return(

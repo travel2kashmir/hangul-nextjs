@@ -251,6 +251,7 @@ export default {
 },
 "addcontacts":"Ajouter des contacts",
 addbasicdetails:"Ajouter des détails de base",
+addimages:"Ajouter des images",
   title: "signe",
   email: "votre e-mail",
   password: "votre mot de passe",

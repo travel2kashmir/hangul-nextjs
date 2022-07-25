@@ -9,7 +9,7 @@ import arabic from "../../../components/Languages/ar"
 import Button from "../../../components/Button";
 import Sidebar from "../../../components/Sidebar";
 var language;
-var property_id;
+var property_id='';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
@@ -194,6 +194,32 @@ function addcontacts() {
     Router.push("./addcontacts");
   }, [])
 
+  const uploadImage = () => {
+    const imageDetails = image.imageFile
+    const formData = new FormData();
+    formData.append("file", imageDetails);
+    formData.append("upload_preset", "Travel2Kashmir")
+
+    axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
+        .then(response => {
+            setImage({ ...image, image_link: response?.data?.secure_url })
+        })
+        .catch(error => {
+            toast.error("Image Upload Error! ", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            console.error('There was an error!', error);
+
+        });
+
+}
+
   return (
     <>
       <Header Primary={english?.Sideadmin} />
@@ -291,7 +317,15 @@ function addcontacts() {
 
             <button
               className="float-right mt-4 bg-blue-600 text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-              onClick={handleSubmit}
+              onClick={()=>property_id===''?handleSubmit():toast.error("Property Not Registered", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })}
               type="button"
             >
               Submit

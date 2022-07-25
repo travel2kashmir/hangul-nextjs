@@ -4,6 +4,7 @@ export default {
     label:' أَجَدّ',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
+"addimages":"إضافة الصور",
 "addcontacts":"ضف جهات اتصال",
 "Submit" :{
   label:'اِختَضَع أَجَدّ',

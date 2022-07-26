@@ -12,7 +12,6 @@ var language;
 var property_id = '';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Result } from 'postcss';
 const logger = require("../../../services/logger");
 
 
@@ -38,9 +37,7 @@ function Addimages() {
     Router.push("./addimages");
   }, [])
 
-
-
-  const imageTemplate = {
+const imageTemplate = {
     property_id: property_id,
     image_link: '',
     image_title: '',
@@ -49,9 +46,10 @@ function Addimages() {
     imageFile: ''
   }
   const [imageData, setImageData] = useState([imageTemplate]?.map((i, id) => { return { ...i, index: id } }))
-  const validateImage = () =>{
-    var isValid=true;
-    isValid = imageData.map((image)=>{
+  const validateImage = (imagedata) =>{
+    let isValid = true;
+    console.log(imagedata)
+    isValid = imagedata.map((image)=>{
      
       for(let value in image){
        if(image[value]==="")
@@ -66,13 +64,11 @@ function Addimages() {
         return `Image description should be upto 500 words only`
       }
       })
+    
       return isValid;
   }
 
   const handleSubmit = () => {
-    const report = validateImage();
-    if(report===true)
-    {
     const imagedata = imageData?.map((i => {
       return {
         property_id: property_id,
@@ -82,6 +78,9 @@ function Addimages() {
         image_category: "outside"
       }
     }))
+    const report = validateImage(imagedata);
+    if(report === true )
+    {
     const finalImage = { "images": imagedata }
    axios.post(`/api/gallery`, finalImage).then(response => {
      toast.success(JSON.stringify(response.data.message), {
@@ -210,7 +209,6 @@ function Addimages() {
             >
               +Add Image
             </button>
-            {property_id}
           </div>
         </div>
 

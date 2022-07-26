@@ -1,4 +1,5 @@
 export default {
+  addimages:"Add Images",
   addbasicdetails:"Add Basic Details",
   page:"page",
   title: "sign in",
@@ -392,7 +393,6 @@ label: "Delete Contact",
    
 },
 "addcontacts":"Add Contacts",
-"addimages":"Add Images",
 "EditRoomBundle" :{
   label: "Edit Room Bundle",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
@@ -464,6 +464,7 @@ propertyxml:'../propertyxml',
 roomsxml:'../roomsxml',
 raterules:'../raterules'
  },
+
  "Sideadmin":{
 basicdetails:'./addbasicdetails',
 contact:'./addcontacts',

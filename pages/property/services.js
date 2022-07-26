@@ -155,9 +155,7 @@ function Services() {
                     });
                 })
         }
-
-    
-
+        
     /* Function to edit services*/
     const updateServices = (props) => {
        
@@ -350,7 +348,7 @@ function Services() {
                 {/* Additional Services Table */}
                 {additionalServices === '' ? <></> : <>
                 <div className="bg-white shadow rounded-lg  mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
-                <Table  gen={gene} setGen={setGen} add={()=> setView(1)} name="Additional Services"
+                <Table  gen={gene} setGen={setGene} add={()=> setView(1)} name="Additional Services"
                 edit={editAdditionalServices}
                 delete={deleteAdditionalServices}/> 
                 </div>

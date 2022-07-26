@@ -104,19 +104,19 @@ const Table = (args) => {
                             </span>
                         </div>
                     </div>
-                  { args.name != "Services" ? 
-                    <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                        <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+                    {args.name != "Services" ?
+                        <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                            <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
             font-semibold
            rounded-lg text-sm px-5 py-2 text-center 
            items-center ease-linear transition-all duration-150" onClick={args?.add} >
-                            Add</button>
-                        <span className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                            <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                            Import
-                        </span>
-                    </div>:<>
-                    </>}
+                                Add</button>
+                            <span className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
+                                <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
+                                Import
+                            </span>
+                        </div> : <>
+                        </>}
                 </div>
             </div>
             {/* Table */}
@@ -127,21 +127,24 @@ const Table = (args) => {
                             <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
                                 <thead className="bg-gray-100">
                                     <tr>
-                                    {args?.name != "Services"?
-                                        <th scope="col" className="p-4">
-                                            <div className="flex items-center">
-                                                <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
-                                                    name="allSelect" checked={args?.gen?.filter(item => item?.isChecked !== true).length < 1}
-                                                    onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
-                                                    className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                                        {args?.name != "Services" ?
+                                            <th scope="col" className="p-4">
+                                                <div className="flex items-center">
+                                                    <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                                        name="allSelect" checked={args?.gen?.filter(item => item?.isChecked !== true).length < 1}
+                                                        onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
+                                                        className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                                                       rounded"  />
-                                                <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-                                            </div>
-                                        </th>:<></>}
+                                                    <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                                                </div>
+                                            </th> : <></>}
                                         <th scope="col"
                                             className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
-                                        <th scope="col"
-                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Details</th>
+                                        {args?.name != "Packages" ?
+                                            <th scope="col"
+                                                className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Details</th>
+                                            :
+                                            <></>}
                                         <th scope="col"
                                             className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
                                         <th scope="col"
@@ -156,97 +159,99 @@ const Table = (args) => {
                                             {update?.edit === 1 && update?.id === idx ?
                                                 <>
                                                     <tr className="hover:bg-gray-100">
-                                                    {args?.name != "Services"?
-                                                        <td className="p-4 w-4">
-                                                            <span className="flex items-center">
-                                                                <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                                                                <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                                            </span>
-                                                        </td>: <></>}
-                                                        {args?.name != "Additional Services"?
-                                                        <td className="data p-4 text-left text-sm font-semibold  ">
-                                                            {item?.name}</td>:
+                                                        {args?.name != "Services" ?
+                                                            <td className="p-4 w-4">
+                                                                <span className="flex items-center">
+                                                                    <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                                                                    <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                                </span>
+                                                            </td> : <></>}
+                                                        {args?.name != "Additional Services" ?
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
-                                                            <input type="text"
-                                                                onChange={(e) => setEditContact({ ...editContact, name: e.target.value })} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
-                                                                defaultValue={item?.name}></input> </td>}
+                                                                {item?.name}</td> :
+                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                                <input type="text"
+                                                                    onChange={(e) => setEditContact({ ...editContact, name: e.target.value })} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
+                                                                    defaultValue={item?.name}></input> </td>}
 
-                                               {args?.name != "Services" ?
-                                                        <td className="data p-4 text-left text-sm font-semibold  ">
-                                                            <input type="text"
-                                                                onChange={(e) => setEditContact({ ...editContact, type: e.target.value })} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
-                                                                defaultValue={item?.type}></input> </td>
-                                                
-                                             :
-                                                 <td className="data p-4 text-left text-sm font-semibold  ">
-                                                {item?.type === 'yes' || item?.type === 'no' ? 
-                                                  <div className="flex">
-                                                  <div className="form-check mx-2 form-check-inline">
+                                                        {args?.name != "Services" ?
 
-                                                      <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
-                                                          <input type="checkbox" value={editContact?.type} checked={editContact.type === "yes" }
-                                                              onChange={(e) => (setEditContact({ ...editContact, type: editContact.type === "yes" ? "no" :"yes" }))}
-                                                              id={"default-toggle"} className="sr-only peer" />
-                                                          <div
-                                                              className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                                <input type="text"
+                                                                    onChange={(e) => setEditContact({ ...editContact, type: e.target.value })} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
+                                                                    defaultValue={item?.type}></input> </td>
+                                                            :
+                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                                {item?.type === 'yes' || item?.type === 'no' ?
+                                                                    <div className="flex">
+                                                                        <div className="form-check mx-2 form-check-inline">
+
+                                                                            <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
+                                                                                <input type="checkbox" value={editContact?.type} checked={editContact.type === "yes"}
+                                                                                    onChange={(e) => (setEditContact({ ...editContact, type: editContact.type === "yes" ? "no" : "yes" }))}
+                                                                                    id={"default-toggle"} className="sr-only peer" />
+                                                                                <div
+                                                                                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
                  dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
                  peer-checked:after:translate-x-full 
                  peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
                  after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
                   after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                                      </label>
-                                                  </div>
-                                              </div> :
-                                              <div>
-                                               {(() => {
-                                                switch (item?.id) {
-                                                    case 'ser0016': return (<div>
-                                                        {/*Kitchen Availability*/}
-                                                        <select   onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))}
-                                                        className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5">
-                                                        <option select>{item?.type}</option>
-                                                            <option value="Available in all rooms">Available in all rooms</option>
-                                                            <option value="Available in some rooms">Available in some rooms</option>
-                                                            <option value="Not available">Not available</option>
-                                                        </select>
-                                                    </div>)
-                                                    case 'ser0017': return (<div>
-                                                        {/*Parking Type*/}
-                                                        <select   onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" >
-                                                            <option select>{item?.type}</option>
-                                                            <option value="No payment required">No Payment Required</option>
-                                                            <option value="Paid">Paid</option>
-                                                            <option value="Not available">Not available</option>
-                                                        </select>
-                                                    </div>)
-                                                    case 'ser0020': return (<div>
-                                                        {/*Swimming Pool*/}
-                                                        <select   onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" >
-                                                           <option select>{item?.type}</option>
-                                                            <option value="Indoors">Indoors</option>
-                                                            <option value="Outdoors">Outdoors</option>
-                                                            <option value="Indoors and outdoors">Indoors and Outdoors</option>
-                                                            <option value="Not available">Not available</option>
-                                                        </select>
-                                                    </div>)
-                                                    case 'ser0022': return (<div>
-                                                        {/*Wifi Type*/}
-                                                        <select   onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5">
-                                                        <option select>{item?.type}</option>
-                                                            <option value="No payment required">No Payment Required</option>
-                                                            <option value="Paid">Paid</option>
-                                                            <option value="Not available">Not available</option>
-                                                            <option value="Not available">Not available</option>
-                                                        </select>
-                                                    </div>)
-                                                    default: return (<div></div>)
-                                                }
-                                            })()}
-                                           </div>   
-                                              
-                                              }
-                                                 </td>
-                                    }
+                                                                            </label>
+                                                                        </div>
+                                                                    </div> :
+                                                                    <div>
+                                                                        {(() => {
+                                                                            switch (item?.id) {
+                                                                                case 'ser0016': return (<div>
+                                                                                    {/*Kitchen Availability*/}
+                                                                                    <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))}
+                                                                                        className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5">
+                                                                                        <option select>{item?.type}</option>
+                                                                                        <option value="Available in all rooms">Available in all rooms</option>
+                                                                                        <option value="Available in some rooms">Available in some rooms</option>
+                                                                                        <option value="Not available">Not available</option>
+                                                                                    </select>
+                                                                                </div>)
+                                                                                case 'ser0017': return (<div>
+                                                                                    {/*Parking Type*/}
+                                                                                    <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" >
+                                                                                        <option select>{item?.type}</option>
+                                                                                        <option value="No payment required">No Payment Required</option>
+                                                                                        <option value="Paid">Paid</option>
+                                                                                        <option value="Not available">Not available</option>
+                                                                                    </select>
+                                                                                </div>)
+                                                                                case 'ser0020': return (<div>
+                                                                                    {/*Swimming Pool*/}
+                                                                                    <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" >
+                                                                                        <option select>{item?.type}</option>
+                                                                                        <option value="Indoors">Indoors</option>
+                                                                                        <option value="Outdoors">Outdoors</option>
+                                                                                        <option value="Indoors and outdoors">Indoors and Outdoors</option>
+                                                                                        <option value="Not available">Not available</option>
+                                                                                    </select>
+                                                                                </div>)
+                                                                                case 'ser0022': return (<div>
+                                                                                    {/*Wifi Type*/}
+                                                                                    <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value }))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5">
+                                                                                        <option select>{item?.type}</option>
+                                                                                        <option value="No payment required">No Payment Required</option>
+                                                                                        <option value="Paid">Paid</option>
+                                                                                        <option value="Not available">Not available</option>
+                                                                                        <option value="Not available">Not available</option>
+                                                                                    </select>
+                                                                                </div>)
+                                                                                default: return (<div></div>)
+                                                                            }
+                                                                        })()}
+                                                                    </div>
+
+                                                                }
+                                                            </td>
+
+                                                        }
+
                                                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                             <div className="flex">
                                                                 <div className="form-check mx-2 form-check-inline">
@@ -279,24 +284,24 @@ const Table = (args) => {
                                                 </> :
                                                 <>
                                                     <tr>
-                                                    {args?.name != "Services"?
-                                                        <td className="p-4 w-4">
-                                                            <span className="flex items-center">
-                                                                <input id="checkbox-1" name={item?.id} checked={item.isChecked || false}
-                                                                    onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
-                                                                    aria-describedby="checkbox-1" type="checkbox"
-                                                                    className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4
+                                                        {args?.name != "Services" ?
+                                                            <td className="p-4 w-4">
+                                                                <span className="flex items-center">
+                                                                    <input id="checkbox-1" name={item?.id} checked={item.isChecked || false}
+                                                                        onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
+                                                                        aria-describedby="checkbox-1" type="checkbox"
+                                                                        className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4
                                                                      w-4 rounded" />
-                                                                <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                                            </span>
-                                                        </td>:<></>}
+                                                                    <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                                </span>
+                                                            </td> : <></>}
                                                         <td className="data p-4 text-left text-sm font-semibold  ">
                                                             {item?.name}
                                                         </td>
-                                                       
-                                                        <td className="data p-4 text-left text-sm font-semibold  ">
-                                                            {item?.type}
-                                                        </td> 
+                                                        {args?.name === "Packages" ? <></> :
+                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                                {item?.type}
+                                                            </td>}
                                                         {item?.status == true ?
                                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                                 <span className="flex items-center">
@@ -323,22 +328,38 @@ const Table = (args) => {
                                                             </td>
                                                             :
                                                             <td className="p-4 whitespace-nowrap space-x-2">
-                                                                <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
-      font-semibold
-     rounded-lg text-sm px-5 py-2 text-center 
-     items-center ease-linear transition-all duration-150" onClick={() => {
-                                                                        setEditContact(item);
-                                                                        setUpdate({ ...update, edit: 1, id: idx })
-                                                                    }}>Edit</button>
-                                                                  {args.name != "Services" ?
-                                                                <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white  sm:inline-flex  
-    font-semibold
-     rounded-lg text-sm px-5 py-2 text-center 
-     items-center ease-linear transition-all duration-150"
-                                                                    onClick={() => {
-                                                                        setDeleteContact(item);
-                                                                        setDel({ ...del, delete: 1, id: idx })
-                                                                    }} >Delete</button>:<></>}
+                                                                  
+                                                                {((args.name != "Packages")||(args.name != "Rooms"))?
+
+                                                                    <div>
+                                                                        <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
+                                                                            setEditContact(item);
+                                                                            setUpdate({ ...update, edit: 1, id: idx })
+                                                                        }}>Edit</button>
+                                                                        {args.name != "Services" ?
+                                                                            <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                                onClick={() => {
+                                                                                    setDeleteContact(item);
+                                                                                    setDel({ ...del, delete: 1, id: idx })
+                                                                                }} >Delete</button> : <></>}
+                                                                    </div>
+                                                                    :
+                                                                    // Room Button
+                                                                    <div>
+                                                                        <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                            onClick={
+                                                                                () => {
+                                                                                    args.edit(item)
+                                                                                }}>Edit</button>
+
+                                                                        <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                            onClick={() => {
+                                                                                setDeleteContact(item);
+                                                                                setDel({ ...del, delete: 1, id: idx })
+                                                                            }} >Delete</button>
+                                                                    </div>
+
+                                                                }
                                                             </td>}
                                                     </tr>
                                                 </>}

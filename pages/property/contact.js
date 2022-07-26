@@ -41,13 +41,11 @@ function Scaffold() {
         }
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
-
-
       }
     }
     firstfun();
 
-    Router.push("./scaffoldedtable");
+    Router.push("./contact");
   }, [])
   /* Function Add Contact*/
   function submitContactAdd(e) {

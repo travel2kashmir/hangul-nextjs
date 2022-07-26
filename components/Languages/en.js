@@ -1,5 +1,9 @@
 export default {
   addimages:"Add Images",
+  addservices:"Add Services",
+  addroom:"Add Room",
+  addnewroom:"Add New Room",
+  addnewservices:"Add New Services",
   addbasicdetails:"Add Basic Details",
   page:"page",
   title: "sign in",

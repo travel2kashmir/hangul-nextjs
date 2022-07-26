@@ -1,6 +1,10 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   addimages:"Ajouter des images",
+  addservices:"Ajouter des services",
+  addroom:"Ajouter une salle",
+  addnewroom:"Ajouter une nouvelle pièce",
+  addnewservices:"Ajouter de nouveaux services",
   "Update" :{
     label: 'Éditer',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    

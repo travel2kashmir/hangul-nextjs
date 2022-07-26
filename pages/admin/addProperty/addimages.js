@@ -53,15 +53,15 @@ const imageTemplate = {
      
       for(let value in image){
        if(image[value]==="")
-        {return `${value} is missing`}
+        {return `APP: ${value?.replace("_", " ")} is missing`}
       }
       if(image.image_title.length>50)
       {
-        return `Image title should be upto 50 words only`
+        return `APP: Image title should be upto 50 characters only`
       }
-      if(image.image_description.length>500)
+      if(image.image_description.length>1000)
       {
-        return `Image description should be upto 500 words only`
+        return `APP: Image description should be upto 1000 characters only`
       }
       })
     
@@ -83,7 +83,7 @@ const imageTemplate = {
     {
     const finalImage = { "images": imagedata }
    axios.post(`/api/gallery`, finalImage).then(response => {
-     toast.success(JSON.stringify(response.data.message), {
+     toast.success("API:"+JSON.stringify(response.data.message), {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -94,7 +94,7 @@ const imageTemplate = {
       });
 
     }).catch(error => {
-     toast.error(JSON.stringify(error.response.data), {
+     toast.error("API:"+JSON.stringify(error.response.data), {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,

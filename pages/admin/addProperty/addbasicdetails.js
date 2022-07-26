@@ -71,7 +71,7 @@ function AddBasicDetails() {
      { 
       if((allHotelDetails[item]==='')&&(item!="description_date"))
       { 
-        return `insert value of ${item}`
+        return `APP:insert value of ${item?.replace("_", " ")}`
       }
      }
      //detect empty values in address
@@ -79,39 +79,39 @@ function AddBasicDetails() {
      {
       if(address[item]==='')
       {console.log(item)
-        return `insert value of ${item}`
+        return `APP:insert value of ${item?.replace("_", " ")}`
       }
      }
      //check  date  established 
     if((allHotelDetails?.established_year.slice(0,4)>current.getFullYear()))
      {
-      return 'Established year is greater than current year'
+      return 'APP: Established year is greater than current year'
      }
      //check star rating
     if((parseInt(allHotelDetails.star_rating)<0)||(parseInt(allHotelDetails.star_rating)>7)||(allHotelDetails.star_rating===''))
      {
-      return 'Enter star rating between 0 to 7'
+      return 'APP: Enter star rating between 0 to 7'
      }
     //check latitudes 
     if((address?.address_latitude<-90)||(address?.address_latitude>90))
     {
-      return 'The value of latitude should be between -90 to +90'
+      return 'APP: The value of latitude should be between -90 to +90'
     }
     //check longitude 
     
      if((address?.address_longitude<-180)||(address?.address_longitude >180))
      {
-       return 'The value of latitude should be between -180 to +180'
+       return 'APP: The value of latitude should be between -180 to +180'
      }
      //check zip code
      if((!address.address_zipcode.match('^[1-9][0-9]{5}$')))
      {
-      return 'Please Enter Valid Indian Zip code'
+      return 'APP: Please Enter Valid Indian Zip code'
      }
      //check precision
     if(address.address_precision<0 || address.address_precision>1000)
      {
-      return 'Precision should be between 0-1000'
+      return 'APP: Precision should be between 0-1000'
      }
     return true;
      }
@@ -128,7 +128,7 @@ function AddBasicDetails() {
     console.log(JSON.stringify(finalData), 'finaldata')
     axios.post('/api/basic',finalData).then((response)=>{
       localStorage.setItem("property_id",JSON.stringify(response?.data?.property_id));
-      toast.success("Property Added Successfully!", {
+      toast.success("API: Property Added Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -137,7 +137,7 @@ function AddBasicDetails() {
         draggable: true,
         progress: undefined,
       });
-    }).catch(()=>{toast.error("Property Add Error!", {
+    }).catch(()=>{toast.error("API: Property Add Error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -580,10 +580,8 @@ return (
             pauseOnFocusLoss
             draggable
             pauseOnHover />
-   
-    </div>
-        
-        </div>
+   </div>
+         </div>
     )
 }
 

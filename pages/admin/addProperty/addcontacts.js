@@ -21,8 +21,7 @@ function addcontacts() {
     property_id: property_id
   }
 
-  const [contact, setContact] = useState
-    ([conTemp]?.map((i, id) => { return { ...i, index: id } }))
+  const [contact, setContact] = useState([conTemp]?.map((i, id) => { return { ...i, index: id } }))
 
   const addContact = () => {
     setContact([...contact, conTemp]?.map((i, id) => { return { ...i, index: id } }))
@@ -37,7 +36,6 @@ function addcontacts() {
       return item
     }))
   }
-
 
   const removeContact = (index) => {
     console.log("index is" + index)
@@ -67,7 +65,7 @@ function addcontacts() {
     var check = '';
     var statement = contactdata?.map((item) => {
       if (item?.contact_data.length === 0) {
-        check = `${item.contact_type} is empty`
+        check = `APP: ${item.contact_type.replace("_", " ")} is empty`
       }
     })
 
@@ -79,30 +77,29 @@ function addcontacts() {
         case 'email':
           let regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/g;
           if (!contactdata[idx].contact_data.match(regex))
-            return 'Enter Valid Email Address'
+            return 'APP: Enter Valid Email Address'
           break;
         case 'website':
           regex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig
           if (!contactdata[idx].contact_data.match(regex))
-            return 'Enter valid website in format of http://www.someaddress.something';
+            return 'APP: Enter valid website in format of http://www.someaddress.something';
           break;
 
         default:
       }
     }
-
-    console.log("repeat  " + repeat + " phoneTypePresent  " + phoneTypePresent)
-    if (check.length != 0)
+ if (check.length != 0)
       return check
     else if ((repeat === false) && (phoneTypePresent === true))
       return (true)
     else if ((repeat === true) && (phoneTypePresent === false))
-      return ("phone number absent and some Contact type being repeated")
+      return ("APP: phone number absent and some Contact type being repeated")
     else if (repeat === true)
-      return ("Some contact type being repeated")
+      return ("APP: Some contact type being repeated")
     else if (phoneTypePresent === false)
-      return ("phone number missing")
+      return ("APP: phone number missing")
   }
+
   function handleSubmit(e) {
     e.preventDefault()
     console.log({ contact })
@@ -171,9 +168,7 @@ function addcontacts() {
     }
   }
 
-
-
-  useEffect(() => {
+useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
         var locale = localStorage.getItem("Language");
@@ -252,7 +247,7 @@ function addcontacts() {
                 hover:shadow-md outline-none focus:outline-none mr-1 mb-4 ease-linear transition-all duration-150" type="button"
               onClick={addContact}
             >
-              +Add Contact
+              +Add Contact {property_id}
             </button>
           </div>
         </div>
@@ -315,7 +310,7 @@ function addcontacts() {
         <div className="items-center p-6 border-t border-gray-200 rounded-b">
           <button
             className="float-right mt-4 bg-blue-600 text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-            onClick={() => property_id === '' ? handleSubmit() : toast.error("Property Not Registered", {
+            onClick={(e) => property_id != '' ? handleSubmit(e) : toast.error("APP: Property Not Registered", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -328,7 +323,7 @@ function addcontacts() {
           >
             Submit
           </button>
-          {/* <Button Primary={language?.Submit} onClick={(e) => { submitContactAdd(e) }} />*/}
+         
         </div>
       </div>
 

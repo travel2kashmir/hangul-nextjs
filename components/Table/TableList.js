@@ -19,19 +19,12 @@ const TableList = (args) =>{
                              {item?.type  !== undefined ?
                              <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{item?.type} </td>
                              : <></>}
-                             {item?.status == true ? 
                              <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                  <span className="flex items-center">
                                      <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
-                                    Active
+                                    {/* {language?.active} */} {item?.status == true ? "Active" : "Inactive"}
                                  </span>
-                             </td>:
-                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
-                                 <span className="flex items-center">
-                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
-                                   Inactive
-                                 </span>
-                             </td>}
+                             </td>
                              <td className="p-4 whitespace-nowrap space-x-2"> 
                             <button onClick={() => args?.EditButton(item)} className={` bg-gradient-to-r ${args?.Edit?.color} sm:inline-flex  
             focus:ring-4 focus:ring-cyan-200 font-semibold

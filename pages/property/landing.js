@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
@@ -168,50 +167,10 @@ const  Landing=() =>{
                                 </button>
                               </td>
                             </tr>
-
-                          </thead>
-                          <tbody className="bg-white divide-y divide-gray-200">
-                            {ownerdata?.map((item, idx) => {
-                              return (
-                                <tr className="hover:bg-gray-100" key={idx}>
-                                  <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
-                                    {item?.property_name}
-                                  </td>
-                                  <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
-                                    {item?.property_category}
-                                  </td>
-                                  <td className="p-1 whitespace-nowrap text-base font-normal text-gray-900">
-                                    <div className="flex items-center">
-                                      <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                                      {language?.active}
-                                    </div>
-                                  </td>
-                                  <td className="p-2 whitespace-nowrap space-x-1">
-                                         <button
-                                      type="button"
-                                      onClick={() => {
-                                        LocalProperty({ item});
-                                        data:item,
-                                       
-                                        router.push("./propertysummary");
-                                      }}
-                                      className="text-white bg-cyan-600
-                                             hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
-                                            text-sm inline-flex items-center px-2 py-1.5 text-center"
-                                    >
-                                     {language?.view}
-
-                                    </button>
-                                   
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-
+                          );
+                        })}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>

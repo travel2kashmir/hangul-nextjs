@@ -132,7 +132,12 @@ Cancel:"Cancel"
  col2 : "Miles  Provider",
   
 },
-
+"EliteCols":{
+  name:"Elite Rewards",
+ col1 : "Program Name",
+ col2 : "Program Level",
+  
+},
 "Upload" :{
   label:"Upload",
    color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",

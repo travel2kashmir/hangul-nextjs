@@ -14,7 +14,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
 
-
 export default function BasicDetails() 
  {
   
@@ -39,7 +38,6 @@ export default function BasicDetails()
     } 
   }
   firstfun();
- 
  Router.push("./basicdetails");
 },[])
 
@@ -137,7 +135,7 @@ const fetchBasicDetails = async () => {
           </li>
         </ol>
       </nav>
-     
+
       {/* Basic Details Form */}
       <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">

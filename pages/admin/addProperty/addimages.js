@@ -175,7 +175,8 @@ const imageTemplate = {
       return item
     }))
   }
-  return (
+
+ return (
     <div>
       <Header Primary={english?.Sideadmin} />
       <Sidebar Primary={english?.Sideadmin} />

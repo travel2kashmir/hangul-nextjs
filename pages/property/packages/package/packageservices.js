@@ -464,7 +464,7 @@ function Packageservices() {
                 <div className="bg-white shadow rounded-lg  mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
                 <Table  gen={gen} setGen={setGen} add={()=> setView(1)} name="Additional Services"
                 edit={editAdditionalPackageServices}
-                delete={deleteAdditionalPackageServices}/> 
+                delete={deleteAdditionalPackageServices} common={language?.common} cols={language?.AdditionalServicesCols}/> 
                 </div>
                 </>}
      

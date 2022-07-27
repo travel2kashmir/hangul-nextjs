@@ -179,7 +179,7 @@ function Services() {
                     });
                     fetchHotelDetails();
                     Router.push("./services");
-                    setModified([])
+                  
                 })
                 .catch((error) => {
                     toast.error("Service Update Error!", {

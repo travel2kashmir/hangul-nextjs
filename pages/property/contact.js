@@ -270,7 +270,7 @@ function Scaffold() {
         </nav>
         {/* Header */}
         <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit}
-        delete={submitContactDelete} name="Contact"/> 
+        delete={submitContactDelete} name="Contact" common={language?.common} cols={language?.ContactCols}/> 
 
 
       

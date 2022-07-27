@@ -7,10 +7,12 @@
     "node": "16.13.1"
   },
   "scripts": {
-    "dev": "next dev",
+    "git-info": "node components/gitInfo.js",
+    "start-server": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev": "npm-run-all --serial git-info start-server"
   },
   "dependencies": {
     "@nrwl/next": "^14.0.2",
@@ -30,6 +32,7 @@
     "mdbreact": "^5.2.0",
     "next": "12.1.4",
     "next-http-proxy-middleware": "^1.2.4",
+    "npm-run-all": "^4.1.5",
     "nprogress": "^0.2.0",
     "pino": "^6.14.0",
     "pino-pretty": "^7.6.1",

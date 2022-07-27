@@ -74,11 +74,11 @@ const Table = (args) => {
         <>
             {/* TableHeader */}
             <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{args.name}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{args?.cols?.name}</h1>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
-                            <label htmlFor="users-search" className="sr-only">Search</label>
+                            <label htmlFor="users-search" className="sr-only">{args?.common?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
                                 <input type="text" name="email" id="myInput" onKeyUp={myFunction}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search">
@@ -104,16 +104,16 @@ const Table = (args) => {
                             </span>
                         </div>
                     </div>
-                    {args.name != "Services" ?
+                    {args?.cols?.name != "Services" ?
                         <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
             font-semibold
            rounded-lg text-sm px-5 py-2 text-center 
            items-center ease-linear transition-all duration-150" onClick={args?.add} >
-                                Add</button>
+                                {args?.common?.Add}</button>
                             <span className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                                 <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                                Import
+                                {args?.common?.Import}
                             </span>
                         </div> : <>
                         </>}
@@ -127,7 +127,7 @@ const Table = (args) => {
                             <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
                                 <thead className="bg-gray-100">
                                     <tr>
-                                        {args?.name != "Services" ?
+                                        {args?.cols?.name != "Services" ?
                                             <th scope="col" className="p-4">
                                                 <div className="flex items-center">
                                                     <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
@@ -139,16 +139,16 @@ const Table = (args) => {
                                                 </div>
                                             </th> : <></>}
                                         <th scope="col"
-                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
-                                        {args?.name != "Packages" ?
+                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col1}</th>
+                                        {args?.cols?.name != "Packages" ?
                                             <th scope="col"
-                                                className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Details</th>
+                                                className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col2}</th>
                                             :
                                             <></>}
                                         <th scope="col"
-                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.common?.Status}</th>
                                         <th scope="col"
-                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Actions
+                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.common?.Action}
                                         </th>
                                     </tr>
                                 </thead>
@@ -159,14 +159,14 @@ const Table = (args) => {
                                             {update?.edit === 1 && update?.id === idx ?
                                                 <>
                                                     <tr className="hover:bg-gray-100">
-                                                        {args?.name != "Services" ?
+                                                        {args?.cols?.name != "Services" ?
                                                             <td className="p-4 w-4">
                                                                 <span className="flex items-center">
                                                                     <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                                     <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                 </span>
                                                             </td> : <></>}
-                                                        {args?.name != "Additional Services" ?
+                                                        {args?.cols?.name != "Additional Services" ?
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
                                                                 {item?.name}</td> :
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
@@ -174,7 +174,7 @@ const Table = (args) => {
                                                                     onChange={(e) => setEditContact({ ...editContact, name: e.target.value })} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
                                                                     defaultValue={item?.name}></input> </td>}
 
-                                                        {args?.name != "Services" ?
+                                                        {args?.cols?.name != "Services" ?
 
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
                                                                 <input type="text"
@@ -276,15 +276,15 @@ const Table = (args) => {
                                                              font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
                                                               duration-150"
                                                                 onClick={() => { { setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact) }}
-                                                            >Save</button>
+                                                            >{args?.common?.Save}</button>
                                                             <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                onClick={() => { setUpdate({ ...update, edit: 0, id: '' }) }}>Cancel</button>
+                                                                onClick={() => { setUpdate({ ...update, edit: 0, id: '' }) }}>{args?.common?.Cancel}</button>
                                                         </td>
                                                     </tr>
                                                 </> :
                                                 <>
                                                     <tr>
-                                                        {args?.name != "Services" ?
+                                                        {args?.cols?.name != "Services" ?
                                                             <td className="p-4 w-4">
                                                                 <span className="flex items-center">
                                                                     <input id="checkbox-1" name={item?.id} checked={item.isChecked || false}
@@ -298,7 +298,7 @@ const Table = (args) => {
                                                         <td className="data p-4 text-left text-sm font-semibold  ">
                                                             {item?.name}
                                                         </td>
-                                                        {args?.name === "Packages" ? <></> :
+                                                        {args?.cols?.name === "Packages" ? <></> :
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
                                                                 {item?.type}
                                                             </td>}
@@ -306,13 +306,13 @@ const Table = (args) => {
                                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                                 <span className="flex items-center">
                                                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mr-2"></span>
-                                                                    Active
+                                                                    {args?.common?.Active}
                                                                 </span>
                                                             </td> :
                                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                                 <span className="flex items-center">
                                                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
-                                                                    Inactive
+                                                                    {args?.common?.Inactive}
                                                                 </span>
                                                             </td>}
 
@@ -324,26 +324,29 @@ const Table = (args) => {
      items-center ease-linear transition-all duration-150"
                                                                     onClick={() => { { setDel({ ...del, delete: 0, id: '' }) }; args.delete(item?.id) }} >Yes, Delete</button>
                                                                 <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                    onClick={() => { setDel({ ...del, delete: 0, id: '' }) }} >Cancel</button>
+                                                                    onClick={() => { setDel({ ...del, delete: 0, id: '' }) }} >{args?.common?.Cancel}</button>
                                                             </td>
                                                             :
                                                             <td className="p-4 whitespace-nowrap space-x-2">
-                                                                  
-                                                                {((args.name != "Packages")||(args.name != "Rooms"))?
+                                                               
+                                                                {(args?.cols?.name != "Rooms" && args?.cols?.name != "Packages")?
 
                                                                     <div>
                                                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
                                                                             setEditContact(item);
                                                                             setUpdate({ ...update, edit: 1, id: idx })
                                                                         }}>Edit</button>
-                                                                        {args.name != "Services" ?
+                                                                        {args?.cols?.name != "Services" ?
                                                                             <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                                 onClick={() => {
                                                                                     setDeleteContact(item);
                                                                                     setDel({ ...del, delete: 1, id: idx })
-                                                                                }} >Delete</button> : <></>}
+                                                                                }} >{args?.common?.Delete}</button> : <></>}
                                                                     </div>
+                                                                
                                                                     :
+                                                                   
+                                                                    
                                                                     // Room Button
                                                                     <div>
                                                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
@@ -390,8 +393,8 @@ const Table = (args) => {
                     }} className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center mr-2">
                         <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                     </ button>
-                    <span className="text-sm font-normal text-gray-500">Showing
-                        <span className="text-gray-900 font-semibold ml-1">{page}</span> of <span className="text-gray-900 font-semibold">{Math.ceil(args?.gen?.length / itemsPerPage)}</span></span>
+                    <span className="text-sm font-normal text-gray-500">{args?.common?.Showing}
+                        <span className="text-gray-900 font-semibold ml-1">{page}</span> {args?.common?.Of} <span className="text-gray-900 font-semibold">{Math.ceil(args?.gen?.length / itemsPerPage)}</span></span>
                 </div>
                 <div className="flex items-center space-x-3">
                     <button onClick={() => {

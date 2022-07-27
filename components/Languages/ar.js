@@ -1,4 +1,5 @@
 export default {
+  addbasicdetails:"ضف التفاصيل الأساسية",
   "Update" :{
     label:' أَجَدّ',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
@@ -6,6 +7,10 @@ export default {
 "Submit" :{
   label:'اِختَضَع أَجَدّ',
    color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+},
+"Addnewproperty":{
+  label:"إضافة خاصية جديدة",
+  color: "bg-cyan-600 hover:bg-cyan-700 text-white " 
 },
 "Delete" :{
   label:'نعم أنا متأكد',

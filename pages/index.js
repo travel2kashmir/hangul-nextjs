@@ -22,7 +22,8 @@ function Signin() {
   }
     , [])
 
-  /* State for internationalization */
+  /** State for internationalization **/
+
   const [lang, setLang] = useState("en");
   var language;
   if (locale === "en") {
@@ -35,8 +36,8 @@ function Signin() {
   if (locale === "fr") {
     language = french
   }
+/** Function for Internationalisation **/
 
-  /* Function for Internationalisation */
   const changelanguage = (item) => {
     const locale = item;
     /* Language selected stored to the localstorage */
@@ -67,11 +68,13 @@ function Signin() {
       headers: { "content-type": "application/json" },
     })
       .then(async (response) => {
-        /* Password Decryption */
+
+        /** Password Decryption **/
        const salt = response.data.salt;
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
         if (EncryptedPass === response.data.password) {
-          /* Toast emitter Sign in Successfull */
+          /** Toast emitter Sign in Successfull **/
+
           logger.info("Login Successful!");
           const whoIsLogged = {
             id: response.data.id,
@@ -80,10 +83,11 @@ function Signin() {
             password: response.data?.password,
             admin_type: response.data?.admin_type
           };
-          {/To re-direct to required module/ }
+          {/*To re-direct to required module*/ }
           if (response.data.id.match(/admin00.[0-9]*/g)) {
             LocalSignin(whoIsLogged);
-            router.push("./admin/adminLanding")
+            router.push("./admin/AdminLanding")
+
           }
           else {
             LocalSignin(whoIsLogged);
@@ -91,9 +95,9 @@ function Signin() {
           }
 
 
-
         } else {
-          /* Toast emitter for error wrong email password combination  */
+          /** Toast emitter for error wrong email password combination  **/
+
           toast.error("Please check your email and password", {
             position: "top-center",
             autoClose: 5000,
@@ -112,7 +116,9 @@ function Signin() {
       .catch((error) => {
         logger.error('Sign In error!');
 
+
         /* Toast emitter for Sign in error  */
+
         toast.error("Sign in Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -328,20 +334,11 @@ function Signin() {
 
 export default Signin;
 
-Signin.getLayout = function PageLayout(page) {
-  return (
-    <>
-      {page}
-    </>
-  )
-
-
-}
 
 Signin.getLayout = function PageLayout(page){
   return(
-    <>
-    {page}
+	<>
+      {page}
     </>
   )
 

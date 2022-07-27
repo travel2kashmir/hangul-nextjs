@@ -10,7 +10,7 @@ import arabic from "../components/Languages/ar"
 const logger = require("../services/logger");
 
 function Signin() {
-  /** Router for Redirection **/
+  /* Router for Redirection */
   const router = useRouter();
   const { locale } = router;
 
@@ -23,6 +23,7 @@ function Signin() {
     , [])
 
   /** State for internationalization **/
+
   const [lang, setLang] = useState("en");
   var language;
   if (locale === "en") {
@@ -35,43 +36,45 @@ function Signin() {
   if (locale === "fr") {
     language = french
   }
+/** Function for Internationalisation **/
 
-  /** Function for Internationalisation **/
   const changelanguage = (item) => {
     const locale = item;
-    /** Language selected stored to the localstorage **/
+    /* Language selected stored to the localstorage */
     localStorage.setItem("Language", locale);
     router.push("/", "/", { locale });
     logger.info("Language fetched: " + locale);
   };
 
-  /** State for Sign In **/
+  /* State for Sign In */
   const [signinDetails, setSigninDetails] = useState({
     email: "",
     password: "",
   });
 
-  /** Storing Sign in data in Local Storage **/
+  /* Storing Sign in data in Local Storage */
   const LocalSignin = (whoIsLogged) => {
     localStorage.setItem("Signin Details", JSON.stringify(whoIsLogged));
   };
 
-  /** Sign In Submit Function **/
+  /* Sign In Submit Function */
   const submitSignIn = async (item) => {
     var item = {
       user_email: signinDetails.email,
     };
 
-    /** API POST call to send Sign Details **/
+    /* API POST call to send Sign Details */
     Axios.post("/api/signin/user", item, {
       headers: { "content-type": "application/json" },
     })
       .then(async (response) => {
+
         /** Password Decryption **/
        const salt = response.data.salt;
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
         if (EncryptedPass === response.data.password) {
           /** Toast emitter Sign in Successfull **/
+
           logger.info("Login Successful!");
           const whoIsLogged = {
             id: response.data.id,
@@ -84,6 +87,7 @@ function Signin() {
           if (response.data.id.match(/admin00.[0-9]*/g)) {
             LocalSignin(whoIsLogged);
             router.push("./admin/AdminLanding")
+
           }
           else {
             LocalSignin(whoIsLogged);
@@ -91,9 +95,9 @@ function Signin() {
           }
 
 
-
         } else {
           /** Toast emitter for error wrong email password combination  **/
+
           toast.error("Please check your email and password", {
             position: "top-center",
             autoClose: 5000,
@@ -112,7 +116,9 @@ function Signin() {
       .catch((error) => {
         logger.error('Sign In error!');
 
-        /** Toast emitter for Sign in error  **/
+
+        /* Toast emitter for Sign in error  */
+
         toast.error("Sign in Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -144,7 +150,7 @@ function Signin() {
               {language?.title}
             </h2>
 
-            {/** Signin Form **/}
+            {/* Signin Form */}
             <form className="mt-8 space-y-6" action="#">
               <div>
                 <label
@@ -310,7 +316,7 @@ function Signin() {
         </div>
       </div>
 
-      {/** Toast Container **/}
+      {/* Toast Container */}
       <ToastContainer
         position="top-center"
         autoClose={5000}
@@ -328,9 +334,10 @@ function Signin() {
 
 export default Signin;
 
-Signin.getLayout = function PageLayout(page) {
-  return (
-    <>
+
+Signin.getLayout = function PageLayout(page){
+  return(
+	<>
       {page}
     </>
   )

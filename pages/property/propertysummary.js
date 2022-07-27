@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import Sidebar  from "../../components/Sidebar";
 import Header  from "../../components/Header";
 import { useState,useEffect } from "react";
@@ -24,10 +24,11 @@ function PropertySummary() {
   var theme4= "bg-yellow-400";
   var theme5= "bg-indigo-500";
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-  const [theme,setTheme]=useState(theme1)
+const [theme,setTheme]=useState(theme1)
   const [bgColor,setBgColor]=useState(theme)
   const [unique,setUnique]=useState(0)
   const [uri,setUri]=useState("")
+
   /** Router for Redirection **/
   const router = useRouter();
   useEffect(()=>{
@@ -46,12 +47,18 @@ function PropertySummary() {
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
        currentProperty = JSON.parse(localStorage.getItem("property"));
+      
+        
+      
       } 
     }
     firstfun();
+
     router.push("./propertysummary");
+  
   },[])
    
+
 const initialtheme = () =>{
   var url;
       url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`;
@@ -65,6 +72,7 @@ const initialtheme = () =>{
 
 }
 /* Function call to fetch Current Property Details when page loads */
+
   useEffect(() => {
     const fetchHotelDetails = async () => { 
         const url = `/api/${currentProperty.address_province.replace(
@@ -163,6 +171,7 @@ const sendLink = () =>{
             </li>
           </ol>
         </nav>
+
           <div>
           
           <button onClick={()=>{setBgColor(theme1); setTheme(theme1);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme1</button>
@@ -195,14 +204,15 @@ const sendLink = () =>{
         </div>
         </div>
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
+
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
-                <span className="text-xl sm:text-xl leading-none font-bold text-gray-800">
+                <span className="text-xl sm:text-lg leading-none font-bold text-gray-800">
                   {allHotelDetails?.property_name}
                 </span>
-                <h3 className="text-base font-normal text-gray-500">
+                <h3 className="text-xs font-normal text-gray-500">
                   {allHotelDetails?.star_rating}-Star{" "}
                   {allHotelDetails?.property_category}
                 </h3>
@@ -217,10 +227,10 @@ const sendLink = () =>{
                 </span>
               </div>
             </div>
-            <p className="text-base font-semibold text-gray-500 truncate">
+            <p className="text-sm font-semibold text-gray-500 truncate">
               {allHotelDetails?.description_title}
             </p>
-            <p className="text-sm font-medium text-gray-90  line-clamp-10 ">
+            <p className="text-xs font-medium text-gray-90  line-clamp-10 ">
               {allHotelDetails?.description_body}
             </p>
           </div>
@@ -401,19 +411,19 @@ const sendLink = () =>{
                 </span>
               </div>
             </div>
-            <div className="align-middle inline-block  min-w-full">
+            <div className="align-middle inline-block min-w-full">
               <div className="shadow overflow-hidden">
-                <table className="table-fixed min-w-full divide-y divide-gray-200">
-                  <tbody className="bg-white divide-y divide-gray-200">
+                <table className="table-fixed min-w-full">
+                  <tbody className="bg-white">
                     {allHotelDetails?.contacts?.map((item, idx) => {
                       return (
                         <tr className="hover:bg-gray-100" key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className=" flex items-center  space-x-2 mr-2 lg:mr-0">
+                            <span className="p-1.5 text-xs font-semibold text-gray-500">
                               {item?.contact_type}{" "}
                             </span>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-1.5  text-xs font-medium text-gray-900">
                             {item?.contact_data}{" "}
                           </td>
                         </tr>
@@ -428,7 +438,7 @@ const sendLink = () =>{
 
         <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
           {/* Services */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+          <div className="bg-white shadow  w-full rounded-lg p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">

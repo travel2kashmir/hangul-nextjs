@@ -186,10 +186,10 @@ const Table = (args) => {
                                                                     <div className="flex">
                                                                         <div className="form-check mx-2 form-check-inline">
 
-                                                                            <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
+                                                                            <label htmlFor={`default-toggle${idx}`} className="inline-flex relative items-center cursor-pointer">
                                                                                 <input type="checkbox" value={editContact?.type} checked={editContact.type === "yes"}
                                                                                     onChange={(e) => (setEditContact({ ...editContact, type: editContact.type === "yes" ? "no" : "yes" }))}
-                                                                                    id={"default-toggle"} className="sr-only peer" />
+                                                                                    id={`default-toggle${idx}`} className="sr-only peer" />
                                                                                 <div
                                                                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
                  dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
@@ -255,11 +255,11 @@ const Table = (args) => {
                                                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                             <div className="flex">
                                                                 <div className="form-check mx-2 form-check-inline">
-
-                                                                    <label htmlFor={"default-toggle"} className="inline-flex relative items-center cursor-pointer">
-                                                                        <input type="checkbox" value={editContact?.status} checked={editContact.status === true}
+                                                                    
+                                                                    <label htmlFor={`default${idx}`} className="inline-flex relative items-center cursor-pointer">
+                                                                        <input type="checkbox" checked={editContact?.status===true} value={editContact?.status} 
                                                                             onChange={(e) => (setEditContact({ ...editContact, status: !editContact.status }))}
-                                                                            id={"default-toggle"} className="sr-only peer" />
+                                                                            id={`default${idx}`} className="sr-only peer" />
                                                                         <div
                                                                             className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
                                dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 

@@ -115,7 +115,23 @@ Cancel:"Cancel"
  col1 : "Service Name",
  col2 : "Service Details", 
 },
+
+"RoomCols":{
+  name:"Rooms",
+ col1 : "Room Name",
+ col2 : "Room Type", 
+},
+"PackageCols":{
+  name:"Packages",
+ col1 : "Package Name",
   
+},
+"MilesCols":{
+  name:"Package Miles",
+ col1 : "Number of Miles",
+ col2 : "Miles  Provider",
+  
+},
 
 "Upload" :{
   label:"Upload",

@@ -14,10 +14,6 @@ export default {
   label:'اِختَضَع أَجَدّ',
    color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
-"Addnewproperty":{
-  label:"إضافة خاصية جديدة",
-  color: "bg-cyan-600 hover:bg-cyan-700 text-white " 
-},
 "Delete" :{
   label:'نعم أنا متأكد',
    color: "bg-red-600 hover:bg-red-800 text-white  mx-2 ",
@@ -58,7 +54,28 @@ export default {
     label: 'التالي',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
-  
+"ContactCols":{
+  col1 : "نوع الاتصال",
+  col2 : "بيانات المتصل"
+ },
+   
+ "common":{
+ Status:"الحالة",
+ Action: "أجراءات",
+ Edit: "تعديل",
+ Delete:"حذف",
+ Add:"يضيف",
+ Search:"بحث",
+ Previous:"السابق",
+ Next:"التالي",
+ Showing: "عرض",
+ Of:"من",
+ Active:"نشيط",
+ Inactive:"غير نشط",
+ Import:"غير نشط",
+ Save:"غير نشط",
+ Cancel:"إلغاء"
+ },
 "DeleteContact" :{
    label: "  اتصل  إحذف",
    color: "bg-red-600 hover:bg-red-800 text-white ",

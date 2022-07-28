@@ -139,9 +139,9 @@ firstfun();
 
   const fetchDetails = async () => {
     const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
-    console.log("url " +url)
     axios.get(url)
     .then((response)=>{setRoomDetails(response.data);
+    
     logger.info("url  to fetch room hitted successfully")})
     .catch((error)=>{logger.error("url to fetch room, failed")}); 
   }

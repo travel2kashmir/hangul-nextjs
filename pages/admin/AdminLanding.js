@@ -33,9 +33,7 @@ function AdminLanding() {
     useEffect(() => {
         const firstfun = () => {
             if (typeof window !== 'undefined') {
-
-                var locale = localStorage.getItem("Language");
-
+            var locale = localStorage.getItem("Language");
                 if (locale === "ar") {
                     language = arabic;
                 }

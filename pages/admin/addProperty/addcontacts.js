@@ -14,7 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
 
-function Addcontacts() {
+function addcontacts() {
   const conTemp = {
     contact_type: '',
     contact_data: '',
@@ -343,4 +343,4 @@ useEffect(() => {
   )
 }
 
-export default Addcontacts
+export default addcontacts

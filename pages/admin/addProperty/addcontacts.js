@@ -239,7 +239,7 @@ useEffect(() => {
         </nav>
 
         <div>
-          <h3 className="text-xl font-semibold">{language?.add} {language?.new} {language?.contact}</h3>
+          <h3 className="text-xl font-semibold">{language?.add}  {language?.contact}</h3>
           <div className='float-right'>
             <button
               className="bg-blue-600 text-white active:bg-blueGray-600

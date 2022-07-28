@@ -195,6 +195,19 @@ Cancel:"Cancel"
    ></path>
  </svg>
 },
+  "Sideadmin":{
+basicdetails:'./addbasicdetails',
+contact:'./addcontacts',
+gallery:'./addimages',
+reviews:'./addreviews',
+services: './addservices',
+rooms:'./addroom',
+packages:'../addpackage',
+roombundles:'./addroombundles',
+raterules:'../../property/addraterule',
+propertyxml:'../../property/propertyxml',
+roomsxml:'../../property/roomsxml'
+},
 "AddRateRule" :{
   label: "Add Rate Rule",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",

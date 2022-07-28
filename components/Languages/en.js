@@ -1,5 +1,10 @@
 export default {
   title: "sign in",
+  addimages:"Add Images",
+   addroom:"Add Room",
+  addbasicdetails:"Add Basic Details",
+  basicdetails: "Basic Details",
+  addcontacts:"Add Contacts",
   email: "your email",
   password: "your password",
   remember: "Remember me",

@@ -1,4 +1,11 @@
 export default {
+  addimages:"Add Images",
+  addservices:"Add Services",
+  addroom:"Add Room",
+  addnewroom:"Add New Room",
+  addnewservices:"Add New Services",
+  addbasicdetails:"Add Basic Details",
+  page:"page",
   title: "sign in",
   email: "your email",
   password: "your password",
@@ -49,6 +56,7 @@ export default {
   licensing: "Licensing",
   cookiepolicy: "Cookie Policy",
   home: "Home",
+  Province: "Province",
   propertyname: "Property Name",
   propertycategory: "Property Category",
   propertybrand: "Property Brand",
@@ -77,11 +85,7 @@ export default {
   label:"Add",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
 },
- 
-
-
- 
-"ContactCols":{
+ "ContactCols":{
   name:"Contact",
  col1 : "Contact Type",
  col2 : "Contact Details", 
@@ -362,6 +366,7 @@ Cancel:"Cancel"
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    
 },
+"addcontacts":"Add Contacts",
 "EditRoomBundle" :{
   label: "Edit Room Bundle",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
@@ -433,7 +438,20 @@ propertyxml:'../propertyxml',
 roomsxml:'../roomsxml',
 raterules:'../raterules'
  },
- 
+
+ "Sideadmin":{
+basicdetails:'./addbasicdetails',
+contact:'./addcontacts',
+gallery:'./addimages',
+reviews:'./addreviews',
+services: './addservices',
+rooms:'./addroom',
+packages:'../addpackage',
+roombundles:'./addroombundles',
+raterules:'../../property/addraterule',
+propertyxml:'../../property/propertyxml',
+roomsxml:'../../property/roomsxml'
+},
  "Side2":{
   basicdetails:'../../basicdetails',
   address:'../../address',

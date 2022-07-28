@@ -166,7 +166,7 @@ const Table = (args) => {
                                                                     <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                 </span>
                                                             </td> : <></>}
-                                                        {args?.cols?.name != "Additional Services" ?
+                                                        {(args?.cols?.name != "Additional Services" && args?.cols?.name != "Package Miles" && args?.cols?.name != "Elite Rewards" )?
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
                                                                 {item?.name}</td> :
                                                             <td className="data p-4 text-left text-sm font-semibold  ">

@@ -240,7 +240,7 @@ function Packagemiles() {
 
     <Table  gen={gen} setGen={setGen}  
         add={()=> setView(1)} edit={submitMileEdit}
-        delete={submitDelete} common={language?.common} cols={language?.MilesCols}/> 
+        delete={submitDelete} common={language?.common} cols={language?.MilesCols} name="Package Miles"/> 
 
     {/* Modals Popups for Edit, Add and Delete Mile */}
     {/* Modal Edit */}

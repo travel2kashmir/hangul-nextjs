@@ -103,11 +103,8 @@ function Eliterewards() {
          draggable: true,
            progress: undefined,
        });
-      
        fetchDetails(); 
        Router.push("./eliterewards");
-       
-       
      })
       .catch((error) => {
          toast.error("Elite Program Update Error!", {
@@ -119,8 +116,7 @@ function Eliterewards() {
          draggable: true,
            progress: undefined,
          });
-       })
-       
+       })   
    }
 
    /* Function htmlFor Delete Room Images*/
@@ -266,7 +262,7 @@ function Eliterewards() {
       {/* Header */}
       <Table  gen={gen} setGen={setGen}  
         add={()=> setView(1)} edit={submitProgramEdit}
-        delete={submitDelete} common={language?.common} cols={language?.EliteCols}/>
+        delete={submitDelete} common={language?.common} cols={language?.EliteCols} name="Elite Rewards"/>
 
       {/* Modals Popups for Edit, Add and Delete Program */}
       {/* Modal Edit */}

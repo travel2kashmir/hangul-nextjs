@@ -5,7 +5,6 @@ import Header from "../../components/Header";
 import Link from "next/link";
 import Table from '../../components/Table';
 import Button from "../../components/Button";
-import TableList from '../../components/Table/TableList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../components/Languages/en"
@@ -342,18 +341,18 @@ function Services() {
                 <div className="bg-white shadow rounded-lg  mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
                 <Table  gen={gen} setGen={setGen}   
                 edit={updateServices}  common={language?.common} cols={language?.ServicesCols}
-               /> 
+                name="Services"/> 
                 </div>
 
                 {/* Additional Services Table */}
-                {additionalServices === '' ? <></> : <>
+                {additionalServices === '' ? <></> : 
                 <div className="bg-white shadow rounded-lg  mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
                 <Table  gen={gene} setGen={setGene} add={()=> setView(1)} name="Additional Services"
                 edit={editAdditionalServices}
                 delete={deleteAdditionalServices}
-                common={language?.common} cols={language?.AdditionalServicesCols}/> 
+                common={language?.common} cols={language?.AdditionalServicesCols}  /> 
                 </div>
-                </>}
+                }
                 
 
 

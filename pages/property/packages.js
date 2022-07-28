@@ -144,7 +144,7 @@ function Packages() {
                 {/* Header */}
                 <Table  gen={gen} setGen={setGen} add={addPackage} 
       edit={currentPackage}
-        delete={deletePackages} common={language?.common} cols={language?.PackageCols}/> 
+        delete={deletePackages} common={language?.common} cols={language?.PackageCols} name="Packages"/> 
 
                 {/* Modal Delete */}
                 <div className={deletePackage === 1 ? "block" : "hidden"}>

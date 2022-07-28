@@ -191,7 +191,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
       </nav>
       <Table  gen={gen} setGen={setGen} add={addRoom} 
       edit={currentRoom}
-        delete={deleteRooms} common={language?.common} cols={language?.RoomCols}/> 
+        delete={deleteRooms} common={language?.common} cols={language?.RoomCols} name="Rooms"/> 
 {/* Rooms Table */}
 
 

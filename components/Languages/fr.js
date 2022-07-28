@@ -1,5 +1,62 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  "ContactCols":{
+    name:"Contacter",
+   col1 : "Type de Contact",
+   col2 : "Détails du contact", 
+  },
+    
+  "common":{
+  Status:"Statut",
+  Action: "Acte",
+  Edit: "Éditer",
+  Delete:"Delete",
+  Add:"Ajouter",
+  Search:"Chercher",
+  Previous:"Précédent",
+  Next:"Suivant",
+  Showing: "Montrant",
+  Of:"de",
+  Active:"Actif",
+  Inactive:"Inactif",
+  Import:"Importer",
+  Save:"Enregistrer",
+  Cancel:"Annuler"
+  },
+  "AdditionalServicesCols":{
+    name:"Additionnel D'entretienes",
+   col1 : "D'entretienes Nom",
+   col2 : "D'entretienes Détails", 
+  },
+  
+  "ServicesCols":{
+    name:"D'entretienes",
+   col1 : "D'entretienes Nom",
+   col2 : "D'entretienes Details", 
+  },
+  
+  "RoomCols":{
+    name:"Pièces",
+   col1 : "Pièces Nom",
+   col2 : "Pièces Type", 
+  },
+  "PackageCols":{
+    name:"Paquets",
+   col1 : "Paquet Nom",
+    
+  },
+  "MilesCols":{
+    name:"Paquets Miles",
+   col1 : "Nombre de Milles",
+   col2 : "Milles Fournisseuse",
+    
+  },
+  "EliteCols":{
+    name:"Elite Rewards",
+   col1 : "Programme Nom",
+   col2 : "Programme Niveau",
+    
+  },
   "Update" :{
     label: 'Éditer',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
@@ -327,7 +384,7 @@ export default {
   capacity:'capacité',
   maximum:'Maximale',
   number: 'nombre',
-  of: 'of',
+  of: 'de',
   occupants:'occupants',
   minimum:'Le minimum',
   age:'A`ge',
@@ -380,7 +437,7 @@ export default {
   yes:'Oui',
   no:'Non',
   level:'Niveau',
-  summary:'ملخص',
+  summary:'Sommaire',
   and:'et',
   next:'Suivant',
   skip:'Sauter',

@@ -75,7 +75,7 @@ const Table = (args) => {
             <div className="mx-4">
                 <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{args?.cols?.name}</h1>
                 <div className="sm:flex">
-                    <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
+                    <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
                             <label htmlFor="users-search" className="sr-only">{args?.common?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
@@ -166,10 +166,12 @@ const Table = (args) => {
                                                                 </span>
                                                             </td> : <></>}
                                                         {(args?.name != "Additional Services" && args?.name != "Package Miles" && args?.name != "Elite Rewards" )?
-                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                         
+                                                                 <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                                 {item?.name}</td> 
                                                                 :
-                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                           
+                                                                <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                                 <input type="text"
                                                                     onChange={(e) => setEditContact({ ...editContact, name: e.target.value },  setFlag(1))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
                                                                     defaultValue={item?.name}></input> </td>}
@@ -296,11 +298,11 @@ const Table = (args) => {
                                                                     <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                 </span>
                                                             </td> : <></>}
-                                                        <td className="data p-4 text-left text-sm font-semibold  ">
+                                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                             {item?.name}
                                                         </td>
                                                         {args?.name === "Packages" ? <></> :
-                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                           <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                                 {item?.type}
                                                             </td>}
                                                         {item?.status == true ?

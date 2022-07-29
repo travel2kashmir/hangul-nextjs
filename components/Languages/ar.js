@@ -296,6 +296,8 @@ export default {
     contact: "اتصل",
     gallery: "صالة عرض",
     reviews: "الاستعراضات",
+    roombundle:"حزم الغرف",
+    raterules:"قواعد معدل",
     services: "خِدْمة",
     rooms: "غرف",
     packages: "الحزم",

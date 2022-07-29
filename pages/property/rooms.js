@@ -189,11 +189,11 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
           </li>
         </ol>
       </nav>
-      <Table  gen={gen} setGen={setGen} add={addRoom} 
-      edit={currentRoom}
-        delete={deleteRooms} common={language?.common} cols={language?.RoomCols} name="Rooms"/> 
+      
 {/* Rooms Table */}
-
+<Table  gen={gen} setGen={setGen} add={addRoom} 
+      edit={currentRoom}
+        delete={deleteRooms} common={language?.common} cols={language?.RoomCols} name="Rooms"/>
 
 {/* Modal Delete */}
 <div className={deleteRoom===1?"block":"hidden"}>

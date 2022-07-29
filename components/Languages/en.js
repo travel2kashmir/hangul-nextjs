@@ -22,7 +22,9 @@ export default {
   propertyxml: "Property XML",
   roomxml: "Rooms XML",
   welcome: "Welcome",
+  roombundle: "Room Bundle",
   search: "Search",
+  raterules:"Rate Rules",
   signout: "Signout",
   property: "Property",
   name: "Name",
@@ -124,6 +126,11 @@ Cancel:"Cancel"
 "PackageCols":{
   name:"Packages",
  col1 : "Package Name",
+  
+},
+"PackageCols":{
+  name:"Rate Rules",
+ col1 : "Name",
   
 },
 "MilesCols":{
@@ -356,6 +363,8 @@ Cancel:"Cancel"
    ></path>
  </svg>
 },
+
+
 "AddRoomBundle" :{
   label: "Add Room Bundle",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",

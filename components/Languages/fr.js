@@ -432,6 +432,8 @@ export default {
   searchforprograms:'Rechercher Programmes',
   propertypackages:'Forfaits Immobiliers',
   packagedescription:'Descriptif Du Colis',
+  roombundle:"Forfaits Chambre",
+  raterules:"Règles de Taux",
   occupants:'Je Est Heureux',
   searchformiles:'rechercher des kilomètres',
   yes:'Oui',

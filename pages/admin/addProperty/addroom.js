@@ -92,7 +92,13 @@ function Addroom() {
   );
 
   /*Validate Room description */
-  const ValidateRoom = () => { //detect empty values
+  const ValidateRoom = () => {
+    if(JSON.stringify(property_id).toUpperCase() != 'NULL')
+    {
+      return `APP: Property Not Registered`
+    }
+    
+    //detect empty values
     for (let item in allRoomDes) {
       if (allRoomDes[item] === '') {
         return `APP:insert value of ${item?.replace("_", " ")}`

@@ -5,6 +5,7 @@ export default {
   addbasicdetails:"Add Basic Details",
   basicdetails: "Basic Details",
   addcontacts:"Add Contacts",
+  addservices:"Add Services",
   email: "your email",
   password: "your password",
   remember: "Remember me",

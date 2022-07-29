@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React from "react";
 import Sidebar  from "../../components/Sidebar";
 import Header  from "../../components/Header";
 import { useState,useEffect } from "react";
@@ -9,14 +9,25 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import { useRouter } from "next/router";
 const logger = require("../../services/logger");
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Button from "../../components/Button"
 var language;
 var currentUser;
 var currentProperty;
 
 function PropertySummary() {
   /** State to store Current Property Details **/
+  var theme1= "bg-red-200";
+  var theme2= "bg-rose-400";
+  var theme3= "bg-neutral-400";
+  var theme4= "bg-yellow-400";
+  var theme5= "bg-indigo-500";
   const [allHotelDetails, setAllHotelDetails] = useState([]);
- 
+  const [theme,setTheme]=useState(theme1)
+  const [bgColor,setBgColor]=useState(theme)
+  const [unique,setUnique]=useState(0)
+  const [uri,setUri]=useState("")
   /** Router for Redirection **/
   const router = useRouter();
   useEffect(()=>{
@@ -35,19 +46,25 @@ function PropertySummary() {
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
        currentProperty = JSON.parse(localStorage.getItem("property"));
-      
-        
-      
       } 
     }
     firstfun();
-
     router.push("./propertysummary");
-  
   },[])
    
- 
-  /* Function call to fetch Current Property Details when page loads */
+const initialtheme = () =>{
+  var url;
+      url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`;
+      axios.get(url)
+        .then((response) => {
+         setTheme(response.data.theme_id);
+         setBgColor(response.data.theme_id);
+          logger.info("url  to fetch property details hitted successfully")
+        })
+        .catch((error) => { logger.error("url to fetch property details, failed") });
+
+}
+/* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     const fetchHotelDetails = async () => { 
         const url = `/api/${currentProperty.address_province.replace(
@@ -61,8 +78,42 @@ function PropertySummary() {
         logger.info("url  to fetch property details hitted successfully")})
         .catch((error)=>{logger.error("url to fetch property details, failed")});  
     }
-    fetchHotelDetails(); 
-  },[]);
+    if(allHotelDetails.length===0)fetchHotelDetails(); 
+    if(allHotelDetails.length!=0)initialtheme();
+  },[allHotelDetails]);
+
+
+
+const sendLink = () =>{
+  const data={
+    uuid:`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`,
+    property_id:currentProperty.property_id,
+    address_id:allHotelDetails.address[0].address_id,
+    theme_id:theme,
+    lang:localStorage?.getItem("Language")
+  }
+ 
+  axios.post('/api/property_page',data).then(
+    (response)=>
+  {toast.success("Page Updated Successfully!", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+}).catch((error)=> toast.error("Unique URL Update Error!", {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  }))
+  }  
   
   return (
     <div>
@@ -71,7 +122,7 @@ function PropertySummary() {
       {/* Body */}
       <div
         id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
+        className={`${bgColor} px-4 pt-24 relative overflow-y-auto lg:ml-64`}
       >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -112,20 +163,46 @@ function PropertySummary() {
             </li>
           </ol>
         </nav>
-
-        <h6 className="text-lg pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
+          <div>
+          
+          <button onClick={()=>{setBgColor(theme1); setTheme(theme1);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme1</button>
+          <button onClick={()=>{setBgColor(theme2); setTheme(theme2);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme2</button>
+          <button onClick={()=>{setBgColor(theme3); setTheme(theme3);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme3</button>
+          <button onClick={()=>{setBgColor(theme4); setTheme(theme4);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme4</button>
+          <button onClick={()=>{setBgColor(theme5); setTheme(theme5);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme5</button>
+        
+         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{ 
+          setUri(`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`);
+         sendLink();
+          setUnique(1)}}
+          >Generate url for page</button>
+          </div>
+        <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.propertysummary}
         </h6>
-
-        <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
+        <div className={unique===1?"block":"hidden"} >
+        <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+          <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+            <div className="bg-white rounded-lg shadow relative">
+              <div className="flex items-start justify-between p-5 border-b rounded-t">
+                 
+              
+       unique page address is https://hangul-v3.herokuapp.com/{uri}
+        <br/><button onClick={()=>setUnique(0)}>close</button>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
-                <span className="text-xl sm:text-lg leading-none font-bold text-gray-800">
+                <span className="text-xl sm:text-xl leading-none font-bold text-gray-800">
                   {allHotelDetails?.property_name}
                 </span>
-                <h3 className="text-xs font-normal text-gray-500">
+                <h3 className="text-base font-normal text-gray-500">
                   {allHotelDetails?.star_rating}-Star{" "}
                   {allHotelDetails?.property_category}
                 </h3>
@@ -140,10 +217,10 @@ function PropertySummary() {
                 </span>
               </div>
             </div>
-            <p className="text-sm font-semibold text-gray-500 truncate">
+            <p className="text-base font-semibold text-gray-500 truncate">
               {allHotelDetails?.description_title}
             </p>
-            <p className="text-xs font-medium text-gray-90  line-clamp-10 ">
+            <p className="text-sm font-medium text-gray-90  line-clamp-10 ">
               {allHotelDetails?.description_body}
             </p>
           </div>
@@ -324,19 +401,19 @@ function PropertySummary() {
                 </span>
               </div>
             </div>
-            <div className="align-middle inline-block min-w-full">
+            <div className="align-middle inline-block  min-w-full">
               <div className="shadow overflow-hidden">
-                <table className="table-fixed min-w-full">
-                  <tbody className="bg-white">
+                <table className="table-fixed min-w-full divide-y divide-gray-200">
+                  <tbody className="bg-white divide-y divide-gray-200">
                     {allHotelDetails?.contacts?.map((item, idx) => {
                       return (
                         <tr className="hover:bg-gray-100" key={idx}>
-                          <td className=" flex items-center  space-x-2 mr-2 lg:mr-0">
-                            <span className="p-1.5 text-xs font-semibold text-gray-500">
+                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
                               {item?.contact_type}{" "}
                             </span>
                           </td>
-                          <td className="p-1.5  text-xs font-medium text-gray-900">
+                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
                             {item?.contact_data}{" "}
                           </td>
                         </tr>
@@ -351,7 +428,7 @@ function PropertySummary() {
 
         <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
           {/* Services */}
-          <div className="bg-white shadow  w-full rounded-lg p-4 sm:p-6 xl:p-8">
+          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
@@ -545,6 +622,16 @@ function PropertySummary() {
         </div>
 
       </div>
+    {/* Toast Container */}
+ <ToastContainer position="top-center"
+       autoClose={5000}
+       hideProgressBar={false}
+       newestOnTop={false}
+       closeOnClick
+       rtl={false}
+       pauseOnFocusLoss
+       draggable
+       pauseOnHover />
     </div>
   );
 }

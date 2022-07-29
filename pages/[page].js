@@ -58,10 +58,10 @@ function Page() {
   }
 
   const fetchHotelDetails = async () => {
-
-    if (router?.query?.Page) {
+if (router?.query?.Page) {
       var url;
       url = `/api/property_page/${router?.query?.Page}`;
+
       axios.get(url)
         .then((response) => {
          fetchProperty(response.data);
@@ -70,6 +70,10 @@ function Page() {
         .catch((error) => { logger.error("url to fetch property details, failed") });
 
     }
+    else
+    {
+      console.log("waiting for router.query.page")
+    }
   
   }
 
@@ -77,8 +81,8 @@ function Page() {
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     fetchHotelDetails();
-  }, [router?.query?.Page]);
-{}
+  },[router.query.Page]);
+
   return (
     <>{allHotelDetails.length===0?
       <Loader/>

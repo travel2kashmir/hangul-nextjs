@@ -1,4 +1,11 @@
 export default {
+  addbasicdetails:"ضف التفاصيل الأساسية",
+  addimages:"إضافة الصور",
+  addservices:"أضف خدمات",
+  addroom:"أضف غرفة",
+  addnewroom:"أضف غرفة جديدة",
+  addnewservices:"أضف خدمات جديدة",
+  "addcontacts":"ضف جهات اتصال",
   "Update" :{
     label:' أَجَدّ',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
@@ -47,6 +54,7 @@ export default {
     label: 'التالي',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
+
 
 "ContactCols":{
   col1 : "نوع الاتصال",

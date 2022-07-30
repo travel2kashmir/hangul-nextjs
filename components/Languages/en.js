@@ -1,5 +1,11 @@
 export default {
   title: "sign in",
+  addimages:"Add Images",
+   addroom:"Add Room",
+  addbasicdetails:"Add Basic Details",
+  basicdetails: "Basic Details",
+  addcontacts:"Add Contacts",
+  addservices:"Add Services",
   email: "your email",
   password: "your password",
   remember: "Remember me",
@@ -70,7 +76,11 @@ export default {
   label:'yes, I am sure',
    color: "bg-red-600 hover:bg-red-800 text-white mx-2 ",
 },
-
+"Addnewproperty":{
+  label:"Add New Property",
+  color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+}
+,
 "Cancel" :{
   label: 'No cancel',
    color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
@@ -197,6 +207,19 @@ Cancel:"Cancel"
      clipRule="evenodd"
    ></path>
  </svg>
+},
+  "Sideadmin":{
+basicdetails:'./addbasicdetails',
+contact:'./addcontacts',
+gallery:'./addimages',
+reviews:'./addreviews',
+services: './addservices',
+rooms:'./addroom',
+packages:'../addpackage',
+roombundles:'./addroombundles',
+raterules:'../../property/addraterule',
+propertyxml:'../../property/propertyxml',
+roomsxml:'../../property/roomsxml'
 },
 "AddRateRule" :{
   label: "Add Rate Rule",

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
-import Table from '../../../../components/Table';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -47,31 +46,16 @@ function Eliterewards() {
   const [deleteProgram, setDeleteProgram] = useState(0)
   const [editProgram, setEditProgram] = useState({});
   const [program, setProgram] = useState([]);
-  const [gen, setGen] = useState([]);
   const [modified, setModified] = useState([])
   const [currentEliteProgram, setCurrentEliteProgram] = useState([])
   
  /* Edit Package Fetch Function */
  const fetchDetails = async  () => {
   const url = `/api/package/${currentPackage}`
-  var genData = [];
    axios.get(url, { header: { "content-type": "application/json" } }).then
      ((response) => {
      logger.info("package success");
      setCurrentEliteProgram(response.data)
-     {
-      response.data?.membership?.map((item) => {
-          var temp = {
-              name: item?.program_name,
-              type: item?.program_level,
-              status: item?.status,
-              id: item?.program_id
-          }
-          genData.push(temp)
-      })
-      setGen(genData);
-  }
-     
      })
      .catch((error) => {
       logger.info("package error")
@@ -85,11 +69,11 @@ function Eliterewards() {
 
   /* Function Edit Program*/
   const submitProgramEdit = (props) => {
- 
+    if (program.length !== 0){
     const final_data = {
-      "program_id":props.id,
-      "program_name": props.name,
-      "program_level": props.type
+      "program_id":props,
+      "program_name": program.program_name,
+      "program_level": program.program_level
   }
     const url = '/api/package/package_membership_master'
      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -105,6 +89,7 @@ function Eliterewards() {
        });
        fetchDetails(); 
        Router.push("./eliterewards");
+
      })
       .catch((error) => {
          toast.error("Elite Program Update Error!", {
@@ -116,12 +101,13 @@ function Eliterewards() {
          draggable: true,
            progress: undefined,
          });
+
        })   
    }
 
    /* Function htmlFor Delete Room Images*/
-  const submitDelete = (props) => {
-    const url = `/api/package/${currentEliteProgram?.package_id}/${props?.id}`
+  const submitDelete = () => {
+    const url = `/api/package/${currentEliteProgram?.package_id}/${editProgram.program_id}`
     axios.delete(url).then
     ((response) => {
     toast.success("Elite Program deleted successfully!", {
@@ -260,6 +246,7 @@ function Eliterewards() {
       </nav>
 
       {/* Header */}
+
       <Table  gen={gen} setGen={setGen}  
         add={()=> setView(1)} edit={submitProgramEdit}
         delete={submitDelete} common={language?.common} cols={language?.EliteCols} name="Elite Rewards"/>

@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+
   "ContactCols":{
     name:"Contacter",
    col1 : "Type de Contact",
@@ -57,6 +58,16 @@ export default {
    col2 : "Programme Niveau",
     
   },
+
+   addimages:"Ajouter des images",
+  addservices:"Ajouter des services",
+  addroom:"Ajouter une salle",
+  addnewroom:"Ajouter une nouvelle pièce",
+  addnewservices:"Ajouter de nouveaux services",
+  "addcontacts":"Ajouter des contacts",
+  basicdetails: "Détails De Base ",
+addbasicdetails:"Ajouter des détails de base",
+
   "Update" :{
     label: 'Éditer',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    

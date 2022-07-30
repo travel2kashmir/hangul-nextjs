@@ -11,6 +11,7 @@ import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router'
 const logger = require("../../../services/logger");
+
 var currentraterule;
 var language;
 var currentProperty;
@@ -241,7 +242,7 @@ function Raterule() {
         </ol>
       </nav>
 
-    <div className="bg-white hidden shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+    <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           Rate Condition
         </h6>
@@ -324,8 +325,7 @@ function Raterule() {
               </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
-                
-                 
+             
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -491,8 +491,23 @@ function Raterule() {
                       </select>
                     </div>
                   </div>
-                  <div className="w-full lg:w-10/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
+                  <div>
+      <label className="block text-gray-600" htmlFor="Multiselect">Multiselect</label>
+      <div className="relative flex w-full">
+        <select
+          className="block w-full p-3 border border-gray-300 rounded-sm cursor-pointer focus:outline-none"
+          multiple>
+          <option value="1">super admin</option>
+          <option value="2">admin</option>
+          <option value="3">writer</option>
+          <option value="4">user</option>
+        </select>
+      </div>
+    </div>
+
+
+
+
               <div className="w-full lg:w-2/12 px-4">
                 <div className="relative w-full ml-4 mb-4">
                   <button
@@ -581,7 +596,7 @@ function Raterule() {
         </div>
 
    {/** Rate Modification **/}
-        <div className="bg-white shadow hiddenrounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
+        <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
          Rate Modification {JSON.stringify(allUserRateDetails)}
         </h6>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
-import TableList from '../../../../components/Table/TableList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from '../../../../components/Button'
@@ -454,7 +453,7 @@ function Packageservices() {
           <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
           
             <Button Primary={language?.Update}  onClick={() => {
-                submitPackageServices();
+                submitPackageServices(); 
               }}/>
           </div>
         </div>

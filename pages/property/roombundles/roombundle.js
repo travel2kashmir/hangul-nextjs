@@ -83,7 +83,7 @@ function Roombundle() {
       fetchPackages();
       const fetchRoomBundle = async () => {
         try {
-            const url = `/api/room_bundle/${currentPackage.id}`
+            const url = `/api/room_bundle/${currentPackage}`
             const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
            setRoomBundle(response.data) 
         }

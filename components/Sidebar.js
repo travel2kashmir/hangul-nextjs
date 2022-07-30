@@ -246,9 +246,9 @@ const Sidebar = (args) => {
                   <Link  href={{pathname:args?.Primary?.propertysummary, query: { id: 1 }}}><a>{language?.propertysummary}</a></Link>
                   </span>
                 </li>
-                :<></>}
+                  :<></>}
                 {args?.Primary?.propertyxml? <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
-                    <svg
+                        <svg
                       className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
                       fill="currentColor"
                       viewBox="0 0 20 20"

@@ -3,7 +3,7 @@ import Sidebar  from "../../components/Sidebar";
 import Header  from "../../components/Header";
 import axios from "axios";
 import Link from "next/link";
-import TableList from '../../components/Table/TableList';
+import Table  from '../../components/Table';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Button from "../../components/Button";
@@ -12,7 +12,7 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 var language;
 var currentProperty;
-import Router  from "next/router";
+import Router from "next/router";
 
 function Rooms() {
   
@@ -42,10 +42,12 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
     const [allrooms, setAllRooms] = useState([])
     const [deleteRoom, setDeleteRoom] = useState(0)
     const [actionRoom,setActionRoom]=useState({});
-    
+ 
     /**Function to save Current property to be viewed to Local Storage**/
-  const CurrentRoom = (roomId ) => {
-    localStorage.setItem("RoomId", (roomId));
+  const currentRoom = (props) => {
+    alert("Props" +props?.id);
+    localStorage.setItem("RoomId", (props.id));
+    Router.push("./rooms/room");
   };
 
   const fetchRooms = async () => {
@@ -85,8 +87,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         ,[])
     
      /* Delete Room Function*/
-     const deleteRooms = () =>{
-    const url=`/api/${actionRoom?.id}`
+     const deleteRooms = (props) =>{
+    const url=`/api/${props?.id}`
     axios.delete(url).then((response)=>{
        toast.success(("Room Deleted Successfully!"), {
          position: "top-center",
@@ -113,7 +115,9 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         })
        }
        
-  
+            const addRoom = () =>{
+              Router.push("./rooms/addroom")
+            }
     
   return (
     <>
@@ -185,7 +189,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
           </li>
         </ol>
       </nav>
-
+      
 {/* Rooms Table */}
 <Table  gen={gen} setGen={setGen} add={addRoom} 
       edit={currentRoom}

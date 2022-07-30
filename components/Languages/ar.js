@@ -450,7 +450,7 @@ export default {
     image:'تَصَوُّر ',
     titl:'عَنْوَنَ',
     upload:'تَحْميل'
-
+  }
   
   };
   

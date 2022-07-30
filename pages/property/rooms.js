@@ -189,7 +189,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
           </li>
         </ol>
       </nav>
-      
+
 {/* Rooms Table */}
 <Table  gen={gen} setGen={setGen} add={addRoom} 
       edit={currentRoom}

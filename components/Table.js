@@ -166,12 +166,14 @@ const Table = (args) => {
                                                                 </span>
                                                             </td> : <></>}
                                                         {(args?.name != "Additional Services" && args?.name != "Package Miles" && args?.name != "Elite Rewards" )?
+
                                                          
                                                                  <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                                 {item?.name}</td> 
                                                                 :
                                                            
                                                                 <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+
                                                                 <input type="text"
                                                                     onChange={(e) => setEditContact({ ...editContact, name: e.target.value },  setFlag(1))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
                                                                     defaultValue={item?.name}></input> </td>}
@@ -303,6 +305,7 @@ const Table = (args) => {
                                                         </td>
                                                         {args?.name === "Packages" ? <></> :
                                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+
                                                                 {item?.type}
                                                             </td>}
                                                         {item?.status == true ?

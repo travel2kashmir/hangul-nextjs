@@ -129,7 +129,9 @@ const submitServices = () =>{
           </li>
         </ol>
       </nav>
-
+          <button 
+          onClick={()=>Router.push('./addadditionalservices')}
+          className="float-right mt-4 bg-blue-600 text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Add Services</button>
       <div>
         <h3 className="text-xl font-semibold">{language?.addnewservices}</h3>
        </div>

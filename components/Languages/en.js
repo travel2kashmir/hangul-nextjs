@@ -138,7 +138,9 @@ Cancel:"Cancel"
  col1 : "Package Name",
   
 },
-"PackageCols":{
+
+
+"RateRuleCols":{
   name:"Rate Rules",
  col1 : "Name",
   

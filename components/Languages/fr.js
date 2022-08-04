@@ -43,7 +43,11 @@ export default {
   },
   "PackageCols":{
     name:"Paquets",
-   col1 : "Paquet Nom",
+   col1 : "Paquet Nom", 
+  },
+  "RateRuleCols":{
+    name:"Règles de Taux",
+   col1 : "Nom",
     
   },
   "MilesCols":{

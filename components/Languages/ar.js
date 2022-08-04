@@ -252,6 +252,11 @@ export default {
    ></path>
  </svg>
 },
+"RateRuleCols":{
+  name:"قواعد معدل",
+ col1 : "اسم",
+  
+},
 "DeleteRoom" :{
     label: "أَسْكَن إحذف",
    color: "bg-red-600 hover:bg-red-800 text-white ",
@@ -450,7 +455,7 @@ export default {
     image:'تَصَوُّر ',
     titl:'عَنْوَنَ',
     upload:'تَحْميل'
-
+  }
   
   };
   

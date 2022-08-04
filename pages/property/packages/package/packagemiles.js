@@ -11,6 +11,7 @@ import Sidebar from '../../../../components/Sidebar';
 import Header from '../../../../components/Header'
 import Footer from "../../../../components/Footer"
 import Router from "next/router";
+import Table from '../../../../components/Table';
 const logger = require("../../../../services/logger");
 var language;
 var currentProperty;
@@ -41,6 +42,7 @@ function Packagemiles() {
     Router.push("./packagemiles");
   },[]) 
 
+  const [gen, setGen] = useState([])
   const [view, setView] = useState(0)
   const [updateMile, setUpdateMile] = useState(0)
   const [deleteMile, setDeleteMile] = useState(0)
@@ -52,10 +54,23 @@ function Packagemiles() {
  /* Edit Package Fetch Function */
  const fetchDetails = async  () => {
   const url = `/api/package/${currentPackage}`
+  var genData = [];
    axios.get(url, { header: { "content-type": "application/json" } }).then
      ((response) => {
      logger.info("package success");
      setCurrentMiles(response.data)
+     {
+      response.data?.package_miles?.map((item) => {
+          var temp = {
+              name: item?.number_of_miles,
+              type: item?.provider,
+              status: item?.status,
+              id: item?.mile_id
+          }
+          genData.push(temp)
+      })
+      setGen(genData);
+  }
      })
      .catch((error) => {
       logger.info("Delete error")
@@ -68,11 +83,12 @@ function Packagemiles() {
 
     /* Function Edit Mile*/
   const submitMileEdit = (props) => { 
-    if (mile.length !== 0){
+   
     const final_data = {
-       "mile_id": props,
-       "number_of_miles": mile.number_of_miles,
-       "provider": mile.provider
+       "mile_id": props.id,
+       "number_of_miles": props.name,
+       "provider": props.type,
+       "status": props.status
      }
    const url = '/api/package/package_miles'
      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -101,15 +117,13 @@ function Packagemiles() {
            progress: undefined,
          });
        })
- 
-   }
   }
  
-   const submitDelete = () => {
-    const url = `/api/package/${editMile.mile_id}`
+   const submitDelete = (props) => {
+    const url = `/api/package/${props}`
     axios.delete(url).then
        ((response) => {
-         setDeleteMile(0)
+        
          toast.success("Package Mile Deleted Successfully!", {
            position: "top-center",
            autoClose: 5000,
@@ -203,15 +217,16 @@ function Packagemiles() {
         <li>
           <div className="flex items-center">
             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-            <span className="text-gray-700 text-sm font-medium hover:text-gray-900 capitalize ml-1 md:ml-2">
-            <Link href="../../packages"><a>{language?.packages}</a></Link></span>
+            <span className="text-gray-700 text-sm font-medium hover:text-gray-90{JS0 capitalize ml-1 md:ml-2">
+            <Link href="../../packages"><a>{language?.packages} </a></Link></span>
           </div>
         </li>
         <li>
           <div className="flex items-center">
             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
             <span className="text-gray-700 text-sm font-medium hover:text-gray-900 capitalize ml-1 md:ml-2">
-            <Link href="../package"><a>{currentMiles?.package_name}</a></Link></span>
+            <Link href="../package"><a>{currentMiles?.package_name} 
+            </a></Link></span>
           </div>
         </li>
         <li>
@@ -223,10 +238,11 @@ function Packagemiles() {
       </ol>
     </nav>
 
-
     <Table  gen={gen} setGen={setGen}  
         add={()=> setView(1)} edit={submitMileEdit}
         delete={submitDelete} common={language?.common} cols={language?.MilesCols} name="Package Miles"/> 
+
+    {/* Modals Popups for Edit, Add and Delete Mile */}
     {/* Modal Edit */}
     <div className={updateMile === 1 ? 'block' : 'hidden'}>
       <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">

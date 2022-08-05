@@ -15,6 +15,8 @@ import axios from "axios";
 import Router from 'next/router';
 var i = 0;
 var j = 1;
+var res =[]
+var resDev = []
 var languageCodes;
 const logger = require("../../../services/logger");
 
@@ -24,179 +26,30 @@ var currentProperty;
 
 function Raterule() {
   const [countryData,setCountryData]=useState([])
+  const [flagBasic,setBasicFlag]=useState([])
   const [languageData,setLanguageData]=useState([])
   const [finalLang,setFinalLang]=useState([])
   const [finalCountry,setFinalCountry]=useState([])
+  const [finalDevice,setFinalDevice]=useState([])
+  const [finalProgram,setFinalProgram]=useState([])
   const [rateRule, setRateRule] = useState([])
+  const [discount, setDiscount] = useState([])
   const [programs, setPrograms] = useState([])
+  const [sPrograms, setSPrograms] = useState([])
+  const [sDevices, setSDevices] = useState([])
   const [allUserRateDetails, setAllUserRateDetails] = useState([])
   const [conditions, setConditions] = useState([])
   const [countr, setCountr] = useState([])
-  const [lang, setlang] = useState([])
+  const [lang, setLang] = useState([])
   const [userSign, setUserSign] = useState([])
+  const [pro, setPro] = useState([])
+  const [coun, setCoun] = useState([])
   const[userRateDetails, setUserRateDetails] = useState([])
-  const [device, setDevice] = useState(['tablet', 'mobile', 'laptop'])
+  const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
   var language_data=[];
   var country_data=[];
-  
-  const submitRatesEdit = () => {
-    const data = [{
-      user_rate_condition_op:userRateDetails?.UserRateCondition_op,
-      description:userRateDetails?.Description,
-      max_user_percentage:userRateDetails?.MaxUsersPercent,
-      user_signed_in: userSign?.UserSignedIn,
-      is_domestic: userSign?.IsDomestic,
-      user_rate_condition_id: userSign?.UserRateCondition_id
-  }];
-  const final_data = { "user_rate_condition": data }
-  const url = "/api/rate_rule/user_rate_conditioning";
-    axios
-      .put(url, final_data, { 
-        header: { "content-type": "application/json" } })
-      .then((response) => {
-        toast.success("Rate rule Updated Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-         
-        Router.push("./raterule");
-      })
-
-      .catch((error) => {
-        toast.error("Rate rule update Error2!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  
-  };
-
-  const submitLanguageEdit = () => { 
-  const final_data = { "user_rate_language": finalLang }
-  alert(JSON.stringify(final_data))
-  const url = "/api/rate_rule/user_rate_conditioning/rate_condition_language_link";
-    axios
-      .put(url, final_data, { 
-        header: { "content-type": "application/json" } })
-      .then((response) => {
-        toast.success("Languages Updated Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        
-        Router.push("./raterule");
-      })
-
-      .catch((error) => {
-        toast.error("Languages Error", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  
-  };
-  // Country Edit Submit
-   const submitCountryEdit = () => {
-  const final_data = { "user_rate_country": finalCountry }
-  alert(JSON.stringify(final_data))
-  const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_country_link";
-    axios
-      .put(url, final_data, { 
-        header: { "content-type": "application/json" } })
-      .then((response) => {
-        toast.success("Country Updated Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        
-        Router.push("./raterule");
-      })
-
-      .catch((error) => {
-        toast.error("Country Error", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  
-  };
-  // Languages JSON for Dropdown
-  const createCountry = () => {
-  var countryCodes = Object.keys(countries.countries);
-    countryCodes.map(code => {
-      var temp = {
-        country_name: countries.countries[code].name,
-        country_code: code
-      }
-    country_data.push(temp) } );
-    setCountryData(country_data);
-  }
-// Languages JSON for Dropdown
-  const createLanguages = () => {
-   languageCodes = langs.all();
-    languageCodes.map(code => {
-      var temp = {
-        language_name: code.name,
-        language_code: code?.[j]
-      }
-    language_data.push(temp) } );
-    setLanguageData(language_data);
-    
-  } 
-
-  const languages = (lan) => { 
-    lan.map(item => {
-      var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
-        language: item?.language_code
-      }
-      language_data.push(temp) } );
-      setFinalLang(language_data);
-      
-  }
-
-
-  const country = (cou) => { 
-    cou.map(item => {
-      var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
-       user_country: item?.country_code
-      }
-      country_data.push(temp) } );
-      setFinalCountry(country_data);
-      
-  }
-
+  var device_data=[];
+  var program_data=[];
   
   useEffect(() => {
     const firstfun = () => {
@@ -223,50 +76,57 @@ function Raterule() {
     Router.push("./raterule")
   }, [])
 
-  const fetchRateRule = async () => {
-    const url = `/api/rate_rule/${currentraterule}`
-    console.log("url" + url)
-    axios.get(url)
-      .then((response) => {
-        setRateRule(response.data);
-        setAllUserRateDetails(response.data.conditional_rate)
-        setConditions(response.data.user_rate_condition?.[j])
-        setUserSign(response.data.user_rate_condition?.[j])
-        logger.info("url  to fetch raterules hitted successfully")
-      })
-      .catch((error) => { logger.error("url to fetch raterules, failed") });
-  }
-
-  const fetchPrograms = async () => {
-    const url = `/api/package_membership/${currentProperty?.property_id}`
-    console.log("url" + url)
-    axios.get(url)
-      .then((response) => {
-        setPrograms(response.data);
-        logger.info("url  to fetch programs hitted successfully")
-      })
-      .catch((error) => { logger.error("url to fetch programs, failed") });
-  }
-
-  /* Function to load Room Details when page loads*/
-  useEffect(() => {
+   /* Function to load  when page loads*/
+   useEffect(() => {
     fetchRateRule();
     fetchPrograms();
-  }, [])
-
-  const [pro, setPro] = useState([])
-  const [coun, setCoun] = useState([])
+   
     
-  /** Function to add mile **/
-  const program = (item) => {
-    setPro(item)
- }
-   
-   
-   
+  }, [])
+  const submitRatesEdit = () => {
+    const data = [{
+      user_rate_condition_op:userRateDetails?.UserRateCondition_op,
+      description:userRateDetails?.Description,
+      max_user_percentage:userRateDetails?.MaxUsersPercent,
+      user_signed_in: userSign?.UserSignedIn,
+      is_domestic: userSign?.IsDomestic,
+      user_rate_condition_id: userSign?.UserRateCondition_id
+  }];
+  const final_data = { "user_rate_condition": data }
+  const url = "/api/rate_rule/user_rate_conditioning";
+    axios
+      .put(url, final_data, { 
+        header: { "content-type": "application/json" } })
+      .then((response) => {
+        toast.success("Rate rule Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setBasicFlag([])
+        Router.push("./raterule");
+      })
+
+      .catch((error) => {
+        toast.error("Rate rule update Error2!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
   
-  /* Edit Rate Details Function */
-  const submitRateEdit = () => {
+  };
+
+   /* Edit Rate Details Function */
+   const submitRateEdit = () => {
     var time;
     var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
     time = new Date(temp.toString())
@@ -321,6 +181,7 @@ function Raterule() {
 
   }
   const submitRateMod = () => {
+    if (lang.length != 0) {
     const final_data = {
       "rate_modification_id": rateRule?.rate_modification_id,
       "hotel_amenity": rateRule?.hotel_amenity,
@@ -341,7 +202,7 @@ function Raterule() {
           draggable: true,
           progress: undefined,
         });
-
+        setLang([])
         Router.push("./raterule");
 
       })
@@ -357,7 +218,307 @@ function Raterule() {
           progress: undefined,
         });
       })
+    }
+  }
+ // Languages Edit Submit
+  const submitLanguageEdit = () => { 
+  const final_data = { "user_rate_language": finalLang }
+  alert(JSON.stringify(final_data))
+  const url = "/api/rate_rule/user_rate_conditioning/rate_condition_language_link";
+    axios
+      .put(url, final_data, { 
+        header: { "content-type": "application/json" } })
+      .then((response) => {
+        toast.success("Languages Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+       setFinalLang([]) 
+        Router.push("./raterule");
+      })
 
+      .catch((error) => {
+        toast.error("Languages Error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  
+  };
+  // Country Edit Submit
+   const submitCountryEdit = () => {
+  const final_data = { "user_rate_country": finalCountry }
+  alert(JSON.stringify(final_data))
+  const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_country_link";
+    axios
+      .put(url, final_data, { 
+        header: { "content-type": "application/json" } })
+      .then((response) => {
+        toast.success("Country Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setFinalCountry([])
+        Router.push("./raterule");
+      })
+
+      .catch((error) => {
+        toast.error("Country Error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  
+  };
+ // Device Edit Submit
+  const submitDeviceEdit = () => {
+    const final_data = { "user_rate_device": finalDevice }
+    alert(JSON.stringify(final_data))
+    const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
+      axios
+        .put(url, final_data, { 
+          header: { "content-type": "application/json" } })
+        .then((response) => {
+          toast.success("Devices Updated Successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setDevice([])
+          Router.push("./raterule");
+        })
+  
+        .catch((error) => {
+          toast.error("Devices Error", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+    
+    };
+
+  // Device Edit Submit
+  const submitProgramEdit = () => {
+    const final_data = { "user_rate_program": finalProgram }
+    alert(JSON.stringify(final_data))
+    const url = "/api/rate_rule/user_rate_conditioning/rate_condition_membership_link";
+      axios
+        .put(url, final_data, { 
+          header: { "content-type": "application/json" } })
+        .then((response) => {
+          toast.success("Programs Updated Successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setFinalProgram([])
+          Router.push("./raterule");
+        })
+  
+        .catch((error) => {
+          toast.error("Programs Error", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+    
+    };
+
+    const submitDiscountEdit = () => {
+      const final_data = {
+        "user_rate_ineligiblity_id": rateRule?.user_rate_ineligiblity_id,
+        "ineligiblity_type": discount?.ineligibility_type,
+       
+      }
+      alert(JSON.stringify(final_data))
+      const url = "/api/rate_rule/rate_ineligiblity ";
+        axios
+          .put(url, final_data, { 
+            header: { "content-type": "application/json" } })
+          .then((response) => {
+            toast.success("Rate Discount Updated Successfully!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setDiscount([])
+            Router.push("./raterule");
+          })
+    
+          .catch((error) => {
+            toast.error("Rate Discount Error", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          });
+      
+      };
+  // Languages JSON for Dropdown
+  const createCountry = () => {
+  var countryCodes = Object.keys(countries.countries);
+    countryCodes.map(code => {
+      var temp = {
+        country_name: countries.countries[code].name,
+        country_code: code
+      }
+    country_data.push(temp) } );
+    setCountryData(country_data);
+  }
+// Languages JSON for Dropdown
+  const createLanguages = () => {
+   languageCodes = langs.all();
+    languageCodes.map(code => {
+      var temp = {
+        language_name: code.name,
+        language_code: code?.[j]
+      }
+    language_data.push(temp) } );
+    setLanguageData(language_data);
+    
+  } 
+
+  const languages = (lan) => { 
+    lan.map(item => {
+      var temp = {
+        user_rate_condition_id: userSign?.UserRateCondition_id,
+        language: item?.language_code
+      }
+      language_data.push(temp) } );
+      setFinalLang(language_data);
+  }
+
+
+  const country = (cou) => { 
+    cou.map(item => {
+      var temp = {
+        user_rate_condition_id: userSign?.UserRateCondition_id,
+       user_country: item?.country_code
+      }
+      country_data.push(temp) } );
+      setFinalCountry(country_data);
+      
+  }
+
+  const devices = (dev) => { 
+   alert(JSON.stringify(dev)) 
+    dev.map(item => {
+      var temp = {
+        user_rate_condition_id: userSign?.UserRateCondition_id,
+        user_device_type: item?.user_device
+      }
+      device_data.push(temp) } );
+      setFinalDevice(device_data);
+      
+  }
+
+  const program = (pro) => { 
+     
+    pro.map(item => {
+       var temp = {
+         user_rate_condition_id: userSign?.UserRateCondition_id,
+         program_id: item.program_id
+       }
+       program_data.push(temp) } );
+       setFinalProgram(program_data);  
+   }
+
+   const filterByDevices = () => {
+   
+    resDev = device.filter(el => {
+       return sDevices.find(element => {
+          return element.user_device === el.user_device;
+       });
+    });
+    Router.push('./raterule')
+   alert(JSON.stringify(resDev))
+ }
+
+ const filterByProgram = () => {
+   
+  res = programs.filter(el => {
+     return sPrograms.find(element => {
+        return element.program_id === el.program_id;
+     });
+  });
+  Router.push('./raterule')
+ alert(JSON.stringify(res))
+}
+
+  const fetchRateRule = async () => {
+    const url = `/api/rate_rule/${currentraterule}`
+    console.log("url" + url)
+    axios.get(url)
+      .then((response) => {
+        setSPrograms(response.data.user_rate_condition?.[j]?.PackageMembership)
+        setSDevices(response.data.user_rate_condition?.[j]?.UserDeviceType)
+        setRateRule(response.data);
+        setAllUserRateDetails(response.data.conditional_rate)
+        setConditions(response.data.user_rate_condition?.[j])
+        setUserSign(response.data.user_rate_condition?.[j])
+        logger.info("url  to fetch raterules hitted successfully")
+        filterByDevices();
+        filterByProgram();
+      })
+      .catch((error) => { logger.error("url to fetch raterules, failed") });
+  }
+
+  const fetchPrograms = async () => {
+    const url = `/api/package_membership/${currentProperty?.property_id}`
+    console.log("url" + url)
+    axios.get(url)
+      .then((response) => {
+        setPrograms(response.data);
+        logger.info("url  to fetch programs hitted successfully")
+       
+      })
+      .catch((error) => { logger.error("url to fetch programs, failed") });
   }
 
   return (
@@ -454,7 +615,9 @@ function Raterule() {
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Condition</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Condition
+              
+             </div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -488,7 +651,7 @@ function Raterule() {
                         setUserRateDetails({
                           ...userRateDetails,
                           MembershipProgram: e.target.value,
-                        })
+                        },setBasicFlag(1))
                       }/>
                   </div>
                 </div>
@@ -511,7 +674,7 @@ function Raterule() {
                         setUserRateDetails({
                           ...userRateDetails,
                           UserRateCondition_op: e.target.value,
-                        })
+                        },setBasicFlag(1))
                       }
                     >
 
@@ -539,7 +702,7 @@ function Raterule() {
                         setUserRateDetails({
                           ...userRateDetails,
                           Description: e.target.value,
-                        })
+                        },setBasicFlag(1))
                       }
 
                     />
@@ -549,7 +712,7 @@ function Raterule() {
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                      Conditions {JSON.stringify(userSign)}
+                      Conditions 
                     </h4></div></div>
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3"></div>
@@ -653,10 +816,12 @@ function Raterule() {
                       onSelect={(event) => {country(event) }} />
                     <Multiselect
                       className="shadow-sm bg-gray-50 my-5  text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
-                      isObject={false}
+                      isObject={true}
                       options={device}
-                      onRemove={(event) => { event }}
-                      onSelect={(event) => { event }} />
+                      displayValue="user_device"
+                      selectedValues={resDev}
+                      onRemove={(event) => { devices(event) }}
+                      onSelect={(event) => { devices(event) }} />
                     <Multiselect
                       className="shadow-sm bg-gray-50  my-5 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -669,6 +834,7 @@ function Raterule() {
                       isObject={true}
                       options={programs}
                       displayValue="program_name"
+                      selectedValues={res}
                       onRemove={(event) => {program(event)}}
                       onSelect= {(event)=>{program(event)}} />
                     <input type="text"
@@ -686,7 +852,7 @@ function Raterule() {
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSign?.UserSignedIn} checked={ userSign?.UserSignedIn === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true })
+                              setUserSign({ ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true },setBasicFlag(1))
                             }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -705,7 +871,7 @@ function Raterule() {
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSign?.IsDomestic} checked={ userSign?.IsDomestic === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, IsDomestic: userSign?.IsDomestic === true ? false : true })
+                              setUserSign({ ...userSign, IsDomestic: userSign?.IsDomestic === true ? false : true },setBasicFlag(1))
                             }
                             id="default" className="sr-only peer" />
                           <div
@@ -728,7 +894,23 @@ function Raterule() {
                     focus:ring-4 focus:ring-cyan-200 font-semibold
                      rounded-lg text-sm px-5 py-2 text-center mt-60 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
-                     onClick={()=>{submitRatesEdit(),submitLanguageEdit(),submitCountryEdit()}} type="button" >
+                     onClick={()=>{
+                      if (flagBasic.length !== 0){
+                        submitRatesEdit()
+                      }
+                      if (finalLang.length !== 0){
+                        submitLanguageEdit()
+                      }
+                      if (finalCountry.length !== 0){
+                        submitCountryEdit()
+                      }
+                      if (finalDevice.length !== 0){
+                        submitDeviceEdit()
+                      }
+                      if (finalProgram.length !== 0){
+                        submitProgramEdit()
+                      }
+                     }} type="button" >
                       {language?.update}</button>
                   </div>
                 </div>
@@ -777,17 +959,16 @@ function Raterule() {
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   onChange={(e) =>
-                    setAllHotelDetails({
-                      ...allHotelDetails,
-                      address_city: e.target.value,
-                    })
-                  }
+                    setDiscount({
+                      ...discount,
+                      ineligibility_type: e.target.value,
+                    },setBasicFlag(1))}
                 >
-                  <option value="srinagar">{rateRule?.ineligiblity_reason}</option>
-                  <option value="baramulla">Baramulla</option>
-                  <option value="budgam">Budgam</option>
-                  <option value="pahalgam">Pahalgam</option>
-                  <option value="gulmarg">Gulmarg</option>
+                  <option selected >{rateRule?.ineligiblity_type}</option>
+                  <option value="exact">exact</option>
+                  <option value="price_band">price band</option>
+                  <option value="existence">existence</option>
+                 
                 </select>
               </div>
             </div>
@@ -807,7 +988,7 @@ function Raterule() {
                     setRateRule({
                       ...rateRule,
                       hotel_amenity: e.target.value,
-                    })
+                    },setLang(1))
                   }
 
                 /></div></div>
@@ -827,14 +1008,18 @@ function Raterule() {
                     setRateRule({
                       ...rateRule,
                       price_multiplier: e.target.value,
-                    })
+                    },setLang(1))
                   }
 
                 /></div></div>
 
             <div id="btn" className="flex items-center justify-end  -mb-16 sm:space-x-3 ml-auto">
               {Button !== 'undefined' ?
-                <Button Primary={language?.Update} onClick={submitRateMod} />
+                <Button Primary={language?.Update} onClick={()=>{submitRateMod();
+                  if (discount.length !== 0){
+                    submitDiscountEdit()
+                  }
+                }} />
                 : <></>
               }
             </div>
@@ -1111,7 +1296,7 @@ function Raterule() {
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
                 {Button !== 'undefined' ?
-                  <Button Primary={language?.Update} onClick={submitRateEdit} />
+                  <Button Primary={language?.Update} onClick={filterByDevices} />
                   : <></>
                 }
               </div>

@@ -251,7 +251,8 @@ useEffect(() => {
             </button>
           </div>
         </div>
-      </div> <div className=' bg-gray-50 px-2 relative overflow-y-auto lg:ml-64'>
+      </div> 
+      <div className=' bg-gray-50 px-2 relative overflow-y-auto lg:ml-64'>
         {contact?.map((contact, index) => (
           <div className='' key={index}>
             <button

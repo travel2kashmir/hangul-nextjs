@@ -57,7 +57,8 @@ function Signin() {
   };
 
   /** Sign In Submit Function **/
-  const submitSignIn = async (item) => {
+  const submitSignIn = async (e) => {
+    e.preventDefault()
     var item = {
       user_email: signinDetails.email,
     };
@@ -222,8 +223,8 @@ function Signin() {
 
               <button
                 type="submit"
-                onClick={() => {
-                  submitSignIn("fr");
+                onClick={(e) => {
+                  submitSignIn(e);
                 }}
                 className="font-semibold text-white bg-cyan-600 
               hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
@@ -240,20 +241,28 @@ function Signin() {
             </form>
           </div>
         </div>
-        <div className="mx-64 mt-2">
-          {lang === "en" ? (
-            <div>
+        <div className="mx-64 mt-2 text-teal-600">
+        <div>
+        <button
+                className={lang === "en"?"text-teal-600 text-sm font-bold mx-1 ":"mx-1 text-teal-600 text-sm"}
+                onClick={() => {
+                  setLang("en");
+                  changelanguage("en");
+                }}
+              >
+                English 
+              </button>|
               <button
-                className="text-teal-600 text-sm "
+                 className={lang === "fr"?"mx-1 text-teal-600 text-sm font-bold":"mx-1 text-teal-600 text-sm"}
                 onClick={() => {
                   setLang("fr");
                   changelanguage("fr");
                 }}
               >
-                Français |
-              </button>
+                Français 
+              </button>|
               <button
-                className="text-teal-600 text-sm mx-1"
+                 className={lang === "ar"?"text-teal-600 text-sm font-bold mx-1":"mx-1 text-teal-600 text-sm"}
                 onClick={() => {
                   setLang("ar");
                   changelanguage("ar");
@@ -262,52 +271,7 @@ function Signin() {
                 عربى
               </button>
             </div>
-          ) : lang === "fr" ? (
-            <div>
-              <button
-                className="text-teal-600 text-sm"
-                onClick={() => {
-                  setLang("en");
-                  changelanguage("en");
-                }}
-              >
-                English |
-              </button>
-              <button
-                className="text-teal-600 text-sm mx-1"
-                onClick={() => {
-                  setLang("ar");
-                  changelanguage("ar");
-                }}
-              >
-                عربى
-              </button>
-            </div>
-          ) : lang === "ar" ? (
-            <div>
-              <button
-                className="text-teal-600 text-sm "
-                onClick={() => {
-                  setLang("en");
-                  changelanguage("en");
-                }}
-              >
-                English |
-              </button>
-              <button
-                className="text-teal-600 text-sm mx-1"
-                onClick={() => {
-                  setLang("fr");
-                  changelanguage("fr");
-                }}
-              >
-                Français
-              </button>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
+       </div>
       </div>
 
       {/** Toast Container **/}

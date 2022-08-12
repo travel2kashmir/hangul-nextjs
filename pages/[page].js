@@ -58,9 +58,10 @@ function Page() {
   }
 
   const fetchHotelDetails = async () => {
-if (router?.query?.Page) {
+    console.log(router)
+if (router?.query?.page) {
       var url;
-      url = `/api/property_page/${router?.query?.Page}`;
+      url = `/api/property_page/${router?.query?.page}`;
 
       axios.get(url)
         .then((response) => {
@@ -81,7 +82,7 @@ if (router?.query?.Page) {
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     fetchHotelDetails();
-  },[router.query.Page]);
+  },[router.query.page]);
 
   return (
     <>{allHotelDetails.length===0?

@@ -13,21 +13,39 @@ import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router';
+import { all } from 'langs';
 var i = 0;
 var j = 1;
 var res =[]
-var resDev = []
-var resCou = []
-var resLang = []
 var languageCodes;
 const logger = require("../../../services/logger");
-
 var currentraterule;
 var language;
 var currentProperty;
+var language_data=[];
+var country_data=[];
+var device_data=[];
+var program_data=[];
+
 function Addraterule() {
     const [allUserRateDetails, setAllUserRateDetails] = useState([])
-    const [disp, setDisp] = useState(0);
+    const [userRateConditionId, setUserRateConditionId] = useState([])
+    const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
+    const [countryCheck, setCountryCheck] = useState(false);
+    const [languageCheck, setLanguageCheck] = useState(false);
+    const [deviceCheck, setDeviceCheck] = useState(false);
+    const [programCheck, setProgramCheck] = useState(false);
+    const [finalLang,setFinalLang]=useState([])
+    const [finalCountry,setFinalCountry]=useState([])
+    const [finalDevice,setFinalDevice]=useState([])
+    const [finalProgram,setFinalProgram]=useState([])
+    const [percentageCheck, setPercentageCheck] = useState(false);
+    const [signedCheck, setSignedCheck] = useState(false);
+    const [disp, setDisp] = useState(2);
+    const [countryData,setCountryData]=useState([])
+    const [programs, setPrograms] = useState([])
+    const [languageData,setLanguageData]=useState([])
+
     useEffect(() => {
         const firstfun = () => {
           if (typeof window !== 'undefined') {
@@ -50,7 +68,449 @@ function Addraterule() {
         }
         firstfun();
         Router.push("./addraterule")
+        createCountry();
+        createLanguages();
       }, [])
+
+      useEffect(() => {
+       fetchPrograms();
+    }, [])
+     // Rates Submit
+      const submitRateAdd = () => {
+        var time;
+        var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
+        time = new Date(temp.toString())
+        const toTimestamp = (strDate) => {
+          const dt = Date.parse(strDate);
+          return dt / 1000;
+        }
+        const final_data = {
+          "conditional_rate_id": allUserRateDetails?.conditional_rate_id,
+          "base_rate_currency": allUserRateDetails?.base_rate_currency,
+          "base_rate_amount": allUserRateDetails.base_rate_amount,
+          "tax_amount": allUserRateDetails.tax_amount,
+          "tax_currency": allUserRateDetails.tax_currency,
+          "otherfees_currency": allUserRateDetails.otherfees_currency,
+          "otherfees_amount": allUserRateDetails.otherfees_amount,
+          "refundable": allUserRateDetails.refundable,
+          "refundable_until_days": allUserRateDetails.refundable_until_days,
+          "refundable_until_time": allUserRateDetails?.refundable_until_time ? time.getTime() : allUserRateDetails?.refundable_until_time,
+          "otherfees_amount": allUserRateDetails.otherfees_amount,
+          "expiration_time":allUserRateDetails.expiration_time,
+          "charge_currency": allUserRateDetails.charge_currency,
+          "status": true
+        }
+        alert(JSON.stringify(final_data))
+        // const url = '/api/rate_rule/conditional_rate'
+        // axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+    
+        //   ((response) => {
+        //     toast.success("User Rate Condition added Successfully!", {
+        //       position: "top-center",
+        //       autoClose: 5000,
+        //       hideProgressBar: false,
+        //       closeOnClick: true,
+        //       pauseOnHover: true,
+        //       draggable: true,
+        //       progress: undefined,
+        //     });
+            
+        //     Router.push("./addraterule");
+    
+        //   })
+        //   .catch((error) => {
+    
+        //     toast.error("User Rate Condition Error!", {
+        //       position: "top-center",
+        //       autoClose: 5000,
+        //       hideProgressBar: false,
+        //       closeOnClick: true,
+        //       pauseOnHover: true,
+        //       draggable: true,
+        //       progress: undefined,
+        //     });
+        //   })
+    
+      }
+     //Rate Modification Submit
+      const submitRateModAdd = () => {
+      
+        const final_data = {
+          "hotel_amenity": "free_wifi",
+          "price_multiplier": allUserRateDetails?.price_multiplier,
+          "modification_name":allUserRateDetails?.program_name
+    
+        }
+        alert(JSON.stringify(final_data))
+        // const url = '/api/rate_rule/rate_modification'
+        // axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+    
+        //   ((response) => {
+    
+        //     toast.success("User Rate Modification Updated Successfully!", {
+        //       position: "top-center",
+        //       autoClose: 5000,
+        //       hideProgressBar: false,
+        //       closeOnClick: true,
+        //       pauseOnHover: true,
+        //       draggable: true,
+        //       progress: undefined,
+        //     });
+            
+        //     Router.push("./addraterule");
+    
+        //   })
+        //   .catch((error) => {
+    
+        //     toast.error("User Rate Modification Error!", {
+        //       position: "top-center",
+        //       autoClose: 5000,
+        //       hideProgressBar: false,
+        //       closeOnClick: true,
+        //       pauseOnHover: true,
+        //       draggable: true,
+        //       progress: undefined,
+        //     });
+        //   })
+        
+      }
+      // Rate Discount Submit
+      const submitDiscountAdd = () => {
+        const final_data = {
+           "ineligiblity_type": allUserRateDetails?.ineligibility_type,
+           "ineligibility_reason": allUserRateDetails?.program_name
+         
+        }
+        alert(JSON.stringify(final_data))
+        const url = "/api/rate_rule/rate_ineligiblity ";
+          axios
+            .post(url, final_data, { 
+              header: { "content-type": "application/json" } })
+            .then((response) => {
+              toast.success("Rate Discount added successfully!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            
+              Router.push("./addraterule");
+            })
+      
+            .catch((error) => {
+              toast.error("Rate Discount Error", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
+            });
+        
+        };
+      //Rate Condition Submit
+        const submitRateConditionAdd = () => {
+          const final_data = {
+             "description": allUserRateDetails?.Description,
+             "offer_name": allUserRateDetails?.program_name,
+             "user_rate_condition_op" :allUserRateDetails?.UserRateCondition_op
+           
+          }
+          alert(JSON.stringify(final_data))
+          const url = "/api/rate_rule/user_rate_condition ";
+            axios
+              .post(url, final_data, { 
+                header: { "content-type": "application/json" } })
+              .then((response) => {
+                toast.success("User Rate Condition added successfully!", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              
+             setUserRateConditionId(response.data.user_rate_condition_id)
+              Router.push("./addraterule");
+              }
+              )
+        
+              .catch((error) => {
+                toast.error("User Rate Condition Error", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+              });
+          
+          };
+          //Language Submit
+          const submitLanguageEdit = () => { 
+            const final_data = { "user_rate_language": finalLang }
+            const url = "/api/rate_rule/user_rate_conditioning/rate_condition_language_link";
+              axios
+                .put(url, final_data, { 
+                  header: { "content-type": "application/json" } })
+                .then((response) => {
+                  toast.success("Languages Updated Successfully!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                 setFinalLang([]) 
+                  Router.push("./raterule");
+                })
+          
+                .catch((error) => {
+                  toast.error("Languages Error", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                });
+            
+            };
+            // Country Edit Submit
+             const submitCountryAdd = () => {
+            const final_data = { "user_rate_country": finalCountry }
+            const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_country_link";
+              axios
+                .put(url, final_data, { 
+                  header: { "content-type": "application/json" } })
+                .then((response) => {
+                  toast.success("Country Updated Successfully!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                  setFinalCountry([])
+                  Router.push("./raterule");
+                })
+          
+                .catch((error) => {
+                  toast.error("Country Error", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                });
+            
+            };
+           // Device Edit Submit
+            const submitDeviceAdd = () => {
+              const final_data = { "user_rate_device": finalDevice }
+              alert(JSON.stringify(final_data))
+              const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
+                axios
+                  .put(url, final_data, { 
+                    header: { "content-type": "application/json" } })
+                  .then((response) => {
+                    toast.success("Devices Updated Successfully!", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                    setDevice([])
+                    Router.push("./addraterule");
+                  })
+            
+                  .catch((error) => {
+                    toast.error("Devices Error", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                  });
+              
+              };
+          
+            // Program Edit Submit
+            const submitProgramAdd = () => {
+              const final_data = { "user_rate_program": finalProgram }
+             const url = "/api/rate_rule/user_rate_conditioning/rate_condition_membership_link";
+                axios
+                  .put(url, final_data, { 
+                    header: { "content-type": "application/json" } })
+                  .then((response) => {
+                    toast.success("Programs Updated Successfully!", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                    setFinalProgram([])
+                    Router.push("./addraterule");
+                  })
+            
+                  .catch((error) => {
+                    toast.error("Programs Error", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                  });
+              
+              };
+            //User Signed In, Max percentage and Domestic Submit
+              const submitAdditional = () => {
+                const data = [{
+                  max_user_percentage:userRateDetails?.MaxUsersPercent,
+                  user_signed_in: userSign?.UserSignedIn,
+                  is_domestic: userSign?.IsDomestic,
+                  user_rate_condition_id: userRateConditionId
+              }];
+              const final_data = { "user_rate_condition": data }
+              const url = "/api/rate_rule/user_rate_conditioning";
+                axios
+                  .put(url, final_data, { 
+                    header: { "content-type": "application/json" } })
+                  .then((response) => {
+                    toast.success("Rate rule Updated Successfully!", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                    setBasicFlag([])
+                    Router.push("./raterule");
+                  })
+            
+                  .catch((error) => {
+                    toast.error("Rate rule update Error2!", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                  });
+              
+              };
+          // Country JSON for Dropdown   
+         const createCountry = () => {
+          var countryCodes = Object.keys(countries.countries);
+            countryCodes.map(code => {
+              var temp = {
+                country_name: countries.countries[code].name,
+                country_code: code
+              }
+            country_data.push(temp) } );
+            setCountryData(country_data);
+          }
+        // Languages JSON for Dropdown
+          const createLanguages = () => {
+           languageCodes = langs.all();
+            languageCodes.map(code => {
+              var temp = {
+                language_name: code.name,
+                language_code: code?.[j]
+              }
+            language_data.push(temp) } );
+            setLanguageData(language_data);
+            
+          } 
+          // Programs JSON for Dropdown
+          const fetchPrograms = async () => {
+            const url = `/api/package_membership/${currentProperty?.property_id}`
+            console.log("url" + url)
+            axios.get(url)
+              .then((response) => {
+                setPrograms(response.data);
+                logger.info("url  to fetch programs hitted successfully")
+               
+              })
+              .catch((error) => { logger.error("url to fetch programs, failed") });
+          }
+          //Languages
+          const languages = (lan) => { 
+            lan.map(item => {
+              var temp = {
+                user_rate_condition_id: userRateConditionId,
+                language: item?.language_code
+              }
+              language_data.push(temp) } );
+              setFinalLang(language_data);
+          }
+        // Country
+          const country = (cou) => { 
+            cou.map(item => {
+              var temp = {
+                user_rate_condition_id:  userRateConditionId,
+               user_country: item?.country_code
+              }
+              country_data.push(temp) } );
+              setFinalCountry(country_data);
+              
+          }
+        //Devices
+          const devices = (dev) => { 
+           alert(JSON.stringify(dev)) 
+            dev.map(item => {
+              var temp = {
+                user_rate_condition_id: userRateConditionId,
+                user_device: item?.user_device
+              }
+              device_data.push(temp) } );
+              setFinalDevice(device_data);
+              
+          }
+         //Programs
+          const program = (pro) => {   
+            pro.map(item => {
+               var temp = {
+                 user_rate_condition_id: userRateConditionId,
+                 program_id: item.program_id
+               }
+               program_data.push(temp) } );
+               setFinalProgram(program_data);  
+           }
   return (
     <>
     <Header Primary={english?.Side1} />
@@ -395,7 +855,7 @@ function Addraterule() {
                       Expiration Timezone
                     </label>
                     <input
-                      type="text"
+                      type="datetime-local"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.expiration_time}
                       onChange={
@@ -409,7 +869,7 @@ function Addraterule() {
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
                 {Button !== 'undefined' ?
-                  <Button Primary={language?.Next}  onClick={()=>{setDisp(1)}}/>
+                  <Button Primary={language?.Next}  onClick={()=>{submitRateAdd();setDisp(1) }}/>
                   : <></>
                 }
               </div>
@@ -418,6 +878,7 @@ function Addraterule() {
           </div>
         </div>
          </div>
+
          <div id='1' className={disp===1?'block':'hidden'}>
         <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -456,11 +917,58 @@ function Addraterule() {
                     <input type="text"
                       className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
-                        setUserRateDetails({
-                          ...userRateDetails,
+                        setAllUserRateDetails({
+                          ...allUserRateDetails,
                           MembershipProgram: e.target.value,
-                        },setBasicFlag(1))
+                        })
                       }/>
+                  </div>
+                </div>
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="text-sm font-medium text-gray-900 block mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Rate Condition 
+                    </label>
+                    <select
+                      className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      onChange={(e) =>
+                        setAllUserRateDetails({
+                          ...allUserRateDetails,
+                          UserRateCondition_op: e.target.value,
+                        })
+                      }
+                    >
+
+                      <option selected >Select</option>
+                      <option value="all">All</option>
+                      <option value="any">Any</option>
+                      <option value="none">None</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="text-sm font-medium text-gray-900 block mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Rate Description
+
+                    </label>
+                    <textarea rows="2" columns="50"
+                      className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      onChange={(e) =>
+                        setAllUserRateDetails({
+                          ...allUserRateDetails,
+                          Description: e.target.value,
+                        })
+                      }
+
+                    />
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -474,15 +982,15 @@ function Addraterule() {
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   onChange={(e) =>
-                    setDiscount({
-                      ...discount,
+                    setAllUserRateDetails({
+                      ...allUserRateDetails,
                       ineligibility_type: e.target.value,
-                    },setBasicFlag(1))}
+                    })}
                 >
                   <option selected >Select</option>
-                  <option value="exact">exact</option>
-                  <option value="price_band">price band</option>
-                  <option value="existence">existence</option>
+                  <option value="exact">exact- A discount percentage</option>
+                  <option value="price_band">price band- A discount range</option>
+                  <option value="existence">existence- A non-specific limit</option>
              </select>
               </div>
             </div>
@@ -498,12 +1006,7 @@ function Addraterule() {
                 <input
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                 onChange={(e) =>
-                    setRateRule({
-                      ...rateRule,
-                      hotel_amenity: e.target.value,
-                    },setLang(1))
-                  }
+                defaultValue={"free_wifi"}
 
                 /></div></div>
 
@@ -517,10 +1020,10 @@ function Addraterule() {
                   type="text"
                   className="shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                  onChange={(e) =>
-                    setRateRule({
-                      ...rateRule,
+                    setAllUserRateDetails({
+                      ...allUserRateDetails,
                       price_multiplier: e.target.value,
-                    },setLang(1))
+                    })
                   }
 
                 /></div></div>
@@ -528,7 +1031,7 @@ function Addraterule() {
 
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
-                  <Button Primary={language?.Next} />  
+                  <Button Primary={language?.Next} onClick = {()=>{submitRateModAdd();submitRateConditionAdd()}}/>  
                   </div>
                 </div>
                 <div>
@@ -538,6 +1041,260 @@ function Addraterule() {
             </div>
 
           </div>
+        </div>
+         </div>
+
+         <div id='2' className={disp===2?'block':'hidden'}>
+         <div className="bg-white  shadow rounded-lg mx-1 px-1 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+              <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
+                1</button>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Modification and Discount</div>
+            </div>
+
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+              <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Condition</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates</div>
+            </div>
+
+
+          </div>
+          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
+            Rate Condition 
+          </h6>
+          <div className="flex flex-wrap">
+          
+
+                
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3"></div>
+                </div>
+
+                <div className="lg:w-10/12  px-1">
+                  <div className="relative w-full ">
+
+                    <div className='flex mb-2'>
+                    <div className="w-full lg:w-3/12 ">
+                      <span className="flex  ">
+                      <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
+                      onClick={() => {setCountryCheck(!countryCheck)}} checked={countryCheck === true}
+                      className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                      <label
+                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        htmlFor="grid-password"
+                      >
+                        User Country 
+                      </label> </span></div>
+                      <div className="w-full lg:w-4/12 ">
+                      <Multiselect
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={countryData}
+                      displayValue="country_name"
+                     onRemove={(event) => {country(event)}}
+                      onSelect={(event) => {country(event) }} /></div>
+                    </div>
+
+                    <div className='flex mb-2'>
+                    <div className="w-full lg:w-3/12 ">
+                      <span className="flex">
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
+                         onClick={() => {setDeviceCheck(!deviceCheck)}} checked={deviceCheck === true}
+                        className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                     
+                      <label
+                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        htmlFor="grid-password"
+                      >
+                        User Device
+                      </label> </span></div>
+
+                      <div className="w-full lg:w-4/12 ">
+                      <Multiselect
+                      className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={device}
+                      displayValue="user_device"
+                     onRemove={(event) => { devices(event) }}
+                      onSelect={(event) => { devices(event) }} /></div>
+                    </div>
+
+                    <div className='flex mb-2'>
+                    <div className="w-full lg:w-3/12 ">
+                      <span className="flex ">
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
+                         onClick={() => {setLanguageCheck(!languageCheck)}} checked={languageCheck === true}
+                        className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                      <label
+                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        htmlFor="grid-password"
+                      >
+                        Language
+                      </label> </span></div>
+                      <div className="w-full lg:w-4/12 ">
+                      <Multiselect
+                      className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={languageData}
+                     displayValue="language_name"
+                      onRemove={(event) => { languages(event) }}
+                      onSelect={(event) => { languages(event) }} />
+                      </div>
+                      </div>
+
+
+                    <div className='flex mb-2'>
+                    <div className="w-full lg:w-3/12 ">
+                      <span className="flex">
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
+                         onClick={() => {setProgramCheck(!programCheck)}} checked={programCheck === true}
+                        className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-1" 
+                         className="sr-only">checkbox</label>
+                     
+                      <label
+                        className="text-sm font-medium text-gray-900 mx-2 block "
+                        htmlFor="grid-password"
+                      >
+                        Membership Program
+                      </label> </span></div>
+                      <div className="w-full lg:w-4/12 ">
+                      <Multiselect
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={programs}
+                      displayValue="program_name"
+                      onRemove={(event) => {program(event)}}
+                      onSelect= {(event)=>{program(event)}} /></div>
+                      </div>
+
+                    <div className='flex mb-2'>
+                    <div className="w-full lg:w-3/12 ">
+                      <span className="flex">
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
+                         onClick={() => {setPercentageCheck(!percentageCheck)}} checked={percentageCheck === true} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                     
+                      <label
+                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        htmlFor="grid-password"
+                      >
+                       Maximum User Percentage
+                      </label> </span></div>
+
+                      <div className="w-full lg:w-4/12 ">
+                      <input type="text"
+                      className="shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
+                      focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
+                     
+                      onChange={(e) =>
+                        setAllUserRateDetails({
+                          ...allUserRateDetails,
+                          MaxUsersPercent: e.target.value,
+                        })
+                      }/>
+                      </div>
+                        </div>
+
+                    <div className='flex mb-2'>
+                        <div className="w-full lg:w-3/12 ">
+                      <span className="flex">
+                        <input id="checkbox-1"
+                          aria-describedby="checkbox-1" type="checkbox"
+                          onClick={() => {setSignedCheck(!signedCheck)}} checked={signedCheck === true}
+                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                     
+                      <label
+                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        htmlFor="grid-password"
+                      >
+                        User Signed In
+                      </label> </span></div>
+                      <div className="w-full lg:w-4/12 ">
+                     
+                      <div className="form-check mx-2 my-4 form-check-inline">
+
+                        <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
+                          <input type="checkbox" value={allUserRateDetails?.UserSignedIn} checked={ allUserRateDetails?.UserSignedIn === true}
+                            onChange={(e) =>
+                              setUserSign({ ...allUserRateDetails, UserSignedIn: allUserRateDetails?.UserSignedIn === true ? false : true },setBasicFlag(1))
+                            }
+                            id={`default-toggle`} className="sr-only peer" />
+                          <div
+                            className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                 peer-checked:after:translate-x-full 
+                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                      </div>
+                    
+                      </div>
+                      </div>
+
+                    <div className='flex mb-2'>
+                    <div className="w-full lg:w-3/12 ">
+                      <span className="flex ">
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                      
+                      <label
+                        className="text-sm mx-2 font-medium text-gray-900 block"
+                        htmlFor="grid-password"
+                      >
+                        Is Domestic
+                      </label>
+                      </span>
+                      
+                      </div>
+                      <div className="w-full lg:w-4/12 ">
+                      <div className="flex">
+                      <div className="form-check mx-2  form-check-inline">
+
+                        <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
+                          <input type="checkbox" value={allUserRateDetails?.IsDomestic} checked={ allUserRateDetails?.IsDomestic === true}
+                            onChange={(e) =>
+                              setAllUserRateDetails({ ...allUserRateDetails, IsDomestic: allUserRateDetails?.IsDomestic === true ? false : true },setBasicFlag(1))
+                            }
+                            id="default" className="sr-only peer" />
+                          <div
+                            className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                 peer-checked:after:translate-x-full 
+                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                      </div>
+                    </div> </div>
+
+                  </div>
+      
+           
+          
+        </div>
+        
+        </div>
+     
+        </div>
+        <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
+              {Button !== 'undefined' ?
+                <Button Primary={language?.Update} onClick={()=>{
+                
+                }} /> 
+                : <></>
+              }
+            </div>
         </div>
          </div>
         </div></>

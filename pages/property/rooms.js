@@ -45,7 +45,6 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
  
     /**Function to save Current property to be viewed to Local Storage**/
   const currentRoom = (props) => {
-    alert("Props" +props?.id);
     localStorage.setItem("RoomId", (props.id));
     Router.push("./rooms/room");
   };

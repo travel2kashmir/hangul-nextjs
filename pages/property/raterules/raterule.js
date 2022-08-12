@@ -38,10 +38,6 @@ function Raterule() {
   const [rateRule, setRateRule] = useState([])
   const [discount, setDiscount] = useState([])
   const [programs, setPrograms] = useState([])
-  const [sPrograms, setSPrograms] = useState([])
-  const [sDevices, setSDevices] = useState([])
-  const [sCountry, setSCountry] = useState([])
-  const [sLanguage, setSLanguage] = useState([])
   const [allUserRateDetails, setAllUserRateDetails] = useState([])
   const [conditions, setConditions] = useState([])
   const [countr, setCountr] = useState([])
@@ -228,7 +224,6 @@ function Raterule() {
  // Languages Edit Submit
   const submitLanguageEdit = () => { 
   const final_data = { "user_rate_language": finalLang }
-  alert(JSON.stringify(final_data))
   const url = "/api/rate_rule/user_rate_conditioning/rate_condition_language_link";
     axios
       .put(url, final_data, { 
@@ -334,8 +329,7 @@ function Raterule() {
   // Device Edit Submit
   const submitProgramEdit = () => {
     const final_data = { "user_rate_program": finalProgram }
-    alert(JSON.stringify(final_data))
-    const url = "/api/rate_rule/user_rate_conditioning/rate_condition_membership_link";
+   const url = "/api/rate_rule/user_rate_conditioning/rate_condition_membership_link";
       axios
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
@@ -373,7 +367,6 @@ function Raterule() {
         "ineligiblity_type": discount?.ineligibility_type,
        
       }
-      alert(JSON.stringify(final_data))
       const url = "/api/rate_rule/rate_ineligiblity ";
         axios
           .put(url, final_data, { 
@@ -502,14 +495,12 @@ Router.push('./raterule')
 }
 
 const filterByLanguage = () => {
-  alert(JSON.stringify(languageData))
   resLang = languageData.filter(el => {
     return rateRule?.user_rate_condition?.[j]?.language.find(element => {
       return element.LanguageCode === el.language_code;
    });
 });
 
-alert(JSON.stringify(resLang))
 Router.push('./raterule')
 }
 

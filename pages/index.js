@@ -57,7 +57,8 @@ function Signin() {
   };
 
   /** Sign In Submit Function **/
-  const submitSignIn = async (item) => {
+  const submitSignIn = async (e) => {
+    e.preventDefault()
     var item = {
       user_email: signinDetails.email,
     };
@@ -222,8 +223,8 @@ function Signin() {
 
               <button
                 type="submit"
-                onClick={() => {
-                  submitSignIn("fr");
+                onClick={(e) => {
+                  submitSignIn(e);
                 }}
                 className="font-semibold text-white bg-cyan-600 
               hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
@@ -334,6 +335,4 @@ Signin.getLayout = function PageLayout(page) {
       {page}
     </>
   )
-
-
 }

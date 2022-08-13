@@ -29,6 +29,9 @@ var program_data=[];
 
 function Addraterule() {
     const [allUserRateDetails, setAllUserRateDetails] = useState([])
+    const [rateRuleId, setRateRuleId] = useState([])
+    const [rateModificationId, setRateModificationId] = useState([])
+    const [rateIneligiblityId, setRateIneligiblityId] = useState([])
     const [userRateConditionId, setUserRateConditionId] = useState([])
     const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
     const [countryCheck, setCountryCheck] = useState(false);
@@ -41,7 +44,7 @@ function Addraterule() {
     const [finalProgram,setFinalProgram]=useState([])
     const [percentageCheck, setPercentageCheck] = useState(false);
     const [signedCheck, setSignedCheck] = useState(false);
-    const [disp, setDisp] = useState(2);
+    const [disp, setDisp] = useState(0);
     const [countryData,setCountryData]=useState([])
     const [programs, setPrograms] = useState([])
     const [languageData,setLanguageData]=useState([])
@@ -98,6 +101,7 @@ function Addraterule() {
           "otherfees_amount": allUserRateDetails.otherfees_amount,
           "expiration_time":allUserRateDetails.expiration_time,
           "charge_currency": allUserRateDetails.charge_currency,
+          "rate_rule": rateRuleId,
           "status": true
         }
         alert(JSON.stringify(final_data))
@@ -132,53 +136,138 @@ function Addraterule() {
         //   })
     
       }
+      
      //Rate Modification Submit
       const submitRateModAdd = () => {
-      
-        const final_data = {
+       const final_data = {
           "hotel_amenity": "free_wifi",
           "price_multiplier": allUserRateDetails?.price_multiplier,
-          "modification_name":allUserRateDetails?.program_name
+          "modification_name":allUserRateDetails?.program
     
         }
         alert(JSON.stringify(final_data))
-        // const url = '/api/rate_rule/rate_modification'
-        // axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+        const url = '/api/rate_rule/rate_modification'
+        axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     
-        //   ((response) => {
+          ((response) => {
     
-        //     toast.success("User Rate Modification Updated Successfully!", {
-        //       position: "top-center",
-        //       autoClose: 5000,
-        //       hideProgressBar: false,
-        //       closeOnClick: true,
-        //       pauseOnHover: true,
-        //       draggable: true,
-        //       progress: undefined,
-        //     });
-            
-        //     Router.push("./addraterule");
+            toast.success("User Rate Modification Added Successfully!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            setRateModificationId(response.data.rate_modification_id);
+            setDisp(1);
+           
     
-        //   })
-        //   .catch((error) => {
+          })
+          .catch((error) => {
     
-        //     toast.error("User Rate Modification Error!", {
-        //       position: "top-center",
-        //       autoClose: 5000,
-        //       hideProgressBar: false,
-        //       closeOnClick: true,
-        //       pauseOnHover: true,
-        //       draggable: true,
-        //       progress: undefined,
-        //     });
-        //   })
+            toast.error("User Rate Modification Error!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          })
         
       }
+      //Rate rule Id generation
+      const submitRateRule = () => {
+        const final_data = {
+          "rate_rule":[{
+           "rate_ineligiblity_id": rateIneligiblityId,
+           "rate_modification_id": rateModificationId
+        }
+        ] 
+         }
+         alert(JSON.stringify(final_data))
+         const url = '/api/rate_rule/rate_rule'
+         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     
+           ((response) => {
+     
+             toast.success("User Rate Modification Updated Successfully!", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             });
+            setRateRuleId(response.data.rate_rule_id);
+            
+     
+           })
+           .catch((error) => {
+     
+             toast.error("User Rate Modification Error!", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             });
+           })
+         
+       }
+       //Rate rule Id generation
+       const submitRateRuleLink = () => {
+        const final_data = {
+          "rate_rule_link":[{
+           "rate_rule_id": rateRuleId,
+           "user_rate_condition_id": useState
+        }
+        ] 
+         }
+         alert(JSON.stringify(final_data))
+         const url = '/api/rate_rule/rate_rule_rate_condition_link'
+         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     
+           ((response) => {
+     
+             toast.success("User Rate Modification Updated Successfully!", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             });
+            setRateRuleId(response.data.rate_rule_id);
+            
+     
+           })
+           .catch((error) => {
+     
+             toast.error("User Rate Modification Error!", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             });
+           })
+         
+       }
       // Rate Discount Submit
       const submitDiscountAdd = () => {
         const final_data = {
            "ineligiblity_type": allUserRateDetails?.ineligibility_type,
-           "ineligibility_reason": allUserRateDetails?.program_name
+           "ineligibility_reason": allUserRateDetails?.program
          
         }
         alert(JSON.stringify(final_data))
@@ -196,8 +285,8 @@ function Addraterule() {
                 draggable: true,
                 progress: undefined,
               });
-            
-              Router.push("./addraterule");
+              setRateIneligiblityId(response.data.rate_ineligiblity_id);
+              submitRateModAdd();
             })
       
             .catch((error) => {
@@ -216,15 +305,17 @@ function Addraterule() {
       //Rate Condition Submit
         const submitRateConditionAdd = () => {
           const final_data = {
+          "user_rate_condition" :  [
+              {
              "description": allUserRateDetails?.Description,
-             "offer_name": allUserRateDetails?.program_name,
+             "offer_name": allUserRateDetails?.program,
              "user_rate_condition_op" :allUserRateDetails?.UserRateCondition_op
-           
+          }
+          ] 
           }
           alert(JSON.stringify(final_data))
-          const url = "/api/rate_rule/user_rate_condition ";
-            axios
-              .post(url, final_data, { 
+          const url = "/api/rate_rule/user_rate_condition";
+            axios.post(url, final_data, { 
                 header: { "content-type": "application/json" } })
               .then((response) => {
                 toast.success("User Rate Condition added successfully!", {
@@ -236,9 +327,9 @@ function Addraterule() {
                   draggable: true,
                   progress: undefined,
                 });
-              
              setUserRateConditionId(response.data.user_rate_condition_id)
-              Router.push("./addraterule");
+             submitRateModAdd();
+             submitDiscountAdd();
               }
               )
         
@@ -256,7 +347,7 @@ function Addraterule() {
           
           };
           //Language Submit
-          const submitLanguageEdit = () => { 
+          const submitLanguageAdd = () => { 
             const final_data = { "user_rate_language": finalLang }
             const url = "/api/rate_rule/user_rate_conditioning/rate_condition_language_link";
               axios
@@ -430,6 +521,7 @@ function Addraterule() {
                       draggable: true,
                       progress: undefined,
                     });
+                    setBasicFlag([])
                   });
               
               };
@@ -601,32 +693,197 @@ function Addraterule() {
           </ol>
         </nav>
         
-         {/** Discount (Rate Eligibility)  **/}
+         {/** Rate Rule Description  **/}
          <div id='0' className={disp===0?'block':'hidden'}>
+         
+        <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description
+             </div>
+            </div>
+
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+              <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Rates</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Conditions</div>
+            </div>
+
+          </div>
+          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
+         Rate Rule Description 
+          </h6>
+          <div className="pt-6">
+            <div className=" md:px-4 mx-auto w-full">
+              <div className="flex flex-wrap">
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="text-sm font-medium text-gray-900 block mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Program Name
+                    </label>
+                    <input type="text"
+                      className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      onChange={(e) =>
+                        setAllUserRateDetails({
+                          ...allUserRateDetails,
+                          program: e.target.value,
+                        })
+                      }/>
+                  </div>
+                </div>
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="text-sm font-medium text-gray-900 block mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Rate Condition 
+                    </label>
+                    <select
+                      className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      onChange={(e) =>
+                        setAllUserRateDetails({
+                          ...allUserRateDetails,
+                          UserRateCondition_op: e.target.value,
+                        })
+                      }
+                    >
+
+                      <option selected >Select</option>
+                      <option value="all">All</option>
+                      <option value="any">Any</option>
+                      <option value="none">None</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="text-sm font-medium text-gray-900 block mb-2"
+                      htmlFor="grid-password"
+                    >
+                      Rate Description
+
+                    </label>
+                    <textarea rows="2" columns="50"
+                      className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      onChange={(e) =>
+                        setAllUserRateDetails({
+                          ...allUserRateDetails,
+                          Description: e.target.value,
+                        })
+                      }
+
+                    />
+                  </div>
+                </div>
+                <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label
+                  className="text-sm font-medium text-gray-900 block  mb-2 "
+                  htmlFor="grid-password"
+                >
+                  Discount Type
+                </label>
+                <select
+                  className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  onChange={(e) =>
+                    setAllUserRateDetails({
+                      ...allUserRateDetails,
+                      ineligibility_type: e.target.value,
+                    })}
+                >
+                  <option selected >Select</option>
+                  <option value="exact">exact- A discount percentage</option>
+                  <option value="price_band">price band- A discount range</option>
+                  <option value="existence">existence- A non-specific limit</option>
+             </select>
+              </div>
+            </div>
+            
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label
+                  className="text-sm font-medium text-gray-900 block mb-2"
+                  htmlFor="grid-password"
+                >
+                  Hotel Amenity(Free Wifi)
+                </label>
+                <input
+                  type="text"
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                defaultValue={"free_wifi"}
+
+                /></div></div>
+
+            <div className="w-full lg:w-6/12 px-4">
+              <div className="relative w-full mb-3">
+                <label className="text-sm font-medium text-gray-900 block"
+                  htmlFor="grid-password">
+                  Price Multiplier
+                </label>
+                <input
+                  type="text"
+                  className="shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                 onChange={(e) =>
+                    setAllUserRateDetails({
+                      ...allUserRateDetails,
+                      price_multiplier: e.target.value,
+                    })
+                  }
+
+                /></div></div>
+              
+
+                <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
+                  <div className="relative w-full ml-4 mb-4">
+                  <Button Primary={language?.Next} onClick = {()=>{
+                  submitRateConditionAdd();}}/>  
+                  </div>
+                </div>
+                <div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+         </div>
+
+          {/** Rate Rule Rates  **/}
+         <div id='1' className={disp===1?'block':'hidden'}>
          <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"> 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rates</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Modification and Discount</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">
              
             3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Conditions </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions </div>
             </div>
 
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-            Rates
-            <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
-          </h6>
+           Rate Rule Rates
+            </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
@@ -869,7 +1126,7 @@ function Addraterule() {
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
                 {Button !== 'undefined' ?
-                  <Button Primary={language?.Next}  onClick={()=>{submitRateAdd();setDisp(1) }}/>
+                  <Button Primary={language?.Next}  onClick={()=>{submitRateAdd();setDisp(2) }}/>
                   : <></>
                 }
               </div>
@@ -878,194 +1135,30 @@ function Addraterule() {
           </div>
         </div>
          </div>
-
-         <div id='1' className={disp===1?'block':'hidden'}>
-        <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rates 
-              
-             </div>
-            </div>
-
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-              
-              <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Modification and Discount</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Conditions</div>
-            </div>
-
-          </div>
-          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Modification and Discount 
-          </h6>
-          <div className="pt-6">
-            <div className=" md:px-4 mx-auto w-full">
-              <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Program Name
-                    </label>
-                    <input type="text"
-                      className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      onChange={(e) =>
-                        setAllUserRateDetails({
-                          ...allUserRateDetails,
-                          MembershipProgram: e.target.value,
-                        })
-                      }/>
-                  </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Rate Condition 
-                    </label>
-                    <select
-                      className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      onChange={(e) =>
-                        setAllUserRateDetails({
-                          ...allUserRateDetails,
-                          UserRateCondition_op: e.target.value,
-                        })
-                      }
-                    >
-
-                      <option selected >Select</option>
-                      <option value="all">All</option>
-                      <option value="any">Any</option>
-                      <option value="none">None</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3">
-                    <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
-                      htmlFor="grid-password"
-                    >
-                      Rate Description
-
-                    </label>
-                    <textarea rows="2" columns="50"
-                      className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      onChange={(e) =>
-                        setAllUserRateDetails({
-                          ...allUserRateDetails,
-                          Description: e.target.value,
-                        })
-                      }
-
-                    />
-                  </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
-              <div className="relative w-full mb-3">
-                <label
-                  className="text-sm font-medium text-gray-900 block "
-                  htmlFor="grid-password"
-                >
-                  Discount Type
-                </label>
-                <select
-                  className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  onChange={(e) =>
-                    setAllUserRateDetails({
-                      ...allUserRateDetails,
-                      ineligibility_type: e.target.value,
-                    })}
-                >
-                  <option selected >Select</option>
-                  <option value="exact">exact- A discount percentage</option>
-                  <option value="price_band">price band- A discount range</option>
-                  <option value="existence">existence- A non-specific limit</option>
-             </select>
-              </div>
-            </div>
-            
-            <div className="w-full lg:w-6/12 px-4">
-              <div className="relative w-full mb-3">
-                <label
-                  className="text-sm font-medium text-gray-900 block mb-2"
-                  htmlFor="grid-password"
-                >
-                  Hotel Amenity(Free Wifi)
-                </label>
-                <input
-                  type="text"
-                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                defaultValue={"free_wifi"}
-
-                /></div></div>
-
-            <div className="w-full lg:w-6/12 px-4">
-              <div className="relative w-full mb-3">
-                <label className="text-sm font-medium text-gray-900 block"
-                  htmlFor="grid-password">
-                  Price Multiplier
-                </label>
-                <input
-                  type="text"
-                  className="shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                 onChange={(e) =>
-                    setAllUserRateDetails({
-                      ...allUserRateDetails,
-                      price_multiplier: e.target.value,
-                    })
-                  }
-
-                /></div></div>
-              
-
-                <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
-                  <div className="relative w-full ml-4 mb-4">
-                  <Button Primary={language?.Next} onClick = {()=>{submitRateModAdd();submitRateConditionAdd()}}/>  
-                  </div>
-                </div>
-                <div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-         </div>
-
+        
+         {/** Rate Rule Conditions  **/}
          <div id='2' className={disp===2?'block':'hidden'}>
          <div className="bg-white  shadow rounded-lg mx-1 px-1 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
                 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Modification and Discount</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Rule Description</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Condition</div>
+            <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Rates</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates</div>
+             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
             </div>
 
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-            Rate Condition 
+            Rate Rule Conditions
           </h6>
           <div className="flex flex-wrap">
           
@@ -1289,9 +1382,24 @@ function Addraterule() {
         </div>
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
-                <Button Primary={language?.Update} onClick={()=>{
-                
-                }} /> 
+                <Button Primary={language?.Submit} onClick={()=>{
+                if(countryCheck === true){
+                  submitCountryAdd();
+                }
+                if(deviceCheck === true){
+                 submitDeviceAdd(); 
+                }
+                if(languageCheck === true){
+                 submitLanguageAdd(); 
+                }
+                if(programCheck === true){
+                 submitProgramAdd
+                }
+                if(basicFlag?.length != undefined){
+                  submitAdditional();
+                }
+                }
+              } /> 
                 : <></>
               }
             </div>

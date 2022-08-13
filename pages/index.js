@@ -55,8 +55,7 @@ function Signin() {
   var language;
   if (locale === "en") {
     language = english
-
-  }
+}
   if (locale === "ar") {
     language = arabic
   }

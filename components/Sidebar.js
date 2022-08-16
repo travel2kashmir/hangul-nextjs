@@ -6,7 +6,7 @@ import Link from 'next/link'
 var language;
 
 const Sidebar = (args) => {
- 
+  const [services, setServices] = useState(false)
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -141,8 +141,12 @@ const Sidebar = (args) => {
                   <span className="ml-3 flex-1 whitespace-nowrap">
                   <Link href={{pathname:args?.Primary?.reviews, query: { id: 1 }}}><a>{language?.reviews}</a></Link></span>
                 </li>
-                <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
-                  <svg
+               
+
+                {/** Drop down example **/}
+                <li>
+					<button type="button" onClick={()=>{setServices(!services)} }className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                   <svg
                     className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -150,10 +154,28 @@ const Sidebar = (args) => {
                   >
                     <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                   </svg>
-                  <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href={{pathname:args?.Primary?.services, query: { id: 1 }}}><a>{language?.services}</a></Link>
-                  </span>
-                </li>
+                  <span className="flex-1 ml-3 text-left whitespace-nowrap" >{language?.services}</span>
+                  <svg sidebar-toggle-item className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" 
+                  xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+            </button>
+           <div className={services === true ? 'block' : 'hidden'}>
+					<ul  className="py-2 space-y-2">
+						<li className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75
+                 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
+							<Link  href={{pathname:args?.Primary?.services, query: { id: 1 }}}>
+            	<a>Basic Services</a></Link>
+						</li>
+						<li 	className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 
+                rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
+						<Link  href={{pathname:args?.Primary?.additionalservices, query: { id: 1 }}}>
+              <a 
+							>
+                  {language?.additionalservices}</a>
+						</Link></li>
+					
+					</ul></div>
+				</li>
+
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
                     className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"

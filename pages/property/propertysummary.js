@@ -18,12 +18,13 @@ var currentProperty;
 
 function PropertySummary() {
   /** State to store Current Property Details **/
-  var theme1= "bg-red-200";
-  var theme2= "bg-rose-400";
-  var theme3= "bg-neutral-400";
-  var theme4= "bg-yellow-400";
-  var theme5= "bg-indigo-500";
+  var theme1= "bg-yellow-100";
+  var theme2= "bg-lime-100";
+  var theme3= "bg-rose-100";
+  var theme4= "bg-orange-100";
+  var theme5= "bg-indigo-100";
   const [allHotelDetails, setAllHotelDetails] = useState([]);
+  const [themes,setThemes]=useState(false)
   const [theme,setTheme]=useState(theme1)
   const [bgColor,setBgColor]=useState(theme)
   const [unique,setUnique]=useState(0)
@@ -86,7 +87,7 @@ const initialtheme = () =>{
 
 const sendLink = () =>{
   const data={
-    uuid:`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`,
+    uuid:`${allHotelDetails?.property_name.replaceAll(' ','-')}-${currentProperty.address_city}`,
     property_id:currentProperty.property_id,
     address_id:allHotelDetails.address[0].address_id,
     theme_id:theme,
@@ -163,20 +164,56 @@ const sendLink = () =>{
             </li>
           </ol>
         </nav>
-          <div>
+        <div>
           
-          <button onClick={()=>{setBgColor(theme1); setTheme(theme1);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme1</button>
-          <button onClick={()=>{setBgColor(theme2); setTheme(theme2);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme2</button>
-          <button onClick={()=>{setBgColor(theme3); setTheme(theme3);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme3</button>
-          <button onClick={()=>{setBgColor(theme4); setTheme(theme4);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme4</button>
-          <button onClick={()=>{setBgColor(theme5); setTheme(theme5);}} className="mx-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Theme5</button>
-        
-         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={()=>{ 
-          setUri(`${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`);
+          
+      
+     </div>     
+<div className="flex" >
+  <div>
+<button  onClick={()=>{setThemes(!themes)}} className="text-white mx-2 bg-cyan-600 hover:bg-cyan-800 
+focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2.5 
+text-center inline-flex items-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800" 
+type="button">Select Theme <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none" 
+stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+  </button>
+
+<div className={themes === true ? 'block' : 'hidden'}>
+<div  className="z-10 w-44 bg-white rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700">
+    <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
+      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+        <button onClick={()=>{setBgColor(theme1); setTheme(theme1);}} >Theme-1</button>
+      </li>
+      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+        <button onClick={()=>{setBgColor(theme2); setTheme(theme2);}} >Theme-2</button>
+      </li>
+      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+      <button onClick={()=>{setBgColor(theme3); setTheme(theme3);}} >Theme-3</button>
+        </li>
+      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+      <button onClick={()=>{setBgColor(theme4); setTheme(theme4);}} >Theme-4</button>
+         </li>
+      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+      <button onClick={()=>{setBgColor(theme5); setTheme(theme5);}} >Theme-5</button>
+      </li>
+    </ul>
+</div></div></div>
+<div>
+<button className="bg-cyan-600 hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={()=>{ 
+          setUri(`${allHotelDetails?.property_name.replaceAll(' ','-')}-${currentProperty.address_city}`.toLowerCase());
          sendLink();
           setUnique(1)}}
-          >Generate url for page</button>
+          >Save</button>
+ <Link href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ','-')}-${currentProperty?.address_city}`}>
+  {`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ','-')}-${currentProperty?.address_city}`.toLowerCase()}</Link>         
+          
+          
           </div>
+  
+</div>
+
+
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.propertysummary}
         </h6>
@@ -196,7 +233,7 @@ const sendLink = () =>{
         </div>
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+          <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <span className="text-xl sm:text-xl leading-none font-bold text-gray-800">
@@ -584,7 +621,7 @@ const sendLink = () =>{
         </div>
 
         {/* Gallery */}
-        <div className="mt-2 grid grid-flow-row-dense md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
+        <div className="mt-2 grid grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">

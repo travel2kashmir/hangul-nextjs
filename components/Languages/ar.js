@@ -382,6 +382,8 @@ export default {
     export:' إِصدار',
     service:' إِصدار',
     additional:'إِضَافِيّ',
+    additionalservices:' خِدمات إِضَافِيّ',
+    basicservices:"الخدمات الأساسية",
     searchforservices:'خِدْمة اِسْتَنْجَع',
     inactive:'بائِر',
     sendto:'أَرْسَل',

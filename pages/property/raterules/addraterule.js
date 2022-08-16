@@ -78,6 +78,7 @@ function Addraterule() {
       useEffect(() => {
        fetchPrograms();
     }, [])
+
      // Rates Submit
       const submitRateAdd = () => {
         var time;
@@ -143,8 +144,7 @@ function Addraterule() {
           "hotel_amenity": "free_wifi",
           "price_multiplier": allUserRateDetails?.price_multiplier,
           "modification_name":allUserRateDetails?.program
-    
-        }
+     }
         alert(JSON.stringify(final_data))
         const url = '/api/rate_rule/rate_modification'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -179,6 +179,7 @@ function Addraterule() {
           })
         
       }
+      
       //Rate rule Id generation
       const submitRateRule = () => {
         const final_data = {
@@ -221,12 +222,13 @@ function Addraterule() {
            })
          
        }
+      
        //Rate rule Id generation
        const submitRateRuleLink = () => {
         const final_data = {
           "rate_rule_link":[{
            "rate_rule_id": rateRuleId,
-           "user_rate_condition_id": useState
+           "user_rate_condition_id": userRateConditionId
         }
         ] 
          }
@@ -263,6 +265,7 @@ function Addraterule() {
            })
          
        }
+       
       // Rate Discount Submit
       const submitDiscountAdd = () => {
         const final_data = {
@@ -328,8 +331,7 @@ function Addraterule() {
                   progress: undefined,
                 });
              setUserRateConditionId(response.data.user_rate_condition_id)
-             submitRateModAdd();
-             submitDiscountAdd();
+             
               }
               )
         
@@ -695,7 +697,8 @@ function Addraterule() {
         
          {/** Rate Rule Description  **/}
          <div id='0' className={disp===0?'block':'hidden'}>
-         
+   
+            
         <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
@@ -775,6 +778,7 @@ function Addraterule() {
                     </label>
                     <textarea rows="2" columns="50"
                       className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      required=""
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
@@ -846,7 +850,8 @@ function Addraterule() {
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                   <Button Primary={language?.Next} onClick = {()=>{
-                  submitRateConditionAdd();}}/>  
+                 submitDiscountAdd();
+                 submitRateModAdd();}}/>  
                   </div>
                 </div>
                 <div>

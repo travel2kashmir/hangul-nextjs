@@ -97,7 +97,7 @@ function Packagedescription() {
             progress: undefined,
           });
           fetchDetails();
-          Router.push("./packagedescription");
+          Router.push("../package");
           setFlag([])
           setPackageDetails([])
         })

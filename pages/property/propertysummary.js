@@ -1,7 +1,7 @@
 import React from "react";
-import Sidebar  from "../../components/Sidebar";
-import Header  from "../../components/Header";
-import { useState,useEffect } from "react";
+import Sidebar from "../../components/Sidebar";
+import Header from "../../components/Header";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 import Link from "next/link";
 import english from "../../components/Languages/en"
@@ -18,108 +18,109 @@ var currentProperty;
 
 function PropertySummary() {
   /** State to store Current Property Details **/
-  var theme1= "bg-cyan-600";
-  var theme2= "bg-lime-200";
-  var theme3= "bg-rose-200";
-  var theme4= "bg-emerald-600";
-  var theme5= "bg-indigo-200";
+  var theme1 = "bg-cyan-600";
+  var theme2 = "bg-lime-200";
+  var theme3 = "bg-rose-200";
+  var theme4 = "bg-emerald-600";
+  var theme5 = "bg-indigo-200";
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-  const [themes,setThemes]=useState(false)
-  const [theme,setTheme]=useState(theme1)
-  const [bgColor,setBgColor]=useState(theme)
-  const [unique,setUnique]=useState(0)
-  const [uri,setUri]=useState("")
+  const [themes, setThemes] = useState(false)
+  const [theme, setTheme] = useState(theme1)
+  const [bgColor, setBgColor] = useState(theme)
+  const [unique, setUnique] = useState(0)
+  const [uri, setUri] = useState("")
   /** Router for Redirection **/
   const router = useRouter();
-  useEffect(()=>{
-    const firstfun=()=>{
-      if (typeof window !== 'undefined'){
-        var locale = localStorage.getItem("Language"); 
+  useEffect(() => {
+    const firstfun = () => {
+      if (typeof window !== 'undefined') {
+        var locale = localStorage.getItem("Language");
         if (locale === "ar") {
-        language = arabic;
+          language = arabic;
         }
         if (locale === "en") {
-        language=english;
+          language = english;
         }
         if (locale === "fr") {
           language = french;
-        } 
+        }
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
-       currentProperty = JSON.parse(localStorage.getItem("property"));
-      } 
+        currentProperty = JSON.parse(localStorage.getItem("property"));
+      }
     }
     firstfun();
     router.push("./propertysummary");
-  },[])
-   
-const initialtheme = () =>{
-  var url;
-      url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ','_')}_${currentProperty.address_city}`;
+  }, [])
+
+  const initialtheme = () => {
+    var url;
+    url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ', '_')}_${currentProperty.address_city}`;
+    axios.get(url)
+      .then((response) => {
+        setTheme(response.data.theme_id);
+        setBgColor(response.data.theme_id);
+        logger.info("url  to fetch property details hitted successfully")
+      })
+      .catch((error) => { logger.error("url to fetch property details, failed") });
+
+  }
+  /* Function call to fetch Current Property Details when page loads */
+  useEffect(() => {
+    const fetchHotelDetails = async () => {
+      const url = `/api/${currentProperty.address_province.replace(
+        /\s+/g,
+        "-"
+      )}/${currentProperty.address_city}/${currentProperty.property_category
+        }s/${currentProperty.property_id}`;
       axios.get(url)
         .then((response) => {
-         setTheme(response.data.theme_id);
-         setBgColor(response.data.theme_id);
+          setAllHotelDetails(response.data);
           logger.info("url  to fetch property details hitted successfully")
         })
         .catch((error) => { logger.error("url to fetch property details, failed") });
-
-}
-/* Function call to fetch Current Property Details when page loads */
-  useEffect(() => {
-    const fetchHotelDetails = async () => { 
-        const url = `/api/${currentProperty.address_province.replace(
-          /\s+/g,
-          "-"
-        )}/${currentProperty.address_city}/${
-          currentProperty.property_category
-        }s/${currentProperty.property_id}`;  
-        axios.get(url)
-        .then((response)=>{setAllHotelDetails(response.data);
-        logger.info("url  to fetch property details hitted successfully")})
-        .catch((error)=>{logger.error("url to fetch property details, failed")});  
     }
-    if(allHotelDetails.length===0)fetchHotelDetails(); 
-    if(allHotelDetails.length!=0)initialtheme();
-  },[allHotelDetails]);
+    if (allHotelDetails.length === 0) fetchHotelDetails();
+    if (allHotelDetails.length != 0) initialtheme();
+  }, [allHotelDetails]);
 
 
 
-const sendLink = () =>{
-  const data={
-    uuid:`${allHotelDetails?.property_name.replaceAll(' ','-')}-${currentProperty.address_city}`,
-    property_id:currentProperty.property_id,
-    address_id:allHotelDetails.address[0].address_id,
-    theme_id:theme,
-    lang:localStorage?.getItem("Language")
+  const sendLink = () => {
+    const data = {
+      uuid: `${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`,
+      property_id: currentProperty.property_id,
+      address_id: allHotelDetails.address[0].address_id,
+      theme_id: theme,
+      lang: localStorage?.getItem("Language")
+    }
+
+    axios.post('/api/property_page', data).then(
+      (response) => {
+        toast.success("Page Updated Successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      }).catch((error) => toast.error("Unique URL Update Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }))
   }
- 
-  axios.post('/api/property_page',data).then(
-    (response)=>
-  {toast.success("Page Updated Successfully!", {
-    position: "top-center",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  })
-}).catch((error)=> toast.error("Unique URL Update Error!", {
-    position: "top-center",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  }))
-  }  
-  
+
   return (
     <div>
-       <Header Primary={english?.Side}/>
-      <Sidebar  Primary={english?.Side}/>
+      <Header Primary={english?.Side} />
+      <Sidebar Primary={english?.Side} />
       {/* Body */}
       <div
         id="main-content"
@@ -165,71 +166,72 @@ const sendLink = () =>{
           </ol>
         </nav>
         <div>
-          
-          
-      
-     </div>     
-<div className="flex" >
-  <div>
-<button  onClick={()=>{setThemes(!themes)}} className="text-white mx-2 bg-cyan-600 hover:bg-cyan-800 
-focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2.5 
-text-center inline-flex items-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800" 
-type="button">Select Theme <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none" 
-stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-  </button>
 
-<div className={themes === true ? 'block' : 'hidden'}>
-<div  className="z-10 w-44 bg-white rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700">
-    <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
-      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-        <button onClick={()=>{setBgColor(theme1); setTheme(theme1);}} >Theme-1</button>
-      </li>
-      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-        <button onClick={()=>{setBgColor(theme2); setTheme(theme2);}} >Theme-2</button>
-      </li>
-      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-      <button onClick={()=>{setBgColor(theme3); setTheme(theme3);}} >Theme-3</button>
-        </li>
-      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-      <button onClick={()=>{setBgColor(theme4); setTheme(theme4);}} >Theme-4</button>
-         </li>
-      <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-      <button onClick={()=>{setBgColor(theme5); setTheme(theme5);}} >Theme-5</button>
-      </li>
-    </ul>
-</div></div></div>
-<div>
-<button className="bg-cyan-600 hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={()=>{ 
-          setUri(`${allHotelDetails?.property_name.replaceAll(' ','-')}-${currentProperty.address_city}`.toLowerCase());
-         sendLink();
-          setUnique(1)}}
-          >Save</button>
- <Link href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ','-')}-${currentProperty?.address_city}`}>
-  {`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ','-')}-${currentProperty?.address_city}`.toLowerCase()}</Link>         
-          
-          
+
+
+        </div>
+        <div className="flex" >
+          <div>
+            <button onClick={() => { setThemes(!themes) }} className="text-white mx-2 bg-cyan-600 hover:bg-cyan-800 
+focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2.5 
+text-center inline-flex items-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
+              type="button">Select Theme <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+
+            <div className={themes === true ? 'block' : 'hidden'}>
+              <div className="z-10 w-44 bg-white rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700">
+                <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
+                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <button onClick={() => { setBgColor(theme1); setTheme(theme1); }} >Theme-1</button>
+                  </li>
+                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <button onClick={() => { setBgColor(theme2); setTheme(theme2); }} >Theme-2</button>
+                  </li>
+                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <button onClick={() => { setBgColor(theme3); setTheme(theme3); }} >Theme-3</button>
+                  </li>
+                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <button onClick={() => { setBgColor(theme4); setTheme(theme4); }} >Theme-4</button>
+                  </li>
+                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <button onClick={() => { setBgColor(theme5); setTheme(theme5); }} >Theme-5</button>
+                  </li>
+                </ul>
+              </div></div></div>
+          <div>
+            <button className="bg-cyan-600 hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={() => {
+              setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`.toLowerCase());
+              sendLink();
+              setUnique(1)
+            }}
+            >Save</button>
+            <Link
+              href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`}>
+              <a target="_blank"> {`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase()}</a>
+            </Link>
           </div>
-  
-</div>
+
+        </div>
 
 
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.propertysummary}
         </h6>
-        <div className={unique===1?"block":"hidden"} >
-        <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-          <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-            <div className="bg-white rounded-lg shadow relative">
-              <div className="flex items-start justify-between p-5 border-b rounded-t">
-                 
-              
-       unique page address is https://hangul-v3.herokuapp.com/{uri}
-        <br/><button onClick={()=>setUnique(0)}>close</button>
-        </div>
-        </div>
-        </div>
-        </div>
+        <div className={unique === 1 ? "block" : "hidden"} >
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div className="bg-white rounded-lg shadow relative">
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+
+
+                  unique page address is https://hangul-v3.herokuapp.com/{uri}
+                  <br /><button onClick={() => setUnique(0)}>close</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
@@ -263,7 +265,7 @@ stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           </div>
 
           {/* Address */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">   
+          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
@@ -301,7 +303,7 @@ stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       </label>
                     </div>
                   </div>
-                  
+
                   <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
                     <div className="relative w-full mb-2">
                       <label
@@ -581,10 +583,10 @@ stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             {allHotelDetails?.Reviews?.map((item, idx) => (
               <div key={idx}>
                 <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm leading-none font-semibold text-gray-800">
-                      {item?.review_author}
-                    </span>
-                  
+                  <span className="text-sm leading-none font-semibold text-gray-800">
+                    {item?.review_author}
+                  </span>
+
                   <div className="flex-shrink-0">
                     <div className="flex items-center flex-1 justify-end px-2 text-yellow-400 text-sm font-bold">
                       {[...Array(item?.review_rating)].map(
@@ -649,7 +651,7 @@ stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <img
                       src={item?.image_link}
                       alt="property_image"
-                      style={{width:"400px", height:"180px"}}
+                      style={{ width: "400px", height: "180px" }}
                     />
                   </div>
                 );
@@ -659,16 +661,16 @@ stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         </div>
 
       </div>
-    {/* Toast Container */}
- <ToastContainer position="top-center"
-       autoClose={5000}
-       hideProgressBar={false}
-       newestOnTop={false}
-       closeOnClick
-       rtl={false}
-       pauseOnFocusLoss
-       draggable
-       pauseOnHover />
+      {/* Toast Container */}
+      <ToastContainer position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover />
     </div>
   );
 }

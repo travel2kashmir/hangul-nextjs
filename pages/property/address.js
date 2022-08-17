@@ -10,11 +10,14 @@ var currentProperty;
 const logger = require("../../services/logger");
 import Link from "next/link";
 import Router from 'next/router'
+import Footer from '../../components/Footer';
+import Loader from "../../components/loader";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 
 function Address() {
+  const [visible,setVisible]=useState(0) 
  
   useEffect(()=>{  
     const firstfun=()=>{  
@@ -49,7 +52,8 @@ function Address() {
     }s/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setAddress(response.data);
-    logger.info("url  to fetch property details hitted successfully")})
+    logger.info("url  to fetch property details hitted successfully")
+  setVisible(1)})
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
 }
   useEffect(() => {
@@ -104,6 +108,8 @@ function Address() {
 
   return (
     <>
+    <div className={visible===0?'block':'hidden'}><Loader/></div>
+    <div className={visible===1?'block':'hidden'}>
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
@@ -412,6 +418,8 @@ function Address() {
         draggable
         pauseOnHover
       />
+    </div>
+    <Footer/>
     </div>
     </>
   );

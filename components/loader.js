@@ -37,7 +37,7 @@ function blinker(arg){
   </div>
 </div>)
 }
-function loader() {
+function Loader() {
   return (<div className='w-full h-100 bg-zinc-200 p-8'>
   <div className='grid grid-cols-1'>{blinker(1)}</div>
   <div className='grid grid-cols-2'>
@@ -47,4 +47,4 @@ function loader() {
 </div>
   )
 }
-export default loader
+export default Loader

@@ -73,6 +73,10 @@ function Raterules() {
         fetchRateRules();
     }
         ,[])
+        const addRateRule = () =>{
+          Router.push("./raterules/addraterule")
+        }
+  
        /**Function to save Current property to be viewed to Local Storage**/
   const currentRateRule = (props ) => {
     localStorage.setItem("RateRuleId", (props.id));
@@ -102,7 +106,6 @@ function Raterules() {
               className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
             >
               <a>{language?.home} 
-              {JSON.stringify(allRateRules)}
               </a>
             </Link>
           </li>
@@ -153,9 +156,9 @@ function Raterules() {
   
 
 {/* Rate Rules Table */}
-<Table  gen={gen} setGen={setGen}  
+<Table  gen={gen} setGen={setGen}  add={addRateRule} 
       edit={currentRateRule}
-         common={language?.common} cols={language?.PackageCols} name="Packages"/> 
+         common={language?.common} cols={language?.RateRuleCols} name="Packages"/> 
 
  {/* Toast Container */}
  <ToastContainer position="top-center"

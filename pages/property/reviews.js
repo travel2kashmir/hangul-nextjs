@@ -6,6 +6,9 @@ import Header  from "../../components/Header";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import Footer from '../../components/Footer';
+import Loader from "../../components/loader";
+
 var language;
 var currentProperty;
 import Router from 'next/router'
@@ -13,6 +16,7 @@ const logger = require("../../services/logger");
 
 function Reviews() {
   const [reviews, setReviews] = useState([]);
+  const [visible,setVisible]=useState(0) 
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -47,11 +51,14 @@ function Reviews() {
     }s/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setReviews(response.data);
-    logger.info("url  to fetch property details hitted successfully")})
+    logger.info("url  to fetch property details hitted successfully")
+  setVisible(1)})
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
   }
   return (
     <>
+    <div className={visible===0?'block':'hidden'}><Loader/></div>
+    <div className={visible===1?'block':'hidden'}>
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
@@ -161,8 +168,9 @@ function Reviews() {
             ))}
         
     </div>
-    </>
-  )
+    <Footer/>
+    </div>
+    </>)
 }
 
 export default Reviews

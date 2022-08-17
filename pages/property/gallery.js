@@ -8,6 +8,8 @@ import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import Footer from '../../components/Footer';
+import Loader from "../../components/loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
@@ -16,6 +18,7 @@ var currentProperty;
 import Router from 'next/router'
 
 function Gallery() {
+    const [visible,setVisible]=useState(0)
     useEffect(() => {
         const firstfun = () => {
             if (typeof window !== 'undefined') {
@@ -58,6 +61,7 @@ function Gallery() {
             .then((response) => {
                 setGallery(response.data);
                 logger.info("url  to fetch property details hitted successfully")
+                setVisible(1)
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
     }  
@@ -215,6 +219,9 @@ function Gallery() {
 
     return (
         <>
+        <div className={visible===0?'block':'hidden'}><Loader/></div>
+        
+        <div className={visible===1?'block':'hidden'}>
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
@@ -530,6 +537,8 @@ function Gallery() {
                 draggable
                 pauseOnHover />
         </div>
+    <Footer/>
+     </div>
      </>
     )
 }

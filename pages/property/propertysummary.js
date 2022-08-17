@@ -7,7 +7,7 @@ import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 const logger = require("../../services/logger");
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,17 +18,18 @@ var currentProperty;
 
 function PropertySummary() {
   /** State to store Current Property Details **/
-  var theme1 = "bg-cyan-600";
-  var theme2 = "bg-lime-200";
-  var theme3 = "bg-rose-200";
-  var theme4 = "bg-emerald-600";
-  var theme5 = "bg-indigo-200";
+  var theme1 = "bg-sky-50";
+  var theme2 = "bg-lime-50";
+  var theme3 = "bg-rose-50";
+  var theme4 = "bg-orange-50";
+  var theme5 = "bg-indigo-50";
   const [allHotelDetails, setAllHotelDetails] = useState([]);
   const [themes, setThemes] = useState(false)
   const [theme, setTheme] = useState(theme1)
-  const [bgColor, setBgColor] = useState(theme)
-  const [unique, setUnique] = useState(0)
+  const [themeName, setThemeName] = useState()
+  const [bgColor, setBgColor] = useState(theme1)
   const [uri, setUri] = useState("")
+
   /** Router for Redirection **/
   const router = useRouter();
   useEffect(() => {
@@ -55,11 +56,29 @@ function PropertySummary() {
 
   const initialtheme = () => {
     var url;
-    url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ', '_')}_${currentProperty.address_city}`;
+    url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`;
     axios.get(url)
       .then((response) => {
         setTheme(response.data.theme_id);
         setBgColor(response.data.theme_id);
+        switch (response.data.theme_id) {
+          case "bg-sky-50":
+            setThemeName("Theme 1");
+            break;
+          case "bg-lime-100":
+            setThemeName("Theme 2");
+            break;
+          case "bg-rose-100":
+            setThemeName("Theme 3");
+            break;
+          case "bg-orange-100":
+            setThemeName("Theme 4");
+            break;
+          case "bg-indigo-100":
+            setThemeName("Theme 5");
+            break;
+          default: <></>
+        }
         logger.info("url  to fetch property details hitted successfully")
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -84,8 +103,6 @@ function PropertySummary() {
     if (allHotelDetails.length != 0) initialtheme();
   }, [allHotelDetails]);
 
-
-
   const sendLink = () => {
     const data = {
       uuid: `${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`,
@@ -105,7 +122,9 @@ function PropertySummary() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-        })
+        });
+        initialtheme();
+        Router.push("./propertysummary");
       }).catch((error) => toast.error("Unique URL Update Error!", {
         position: "top-center",
         autoClose: 5000,
@@ -166,73 +185,79 @@ function PropertySummary() {
           </ol>
         </nav>
         <div>
-
-
-
         </div>
-        <div className="flex" >
-          <div>
-            <button onClick={() => { setThemes(!themes) }} className="text-white mx-2 bg-cyan-600 hover:bg-cyan-800 
-focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-4 py-2.5 
-text-center inline-flex items-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
-              type="button">Select Theme <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
 
-            <div className={themes === true ? 'block' : 'hidden'}>
-              <div className="z-10 w-44 bg-white rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700">
-                <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
-                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <button onClick={() => { setBgColor(theme1); setTheme(theme1); }} >Theme-1</button>
-                  </li>
-                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <button onClick={() => { setBgColor(theme2); setTheme(theme2); }} >Theme-2</button>
-                  </li>
-                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <button onClick={() => { setBgColor(theme3); setTheme(theme3); }} >Theme-3</button>
-                  </li>
-                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <button onClick={() => { setBgColor(theme4); setTheme(theme4); }} >Theme-4</button>
-                  </li>
-                  <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    <button onClick={() => { setBgColor(theme5); setTheme(theme5); }} >Theme-5</button>
-                  </li>
-                </ul>
-              </div></div></div>
+        {/* Themes Active and Link */}
+        <div className="flex my-2" >
+          {/* Theme Dropdown and Save  */}
           <div>
-            <button className="bg-cyan-600 hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={() => {
-              setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`.toLowerCase());
-              sendLink();
-              setUnique(1)
-            }}
-            >Save</button>
-            <Link
-              href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`}>
-              <a target="_blank"> {`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase()}</a>
-            </Link>
+
+            <span className="flex items-center">
+              <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mx-2"></span>
+              <span className="text-base font-semibold mr-4 text-gray-700">{themeName} </span>
+            </span>
+          </div>
+
+
+          {/* Link */}
+          <div className="flex items-center justify-end space-x-1 mr-2 sm:space-x-2 ml-auto">
+            <span> Click here</span>
+            <span className="text-cyan-800 underline">
+              <Link href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`}>
+               <a target="_blank"> {`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase()}</a></Link>
+            </span>
+
           </div>
 
         </div>
 
+        {/* Themes Selection*/}
+        <div className="flex" >
+          <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
+            {language?.propertysummary}
+          </h6>
+          <div className="flex items-center justify-end space-x-1  sm:space-x-2 ml-auto">
+            <div>
+              <button onClick={() => { setThemes(!themes) }} className="text-cyan-600 sm:text-xs bg-white hover:bg-gray-50 
+                    focus:ring-4 focus:outline-none focus:ring-gray-200 font-semibold rounded-lg text-sm px-4 py-2.5 
+                         text-center inline-flex items-center"
+                      type="button">Select Theme <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none"
+                  stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
 
-        <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-          {language?.propertysummary}
-        </h6>
-        <div className={unique === 1 ? "block" : "hidden"} >
-          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-              <div className="bg-white rounded-lg shadow relative">
-                <div className="flex items-start justify-between p-5 border-b rounded-t">
+              <div className={themes === true ? 'block' : 'hidden'}>
+                <div className="z-10 w-40 absolute bg-white rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700">
+                  <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
+                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <button onClick={() => { setBgColor(theme1); setTheme(theme1); setThemeName("Theme-1");setThemes(!themes) }} >Theme-1</button>
+                    </li>
+                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <button onClick={() => { setBgColor(theme2); setTheme(theme2); setThemeName("Theme-2"); setThemes(!themes) }} >Theme-2</button>
+                    </li>
+                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <button onClick={() => { setBgColor(theme3); setTheme(theme3); setThemeName("Theme-3"); setThemes(!themes) }} >Theme-3</button>
+                    </li>
+                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <button onClick={() => { setBgColor(theme4); setTheme(theme4); setThemeName("Theme-4"); setThemes(!themes) }} >Theme-4</button>
+                    </li>
+                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                      <button onClick={() => { setBgColor(theme5); setTheme(theme5); setThemeName("Theme-5"); setThemes(!themes) }} >Theme-5</button>
+                    </li>
+                  </ul>
+                </div></div></div>
 
+            <div>
+              <button className="bg-cyan-600 text-sm text-center hover:bg-cyan-700 text-white mr-2 py-2 px-4 rounded" onClick={() => {
+                setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`.toLowerCase());
+                sendLink();
+              }}
+              >Save</button>
 
-                  unique page address is https://hangul-v3.herokuapp.com/{uri}
-                  <br /><button onClick={() => setUnique(0)}>close</button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
+
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">

@@ -81,7 +81,7 @@ function PropertySummary() {
             setThemeName("Theme 5");
             break;
           default: setThemeName(response.data.theme_id)
-        }
+}
         logger.info("url  to fetch property details hitted successfully")
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });

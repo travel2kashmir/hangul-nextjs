@@ -391,3 +391,10 @@ function Scaffold() {
 }
 
 export default Scaffold
+Scaffold.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

@@ -11,7 +11,9 @@ import Router, { useRouter } from "next/router";
 const logger = require("../../services/logger");
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "../../components/Button"
+import Button from "../../components/Button";
+import Footer from '../../components/Footer';
+import Loader from "../../components/loader";
 var language;
 var currentUser;
 var currentProperty;
@@ -29,6 +31,7 @@ function PropertySummary() {
   const [themeName, setThemeName] = useState()
   const [bgColor, setBgColor] = useState(theme1)
   const [uri, setUri] = useState("")
+  const [visible,setVisible]=useState(0) 
 
   /** Router for Redirection **/
   const router = useRouter();
@@ -65,19 +68,19 @@ function PropertySummary() {
           case "bg-sky-50":
             setThemeName("Theme 1");
             break;
-          case "bg-lime-100":
+          case "bg-lime-50":
             setThemeName("Theme 2");
             break;
-          case "bg-rose-100":
+          case "bg-rose-50":
             setThemeName("Theme 3");
             break;
-          case "bg-orange-100":
+          case "bg-orange-50":
             setThemeName("Theme 4");
             break;
-          case "bg-indigo-100":
+          case "bg-indigo-50":
             setThemeName("Theme 5");
             break;
-          default: <></>
+          default: setThemeName(response.data.theme_id)
         }
         logger.info("url  to fetch property details hitted successfully")
       })
@@ -100,7 +103,7 @@ function PropertySummary() {
         .catch((error) => { logger.error("url to fetch property details, failed") });
     }
     if (allHotelDetails.length === 0) fetchHotelDetails();
-    if (allHotelDetails.length != 0) initialtheme();
+    if (allHotelDetails.length != 0){initialtheme();setVisible(1)} 
   }, [allHotelDetails]);
 
   const sendLink = () => {
@@ -138,6 +141,8 @@ function PropertySummary() {
 
   return (
     <div>
+      <div className={visible===0?'block':'hidden'}><Loader/></div>
+    <div className={visible===1?'block':'hidden'}>
       <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
       {/* Body */}
@@ -697,6 +702,15 @@ function PropertySummary() {
         draggable
         pauseOnHover />
     </div>
+    <Footer/>
+    </div>
   );
 }
 export default PropertySummary;
+PropertySummary.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

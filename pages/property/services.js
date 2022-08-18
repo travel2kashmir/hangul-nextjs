@@ -421,3 +421,10 @@ function Services() {
 }
 
 export default Services
+Services.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+    }

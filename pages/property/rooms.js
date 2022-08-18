@@ -238,3 +238,10 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 )
 }
 export default Rooms
+Rooms.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

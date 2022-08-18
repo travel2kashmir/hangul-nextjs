@@ -347,4 +347,10 @@ const fetchBasicDetails = async () => {
   )
 }
 
-
+BasicDetails.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

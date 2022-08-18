@@ -426,3 +426,10 @@ function Address() {
 }
 
 export default Address;
+Address.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

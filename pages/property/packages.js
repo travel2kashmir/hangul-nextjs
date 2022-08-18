@@ -202,3 +202,10 @@ function Packages() {
 }
 
 export default Packages
+Packages.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+    }

@@ -11,12 +11,15 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Router from "next/router";
+import Footer from '../../components/Footer';
+import Loader from "../../components/loader";
 var language;
 var currentProperty;
 var  currentPackageDetails;
 const logger = require("../../services/logger");
 
 function Allroombundles() {
+  const [visible,setVisible]=useState(0) 
   const[gen,setGen] = useState([])
   const [allBundles, setAllBundles] = useState([])
   const [deleteBundle, setDeleteBundle] = useState(0)
@@ -65,6 +68,7 @@ function Allroombundles() {
       genData.push(temp)
     })
     setGen(genData);
+    setVisible(1)
     }
     })
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
@@ -110,7 +114,8 @@ const addRoomBundle = async () => {
          
  
   return (
-    <>
+    <><div className={visible===0?'block':'hidden'}><Loader/></div>
+    <div className={visible===1?'block':'hidden'}>
      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
@@ -228,8 +233,17 @@ const addRoomBundle = async () => {
         draggable
         pauseOnHover />
     </div>
+    <Footer/>
+    </div>
     </>
   )
 }
 
 export default Allroombundles
+Allroombundles.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

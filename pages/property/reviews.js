@@ -174,3 +174,10 @@ function Reviews() {
 }
 
 export default Reviews
+Reviews.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

@@ -55,8 +55,7 @@ function Signin() {
   var language;
   if (locale === "en") {
     language = english
-
-  }
+}
   if (locale === "ar") {
     language = arabic
   }
@@ -318,7 +317,6 @@ function Signin() {
     </div>
   );
 }
-
 export default Signin;
 
 Signin.getLayout = function PageLayout(page) {
@@ -327,6 +325,4 @@ Signin.getLayout = function PageLayout(page) {
       {page}
     </>
   )
-
-
 }

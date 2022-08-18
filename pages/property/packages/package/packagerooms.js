@@ -8,6 +8,7 @@ import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
 import Footer from "../../../../components/Footer";
+import Loader from "../../../../components/loader";
 import Sidebar from '../../../../components/Sidebar';
 import Header from '../../../../components/Header'
 import Router from "next/router";
@@ -21,6 +22,7 @@ var id=[];
 var currentPackage;
 
 function Packagerooms() {
+  const [visible,setVisible]=useState(0) 
     const [allRooms, setAllRooms] = useState([])
     const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
     const[room,setRoom]= useState([])
@@ -56,7 +58,7 @@ function Packagerooms() {
        ((response) => {
        logger.info("package success");
        setCurrentPackageRates(response.data)
-       })
+        })
        .catch((error) => {
         logger.info("Delete error")
        })
@@ -71,6 +73,7 @@ function Packagerooms() {
           });
           setAllRooms(response.data);
           console.log(JSON.stringify(allRooms));
+          setVisible(1)
         } catch (error) {
           if (error.response) {
           } else {
@@ -208,7 +211,8 @@ function Packagerooms() {
       }
     }
   return (
-    <>
+    <><div className={visible===0?'block':'hidden'}><Loader/></div>
+    <div className={visible===1?'block':'hidden'}>
     <Header Primary={english?.Side2}/>
     <Sidebar  Primary={english?.Side2}/>
     <div id="main-content"
@@ -312,7 +316,7 @@ function Packagerooms() {
         pauseOnHover />
     </div>
     <Footer/>
-      </>
+     </div> </>
  
   )
 }

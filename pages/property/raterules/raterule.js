@@ -11,6 +11,7 @@ import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router'
 const logger = require("../../../services/logger");
+
 var currentraterule;
 var language;
 var currentProperty;
@@ -79,14 +80,11 @@ function Raterule() {
          "otherfees_amount": allUserRateDetails.otherfees_amount,
          "expiration_time": toTimestamp(allUserRateDetails.expiration_time),
          "charge_currency": allUserRateDetails.charge_currency,
-
-     }
-     alert("final_data" +JSON.stringify(final_data))
+  }
     const url = '/api/rate_rule/conditional_rate'
      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      
          ((response) => {
-          alert(JSON.stringify(response.data))
              toast.success("User Rate Condition Updated Successfully!", {
                  position: "top-center",
                  autoClose: 5000,
@@ -101,7 +99,7 @@ function Raterule() {
              
          })
          .catch((error) => {
-          alert(JSON.stringify(response.error))
+       
             toast.error("User Rate Condition Error!", {
                  position: "top-center",
                  autoClose: 5000,
@@ -135,7 +133,7 @@ function Raterule() {
                draggable: true,
                progress: undefined,
              });
-             submitRateMod(); 
+            
              Router.push("./raterule");
            
        })
@@ -244,7 +242,7 @@ function Raterule() {
         </ol>
       </nav>
 
-    <div className="bg-white hidden shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+    <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           Rate Condition
         </h6>
@@ -327,8 +325,7 @@ function Raterule() {
               </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
-                
-                 
+             
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -494,8 +491,23 @@ function Raterule() {
                       </select>
                     </div>
                   </div>
-                  <div className="w-full lg:w-10/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
+                  <div>
+      <label className="block text-gray-600" htmlFor="Multiselect">Multiselect</label>
+      <div className="relative flex w-full">
+        <select
+          className="block w-full p-3 border border-gray-300 rounded-sm cursor-pointer focus:outline-none"
+          multiple>
+          <option value="1">super admin</option>
+          <option value="2">admin</option>
+          <option value="3">writer</option>
+          <option value="4">user</option>
+        </select>
+      </div>
+    </div>
+
+
+
+
               <div className="w-full lg:w-2/12 px-4">
                 <div className="relative w-full ml-4 mb-4">
                   <button
@@ -510,7 +522,7 @@ function Raterule() {
           </div>
         </div>
       </div>
-      <div className="bg-white hidden shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
+      <div className="bg-white  shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
           Discount(Rate Eligibility)
         </h6>
@@ -537,7 +549,7 @@ function Raterule() {
                   <div className="w-full lg:w-4/12 ">
                     <div className="relative w-full mb-3">
                     <select
-                        className="shadow-sm bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        className="shadow-sm bg-gray-50 mb-1.5 mborder border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -584,9 +596,9 @@ function Raterule() {
         </div>
 
    {/** Rate Modification **/}
-        <div className="bg-white shadow hidden\ rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
+        <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
       <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-         Rate Modification
+         Rate Modification {JSON.stringify(allUserRateDetails)}
         </h6>
         <div className="flex flex-wrap">  
               <div className="w-full lg:w-3/12 px-1">

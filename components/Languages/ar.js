@@ -54,6 +54,65 @@ export default {
     label: 'التالي',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
+
+
+"ContactCols":{
+  col1 : "نوع الاتصال",
+  col2 : "بيانات المتصل"
+ },
+   
+ "common":{
+ Status:"الحالة",
+ Action: "أجراءات",
+ Edit: "تعديل",
+ Delete:"حذف",
+ Add:"يضيف",
+ Search:"بحث",
+ Previous:"السابق",
+ Next:"التالي",
+ Showing: "عرض",
+ Of:"من",
+ Active:"نشيط",
+ Inactive:"غير نشط",
+ Import:"غير نشط",
+ Save:"غير نشط",
+ Cancel:"إلغاء"
+ },
+
+  "AdditionalServicesCols":{
+    name:"خدمات إضافية",
+   col1 : "اسم الخدمة",
+   col2 : "تفاصيل الخدمة", 
+  },
+  
+  "ServicesCols":{
+    name:"خدمات",
+   col1 : "اسم الخدمة",
+   col2 : "تفاصيل الخدمة", 
+  },
+  
+  "RoomCols":{
+    name:"غرف",
+   col1 : "اسم الغرفة",
+   col2 : "نوع الغرفة", 
+  },
+  "PackageCols":{
+    name:"الحزم",
+   col1 : "اسم الحزمة",
+    
+  },
+  "MilesCols":{
+    name:"أميال الحزمة",
+   col1 : "عدد الأميال",
+   col2 : "مزود الأميال",
+    
+  },
+  "EliteCols":{
+    name:"مكافآت النخبة",
+   col1 : "إسم البرنامج",
+   col2 : "مستوى البرنامج",
+    
+
   
 "DeleteContact" :{
    label: "  اتصل  إحذف",
@@ -263,6 +322,8 @@ export default {
     contact: "اتصل",
     gallery: "صالة عرض",
     reviews: "الاستعراضات",
+    roombundle:"حزم الغرف",
+    raterules:"قواعد معدل",
     services: "خِدْمة",
     rooms: "غرف",
     packages: "الحزم",
@@ -389,7 +450,7 @@ export default {
     image:'تَصَوُّر ',
     titl:'عَنْوَنَ',
     upload:'تَحْميل'
-
+  }
   
   };
   

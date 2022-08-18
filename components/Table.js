@@ -3,9 +3,8 @@ import React, { useState, useMemo } from "react";
 const Table = (args) => {
     const itemsPerPage = 4;
     const [page, setPage] = useState(1);
-    const [view, setView] = useState(0);
     const [viewDel, setViewDel] = useState(0);
-    const [modified, setModified] = useState({});
+    const [flag, setFlag] = useState([]);
 
     const [update, setUpdate] = useState({
         "edit": 0,
@@ -76,7 +75,7 @@ const Table = (args) => {
             <div className="mx-4">
                 <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{args?.cols?.name}</h1>
                 <div className="sm:flex">
-                    <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
+                    <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
                             <label htmlFor="users-search" className="sr-only">{args?.common?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
@@ -104,7 +103,7 @@ const Table = (args) => {
                             </span>
                         </div>
                     </div>
-                    {args?.cols?.name != "Services" ?
+                    {args?.name != "Services" ?
                         <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
             font-semibold
@@ -127,7 +126,7 @@ const Table = (args) => {
                             <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
                                 <thead className="bg-gray-100">
                                     <tr>
-                                        {args?.cols?.name != "Services" ?
+                                        {args?.name != "Services" ?
                                             <th scope="col" className="p-4">
                                                 <div className="flex items-center">
                                                     <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
@@ -140,7 +139,7 @@ const Table = (args) => {
                                             </th> : <></>}
                                         <th scope="col"
                                             className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col1}</th>
-                                        {args?.cols?.name != "Packages" ?
+                                        {args?.name != "Packages" ?
                                             <th scope="col"
                                                 className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col2}</th>
                                             :
@@ -159,26 +158,31 @@ const Table = (args) => {
                                             {update?.edit === 1 && update?.id === idx ?
                                                 <>
                                                     <tr className="hover:bg-gray-100">
-                                                        {args?.cols?.name != "Services" ?
+                                                        {args?.name != "Services" ?
                                                             <td className="p-4 w-4">
                                                                 <span className="flex items-center">
                                                                     <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                                                                     <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                 </span>
                                                             </td> : <></>}
-                                                        {(args?.cols?.name != "Additional Services" && args?.cols?.name != "Package Miles" && args?.cols?.name != "Elite Rewards" )?
-                                                            <td className="data p-4 text-left text-sm font-semibold  ">
-                                                                {item?.name}</td> :
-                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                        {(args?.name != "Additional Services" && args?.name != "Package Miles" && args?.name != "Elite Rewards" )?
+
+                                                         
+                                                                 <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                                {item?.name}</td> 
+                                                                :
+                                                           
+                                                                <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+
                                                                 <input type="text"
-                                                                    onChange={(e) => setEditContact({ ...editContact, name: e.target.value })} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
+                                                                    onChange={(e) => setEditContact({ ...editContact, name: e.target.value },  setFlag(1))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
                                                                     defaultValue={item?.name}></input> </td>}
 
-                                                        {args?.cols?.name != "Services" ?
+                                                        {args?.name != "Services" ?
 
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
                                                                 <input type="text"
-                                                                    onChange={(e) => setEditContact({ ...editContact, type: e.target.value })} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
+                                                                    onChange={(e) => setEditContact({ ...editContact, type: e.target.value }, setFlag(1))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
                                                                     defaultValue={item?.type}></input> </td>
                                                             :
                                                             <td className="data p-4 text-left text-sm font-semibold  ">
@@ -188,15 +192,16 @@ const Table = (args) => {
 
                                                                             <label htmlFor={`default-toggle${idx}`} className="inline-flex relative items-center cursor-pointer">
                                                                                 <input type="checkbox" value={editContact?.type} checked={editContact.type === "yes"}
-                                                                                    onChange={(e) => (setEditContact({ ...editContact, type: editContact.type === "yes" ? "no" : "yes" }))}
+                                                                                    onChange={(e) => (setEditContact({ ...editContact, type: editContact.type === "yes" ? "no" : "yes" }), setFlag(1))}
                                                                                     id={`default-toggle${idx}`} className="sr-only peer" />
                                                                                 <div
                                                                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
-                                            dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
-                                            peer-checked:after:translate-x-full 
-                                            peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                            after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
-                                            after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              rounded-full peer dark:bg-gray-700 
+                 peer-checked:after:translate-x-full 
+                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+
                                                                             </label>
                                                                         </div>
                                                                     </div> :
@@ -258,7 +263,7 @@ const Table = (args) => {
                                                                     
                                                                     <label htmlFor={`default${idx}`} className="inline-flex relative items-center cursor-pointer">
                                                                         <input type="checkbox" checked={editContact?.status===true} value={editContact?.status} 
-                                                                            onChange={(e) => (setEditContact({ ...editContact, status: !editContact.status }))}
+                                                                            onChange={(e) => (setEditContact({ ...editContact, status: !editContact.status }), setFlag(1))}
                                                                             id={`default${idx}`} className="sr-only peer" />
                                                                         <div
                                                                             className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
@@ -275,7 +280,8 @@ const Table = (args) => {
                                                             <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
                                                              font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
                                                               duration-150"
-                                                                onClick={() => { { setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact) }}
+                                                                onClick={() =>
+                                                                    {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact); setFlag([])}}}
                                                             >{args?.common?.Save}</button>
                                                             <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                 onClick={() => { setUpdate({ ...update, edit: 0, id: '' }) }}>{args?.common?.Cancel}</button>
@@ -284,7 +290,7 @@ const Table = (args) => {
                                                 </> :
                                                 <>
                                                     <tr>
-                                                        {args?.cols?.name != "Services" ?
+                                                        {args?.name != "Services" ?
                                                             <td className="p-4 w-4">
                                                                 <span className="flex items-center">
                                                                     <input id="checkbox-1" name={item?.id} checked={item.isChecked || false}
@@ -295,11 +301,12 @@ const Table = (args) => {
                                                                     <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                 </span>
                                                             </td> : <></>}
-                                                        <td className="data p-4 text-left text-sm font-semibold  ">
+                                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                             {item?.name}
                                                         </td>
-                                                        {args?.cols?.name === "Packages" ? <></> :
-                                                            <td className="data p-4 text-left text-sm font-semibold  ">
+                                                        {args?.name === "Packages" ? <></> :
+                                                           <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+
                                                                 {item?.type}
                                                             </td>}
                                                         {item?.status == true ?
@@ -319,9 +326,8 @@ const Table = (args) => {
                                                         {del?.delete === 1 && del?.id === idx ?
                                                             <td className="p-4 whitespace-nowrap space-x-2">
                                                                 <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white  sm:inline-flex  
-    font-semibold
-     rounded-lg text-sm px-5 py-2 text-center 
-     items-center ease-linear transition-all duration-150"
+                                                                 font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                 
                                                                     onClick={() => { { setDel({ ...del, delete: 0, id: '' }) }; args.delete(item?.id) }} >Yes, Delete</button>
                                                                 <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                     onClick={() => { setDel({ ...del, delete: 0, id: '' }) }} >{args?.common?.Cancel}</button>
@@ -329,14 +335,14 @@ const Table = (args) => {
                                                             :
                                                             <td className="p-4 whitespace-nowrap space-x-2">
                                                                
-                                                                {(args?.cols?.name != "Rooms" && args?.cols?.name != "Packages")?
+                                                                {(args?.name != "Rooms") && (args?.name != "Packages")?
 
                                                                     <div>
                                                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
                                                                             setEditContact(item);
                                                                             setUpdate({ ...update, edit: 1, id: idx })
-                                                                        }}>Edit</button>
-                                                                        {args?.cols?.name != "Services" ?
+                                                                        }}>{args?.common?.Edit}</button>
+                                                                        {args?.name != "Services" ?
                                                                             <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                                 onClick={() => {
                                                                                     setDeleteContact(item);
@@ -353,13 +359,13 @@ const Table = (args) => {
                                                                             onClick={
                                                                                 () => {
                                                                                     args.edit(item)
-                                                                                }}>Edit</button>
+                                                                                }}>{args?.common?.Edit}</button>
 
                                                                         <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                             onClick={() => {
                                                                                 setDeleteContact(item);
                                                                                 setDel({ ...del, delete: 1, id: idx })
-                                                                            }} >Delete</button>
+                                                                            }} >{args?.common?.Delete}</button>
                                                                     </div>
 
                                                                 }
@@ -403,14 +409,14 @@ const Table = (args) => {
                         }
                     }} className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
                         <svg className="-ml-1 mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                        Previous </button>
+                       {args?.common?.Previous}</button>
                     <button onClick={() => {
                         if (page < Math.ceil(args?.gen?.length / itemsPerPage)) {
                             setPage(page + 1);
 
                         }
                     }} className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
-                        Next
+                       {args?.common?.Next}
                         <svg className="-mr-1 ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                     </button>
                 </div>

@@ -8,6 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import Loader from "../../components/loader";
+import Footer from '../../components/Footer';
 const logger = require("../../services/logger");
 var language;
 var currentProperty;
@@ -16,7 +18,7 @@ import Router from 'next/router'
 
 function Propertyxml() {
   const [hotelXML, setHotelXML] = useState();
-
+  const [visible,setVisible]=useState(0) 
   /** Use Effect to fetch details from the Local Storage **/
   useEffect(()=>{  
     const firstfun=()=>{
@@ -65,6 +67,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
           headers: { "Content-Type": "application/xml; charset=utf-8" },
         });
         setHotelXML(response.data);
+        setVisible(1)
        
       } catch (error) {
         if (error.response) {
@@ -81,6 +84,8 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 
   return (
     <div>
+      <div className={visible===0?'block':'hidden'}><Loader/></div>
+<div className={visible===1?'block':'hidden'}>
       <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
       <div
@@ -193,7 +198,16 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         pauseOnHover
       />
     </div>
+    <Footer/>
+    </div>
   );
 }
 
 export default Propertyxml   
+Propertyxml.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

@@ -701,8 +701,8 @@ function PropertySummary() {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+        <Footer/>
     </div>
-    <Footer/>
     </div>
   );
 }

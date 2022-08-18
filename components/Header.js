@@ -7,8 +7,7 @@ import Link from 'next/link'
 var language;
 
 function Navbar(args) {
-
-  useEffect(()=>{
+ useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
        

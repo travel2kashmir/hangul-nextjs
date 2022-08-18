@@ -6,8 +6,7 @@ import Link from 'next/link'
 var language;
 
 const Sidebar = (args) => {
- 
-  useEffect(()=>{
+ useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language");

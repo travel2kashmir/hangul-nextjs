@@ -8,10 +8,13 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
 const logger = require("../../services/logger");
+import Footer from '../../components/Footer';
+import Loader from '../../components/loader';
 var language;
 var currentProperty;
 
 function Roomsxml() {
+    const [visible,setVisible]=useState(0) 
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -45,6 +48,7 @@ function Roomsxml() {
              const url = `/api/rooms/${currentProperty.property_id}`
               const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
             setAllRooms(response.data) 
+            setVisible(1)
           } 
           catch (error) {
               if (error.response) {
@@ -58,7 +62,8 @@ function Roomsxml() {
       ,[])
     
   return (
-    <>
+    <><div className={visible===0?'block':'hidden'}><Loader/></div>
+    <div className={visible===1?'block':'hidden'}>
      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div  id="main-content"
@@ -186,9 +191,17 @@ function Roomsxml() {
                 </div>
             </div>
         </div>
-        </>
+       <Footer/>
+       </div> </>
     )
 
 }
 
 export default Roomsxml
+Roomsxml.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+    }

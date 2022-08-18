@@ -8,6 +8,7 @@ import Sidebar from '../../../components/Sidebar'
 import Header from '../../../components/Header'
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
+import Loader from "../../../components/loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 var language;
@@ -18,7 +19,7 @@ import Router from 'next/router'
 const logger = require("../../../services/logger");
 
 function Room() {
-
+  const [visible,setVisible]=useState(0) 
    /** Use Effect to fetch details from the Local Storage **/
    useEffect(()=>{  
     const firstfun=()=>{
@@ -47,6 +48,7 @@ firstfun();
 }  
  
   const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [disp, setDisp] = useState(0);
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomimages, setRoomimages] = useState({})
@@ -142,7 +144,8 @@ firstfun();
     console.log("url " +url)
     axios.get(url)
     .then((response)=>{setRoomDetails(response.data);
-    logger.info("url  to fetch room hitted successfully")})
+    logger.info("url  to fetch room hitted successfully")
+  setVisible(1)})
     .catch((error)=>{logger.error("url to fetch room, failed")}); 
   }
 
@@ -269,6 +272,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
         });
         fetchImages(); 
         fetchDetails();
+       
       Router.push("./room");
       })
       .catch((error) => {
@@ -313,8 +317,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           draggable: true,
           progress: undefined,
         });
+        setDisp(1);
       fetchDetails(); 
-    Router.push("./room");
      setAllRoomDetails([])
       })
       .catch((error) => {
@@ -378,7 +382,9 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
   
   return (
     <>
-    <Header  Primary={english?.Side1}/>
+    <div className={visible===0?'block':'hidden'}><Loader/></div>
+<div className={visible===1?'block':'hidden'}>
+<Header  Primary={english?.Side1}/>
     <Sidebar Primary={english?.Side1}/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -422,7 +428,23 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       
      
           {/* Room Description */}
+        <div id='0' className={disp===0?'block':'hidden'}>
           <div className="bg-white shadow rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Description</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Gallery</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Rates</div>
+            </div>
+        </div>
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {language?.room} {language?.description}
             </h6>
@@ -657,15 +679,33 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
              
-                <Button Primary={language?.Update}     onClick={submitRoomDescriptionEdit} /> 
+                <Button Primary={language?.Next} onClick={submitRoomDescriptionEdit} /> 
               </div> 
                 </div>
               </div>
             </div>
           </div>
+         </div>
 
           {/* Room Gallery */}
+          <div id='1' className={disp===1?'block':'hidden'}>
           <div className="bg-white shadow rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Description</div>
+            </div>
+          
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Room Gallery </div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Rates</div>
+            </div>
+           
+        </div>
           <h6 className="text-base  flex leading-none mb-2 pt-2 font-semibold text-gray-800 ">
                  {language?.room}  {language?.gallery}
                 </h6>
@@ -729,8 +769,11 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                 )
               })}
             </div>
+            <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(2)}} />
+                    </div>
           </div>
-       
+       </div>
       
       {/* Room Services Table */}
       <div className="bg-white hidden shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3">
@@ -817,7 +860,26 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       </div>
 
       {/* Room Rates*/}
+      <div id='2' className={disp===2?'block':'hidden'}>
       <div className="bg-white shadow rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
+      <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Description</div>
+            </div>
+          
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+               Room Gallery</div>
+            </div>
+           
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Rates</div>
+            </div>
+            
+        </div>
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {language?.room} {language?.rates} 
             </h6>
@@ -962,7 +1024,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
             </div>
           </div>
           </div>
-       
+         
+       </div>
      
        {/* Modal Image Enlarge */}
        <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
@@ -1176,7 +1239,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
 
     </div>
     <Footer/>
-    </>
+</div>
+   </>
   )
 }
 

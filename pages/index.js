@@ -58,6 +58,7 @@ function Signin() {
 }
   if (locale === "ar") {
     language = arabic
+    console.log(JSON.stringify(language.title))
   }
   if (locale === "fr") {
     language = french

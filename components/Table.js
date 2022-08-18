@@ -276,12 +276,20 @@ const Table = (args) => {
                                                             </div>
                                                         </td>
                                                         <td className="p-4 whitespace-nowrap space-x-2">
-                                                            <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
-                                                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
-                                                              duration-150"
-                                                                onClick={() =>
-                                                                    {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact); setFlag([])}}}
-                                                            >{args?.common?.Save}</button>
+                                                        {flag.length === 0 ?
+                                                           <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
+                                                           font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
+                                                            duration-150 cursor-not-allowed opacity-70 " 
+                                                              
+                                                          >{args?.common?.Save} </button>
+                                                           :
+                                                           <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
+                                                           font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
+                                                            duration-150"
+                                                              onClick={() =>
+                                                                  {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact); setFlag([])}}}
+                                                          >{args?.common?.Save}</button> }
+                                                         
                                                             <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                 onClick={() => { setUpdate({ ...update, edit: 0, id: '' }) }}>{args?.common?.Cancel}</button>
                                                         </td>

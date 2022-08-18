@@ -103,7 +103,7 @@ function AdditionalServices() {
                     progress: undefined,
                 });
                 fetchAdditionalServices();
-                Router.push("./services");
+                Router.push("./additionalservices");
                 setModified([])
             })
             .catch((error) => {

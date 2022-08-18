@@ -13,7 +13,6 @@ import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router';
-import { all } from 'langs';
 var i = 0;
 var j = 1;
 var res =[]
@@ -23,9 +22,11 @@ var currentraterule;
 var language;
 var currentProperty;
 var language_data=[];
+var final_language_data=[];
 var country_data=[];
-var device_data=[];
-var program_data=[];
+var final_country_data=[];
+var final_device_data=[];
+var final_program_data=[];
 
 function Addraterule() {
     const [allUserRateDetails, setAllUserRateDetails] = useState([])
@@ -33,21 +34,26 @@ function Addraterule() {
     const [rateModificationId, setRateModificationId] = useState([])
     const [rateIneligiblityId, setRateIneligiblityId] = useState([])
     const [userRateConditionId, setUserRateConditionId] = useState([])
+    const [conditionalRateId, setConditionalRateId] = useState([])
     const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
     const [countryCheck, setCountryCheck] = useState(false);
     const [languageCheck, setLanguageCheck] = useState(false);
     const [deviceCheck, setDeviceCheck] = useState(false);
+    const [basicFlag,setBasicFlag]=useState([])
     const [programCheck, setProgramCheck] = useState(false);
     const [finalLang,setFinalLang]=useState([])
     const [finalCountry,setFinalCountry]=useState([])
     const [finalDevice,setFinalDevice]=useState([])
     const [finalProgram,setFinalProgram]=useState([])
     const [percentageCheck, setPercentageCheck] = useState(false);
+    const [userSignedIn, setUserSignedIn] = useState(false);
+    const [isDomestic, setIsDomestic] = useState(false);
     const [signedCheck, setSignedCheck] = useState(false);
-    const [disp, setDisp] = useState(0);
+    const [disp, setDisp] = useState(2);
     const [countryData,setCountryData]=useState([])
     const [programs, setPrograms] = useState([])
     const [languageData,setLanguageData]=useState([])
+    const [rooms,setRooms]=useState([])
 
     useEffect(() => {
         const firstfun = () => {
@@ -66,8 +72,7 @@ function Addraterule() {
             currentraterule = localStorage.getItem('RateRuleId');
             /** Current Property Details fetched from the local storage **/
             currentProperty = JSON.parse(localStorage.getItem("property"));
-            
-          }
+         }
         }
         firstfun();
         Router.push("./addraterule")
@@ -77,8 +82,25 @@ function Addraterule() {
 
       useEffect(() => {
        fetchPrograms();
+       fetchRooms();
     }, [])
 
+
+    const fetchRooms = async () => {
+      try {
+        var genData=[];
+          const url = `/api/rooms/${currentProperty.property_id}`
+          const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+         setRooms(response.data)
+      }
+      catch (error) {
+  
+          if (error.response) {
+              } 
+          else {
+          }
+      }
+  }
      // Rates Submit
       const submitRateAdd = () => {
         var time;
@@ -89,7 +111,6 @@ function Addraterule() {
           return dt / 1000;
         }
         const final_data = {
-          "conditional_rate_id": allUserRateDetails?.conditional_rate_id,
           "base_rate_currency": allUserRateDetails?.base_rate_currency,
           "base_rate_amount": allUserRateDetails.base_rate_amount,
           "tax_amount": allUserRateDetails.tax_amount,
@@ -106,35 +127,66 @@ function Addraterule() {
           "status": true
         }
         alert(JSON.stringify(final_data))
-        // const url = '/api/rate_rule/conditional_rate'
-        // axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+        const url = '/api/rate_rule/conditional_rate'
+        axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     
-        //   ((response) => {
-        //     toast.success("User Rate Condition added Successfully!", {
-        //       position: "top-center",
-        //       autoClose: 5000,
-        //       hideProgressBar: false,
-        //       closeOnClick: true,
-        //       pauseOnHover: true,
-        //       draggable: true,
-        //       progress: undefined,
-        //     });
+          ((response) => {
+            toast.success("User Rate Condition added Successfully!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
             
-        //     Router.push("./addraterule");
+
+            const data = {
+              "conditional_rate_id": response.data.conditional_rate_id,
+              "room_id": allUserRateDetails?.room_id,
+              
+            }
+            const url = '/api/rate_rule/conditional_rate'
+            axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+        
+              ((response) => {
+                toast.success("User Rate Condition added Successfully!", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+                
+          })
+          .catch((error) => {
     
-        //   })
-        //   .catch((error) => {
+            toast.error("User Rate Condition Error!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });})
+          })
+
+          .catch((error) => {
     
-        //     toast.error("User Rate Condition Error!", {
-        //       position: "top-center",
-        //       autoClose: 5000,
-        //       hideProgressBar: false,
-        //       closeOnClick: true,
-        //       pauseOnHover: true,
-        //       draggable: true,
-        //       progress: undefined,
-        //     });
-        //   })
+            toast.error("User Rate Condition Error!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          })
     
       }
       
@@ -145,7 +197,7 @@ function Addraterule() {
           "price_multiplier": allUserRateDetails?.price_multiplier,
           "modification_name":allUserRateDetails?.program
      }
-        alert(JSON.stringify(final_data))
+       
         const url = '/api/rate_rule/rate_modification'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     
@@ -160,9 +212,8 @@ function Addraterule() {
               draggable: true,
               progress: undefined,
             });
-            setRateModificationId(response.data.rate_modification_id);
-            setDisp(1);
-           
+            setRateModificationId(response.data.rate_modification_id);   
+            
     
           })
           .catch((error) => {
@@ -185,17 +236,17 @@ function Addraterule() {
         const final_data = {
           "rate_rule":[{
            "rate_ineligiblity_id": rateIneligiblityId,
-           "rate_modification_id": rateModificationId
+           "rate_modification_id": rateModificationId,
+           "property_id": currentProperty?.property_id,
+           "status": true,
+           "rate_rule_name": allUserRateDetails?.program
         }
         ] 
          }
-         alert(JSON.stringify(final_data))
          const url = '/api/rate_rule/rate_rule'
          axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-     
-           ((response) => {
-     
-             toast.success("User Rate Modification Updated Successfully!", {
+        ((response) => {
+           toast.success("Rate Rule Successfully!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -205,12 +256,12 @@ function Addraterule() {
                progress: undefined,
              });
             setRateRuleId(response.data.rate_rule_id);
-            
-     
+           alert(JSON.stringify(rateRuleId))
+           setDisp(2);
            })
            .catch((error) => {
      
-             toast.error("User Rate Modification Error!", {
+             toast.error("Rate Rule Error!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -232,13 +283,12 @@ function Addraterule() {
         }
         ] 
          }
-         alert(JSON.stringify(final_data))
-         const url = '/api/rate_rule/rate_rule_rate_condition_link'
+        const url = '/api/rate_rule/rate_rule_rate_condition_link'
          axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      
            ((response) => {
      
-             toast.success("User Rate Modification Updated Successfully!", {
+             toast.success("Rate Rule Link Successfully!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -248,12 +298,12 @@ function Addraterule() {
                progress: undefined,
              });
             setRateRuleId(response.data.rate_rule_id);
-            
+            setDisp(1);
      
            })
            .catch((error) => {
      
-             toast.error("User Rate Modification Error!", {
+             toast.error("Rate Rule Link Error!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -269,12 +319,10 @@ function Addraterule() {
       // Rate Discount Submit
       const submitDiscountAdd = () => {
         const final_data = {
-           "ineligiblity_type": allUserRateDetails?.ineligibility_type,
-           "ineligibility_reason": allUserRateDetails?.program
-         
+          "ineligiblity_type": allUserRateDetails?.ineligibility_type,
+           "ineligiblity_reason": allUserRateDetails?.program  
         }
-        alert(JSON.stringify(final_data))
-        const url = "/api/rate_rule/rate_ineligiblity ";
+      const url = "/api/rate_rule/rate_ineligiblity ";
           axios
             .post(url, final_data, { 
               header: { "content-type": "application/json" } })
@@ -288,8 +336,8 @@ function Addraterule() {
                 draggable: true,
                 progress: undefined,
               });
-              setRateIneligiblityId(response.data.rate_ineligiblity_id);
-              submitRateModAdd();
+              setRateIneligiblityId(response.data.user_rate_ineligiblity_id);
+              setDisp(1);
             })
       
             .catch((error) => {
@@ -305,6 +353,7 @@ function Addraterule() {
             });
         
         };
+        
       //Rate Condition Submit
         const submitRateConditionAdd = () => {
           const final_data = {
@@ -316,8 +365,7 @@ function Addraterule() {
           }
           ] 
           }
-          alert(JSON.stringify(final_data))
-          const url = "/api/rate_rule/user_rate_condition";
+         const url = "/api/rate_rule/user_rate_condition";
             axios.post(url, final_data, { 
                 header: { "content-type": "application/json" } })
               .then((response) => {
@@ -330,8 +378,8 @@ function Addraterule() {
                   draggable: true,
                   progress: undefined,
                 });
-             setUserRateConditionId(response.data.user_rate_condition_id)
-             
+             setUserRateConditionId(response.data?.user_rate_condition_id)
+            
               }
               )
         
@@ -348,6 +396,7 @@ function Addraterule() {
               });
           
           };
+
           //Language Submit
           const submitLanguageAdd = () => { 
             const final_data = { "user_rate_language": finalLang }
@@ -366,7 +415,7 @@ function Addraterule() {
                     progress: undefined,
                   });
                  setFinalLang([]) 
-                  Router.push("./raterule");
+                 final_language_data=[]
                 })
           
                 .catch((error) => {
@@ -400,7 +449,7 @@ function Addraterule() {
                     progress: undefined,
                   });
                   setFinalCountry([])
-                  Router.push("./raterule");
+                  final_country_data=[]
                 })
           
                 .catch((error) => {
@@ -419,13 +468,12 @@ function Addraterule() {
            // Device Edit Submit
             const submitDeviceAdd = () => {
               const final_data = { "user_rate_device": finalDevice }
-              alert(JSON.stringify(final_data))
-              const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
+             const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
                 axios
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("Devices Updated Successfully!", {
+                    toast.success("Devices Added Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -435,7 +483,7 @@ function Addraterule() {
                       progress: undefined,
                     });
                     setDevice([])
-                    Router.push("./addraterule");
+                    final_device_data=[]
                   })
             
                   .catch((error) => {
@@ -469,8 +517,9 @@ function Addraterule() {
                       draggable: true,
                       progress: undefined,
                     });
+                    
                     setFinalProgram([])
-                    Router.push("./addraterule");
+                  final_program_data= []
                   })
             
                   .catch((error) => {
@@ -489,9 +538,9 @@ function Addraterule() {
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
                 const data = [{
-                  max_user_percentage:userRateDetails?.MaxUsersPercent,
-                  user_signed_in: userSign?.UserSignedIn,
-                  is_domestic: userSign?.IsDomestic,
+                  max_user_percentage:allUserRateDetails?.MaxUsersPercent,
+                  user_signed_in: userSignedIn,
+                  is_domestic: isDomestic,
                   user_rate_condition_id: userRateConditionId
               }];
               const final_data = { "user_rate_condition": data }
@@ -510,7 +559,7 @@ function Addraterule() {
                       progress: undefined,
                     });
                     setBasicFlag([])
-                    Router.push("./raterule");
+                  
                   })
             
                   .catch((error) => {
@@ -569,30 +618,29 @@ function Addraterule() {
                 user_rate_condition_id: userRateConditionId,
                 language: item?.language_code
               }
-              language_data.push(temp) } );
-              setFinalLang(language_data);
+              final_language_data.push(temp) } );
+              setFinalLang(final_language_data);
           }
         // Country
           const country = (cou) => { 
-            cou.map(item => {
+           cou.map(item => {
               var temp = {
                 user_rate_condition_id:  userRateConditionId,
-               user_country: item?.country_code
+               user_country: item.country_code
               }
-              country_data.push(temp) } );
-              setFinalCountry(country_data);
+             final_country_data.push(temp) } );
+              setFinalCountry(final_country_data);
               
           }
         //Devices
           const devices = (dev) => { 
-           alert(JSON.stringify(dev)) 
-            dev.map(item => {
+           dev.map(item => {
               var temp = {
                 user_rate_condition_id: userRateConditionId,
-                user_device: item?.user_device
+                user_device_type: item?.user_device
               }
-              device_data.push(temp) } );
-              setFinalDevice(device_data);
+              final_device_data.push(temp) } );
+              setFinalDevice(final_device_data);
               
           }
          //Programs
@@ -600,10 +648,10 @@ function Addraterule() {
             pro.map(item => {
                var temp = {
                  user_rate_condition_id: userRateConditionId,
-                 program_id: item.program_id
+                 always_eligible_membership_id: item.program_id
                }
-               program_data.push(temp) } );
-               setFinalProgram(program_data);  
+               final_program_data.push(temp) } );
+               setFinalProgram(final_program_data);  
            }
   return (
     <>
@@ -688,7 +736,7 @@ function Addraterule() {
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  Add Rate Rules
+                  Add Rate Rules {JSON.stringify(rateRuleId)}
                 </span>
               </div>
             </li>
@@ -696,9 +744,7 @@ function Addraterule() {
         </nav>
         
          {/** Rate Rule Description  **/}
-         <div id='0' className={disp===0?'block':'hidden'}>
-   
-            
+         <div id='0' className={disp===0?'block':'hidden'}>    
         <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
@@ -850,8 +896,10 @@ function Addraterule() {
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                   <Button Primary={language?.Next} onClick = {()=>{
+                 submitRateModAdd();
+                 submitRateConditionAdd();
                  submitDiscountAdd();
-                 submitRateModAdd();}}/>  
+                }}/>  
                   </div>
                 </div>
                 <div>
@@ -865,7 +913,7 @@ function Addraterule() {
          </div>
 
           {/** Rate Rule Rates  **/}
-         <div id='1' className={disp===1?'block':'hidden'}>
+         <div id='2' className={disp===2?'block':'hidden'}>
          <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
@@ -1004,7 +1052,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.amount}
+                      {language?.other} {language?.charges} {language?.amount} {JSON.stringify(rooms)}
                     </label>
                     <input
                       type="text"
@@ -1128,10 +1176,29 @@ function Addraterule() {
 
                   </div>
                 </div>
+
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="text-sm font-medium text-gray-900 block mb-2"
+                        htmlFor="grid-password">
+                       {language?.room}
+                      </label>
+                      <select
+                        onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
+                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                        <option selected >Select </option>
+                        {rooms?.map(i => {
+                          return (
+                            <option key={i} value={i.room_id}>{i.room_name}</option>)
+                        }
+                        )}
+                      </select>
+                    </div>
+                  </div>
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
                 {Button !== 'undefined' ?
-                  <Button Primary={language?.Next}  onClick={()=>{submitRateAdd();setDisp(2) }}/>
+                  <Button Primary={language?.Next}  onClick={()=>{submitRateAdd(); submitRateRuleLink(); }}/>
                   : <></>
                 }
               </div>
@@ -1142,7 +1209,7 @@ function Addraterule() {
          </div>
         
          {/** Rate Rule Conditions  **/}
-         <div id='2' className={disp===2?'block':'hidden'}>
+         <div id='1' className={disp===1?'block':'hidden'}>
          <div className="bg-white  shadow rounded-lg mx-1 px-1 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
@@ -1159,17 +1226,12 @@ function Addraterule() {
              <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
             </div>
-
-
-          </div>
+       </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
             Rate Rule Conditions
           </h6>
           <div className="flex flex-wrap">
-          
-
-                
-                <div className="w-full lg:w-6/12 px-4">
+           <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3"></div>
                 </div>
 
@@ -1322,9 +1384,9 @@ function Addraterule() {
                       <div className="form-check mx-2 my-4 form-check-inline">
 
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={allUserRateDetails?.UserSignedIn} checked={ allUserRateDetails?.UserSignedIn === true}
+                          <input type="checkbox" value={userSignedIn} 
                             onChange={(e) =>
-                              setUserSign({ ...allUserRateDetails, UserSignedIn: allUserRateDetails?.UserSignedIn === true ? false : true },setBasicFlag(1))
+                              setUserSignedIn( (!userSignedIn) ,setBasicFlag(1))
                             }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -1360,9 +1422,9 @@ function Addraterule() {
                       <div className="form-check mx-2  form-check-inline">
 
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={allUserRateDetails?.IsDomestic} checked={ allUserRateDetails?.IsDomestic === true}
+                          <input type="checkbox" value={isDomestic} 
                             onChange={(e) =>
-                              setAllUserRateDetails({ ...allUserRateDetails, IsDomestic: allUserRateDetails?.IsDomestic === true ? false : true },setBasicFlag(1))
+                              setIsDomestic((!isDomestic),setBasicFlag(1))
                             }
                             id="default" className="sr-only peer" />
                           <div
@@ -1388,6 +1450,8 @@ function Addraterule() {
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
                 <Button Primary={language?.Submit} onClick={()=>{
+                  submitAdditional();
+                  submitRateRule();
                 if(countryCheck === true){
                   submitCountryAdd();
                 }
@@ -1398,11 +1462,11 @@ function Addraterule() {
                  submitLanguageAdd(); 
                 }
                 if(programCheck === true){
-                 submitProgramAdd
+                 submitProgramAdd();
                 }
-                if(basicFlag?.length != undefined){
-                  submitAdditional();
-                }
+               
+                 
+                
                 }
               } /> 
                 : <></>
@@ -1410,6 +1474,17 @@ function Addraterule() {
             </div>
         </div>
          </div>
+          {/* Toast Container */}
+      <ToastContainer position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover />
+   
         </div></>
   )
 }

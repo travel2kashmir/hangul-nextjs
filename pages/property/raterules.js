@@ -77,6 +77,36 @@ function Raterules() {
           Router.push("./raterules/addraterule")
         }
   
+
+        const deleteRateRules = (props) => {
+          alert(JSON.stringify(props))
+          const url = `/api/rate_rule/${props}`
+          axios.delete(url).then((response) => {
+              toast.success(("Rate Rule Deleted Successfully!"), {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+              });
+              
+              Router.push("./raterules");
+          })
+              .catch((error) => {
+                  toast.error(("Rate Rule Delete Error!"), {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                  });
+              })
+      }
+
        /**Function to save Current property to be viewed to Local Storage**/
   const currentRateRule = (props ) => {
     localStorage.setItem("RateRuleId", (props.id));
@@ -158,7 +188,7 @@ function Raterules() {
 {/* Rate Rules Table */}
 <Table  gen={gen} setGen={setGen}  add={addRateRule} 
       edit={currentRateRule}
-         common={language?.common} cols={language?.RateRuleCols} name="Packages"/> 
+         common={language?.common} cols={language?.RateRuleCols}  delete={deleteRateRules} name="Packages"/> 
 
  {/* Toast Container */}
  <ToastContainer position="top-center"

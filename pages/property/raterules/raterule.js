@@ -415,7 +415,7 @@ function Raterule() {
     languageCodes.map(code => {
       var temp = {
         language_name: code.name,
-        language_code: code?.[j]
+        language_code: code?.[i]
       }
     language_data.push(temp) } );
     setLanguageData(language_data);
@@ -468,7 +468,7 @@ function Raterule() {
 
    const filterByDevices = () => {
    resDev = device.filter(el => {
-       return rateRule?.user_rate_condition?.[j]?.UserDeviceType.find(element => {
+       return rateRule?.user_rate_condition?.[i]?.UserDeviceType.find(element => {
           return element.user_device === el.user_device;
        });
     });
@@ -478,7 +478,7 @@ function Raterule() {
 
  const filterByProgram = () => {
     res = programs.filter(el => {
-     return rateRule?.user_rate_condition?.[j]?.PackageMembership.find(element => {
+     return rateRule?.user_rate_condition?.[i]?.PackageMembership.find(element => {
         return element.program_id === el.program_id;
      });
   });
@@ -487,7 +487,7 @@ function Raterule() {
 
 const filterByCountry = () => {
   resCou = countryData.filter(el => {
-   return rateRule?.user_rate_condition?.[j]?.UserCountry?.find(element => {
+   return rateRule?.user_rate_condition?.[i]?.UserCountry?.find(element => {
       return element.user_country === el.country_code;
    });
 });
@@ -496,7 +496,7 @@ Router.push('./raterule')
 
 const filterByLanguage = () => {
   resLang = languageData.filter(el => {
-    return rateRule?.user_rate_condition?.[j]?.language.find(element => {
+    return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
    });
 });
@@ -512,8 +512,8 @@ Router.push('./raterule')
        
         setRateRule(response.data);
         setAllUserRateDetails(response.data.conditional_rate)
-        setConditions(response.data.user_rate_condition?.[j])
-        setUserSign(response.data.user_rate_condition?.[j])
+        setConditions(response.data.user_rate_condition?.[i])
+        setUserSign(response.data.user_rate_condition?.[i])
         logger.info("url  to fetch raterules hitted successfully")
       })
       .catch((error) => { logger.error("url to fetch raterules, failed") });
@@ -643,7 +643,7 @@ Router.push('./raterule')
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Modification and Discount {JSON.stringify(rateRule?.user_rate_condition?.[j]?.language)}
+         Rate Modification and Discount {JSON.stringify(rateRule?.user_rate_condition?.[i]?.language)}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1048,10 +1048,7 @@ Router.push('./raterule')
                     </div> </div>
 
                   </div>
-      
-           
-          
-        </div>
+       </div>
         
         </div>
      

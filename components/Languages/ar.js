@@ -112,7 +112,7 @@ export default {
    col1 : "إسم البرنامج",
    col2 : "مستوى البرنامج",
     
-
+  },
   
 "DeleteContact" :{
    label: "  اتصل  إحذف",
@@ -457,7 +457,5 @@ export default {
     image:'تَصَوُّر ',
     titl:'عَنْوَنَ',
     upload:'تَحْميل'
-  }
-  
-  };
+ };
   

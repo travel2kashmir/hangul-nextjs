@@ -75,8 +75,9 @@ function Packages() {
         , [])
 
     /* Delete Package Function*/
-    const deletePackages = () => {
-        const url = `/api/package/${actionPackage?.id}`
+    const deletePackages = (props) => {
+        alert(JSON.stringify(props))
+        const url = `/api/package/${props}`
         axios.delete(url).then((response) => {
             toast.success(("Package Deleted Successfully!"), {
                 position: "top-center",

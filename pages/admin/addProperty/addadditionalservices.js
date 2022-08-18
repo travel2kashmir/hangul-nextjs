@@ -16,7 +16,7 @@ const logger = require("../../../services/logger");
 
 
 
-function addadditionalservices() {
+function Addadditionalservices() {
     const serTemp = {
         add_service_name: '',
         add_service_comment: '',
@@ -183,4 +183,4 @@ useEffect(() => {
   )
 }
 
-export default addadditionalservices
+export default Addadditionalservices

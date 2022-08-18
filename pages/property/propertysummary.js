@@ -83,6 +83,7 @@ function PropertySummary() {
           default: setThemeName(response.data.theme_id)
 }
         logger.info("url  to fetch property details hitted successfully")
+        setVisible(1)
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
 
@@ -103,7 +104,7 @@ function PropertySummary() {
         .catch((error) => { logger.error("url to fetch property details, failed") });
     }
     if (allHotelDetails.length === 0) fetchHotelDetails();
-    if (allHotelDetails.length != 0){initialtheme();setVisible(1)} 
+    if (allHotelDetails.length != 0){initialtheme();} 
   }, [allHotelDetails]);
 
   const sendLink = () => {

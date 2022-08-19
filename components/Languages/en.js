@@ -80,8 +80,12 @@ export default {
 "Addnewproperty":{
   label:"Add New Property",
   color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
-}
-,
+},
+"AddContact":{
+  label:"Add",
+  color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+},
+
 "Cancel" :{
   label: 'No cancel',
    color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
@@ -139,7 +143,6 @@ Cancel:"Cancel"
  col1 : "Package Name",
   
 },
-
 
 "RateRuleCols":{
   name:"Rate Rules",

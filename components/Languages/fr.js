@@ -464,6 +464,10 @@ export default {
   imageupload:'Hargement Des Images',
   image:'Image',
   titl:'titre',
-  upload:'Télécharger'
+  upload:'Télécharger',
+  "Addnewproperty":{
+    label:'Ajouter une nouvelle propriété',
+    color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+  }
 
 };

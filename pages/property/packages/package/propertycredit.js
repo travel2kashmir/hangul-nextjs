@@ -8,6 +8,7 @@ import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
 import Header from "../../../../components/Header"
+import Loader from "../../../../components/loader";
 import Footer from "../../../../components/Footer"
 import Sidebar from "../../../../components/Sidebar"
 import Router from "next/router";
@@ -19,6 +20,7 @@ var currentPackage;
 var i=0;
 
 function Propertycredit() {
+  const [visible,setVisible]=useState(0) 
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -87,6 +89,7 @@ function Propertycredit() {
        ((response) => {
        logger.info("package success");
        setCurrentPropertyCredit(response.data)
+       setVisible(1)
        })
        .catch((error) => {
         logger.info("Delete error")
@@ -97,7 +100,8 @@ function Propertycredit() {
   fetchDetails();
   },[])
   return (
-    <>
+    <><div className={visible===0?'block':'hidden'}><Loader/></div>
+    <div className={visible===1?'block':'hidden'}>
     <Header Primary={english?.Side2}/>
     <Sidebar  Primary={english?.Side2}/>
     <div  id="main-content"
@@ -219,7 +223,7 @@ function Propertycredit() {
         pauseOnHover />
       </div>
       <Footer/>
-      </>
+     </div> </>
   )
 }
 

@@ -92,7 +92,13 @@ function Addroom() {
   );
 
   /*Validate Room description */
-  const ValidateRoom = () => { //detect empty values
+  const ValidateRoom = () => {
+    if(JSON.stringify(property_id).toUpperCase() != 'NULL')
+    {
+      return `APP: Property Not Registered`
+    }
+    
+    //detect empty values
     for (let item in allRoomDes) {
       if (allRoomDes[item] === '') {
         return `APP:insert value of ${item?.replace("_", " ")}`
@@ -602,7 +608,7 @@ function Addroom() {
                         {language?.room} {language?.type}
                       </label>
                       <select
-                        onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
+                        onChange={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
                         {roomtypes.length === undefined ? <option value="loading">Loading values</option> :
                           <>{roomtypes?.map(i => {

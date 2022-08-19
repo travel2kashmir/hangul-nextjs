@@ -8,6 +8,7 @@ import Sidebar from '../../../components/Sidebar'
 import Header from '../../../components/Header'
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
+import Loader from "../../../components/loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 var language;
@@ -18,7 +19,7 @@ import Router from 'next/router'
 const logger = require("../../../services/logger");
 
 function Room() {
-
+  const [visible,setVisible]=useState(0) 
    /** Use Effect to fetch details from the Local Storage **/
    useEffect(()=>{  
     const firstfun=()=>{
@@ -143,7 +144,8 @@ firstfun();
     console.log("url " +url)
     axios.get(url)
     .then((response)=>{setRoomDetails(response.data);
-    logger.info("url  to fetch room hitted successfully")})
+    logger.info("url  to fetch room hitted successfully")
+  setVisible(1)})
     .catch((error)=>{logger.error("url to fetch room, failed")}); 
   }
 
@@ -380,7 +382,9 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
   
   return (
     <>
-    <Header  Primary={english?.Side1}/>
+    <div className={visible===0?'block':'hidden'}><Loader/></div>
+<div className={visible===1?'block':'hidden'}>
+<Header  Primary={english?.Side1}/>
     <Sidebar Primary={english?.Side1}/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -1235,7 +1239,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
 
     </div>
     <Footer/>
-    </>
+</div>
+   </>
   )
 }
 

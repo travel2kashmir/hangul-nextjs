@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import Cookies from 'js-cookie'
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
@@ -13,24 +14,51 @@ function Signin() {
   /** Router for Redirection **/
   const router = useRouter();
   const { locale } = router;
-
+  const [current,setCurrent]=useState(false)
   useEffect(() => {
     const setLanguage = async () => {
       localStorage.setItem("Language", "en");
     };
     setLanguage();
+    getCookieData();
   }
     , [])
 
-  /** State for internationalization **/
+  //write into cookies
+  function setCookieData(checked) {
+    if(checked)
+    {Cookies.set("email",signinDetails.email, { expires: 30 })
+    Cookies.set("password",signinDetails.password, { expires: 30 })
+  }
+  else{
+    Cookies.remove("email");
+    Cookies.remove("password")
+  }
+  }
+
+
+//read from cookies
+  function getCookieData(){
+    var mail=Cookies.get("email");
+    var pass=Cookies.get("password")
+    setSigninDetails({"email":mail, "password":pass})
+   if(mail != undefined){
+    document.getElementById('email').value=mail;
+    document.getElementById('password').value=pass;
+   } 
+  }
+  
+  
+  
+    /** State for internationalization **/
   const [lang, setLang] = useState("en");
   var language;
   if (locale === "en") {
     language = english
-
-  }
+}
   if (locale === "ar") {
     language = arabic
+    console.log(JSON.stringify(language.title))
   }
   if (locale === "fr") {
     language = french
@@ -57,7 +85,8 @@ function Signin() {
   };
 
   /** Sign In Submit Function **/
-  const submitSignIn = async (item) => {
+  const submitSignIn = async (e) => {
+    e.preventDefault()
     var item = {
       user_email: signinDetails.email,
     };
@@ -135,7 +164,7 @@ function Signin() {
           className="self-center text-3xl  mb-4 mt-2 tracking-normal font-bold
        text-gray-700 whitespace-nowrap"
         >
-          enGage
+          enGage 
         </span>
 
         <div className="bg-white shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0">
@@ -203,7 +232,8 @@ function Signin() {
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
-                    required
+                    onClick={()=>{setCookieData(!current); setCurrent(!current)}}
+                    
                   />
                 </div>
                 <div className="text-sm ml-3">
@@ -222,8 +252,8 @@ function Signin() {
 
               <button
                 type="submit"
-                onClick={() => {
-                  submitSignIn("fr");
+                onClick={(e) => {
+                  submitSignIn(e);
                 }}
                 className="font-semibold text-white bg-cyan-600 
               hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
@@ -240,20 +270,28 @@ function Signin() {
             </form>
           </div>
         </div>
-        <div className="mx-64 mt-2">
-          {lang === "en" ? (
-            <div>
+        <div className="mx-64 mt-2 text-teal-600">
+        <div>
+        <button
+                className={lang === "en"?"text-teal-600 text-sm font-bold mx-1 ":"mx-1 text-teal-600 text-sm"}
+                onClick={() => {
+                  setLang("en");
+                  changelanguage("en");
+                }}
+              >
+                English 
+              </button>|
               <button
-                className="text-teal-600 text-sm "
+                 className={lang === "fr"?"mx-1 text-teal-600 text-sm font-bold":"mx-1 text-teal-600 text-sm"}
                 onClick={() => {
                   setLang("fr");
                   changelanguage("fr");
                 }}
               >
-                Français |
-              </button>
+                Français 
+              </button>|
               <button
-                className="text-teal-600 text-sm mx-1"
+                 className={lang === "ar"?"text-teal-600 text-sm font-bold mx-1":"mx-1 text-teal-600 text-sm"}
                 onClick={() => {
                   setLang("ar");
                   changelanguage("ar");
@@ -262,52 +300,7 @@ function Signin() {
                 عربى
               </button>
             </div>
-          ) : lang === "fr" ? (
-            <div>
-              <button
-                className="text-teal-600 text-sm"
-                onClick={() => {
-                  setLang("en");
-                  changelanguage("en");
-                }}
-              >
-                English |
-              </button>
-              <button
-                className="text-teal-600 text-sm mx-1"
-                onClick={() => {
-                  setLang("ar");
-                  changelanguage("ar");
-                }}
-              >
-                عربى
-              </button>
-            </div>
-          ) : lang === "ar" ? (
-            <div>
-              <button
-                className="text-teal-600 text-sm "
-                onClick={() => {
-                  setLang("en");
-                  changelanguage("en");
-                }}
-              >
-                English |
-              </button>
-              <button
-                className="text-teal-600 text-sm mx-1"
-                onClick={() => {
-                  setLang("fr");
-                  changelanguage("fr");
-                }}
-              >
-                Français
-              </button>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
+       </div>
       </div>
 
       {/** Toast Container **/}
@@ -325,7 +318,6 @@ function Signin() {
     </div>
   );
 }
-
 export default Signin;
 
 Signin.getLayout = function PageLayout(page) {
@@ -334,6 +326,4 @@ Signin.getLayout = function PageLayout(page) {
       {page}
     </>
   )
-
-
 }

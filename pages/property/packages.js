@@ -8,6 +8,8 @@ import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import Footer from '../../components/Footer';
+import Loader from "../../components/loader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Router from "next/router";
@@ -15,7 +17,7 @@ var language;
 var currentProperty;
 
 function Packages() {
-
+    const [visible,setVisible]=useState(0) 
     useEffect(() => {
         const firstfun = () => {
             if (typeof window !== 'undefined') {
@@ -60,6 +62,7 @@ function Packages() {
                         genData.push(temp)
                     })
                     setGen(genData);
+                    setVisible(1);
                 }
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -111,7 +114,8 @@ function Packages() {
     };
 
     return (
-        <>
+        <><div className={visible===0?'block':'hidden'}><Loader/></div>
+        <div className={visible===1?'block':'hidden'}>
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
@@ -143,9 +147,17 @@ function Packages() {
                     </ol>
                 </nav>
                 {/* Header */}
-                <Table  gen={gen} setGen={setGen} add={addPackage} 
-      edit={currentPackage}
-        delete={deletePackages} common={language?.common} cols={language?.PackageCols} name="Packages"/> 
+
+                <Table  
+                gen={gen}
+                setGen={setGen}
+                add={addPackage} 
+                edit={currentPackage}
+                delete={deletePackages}
+                common={language?.common}
+                cols={language?.PackageCols}
+                name="Packages"/> 
+               
 
                 {/* Modal Delete */}
                 <div className={deletePackage === 1 ? "block" : "hidden"}>
@@ -185,6 +197,8 @@ function Packages() {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover />
+            </div>
+            <Footer/>
             </div>
         </>
     )

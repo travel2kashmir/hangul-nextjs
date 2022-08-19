@@ -14,6 +14,7 @@ var currentUser;
 
 
 function AdminLanding() {
+    
     const [properties, setProperties] = useState([])
     const router = useRouter();
 
@@ -30,26 +31,27 @@ function AdminLanding() {
             setProperties(response.data)
         }).catch(error => alert(error))
     }
-    useEffect(() => {
-        const firstfun = () => {
-            if (typeof window !== 'undefined') {
+    useEffect(()=>{
+        const firstfun=()=>{
+          if (typeof window !== 'undefined'){
             var locale = localStorage.getItem("Language");
-                if (locale === "ar") {
-                    language = arabic;
-                }
-                if (locale === "en") {
-                    language = english;
-                }
-                if (locale === "fr") {
-                    language = french;
-                }
-                currentUser = JSON.parse(localStorage.getItem("Signin Details"));
+            if (locale === "ar") {
+            language = arabic;
             }
+            if (locale === "en") {
+            language=english;
+            }
+            if (locale === "fr") {
+              language = french;
+            } 
+            currentUser = JSON.parse(localStorage.getItem("Signin Details"));    
+          } 
         }
         firstfun();
-        router.push('./AdminLanding')
+        router.push('./AdminLanding');
         fetchAllProperties();
-    }, [])
+      },[])
+    
 
     const LocalProperty = ({ item }) => {
         localStorage.setItem("property", JSON.stringify(item));
@@ -72,13 +74,13 @@ function AdminLanding() {
                                 className=" float-right ml-5 text-white bg-cyan-600 
                   hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold 
                   rounded-lg text-sm px-4 py-2 text-center  mr-2"
-                                onClick={() => {
-                                    router.push("/");
+                                onClick={(e) => { e.preventDefault();
+                                  router.push("/");
                                     localStorage.clear();
-                                }}
+                                  }}
                                 type="button"
                             >
-                                {language?.signout}
+                                {language?.signout} 
                             </button>
                             <div className="text-center mt-16">
                                 <p className="capitalize font-semibold text-3xl font-sans sm:mt-12 mx-12 mt-24 mb-6 text-cyan-500">

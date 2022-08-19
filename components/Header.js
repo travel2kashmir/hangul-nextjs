@@ -7,8 +7,10 @@ import Link from 'next/link'
 var language;
 
 function Navbar(args) {
+
   const [services, setServices] = useState(false)
   useEffect(()=>{
+
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
        

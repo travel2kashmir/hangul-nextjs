@@ -106,6 +106,7 @@ function Raterules() {
               })
       }
 
+
        /**Function to save Current property to be viewed to Local Storage**/
   const currentRateRule = (props ) => {
     localStorage.setItem("RateRuleId", (props.id));
@@ -188,6 +189,7 @@ function Raterules() {
 <Table  gen={gen} setGen={setGen}  add={addRateRule} 
       edit={currentRateRule}
          common={language?.common} cols={language?.RateRuleCols}  delete={deleteRateRules} name="Packages"/> 
+
 
  {/* Toast Container */}
  <ToastContainer position="top-center"

@@ -198,7 +198,7 @@ function AdditionalServices() {
         <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
-                className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+                className="  bg-white pt-24 relative overflow-y-auto lg:ml-64">
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -263,12 +263,10 @@ function AdditionalServices() {
                     </ol>
                 </nav>
                 {additionalServices === '' ? <></> : 
-                <div className="bg-white shadow rounded-lg  mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
                 <Table  gen={gene} setGen={setGene} add={()=> setView(1)} name="Additional Services"
                 edit={editAdditionalServices}
                 delete={deleteAdditionalServices}
                 common={language?.common} cols={language?.AdditionalServicesCols}  /> 
-                </div>
                 }
                  {/* Modal Add */}
                  <div className={view === 1 ? 'block' : 'hidden'}>
@@ -325,3 +323,10 @@ pauseOnHover />
         </>)
     }
 export default AdditionalServices
+AdditionalServices.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+    }

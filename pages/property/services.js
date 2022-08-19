@@ -137,7 +137,7 @@ function Services() {
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
-                className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+                className="  bg-white pt-24 relative overflow-y-auto lg:ml-64">
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -201,20 +201,10 @@ function Services() {
                         </li>
                     </ol>
                 </nav>
-
-                <div className="bg-white shadow rounded-lg  mt-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
-                <Table  gen={gen} setGen={setGen}   
+               <Table  gen={gen} setGen={setGen}   
                 edit={updateServices}  common={language?.common} cols={language?.ServicesCols}
                 name="Services"/> 
-                </div>
-
-              
-                
-
-
-              
-              
-                {/* Toast Container */}
+              {/* Toast Container */}
                 <ToastContainer position="top-center"
                     autoClose={5000}
                     hideProgressBar={false}
@@ -230,3 +220,10 @@ function Services() {
 }
 
 export default Services
+Services.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+    }

@@ -279,7 +279,7 @@ const Table = (args) => {
                                                         {flag.length === 0 ?
                                                            <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
                                                            font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
-                                                            duration-150 cursor-not-allowed opacity-70 " 
+                                                            duration-150 cursor-not-allowed opacity-60 " 
                                                               
                                                           >{args?.common?.Save} </button>
                                                            :

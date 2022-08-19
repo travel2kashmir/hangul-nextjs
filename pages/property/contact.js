@@ -203,7 +203,7 @@ function Scaffold() {
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
+        className="  bg-white pt-24 relative overflow-y-auto lg:ml-64"
       >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -384,3 +384,10 @@ function Scaffold() {
 }
 
 export default Scaffold
+Scaffold.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

@@ -40,7 +40,7 @@ function Addraterule() {
     const [languageCheck, setLanguageCheck] = useState(false);
     const [deviceCheck, setDeviceCheck] = useState(false);
     const [basicFlag,setBasicFlag]=useState([])
-    const [disp,setDisp]=useState(3)
+    const [disp,setDisp]=useState(0)
     const [programCheck, setProgramCheck] = useState(false);
     const [finalLang,setFinalLang]=useState([])
     const [finalCountry,setFinalCountry]=useState([])
@@ -127,7 +127,7 @@ function Addraterule() {
           "rate_rule_id": rateRuleId,
           "status": true
         }
-        alert(JSON.stringify(final_data))
+       
         const url = '/api/rate_rule/conditional_rate'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     
@@ -148,7 +148,7 @@ function Addraterule() {
               "room_id": allUserRateDetails.room_id,
               
             }]}
-            alert(JSON.stringify(room_data))
+          
             const url = '/api/rate_rule/conditional_rate/conditional_rate_room_link'
             axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
         
@@ -737,7 +737,7 @@ function Addraterule() {
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  Add Rate Rules {JSON.stringify(rateRuleId)}
+                  Add Rate Rules 
                 </span>
               </div>
             </li>
@@ -1314,7 +1314,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.amount} {JSON.stringify(rooms)}
+                      {language?.other} {language?.charges} {language?.amount}
                     </label>
                     <input
                       type="text"
@@ -1468,9 +1468,7 @@ function Addraterule() {
         </div>
          </div>
         
-         <div id='3' className={disp===3?'block':'hidden'}>
-         <div className="bg-white  shadow rounded-lg mx-1 px-1 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
-          </div></div>
+      
        
           {/* Toast Container */}
       <ToastContainer position="top-center"

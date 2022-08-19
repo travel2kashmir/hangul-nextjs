@@ -20,7 +20,7 @@ const logger = require("../../services/logger");
 function Raterules() {
   const[gen,setGen] = useState([])
   const [deleteRoom, setDeleteRoom] = useState(0)
-  const [actionRoom,setActionRoom]=useState({});
+ 
     useEffect(()=>{  
         const firstfun=()=>{
             if (typeof window !== 'undefined'){
@@ -79,7 +79,6 @@ function Raterules() {
   
 
         const deleteRateRules = (props) => {
-          alert(JSON.stringify(props))
           const url = `/api/rate_rule/${props}`
           axios.delete(url).then((response) => {
               toast.success(("Rate Rule Deleted Successfully!"), {
@@ -91,7 +90,7 @@ function Raterules() {
                   draggable: true,
                   progress: undefined,
               });
-              
+              fetchRateRules();
               Router.push("./raterules");
           })
               .catch((error) => {
@@ -117,7 +116,7 @@ function Raterules() {
      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
-    className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+    className="  bg-white  pt-24 relative overflow-y-auto lg:ml-64">
 
        {/* Navbar */}
        <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -207,3 +206,10 @@ function Raterules() {
 }
 
 export default Raterules
+Raterules.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

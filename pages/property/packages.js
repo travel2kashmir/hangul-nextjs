@@ -115,7 +115,7 @@ function Packages() {
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
-                className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+                className="  bg-white  pt-24 relative overflow-y-auto lg:ml-64">
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -191,3 +191,10 @@ function Packages() {
 }
 
 export default Packages
+Packages.getLayout = function PageLayout(page){
+    return(
+      <>
+      {page}
+      </>
+    )
+    }

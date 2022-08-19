@@ -1,8 +1,4 @@
 {
-  "gitBranch": "main",
-<<<<<<< Updated upstream
-  "gitCommitHash": "b5e5d4b"
-=======
-  "gitCommitHash": "8203daf"
->>>>>>> Stashed changes
+  "gitBranch": "tablescaffold",
+  "gitCommitHash": "9e1b244"
 }

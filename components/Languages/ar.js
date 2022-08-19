@@ -457,15 +457,12 @@ AddPackage :{
     imageupload:'لتخزين الصور',
     image:'تَصَوُّر ',
     titl:'عَنْوَنَ',
-    upload:'تَحْميل'
- };
-
-    
-    "Addnewproperty":{
+    upload:'تَحْميل',
+  "Addnewproperty":{
       label:'إضافة خاصية جديدة',
       color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
     }
-  }
+  };
 
 
   

@@ -20,7 +20,7 @@ const logger = require("../../services/logger");
 function Raterules() {
   const[gen,setGen] = useState([])
   const [deleteRoom, setDeleteRoom] = useState(0)
-  const [actionRoom,setActionRoom]=useState({});
+ 
     useEffect(()=>{  
         const firstfun=()=>{
             if (typeof window !== 'undefined'){
@@ -77,6 +77,36 @@ function Raterules() {
           Router.push("./raterules/addraterule")
         }
   
+
+        const deleteRateRules = (props) => {
+          const url = `/api/rate_rule/${props}`
+          axios.delete(url).then((response) => {
+              toast.success(("Rate Rule Deleted Successfully!"), {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+              });
+              fetchRateRules();
+              Router.push("./raterules");
+          })
+              .catch((error) => {
+                  toast.error(("Rate Rule Delete Error!"), {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                  });
+              })
+      }
+
+
        /**Function to save Current property to be viewed to Local Storage**/
   const currentRateRule = (props ) => {
     localStorage.setItem("RateRuleId", (props.id));
@@ -87,7 +117,7 @@ function Raterules() {
      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
-    className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+    className="  bg-white  pt-24 relative overflow-y-auto lg:ml-64">
 
        {/* Navbar */}
        <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -158,7 +188,8 @@ function Raterules() {
 {/* Rate Rules Table */}
 <Table  gen={gen} setGen={setGen}  add={addRateRule} 
       edit={currentRateRule}
-         common={language?.common} cols={language?.RateRuleCols} name="Packages"/> 
+         common={language?.common} cols={language?.RateRuleCols}  delete={deleteRateRules} name="Packages"/> 
+
 
  {/* Toast Container */}
  <ToastContainer position="top-center"
@@ -177,3 +208,10 @@ function Raterules() {
 }
 
 export default Raterules
+Raterules.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

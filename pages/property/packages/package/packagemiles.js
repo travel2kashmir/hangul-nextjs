@@ -72,7 +72,9 @@ function Packagemiles() {
           genData.push(temp)
       })
       setGen(genData);
+
       setVisible(1)
+
   }
      })
      .catch((error) => {

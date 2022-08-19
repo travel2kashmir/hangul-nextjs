@@ -78,8 +78,9 @@ function Packages() {
         , [])
 
     /* Delete Package Function*/
-    const deletePackages = () => {
-        const url = `/api/package/${actionPackage?.id}`
+    const deletePackages = (props) => {
+        alert(JSON.stringify(props))
+        const url = `/api/package/${props}`
         axios.delete(url).then((response) => {
             toast.success(("Package Deleted Successfully!"), {
                 position: "top-center",
@@ -118,7 +119,7 @@ function Packages() {
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
-                className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+                className="  bg-white  pt-24 relative overflow-y-auto lg:ml-64">
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -146,6 +147,7 @@ function Packages() {
                     </ol>
                 </nav>
                 {/* Header */}
+
                 <Table  
                 gen={gen}
                 setGen={setGen}
@@ -156,6 +158,7 @@ function Packages() {
                 cols={language?.PackageCols}
                 name="Packages"/> 
                
+
                 {/* Modal Delete */}
                 <div className={deletePackage === 1 ? "block" : "hidden"}>
                     <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full" >

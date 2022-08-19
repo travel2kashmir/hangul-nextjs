@@ -67,7 +67,7 @@ function Propertycredit() {
         });
         setPropertyCredit([])
         fetchDetails(); 
-        Router.push("./propertycredit");
+        Router.push("../package")
       })
       .catch((error) => {
        toast.error("Property Credit Error!", {

@@ -110,10 +110,8 @@ ContactCols:{
   EliteCols:{
     name:"مكافآت النخبة",
    col1 : "إسم البرنامج",
-   col2 : "مستوى البرنامج"
-  }, 
-
-  
+ col2 : "مستوى البرنامج",
+ },
 DeleteContact :{
    label: "  اتصل  إحذف",
    color: "bg-red-600 hover:bg-red-800 text-white ",
@@ -252,12 +250,14 @@ AddRoom :{
    ></path>
  </svg>
 },
-RateRuleCols:{
-  name:"قواعد معدل",
+
+"RateRuleCols":{
+name:"قواعد معدل",
  col1 : "اسم",
   
 },
-DeleteRoom :{
+
+"DeleteRoom" :{
     label: "أَسْكَن إحذف",
    color: "bg-red-600 hover:bg-red-800 text-white ",
    icon: <svg
@@ -457,11 +457,15 @@ AddPackage :{
     imageupload:'لتخزين الصور',
     image:'تَصَوُّر ',
     titl:'عَنْوَنَ',
-    upload:'تَحْميل',
+    upload:'تَحْميل'
+ };
+
+    
     "Addnewproperty":{
       label:'إضافة خاصية جديدة',
       color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
     }
   }
+
 
   

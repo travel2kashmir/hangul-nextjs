@@ -1049,11 +1049,7 @@ function Addpackage() {
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <button type="button" onClick={addMiles}
-                      className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                      <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      {language?.add} {language?.miles}
-                    </button>
+                    
                     <Button Primary={language?.AddMiles}  onClick={addMiles} />
                   </div>
                 </div>
@@ -1499,7 +1495,7 @@ function Addpackage() {
                     <button type="button" onClick={addService}
                       className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                       <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      {language?.add} {language?.program}
+                      {language?.add} {language?.service}
                     </button>
                   </div>
                 </div>

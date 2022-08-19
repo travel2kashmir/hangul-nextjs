@@ -64,6 +64,7 @@ export default {
   starrating: "Star Rating",
   descriptiontitle: "Description title",
   description: "Description",
+  additionalservices:"Additional Services",
   "Update" :{
     label: "Update",
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
@@ -142,6 +143,7 @@ Cancel:"Cancel"
  col1 : "Package Name",
   
 },
+
 "RateRuleCols":{
   name:"Rate Rules",
  col1 : "Name",
@@ -448,7 +450,8 @@ roomsxml:'../../property/roomsxml'
 propertysummary:'./propertysummary',
 propertyxml:'./propertyxml',
 roomsxml:'./roomsxml',
-raterules:'./raterules'
+raterules:'./raterules',
+additionalservices:'./additionalservices'
 },
 
 
@@ -467,7 +470,8 @@ raterules:'./raterules'
  propertysummary:'../propertysummary',
 propertyxml:'../propertyxml',
 roomsxml:'../roomsxml',
-raterules:'../raterules'
+raterules:'../raterules',
+additionalservices:'../additionalservices'
  },
  
  "Side2":{
@@ -485,7 +489,8 @@ raterules:'../raterules'
  propertysummary:'../..propertysummary',
  propertyxml:'../../propertyxml',
 roomsxml:'../../roomsxml',
-raterules:'../../raterules'
+raterules:'../../raterules',
+additionalservices:'../../additionalservices'
  },
   descriptiondate: "Description Date",
   update:'Update',

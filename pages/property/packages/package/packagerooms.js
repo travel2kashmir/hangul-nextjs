@@ -117,7 +117,7 @@ function Packagerooms() {
             draggable: true,
             progress: undefined,
           });
-  
+          Router.push("../package")
         })
         .catch((error) => {
          toast.error("Package Rooms update error! " , {
@@ -156,6 +156,7 @@ function Packagerooms() {
             progress: undefined,
           });
           setAllPackageRateDetails([])
+          Router.push("../package")
         })
         .catch((error) => {
          toast.error("Package Rates Error!", {

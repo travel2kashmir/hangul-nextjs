@@ -21,7 +21,9 @@ const logger = require("../../services/logger");
 function Scaffold() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
+
   const [visible,setVisible]=useState(0) 
+
   const [deleteContact, setDeleteContact] = useState(0);
   const [viewDel, setViewDel] = useState(0);
   const [editContact, setEditContact] = useState({});
@@ -156,7 +158,9 @@ function Scaffold() {
           })
           setGen(genData);
         }
+
         setVisible(1);
+
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
 
@@ -202,6 +206,7 @@ function Scaffold() {
 
   return (
     <>
+
     <div className={visible===0?'block':'hidden'}><Loader/></div>
     <div className={visible===1?'block':'hidden'}>
 
@@ -209,7 +214,7 @@ function Scaffold() {
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
+        className="  bg-white pt-24 relative overflow-y-auto lg:ml-64"
       >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -385,8 +390,9 @@ function Scaffold() {
           pauseOnHover
         />
       </div>
-      <Footer/>
+    
     </div></>
+
   );
 }
 
@@ -398,3 +404,4 @@ Scaffold.getLayout = function PageLayout(page){
     </>
   )
   }
+

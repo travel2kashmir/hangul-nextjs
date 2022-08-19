@@ -86,6 +86,7 @@ const fetchDetails = async  () => {
       ((response) => {
       logger.info("Delete success");
       submitUpdatedRooms();
+
       })
       .catch((error) => {
        logger.info("Delete error")
@@ -151,6 +152,7 @@ const fetchDetails = async  () => {
           progress: undefined,
         });
         setAllPackageRateDetails([])
+        Router.push("../package")
       })
       .catch((error) => {
        toast.error("Package Rates Error!", {
@@ -191,6 +193,7 @@ const fetchDetails = async  () => {
           progress: undefined,
         });
         setAllPackageRateDetails([])
+        Router.push("../package")
       })
       .catch((error) => {
        toast.error("Package Rates Error!", {

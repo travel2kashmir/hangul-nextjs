@@ -7,7 +7,10 @@ import Link from 'next/link'
 var language;
 
 function Navbar(args) {
- useEffect(()=>{
+
+  const [services, setServices] = useState(false)
+  useEffect(()=>{
+
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
        
@@ -34,7 +37,7 @@ function Navbar(args) {
   return (
     <div>
       {/** Header **/}
-      <nav className="bg-white border-b border-gray-200 fixed z-30 w-full">
+      <nav className="bg-white px-2 border-b border-gray-200 fixed z-30 w-full">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start">
@@ -54,15 +57,18 @@ function Navbar(args) {
               <li className="text-2xl text-cyan-600 font-bold flex items-center lg:ml-2.5">
                 <span className="self-center whitespace-nowrap">enGage</span>
               </li>
-              <form action="#" method="GET" className="hidden lg:block lg:pl-32">
-                <label htmlFor="topbar-search" className="sr-only text-sm font-semibold">{language?.search}</label>
-                <div className="mt-1 relative lg:w-64">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  </div>
-                  <input type="text" name="email" id="topbar-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full pl-10 p-2.5" placeholder={language?.search}>
-                  </input>
-                </div>
-              </form>
+              <form action="#" method="GET" className="hidden lg:block lg:pl-40">
+<label htmlFor="topbar-search" className="sr-only">{language?.search}</label>
+<div className="mt-1 relative lg:w-64">
+<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<svg className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <path fillRule="evenodd"
+   d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
+</div>
+<input type="text" name="email" id="topbar-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full pl-10 p-2.5"
+ placeholder={language?.search}/>
+</div>
+</form>
             </div>
             
             
@@ -167,13 +173,39 @@ function Navbar(args) {
                 
                 </li>:<></>}
                   
-               {args?.Primary?.services?<li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
-                    <svg className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
-                  </svg>
-                     <span className="ml-3 flex-1 whitespace-nowrap">
-                     <Link href={{pathname:args?.Primary?.services, query: { id: 1 }}}><a>{language?.services}</a></Link></span>    
-                </li>
+               {args?.Primary?.services?
+                     <li>
+                     <button type="button" onClick={()=>{setServices(!services)} }className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                              <svg
+                               className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                               fill="currentColor"
+                               viewBox="0 0 20 20"
+                               xmlns="http://www.w3.org/2000/svg"
+                             >
+                               <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
+                             </svg>
+                             <span className="flex-1 ml-3 text-left whitespace-nowrap" >{language?.services}</span>
+                             <svg sidebar-toggle-item className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" 
+                             xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                       </button>
+                      <div className={services === true ? 'block' : 'hidden'}>
+                     <ul  className="py-2 space-y-2">
+                       <li className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75
+                            rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
+                         <Link  href={{pathname:args?.Primary?.services, query: { id: 1 }}}>
+                         <a>Basic Services</a></Link>
+                       </li>
+                       <li 	className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 
+                           rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
+                       <Link  href={{pathname:args?.Primary?.additionalservices, query: { id: 1 }}}>
+                         <a 
+                         >
+                             {language?.additionalservices}</a>
+                       </Link></li>
+                     
+                     </ul></div>
+                   </li>
+           
                 :<></>}
 
                 {args?.Primary?.rooms?<li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">

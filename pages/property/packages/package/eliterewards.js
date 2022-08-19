@@ -73,7 +73,9 @@ function Eliterewards() {
       })
       setGen(genData);
   }
+
   setVisible(1)
+
      })
      .catch((error) => {
       logger.info("package error")

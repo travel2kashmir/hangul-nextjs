@@ -179,14 +179,11 @@ function Contact() {
   const allDelete = async () => {
     console.log(contacts)
     const checked= contacts.filter(i=>i.isChecked===true).map(j=>{return(j.contact_id)})
-    alert(JSON.stringify(checked))
   }
 
   
     const displayData = useMemo(() => {
         const start = (page - 1) * itemsPerPage;
-       
-     // alert(JSON.stringify(page))  ;
         return gen.slice(start, start + itemsPerPage);
       }, [page,gen]);
 

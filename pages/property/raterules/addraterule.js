@@ -257,7 +257,7 @@ function Addraterule() {
                progress: undefined,
              });
             setRateRuleId(response.data.rate_rule_id);
-           alert(JSON.stringify(rateRuleId))
+     
            setDisp(2);
            })
            .catch((error) => {
@@ -924,12 +924,13 @@ function Addraterule() {
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Rates</div>
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">  2</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+           
+             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Rates </div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
@@ -1467,9 +1468,7 @@ function Addraterule() {
           </div>
         </div>
          </div>
-        
-      
-       
+     
           {/* Toast Container */}
       <ToastContainer position="top-center"
             autoClose={5000}

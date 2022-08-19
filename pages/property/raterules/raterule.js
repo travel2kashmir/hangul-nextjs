@@ -19,7 +19,6 @@ var res =[]
 var resDev = []
 var resCou = []
 var resLang = []
-var languageCodes;
 const logger = require("../../../services/logger");
 
 var currentraterule;
@@ -29,7 +28,7 @@ var currentProperty;
 function Raterule() {
 
   const [countryData,setCountryData]=useState([])
-  const [flagBasic,setBasicFlag]=useState([])
+  const [basicFlag,setBasicFlag]=useState([])
   const [languageData,setLanguageData]=useState([])
   const [finalLang,setFinalLang]=useState([])
   const [finalCountry,setFinalCountry]=useState([])
@@ -71,7 +70,7 @@ function Raterule() {
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
         createCountry();
-        createLanguages();
+      
       }
     }
     firstfun();
@@ -82,6 +81,7 @@ function Raterule() {
    useEffect(() => {
     fetchRateRule();
     fetchPrograms();
+    createLanguages();
 }, [])
 
   const submitRatesEdit = () => {
@@ -147,7 +147,7 @@ function Raterule() {
       "refundable_until_days": allUserRateDetails.refundable_until_days,
       "refundable_until_time": allUserRateDetails?.refundable_until_time ? time.getTime() : allUserRateDetails?.refundable_until_time,
       "otherfees_amount": allUserRateDetails.otherfees_amount,
-      "expiration_time": toTimestamp(allUserRateDetails.expiration_time),
+      "expiration_time":allUserRateDetails.expiration_time,
       "charge_currency": allUserRateDetails.charge_currency,
     }
     const url = '/api/rate_rule/conditional_rate'
@@ -258,7 +258,6 @@ function Raterule() {
   // Country Edit Submit
    const submitCountryEdit = () => {
   const final_data = { "user_rate_country": finalCountry }
-  alert(JSON.stringify(final_data))
   const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_country_link";
     axios
       .put(url, final_data, { 
@@ -293,7 +292,6 @@ function Raterule() {
  // Device Edit Submit
   const submitDeviceEdit = () => {
     const final_data = { "user_rate_device": finalDevice }
-    alert(JSON.stringify(final_data))
     const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
       axios
         .put(url, final_data, { 
@@ -361,6 +359,47 @@ function Raterule() {
     
     };
 
+    //User Signed In, Max percentage and Domestic Submit
+    const submitAdditional = () => {
+      const data = [{
+        max_user_percentage:userRateDetails?.MaxUsersPercent,
+        user_signed_in:userSign?.UserSignedIn,
+        is_domestic: userSign?.IsDomestic,
+        user_rate_condition_id:userSign?.UserRateCondition_id
+    }];
+    const final_data = { "user_rate_condition": data }
+    const url = "/api/rate_rule/user_rate_conditioning";
+      axios
+        .put(url, final_data, { 
+          header: { "content-type": "application/json" } })
+        .then((response) => {
+          toast.success("Rate rule Updated Successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setBasicFlag([])
+        
+        })
+  
+        .catch((error) => {
+          toast.error("Rate rule update Error2!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setBasicFlag([])
+        });
+    
+    };
     const submitDiscountEdit = () => {
       const final_data = {
         "user_rate_ineligiblity_id": rateRule?.user_rate_ineligiblity_id,
@@ -411,14 +450,17 @@ function Raterule() {
   }
 // Languages JSON for Dropdown
   const createLanguages = () => {
-   languageCodes = langs.all();
+   var languageCodes = langs.all();
+  console.log(languageCodes)
     languageCodes.map(code => {
       var temp = {
         language_name: code.name,
-        language_code: code?.[i]
+        language_code: code?.[j]
       }
     language_data.push(temp) } );
+  
     setLanguageData(language_data);
+    
     
   } 
 
@@ -444,7 +486,6 @@ function Raterule() {
   }
 
   const devices = (dev) => { 
-   alert(JSON.stringify(dev)) 
     dev.map(item => {
       var temp = {
         user_rate_condition_id: userSign?.UserRateCondition_id,
@@ -482,6 +523,7 @@ function Raterule() {
         return element.program_id === el.program_id;
      });
   });
+  filterByLanguage();
   Router.push('./raterule')
 }
 
@@ -491,6 +533,7 @@ const filterByCountry = () => {
       return element.user_country === el.country_code;
    });
 });
+filterByLanguage();
 Router.push('./raterule')
 }
 
@@ -499,6 +542,7 @@ const filterByLanguage = () => {
     return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
    });
+   
 });
 
 Router.push('./raterule')
@@ -643,7 +687,7 @@ Router.push('./raterule')
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Modification and Discount {JSON.stringify(rateRule?.user_rate_condition?.[i]?.language)}
+         Rate Modification and Discount
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -740,11 +784,12 @@ Router.push('./raterule')
                      rounded-lg text-sm px-5 py-2 text-center 
                      items-center  mr-1 mb-1 ease-linear transition-all duration-150"
                      onClick={()=>{
-                      filterByProgram();
+                     filterByCountry();
+                     filterByProgram();
+                     filterByDevices();
                       filterByLanguage();
-                      filterByDevices();
-                      filterByCountry();
-                     if (flagBasic.length !== 0){
+                   
+                     if (basicFlag.length !== 0){
                         submitRatesEdit()
                       }  
                       submitRateMod();
@@ -799,7 +844,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Condition 
+                      Rate Condition
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -825,7 +870,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Description
+                      Rate Description 
 
                     </label>
                     <textarea rows="2" columns="50"
@@ -970,7 +1015,7 @@ Router.push('./raterule')
                         setUserRateDetails({
                           ...userRateDetails,
                           MaxUsersPercent: e.target.value,
-                        })
+                        },setBasicFlag(1))
                       }/>
                       </div>
                         </div>
@@ -1056,9 +1101,10 @@ Router.push('./raterule')
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
                 <Button Primary={language?.Update} onClick={()=>{
-                  setDisp(2);
-                  if (flagBasic.length !== 0){
-                    submitRatesEdit()
+                 
+                
+                  if (basicFlag.length !== 0){
+                    submitAdditional();
                   }
                   if (finalLang.length !== 0){
                     submitLanguageEdit()
@@ -1072,6 +1118,7 @@ Router.push('./raterule')
                   if (finalProgram.length !== 0){
                     submitProgramEdit()
                   }
+                  setDisp(2);
                 }} /> 
                 : <></>
               }

@@ -64,7 +64,6 @@ const Table = (args) => {
     const allDelete = async () => {
         console.log(args?.gen)
         const checked = args?.gen.filter(i => i.isChecked === true).map(j => { return (j.id) })
-        alert(JSON.stringify(checked))
     }
     const [editContact, setEditContact] = useState({});
     const [deleteContact, setDeleteContact] = useState({});

@@ -119,7 +119,7 @@ function Addroom() {
           break
         case "room_capacity":
           let num = parseInt(allRoomDes[item])
-          alert("capacity" + num)
+        
           if (isNaN(num)) {
             flag = `APP:Room capacity should be number`
           }
@@ -137,8 +137,7 @@ function Addroom() {
           }
           break
         case "maximum_number_of_occupants":
-          alert("occupants" + parseInt(allRoomDes[item]))
-          if (isNaN(parseInt(allRoomDes[item]))) {
+         if (isNaN(parseInt(allRoomDes[item]))) {
             flag = `APP:Maximum number of occupants should be number`
           }
           else {

@@ -60,7 +60,6 @@ function Scaffold() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
-      alert(JSON.stringify(finalContact))
       axios
         .post(`/api/contact`, JSON.stringify(finalContact), {
           headers: { "content-type": "application/json" },

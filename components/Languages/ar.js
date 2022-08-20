@@ -441,6 +441,7 @@ AddPackage :{
     areyousureyouwanttodelete:"?هل أنت متأكد أنك تريد حذف",
     yesiamsure:'نعم أنا متأكد',
     nocancel:'لا إلغاء',
+    theme:'سمة',
     searchforprograms:'البرامج البحث عن',
     propertypackages:'حزم الممتلكات',
     packagedescription:'حزمة الوصف',

@@ -220,7 +220,6 @@ function Services() {
                     draggable
                     pauseOnHover />
             </div>
-            <Footer/>
         </div>
         </>
     )

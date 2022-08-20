@@ -20,6 +20,7 @@ export default {
   address: "Address",
   contact: "Contact",
   gallery: "Gallery",
+  theme:"Theme",
   reviews: "Reviews",
   services: "Services",
   rooms: "Rooms",
@@ -451,7 +452,8 @@ propertysummary:'./propertysummary',
 propertyxml:'./propertyxml',
 roomsxml:'./roomsxml',
 raterules:'./raterules',
-additionalservices:'./additionalservices'
+additionalservices:'./additionalservices',
+theme:'./theme'
 },
 
 
@@ -471,7 +473,8 @@ additionalservices:'./additionalservices'
 propertyxml:'../propertyxml',
 roomsxml:'../roomsxml',
 raterules:'../raterules',
-additionalservices:'../additionalservices'
+additionalservices:'../additionalservices',
+theme:'../theme'
  },
  
  "Side2":{
@@ -490,7 +493,8 @@ additionalservices:'../additionalservices'
  propertyxml:'../../propertyxml',
 roomsxml:'../../roomsxml',
 raterules:'../../raterules',
-additionalservices:'../../additionalservices'
+additionalservices:'../../additionalservices',
+theme:'../../theme'
  },
   descriptiondate: "Description Date",
   update:'Update',

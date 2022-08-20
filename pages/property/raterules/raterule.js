@@ -193,8 +193,7 @@ function Raterule() {
       "rate_modification_id": rateRule?.rate_modification_id,
       "hotel_amenity": rateRule?.hotel_amenity,
       "price_multiplier": rateRule?.price_multiplier,
-
-    }
+ }
     const url = '/api/rate_rule/rate_modification'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
 
@@ -514,7 +513,6 @@ function Raterule() {
    }
 
    const filterByDevices = () => {
-   alert(rateRule?.user_rate_condition?.[i]?.UserDeviceType);
    if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined) {
     setCheckDevice(true)
    resDev =  device?.filter(el => {
@@ -591,7 +589,7 @@ Router.push('./raterule')
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
         logger.info("url  to fetch raterules hitted successfully")
-        checkConditions();
+       
       })
     
       .catch((error) => { logger.error("url to fetch raterules, failed") });

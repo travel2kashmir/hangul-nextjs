@@ -345,6 +345,7 @@ export default {
   property: "Biens",
   name: "Nom",
   status: "Statut",
+  theme:'Thème',
   category: "Catégorie",
   active: "Actif",
   action: "Acte",

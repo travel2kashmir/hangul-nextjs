@@ -107,10 +107,6 @@ function Addraterule() {
         var time;
         var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
         time = new Date(temp.toString())
-        const toTimestamp = (strDate) => {
-          const dt = Date.parse(strDate);
-          return dt / 1000;
-        }
         const final_data = {
           "base_rate_currency": allUserRateDetails?.base_rate_currency,
           "base_rate_amount": allUserRateDetails.base_rate_amount,
@@ -127,7 +123,7 @@ function Addraterule() {
           "rate_rule_id": rateRuleId,
           "status": true
         }
-       
+    
         const url = '/api/rate_rule/conditional_rate'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     
@@ -1402,7 +1398,7 @@ function Addraterule() {
                           htmlFor="grid-password"
                         >
                           Refundable until time
-                        </label>
+                       </label>
                         <input
                           type="time" step="2"
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"

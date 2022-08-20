@@ -73,7 +73,7 @@ function Packagedescription() {
   const submitPackageEdit = () => {
     if (flag.length !== 0) {
       var time;
-      var temp = `2022-01-01 ` + packageDetails?.refundable_until_time;
+      var temp = `2022-01-01 ` + allPackageDetails?.refundable_until_time;
       time = new Date(temp.toString())
       const final_data = {
         "package_id": allPackageDetails?.package_id,
@@ -82,7 +82,7 @@ function Packagedescription() {
         "charge_currency": allPackageDetails?.charge_currency,
         "refundable": allPackageDetails?.refundable,
         "refundable_until_days": allPackageDetails?.refundable_until_days,
-        "refundable_until_time": packageDetails?.refundable_until_time ? time.getTime() : packageDetails?.refundable_until_time,
+        "refundable_until_time":  time.getTime() ,
         "max_number_of_intended_occupants": allPackageDetails?.max_number_of_intended_occupants,
         "max_number_of_adult_guest": allPackageDetails?.max_number_of_adult_guest
       }
@@ -99,7 +99,6 @@ function Packagedescription() {
             progress: undefined,
           });
           fetchDetails();
-          Router.push("../package");
           setFlag([])
           setPackageDetails([])
         })

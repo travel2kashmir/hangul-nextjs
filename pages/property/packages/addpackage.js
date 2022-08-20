@@ -689,7 +689,7 @@ function Addpackage() {
                     
                     onChange={
                       (e) => (
-                          setAllPackageDetails({ ...allPackageDetails,  refundable_until_time: e.target.value })
+                          setAllPackageDetails({ ...allPackageDetails, refundable_until_time: e.target.value })
                       )
                   }
                   />

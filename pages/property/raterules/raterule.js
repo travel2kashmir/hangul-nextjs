@@ -44,7 +44,13 @@ function Raterule() {
   const [userSign, setUserSign] = useState([])
   const [pro, setPro] = useState([])
   const [coun, setCoun] = useState([])
+  const [mod, setMod] = useState([])
   const [disp, setDisp] = useState(0);
+  const [checkDevice, setCheckDevice] = useState();
+  const [checkLanguage, setCheckLanguage] = useState(false);
+  const [checkCountry, setCheckCountry] = useState();
+  const [checkProgram, setCheckProgram] = useState();
+  const [checkPercentage, setCheckPercentage] = useState();
   const[userRateDetails, setUserRateDetails] = useState([])
   const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
   var language_data=[];
@@ -203,7 +209,7 @@ function Raterule() {
           draggable: true,
           progress: undefined,
         });
-        setLang([])
+        setMod([])
         Router.push("./raterule");
 
       })
@@ -497,8 +503,8 @@ function Raterule() {
   }
 
   const program = (pro) => { 
-     
-    pro.map(item => {
+
+   pro.map(item => {
        var temp = {
          user_rate_condition_id: userSign?.UserRateCondition_id,
          program_id: item.program_id
@@ -508,45 +514,71 @@ function Raterule() {
    }
 
    const filterByDevices = () => {
-   resDev = device.filter(el => {
+   alert(rateRule?.user_rate_condition?.[i]?.UserDeviceType);
+   if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined) {
+    setCheckDevice(true)
+   resDev =  device?.filter(el => {
        return rateRule?.user_rate_condition?.[i]?.UserDeviceType.find(element => {
           return element.user_device === el.user_device;
        });
     });
-    
+  }
+  else{
+    resDev= []
+  } 
     Router.push('./raterule')
    }
 
  const filterByProgram = () => {
+  if(conditions?.MaxUsersPercent != undefined){
+    setCheckPercentage(true)
+  }
+  if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined) {
+    
+    setCheckProgram(true)
     res = programs.filter(el => {
      return rateRule?.user_rate_condition?.[i]?.PackageMembership.find(element => {
         return element.program_id === el.program_id;
      });
-  });
+  });}
+  else{
+    res= []
+  }
   filterByLanguage();
   Router.push('./raterule')
 }
 
 const filterByCountry = () => {
+  if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined) {
+  setCheckCountry(true)
   resCou = countryData.filter(el => {
    return rateRule?.user_rate_condition?.[i]?.UserCountry?.find(element => {
       return element.user_country === el.country_code;
    });
 });
-filterByLanguage();
+  }
+  else{
+  resCou= []
+  }
 Router.push('./raterule')
 }
 
 const filterByLanguage = () => {
+  if(rateRule?.user_rate_condition?.[i]?.language != undefined) {
+    setCheckLanguage(true)
   resLang = languageData.filter(el => {
     return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
    });
    
 });
-
+  }
+  else{
+    resLang= []
+    }
 Router.push('./raterule')
 }
+
 
   const fetchRateRule = async () => {
     const url = `/api/rate_rule/${currentraterule}`
@@ -559,7 +591,9 @@ Router.push('./raterule')
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
         logger.info("url  to fetch raterules hitted successfully")
+        checkConditions();
       })
+    
       .catch((error) => { logger.error("url to fetch raterules, failed") });
   }
 
@@ -597,7 +631,7 @@ Router.push('./raterule')
                 href="./landing"
                 className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
               >
-                <a>{language?.home}</a>
+                <a>{language?.home} </a>
               </Link>
             </li>
             <li>
@@ -668,17 +702,16 @@ Router.push('./raterule')
         {/** Discount (Rate Eligibility)  **/}
         <div id='0' className={disp===0?'block':'hidden'}>
         <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+        <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Modification and Discount
-              
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description
              </div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Condition</div>
+              <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
@@ -687,7 +720,7 @@ Router.push('./raterule')
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Modification and Discount
+         Rate Rule Description
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -747,13 +780,7 @@ Router.push('./raterule')
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.hotel_amenity}
-                  onChange={(e) =>
-                    setRateRule({
-                      ...rateRule,
-                      hotel_amenity: e.target.value,
-                    },setLang(1))
-                  }
-
+                
                 /></div></div>
 
             <div className="w-full lg:w-6/12 px-4">
@@ -770,7 +797,7 @@ Router.push('./raterule')
                     setRateRule({
                       ...rateRule,
                       price_multiplier: e.target.value,
-                    },setLang(1))
+                    },setMod(1))
                   }
 
                 /></div></div>
@@ -791,16 +818,17 @@ Router.push('./raterule')
                    
                      if (basicFlag.length !== 0){
                         submitRatesEdit()
-                      }  
+                      } 
+                      if (mod.length !== 0){ 
                       submitRateMod();
-                    
+                      }
                       if (discount.length !== 0){
                         submitDiscountEdit()
                       }
                       setDisp(1);
                      
                      }} type="button" >
-                      {language?.update}</button>
+                      {language?.next}</button>
                   </div>
                 </div>
                 <div>
@@ -816,24 +844,23 @@ Router.push('./raterule')
         {/**Rate Condition **/}
         <div id='1' className={disp===1?'block':'hidden'}>
         <div className="bg-white  shadow rounded-lg mx-1 px-1 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+        <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
                 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Modification and Discount</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Rule Description</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Condition</div>
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">  2</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates</div>
+           
+             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates </div>
             </div>
-
-
-          </div>
+       </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
             Rate Condition
           </h6>
@@ -844,7 +871,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Condition
+                      Rate Rule Conditions
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -882,8 +909,7 @@ Router.push('./raterule')
                           Description: e.target.value,
                         },setBasicFlag(1))
                       }
-
-                    />
+                  />
                   </div>
                 </div>
 
@@ -903,7 +929,9 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex  ">
-                      <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                      <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
+                      checked={checkCountry === true}
+                      onChange={()=>{setCheckCountry(!checkCountry)}} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
@@ -925,10 +953,12 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex">
-                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
+                        checked={checkDevice === true} 
+                        onChange={()=>{setCheckDevice(!checkDevice)}}
+                        className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                     
-                      <label
+                     <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
@@ -949,7 +979,8 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex ">
-                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <input id="checkbox-1"  checked={checkLanguage === true} 
+                        onChange={()=>{setCheckLanguage(!checkLanguage)}} aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
@@ -973,7 +1004,9 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex">
-                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
+                            checked={checkProgram === true}
+                            onChange={()=>{setCheckProgram(!checkProgram)}}className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
                       <label
@@ -996,18 +1029,21 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex">
-                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
+                         checked={checkPercentage === true}
+                         onChange={()=>{setCheckPercentage(!checkPercentage)}}
+                         className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       Maximum User Percentage
+                       Maximum User Percentage 
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
-                      <input type="text"
+                      <input type="text" 
                       className="shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
                       defaultValue={conditions?.MaxUsersPercent} 
@@ -1023,7 +1059,7 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-3/12 ">
                       <span className="flex">
-                        <input id="checkbox-1"
+                        <input id="checkbox-1" checked={ userSign?.UserSignedIn === true} onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true})}}
                           aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
@@ -1059,7 +1095,10 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex ">
-                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"  
+                        checked={ userSign?.IsDomestic === true}
+                          onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.IsDomestic === true ? false : true})}}
+                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       
                       <label
@@ -1100,9 +1139,7 @@ Router.push('./raterule')
         </div>
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
-                <Button Primary={language?.Update} onClick={()=>{
-                 
-                
+                <Button Primary={language?.Next} onClick={()=>{ 
                   if (basicFlag.length !== 0){
                     submitAdditional();
                   }
@@ -1129,24 +1166,23 @@ Router.push('./raterule')
         {/** Rates **/}
         <div id='2' className={disp===2?'block':'hidden'}>
         <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+        <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"> 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Condition</div>
+               <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"> 1</button>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Modification and Discount</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Conditions</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-
-              <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+            <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">
+             
+            3</button>
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rates </div>
             </div>
-
-
-          </div>
+       </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
             Rates
             <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
@@ -1406,7 +1442,6 @@ Router.push('./raterule')
           </div>
         </div></div>
 
-    
         {/* Toast Container */}
         <ToastContainer position="top-center"
           autoClose={5000}
@@ -1418,8 +1453,7 @@ Router.push('./raterule')
           draggable
           pauseOnHover />
 
-
-      </div>
+   </div>
     </>
   )
 }

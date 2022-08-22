@@ -171,6 +171,7 @@ function Addraterule() {
               draggable: true,
               progress: undefined,
             });})
+            Router.push("../raterules");
           })
 
           .catch((error) => {
@@ -431,6 +432,7 @@ function Addraterule() {
             // Country Edit Submit
              const submitCountryAdd = () => {
             const final_data = { "user_rate_country": finalCountry }
+            alert(JSON.stringify(final_data))
             const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_country_link";
               axios
                 .put(url, final_data, { 
@@ -669,7 +671,7 @@ function Addraterule() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
               <Link
-                href="./landing"
+                href="../landing"
                 className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
               >
                 <a>{language?.home}</a>
@@ -690,7 +692,7 @@ function Addraterule() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="./propertysummary" >
+                  <Link href="../propertysummary" >
                     <a> {currentProperty?.property_name}</a>
                   </Link></span>
               </div>
@@ -761,7 +763,7 @@ function Addraterule() {
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Rule Description 
+         Rate Rule Description
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -773,6 +775,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       Program Name
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input type="text"
                       className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -791,6 +794,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       Rate Condition 
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -817,7 +821,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       Rate Description
-
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <textarea rows="2" columns="50"
                       className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -839,6 +843,7 @@ function Addraterule() {
                   htmlFor="grid-password"
                 >
                   Discount Type
+                  <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -863,6 +868,7 @@ function Addraterule() {
                   htmlFor="grid-password"
                 >
                   Hotel Amenity(Free Wifi)
+                  <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
                   type="text"
@@ -876,6 +882,7 @@ function Addraterule() {
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                   Price Multiplier
+                  <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
                   type="text"
@@ -1206,7 +1213,9 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.baserate} {language?.currency}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
                       onChange={
@@ -1228,6 +1237,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.baserate} {language?.amount}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1248,6 +1258,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.currency}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1270,6 +1281,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.amount}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1289,6 +1301,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.other} {language?.capacity} {language?.currency}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
@@ -1312,6 +1325,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.other} {language?.charges} {language?.amount}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1331,6 +1345,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       Payment Holder 
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1354,6 +1369,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       Refundable
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1379,6 +1395,7 @@ function Addraterule() {
                           htmlFor="grid-password"
                         >
                           Refundable until days
+                          <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
                           type="text"
@@ -1398,6 +1415,7 @@ function Addraterule() {
                           htmlFor="grid-password"
                         >
                           Refundable until time
+                          <span style={{color:"#ff0000"}}>*</span>
                        </label>
                         <input
                           type="time" step="2"
@@ -1420,6 +1438,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       Expiration Timezone
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="datetime-local"

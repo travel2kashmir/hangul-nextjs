@@ -112,6 +112,7 @@ function Address() {
     <div className={visible===1?'block':'hidden'}>
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
+     
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
       {/* Navbar */}

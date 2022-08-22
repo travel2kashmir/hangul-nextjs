@@ -192,44 +192,26 @@ function Theme() {
         <div>
         </div>
 
-        {/* Themes Active and Link */}
-        <div className="flex my-2" >
-          {/* Theme Dropdown and Save  */}
-          <div>
-
-            <span className="flex items-center">
-              <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mx-2"></span>
-              <span className="text-base font-semibold mr-4 text-gray-700">{themeName} </span>
-            </span>
-          </div>
-
-
-          {/* Link */}
-          <div className="flex items-center justify-end space-x-1 mr-2 sm:space-x-2 ml-auto">
-            <span>Preview</span>
-            <span className="text-cyan-800 underline">
-              <Link href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`}>
-               <a target="_blank"> {`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase()}</a></Link>
-            </span>
-
-          </div>
-
-        </div>
-
+       
         {/* Themes Selection*/}
         <div className="flex" >
           <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
             {language?.propertysummary}
           </h6>
           <div className="flex items-center justify-end space-x-1  sm:space-x-2 ml-auto">
+            
             <div>
               <button onClick={() => { setThemes(!themes) }} className="text-cyan-600 sm:text-xs bg-white hover:bg-gray-50 
-                    focus:ring-4 focus:outline-none focus:ring-gray-200 font-semibold rounded-lg text-sm px-4 py-2.5 
+                    focus:ring-4 focus:outline-none focus:ring-gray-200 font-semibold rounded-lg text-base px-4 py-2.5 
                          text-center inline-flex items-center"
-                      type="button">{themeName} <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none"
+                      type="button">
+                         <span className="flex items-center">
+              <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mx-2"></span>
+                        {themeName} 
+                        <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none"
                   stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-              </button>
+             </span> </button>
 
               <div className={themes === true ? 'block' : 'hidden'}>
                 <div className="z-10 w-40 absolute bg-white rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700">
@@ -253,13 +235,23 @@ function Theme() {
                 </div></div></div>
 
             <div>
-              <button className="bg-cyan-600 text-sm text-center hover:bg-cyan-700 text-white mr-2 py-2 px-4 rounded" onClick={() => {
+              <button className="bg-cyan-600 text-sm text-center hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={() => {
                 setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`.toLowerCase());
                 sendLink();
               }}
               >Save</button>
 
             </div>
+
+            <div className="flex hover:underline py-2 hover:decoration-cyan-600">
+            <svg className="h-6 w-6 pt-1 flex-none stroke-sky-500" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M17.25 10c0 1-1.75 6.25-7.25 6.25S2.75 11 2.75 10 4.5 3.75 10 3.75 17.25 9 17.25 10Z"></path><circle cx="10" cy="10" r="2.25"></circle></svg>
+              <button className=" text-base text-center text-cyan-600 mr-2  rounded"
+              >  
+               <Link href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`}>
+               <a target="_blank">Preview </a></Link></button>
+
+            </div>
+
           </div>
         </div>
 

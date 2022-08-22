@@ -46,10 +46,10 @@ function Raterule() {
   const [coun, setCoun] = useState([])
   const [mod, setMod] = useState([])
   const [disp, setDisp] = useState(0);
-  const [checkDevice, setCheckDevice] = useState();
+  const [checkDevice, setCheckDevice] = useState(false);
   const [checkLanguage, setCheckLanguage] = useState(false);
-  const [checkCountry, setCheckCountry] = useState();
-  const [checkProgram, setCheckProgram] = useState();
+  const [checkCountry, setCheckCountry] = useState(false);
+  const [checkProgram, setCheckProgram] = useState(false);
   const [checkPercentage, setCheckPercentage] = useState();
   const[userRateDetails, setUserRateDetails] = useState([])
   const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
@@ -90,9 +90,169 @@ function Raterule() {
     createLanguages();
 }, [])
 
+
+/**  Delete Rate Rules **/
+// Delete Country
+const deleteCountry = () =>{
+  const url = `/api/rate_rule/user_rate_condition/${userSign?.UserRateCondition_id}/countries`;
+  axios
+    .delete(url, { 
+      header: { "content-type": "application/json" } })
+    .then((response) => {
+      toast.success("Country delete success!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });         
+    }  
+    )
+    .catch((error) => {
+      toast.error("Country delete error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+}
+// Delete Device
+const deleteDevice = () =>{
+  const url = `/api/rate_rule/user_rate_condition/${userSign?.UserRateCondition_id}/devices`;
+  axios
+  .delete(url, { 
+    header: { "content-type": "application/json" } })
+  .then((response) => {
+    toast.success("Device delete success!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });         
+  }  
+  )
+  .catch((error) => {
+    toast.error("Device delete error!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  });
+}
+// Delete Program
+const deleteProgram = () =>{
+  const url = `/api/rate_rule/user_rate_condition/${userSign?.UserRateCondition_id}/memberships`;
+  axios
+  .delete(url, { 
+    header: { "content-type": "application/json" } })
+  .then((response) => {
+    toast.success("Program delete success!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });         
+  }  
+  )
+  .catch((error) => {
+    toast.error("Program delete error!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  });
+}
+// Delete Language
+const deleteLanguage = () =>{
+  const url = `/api/rate_rule/user_rate_condition/${userSign?.UserRateCondition_id}/languages`;
+  axios
+  .delete(url, { 
+    header: { "content-type": "application/json" } })
+  .then((response) => {
+    toast.success("Language delete success!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });         
+  }  
+  )
+  .catch((error) => {
+    toast.error("Language delete error!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  });
+}
+
+
+const submitRateUpdate = () =>{
+  const data = {
+    rate_rule_name:rateRule?.rate_rule_name,
+   rate_rule_id: rateRule?.rate_rule_id
+};
+alert(JSON.stringify(data))
+const url = "/api/rate_rule/rate_rules";
+  axios
+    .put(url,data, { 
+      header: { "content-type": "application/json" } })
+    .then((response) => {
+      toast.success("Rate rules2 Updated Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });         
+    }  
+    )
+    .catch((error) => {
+      toast.error("Rate rule2 update Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+}
+
   const submitRatesEdit = () => {
     const data = [{
       user_rate_condition_op:userRateDetails?.UserRateCondition_op,
+      offer_name: rateRule?.rate_rule_name,
       description:userRateDetails?.Description,
       max_user_percentage:userRateDetails?.MaxUsersPercent,
       user_signed_in: userSign?.UserSignedIn,
@@ -114,12 +274,14 @@ function Raterule() {
           draggable: true,
           progress: undefined,
         });
+    
         setBasicFlag([])
-        Router.push("./raterule");
-      })
+      
+      }
+    )
 
       .catch((error) => {
-        toast.error("Rate rule update Error2!", {
+        toast.error("Rate rule update Error!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -170,7 +332,7 @@ function Raterule() {
           progress: undefined,
         });
         fetchRateRule();
-        Router.push("./raterule");
+        Router.push("../raterules");
 
       })
       .catch((error) => {
@@ -187,6 +349,7 @@ function Raterule() {
       })
 
   }
+   /* Edit Rate Modification Function */
   const submitRateMod = () => {
     if (lang.length != 0) {
     const final_data = {
@@ -368,6 +531,8 @@ function Raterule() {
     const submitAdditional = () => {
       const data = [{
         max_user_percentage:userRateDetails?.MaxUsersPercent,
+        user_rate_condition_op:userRateDetails?.UserRateCondition_op,
+        offer_name: rateRule?.rate_rule_name,
         user_signed_in:userSign?.UserSignedIn,
         is_domestic: userSign?.IsDomestic,
         user_rate_condition_id:userSign?.UserRateCondition_id
@@ -409,6 +574,7 @@ function Raterule() {
       const final_data = {
         "user_rate_ineligiblity_id": rateRule?.user_rate_ineligiblity_id,
         "ineligiblity_type": discount?.ineligibility_type,
+       "ineligiblity_reason":rateRule?.rate_rule_name,
        
       }
       const url = "/api/rate_rule/rate_ineligiblity ";
@@ -487,7 +653,7 @@ function Raterule() {
       }
       country_data.push(temp) } );
       setFinalCountry(country_data);
-      
+      alert(JSON.stringify(finalCountry))
   }
 
   const devices = (dev) => { 
@@ -554,6 +720,7 @@ const filterByCountry = () => {
       return element.user_country === el.country_code;
    });
 });
+alert(JSON.stringify(resCou))
   }
   else{
   resCou= []
@@ -626,7 +793,7 @@ Router.push('./raterule')
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
               <Link
-                href="./landing"
+                href="../landing"
                 className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
               >
                 <a>{language?.home} </a>
@@ -647,7 +814,7 @@ Router.push('./raterule')
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="./propertysummary" >
+                  <Link href="../propertysummary" >
                     <a> {currentProperty?.property_name}</a>
                   </Link></span>
               </div>
@@ -729,15 +896,16 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Program Name
+                      Program Name 
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input type="text"
                       className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      defaultValue={rateRule?.user_rate_condition?.[i]?.MembershipProgram} 
+                      defaultValue={rateRule?.rate_rule_name} 
                       onChange={(e) =>
-                        setUserRateDetails({
-                          ...userRateDetails,
-                          MembershipProgram: e.target.value,
+                        setRateRule({
+                          ...rateRule,
+                          rate_rule_name: e.target.value,
                         },setBasicFlag(1))
                       }/>
                   </div>
@@ -745,10 +913,11 @@ Router.push('./raterule')
                 <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label
-                  className="text-sm font-medium text-gray-900 block "
+                  className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Discount Type
+                  Discount Type 
+                  <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -773,6 +942,7 @@ Router.push('./raterule')
                   htmlFor="grid-password"
                 >
                   Hotel Amenity(Free Wifi)
+                  <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
                   type="text"
@@ -786,6 +956,7 @@ Router.push('./raterule')
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                   Price Multiplier
+                  <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
                   type="text"
@@ -815,7 +986,9 @@ Router.push('./raterule')
                       filterByLanguage();
                    
                      if (basicFlag.length !== 0){
-                        submitRatesEdit()
+                        submitRatesEdit();
+                        submitRateUpdate();
+                        submitDiscountEdit();
                       } 
                       if (mod.length !== 0){ 
                       submitRateMod();
@@ -1144,7 +1317,7 @@ Router.push('./raterule')
                   if (finalLang.length !== 0){
                     submitLanguageEdit()
                   }
-                  if (finalCountry.length !== 0){
+                  if (finalCountry.length !== 0 && checkCountry == true){
                     submitCountryEdit()
                   }
                   if (finalDevice.length !== 0){
@@ -1152,6 +1325,18 @@ Router.push('./raterule')
                   }
                   if (finalProgram.length !== 0){
                     submitProgramEdit()
+                  }
+                  if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
+                    deleteDevice()
+                  }
+                  if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false){
+                    deleteCountry()
+                  } 
+                  if(rateRule?.user_rate_condition?.[i]?.language != undefined && checkLanguage == false){
+                    deleteLanguage()
+                  }
+                  if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
+                    deleteProgram()
                   }
                   setDisp(2);
                 }} /> 
@@ -1166,7 +1351,7 @@ Router.push('./raterule')
         <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-               <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"> 1</button>
+            <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
               <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
             </div>
 
@@ -1175,8 +1360,8 @@ Router.push('./raterule')
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Conditions</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">
-             
+          
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">
             3</button>
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rates </div>
             </div>
@@ -1195,6 +1380,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       {language?.baserate} {language?.currency}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
@@ -1217,6 +1403,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       {language?.baserate} {language?.amount}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1238,6 +1425,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.currency}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1260,6 +1448,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.amount}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1280,6 +1469,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       {language?.other} {language?.capacity} {language?.currency}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
@@ -1303,6 +1493,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       {language?.other} {language?.charges} {language?.amount}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1323,6 +1514,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       Payment Holder
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1346,6 +1538,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       Refundable
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1372,7 +1565,7 @@ Router.push('./raterule')
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until days
+                          Refundable until days  <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
                           type="text"
@@ -1393,6 +1586,7 @@ Router.push('./raterule')
                           htmlFor="grid-password"
                         >
                           Refundable until time
+                          <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
                           type="time" step="2"
@@ -1414,7 +1608,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Expiration Timezone
+                      Expiration Timezone <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"

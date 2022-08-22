@@ -123,6 +123,7 @@ function Signin() {
 
 
         } else {
+          setSpinner(0)
           /** Toast emitter for error wrong email password combination  **/
           toast.error("Please check your email and password", {
             position: "top-center",
@@ -141,7 +142,7 @@ function Signin() {
 
       .catch((error) => {
         logger.error('Sign In error!');
-
+        setSpinner(0);
         /** Toast emitter for Sign in error  **/
         toast.error("Sign in Error!", {
           position: "top-center",

@@ -57,6 +57,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         const url = `/api/rooms/${currentProperty.property_id}`
         const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
        setAllRooms(response.data)
+       setVisible(1)
       response?.data?.map((item)=>{
         var temp={
           name:item.room_name,
@@ -68,7 +69,7 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
         }
       )
       setGen(genData);
-      setVisible(1)
+      
     }
     catch (error) {
 

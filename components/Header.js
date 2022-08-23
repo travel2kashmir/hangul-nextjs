@@ -33,10 +33,7 @@ function Navbar(args) {
   /** UseState to check whether its small screen or large screen **/
   const [smSidebar, setSmSidebar] = useState(false)
   const router = useRouter();
-  const callHome = ({defaultLang}) =>{
-    <Home defaultLang={defaultLang}/>
-  }
-
+  
   return (
     <div>
       {/** Header **/}

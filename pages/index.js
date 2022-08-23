@@ -10,7 +10,8 @@ import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 const logger = require("../services/logger");
 
-function Signin() {
+function Signin(args) {
+ 
   const [spinner, setSpinner] = useState(0)
   /** Router for Redirection **/
   const router = useRouter();
@@ -18,7 +19,7 @@ function Signin() {
   const [current, setCurrent] = useState(false)
   useEffect(() => {
     const setLanguage = async () => {
-      localStorage.setItem("Language", "en");
+      localStorage.setItem("Language", "en")
     };
     setLanguage();
     getCookieData();
@@ -59,7 +60,7 @@ function Signin() {
   }
   if (locale === "ar") {
     language = arabic
-    console.log(JSON.stringify(language.title))
+    
   }
   if (locale === "fr") {
     language = french

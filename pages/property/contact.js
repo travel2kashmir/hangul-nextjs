@@ -55,7 +55,7 @@ function Scaffold() {
   /* Function Add Contact*/
   function submitContactAdd(e) {
     e.preventDefault();
-    if (gen.length !== 0) {
+    if (contact.contact_type!==undefined) {
       const contactdata = [{
         property_id: currentProperty?.property_id,
         contact_type: contact?.contact_type,
@@ -63,8 +63,9 @@ function Scaffold() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
+      alert(JSON.stringify(finalContact))
       axios
-        .post(`/api/contact`, {
+        .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
         })
         .then((response) => {

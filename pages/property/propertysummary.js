@@ -66,9 +66,9 @@ function PropertySummary() {
         })
         .catch((error) => { logger.error("url to fetch property details, failed") });
     }
-  fetchHotelDetails(); 
+   fetchHotelDetails(); 
    
-  }, [allHotelDetails]);
+  }, []);
 
  
   return (

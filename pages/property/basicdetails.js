@@ -54,6 +54,7 @@ const fetchBasicDetails = async () => {
   axios.get(url)
   .then((response)=>{setBasicDetails(response?.data);
   logger.info("url  to fetch property details hitted successfully")
+  console.log(response.data)
   setVisible(1)
   })
   .catch((error)=>{logger.error("url to fetch property details, failed")});  

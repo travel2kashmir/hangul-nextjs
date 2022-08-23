@@ -10,8 +10,7 @@ function Navbar(args) {
 
   const [services, setServices] = useState(false)
   useEffect(() => {
-
-    const firstfun = () => {
+      const firstfun = () => {
       if (typeof window !== 'undefined') {
 
         var locale = localStorage.getItem("Language");
@@ -80,7 +79,9 @@ function Navbar(args) {
               rounded-lg text-sm px-4 py-2 text-center  mr-2"
                   onClick={() => {
                      router.push("/");
-                    localStorage.clear();
+                     localStorage.removeItem("property");
+                     localStorage.removeItem("Signin Details");  
+                    //localStorage.clear();
                   }}
                   type="button"
                 >

@@ -9,23 +9,46 @@ import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 const logger = require("../services/logger");
-
+var language;
 function Signin(args) {
- 
+  const [lang, setLang] = useState("");
+
+
   const [spinner, setSpinner] = useState(0)
   /** Router for Redirection **/
   const router = useRouter();
   const { locale } = router;
   const [current, setCurrent] = useState(false)
+  /** State for internationalization **/
   useEffect(() => {
-    const setLanguage = async () => {
-      localStorage.setItem("Language", "en")
-    };
-    setLanguage();
+    firstfun()
     getCookieData();
+  }, [locale])
+  const firstfun = () => {
+    if (typeof window !== 'undefined') {
+      locale = localStorage.getItem("Language");
+      /*checks if language is already there in local storage */
+      if (locale === null) {
+        language = english
+        setLang("en")
+        localStorage.setItem("Language", "en")
+      }
+      else {
+        if (locale === "ar") {
+          language = arabic;
+          setLang("ar")
+        }
+        if (locale === "en") {
+          language = english;
+          setLang("en")
+        }
+        if (locale === "fr") {
+          language = french;
+          setLang("fr")
+        }
+      }
+    }
   }
-    , [])
-
   //write into cookies
   function setCookieData(checked) {
     if (checked) {
@@ -37,8 +60,6 @@ function Signin(args) {
       Cookies.remove("password")
     }
   }
-
-
   //read from cookies
   function getCookieData() {
     var mail = Cookies.get("email");
@@ -49,28 +70,12 @@ function Signin(args) {
       document.getElementById('password').value = pass;
     }
   }
-
-
-
-  /** State for internationalization **/
-  const [lang, setLang] = useState("en");
-  var language;
-  if (locale === "en") {
-    language = english
-  }
-  if (locale === "ar") {
-    language = arabic
-    
-  }
-  if (locale === "fr") {
-    language = french
-  }
-
   /** Function for Internationalisation **/
   const changelanguage = (item) => {
     const locale = item;
     /** Language selected stored to the localstorage **/
     localStorage.setItem("Language", locale);
+    language = locale;
     router.push("/", "/", { locale });
     logger.info("Language fetched: " + locale);
   };

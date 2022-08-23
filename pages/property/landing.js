@@ -22,10 +22,8 @@ const  Landing=() =>{
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
-       
-        locale = localStorage.getItem("Language");
-        
-        if (locale === "ar") {
+       locale = localStorage.getItem("Language");
+         if (locale === "ar") {
         language = arabic;
         }
         if (locale === "en") {
@@ -86,7 +84,9 @@ const  Landing=() =>{
           rounded-lg text-sm px-4 py-2 text-center  mr-2"
             onClick={() => {
               router.push("/");
-              localStorage.clear();
+              localStorage.removeItem("property");
+              localStorage.removeItem("Signin Details");  
+              //localStorage.clear();
             }}
             type="button"
           >

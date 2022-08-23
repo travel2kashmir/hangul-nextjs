@@ -76,7 +76,9 @@ function AdminLanding() {
                   rounded-lg text-sm px-4 py-2 text-center  mr-2"
                                 onClick={(e) => { e.preventDefault();
                                   router.push("/");
-                                    localStorage.clear();
+                                  localStorage.removeItem("property");
+                                  localStorage.removeItem("Signin Details");  
+                                 //localStorage.clear();
                                   }}
                                 type="button"
                             >

@@ -44,6 +44,7 @@ export default {
   view: "View",
   streetaddress: "Street Address",
   landmark: "Landmark",
+  previous:"Previous",
   city: "City",
   province: "Province",
   countrycode: "Country Code",
@@ -168,6 +169,10 @@ Cancel:"Cancel"
 },
 "Skip" :{
   label:"Skip",
+   color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
+},
+"Previous" :{
+  label:"Previous",
    color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
 },
 "Submit" :{

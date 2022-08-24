@@ -9,7 +9,7 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Footer from '../../components/Footer';
-import Loader from "../../components/loader";
+import Loader from "../../components/loaders/imageloader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
@@ -219,9 +219,7 @@ function Gallery() {
 
     return (
         <>
-        <div className={visible===0?'block':'hidden'}><Loader/></div>
-        
-        <div className={visible===1?'block':'hidden'}>
+      <div>
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
@@ -292,6 +290,9 @@ function Gallery() {
 
 
                 {/* Gallery Form */}
+                <div className={visible===0?'block w-auto h-auto m-6 flex':'hidden'}><Loader/><Loader/><Loader/></div>
+        
+        <div className={visible===1?'block':'hidden'}>
                 <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
                     {gallery?.images?.map((item, idx) => {
                         return (
@@ -326,6 +327,7 @@ function Gallery() {
                     )
                     }
 
+                </div>
                 </div>
             </div>
             {/* Modal Image Enlarge */}
@@ -544,3 +546,11 @@ function Gallery() {
 }
 
 export default Gallery
+Gallery.getLayout = function PageLayout(page) {
+    return (
+      <>
+        {page}
+      </>
+    )
+  }
+  

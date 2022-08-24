@@ -42,9 +42,7 @@ function AdditionalServices() {
                 if (locale === "fr") {
                     language = french;
                 }
-                /** Current Property Basic Details fetched from the local storage **/
-                services = JSON.parse(localStorage.getItem('allPropertyDetails'))
-                /** Current Property Details fetched from the local storage **/
+               /** Current Property Details fetched from the local storage **/
                 currentProperty = JSON.parse(localStorage.getItem("property"));
             }
         }
@@ -72,21 +70,54 @@ function AdditionalServices() {
                     })
                     setGene(geneData);
                 }
+              
             })
             .catch((error) => { logger.error("url to fetch additional services, failed") });
     }
     useEffect(() => {
         fetchAdditionalServices();
+        fetchHotelDetails();
 
     }, [])
+  /* Function call to fetch Current Property Details when page loads */
+  const fetchHotelDetails = async () => {
+    var genData = [];
+    const url = `/api/${currentProperty.address_province.replace(
+        /\s+/g,
+        "-"
+    )}/${currentProperty.address_city}/${currentProperty.property_category
+        }s/${currentProperty.property_id}`;
+    axios.get(url)
+        .then((response) => {
+            setServices(response.data);
+            logger.info("url  to fetch property details hitted successfully")
 
+            {
+                response.data?.services?.map((item) => {
+                    var temp = {
+                        name: item.local_service_name,
+                        description: item.service_comment,
+                        type: item.service_value,
+                        status: item.status,
+                        id: item.service_id
+                    }
+                    genData.push(temp)
+                })
+                setGen(genData);
+            }
+            setVisible(1)
+
+        })
+
+        .catch((error) => { logger.error("url to fetch property details, failed") });
+}
       /*Function to edit additional services*/
       const editAdditionalServices = (props) => {
      
         const final_data = {
             "add_service_id": props.id,
             "add_service_name": props.name,
-            "property_id": propertyId,
+            "property_id": currentProperty.property_id,
             "add_service_comment": props?.type,
             "status":props.status
         }
@@ -121,7 +152,7 @@ function AdditionalServices() {
     }
      /* Function to delete additional service */
      const deleteAdditionalServices = (props) => {
-        const url = `/api/additional_service/${props}`
+      const url = `/api/additional_service/${props}`
         axios.delete(url).then((response) => {
             toast.success(("Additional Service Deleted Successfully!"), {
                 position: "top-center",
@@ -133,8 +164,7 @@ function AdditionalServices() {
                 progress: undefined,
             });
             fetchAdditionalServices();
-            Router.push("./additionalservices");
-
+            Router.push('./additionalservices')
         })
             .catch((error) => {
                 toast.error(("Additional Service Delete Error!"), {
@@ -155,7 +185,7 @@ function AdditionalServices() {
             const final_data = {
 
                 "additional_service": [{
-                    "property_id": propertyName,
+                    "property_id": currentProperty.property_id,
                     "add_service_name": modified.add_service_name,
                     "add_service_comment": modified.add_service_comment,
                     "status": true
@@ -177,6 +207,7 @@ function AdditionalServices() {
                     fetchAdditionalServices();
                     Router.push("./additionalservices");
                     setModified([])
+                    setView(0)
                 })
                 .catch((error) => {
                     toast.error("Additional Services Add Error! ", {
@@ -262,12 +293,12 @@ function AdditionalServices() {
                         </li>
                     </ol>
                 </nav>
-                {additionalServices === '' ? <></> : 
+             
                 <Table  gen={gene} setGen={setGene} add={()=> setView(1)} name="Additional Services"
                 edit={editAdditionalServices}
                 delete={deleteAdditionalServices}
                 common={language?.common} cols={language?.AdditionalServicesCols}  /> 
-                }
+                
                  {/* Modal Add */}
                  <div className={view === 1 ? 'block' : 'hidden'}>
 

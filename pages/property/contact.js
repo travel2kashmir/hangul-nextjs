@@ -18,7 +18,7 @@ var propertyName;
 import Router from 'next/router'
 const logger = require("../../services/logger");
 
-function Scaffold() {
+function Contact() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
 
@@ -63,7 +63,6 @@ function Scaffold() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
-      alert(JSON.stringify(finalContact))
       axios
         .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
@@ -80,7 +79,7 @@ function Scaffold() {
           });
           setView(0)
           fetchHotelDetails();
-          Router.push("./scaffoldedtable");
+          Router.push("./contact");
           setContact([])
         })
         .catch((error) => {
@@ -397,8 +396,8 @@ function Scaffold() {
   );
 }
 
-export default Scaffold
-Scaffold.getLayout = function PageLayout(page){
+export default Contact
+Contact.getLayout = function PageLayout(page){
   return(
     <>
     {page}

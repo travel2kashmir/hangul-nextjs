@@ -47,7 +47,7 @@ function Services() {
                     language = french;
                 }
                 /** Current Property Basic Details fetched from the local storage **/
-                services = JSON.parse(localStorage.getItem('allPropertyDetails'))
+                
                 /** Current Property Details fetched from the local storage **/
                 currentProperty = JSON.parse(localStorage.getItem("property"));
             }

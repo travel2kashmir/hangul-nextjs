@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Router from "next/router";
 var language;
 var currentProperty;
+const logger = require("../../services/logger");
 
 function Packages() {
     const [visible,setVisible]=useState(0) 
@@ -39,6 +40,11 @@ function Packages() {
         firstfun();
         Router.push("./packages");
     }, [])
+    useEffect(() => {
+        fetchPackages();
+    }
+ , [])
+
     const [gen, setGen] = useState([])
     const [deletePackage, setDeletePackage] = useState(0)
     const [actionPackage, setActionPackage] = useState({});
@@ -50,7 +56,9 @@ function Packages() {
         const url = `/api/package/${currentProperty?.property_id}`;
         axios.get(url)
             .then((response) => {
+                setVisible(1);
                 setAllPackages(response.data);
+             
                 {
                     response.data?.map((item) => {
                         var temp = {
@@ -62,7 +70,7 @@ function Packages() {
                         genData.push(temp)
                     })
                     setGen(genData);
-                    setVisible(1);
+                 
                 }
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -72,11 +80,7 @@ function Packages() {
       }
 
 
-    useEffect(() => {
-        fetchPackages();
-    }
-        , [])
-
+ 
     /* Delete Package Function*/
     const deletePackages = (props) => {
         const url = `/api/package/${props}`
@@ -113,8 +117,8 @@ function Packages() {
     };
 
     return (
-        <><div className={visible===0?'block':'hidden'}><Loader/></div>
-        <div className={visible===1?'block':'hidden'}>
+        <>
+        <div>
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"

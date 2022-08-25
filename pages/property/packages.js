@@ -15,6 +15,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Router from "next/router";
 var language;
 var currentProperty;
+var currentLogged;
+const logger = require("../../services/logger");
 
 function Packages() {
     const [visible,setVisible]=useState(0) 
@@ -33,12 +35,17 @@ function Packages() {
                 }
                 /** Current Property Basic Details fetched from the local storage **/
                 currentProperty = JSON.parse(localStorage.getItem('property'))
-
+                currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             }
         }
         firstfun();
         Router.push("./packages");
     }, [])
+    useEffect(() => {
+        fetchPackages();
+    }
+ , [])
+
     const [gen, setGen] = useState([])
     const [deletePackage, setDeletePackage] = useState(0)
     const [actionPackage, setActionPackage] = useState({});
@@ -50,7 +57,9 @@ function Packages() {
         const url = `/api/package/${currentProperty?.property_id}`;
         axios.get(url)
             .then((response) => {
+                setVisible(1);
                 setAllPackages(response.data);
+             
                 {
                     response.data?.map((item) => {
                         var temp = {
@@ -62,7 +71,7 @@ function Packages() {
                         genData.push(temp)
                     })
                     setGen(genData);
-                    setVisible(1);
+                 
                 }
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -72,11 +81,7 @@ function Packages() {
       }
 
 
-    useEffect(() => {
-        fetchPackages();
-    }
-        , [])
-
+ 
     /* Delete Package Function*/
     const deletePackages = (props) => {
         const url = `/api/package/${props}`
@@ -113,8 +118,8 @@ function Packages() {
     };
 
     return (
-        <><div className={visible===0?'block':'hidden'}><Loader/></div>
-        <div className={visible===1?'block':'hidden'}>
+        <>
+        <div>
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
@@ -125,9 +130,8 @@ function Packages() {
                         <li className="inline-flex items-center">
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                             <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                                <Link href="./landing" >
-                                    <a>  {language?.home}</a>
-                                </Link></span>
+                            <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link></span>
                         </li>
                         <li>
                             <div className="flex items-center">

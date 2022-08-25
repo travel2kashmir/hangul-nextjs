@@ -453,7 +453,7 @@ roomsxml:'../../property/roomsxml'
  gallery:'./gallery',
  services: './services',
  propertysummary:'./propertysummary',
- roombundles:'./allroombundles',
+ roombundle:'./allroombundles',
  rooms:'./rooms',
  packages:'./packages',
  result:'./allresults',

@@ -221,7 +221,7 @@ function Address() {
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.[i]?.address_street_address}
+                        defaultValue={address?.address?.[i]?.address_street_address}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
@@ -244,7 +244,7 @@ function Address() {
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.[i]?.address_landmark}
+                        defaultValue={address?.address?.[i]?.address_landmark}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,

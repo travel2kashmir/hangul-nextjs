@@ -1,9 +1,4 @@
 {
-<<<<<<< Updated upstream
-  "gitBranch": "main",
-  "gitCommitHash": "9f27eb8"
-=======
-  "gitBranch": "raterulevalidation",
-  "gitCommitHash": "1428a4d"
->>>>>>> Stashed changes
+  "gitBranch": "loader",
+  "gitCommitHash": "30779de"
 }

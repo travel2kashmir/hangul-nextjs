@@ -11,11 +11,12 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Footer from '../../components/Footer';
-import Loader from "../../components/loader";
 var language;
 var currentProperty;
 var propertyName;
+import Headloader from "../../components/loaders/headloader";
 import Router from 'next/router'
+import LoaderTable from "./loaderTable";
 const logger = require("../../services/logger");
 
 function Scaffold() {
@@ -159,8 +160,7 @@ function Scaffold() {
           })
           setGen(genData);
         }
-
-        setVisible(1);
+      setVisible(1);
 
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -207,11 +207,7 @@ function Scaffold() {
 
   return (
     <>
-
-    <div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
-
-      <Header Primary={english?.Side} />
+     <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
@@ -250,10 +246,11 @@ function Scaffold() {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="./propertysummary">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
                     <a>{propertyName}</a>
-                  </Link></span>
+                  </Link>
+                  </div>
               </div>
             </li>
             <li>
@@ -281,10 +278,12 @@ function Scaffold() {
           </ol>
         </nav>
         {/* Header */}
+        <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
         <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit}
         delete={submitContactDelete} common={language?.common} cols={language?.ContactCols}
         name="Contact"/> 
-
+        </div>
 
       
 
@@ -391,8 +390,7 @@ function Scaffold() {
           pauseOnHover
         />
       </div>
-    
-    </div></>
+    </>
 
   );
 }

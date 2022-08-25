@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar  from "../../components/Sidebar";
+import Headloader from '../../components/loaders/headloader';
+import Lineloader from '../../components/loaders/lineloader';
 import Header  from "../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,10 +17,11 @@ import Loader from "../../components/loader";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+var i=0;
 
 function Address() {
   const [visible,setVisible]=useState(0) 
- 
+  
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -52,8 +55,9 @@ function Address() {
     }s/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setAddress(response.data);
+      
     logger.info("url  to fetch property details hitted successfully")
-  setVisible(1)})
+     setVisible(1)})
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
 }
   useEffect(() => {
@@ -64,7 +68,7 @@ function Address() {
   const submitAddressEdit = () => {
     if (allHotelDetails.length !== 0){
     const final_data = {
-      address_id: address?.address[0]?.address_id,
+      address_id: address?.address?.[i]?.address_id,
       address_street_address: allHotelDetails.address_street_address,
       address_longitude: allHotelDetails.address_longitude,
       address_latitude: allHotelDetails.address_latitude,
@@ -108,8 +112,7 @@ function Address() {
 
   return (
     <>
-    <div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
+   
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
      
@@ -149,9 +152,12 @@ function Address() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>  
               <Link href="./propertysummary" >
+             
               <a>  {address?.property_name} </a>
-              </Link></span>
+              </Link></div></span>
             </div>
           </li>
           <li>
@@ -182,7 +188,7 @@ function Address() {
       {/* Update Address Form */}
       <div className="bg-white shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl  flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-          {language?.address}
+          {language?.address} 
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"
@@ -197,9 +203,9 @@ function Address() {
             ></path>
           </svg>
         </h6>
-        {address?.address?.map((item, idx) => {
-          return (
-            <div className="pt-6" key={idx}>
+       
+        
+            <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
                   <div className="w-full lg:w-6/12 px-4">
@@ -210,17 +216,19 @@ function Address() {
                       >
                         {language?.streetaddress}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={item.address_street_address}
+                        defaultValue={address?.address?.[i]?.[i]?.address_street_address}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_street_address: e.target.value,
                           })
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -231,17 +239,19 @@ function Address() {
                       >
                         {language?.landmark}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={item.address_landmark}
+                        defaultValue={address?.address?.[i]?.[i]?.address_landmark}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_landmark: e.target.value,
                           })
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -252,6 +262,8 @@ function Address() {
                       >
                         {language?.city}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={(e) =>
@@ -267,6 +279,7 @@ function Address() {
                         <option value="pahalgam">Pahalgam</option>
                         <option value="gulmarg">Gulmarg</option>
                       </select>
+                      </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -277,6 +290,8 @@ function Address() {
                       >
                        {language?.province}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={(e) =>
@@ -292,7 +307,7 @@ function Address() {
                         <option value="kargil">Kargil</option>
                         <option value="delhi">Delhi</option>
                         <option value="maharastra">Maharastra</option>
-                      </select>
+                      </select></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -303,19 +318,21 @@ function Address() {
                       >
                         {language?.latitude}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900
                      sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600
                       block w-full p-2.5"
-                        defaultValue={item.address_latitude}
+                        defaultValue={address?.address?.[i]?.address_latitude}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_latitude: e.target.value,
                           })
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -326,17 +343,19 @@ function Address() {
                       >
                         {language?.longitude}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={item.address_longitude}
+                        defaultValue={address?.address?.[i]?.address_longitude}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_longitude: e.target.value,
                           })
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -347,17 +366,19 @@ function Address() {
                       >
                         {language?.postalcode}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={item.address_zipcode}
+                        defaultValue={address?.address?.[i]?.address_zipcode}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_zipcode: e.target.value,
                           })
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -368,17 +389,19 @@ function Address() {
                       >
                         {language?.precision}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={item.address_precision}
+                        defaultValue={address?.address?.[i]?.address_precision}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_precision: e.target.value,
                           })
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -389,12 +412,14 @@ function Address() {
                       >
                         {language?.country}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
                         <option value="IN">India</option>
                         <option value="PK">Pakistan</option>
                         <option value="UN">United States of America</option>
                         <option value="UK">United Kingdom</option>
-                      </select>
+                      </select></div>
                     </div>
                   </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
@@ -403,8 +428,8 @@ function Address() {
                 </div>
               </div>
             </div>
-          );
-        })}
+         
+       
       </div>
 
       {/* Toast Container */}
@@ -421,7 +446,7 @@ function Address() {
       />
     </div>
     <Footer/>
-    </div>
+   
     </>
   );
 }

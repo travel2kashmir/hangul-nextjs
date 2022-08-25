@@ -17,13 +17,13 @@ import Loader from "../../components/loader";
 var language;
 var currentUser;
 var currentProperty;
-
+var currentLogged;
 function PropertySummary() {
   /** State to store Current Property Details **/
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-  
-  
-  
+
+
+
 
   /** Router for Redirection **/
   const router = useRouter();
@@ -43,13 +43,14 @@ function PropertySummary() {
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       }
     }
     firstfun();
     router.push("./propertysummary");
   }, [])
 
- 
+
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -61,26 +62,26 @@ function PropertySummary() {
       axios.get(url)
         .then((response) => {
           setAllHotelDetails(response.data);
-          
+
           logger.info("url  to fetch property details hitted successfully")
         })
         .catch((error) => { logger.error("url to fetch property details, failed") });
     }
-   fetchHotelDetails(); 
-   
+    fetchHotelDetails();
+
   }, []);
 
- 
+
   return (
     <div>
-     
-    
+
+
       <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
       {/* Body */}
       <div
         id="main-content"
-        className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
+        className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"}
       >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -95,8 +96,7 @@ function PropertySummary() {
                 >
                   <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
-                <Link href="./landing">
-                  <a>{language?.home}</a>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
                 </Link>
               </div>
             </li>
@@ -115,7 +115,7 @@ function PropertySummary() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  {allHotelDetails?.property_name} 
+                  {allHotelDetails?.property_name}
                 </span>
               </div>
             </li>
@@ -123,11 +123,6 @@ function PropertySummary() {
         </nav>
         <div>
         </div>
-
-       
-
-       
-
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">
@@ -566,16 +561,16 @@ function PropertySummary() {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
-        <Footer/>
+      <Footer />
     </div>
-   
+
   );
 }
 export default PropertySummary;
-PropertySummary.getLayout = function PageLayout(page){
-  return(
+PropertySummary.getLayout = function PageLayout(page) {
+  return (
     <>
-    {page}
+      {page}
     </>
   )
-  }
+}

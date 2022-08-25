@@ -76,10 +76,10 @@ const Table = (args) => {
                 <div className="sm:flex">
                     <div className=" sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
-                            <label htmlFor="users-search" className="sr-only">{args?.common?.search}</label>
+                            <label htmlFor="users-search" className="sr-only">{args?.cols?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
                                 <input type="text" name="email" id="myInput" onKeyUp={myFunction}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search">
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={args?.cols?.search}>
                                 </input>
                             </div>
                         </form>

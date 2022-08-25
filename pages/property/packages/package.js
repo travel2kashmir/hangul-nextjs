@@ -18,6 +18,7 @@ var filtered=[]
 var resArr=[]
 var currentPackageRooms=[]
 import { ToastContainer, toast } from 'react-toastify';
+var currentLogged;
 
 function Package() {
     const [visible,setVisible]=useState(0)
@@ -39,6 +40,7 @@ function Package() {
              /** To fetch current Package from Local Storage **/
             currentPackage=localStorage.getItem('packageId')
             currentPackageRooms=JSON.parse(localStorage.getItem('packageDescription'))
+            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
           } 
         }
         firstfun();
@@ -116,9 +118,8 @@ function Package() {
                     <li className="inline-flex items-center">
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                             <p className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href="../landing" >
-                          <a>{language?.home}</a> 
-                        </Link></p>
+                            <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../admin/AdminLanding":"../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link></p>
                     </li>
                     <li>
                         <div className="flex items-center">

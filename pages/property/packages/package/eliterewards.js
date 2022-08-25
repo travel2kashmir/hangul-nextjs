@@ -16,7 +16,6 @@ import Router from "next/router";
 var language;
 var currentProperty;
 var currentPackage;
-var currentLogged;
 const logger = require("../../../../services/logger");
 
 function Eliterewards() {
@@ -38,7 +37,6 @@ function Eliterewards() {
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
         currentPackage=localStorage.getItem('packageId')
-        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       } 
     }
     firstfun();
@@ -228,8 +226,9 @@ function Eliterewards() {
           <li className="inline-flex items-center">
               <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
              <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-             <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../../admin/AdminLanding":"../../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link></span>
+              <Link href="../../landing" >
+             <a> {language?.home}</a>
+            </Link></span>
           </li>
           <li>
             <div className="flex items-center">

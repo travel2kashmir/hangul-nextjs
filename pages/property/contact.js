@@ -18,9 +18,8 @@ import Headloader from "../../components/loaders/headloader";
 import Router from 'next/router'
 import LoaderTable from "./loaderTable";
 const logger = require("../../services/logger");
-var currentLogged;
 
-function Contact() {
+function Scaffold() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
 
@@ -48,7 +47,6 @@ function Contact() {
         }
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
-        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       }
     }
     firstfun();
@@ -66,6 +64,7 @@ function Contact() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
+      alert(JSON.stringify(finalContact))
       axios
         .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
@@ -82,7 +81,7 @@ function Contact() {
           });
           setView(0)
           fetchHotelDetails();
-          Router.push("./contact");
+          Router.push("./scaffoldedtable");
           setContact([])
         })
         .catch((error) => {
@@ -226,8 +225,12 @@ function Contact() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
-              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link>
+              <Link
+                href="./landing"
+                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
+              >
+                <a>{language?.home}</a>
+              </Link>
             </li>
             <li>
               <div className="flex items-center">
@@ -392,8 +395,8 @@ function Contact() {
   );
 }
 
-export default Contact
-Contact.getLayout = function PageLayout(page){
+export default Scaffold
+Scaffold.getLayout = function PageLayout(page){
   return(
     <>
     {page}

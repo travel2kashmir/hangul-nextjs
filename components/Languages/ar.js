@@ -5,35 +5,35 @@ export default {
   addroom:"أضف غرفة",
   addnewroom:"أضف غرفة جديدة",
   addnewservices:"أضف خدمات جديدة",
-  "addcontacts":"ضف جهات اتصال",
-  "Update" :{
+  addcontacts:"ضف جهات اتصال",
+  Update :{
     label:' أَجَدّ',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
-"Submit" :{
+Submit :{
   label:'اِختَضَع أَجَدّ',
    color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
-"Delete" :{
+Delete :{
   label:'نعم أنا متأكد',
    color: "bg-red-600 hover:bg-red-800 text-white  mx-2 ",
 },
 
-"Cancel" :{
+Cancel :{
   label: 'لا إلغاء',
    color: "text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 ",
 },
-"Add" :{
+Add :{
   label:' أَتْبَع',
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
 },
-"AddContact" :{
+AddContact :{
   label: " أَتْبَع اتصل",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    
 },
-"EditContact" :{
+EditContact :{
   label: " تحرير اتصل",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg
@@ -50,18 +50,18 @@ export default {
    ></path>
   </svg>
   },
-  "Next" :{
+  Next :{
     label: 'التالي',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
 
 
-"ContactCols":{
+ContactCols:{
   col1 : "نوع الاتصال",
   col2 : "بيانات المتصل"
  },
    
- "common":{
+ common:{
  Status:"الحالة",
  Action: "أجراءات",
  Edit: "تعديل",
@@ -79,42 +79,40 @@ export default {
  Cancel:"إلغاء"
  },
 
-  "AdditionalServicesCols":{
+  AdditionalServicesCols:{
     name:"خدمات إضافية",
    col1 : "اسم الخدمة",
    col2 : "تفاصيل الخدمة", 
   },
   
-  "ServicesCols":{
+  ServicesCols:{
     name:"خدمات",
    col1 : "اسم الخدمة",
    col2 : "تفاصيل الخدمة", 
   },
   
-  "RoomCols":{
+  RoomCols:{
     name:"غرف",
    col1 : "اسم الغرفة",
    col2 : "نوع الغرفة", 
   },
-  "PackageCols":{
+  PackageCols:{
     name:"الحزم",
    col1 : "اسم الحزمة",
     
   },
-  "MilesCols":{
+  MilesCols:{
     name:"أميال الحزمة",
    col1 : "عدد الأميال",
    col2 : "مزود الأميال",
     
   },
-  "EliteCols":{
+  EliteCols:{
     name:"مكافآت النخبة",
    col1 : "إسم البرنامج",
-   col2 : "مستوى البرنامج",
-    
-
-  
-"DeleteContact" :{
+ col2 : "مستوى البرنامج",
+ },
+DeleteContact :{
    label: "  اتصل  إحذف",
    color: "bg-red-600 hover:bg-red-800 text-white ",
    icon: <svg
@@ -130,29 +128,25 @@ export default {
    ></path>
   </svg>
   },
-  "AddImage" : {
-   label:'استعارة أَتْبَع',
-   color: "bg-cyan-600 text-white  hover:bg-cyan-700",
-    icon: <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
 
-},
-"Skip" :{
+ 
+Skip :{
   label:"يتخطى",
    color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
 },
-"AddMiles" :{
+AddMiles :{
   label: " أَتْبَع اميال",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    
 },
-"AddProgram" :{
+AddProgram :{
     label: "برنامج أَتْبَع",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    
 },
-"EditProgram" :{
+EditProgram:{
     label: "إحذف تحرير",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg
@@ -170,7 +164,7 @@ export default {
  </svg>
 },
 
-"DeleteProgram" :{
+DeleteProgram :{
     program:'برنامج  إحذف ',
    color: "bg-red-600 hover:bg-red-800 text-white ",
    icon: <svg
@@ -186,17 +180,17 @@ export default {
    ></path>
  </svg>
 },
-"Upload" :{
+Upload :{
   label:'تَحْميل',
    color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
 },
-"AddService" :{ 
+AddService :{ 
    label: " أَتْبَع إِصدار",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    
 },
-"EditService" :{
+EditService :{
     label:'تحرير  إِصدار',
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg
@@ -213,7 +207,7 @@ export default {
    ></path>
  </svg>
 },
-"DeleteService" :{
+DeleteService :{
     label: "  إِصدارإحذف",
    color: "bg-red-600 hover:bg-red-800 text-white ",
    icon: <svg
@@ -229,13 +223,13 @@ export default {
    ></path>
  </svg>
 },
-"AddRoom" :{
+AddRoom :{
   label: "أَتْبَع أَسْكَن",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    
 },
- "EditRoom":{
+ EditRoom:{
   label: "تحرير أَسْكَن",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg
@@ -252,6 +246,13 @@ export default {
    ></path>
  </svg>
 },
+
+"RateRuleCols":{
+name:"قواعد معدل",
+ col1 : "اسم",
+  
+},
+
 "DeleteRoom" :{
     label: "أَسْكَن إحذف",
    color: "bg-red-600 hover:bg-red-800 text-white ",
@@ -268,7 +269,7 @@ export default {
    ></path>
  </svg>
 },
-"EditPackage" :{
+EditPackage :{
     label:'اِتِّفاق تحرير',
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg
@@ -285,7 +286,7 @@ export default {
    ></path>
  </svg>
 },
-"DeletePackage" :{
+DeletePackage :{
     label: " اِتِّفاق إحذف",    
    color: "bg-red-600 hover:bg-red-800 text-white ",
    icon: <svg
@@ -301,7 +302,7 @@ export default {
    ></path>
  </svg>
 },
-"AddPackage" :{
+AddPackage :{
   label: 'اِتِّفاق أَتْبَع',
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
@@ -346,6 +347,7 @@ export default {
     landmark: "أُعلُومَة",
     city: "بَلَد",
     province: " اِختِصَاص",
+    Province: " اِختِصَاص",
     countrycode: "رمز البلد",
     latitude: "حَدّ",
     longitude: "دَرَجَةُ الطُّول",
@@ -377,6 +379,8 @@ export default {
     export:' إِصدار',
     service:' إِصدار',
     additional:'إِضَافِيّ',
+    additionalservices:' خِدمات إِضَافِيّ',
+    basicservices:"الخدمات الأساسية",
     searchforservices:'خِدْمة اِسْتَنْجَع',
     inactive:'بائِر',
     sendto:'أَرْسَل',
@@ -433,6 +437,7 @@ export default {
     areyousureyouwanttodelete:"?هل أنت متأكد أنك تريد حذف",
     yesiamsure:'نعم أنا متأكد',
     nocancel:'لا إلغاء',
+    theme:'سمة',
     searchforprograms:'البرامج البحث عن',
     propertypackages:'حزم الممتلكات',
     packagedescription:'حزمة الوصف',
@@ -449,8 +454,14 @@ export default {
     imageupload:'لتخزين الصور',
     image:'تَصَوُّر ',
     titl:'عَنْوَنَ',
-    upload:'تَحْميل'
-  }
-  
+    upload:'تَحْميل',
+
+    
+    "Addnewproperty":{
+      label:'إضافة خاصية جديدة',
+      color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+    }
   };
+
+
   

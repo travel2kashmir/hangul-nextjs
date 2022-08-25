@@ -43,7 +43,11 @@ export default {
   },
   "PackageCols":{
     name:"Paquets",
-   col1 : "Paquet Nom",
+   col1 : "Paquet Nom", 
+  },
+  "RateRuleCols":{
+    name:"Règles de Taux",
+   col1 : "Nom",
     
   },
   "MilesCols":{
@@ -64,9 +68,9 @@ export default {
   addroom:"Ajouter une salle",
   addnewroom:"Ajouter une nouvelle pièce",
   addnewservices:"Ajouter de nouveaux services",
-  "addcontacts":"Ajouter des contacts",
+  addcontacts:"Ajouter des contacts",
   basicdetails: "Détails De Base ",
-addbasicdetails:"Ajouter des détails de base",
+  addbasicdetails:"Ajouter des détails de base",
 
   "Update" :{
     label: 'Éditer',
@@ -341,6 +345,7 @@ addbasicdetails:"Ajouter des détails de base",
   property: "Biens",
   name: "Nom",
   status: "Statut",
+  theme:'Thème',
   category: "Catégorie",
   active: "Actif",
   action: "Acte",
@@ -384,6 +389,8 @@ addbasicdetails:"Ajouter des détails de base",
   service:'Le service',
   services:'Le services',
   additional:'Additionnel',
+  additionalservices:"Additionnel Le services",
+  basicservices:"De Base Le services",
   searchforservices:'Rechercher Le services',
   inactive:'Inactif',
   sendto:'Envoyer a`',
@@ -458,6 +465,10 @@ addbasicdetails:"Ajouter des détails de base",
   imageupload:'Hargement Des Images',
   image:'Image',
   titl:'titre',
-  upload:'Télécharger'
+  upload:'Télécharger',
+  "Addnewproperty":{
+    label:'Ajouter une nouvelle propriété',
+    color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+  }
 
 };

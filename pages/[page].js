@@ -58,6 +58,7 @@ function Page() {
   }
 
   const fetchHotelDetails = async () => {
+
 console.log(router.query.page)
     if (router?.query?.page) {
       var url;
@@ -84,6 +85,7 @@ console.log(router.query.page)
   useEffect(() => {
     fetchHotelDetails();
   },[router.query.page]);
+
 
   return (
     <>{allHotelDetails.length===0?
@@ -461,7 +463,7 @@ console.log(router.query.page)
      </div>
 
      {/* Gallery */}
-     <div className="mt-2 grid grid-flow-row-dense md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
+     <div className="mt-2 grid grid-flow-row-dense md:grid-cols-1 sm:grid-cols-1 mb-4 lg:grid-cols-1 gap-3">
        <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
          <div className="flex items-center justify-between ">
            <div className="flex-shrink-0">

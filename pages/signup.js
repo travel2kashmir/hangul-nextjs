@@ -108,7 +108,7 @@ export default function Register(props) {
                 setAdmin({...admin,admin_password:enc_pass})
             })
         });
-        alert(JSON.stringify(admin))
+      
         
 
       Axios.post('/signup/admin', JSON.stringify(admin),

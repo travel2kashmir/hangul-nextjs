@@ -14,7 +14,7 @@ var currentUser;
 
 
 function AdminLanding() {
-    var locale;
+    
     const [properties, setProperties] = useState([])
     const router = useRouter();
 
@@ -31,26 +31,27 @@ function AdminLanding() {
             setProperties(response.data)
         }).catch(error => alert(error))
     }
-    useEffect(() => {
-        const firstfun = () => {
-            if (typeof window !== 'undefined') {
-             locale = localStorage.getItem("Language");
-                if (locale === "ar") {
-                    language = arabic;
-                }
-                if (locale === "en") {
-                    language = english;
-                }
-                if (locale === "fr") {
-                    language = french;
-                }
-                currentUser = JSON.parse(localStorage.getItem("Signin Details"));
+    useEffect(()=>{
+        const firstfun=()=>{
+          if (typeof window !== 'undefined'){
+            var locale = localStorage.getItem("Language");
+            if (locale === "ar") {
+            language = arabic;
             }
+            if (locale === "en") {
+            language=english;
+            }
+            if (locale === "fr") {
+              language = french;
+            } 
+            currentUser = JSON.parse(localStorage.getItem("Signin Details"));    
+          } 
         }
         firstfun();
-        router.push('./AdminLanding')
+        router.push('./AdminLanding');
         fetchAllProperties();
-    }, [])
+      },[])
+    
 
     const LocalProperty = ({ item }) => {
         localStorage.setItem("property", JSON.stringify(item));
@@ -75,7 +76,9 @@ function AdminLanding() {
                   rounded-lg text-sm px-4 py-2 text-center  mr-2"
                                 onClick={(e) => { e.preventDefault();
                                   router.push("/");
-                                    localStorage.clear();
+                                  localStorage.removeItem("property");
+                                  localStorage.removeItem("Signin Details");  
+                                 //localStorage.clear();
                                   }}
                                 type="button"
                             >

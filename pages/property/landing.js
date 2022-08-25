@@ -12,7 +12,7 @@ import Loader from "../../components/loader";
 var language;
 var currentUser;
 const  Landing=() =>{ 
-
+  var locale;
   /** Router for Redirection **/
   const router = useRouter();
 
@@ -22,10 +22,8 @@ const  Landing=() =>{
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
-       
-        var locale = localStorage.getItem("Language");
-        
-        if (locale === "ar") {
+       locale = localStorage.getItem("Language");
+         if (locale === "ar") {
         language = arabic;
         }
         if (locale === "en") {
@@ -38,31 +36,29 @@ const  Landing=() =>{
       } 
     }
     firstfun();
+    fetchProperty();
   },[])
 
   /** Use Effect to fetch all the properties of Current user **/
-  useEffect(() => {
-    const fetchProperty = async () => { 
-      try {
-        const url = `/api/properties/${currentUser.id}`;
-        logger.info("url" +url)
-        const response = await axios.get(url, {
-          headers: { accept: "application/json" },
-        });
-        
-        setOwnerdata(response.data);
-      } catch (error) {
-        if (error.response) {
-          logger.error("Current User Properties Error");
-        } else {
-          logger.error("Current User Properties Error");
-        }
+  const fetchProperty = async () => { 
+    try {
+      const l=await localStorage.getItem("Language");
+      console.log("langguage "+l)
+      const url = `/api/${l}/properties/${currentUser.id}`;
+      logger.info("url" +url)
+      const response = await axios.get(url, {
+        headers: { accept: "application/json" },
+      });
+      
+      setOwnerdata(response.data);
+    } catch (error) {
+      if (error.response) {
+        logger.error("Current User Properties Error");
+      } else {
+        logger.error("Current User Properties Error");
       }
-    };
-   
-    fetchProperty();
-    
-  },[]);
+    }
+  };
 
   /**Function to save Current property to be viewed to Local Storage**/
   const LocalProperty = ({ item }) => {
@@ -88,7 +84,9 @@ const  Landing=() =>{
           rounded-lg text-sm px-4 py-2 text-center  mr-2"
             onClick={() => {
               router.push("/");
-              localStorage.clear();
+              localStorage.removeItem("property");
+              localStorage.removeItem("Signin Details");  
+              //localStorage.clear();
             }}
             type="button"
           >

@@ -17,11 +17,14 @@ var currentProperty;
 var propertyName;
 import Router from 'next/router'
 const logger = require("../../services/logger");
+var currentLogged;
 
-function Scaffold() {
+function Contact() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
+
   const [visible,setVisible]=useState(0) 
+
   const [deleteContact, setDeleteContact] = useState(0);
   const [viewDel, setViewDel] = useState(0);
   const [editContact, setEditContact] = useState({});
@@ -44,6 +47,7 @@ function Scaffold() {
         }
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       }
     }
     firstfun();
@@ -53,7 +57,7 @@ function Scaffold() {
   /* Function Add Contact*/
   function submitContactAdd(e) {
     e.preventDefault();
-    if (gen.length !== 0) {
+    if (contact.contact_type!==undefined) {
       const contactdata = [{
         property_id: currentProperty?.property_id,
         contact_type: contact?.contact_type,
@@ -62,7 +66,7 @@ function Scaffold() {
       }];
       const finalContact = { contacts: contactdata };
       axios
-        .post(`/api/contact`, {
+        .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
         })
         .then((response) => {
@@ -77,7 +81,7 @@ function Scaffold() {
           });
           setView(0)
           fetchHotelDetails();
-          Router.push("./scaffoldedtable");
+          Router.push("./contact");
           setContact([])
         })
         .catch((error) => {
@@ -156,7 +160,9 @@ function Scaffold() {
           })
           setGen(genData);
         }
+
         setVisible(1);
+
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
 
@@ -202,6 +208,7 @@ function Scaffold() {
 
   return (
     <>
+
     <div className={visible===0?'block':'hidden'}><Loader/></div>
     <div className={visible===1?'block':'hidden'}>
 
@@ -209,7 +216,7 @@ function Scaffold() {
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
+        className="  bg-white pt-24 relative overflow-y-auto lg:ml-64"
       >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -223,12 +230,8 @@ function Scaffold() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
-              <Link
-                href="./landing"
-                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
-              >
-                <a>{language?.home}</a>
-              </Link>
+              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link>
             </li>
             <li>
               <div className="flex items-center">
@@ -385,16 +388,18 @@ function Scaffold() {
           pauseOnHover
         />
       </div>
-      <Footer/>
+    
     </div></>
+
   );
 }
 
-export default Scaffold
-Scaffold.getLayout = function PageLayout(page){
+export default Contact
+Contact.getLayout = function PageLayout(page){
   return(
     <>
     {page}
     </>
   )
   }
+

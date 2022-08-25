@@ -64,7 +64,6 @@ const Table = (args) => {
     const allDelete = async () => {
         console.log(args?.gen)
         const checked = args?.gen.filter(i => i.isChecked === true).map(j => { return (j.id) })
-        alert(JSON.stringify(checked))
     }
     const [editContact, setEditContact] = useState({});
     const [deleteContact, setDeleteContact] = useState({});
@@ -196,7 +195,9 @@ const Table = (args) => {
                                                                                     id={`default-toggle${idx}`} className="sr-only peer" />
                                                                                 <div
                                                                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
-              rounded-full peer dark:bg-gray-700 
+
+                         rounded-full peer dark:bg-gray-700 
+
                  peer-checked:after:translate-x-full 
                  peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
                  after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
@@ -277,12 +278,20 @@ const Table = (args) => {
                                                             </div>
                                                         </td>
                                                         <td className="p-4 whitespace-nowrap space-x-2">
-                                                            <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
-                                                             font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
-                                                              duration-150"
-                                                                onClick={() =>
-                                                                    {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact); setFlag([])}}}
-                                                            >{args?.common?.Save}</button>
+                                                        {flag.length === 0 ?
+                                                           <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
+                                                           font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
+                                                            duration-150 cursor-not-allowed opacity-60 " 
+                                                              
+                                                          >{args?.common?.Save} </button>
+                                                           :
+                                                           <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
+                                                           font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
+                                                            duration-150"
+                                                              onClick={() =>
+                                                                  {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact); setFlag([])}}}
+                                                          >{args?.common?.Save}</button> }
+                                                         
                                                             <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                 onClick={() => { setUpdate({ ...update, edit: 0, id: '' }) }}>{args?.common?.Cancel}</button>
                                                         </td>

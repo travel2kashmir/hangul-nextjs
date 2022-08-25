@@ -18,6 +18,7 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 var i=0;
+var currentLogged;
 
 function Address() {
   const [visible,setVisible]=useState(0) 

@@ -4,7 +4,6 @@ import axios from "axios";
 import Button from "../../components/Button";
 import Sidebar  from "../../components/Sidebar";
 import Header  from "../../components/Header";
-import Table from "../../components/Table/TableList";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../components/Languages/en"

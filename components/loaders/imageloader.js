@@ -1,6 +1,5 @@
 import React from 'react'
-import LineLoader from './lineloader'
-import Lineloader from './lineloader'
+
 
 function imageloader() {
   return <div className='m-4'>

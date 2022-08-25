@@ -11,15 +11,15 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Footer from '../../components/Footer';
-import Loader from "../../components/loader";
 var language;
 var currentProperty;
 var propertyName;
+import Headloader from "../../components/loaders/headloader";
 import Router from 'next/router'
+import LoaderTable from "./loaderTable";
 const logger = require("../../services/logger");
-var currentLogged;
 
-function Contact() {
+function Scaffold() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
 
@@ -47,7 +47,6 @@ function Contact() {
         }
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
-        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       }
     }
     firstfun();
@@ -65,6 +64,7 @@ function Contact() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
+      alert(JSON.stringify(finalContact))
       axios
         .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
@@ -81,7 +81,7 @@ function Contact() {
           });
           setView(0)
           fetchHotelDetails();
-          Router.push("./contact");
+          Router.push("./scaffoldedtable");
           setContact([])
         })
         .catch((error) => {
@@ -160,8 +160,7 @@ function Contact() {
           })
           setGen(genData);
         }
-
-        setVisible(1);
+      setVisible(1);
 
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -208,11 +207,7 @@ function Contact() {
 
   return (
     <>
-
-    <div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
-
-      <Header Primary={english?.Side} />
+     <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
@@ -230,8 +225,12 @@ function Contact() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
-              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link>
+              <Link
+                href="./landing"
+                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
+              >
+                <a>{language?.home}</a>
+              </Link>
             </li>
             <li>
               <div className="flex items-center">
@@ -247,10 +246,11 @@ function Contact() {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="./propertysummary">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
                     <a>{propertyName}</a>
-                  </Link></span>
+                  </Link>
+                  </div>
               </div>
             </li>
             <li>
@@ -278,10 +278,12 @@ function Contact() {
           </ol>
         </nav>
         {/* Header */}
+        <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
         <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit}
         delete={submitContactDelete} common={language?.common} cols={language?.ContactCols}
         name="Contact"/> 
-
+        </div>
 
       
 
@@ -388,14 +390,13 @@ function Contact() {
           pauseOnHover
         />
       </div>
-    
-    </div></>
+    </>
 
   );
 }
 
-export default Contact
-Contact.getLayout = function PageLayout(page){
+export default Scaffold
+Scaffold.getLayout = function PageLayout(page){
   return(
     <>
     {page}

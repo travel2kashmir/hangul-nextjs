@@ -97,13 +97,17 @@ export default {
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
 },
  
-
+//Validation
+required:'This field is required',
+float:'This field accepts numbers and decimal values',
+number:'This field accepts only numbers',
 
  
 "ContactCols":{
   name:"Contact",
  col1 : "Contact Type",
  col2 : "Contact Details", 
+ search: "Search"
 },
   
 "common":{
@@ -592,5 +596,39 @@ theme:'../../theme'
   upload:'Upload',
   addnewimage:'Add new Image',
   image:'Image',
-  titl:'title'
+  titl:'title',
+
+  //Rate Rules
+  programname:'Program Name',
+  ratecondition: 'Rate Condition',
+  ratedescription: 'Rate Description',
+  discounttype: 'Discount Type',
+  hotelamenity: 'Hotel Amenity(Free Wifi)',
+  pricemultiplier: 'Price Multiplier',
+  rateruledescription: 'Rate Rule Description',
+  rateruleconditions: "Rate Rule Conditions",
+  editraterules:'Edit Rate Rules',
+  rates: 'Rates',
+  all: 'All',
+  any: 'Any',
+  none: 'None',
+  select:'Select',
+  exact: 'exact- A discount percentage',
+  priceband:'price- A discount range',
+  existence:'existence- A non-specific limit',
+  addraterules:'Add Rate Rules',
+  usercountry: 'User Country',
+  userdevice:'User Device',
+  language:'Language',
+  membershipprogram: 'Memebership Program',
+  usersignedin: 'User Signed In',
+  isdomestic: 'Is Domestic',
+  maxuserpercentage: 'Maximum User Percentage',
+  expirationtimezone: 'Expiration Time Zone',
+  web:'Web',
+  hotel:'Hotel',
+  installment: 'Installment',
+  deposit:'Deposit',
+  yes:'Yes',
+  no: 'No'
 };

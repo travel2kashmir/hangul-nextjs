@@ -717,7 +717,7 @@ function Addraterule() {
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                   <Link href="../raterules" >
-                    <a>Rate Rules</a>
+                    <a>  {language?.raterules}</a>
                   </Link></span>
               </div>
             </li>
@@ -739,7 +739,7 @@ function Addraterule() {
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  Add Rate Rules 
+                   {language?.addraterules}
                 </span>
               </div>
             </li>
@@ -752,22 +752,22 @@ function Addraterule() {
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}
              </div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates}</div>
             </div>
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Rule Description
+         {language?.rateruledescription}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -778,7 +778,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Program Name
+                    {language?.programname}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input type="text" 
@@ -791,7 +791,7 @@ function Addraterule() {
                         })
                       }/>
                      <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter program name
+                {language?.required}
             </p>
                   </div>
                 </div>
@@ -801,7 +801,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Condition 
+                       {language?.ratecondition}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select
@@ -815,13 +815,13 @@ function Addraterule() {
                       }
                     >
 
-                      <option selected >Select</option>
-                      <option value="all">All</option>
-                      <option value="any">Any</option>
-                      <option value="none">None</option>
+                      <option selected >{language?.select}</option>
+                      <option value="all">{language?.all}</option>
+                      <option value="any">{language?.any}</option>
+                      <option value="none">{language?.none}</option>
                     </select>
                     <p className="invisible peer:visible text-red-700 font-light">
-                Please enter program name
+             {language?.required}
             </p>
                   </div>
                 </div>
@@ -832,7 +832,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Description
+                       {language?.ratedescription}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <textarea rows="2" columns="50"
@@ -847,17 +847,18 @@ function Addraterule() {
 
                     />
                        <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter rate description
+               
             </p>
                   </div>
                 </div>
+
                 <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label
                   className="text-sm font-medium text-gray-900 block  mb-2 "
                   htmlFor="grid-password"
                 >
-                  Discount Type
+                   {language?.discounttype}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <select
@@ -868,10 +869,10 @@ function Addraterule() {
                       ineligibility_type: e.target.value,
                     })}
                 >
-                  <option selected >Select</option>
-                  <option value="exact">exact- A discount percentage</option>
-                  <option value="price_band">price band- A discount range</option>
-                  <option value="existence">existence- A non-specific limit</option>
+                  <option selected >{language?.select}</option>
+                  <option value="exact">{language?.exact}</option>
+                  <option value="price_band">{language?.priceband}</option>
+                  <option value="existence">{language?.existence}</option>
              </select>
            
               </div>
@@ -883,7 +884,7 @@ function Addraterule() {
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Hotel Amenity(Free Wifi)
+                    {language?.hotelamenity}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
@@ -897,7 +898,7 @@ function Addraterule() {
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
-                  Price Multiplier
+                   {language?.pricemultiplier}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
@@ -913,7 +914,7 @@ function Addraterule() {
                   }
                />
                  <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter valid discount code
+              {language?.float}
             </p>
                 </div></div>
               
@@ -944,21 +945,21 @@ function Addraterule() {
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
                 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Rule Description</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">  2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
            
              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates}</div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-            Rate Rule Conditions
+          {language?.raterulecondition}
           </h6>
           <div className="flex flex-wrap">
            <div className="w-full lg:w-6/12 px-4">
@@ -979,7 +980,7 @@ function Addraterule() {
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Country 
+                          {language?.usercountry}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1003,7 +1004,7 @@ function Addraterule() {
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Device
+                         {language?.userdevice}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1027,7 +1028,7 @@ function Addraterule() {
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        Language
+                          {language?.language}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1054,7 +1055,7 @@ function Addraterule() {
                         className="text-sm font-medium text-gray-900 mx-2 block "
                         htmlFor="grid-password"
                       >
-                        Membership Program
+                          {language?.membershipprogram}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1077,7 +1078,7 @@ function Addraterule() {
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       Maximum User Percentage
+                       {language?.maxuserpercentage}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1093,7 +1094,7 @@ function Addraterule() {
                         })
                       }/>
                        <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter valid max user percentage
+              {language?.float}
             </p>
                       </div>
                         </div>
@@ -1111,7 +1112,7 @@ function Addraterule() {
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Signed In
+                       {language?.usersignedin}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                      
@@ -1147,7 +1148,7 @@ function Addraterule() {
                         className="text-sm mx-2 font-medium text-gray-900 block"
                         htmlFor="grid-password"
                       >
-                        Is Domestic
+                         {language?.isdomestic}
                       </label>
                       </span>
                       
@@ -1226,7 +1227,7 @@ function Addraterule() {
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-           Rate Rule Rates
+          {language?.rates}
             </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1248,7 +1249,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
                         )
                       }>
-                      <option selected>Select</option>
+                      <option selected>{language?.select}</option>
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1276,7 +1277,7 @@ function Addraterule() {
                       }
                     />
                     <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid base rate amount
+                    {language?.float}
             </p>
                   </div>
                 </div>
@@ -1296,7 +1297,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, tax_currency: e.target.value })
                         )
                       }>
-                      <option selected >Select</option>
+                      <option selected>{language?.select}</option>
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1324,7 +1325,7 @@ function Addraterule() {
                         )
                       } />
                         <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid tax rate amount
+                        {language?.float}
             </p>
                   </div>
                 </div>
@@ -1345,7 +1346,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_currency: e.target.value })
                         )
                       }>
-                      <option value="USD" >Select</option>
+                      <option value="USD" >{language?.select}</option>
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1374,7 +1375,7 @@ function Addraterule() {
                       }
                     />
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid other charges amount
+                      {language?.float}
             </p>
                   </div>
                 </div>
@@ -1384,7 +1385,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Payment Holder 
+                        {language?.paymentholder}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1393,7 +1394,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         )
                       }>
-                      <option selected >Select</option>
+                      <option selected >{language?.usersignedin}</option>
                       <option value="web">Web</option>
                       <option value="hotel">Hotel</option>
                       <option value="installment">Installment</option>
@@ -1408,7 +1409,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Refundable
+                        {language?.refundable}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1417,7 +1418,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, refundable: e.target.value })
                         )
                       }>
-                        <option selected>Select</option> 
+                        <option selected>  {language?.usersignedin}</option> 
                     
                         <option value={true}>Yes</option>
                          <option value={false}>No</option>
@@ -1434,8 +1435,8 @@ function Addraterule() {
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until days
-                          <span style={{color:"#ff0000"}}>*</span>
+                           {language?.refundable} {language?.till} {language?.days}
+                              <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
                           type="text"
@@ -1448,7 +1449,7 @@ function Addraterule() {
                             )
                           } />
                             <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid refundable days
+                            {language?.number}
                             </p>
                       </div>
                     </div>
@@ -1459,7 +1460,7 @@ function Addraterule() {
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until time
+                       {language?.refundable} {language?.till} {language?.time}
                           <span style={{color:"#ff0000"}}>*</span>
                        </label>
                         <input
@@ -1482,7 +1483,7 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Expiration Timezone
+                        {language?.expirationtimezone}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
@@ -1507,7 +1508,7 @@ function Addraterule() {
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                        <option selected >Select </option>
+                        <option selected >{language?.usersignedin}</option>
                         {rooms?.map(i => {
                           return (
                             <option key={i} value={i.room_id}>{i.room_name}</option>)

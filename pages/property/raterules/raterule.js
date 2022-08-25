@@ -833,7 +833,7 @@ Router.push('./raterule')
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                   <Link href="../raterules" >
-                    <a> Rate Rules</a>
+                    <a>{language?.raterules}</a>
                   </Link></span>
               </div>
             </li>
@@ -855,7 +855,7 @@ Router.push('./raterule')
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  Edit Rate Rule
+                  {language?.editraterule}
                 </span>
               </div>
             </li>
@@ -868,22 +868,22 @@ Router.push('./raterule')
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}
              </div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.rates}</div>
             </div>
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Rule Description
+          {language?.rateruledescription}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -894,7 +894,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Program Name 
+                      {language?.programname}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input type="text"
@@ -908,7 +908,7 @@ Router.push('./raterule')
                         },setBasicFlag(1))
                       }/>
                <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter program name
+               {language?.required}
             </p>
                   </div>
                 </div>
@@ -918,7 +918,7 @@ Router.push('./raterule')
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Discount Type 
+                 {language?.discounttype}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <select
@@ -943,7 +943,7 @@ Router.push('./raterule')
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Hotel Amenity(Free Wifi)
+                    {language?.hotelamenity}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
@@ -957,7 +957,7 @@ Router.push('./raterule')
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
-                  Price Multiplier
+                    {language?.pricemultiplier}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
@@ -975,7 +975,7 @@ Router.push('./raterule')
 
                 />
                   <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter valid discount code
+                  {language?.number}
             </p></div></div>
               
 
@@ -1026,21 +1026,21 @@ Router.push('./raterule')
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
                 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Rule Description</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">  2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
            
              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates} </div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-            Rate Condition
+          {language?.ratecondition}
           </h6>
           <div className="flex flex-wrap">
           <div className="w-full lg:w-6/12 px-4">
@@ -1049,7 +1049,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Condition
+                       {language?.ratecondition}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select
@@ -1063,9 +1063,9 @@ Router.push('./raterule')
                     >
 
                       <option selected >{rateRule?.user_rate_condition?.[i]?.UserRateCondition_op}</option>
-                      <option value="all">All</option>
-                      <option value="any">Any</option>
-                      <option value="none">None</option>
+                      <option value="all">{language?.all}</option>
+                      <option value="any">{language?.any}</option>
+                      <option value="none">{language?.none}</option>
                     </select>
                   </div>
                 </div>
@@ -1076,7 +1076,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Description 
+                       {language?.ratedescription}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     
@@ -1092,7 +1092,7 @@ Router.push('./raterule')
                       }
                   />
                      <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter rate description
+                     {language?.required}
             </p>
                   </div>
                 </div>
@@ -1100,7 +1100,7 @@ Router.push('./raterule')
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                      Conditions 
+                   {language?.conditions}
                     </h4></div>
                     </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1121,7 +1121,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Country 
+                        {language?.usercountry}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1146,7 +1146,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Device
+                       {language?.usercountry}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1170,7 +1170,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        Language
+                        {language?.language}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1197,7 +1197,7 @@ Router.push('./raterule')
                         className="text-sm font-medium text-gray-900 mx-2 block "
                         htmlFor="grid-password"
                       >
-                        Membership Program
+                          {language?.membershipprogram}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1223,7 +1223,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       Maximum User Percentage 
+                       {language?.maxuserpercentage}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1239,10 +1239,10 @@ Router.push('./raterule')
                         },setBasicFlag(1))
                       }/>
                        <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter valid max user percentage
-            </p>
+                       {language?.float}
+                       </p>
                       </div>
-                        </div>
+                        </div> 
 
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-3/12 ">
@@ -1255,7 +1255,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Signed In
+                        {language?.usersignedin}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                      
@@ -1293,7 +1293,7 @@ Router.push('./raterule')
                         className="text-sm mx-2 font-medium text-gray-900 block"
                         htmlFor="grid-password"
                       >
-                        Is Domestic
+                         {language?.isdomestic}
                       </label>
                       </span>
                       
@@ -1370,22 +1370,22 @@ Router.push('./raterule')
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">  {language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">  {language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
           
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">
             3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">  {language?.rates}</div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-            Rates
+          {language?.rates}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1435,7 +1435,7 @@ Router.push('./raterule')
                       }
                     />
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid base rate amount
+                      {language?.float}
                   </p>
                   </div>
                 </div>
@@ -1484,7 +1484,7 @@ Router.push('./raterule')
                         )
                       } />
                         <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid tax rate amount
+                        {language?.float}
                       </p>
                   </div>
                 </div>
@@ -1535,7 +1535,7 @@ Router.push('./raterule')
                       }
                     />
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid other charges amount
+                      {language?.float}
                   </p>
                   </div>
                 </div>
@@ -1545,7 +1545,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Payment Holder
+                        {language?.paymentholder}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1555,10 +1555,10 @@ Router.push('./raterule')
                         )
                       }>
                       <option selected >{allUserRateDetails.charge_currency}</option>
-                      <option value="web">Web</option>
-                      <option value="hotel">Hotel</option>
-                      <option value="installment">Installment</option>
-                      <option value="deposit">Deposit</option>
+                      <option value="web">  {language?.web}</option>
+                      <option value="hotel">  {language?.hotel}</option>
+                      <option value="installment">  {language?.installment}</option>
+                      <option value="deposit">  {language?.deposit}</option>
                     </select>
                   </div>
                 </div>
@@ -1569,7 +1569,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Refundable
+                       {language?.refundable}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1580,11 +1580,11 @@ Router.push('./raterule')
                       }>
                       {allUserRateDetails?.refundable === "true"
                         ?
-                        <option selected value={true}>Yes</option>
-                        : <option value={false}>No</option>}
+                        <option selected value={true}>  {language?.yes}</option>
+                        : <option value={false}> {language?.no}</option>}
 
-                      <option value={true}>Yes</option>
-                      <option selected value={false}>No</option>
+                      <option value={true}> {language?.yes}</option>
+                      <option selected value={false}> {language?.no}</option>
                     </select>
                   </div>
                 </div>
@@ -1597,7 +1597,8 @@ Router.push('./raterule')
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until days  <span style={{color:"#ff0000"}}>*</span>
+                            {language?.refundable} {language?.till} {language?.days}
+                              <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
                           type="text"
@@ -1611,7 +1612,7 @@ Router.push('./raterule')
                             )
                           } />
                           <p className="invisible peer-invalid:visible text-red-700 font-light">
-                            Please enter valid refundable days
+                          {language?.number}
                           </p>
                       </div>
                     </div>
@@ -1622,7 +1623,7 @@ Router.push('./raterule')
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until time
+                        {language?.refundable} {language?.till} {language?.time}
                           <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
@@ -1645,7 +1646,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Expiration Timezone <span style={{color:"#ff0000"}}>*</span>
+                       {language?.expirationtimezone} <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"

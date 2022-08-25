@@ -466,6 +466,53 @@ export default {
   image:'Image',
   titl:'titre',
   upload:'Télécharger',
+
+  //Rate Rules
+  programname:'Nom du Programme',
+  ratecondition: 'Conditions Tarifaires',
+  ratedescription: 'Description du Tarif',
+  discounttype: 'Type de Remise',
+  hotelamenity: 'Équipement de l`hôtel(Wifi gratuit)',
+  pricemultiplier: 'Multiplicateur de Prix',
+  rateruledescription: 'Description de la Règle de Tarification',
+  rateruleconditions: "Règle de Taux les Cnditions",
+  rates: 'Les Taux',
+  all: 'Tout',
+  any: 'N`importe Quel',
+  none: 'Rien',
+  select:'Sélectionner',
+  exact: 'exact- Un pourcentage de remise',
+  priceband:'Le prix- Une gamme de rabais',
+  existence:'existence- Une limite non spécifique',
+  addraterules:'Ajouter des Règles de Taux',
+  usercountry: 'Pays de L`utilisateur',
+  userdevice:'Appareil Utilisateur',
+  language:'Langue',
+  "ContactCols":{
+    name:"Contactez",
+   col1 : "Type de contact",
+   col2 : "Détails du Contact", 
+   search: "Chercher"
+  },
+  //Validation
+   required:'Ce champ est requis',
+   float:'Ce champ accepte les flottants et les nombres',
+   number:'Ce champ n`accepte que des nombres',
+
+  editraterule: 'Modifier La Règle de Taux',
+  conditions:'Les conditions',
+  membershipprogram: 'Programme D`adhésion',
+  maxuserpercentage: 'Pourcentage Maximal D`utilisateurs',
+  usersignedin: 'Utilisateur Connecté',
+  isdomestic: 'Est Domestique',
+  expirationtimezone: 'Fuseau Horaire D`expiration',
+  web:'La Toile',
+  hotel:'Hôtel',
+  installment:'Versement',
+  deposit:'Verser',
+  yes:'Oui',
+  no: 'Non',
+
   "Addnewproperty":{
     label:'Ajouter une nouvelle propriété',
     color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 

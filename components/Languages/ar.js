@@ -460,11 +460,56 @@ AddPackage :{
     titl:'عَنْوَنَ',
     upload:'تَحْميل',
 
+   //Rate Rules
+    programname:'إسم البرنامج',
+    ratecondition: 'حالة السعر',
+    ratedescription: 'وصف معدل',
+    discounttype:'نوع الخصم',
+    editraterule:'تعديل قاعدة معدل',
+    conditions:'الظروف',
+    hotelamenity: 'وسائل الراحة في الفندق (واي فاي مجاني)',
+    pricemultiplier: 'مضاعف السعر',
+    rateruledescription: 'وصف قاعدة معدل',
+    rateruleconditions: "شروط حكم معدل",
+    rates: 'معدلات',
+    all: 'الكل',
+    any: 'أي',
+    none: 'لا أحد',
+    select:'تحديد',
+    exact: 'بالضبط- نسبة الخصم',
+    priceband:'السعر- نطاق الخصم',
+    existence:'وجود- حد غير محدد',
+    addraterules:'إضافة قواعد معدل',
+    usercountry: 'بلد المستخدم',
+    userdevice:'جهاز المستخدم',
+    language:'لغة',
+    membershipprogram: 'برنامج العضوية',
+    maxuserpercentage:'أقصى نسبة مستخدم',
+    usersignedin: 'قام المستخدم بتسجيل الدخول',
+    isdomestic: 'هو محلي',
+    expirationtimezone: 'المنطقة الزمنية لانتهاء الصلاحية',
+    web:'الويب',
+    hotel:'الفندق',
+    installment: 'القسط',
+    deposit:'الوديعة',
+    yes:'نعم',
+    no: 'رقم',
+    
+    //Validation
+    required:'هذه الخانة مطلوبه',
+    float:'يقبل هذا الحقل الأرقام والقيم العشرية',
+    number:'هذا الحقل يقبل الأرقام',
     
     "Addnewproperty":{
       label:'إضافة خاصية جديدة',
       color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
-    }
+    },
+    "ContactCols":{
+      name:"اتصل",
+     col1 : "نوع الاتصال",
+     col2 : "بيانات المتصل", 
+     search: "بحث"
+    },
   };
 
 

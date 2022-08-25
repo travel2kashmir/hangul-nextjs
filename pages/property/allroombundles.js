@@ -60,6 +60,7 @@ function Allroombundles() {
     const url = `/api/room_bundle/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setAllBundles(response.data);
+      setVisible(1)
     {response.data?.map((item) => {
       var temp={
         name:item.room_name,
@@ -70,7 +71,6 @@ function Allroombundles() {
       genData.push(temp)
     })
     setGen(genData);
-    setVisible(1)
     }
     })
     .catch((error)=>{logger.error("url to fetch property details, failed")});  

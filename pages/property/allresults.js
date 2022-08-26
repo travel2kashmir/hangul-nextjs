@@ -217,7 +217,7 @@ function Allresults()
  <div className="overflow-x-auto">
      <div className="align-middle inline-block min-w-full">
          <div className="shadow overflow-hidden">
-                 <Table Primary={result} />
+                 <p>hello test</p>
             
          </div>
      </div>

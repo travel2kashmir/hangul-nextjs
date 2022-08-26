@@ -9,9 +9,10 @@ import arabic from "../../../components/Languages/ar"
 import Button from "../../../components/Button";
 import Sidebar from "../../../components/Sidebar";
 var language;
-var property_id = '';
+var property = '';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Route } from 'react-router';
 const logger = require("../../../services/logger");
 
 function Addservices() {
@@ -23,8 +24,8 @@ function Addservices() {
     var intermediate=[]
     arg.map((item,index)=>{
       var temp={"service_id":item.service_id,
-        "property_id":property_id,
-        "local_service_name":item.service_name,
+        "property_id":property?.property_id,
+        "local_service_name":item.service_name.replaceAll("_"," "),
         "service_value":"no",
         "service_comment":"",
         "status":true,
@@ -62,11 +63,11 @@ useEffect(() => {
           language = french;
 
         }
+        property = JSON.parse(localStorage.getItem("property"));
       }
     }
     firstfun();
-    property_id = localStorage.getItem("property_id")
-    Router.push("./addservices");
+     Router.push("./addservices");
     fetchServices();
   }, [])
   
@@ -92,6 +93,7 @@ const submitServices = () =>{
       draggable: true,
       progress: undefined,
     });
+    Router.push("../../property/services");
   }).catch((error)=>{
     toast.error(error.message, {
       position: "top-center",
@@ -109,15 +111,15 @@ const submitServices = () =>{
 
   return (
     <>
-    <Header Primary={english?.Sideadmin} />
-    <Sidebar Primary={english?.Sideadmin} />
+     <Header Primary={english?.Side} />
+    <Sidebar Primary={english?.Side} />
     <div id="main-content"
       className=" bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-            <Link href="../adminLanding" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+            <Link href="../AdminLanding" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
             </Link>
           </li>
 
@@ -129,9 +131,7 @@ const submitServices = () =>{
           </li>
         </ol>
       </nav>
-          <button 
-          onClick={()=>Router.push('./addadditionalservices')}
-          className="float-right mt-4 bg-blue-600 text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">Add Services</button>
+    
       <div>
         <h3 className="text-xl font-semibold">{language?.addnewservices}</h3>
        </div>
@@ -261,7 +261,7 @@ const submitServices = () =>{
                   onChange={(e) => {
                     setFinalServices(finalServices?.map((i) => {
                       if (i?.service_id === item?.service_id) {
-                        i.service_value = e.target.value
+                        i.service_value = e.target.value==="true"?"yes":"no"
                       }
                       return i
                     }))
@@ -294,7 +294,7 @@ const submitServices = () =>{
         <button
           className="float-right mt-4 bg-blue-600 text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
            
-          onClick={(e) => JSON.stringify(property_id).toUpperCase() != 'NULL' ? submitServices(e) : 
+          onClick={(e) => JSON.stringify(property.property_id).toUpperCase() != 'NULL' ? submitServices(e) : 
           toast.error("APP: Property Not Registered", {
             position: "top-center",
             autoClose: 5000,
@@ -308,6 +308,7 @@ const submitServices = () =>{
         >
           Submit 
         </button>
+        
      
       </div>
     </div>

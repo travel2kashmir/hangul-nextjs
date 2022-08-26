@@ -52,7 +52,9 @@ const  Landing=() =>{
       });
       
       setOwnerdata(response.data);
+
       setVisible(1)
+
     } catch (error) {
       if (error.response) {
         logger.error("Current User Properties Error");

@@ -1,8 +1,6 @@
 import React from 'react'
 import LineLoader from './lineloader'
-import Lineloader from './lineloader'
-
-function imageloader() {
+ imageloader() {
   return <div className='m-4'>
     <div className="animate-pulse bg-slate-200 rounded" style={{ height: "250px", width: "400px" }}></div>
     <div className='flex mt-4 '>

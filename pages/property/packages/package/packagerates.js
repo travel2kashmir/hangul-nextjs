@@ -7,10 +7,11 @@ import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
 import Button from '../../../../components/Button'
-import Loader from "../../../../components/loader";
 import Footer from "../../../../components/Footer";
 import Sidebar from '../../../../components/Sidebar';
-import Header from '../../../../components/Header'
+import Headloader from '../../../../components/loaders/headloader';
+import Lineloader from '../../../../components/loaders/lineloader';
+import Header from '../../../../components/Header';
 import Router from "next/router";
 var language;
 var currentProperty;
@@ -46,6 +47,7 @@ function PackageRates() {
     firstfun();
     Router.push("./packagerates");
   },[]) 
+
 /* Edit Package Fetch Function */
 const fetchDetails = async  () => {
   const url = `/api/package/${currentPackage}`
@@ -209,8 +211,7 @@ const fetchDetails = async  () => {
     }
   }
   return (
-    <><div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
+    <>
     <Header Primary={english?.Side2}/>
     <Sidebar  Primary={english?.Side2}/>
     <div id="main-content"
@@ -243,7 +244,10 @@ const fetchDetails = async  () => {
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 capitalize md:ml-2">
-                < Link href="../package"><a>{currentPackageRates?.package_name}</a></Link></span>
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+		
+                < Link href="../package"><a>{currentPackageRates?.package_name}</a></Link></div></span>
             </div>
           </li>
           <li>
@@ -272,17 +276,19 @@ const fetchDetails = async  () => {
                   >
                     {language?.baserate} {language?.currency}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, base_rate_currency: e.target.value })
                       )
                     }>
-                     <option selected >Select baserate currency</option>
+                     <option selected>{currentPackageRates?.base_rate_currency}</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select>
+                  </select></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -293,6 +299,8 @@ const fetchDetails = async  () => {
                   >
                     {language?.baserate} {language?.amount}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -302,7 +310,7 @@ const fetchDetails = async  () => {
                         setAllPackageRateDetails({ ...allPackageRateDetails, base_rate_amount: e.target.value })
                       )
                     }
-                  />
+                  /></div>
                 </div>
               </div>
 
@@ -314,17 +322,19 @@ const fetchDetails = async  () => {
                   >
                     {language?.taxrate} {language?.currency}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_currency: e.target.value })
                       )
                     }>
-                    <option selected >Select taxrate currency</option>
+                    <option selected >{currentPackageRates?.tax_rate_currency}</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select>
+                  </select></div>
                 </div>
               </div>
 
@@ -336,6 +346,8 @@ const fetchDetails = async  () => {
                   >
                     {language?.taxrate} {language?.amount}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -344,7 +356,7 @@ const fetchDetails = async  () => {
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_amount: e.target.value })
                       )
-                    } />
+                    } /></div>
                 </div>
               </div>
 
@@ -356,17 +368,19 @@ const fetchDetails = async  () => {
                   >
                     {language?.other} {language?.charges} {language?.currency}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_currency: e.target.value })
                       )
                     }>
-                     <option selected >Select other charges currency</option>
+                     <option selected >{currentPackageRates?.other_charges_currency}</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select>
+                  </select></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -377,6 +391,8 @@ const fetchDetails = async  () => {
                   >
                     {language?.other} {language?.charges} {language?.amount}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -385,7 +401,7 @@ const fetchDetails = async  () => {
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_amount: e.target.value })
                       )
-                    } />
+                    } /></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -412,7 +428,7 @@ const fetchDetails = async  () => {
         pauseOnHover />
     </div>
     <Footer/>
-    </div>
+   
       </>
   )
 }

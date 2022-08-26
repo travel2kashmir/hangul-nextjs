@@ -5,11 +5,11 @@ import axios from "axios";
 import Link from "next/link";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Button from "../../components/Button";
+import LoaderTable from "./loaderTable";
+import Headloader from "../../components/loaders/headloader";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-// import {english, french, arabic} from "../../components/Languages/Languages"
 var language;
 import Table from '../../components/Table';
 var currentProperty;
@@ -18,6 +18,7 @@ const logger = require("../../services/logger");
 
 function Raterules() {
   const[gen,setGen] = useState([])
+  const [visible,setVisible]=useState(0) 
   const [deleteRoom, setDeleteRoom] = useState(0)
  
     useEffect(()=>{  
@@ -59,6 +60,7 @@ function Raterules() {
           }
           )
           setGen(genData);
+          setVisible(1)
         }
         catch (error) {
     
@@ -153,9 +155,11 @@ function Raterules() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
               <Link href="./propertysummary" >
                <a> {currentProperty?.property_name}</a>
-              </Link></span>
+              </Link></div></span>
             </div>
           </li>
           <li>
@@ -185,11 +189,13 @@ function Raterules() {
   
 
 {/* Rate Rules Table */}
+<div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+ <div className={visible === 1 ? 'block' : 'hidden'}>
 <Table  gen={gen} setGen={setGen}  add={addRateRule} 
       edit={currentRateRule}
          common={language?.common} cols={language?.RateRuleCols}  delete={deleteRateRules} name="Packages"/> 
-
-
+</div>
+</div>
  {/* Toast Container */}
  <ToastContainer position="top-center"
         autoClose={5000}
@@ -200,8 +206,7 @@ function Raterules() {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
-
-</div>
+   
     </>
   )
 }

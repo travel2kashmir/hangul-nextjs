@@ -44,6 +44,7 @@ export default {
   view: "View",
   streetaddress: "Street Address",
   landmark: "Landmark",
+  previous:"Previous",
   city: "City",
   province: "Province",
   countrycode: "Country Code",
@@ -95,14 +96,18 @@ export default {
   label:"Add",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
 },
- 
-
+editraterules:'Edit Rate Rule',
+//Validation
+required:'This field is required',
+float:'This field accepts numbers and decimal values',
+num:'This field accepts only numbers',
 
  
 "ContactCols":{
   name:"Contact",
  col1 : "Contact Type",
  col2 : "Contact Details", 
+ search: "Search"
 },
   
 "common":{
@@ -168,6 +173,10 @@ Cancel:"Cancel"
 },
 "Skip" :{
   label:"Skip",
+   color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
+},
+"Previous" :{
+  label:"Previous",
    color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
 },
 "Submit" :{
@@ -444,7 +453,7 @@ roomsxml:'../../property/roomsxml'
  gallery:'./gallery',
  services: './services',
  propertysummary:'./propertysummary',
- roombundles:'./allroombundles',
+ roombundle:'./allroombundles',
  rooms:'./rooms',
  packages:'./packages',
  result:'./allresults',
@@ -587,5 +596,39 @@ theme:'../../theme'
   upload:'Upload',
   addnewimage:'Add new Image',
   image:'Image',
-  titl:'title'
+  titl:'title',
+
+  //Rate Rules
+  programname:'Program Name',
+  ratecondition: 'Rate Condition',
+  ratedescription: 'Rate Description',
+  discounttype: 'Discount Type',
+  hotelamenity: 'Hotel Amenity(Free Wifi)',
+  pricemultiplier: 'Price Multiplier',
+  rateruledescription: 'Rate Rule Description',
+  rateruleconditions: "Rate Rule Conditions",
+  editraterules:'Edit Rate Rules',
+  rates: 'Rates',
+  all: 'All',
+  any: 'Any',
+  none: 'None',
+  select:'Select',
+  exact: 'exact- A discount percentage',
+  priceband:'price- A discount range',
+  existence:'existence- A non-specific limit',
+  addraterules:'Add Rate Rules',
+  usercountry: 'User Country',
+  userdevice:'User Device',
+  language:'Language',
+  membershipprogram: 'Memebership Program',
+  usersignedin: 'User Signed In',
+  isdomestic: 'Is Domestic',
+  maxuserpercentage: 'Maximum User Percentage',
+  expirationtimezone: 'Expiration Time Zone',
+  web:'Web',
+  hotel:'Hotel',
+  installment: 'Installment',
+  deposit:'Deposit',
+  yes:'Yes',
+  no: 'No'
 };

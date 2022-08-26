@@ -6,7 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Button from '../../../../components/Button'
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
-import arabic from "../../../../components/Languages/ar"
+import arabic from "../../../../components/Languages/ar";
+import Headloader from '../../../../components/loaders/headloader';
+import LoaderTable from '../../loaderTable';
 import Router from "next/router";
 import Table from '../../../../components/Table';
 import Sidebar from '../../../../components/Sidebar';
@@ -22,6 +24,7 @@ var currentPackage;
 
 function Packageservices() {
   const [visible,setVisible]=useState(0) 
+  const [visibleAdd,setVisibleAdd]=useState(0) 
   const [packageServices, setPackageServices] = useState([])
   const [additionalPackageServices, setAdditionalPackageServices] = useState([])
   const [allPackageDetails, setAllPackageDetails] = useState([])
@@ -60,7 +63,7 @@ function Packageservices() {
       .then((response) => {
         setPackageServices(response.data);
         logger.info("url  to fetch package services hitted successfully")
-        setVisible(1)
+        
       }
       )
       .catch((error) => { logger.error("url to fetch package services, failed") });
@@ -83,7 +86,7 @@ function Packageservices() {
           geneData.push(temp)
         })
         setGen(geneData);
-        
+        setVisibleAdd(1)
       }
 
       }
@@ -98,6 +101,7 @@ function Packageservices() {
      ((response) => {
      logger.info("package success");
      setAllPackageDetails(response.data)
+     setVisible(1)
      })
      .catch((error) => {
       logger.info("Delete error")
@@ -258,8 +262,7 @@ function Packageservices() {
   }
 
   return (
-    <><div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
+    <>
       <Header Primary={english?.Side2}/>
       <Sidebar  Primary={english?.Side2} />
       <div
@@ -298,9 +301,12 @@ function Packageservices() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+		
                   <Link href="../../propertysummary">
                     <a>{currentProperty?.property_name}</a>
-                  </Link>
+                  </Link></div>
                 </span>
               </div>
             </li>
@@ -340,9 +346,12 @@ function Packageservices() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+		
                   <Link href="../package">
                     <a> {allPackageDetails?.package_name}</a>
-                  </Link>
+                  </Link></div>
                 </span>
               </div>
             </li>
@@ -465,10 +474,12 @@ function Packageservices() {
        
         {additionalPackageServices === '' ? <></> : <>
                 <div className="bg-white shadow rounded-lg  mt-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2">
+                <div className={visibleAdd === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+                 <div className={visibleAdd === 1 ? 'block' : 'hidden'}>
                 <Table  gen={gen} setGen={setGen} add={()=> setView(1)} name="Additional Services"
                 edit={editAdditionalPackageServices}
                 delete={deleteAdditionalPackageServices} common={language?.common} cols={language?.AdditionalServicesCols}/> 
-                </div>
+              </div>  </div>
                 </>}
      
 
@@ -595,31 +606,7 @@ function Packageservices() {
           </div>
         </div>
 
-        {/* Modal Delete additional services*/}
-        <div className={addDel === 1 ? 'block' : 'hidden'}>
-          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-            <div className="relative w-full max-w-md px-4 h-full md:h-auto">
-              <div className="bg-white rounded-lg shadow relative">
-                <div className="flex justify-end p-2">
-                  <button onClick={() => setAddDel(0)} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="delete-user-modal">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                  </button>
-                </div>
-
-                <div className="p-6 pt-0 text-center">
-                  <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">{language?.areyousureyouwanttodelete}</h3>
-                  <button onClick={() => { deleteAdditionalService(); setAddDel(0) }} className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                    {language?.yesiamsure}
-                  </button>
-                  <button onClick={() => setAddDel(0)} className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                    {language?.nocancel}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div >
+      
         {/* Toast Container */}
         <ToastContainer
           position="top-center"
@@ -633,8 +620,6 @@ function Packageservices() {
           pauseOnHover
         />
       </div>
-     <Footer />
-     </div>
     </>
   );
 }

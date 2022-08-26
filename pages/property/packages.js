@@ -7,9 +7,9 @@ import Table from "../../components/Table"
 import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
-import arabic from "../../components/Languages/ar"
-import Footer from '../../components/Footer';
-import Loader from "../../components/loader";
+import arabic from "../../components/Languages/ar";
+import LoaderTable from "./loaderTable";
+import Headloader from "../../components/loaders/headloader";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Router from "next/router";
@@ -113,8 +113,7 @@ function Packages() {
     };
 
     return (
-        <><div className={visible===0?'block':'hidden'}><Loader/></div>
-        <div className={visible===1?'block':'hidden'}>
+        <>
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
@@ -133,8 +132,10 @@ function Packages() {
                             <div className="flex items-center">
                                 <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+                                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                                     <Link href="./propertysummary" >
-                                        <a>{currentProperty?.property_name}</a></Link></span>
+                                        <a>{currentProperty?.property_name}</a></Link></div></span>
                             </div>
                         </li>
                         <li>
@@ -146,7 +147,8 @@ function Packages() {
                     </ol>
                 </nav>
                 {/* Header */}
-
+                <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+                 <div className={visible === 1 ? 'block' : 'hidden'}>
                 <Table  
                 gen={gen}
                 setGen={setGen}
@@ -155,9 +157,8 @@ function Packages() {
                 delete={deletePackages}
                 common={language?.common}
                 cols={language?.PackageCols}
-                name="Packages"/> 
+                name="Packages"/></div> 
                
-
                 {/* Modal Delete */}
                 <div className={deletePackage === 1 ? "block" : "hidden"}>
                     <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full" >
@@ -196,8 +197,6 @@ function Packages() {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover />
-            </div>
-            <Footer/>
             </div>
         </>
     )

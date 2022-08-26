@@ -219,7 +219,6 @@ const submitRateUpdate = () =>{
     rate_rule_name:rateRule?.rate_rule_name,
    rate_rule_id: rateRule?.rate_rule_id
 };
-alert(JSON.stringify(data))
 const url = "/api/rate_rule/rate_rules";
   axios
     .put(url,data, { 
@@ -331,7 +330,7 @@ const url = "/api/rate_rule/rate_rules";
           draggable: true,
           progress: undefined,
         });
-        fetchRateRule();
+        
         Router.push("../raterules");
 
       })
@@ -351,7 +350,7 @@ const url = "/api/rate_rule/rate_rules";
   }
    /* Edit Rate Modification Function */
   const submitRateMod = () => {
-    if (lang.length != 0) {
+    if (mod.length != 0) {
     const final_data = {
       "rate_modification_id": rateRule?.rate_modification_id,
       "hotel_amenity": rateRule?.hotel_amenity,
@@ -653,7 +652,7 @@ const url = "/api/rate_rule/rate_rules";
       }
       country_data.push(temp) } );
       setFinalCountry(country_data);
-      alert(JSON.stringify(finalCountry))
+     
   }
 
   const devices = (dev) => { 
@@ -720,7 +719,6 @@ const filterByCountry = () => {
       return element.user_country === el.country_code;
    });
 });
-alert(JSON.stringify(resCou))
   }
   else{
   resCou= []
@@ -835,7 +833,7 @@ Router.push('./raterule')
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                   <Link href="../raterules" >
-                    <a> Rate Rules</a>
+                    <a>{language?.raterules}</a>
                   </Link></span>
               </div>
             </li>
@@ -857,7 +855,7 @@ Router.push('./raterule')
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  Edit Rate Rule
+                  {language?.editraterules}
                 </span>
               </div>
             </li>
@@ -870,22 +868,22 @@ Router.push('./raterule')
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}
              </div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.rates}</div>
             </div>
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Rule Description
+          {language?.rateruledescription}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -896,18 +894,22 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Program Name 
+                      {language?.programname}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input type="text"
-                      className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={rateRule?.rate_rule_name} 
+                      required
                       onChange={(e) =>
                         setRateRule({
                           ...rateRule,
                           rate_rule_name: e.target.value,
                         },setBasicFlag(1))
                       }/>
+               <p className="invisible peer-invalid:visible text-red-700 font-light">
+               {language?.required}
+            </p>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -916,7 +918,7 @@ Router.push('./raterule')
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Discount Type 
+                 {language?.discounttype}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <select
@@ -927,7 +929,7 @@ Router.push('./raterule')
                       ineligibility_type: e.target.value,
                     },setBasicFlag(1))}
                 >
-                  <option selected >{rateRule?.ineligiblity_type}</option>
+                  <option selected >{rateRule?.ineligiblity_type?.replace('_',' ')}</option>
                   <option value="exact">exact</option>
                   <option value="price_band">price band</option>
                   <option value="existence">existence</option>
@@ -941,26 +943,28 @@ Router.push('./raterule')
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Hotel Amenity(Free Wifi)
+                    {language?.hotelamenity}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.hotel_amenity}
-                
+                readOnly
                 /></div></div>
 
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
-                  Price Multiplier
+                    {language?.pricemultiplier}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
                 <input
                   type="text"
-                  className="shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
+                  required
+                  className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.price_multiplier}
                   onChange={(e) =>
                     setRateRule({
@@ -969,7 +973,10 @@ Router.push('./raterule')
                     },setMod(1))
                   }
 
-                /></div></div>
+                />
+                  <p className="invisible peer-invalid:visible text-red-700 font-light">
+                 {language?.num}
+            </p></div></div>
               
 
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
@@ -1019,21 +1026,21 @@ Router.push('./raterule')
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
                 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Rule Description</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">  2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
            
              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates} </div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-            Rate Condition
+          {language?.ratecondition}
           </h6>
           <div className="flex flex-wrap">
           <div className="w-full lg:w-6/12 px-4">
@@ -1042,7 +1049,8 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Rule Conditions
+                       {language?.ratecondition}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1055,9 +1063,9 @@ Router.push('./raterule')
                     >
 
                       <option selected >{rateRule?.user_rate_condition?.[i]?.UserRateCondition_op}</option>
-                      <option value="all">All</option>
-                      <option value="any">Any</option>
-                      <option value="none">None</option>
+                      <option value="all">{language?.all}</option>
+                      <option value="any">{language?.any}</option>
+                      <option value="none">{language?.none}</option>
                     </select>
                   </div>
                 </div>
@@ -1068,12 +1076,14 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Description 
-
+                       {language?.ratedescription}
+                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    
                     <textarea rows="2" columns="50"
-                      className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={rateRule?.user_rate_condition?.[i]?.Description}
+                      required
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
@@ -1081,13 +1091,16 @@ Router.push('./raterule')
                         },setBasicFlag(1))
                       }
                   />
+                     <p className="invisible peer-invalid:visible text-red-700 font-light">
+                     {language?.required}
+            </p>
                   </div>
                 </div>
 
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                      Conditions 
+                   {language?.conditions}
                     </h4></div>
                     </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1108,7 +1121,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Country 
+                        {language?.usercountry}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1133,7 +1146,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Device
+                       {language?.usercountry}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1157,7 +1170,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        Language
+                        {language?.language}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1184,7 +1197,7 @@ Router.push('./raterule')
                         className="text-sm font-medium text-gray-900 mx-2 block "
                         htmlFor="grid-password"
                       >
-                        Membership Program
+                          {language?.membershipprogram}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
@@ -1210,22 +1223,26 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       Maximum User Percentage 
+                       {language?.maxuserpercentage}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
                       <input type="text" 
-                      className="shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
+                      className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
                       defaultValue={conditions?.MaxUsersPercent} 
+                      pattern="[0-9]+(\.[0-9]{1,2})?%?"
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
                           MaxUsersPercent: e.target.value,
                         },setBasicFlag(1))
                       }/>
+                       <p className="invisible peer-invalid:visible text-red-700 font-light">
+                       {language?.float}
+                       </p>
                       </div>
-                        </div>
+                        </div> 
 
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-3/12 ">
@@ -1238,7 +1255,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Signed In
+                        {language?.usersignedin}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                      
@@ -1276,7 +1293,7 @@ Router.push('./raterule')
                         className="text-sm mx-2 font-medium text-gray-900 block"
                         htmlFor="grid-password"
                       >
-                        Is Domestic
+                         {language?.isdomestic}
                       </label>
                       </span>
                       
@@ -1309,6 +1326,7 @@ Router.push('./raterule')
      
         </div>
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
+        <Button Primary={language?.Previous}   onClick={() => {setDisp(0);}} />
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={()=>{ 
                   if (basicFlag.length !== 0){
@@ -1352,23 +1370,22 @@ Router.push('./raterule')
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">  {language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">  {language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
           
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">
             3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">  {language?.rates}</div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-            Rates
-            <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
+          {language?.rates}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1407,7 +1424,9 @@ Router.push('./raterule')
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
+                      required
+                      className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.base_rate_amount}
                       onChange={
                         (e) => (
@@ -1415,6 +1434,9 @@ Router.push('./raterule')
                         )
                       }
                     />
+                      <p className="invisible peer-invalid:visible text-red-700 font-light">
+                      {language?.float}
+                  </p>
                   </div>
                 </div>
 
@@ -1452,13 +1474,18 @@ Router.push('./raterule')
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.tax_amount}
+                      pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
+                      required
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
+                        <p className="invisible peer-invalid:visible text-red-700 font-light">
+                        {language?.float}
+                      </p>
                   </div>
                 </div>
 
@@ -1497,14 +1524,19 @@ Router.push('./raterule')
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.otherfees_amount}
+                      pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
+                      required
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_amount: e.target.value })
                         )
                       }
                     />
+                      <p className="invisible peer-invalid:visible text-red-700 font-light">
+                      {language?.float}
+                  </p>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1513,7 +1545,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Payment Holder
+                        {language?.paymentholder}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1523,10 +1555,10 @@ Router.push('./raterule')
                         )
                       }>
                       <option selected >{allUserRateDetails.charge_currency}</option>
-                      <option value="web">Web</option>
-                      <option value="hotel">Hotel</option>
-                      <option value="installment">Installment</option>
-                      <option value="deposit">Deposit</option>
+                      <option value="web">  {language?.web}</option>
+                      <option value="hotel">  {language?.hotel}</option>
+                      <option value="installment">  {language?.installment}</option>
+                      <option value="deposit">  {language?.deposit}</option>
                     </select>
                   </div>
                 </div>
@@ -1537,7 +1569,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Refundable
+                       {language?.refundable}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1548,11 +1580,11 @@ Router.push('./raterule')
                       }>
                       {allUserRateDetails?.refundable === "true"
                         ?
-                        <option selected value={true}>Yes</option>
-                        : <option value={false}>No</option>}
+                        <option selected value={true}>  {language?.yes}</option>
+                        : <option value={false}> {language?.no}</option>}
 
-                      <option value={true}>Yes</option>
-                      <option selected value={false}>No</option>
+                      <option value={true}> {language?.yes}</option>
+                      <option selected value={false}> {language?.no}</option>
                     </select>
                   </div>
                 </div>
@@ -1565,17 +1597,23 @@ Router.push('./raterule')
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until days  <span style={{color:"#ff0000"}}>*</span>
+                            {language?.refundable} {language?.till} {language?.days}
+                              <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
                           type="text"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                           defaultValue={allUserRateDetails?.refundable_until_days}
+                          pattern='^[1-9]+[0-9]*$'
+                          required
                           onChange={
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_days: e.target.value })
                             )
                           } />
+                          <p className="invisible peer-invalid:visible text-red-700 font-light">
+                         {language?.num}
+                          </p>
                       </div>
                     </div>
 
@@ -1585,7 +1623,7 @@ Router.push('./raterule')
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until time
+                        {language?.refundable} {language?.till} {language?.time}
                           <span style={{color:"#ff0000"}}>*</span>
                         </label>
                         <input
@@ -1608,7 +1646,7 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Expiration Timezone <span style={{color:"#ff0000"}}>*</span>
+                       {language?.expirationtimezone} <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1624,6 +1662,7 @@ Router.push('./raterule')
                 </div>
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
+              <Button Primary={language?.Previous}   onClick={() => {setDisp(1);}} />
                 {Button !== 'undefined' ?
                   <Button Primary={language?.Update} onClick={submitRateEdit} />
                   : <></>

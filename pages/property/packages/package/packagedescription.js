@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
+import Headloader from '../../../../components/loaders/headloader';
+import Lineloader from '../../../../components/loaders/lineloader';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,7 +9,6 @@ import Button from '../../../../components/Button';
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
 import arabic from "../../../../components/Languages/ar"
-import Loader from "../../../../components/loader";
 import Footer from "../../../../components/Footer"
 import Sidebar from '../../../../components/Sidebar';
 import Header from '../../../../components/Header'
@@ -166,8 +167,7 @@ function Packagedescription() {
   }
 
   return (
-    <><div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
+    <>
       <Header Primary={english?.Side2}/>
       <Sidebar  Primary={english?.Side2}/>
       <div id="main-content"
@@ -204,9 +204,11 @@ function Packagedescription() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                   <Link href="../../propertysummary">
                     <a>{currentProperty?.property_name}</a>
-                  </Link>
+                  </Link></div>
                 </span>
               </div>
             </li>
@@ -246,9 +248,12 @@ function Packagedescription() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+		
                   <Link href="../package">
                     <a> {allPackageDetails?.package_name}</a>
-                  </Link>
+                  </Link></div>
                 </span>
               </div>
             </li>
@@ -305,6 +310,8 @@ function Packagedescription() {
                     >
                       {language?.package} {language?.name}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -315,7 +322,7 @@ function Packagedescription() {
                           package_name: e.target.value
                         }, setFlag(1))
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -327,6 +334,8 @@ function Packagedescription() {
                     >
                       {language?.package} {language?.description}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <textarea
                       rows="2"
                       columns="50"
@@ -338,7 +347,7 @@ function Packagedescription() {
                           package_description: e.target.value,
                         }, setFlag(1))
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -350,6 +359,8 @@ function Packagedescription() {
                     >
                       {language?.paymentholder}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
@@ -363,7 +374,7 @@ function Packagedescription() {
                       <option value="hotel">Hotel</option>
                       <option value="installment">Installment</option>
                       <option value="deposit">Deposit</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -375,6 +386,8 @@ function Packagedescription() {
                     >
                       {language?.refundable}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
@@ -391,7 +404,7 @@ function Packagedescription() {
 
                       <option value={true}>Yes</option>
                       <option value={false}>No</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
                 {allPackageDetails?.refundable === "true" ? (
@@ -404,6 +417,8 @@ function Packagedescription() {
                         >
                           {language?.refundable} {language?.till} {language?.days}
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="text"
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -414,7 +429,7 @@ function Packagedescription() {
                               refundable_until_days: e.target.value,
                             }, setFlag(1))
                           }
-                        />
+                        /></div>
                       </div>
                     </div>
 
@@ -426,6 +441,8 @@ function Packagedescription() {
                         >
                           {language?.refundable} {language?.till} {language?.time}
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="time" step="2"
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -436,7 +453,7 @@ function Packagedescription() {
                               refundable_until_time: e.target.value,
                             }, setFlag(1))
                           }
-                        />
+                        /></div>
                       </div>
                     </div>
                   </>
@@ -452,6 +469,8 @@ function Packagedescription() {
                     >
                       {language?.number} {language?.of} {language?.occupants}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -464,7 +483,7 @@ function Packagedescription() {
                       defaultValue={
                         allPackageDetails?.max_number_of_intended_occupants
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -476,6 +495,8 @@ function Packagedescription() {
                     >
                       {language?.number} {language?.of} {language?.adult}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -486,7 +507,7 @@ function Packagedescription() {
                           max_number_of_adult_guest: e.target.value,
                         }, setFlag(1), setDisp(1))
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -506,6 +527,8 @@ function Packagedescription() {
                               >
                                 Maximum Age Of Child
                               </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                               <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                 onChange={(e) =>
@@ -524,7 +547,7 @@ function Packagedescription() {
                                 <option value="10">10</option>
                                 <option value="11">11</option>
                                 <option value="12">12</option>
-                              </select>
+                              </select></div>
                             </div>
 
                           </div>
@@ -544,6 +567,8 @@ function Packagedescription() {
                           >
                             Maximum Age Of Child
                           </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                           <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                          sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={(e) =>
@@ -562,7 +587,7 @@ function Packagedescription() {
                             <option value="10">10</option>
                             <option value="11">11</option>
                             <option value="12">12</option>
-                          </select>
+                          </select></div>
                         </div>
 
                       </div>
@@ -593,7 +618,7 @@ function Packagedescription() {
         />
       </div>
       <Footer />
-      </div>
+    
     </>
   );
 }

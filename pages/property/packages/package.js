@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
 import Link from "next/link";
+import Headloader from '../../../components/loaders/headloader';
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar"
@@ -104,8 +105,7 @@ function Package() {
   },[])
 
   return (
-    <><div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
+    <>
      <Header Primary={english?.Side1}/>
     <Sidebar  Primary={english?.Side1}/>
     <div id="main-content"
@@ -137,7 +137,10 @@ function Package() {
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                            <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                             <p className="text-gray-400 ml-1 md:ml-2 capitalize font-medium text-sm  " aria-current="page"> {allPackageDetails?.package_name}</p>
+                         </div>
                         </div>
                     </li>
                 </ol>
@@ -476,7 +479,7 @@ function Package() {
             </div>
     </div>
     <Footer/>
-   </div> </>
+    </>
   )
 }
 

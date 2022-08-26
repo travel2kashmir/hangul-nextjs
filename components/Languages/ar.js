@@ -128,12 +128,8 @@ DeleteContact :{
    ></path>
   </svg>
   },
-  AddImage : {
-   label:'استعارة أَتْبَع',
-   color: "bg-cyan-600 text-white  hover:bg-cyan-700",
-    icon: <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
 
-},
+ 
 Skip :{
   label:"يتخطى",
    color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
@@ -460,11 +456,56 @@ AddPackage :{
     titl:'عَنْوَنَ',
     upload:'تَحْميل',
 
+   //Rate Rules
+    programname:'إسم البرنامج',
+    ratecondition: 'حالة السعر',
+    ratedescription: 'وصف معدل',
+    discounttype:'نوع الخصم',
+    editraterule:'تعديل قاعدة معدل',
+    conditions:'الظروف',
+    hotelamenity: 'وسائل الراحة في الفندق (واي فاي مجاني)',
+    pricemultiplier: 'مضاعف السعر',
+    rateruledescription: 'وصف قاعدة معدل',
+    rateruleconditions: "شروط حكم معدل",
+    rates: 'معدلات',
+    all: 'الكل',
+    any: 'أي',
+    none: 'لا أحد',
+    select:'تحديد',
+    exact: 'بالضبط- نسبة الخصم',
+    priceband:'السعر- نطاق الخصم',
+    existence:'وجود- حد غير محدد',
+    addraterules:'إضافة قواعد معدل',
+    usercountry: 'بلد المستخدم',
+    userdevice:'جهاز المستخدم',
+    language:'لغة',
+    membershipprogram: 'برنامج العضوية',
+    maxuserpercentage:'أقصى نسبة مستخدم',
+    usersignedin: 'قام المستخدم بتسجيل الدخول',
+    isdomestic: 'هو محلي',
+    expirationtimezone: 'المنطقة الزمنية لانتهاء الصلاحية',
+    web:'الويب',
+    hotel:'الفندق',
+    installment: 'القسط',
+    deposit:'الوديعة',
+    yes:'نعم',
+    no: 'رقم',
+    
+    //Validation
+    required:'هذه الخانة مطلوبه',
+    float:'يقبل هذا الحقل الأرقام والقيم العشرية',
+    num:'هذا الحقل يقبل الأرقام',
     
     "Addnewproperty":{
       label:'إضافة خاصية جديدة',
       color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
-    }
+    },
+    "ContactCols":{
+      name:"اتصل",
+     col1 : "نوع الاتصال",
+     col2 : "بيانات المتصل", 
+     search: "بحث"
+    },
   };
 
 

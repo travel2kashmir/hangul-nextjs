@@ -21,11 +21,7 @@ var currentLogged;
 function PropertySummary() {
   /** State to store Current Property Details **/
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-
-
-
-
-  /** Router for Redirection **/
+ /** Router for Redirection **/
   const router = useRouter();
   useEffect(() => {
     const firstfun = () => {
@@ -50,7 +46,6 @@ function PropertySummary() {
     router.push("./propertysummary");
   }, [])
 
-
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     const fetchHotelDetails = async () => {
@@ -67,22 +62,23 @@ function PropertySummary() {
         })
         .catch((error) => { logger.error("url to fetch property details, failed") });
     }
+
     fetchHotelDetails();
 
   }, []);
 
 
+ 
   return (
     <div>
-
 
       <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
       {/* Body */}
       <div
         id="main-content"
-        className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"}
-      >
+className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
+ >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -115,7 +111,7 @@ function PropertySummary() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  {allHotelDetails?.property_name}
+                  {allHotelDetails?.property_name} 
                 </span>
               </div>
             </li>
@@ -123,6 +119,7 @@ function PropertySummary() {
         </nav>
         <div>
         </div>
+
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">
@@ -561,6 +558,7 @@ function PropertySummary() {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+
       <Footer />
     </div>
 

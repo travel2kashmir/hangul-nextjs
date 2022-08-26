@@ -219,6 +219,7 @@ const submitRateUpdate = () =>{
     rate_rule_name:rateRule?.rate_rule_name,
    rate_rule_id: rateRule?.rate_rule_id
 };
+
 const url = "/api/rate_rule/rate_rules";
   axios
     .put(url,data, { 
@@ -330,7 +331,9 @@ const url = "/api/rate_rule/rate_rules";
           draggable: true,
           progress: undefined,
         });
-        
+
+        fetchRateRule();
+
         Router.push("../raterules");
 
       })
@@ -350,7 +353,9 @@ const url = "/api/rate_rule/rate_rules";
   }
    /* Edit Rate Modification Function */
   const submitRateMod = () => {
-    if (mod.length != 0) {
+
+    if (lang.length != 0) {
+
     const final_data = {
       "rate_modification_id": rateRule?.rate_modification_id,
       "hotel_amenity": rateRule?.hotel_amenity,
@@ -652,7 +657,7 @@ const url = "/api/rate_rule/rate_rules";
       }
       country_data.push(temp) } );
       setFinalCountry(country_data);
-     
+
   }
 
   const devices = (dev) => { 
@@ -719,6 +724,7 @@ const filterByCountry = () => {
       return element.user_country === el.country_code;
    });
 });
+
   }
   else{
   resCou= []
@@ -898,18 +904,22 @@ Router.push('./raterule')
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <input type="text"
+
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={rateRule?.rate_rule_name} 
                       required
+
                       onChange={(e) =>
                         setRateRule({
                           ...rateRule,
                           rate_rule_name: e.target.value,
                         },setBasicFlag(1))
                       }/>
+
                <p className="invisible peer-invalid:visible text-red-700 font-light">
                 Please enter program name
             </p>
+n
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -929,7 +939,9 @@ Router.push('./raterule')
                       ineligibility_type: e.target.value,
                     },setBasicFlag(1))}
                 >
+
                   <option selected >{rateRule?.ineligiblity_type?.replace('_',' ')}</option>
+
                   <option value="exact">exact</option>
                   <option value="price_band">price band</option>
                   <option value="existence">existence</option>
@@ -950,7 +962,9 @@ Router.push('./raterule')
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.hotel_amenity}
+
                 readOnly
+
                 /></div></div>
 
             <div className="w-full lg:w-6/12 px-4">
@@ -962,9 +976,11 @@ Router.push('./raterule')
                 </label>
                 <input
                   type="text"
+
                   pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                   required
                   className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+
                   defaultValue={rateRule?.price_multiplier}
                   onChange={(e) =>
                     setRateRule({
@@ -973,10 +989,12 @@ Router.push('./raterule')
                     },setMod(1))
                   }
 
+
                 />
                   <p className="invisible peer-invalid:visible text-red-700 font-light">
                 Please enter valid discount code
             </p></div></div>
+
               
 
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
@@ -1049,8 +1067,10 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
+
                       Rate Condition
                       <span style={{color:"#ff0000"}}>*</span>
+
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1077,6 +1097,7 @@ Router.push('./raterule')
                       htmlFor="grid-password"
                     >
                       Rate Description 
+
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     
@@ -1084,6 +1105,7 @@ Router.push('./raterule')
                       className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={rateRule?.user_rate_condition?.[i]?.Description}
                       required
+
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
@@ -1091,9 +1113,11 @@ Router.push('./raterule')
                         },setBasicFlag(1))
                       }
                   />
+
                      <p className="invisible peer-invalid:visible text-red-700 font-light">
                 Please enter rate description
             </p>
+
                   </div>
                 </div>
 
@@ -1228,19 +1252,23 @@ Router.push('./raterule')
 
                       <div className="w-full lg:w-4/12 ">
                       <input type="text" 
+
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
                       defaultValue={conditions?.MaxUsersPercent} 
                       pattern="[0-9]+(\.[0-9]{1,2})?%?"
+
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
                           MaxUsersPercent: e.target.value,
                         },setBasicFlag(1))
                       }/>
+
                        <p className="invisible peer-invalid:visible text-red-700 font-light">
                 Please enter valid max user percentage
             </p>
+
                       </div>
                         </div>
 
@@ -1326,7 +1354,9 @@ Router.push('./raterule')
      
         </div>
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
+
         <Button Primary={language?.Previous}   onClick={() => {setDisp(0);}} />
+
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={()=>{ 
                   if (basicFlag.length !== 0){
@@ -1386,6 +1416,7 @@ Router.push('./raterule')
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
             Rates
+
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1424,9 +1455,11 @@ Router.push('./raterule')
                     </label>
                     <input
                       type="text"
+
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                       required
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+
                       defaultValue={allUserRateDetails?.base_rate_amount}
                       onChange={
                         (e) => (
@@ -1434,9 +1467,11 @@ Router.push('./raterule')
                         )
                       }
                     />
+
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
                       Please enter valid base rate amount
                   </p>
+
                   </div>
                 </div>
 
@@ -1474,18 +1509,21 @@ Router.push('./raterule')
                     </label>
                     <input
                       type="text"
+
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.tax_amount}
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                       required
+
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
-                        <p className="invisible peer-invalid:visible text-red-700 font-light">
+                    <p className="invisible peer-invalid:visible text-red-700 font-light">
                       Please enter valid tax rate amount
                       </p>
+
                   </div>
                 </div>
 
@@ -1524,19 +1562,23 @@ Router.push('./raterule')
                     </label>
                     <input
                       type="text"
+
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.otherfees_amount}
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                       required
+
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_amount: e.target.value })
                         )
                       }
                     />
+
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
                       Please enter valid other charges amount
                   </p>
+
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1601,18 +1643,22 @@ Router.push('./raterule')
                         </label>
                         <input
                           type="text"
+
                           className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                           defaultValue={allUserRateDetails?.refundable_until_days}
                           pattern='^[1-9]+[0-9]*$'
                           required
+
                           onChange={
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_days: e.target.value })
                             )
                           } />
+
                           <p className="invisible peer-invalid:visible text-red-700 font-light">
                             Please enter valid refundable days
                           </p>
+
                       </div>
                     </div>
 
@@ -1661,7 +1707,9 @@ Router.push('./raterule')
                 </div>
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
+
               <Button Primary={language?.Previous}   onClick={() => {setDisp(1);}} />
+
                 {Button !== 'undefined' ?
                   <Button Primary={language?.Update} onClick={submitRateEdit} />
                   : <></>

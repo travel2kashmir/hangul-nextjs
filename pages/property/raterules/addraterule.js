@@ -40,7 +40,7 @@ function Addraterule() {
     const [languageCheck, setLanguageCheck] = useState(false);
     const [deviceCheck, setDeviceCheck] = useState(false);
     const [basicFlag,setBasicFlag]=useState([])
-    const [disp,setDisp]=useState(1)
+    const [disp,setDisp]=useState(0)
     const [programCheck, setProgramCheck] = useState(false);
     const [finalLang,setFinalLang]=useState([])
     const [finalCountry,setFinalCountry]=useState([])
@@ -59,6 +59,7 @@ function Addraterule() {
     const [drp,setDrp]=useState(false)
 
     useEffect(() => {
+
         const firstfun = () => {
           if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
@@ -1126,7 +1127,7 @@ function Addraterule() {
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                      
-                      <div className="form-check mx-2  form-check-inline">
+                      <div className="form-check mx-2 my-4 form-check-inline">
 
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSignedIn} 
@@ -1430,7 +1431,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, refundable: e.target.value })
                         )
                       }>
-                        <option selected>{language?.select}</option> 
+                        <option selected>  {language?.select}</option> 
                     
                         <option value={true}>Yes</option>
                          <option value={false}>No</option>

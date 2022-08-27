@@ -103,6 +103,7 @@ editraterules:'Edit Rate Rule',
 required:'This field is required',
 float:'This field accepts numbers and decimal values',
 num:'This field accepts only numbers',
+salename:'Point of Sale Name',
 
  
 "ContactCols":{

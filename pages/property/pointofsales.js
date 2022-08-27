@@ -42,7 +42,7 @@ function Allpointofsale() {
     }
    
     firstfun();
-  Router.push('./pointofsales')
+ 
   }, [])
 
   useEffect(() => {

@@ -325,6 +325,14 @@ export default {
   lost: "Mot de passe perdu",
   remember: "Non enregistré?",
   create: "Créer un compte",
+  "SaleCols":{
+    name:"Point de Vente",
+   col1 : "Nom de la Vente",
+    
+  },
+  matchstatus:'Statut de correspondance',
+  salename: 'Nom du Point de Vente',
+  salelanguage:'Langue du Point de Vente',
   pointofsale:"Point de Vente",
   enteremail: "entrer votre email",
   enterpassword: "tapez votre mot de passe",

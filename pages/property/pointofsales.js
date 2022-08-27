@@ -4,6 +4,8 @@ import axios from "axios";
 import Table from '../../components/Table';
 import Button from "../../components/Button";
 import Sidebar  from "../../components/Sidebar";
+import LoaderTable from "./loaderTable";
+import Headloader from "../../components/loaders/headloader";
 import Header  from "../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +18,10 @@ var currentProperty;
 const logger = require("../../services/logger");
 
 function Allpointofsale() {
+  const [visible,setVisible]=useState(0) 
+  const[gen,setGen] = useState([])
+  const [allSales, setAllSales] = useState([])
+
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
@@ -38,12 +44,74 @@ function Allpointofsale() {
     firstfun();
   Router.push('./pointofsales')
   }, [])
-  const AddRoom ={
-    label: "Add",
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-    
-}
 
+  useEffect(() => {
+    fetchSales();
+}
+    , [])
+  const fetchSales = async () => {
+    try {
+      var genData=[];
+        const url = `/api/point_of_sale/${currentProperty.property_id}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+       setAllSales(response.data)
+       setVisible(1)
+      response?.data?.map((item)=>{
+        var temp={
+          name:item.display_name,
+          status:item.status,
+          id:item.sale_id
+        }
+        genData.push(temp)
+        }
+      )
+      setGen(genData);
+      
+    }
+    catch (error) {
+
+        if (error.response) {
+            } 
+        else {
+        }
+    }
+}
+const addSale = () =>{
+  Router.push("./pointofsales/addpointofsale")
+}
+  /* Delete Package Function*/
+  const deleteSale = (props) => {
+    const url = `/api/point_of_sale/${props}`
+    axios.delete(url).then((response) => {
+        toast.success(("Package Deleted Successfully!"), {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+        fetchSales();
+        Router.push("./pointofsales");
+    })
+        .catch((error) => {
+            toast.error(("Package Delete Error!"), {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        })
+}
+ /**Function to save Current property to be viewed to Local Storage**/
+ const currentSale = (props) => {
+  localStorage.setItem("saleId", props?.id);
+  Router.push("./pointofsales/pointofsale")
+};
   return (
     <div>
         <Header Primary={english?.Side}/>
@@ -84,9 +152,11 @@ function Allpointofsale() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
               <Link href="./propertysummary" >
                <a> {currentProperty?.property_name}</a>
-              </Link></span>
+              </Link></div></span>
             </div>
           </li>
           <li>
@@ -114,7 +184,20 @@ function Allpointofsale() {
         </ol>
       </nav>
 
-   
+        {/* Header */}
+        <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+                 <div className={visible === 1 ? 'block' : 'hidden'}>
+                <Table  
+                gen={gen}
+                setGen={setGen}
+                add={addSale} 
+                edit={currentSale}
+                delete={deleteSale}
+                common={language?.common}
+                cols={language?.SaleCols}
+                name="Packages"/></div> 
+               
+              
                
       </div>
     </div>
@@ -122,3 +205,10 @@ function Allpointofsale() {
 }
 
 export default Allpointofsale
+Allpointofsale.getLayout = function PageLayout(page) {
+  return (
+    <>
+      {page}
+    </>
+  )
+}

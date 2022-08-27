@@ -7,7 +7,10 @@ import countries from "countries-list";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from '../../../components/Header'
-import Sidebar from '../../../components/Sidebar'
+import Sidebar from '../../../components/Sidebar';
+import Headloader from '../../../components/loaders/headloader';
+import Lineloader from '../../../components/loaders/lineloader';
+import Textboxloader from '../../../components/loaders/textboxloader'
 import english from '../../../components/Languages/en'
 import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
@@ -26,7 +29,7 @@ var language;
 var currentProperty;
 
 function Raterule() {
-
+  const [visible,setVisible]=useState(0) 
   const [countryData,setCountryData]=useState([])
   const [basicFlag,setBasicFlag]=useState([])
   const [languageData,setLanguageData]=useState([])
@@ -753,6 +756,7 @@ Router.push('./raterule')
         setAllUserRateDetails(response.data.conditional_rate)
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
+        setVisible(1);
         logger.info("url  to fetch raterules hitted successfully")
        
       })
@@ -812,9 +816,11 @@ Router.push('./raterule')
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                <div className={visible === 1 ? 'block' : 'hidden'}>
                   <Link href="../propertysummary" >
                     <a> {currentProperty?.property_name}</a>
-                  </Link></span>
+                  </Link></div></span>
               </div>
             </li>
             <li>
@@ -897,6 +903,8 @@ Router.push('./raterule')
                       {language?.programname}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input type="text"
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={rateRule?.rate_rule_name} 
@@ -909,7 +917,7 @@ Router.push('./raterule')
                       }/>
                <p className="invisible peer-invalid:visible text-red-700 font-light">
                {language?.required}
-            </p>
+            </p></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -921,6 +929,8 @@ Router.push('./raterule')
                  {language?.discounttype}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
+                <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   onChange={(e) =>
@@ -933,7 +943,7 @@ Router.push('./raterule')
                   <option value="exact">exact</option>
                   <option value="price_band">price band</option>
                   <option value="existence">existence</option>
-             </select>
+             </select></div>
               </div>
             </div>
             
@@ -946,12 +956,14 @@ Router.push('./raterule')
                     {language?.hotelamenity}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
+                <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.hotel_amenity}
                 readOnly
-                /></div></div>
+                /></div></div></div>
 
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
@@ -960,6 +972,8 @@ Router.push('./raterule')
                     {language?.pricemultiplier}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
+                <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
                   type="text"
                   pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
@@ -976,7 +990,7 @@ Router.push('./raterule')
                 />
                   <p className="invisible peer-invalid:visible text-red-700 font-light">
                  {language?.num}
-            </p></div></div>
+            </p></div></div></div>
               
 
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
@@ -1052,6 +1066,8 @@ Router.push('./raterule')
                        {language?.ratecondition}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
@@ -1066,7 +1082,7 @@ Router.push('./raterule')
                       <option value="all">{language?.all}</option>
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1079,7 +1095,8 @@ Router.push('./raterule')
                        {language?.ratedescription}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
-                    
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Textboxloader/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <textarea rows="2" columns="50"
                       className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={rateRule?.user_rate_condition?.[i]?.Description}
@@ -1093,7 +1110,7 @@ Router.push('./raterule')
                   />
                      <p className="invisible peer-invalid:visible text-red-700 font-light">
                      {language?.required}
-            </p>
+            </p></div>
                   </div>
                 </div>
 
@@ -1124,6 +1141,8 @@ Router.push('./raterule')
                         {language?.usercountry}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1131,7 +1150,7 @@ Router.push('./raterule')
                       displayValue="country_name"
                       selectedValues={resCou}
                       onRemove={(event) => {country(event)}}
-                      onSelect={(event) => {country(event) }} /></div>
+                      onSelect={(event) => {country(event) }} /></div></div>
                     </div>
 
                     <div className='flex mb-2'>
@@ -1150,6 +1169,8 @@ Router.push('./raterule')
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1157,7 +1178,7 @@ Router.push('./raterule')
                       displayValue="user_device"
                       selectedValues={resDev}
                       onRemove={(event) => { devices(event) }}
-                      onSelect={(event) => { devices(event) }} /></div>
+                      onSelect={(event) => { devices(event) }} /></div></div>
                     </div>
 
                     <div className='flex mb-2'>
@@ -1173,6 +1194,8 @@ Router.push('./raterule')
                         {language?.language}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1180,7 +1203,7 @@ Router.push('./raterule')
                       selectedValues={resLang}
                       displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
-                      onSelect={(event) => { languages(event) }} />
+                      onSelect={(event) => { languages(event) }} /></div>
                       </div>
                       </div>
 
@@ -1200,6 +1223,8 @@ Router.push('./raterule')
                           {language?.membershipprogram}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1207,7 +1232,7 @@ Router.push('./raterule')
                       displayValue="program_name"
                       selectedValues={res}
                       onRemove={(event) => {program(event)}}
-                      onSelect= {(event)=>{program(event)}} /></div>
+                      onSelect= {(event)=>{program(event)}} /></div></div>
                       </div>
 
                     <div className='flex mb-2'>
@@ -1227,6 +1252,8 @@ Router.push('./raterule')
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input type="text" 
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
@@ -1240,7 +1267,7 @@ Router.push('./raterule')
                       }/>
                        <p className="invisible peer-invalid:visible text-red-700 font-light">
                        {language?.float}
-                       </p>
+                       </p></div>
                       </div>
                         </div> 
 
@@ -1399,6 +1426,8 @@ Router.push('./raterule')
                       {language?.baserate} {language?.currency}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
                       onChange={
@@ -1410,7 +1439,7 @@ Router.push('./raterule')
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1422,6 +1451,8 @@ Router.push('./raterule')
                       {language?.baserate} {language?.amount}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
@@ -1436,7 +1467,7 @@ Router.push('./raterule')
                     />
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
                       {language?.float}
-                  </p>
+                  </p></div>
                   </div>
                 </div>
 
@@ -1449,6 +1480,8 @@ Router.push('./raterule')
                       {language?.taxrate} {language?.currency}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1459,7 +1492,7 @@ Router.push('./raterule')
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1472,6 +1505,8 @@ Router.push('./raterule')
                       {language?.taxrate} {language?.amount}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1485,7 +1520,7 @@ Router.push('./raterule')
                       } />
                         <p className="invisible peer-invalid:visible text-red-700 font-light">
                         {language?.float}
-                      </p>
+                      </p></div>
                   </div>
                 </div>
 
@@ -1498,6 +1533,8 @@ Router.push('./raterule')
                       {language?.other} {language?.capacity} {language?.currency}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
                       onChange={
@@ -1509,7 +1546,7 @@ Router.push('./raterule')
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1522,6 +1559,8 @@ Router.push('./raterule')
                       {language?.other} {language?.charges} {language?.amount}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1536,7 +1575,7 @@ Router.push('./raterule')
                     />
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
                       {language?.float}
-                  </p>
+                  </p></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1548,6 +1587,8 @@ Router.push('./raterule')
                         {language?.paymentholder}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1559,7 +1600,7 @@ Router.push('./raterule')
                       <option value="hotel">  {language?.hotel}</option>
                       <option value="installment">  {language?.installment}</option>
                       <option value="deposit">  {language?.deposit}</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1572,6 +1613,8 @@ Router.push('./raterule')
                        {language?.refundable}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1585,7 +1628,7 @@ Router.push('./raterule')
 
                       <option value={true}> {language?.yes}</option>
                       <option selected value={false}> {language?.no}</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1600,6 +1643,8 @@ Router.push('./raterule')
                             {language?.refundable} {language?.till} {language?.days}
                               <span style={{color:"#ff0000"}}>*</span>
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="text"
                           className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1613,7 +1658,7 @@ Router.push('./raterule')
                           } />
                           <p className="invisible peer-invalid:visible text-red-700 font-light">
                          {language?.num}
-                          </p>
+                          </p></div>
                       </div>
                     </div>
 
@@ -1626,6 +1671,8 @@ Router.push('./raterule')
                         {language?.refundable} {language?.till} {language?.time}
                           <span style={{color:"#ff0000"}}>*</span>
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="time" step="2"
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1634,7 +1681,7 @@ Router.push('./raterule')
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_time: e.target.value })
                             )
-                          } />
+                          } /></div>
                       </div>
                     </div></>)
                   :
@@ -1648,6 +1695,8 @@ Router.push('./raterule')
                     >
                        {language?.expirationtimezone} <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1657,7 +1706,7 @@ Router.push('./raterule')
                           setAllUserRateDetails({ ...allUserRateDetails, expiration_time: e.target.value })
                         )
                       } />
-
+                     </div>
                   </div>
                 </div>
               </div>

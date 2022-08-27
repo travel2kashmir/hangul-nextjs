@@ -149,7 +149,17 @@ Cancel:"Cancel"
  col1 : "Package Name",
   
 },
-
+"RoomBundleCols":{
+  name:"Room Bundles",
+ col1 : "Room Name",
+ col2:"Package Name"
+  
+},
+"SaleCols":{
+  name:"Point of Sales",
+ col1 : "Sale Name",
+  
+},
 "RateRuleCols":{
   name:"Rate Rules",
  col1 : "Name",

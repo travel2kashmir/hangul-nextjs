@@ -6,7 +6,6 @@ import Link from "next/link";
 import Table  from '../../components/Table';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Button from "../../components/Button";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
@@ -42,8 +41,6 @@ currentProperty = JSON.parse(localStorage.getItem("property"));
 
     const[gen,setGen] = useState([])
     const [allrooms, setAllRooms] = useState([])
-    const [deleteRoom, setDeleteRoom] = useState(0)
-    const [actionRoom,setActionRoom]=useState({});
  
     /**Function to save Current property to be viewed to Local Storage**/
   const currentRoom = (props) => {

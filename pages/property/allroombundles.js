@@ -190,7 +190,7 @@ function Allroombundles() {
         <div className={visible === 1 ? 'block' : 'hidden'}>
           <Table gen={gen} setGen={setGen} add={addRoomBundle}
             edit={currentRoomBundle}
-            delete={deleteRoomBundle} common={language?.common} cols={language?.RoomBundleCols} name="RoomBundle" />
+            delete={deleteRoomBundle} common={language?.common} cols={language?.RoomBundleCols} name="Rooms" />
         </div>
         {/* Toast Container */}
         <ToastContainer position="top-center"

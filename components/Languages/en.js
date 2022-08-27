@@ -32,6 +32,7 @@ export default {
   roombundle: "Room Bundle",
   search: "Search",
   raterules:"Rate Rules",
+  pointofsale:"Point of Sale",
   signout: "Signout",
   property: "Property",
   name: "Name",
@@ -96,6 +97,7 @@ export default {
   label:"Add",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
 },
+
 editraterules:'Edit Rate Rule',
 //Validation
 required:'This field is required',
@@ -472,7 +474,8 @@ propertyxml:'./propertyxml',
 roomsxml:'./roomsxml',
 raterules:'./raterules',
 additionalservices:'./additionalservices',
-theme:'./theme'
+theme:'./theme',
+pointofsale:'./pointofsales'
 },
 
 
@@ -493,7 +496,8 @@ propertyxml:'../propertyxml',
 roomsxml:'../roomsxml',
 raterules:'../raterules',
 additionalservices:'../additionalservices',
-theme:'../theme'
+theme:'../theme',
+pointofsale:'../pointofsales'
  },
  
  "Side2":{
@@ -513,7 +517,8 @@ theme:'../theme'
 roomsxml:'../../roomsxml',
 raterules:'../../raterules',
 additionalservices:'../../additionalservices',
-theme:'../../theme'
+theme:'../../theme',
+pointofsale:'../../pointofsales'
  },
   descriptiondate: "Description Date",
   update:'Update',

@@ -112,6 +112,8 @@ const addSale = () =>{
   localStorage.setItem("saleId", props?.id);
   Router.push("./pointofsales/pointofsale")
 };
+
+
   return (
     <div>
         <Header Primary={english?.Side}/>

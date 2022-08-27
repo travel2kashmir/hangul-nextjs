@@ -478,6 +478,7 @@ AddPackage :{
     usercountry: 'بلد المستخدم',
     userdevice:'جهاز المستخدم',
     language:'لغة',
+    pointofsale:"نقطة البيع",
     membershipprogram: 'برنامج العضوية',
     maxuserpercentage:'أقصى نسبة مستخدم',
     usersignedin: 'قام المستخدم بتسجيل الدخول',

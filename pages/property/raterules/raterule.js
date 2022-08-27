@@ -731,7 +731,7 @@ Router.push('./raterule')
 
 const filterByLanguage = () => {
   if(rateRule?.user_rate_condition?.[i]?.language != undefined) {
-    setCheckLanguage(true)
+  setCheckLanguage(true)
   resLang = languageData.filter(el => {
     return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
@@ -1323,7 +1323,7 @@ Router.push('./raterule')
                       </div>
                       <div className="w-full lg:w-4/12 ">
                       <div className="flex">
-                      <div className="form-check mx-2  form-check-inline">
+                      <div className="form-check mx-2 form-check-inline">
 
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSign?.IsDomestic} checked={ userSign?.IsDomestic === true}

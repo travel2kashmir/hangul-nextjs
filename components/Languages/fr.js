@@ -325,6 +325,7 @@ export default {
   lost: "Mot de passe perdu",
   remember: "Non enregistré?",
   create: "Créer un compte",
+  pointofsale:"Point de Vente",
   enteremail: "entrer votre email",
   enterpassword: "tapez votre mot de passe",
   language: "Sélectionner",

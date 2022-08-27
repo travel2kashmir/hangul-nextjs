@@ -18,8 +18,9 @@ import Headloader from "../../components/loaders/headloader";
 import Router from 'next/router'
 import LoaderTable from "./loaderTable";
 const logger = require("../../services/logger");
+var currentLogged;
 
-function Scaffold() {
+function Contact() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
   const [visible,setVisible]=useState(0) 
@@ -45,6 +46,7 @@ function Scaffold() {
         }
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       }
     }
     firstfun();
@@ -79,7 +81,7 @@ function Scaffold() {
           });
           setView(0)
           fetchHotelDetails();
-          Router.push("./scaffoldedtable");
+          Router.push("./contact");
           setContact([])
         })
         .catch((error) => {
@@ -158,9 +160,8 @@ function Scaffold() {
           })
           setGen(genData);
         }
-      setVisible(1);
-
-      })
+        setVisible(1);
+ })
       .catch((error) => { logger.error("url to fetch property details, failed") });
 
 
@@ -205,7 +206,9 @@ function Scaffold() {
 
   return (
     <>
+
      <Header Primary={english?.Side} />
+
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
@@ -223,12 +226,8 @@ function Scaffold() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
-              <Link
-                href="./landing"
-                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
-              >
-                <a>{language?.home}</a>
-              </Link>
+              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link>
             </li>
             <li>
               <div className="flex items-center">
@@ -388,13 +387,15 @@ function Scaffold() {
           pauseOnHover
         />
       </div>
+
     </>
+
 
   );
 }
 
-export default Scaffold
-Scaffold.getLayout = function PageLayout(page){
+export default Contact
+Contact.getLayout = function PageLayout(page){
   return(
     <>
     {page}

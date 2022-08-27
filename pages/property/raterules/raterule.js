@@ -222,6 +222,7 @@ const submitRateUpdate = () =>{
     rate_rule_name:rateRule?.rate_rule_name,
    rate_rule_id: rateRule?.rate_rule_id
 };
+
 const url = "/api/rate_rule/rate_rules";
   axios
     .put(url,data, { 
@@ -333,7 +334,7 @@ const url = "/api/rate_rule/rate_rules";
           draggable: true,
           progress: undefined,
         });
-        
+
         Router.push("../raterules");
 
       })
@@ -655,7 +656,6 @@ const url = "/api/rate_rule/rate_rules";
       }
       country_data.push(temp) } );
       setFinalCountry(country_data);
-     
   }
 
   const devices = (dev) => { 
@@ -964,7 +964,6 @@ Router.push('./raterule')
                   defaultValue={rateRule?.hotel_amenity}
                 readOnly
                 /></div></div></div>
-
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
@@ -986,14 +985,11 @@ Router.push('./raterule')
                       price_multiplier: e.target.value,
                     },setMod(1))
                   }
-
                 />
                   <p className="invisible peer-invalid:visible text-red-700 font-light">
                  {language?.num}
             </p></div></div></div>
-              
-
-                <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
+               <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                     <button
                       className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
@@ -1354,6 +1350,7 @@ Router.push('./raterule')
         </div>
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
         <Button Primary={language?.Previous}   onClick={() => {setDisp(0);}} />
+
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={()=>{ 
                   if (basicFlag.length !== 0){

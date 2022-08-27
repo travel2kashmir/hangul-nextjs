@@ -17,8 +17,10 @@ var language;
 var currentProperty;
 var propertyName;
 var propertyId;
-import Router from 'next/router'
-import arabic from "../../components/Languages/ar"
+import Router from 'next/router';
+import arabic from "../../components/Languages/ar";
+import Addservices from '../admin/addProperty/addservices';
+var currentLogged;
 
 function Services() {
     const [visible,setVisible]=useState(0) 
@@ -46,10 +48,9 @@ function Services() {
                 if (locale === "fr") {
                     language = french;
                 }
-                /** Current Property Basic Details fetched from the local storage **/
-                services = JSON.parse(localStorage.getItem('allPropertyDetails'))
                 /** Current Property Details fetched from the local storage **/
                 currentProperty = JSON.parse(localStorage.getItem("property"));
+                currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             }
         }
         firstfun();
@@ -68,7 +69,9 @@ function Services() {
             .then((response) => {
                 setServices(response.data);
                 logger.info("url  to fetch property details hitted successfully")
-
+                setVisible(1)
+                if (response?.data.services === undefined) { Router.push('../admin/addProperty/addservices') }
+               
                 {
                     response.data?.services?.map((item) => {
                         var temp = {
@@ -82,7 +85,7 @@ function Services() {
                     })
                     setGen(genData);
                 }
-                setVisible(1)
+
 
             })
 
@@ -94,49 +97,50 @@ function Services() {
     }, [])
 
 
-        
+
     /* Function to edit services*/
     const updateServices = (props) => {
-       
-            const final_data = {
-                "service_id":props.id,
-                "property_id": currentProperty.property_id,
-                "service_value": props.type,
-                "status": props.status
-            }
-           const url = '/api/services'
-            axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
-                ((response) => {
-                    toast.success("Services Updated Successfully!", {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    fetchHotelDetails();
-                    Router.push("./services");
-                  
-                })
-                .catch((error) => {
-                    toast.error("Service Update Error!", {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                })
-        
+
+
+        const final_data = {
+            "service_id": props.id,
+            "property_id": currentProperty.property_id,
+            "service_value": props.type,
+            "status": props.status
+        }
+        const url = '/api/services'
+        axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+            ((response) => {
+                toast.success("Services Updated Successfully!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                fetchHotelDetails();
+                Router.push("./services");
+
+            })
+            .catch((error) => {
+                toast.error("Service Update Error!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+
     }
+
 
     return (
         <>
-        
             <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
             <div id="main-content"
@@ -221,16 +225,17 @@ function Services() {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover />
+
             </div>
         </>
     )
 }
 
 export default Services
-Services.getLayout = function PageLayout(page){
-    return(
-      <>
-      {page}
-      </>
+Services.getLayout = function PageLayout(page) {
+    return (
+        <>
+            {page}
+        </>
     )
-    }
+}

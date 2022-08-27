@@ -55,9 +55,11 @@ function Addraterule() {
     const [programs, setPrograms] = useState([])
     const [languageData,setLanguageData]=useState([])
     const [rooms,setRooms]=useState([])
+
     const [drp,setDrp]=useState(false)
 
     useEffect(() => {
+
         const firstfun = () => {
           if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
@@ -433,7 +435,7 @@ function Addraterule() {
             // Country Edit Submit
              const submitCountryAdd = () => {
             const final_data = { "user_rate_country": finalCountry }
-          
+
             const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_country_link";
               axios
                 .put(url, final_data, { 
@@ -654,8 +656,6 @@ function Addraterule() {
                setFinalProgram(final_program_data);  
            }
 
- 
-
   return (
     <>
     <Header Primary={english?.Side1} />
@@ -781,18 +781,22 @@ function Addraterule() {
                     {language?.programname}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+
                     <input type="text" 
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       required
+
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
                           program: e.target.value,
                         })
                       }/>
+
                      <p className="invisible peer-invalid:visible text-red-700 font-light">
                 {language?.required}
             </p>
+
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -806,11 +810,13 @@ function Addraterule() {
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+
                       required
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
                           UserRateCondition_op: e.target.value
+
                         })
                       }
                     >
@@ -820,9 +826,11 @@ function Addraterule() {
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
                     </select>
+
                     <p className="invisible peer:visible text-red-700 font-light">
              {language?.required}
             </p>
+
                   </div>
                 </div>
 
@@ -838,6 +846,7 @@ function Addraterule() {
                     <textarea rows="2" columns="50"
                       className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       required
+
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
@@ -846,8 +855,7 @@ function Addraterule() {
                       }
 
                     />
-                       <p className="invisible peer-invalid:visible text-red-700 font-light">
-               
+              <p className="invisible peer-invalid:visible text-red-700 font-light">    
             </p>
                   </div>
                 </div>
@@ -874,7 +882,6 @@ function Addraterule() {
                   <option value="price_band">{language?.priceband}</option>
                   <option value="existence">{language?.existence}</option>
              </select>
-           
               </div>
             </div>
             
@@ -903,22 +910,23 @@ function Addraterule() {
                 </label>
                 <input
                   type="text"
+
                   pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                   required
                   className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+
                  onChange={(e) =>
                     setAllUserRateDetails({
                       ...allUserRateDetails,
                       price_multiplier: e.target.value,
                     })
                   }
+
                />
                  <p className="invisible peer-invalid:visible text-red-700 font-light">
               {language?.float}
             </p>
                 </div></div>
-              
-
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                   <Button Primary={language?.Next} onClick = {()=>{
@@ -1083,6 +1091,7 @@ function Addraterule() {
 
                       <div className="w-full lg:w-4/12 ">
                       <input type="text"
+
                       pattern="[0-9]+(\.[0-9]{1,2})?%?"
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
@@ -1093,10 +1102,12 @@ function Addraterule() {
                           MaxUsersPercent: e.target.value,
                         })
                       }/>
+
                        <p className="invisible peer-invalid:visible text-red-700 font-light">
               {language?.float}
             </p>
                       </div>
+
                         </div>
 
                     <div className='flex mb-2'>
@@ -1324,6 +1335,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
+
                         <p className="invisible peer-invalid:visible text-red-700 font-light">
                         {language?.float}
             </p>
@@ -1365,6 +1377,7 @@ function Addraterule() {
                     </label>
                     <input
                       type="text"
+
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                       required
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1448,6 +1461,7 @@ function Addraterule() {
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_days: e.target.value })
                             )
                           } />
+
                             <p className="invisible peer-invalid:visible text-red-700 font-light">
                             {language?.number}
                             </p>

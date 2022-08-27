@@ -15,7 +15,8 @@ import Router from "next/router";
 
 var language;
 var currentProperty;
-var currentPackageDetails;
+var currentLogged;
+var  currentPackageDetails;
 const logger = require("../../services/logger");
 
 function Allroombundles() {
@@ -24,15 +25,25 @@ function Allroombundles() {
   const [allBundles, setAllBundles] = useState([])
 
 
-  useEffect(() => {
-    const firstfun = () => {
-      if (typeof window !== 'undefined') {
-        var locale = localStorage.getItem("Language");
-        if (locale === "ar") {
-          language = arabic;
-        }
-        if (locale === "en") {
-          language = english;
+    useEffect(()=>{
+        const firstfun=()=>{
+          if (typeof window !== 'undefined'){
+            var locale = localStorage.getItem("Language"); 
+            if (locale === "ar") {
+            language = arabic;
+            }
+            if (locale === "en") {
+            language=english;
+            }
+            if (locale === "fr") {
+              language = french;
+            }
+            /** Current Property Basic Details fetched from the local storage **/
+            currentProperty=JSON.parse(localStorage.getItem('property'))  
+            currentPackageDetails=JSON.parse(localStorage.getItem('packageDescription'))
+            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+          } 
+
         }
         if (locale === "fr") {
           language = french;
@@ -56,6 +67,7 @@ function Allroombundles() {
     var genData = [];
     const url = `/api/room_bundle/${currentProperty.property_id}`;
     axios.get(url)
+
       .then((response) => {
         setAllBundles(response.data);
         {
@@ -99,6 +111,7 @@ function Allroombundles() {
         progress: undefined,
       });
       fetchBundles();
+
     })
       .catch((error) => {
         toast.error(("Room Bundle Delete Error!"), {
@@ -115,6 +128,7 @@ function Allroombundles() {
 
 
   return (
+
     <>
       <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
@@ -124,6 +138,7 @@ function Allroombundles() {
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
             <li className="inline-flex items-center">
+
               <svg
                 className="w-5 h-5 mr-2.5"
                 fill="currentColor"

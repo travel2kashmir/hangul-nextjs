@@ -129,7 +129,6 @@ DeleteContact :{
   </svg>
   },
 
- 
 Skip :{
   label:"يتخطى",
    color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",

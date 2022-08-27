@@ -277,6 +277,7 @@ const Table = (args) => {
                                                                 </div>
                                                             </div>
                                                         </td>
+
                                                         <td className="p-4 whitespace-nowrap capitalize space-x-2">
                                                         {flag.length === 0 ?
                                                            <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 

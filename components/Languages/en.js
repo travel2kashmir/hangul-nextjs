@@ -179,15 +179,15 @@ Cancel:"Cancel"
 },
 "Upload" :{
   label:"Upload",
-   color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
+   color: "bg-gray-600 hover:bg-gray-700  text-white ",
 },
 "Skip" :{
   label:"Skip",
-   color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
+   color: "bg-gray-600 hover:bg-gray-700  text-white ",
 },
 "Previous" :{
   label:"Previous",
-   color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
+   color: "bg-gray-600 hover:bg-gray-700  text-white ",
 },
 "Submit" :{
   label:"Submit",

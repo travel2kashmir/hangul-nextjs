@@ -40,7 +40,7 @@ function Addraterule() {
     const [languageCheck, setLanguageCheck] = useState(false);
     const [deviceCheck, setDeviceCheck] = useState(false);
     const [basicFlag,setBasicFlag]=useState([])
-    const [disp,setDisp]=useState(0)
+    const [disp,setDisp]=useState(1)
     const [programCheck, setProgramCheck] = useState(false);
     const [finalLang,setFinalLang]=useState([])
     const [finalCountry,setFinalCountry]=useState([])
@@ -59,7 +59,6 @@ function Addraterule() {
     const [drp,setDrp]=useState(false)
 
     useEffect(() => {
-
         const firstfun = () => {
           if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
@@ -1127,7 +1126,7 @@ function Addraterule() {
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                      
-                      <div className="form-check mx-2 my-4 form-check-inline">
+                      <div className="form-check mx-2  form-check-inline">
 
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSignedIn} 
@@ -1407,7 +1406,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         )
                       }>
-                      <option selected >{language?.usersignedin}</option>
+                      <option selected >{language?.select}</option>
                       <option value="web">Web</option>
                       <option value="hotel">Hotel</option>
                       <option value="installment">Installment</option>
@@ -1431,7 +1430,7 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, refundable: e.target.value })
                         )
                       }>
-                        <option selected>  {language?.usersignedin}</option> 
+                        <option selected>{language?.select}</option> 
                     
                         <option value={true}>Yes</option>
                          <option value={false}>No</option>
@@ -1522,7 +1521,7 @@ function Addraterule() {
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                        <option selected >{language?.usersignedin}</option>
+                        <option selected >{language?.select}</option>
                         {rooms?.map(i => {
                           return (
                             <option key={i} value={i.room_id}>{i.room_name}</option>)

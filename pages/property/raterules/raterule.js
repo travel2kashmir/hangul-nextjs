@@ -1282,7 +1282,7 @@ Router.push('./raterule')
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                      
-                      <div className="form-check mx-2 my-4 form-check-inline">
+                      <div className="form-check mx-2 form-check-inline">
 
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSign?.UserSignedIn} checked={ userSign?.UserSignedIn === true}
@@ -1708,7 +1708,9 @@ Router.push('./raterule')
                 </div>
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
+              {Button !== 'undefined' ?
               <Button Primary={language?.Previous}   onClick={() => {setDisp(1);}} />
+              : <></>}
                 {Button !== 'undefined' ?
                   <Button Primary={language?.Update} onClick={submitRateEdit} />
                   : <></>

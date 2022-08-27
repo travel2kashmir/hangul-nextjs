@@ -6,12 +6,11 @@ import Link from "next/link";
 import Table  from '../../components/Table';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Button from "../../components/Button";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
-import arabic from "../../components/Languages/ar"
-import Footer from '../../components/Footer';
-import Loader from "../../components/loader";
+import arabic from "../../components/Languages/ar";
+import LoaderTable from "./loaderTable";
+import Headloader from "../../components/loaders/headloader";
 var language;
 var currentProperty;
 var currentLogged;
@@ -44,8 +43,6 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
     const[gen,setGen] = useState([])
     const [allrooms, setAllRooms] = useState([])
-    const [deleteRoom, setDeleteRoom] = useState(0)
-    const [actionRoom,setActionRoom]=useState({});
  
     /**Function to save Current property to be viewed to Local Storage**/
   const currentRoom = (props) => {
@@ -82,8 +79,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
     }
 }
 
-    useEffect(() => {
-       
+    useEffect(() => { 
         fetchRooms();
     }
         ,[])
@@ -117,14 +113,13 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         })
        }
        
-            const addRoom = () =>{
+    const addRoom = () =>{
               Router.push("./rooms/addroom")
-            }
+    }
     
   return (
     <>
-    <div className={visible===0?'block':'hidden'}><Loader/></div>
-<div className={visible===1?'block':'hidden'}>
+   
      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
@@ -160,9 +155,11 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+              <div className={visible === 1 ? 'block' : 'hidden'}>
               <Link href="./propertysummary" >
                <a> {currentProperty?.property_name}</a>
-              </Link></span>
+              </Link></div></span>
             </div>
           </li>
           <li>
@@ -191,10 +188,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       </nav>
       
 {/* Rooms Table */}
+<div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+ <div className={visible === 1 ? 'block' : 'hidden'}></div>
 <Table  gen={gen} setGen={setGen} add={addRoom} 
       edit={currentRoom}
         delete={deleteRooms} common={language?.common} cols={language?.RoomCols} name="Rooms"/>
-
+</div>
 
  {/* Toast Container */}
  <ToastContainer position="top-center"
@@ -206,10 +205,6 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         pauseOnFocusLoss
         draggable
         pauseOnHover />
-
-</div>
-<Footer/>
-</div>
 </>
 )
 }

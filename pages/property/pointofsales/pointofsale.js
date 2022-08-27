@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
+import Button from '../../../components/Button';
 import Sidebar  from "../../../components/Sidebar";
 import Header  from "../../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
@@ -144,18 +145,17 @@ function Allpointofsale() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    Display Name
+                  Point of Sale Name
                   </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  <input
+                    type="text"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  
                     onChange={
                       (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, base_rate_currency: e.target.value })
+                        setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_amount: e.target.value })
                       )
-                    }>
-                    <option value="USD" ></option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
+                    } />
                 </div>
               </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -164,7 +164,7 @@ function Allpointofsale() {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    Display Language
+                  Point of Sale Language
                   </label>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
@@ -178,151 +178,14 @@ function Allpointofsale() {
                   </select>
                 </div>
               </div>
+            
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                   Match Status
-                  </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    onChange={
-                      (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_currency: e.target.value })
-                      )
-                    }>
-                    <option value="USD" >Yes</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Country
-                  </label>
-                  <input
-                    type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   
-                    onChange={
-                      (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_amount: e.target.value })
-                      )
-                    } />
-                </div>
-              </div>
-
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Language
-                  </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    onChange={
-                      (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_currency: e.target.value })
-                      )
-                    }>
-                    <option value="USD" >Select Language</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                  Brand
-                  </label>
-                  <input
-                    type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   
-                    onChange={
-                      (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_amount: e.target.value })
-                      )
-                    } />
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                  Currency
-                  </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                    onChange={
-                      (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_currency: e.target.value })
-                      )
-                    }>
-                    <option value="USD" >Select</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Site Type
-                  </label>
-                  <input
-                    type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  
-                    onChange={
-                      (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_amount: e.target.value })
-                      )
-                    } />
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                 Device
-                  </label>
-                  <input
-                    type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  
-                    onChange={
-                      (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_amount: e.target.value })
-                      )
-                    } />
-                </div>
-              </div>
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
-                    htmlFor="grid-password"
-                  >
-                  URL
+                Point of Sale URL
                   </label>
                   <input
                     type="text"
@@ -336,23 +199,12 @@ function Allpointofsale() {
                 </div>
               </div>
             
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                </div>
-              </div>
-
-              <div className="w-full lg:w-10/12 px-4">
-                <div className="relative w-full ml-4 mb-3"></div></div>
-              <div className="w-full lg:w-2/12 px-4">
-                <div className="relative w-full ml-4 mb-4">
-                  <button
-                    className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center 
-                     items-center  mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
-                    {language?.update}</button>
-                </div>
-              </div>
+              <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    {Button !== 'undefined' ?
+                      <Button Primary={language?.Update}  />
+                      : <></>
+                    }
+                  </div>
 
             </div>
           </div>

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
+import Headloader from '../../../components/loaders/headloader';
+import Lineloader from '../../../components/loaders/lineloader';
 import Button  from '../../../components/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -41,6 +43,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
          Router.push("./addroom")   
 },[])
   const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [visible,setVisible]=useState(0) 
   const [roomtypes, setRoomtypes] = useState({})
   const [image, setImage] = useState({})
   const [actionImage, setActionImage] = useState([])
@@ -55,7 +58,8 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
     const url = `/api/room-types`
     axios.get(url)
     .then((response)=>{setRoomtypes(response.data);
-      logger.info("url  to fetch roomtypes hitted successfully")})
+      logger.info("url  to fetch roomtypes hitted successfully")
+    setVisible(1)})
       .catch((error)=>{logger.error("url to fetch roomtypes, failed")});  
     }
     const fetchServices = async () => {
@@ -418,7 +422,9 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="../propertysummary"><a>{currentProperty?.property_name}</a></Link>
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+              <Link href="../propertysummary"><a>{currentProperty?.property_name}</a></Link></div>
               </span>
             </div>
           </li>
@@ -479,7 +485,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={e => setAllRoomDes({ ...allRoomDes, room_name: e.target.value ,property_id:currentProperty?.property_id})}
-       />
+                    />
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -488,6 +494,8 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                       htmlFor="grid-password">
                       {language?.room} {language?.type}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
@@ -497,7 +505,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                           <option key={i.room_type_id} value={i.room_type_id}>{i?.room_type_name}</option>)
                       }
                       )}</>}
-                    </select>
+                    </select></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -867,6 +875,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                         setAllRoomRates({...allRoomRates, base_rate_currency: e.target.value })
                       )
                     }>
+                       <option selected >Select</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -907,6 +916,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                         setAllRoomRates({...allRoomRates, tax_rate_currency: e.target.value })
                       )
                     }>
+                    <option selected >Select</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
@@ -947,6 +957,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                         setAllRoomRates({...allRoomRates,otherfees_currency: e.target.value })
                       )
                     }>
+                     <option selected >Select</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>

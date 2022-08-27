@@ -3,6 +3,8 @@ import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import Link from "next/link";
+import LoaderTable from "./loaderTable";
+import Headloader from "../../components/loaders/headloader";
 import Table from '../../components/Table';
 import Button from "../../components/Button";
 import { ToastContainer, toast } from 'react-toastify';
@@ -19,6 +21,7 @@ import Router from 'next/router'
 import arabic from "../../components/Languages/ar"
 
 function AdditionalServices() {
+        const [visible,setVisible]=useState(0) 
         const [additionalServices, setAdditionalServices] = useState({})
         const [services, setServices] = useState([])
         const [edit, setEdit] = useState(0)
@@ -71,6 +74,7 @@ function AdditionalServices() {
                         geneData.push(temp)
                     })
                     setGene(geneData);
+                    setVisible(1);
                 }
               
             })
@@ -114,8 +118,7 @@ function AdditionalServices() {
         .catch((error) => { logger.error("url to fetch property details, failed") });
 }
       /*Function to edit additional services*/
-      const editAdditionalServices = (props) => {
-     
+      const editAdditionalServices = (props) => { 
         const final_data = {
             "add_service_id": props.id,
             "add_service_name": props.name,
@@ -262,9 +265,11 @@ function AdditionalServices() {
                                     ></path>
                                 </svg>
                                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+                                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                                     <Link href="./propertysummary" >
                                         <a> {services?.property_name}</a>
-                                    </Link></span>
+                                    </Link></div></span>
                             </div>
                         </li>
                         <li>
@@ -291,11 +296,15 @@ function AdditionalServices() {
                         </li>
                     </ol>
                 </nav>
-             
+
+            
+                <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+                 <div className={visible === 1 ? 'block' : 'hidden'}>
                 <Table  gen={gene} setGen={setGene} add={()=> setView(1)} name="Additional Services"
                 edit={editAdditionalServices}
                 delete={deleteAdditionalServices}
-                common={language?.common} cols={language?.AdditionalServicesCols}  /> 
+                common={language?.common} cols={language?.AdditionalServicesCols}  /> </div>
+
                 
                  {/* Modal Add */}
                  <div className={view === 1 ? 'block' : 'hidden'}>

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
-import Button from "../../../components/Button"
+import Button from "../../../components/Button";
+import Headloader from '../../../components/loaders/headloader'
+import Lineloader from '../../../components/loaders/lineloader';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import english from "../../../components/Languages/en"
@@ -18,6 +20,7 @@ var rateId;
 const logger = require("../../../services/logger");
 
 function Addroombundles() {
+  const [visible, setVisible] = useState(0)
   const [allRooms, setAllRooms] = useState([]);
   const [allPackages, setAllPackages] = useState([]);
   const [roomBundle, setRoomBundle] = useState([]);
@@ -26,6 +29,7 @@ function Addroombundles() {
   const[parking,setParking]= useState(false)
   const[breakfast,setBreakfast]= useState(false)
   const[internet,setInternet]= useState(false)
+
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== "undefined") {
@@ -42,7 +46,7 @@ function Addroombundles() {
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
         currentPackageDetails = JSON.parse(
-          localStorage.getItem("packageDescription")
+        localStorage.getItem("packageDescription")
         );
       }
     };
@@ -58,6 +62,7 @@ function Addroombundles() {
           headers: { accept: "application/json" },
         });
         setAllRooms(response.data);
+        setVisible(1)
       } catch (error) {
         if (error.response) {
         } else {
@@ -65,34 +70,7 @@ function Addroombundles() {
       }
     };
     fetchRooms();
-    const fetchPackages = async () => {
-      try {
-        const url = `/api/package/${currentProperty?.property_id}`;
-        const response = await axios.get(url, {
-          headers: { accept: "application/json" },
-        });
-        setAllPackages(response.data);
-      } catch (error) {
-        if (error.response) {
-        } else {
-        }
-      }
-    };
-    fetchPackages();
-    const fetchRoomBundle = async () => {
-      try {
-        const url = `/api/room_bundle/${currentPackage.room_bundle_id}`;
-        const response = await axios.get(url, {
-          headers: { accept: "application/json" },
-        });
-        setRoomBundle(response.data);
-      } catch (error) {
-        if (error.response) {
-        } else {
-        }
-      }
-    };
-    fetchRoomBundle();
+  
   }, []);
   
 
@@ -220,9 +198,11 @@ function Addroombundles() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                 <Link href="../propertysummary">
                   <a>{currentProperty?.property_name}</a>
-                </Link>
+                </Link></div>
               </span>
             </div>
           </li>
@@ -286,6 +266,8 @@ function Addroombundles() {
                   >
                     {language?.room} {language?.name}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select
                     onClick={(e) =>
                       setBundle({ ...bundle, room_id: e.target.value })
@@ -301,7 +283,7 @@ function Addroombundles() {
                         </option>
                       );
                     })}
-                  </select>
+                  </select></div>
                 </div>
               </div>
 
@@ -313,6 +295,8 @@ function Addroombundles() {
                   >
                     {language?.package} {language?.name}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select
                     onClick={(e) =>
                       setBundle({ ...bundle, package_id: e.target.value })
@@ -327,7 +311,7 @@ function Addroombundles() {
                         </option>
                       );
                     })}
-                  </select>
+                  </select></div>
                 </div>
               </div>
 

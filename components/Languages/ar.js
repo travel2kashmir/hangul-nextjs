@@ -468,6 +468,11 @@ AddPackage :{
     rateruleconditions: "شروط حكم معدل",
     rates: 'معدلات',
     all: 'الكل',
+    "SaleCols":{
+      name:"نقطة مبيعات",
+     col1 : "اسم البيع",
+      
+    },
     any: 'أي',
     none: 'لا أحد',
     select:'تحديد',
@@ -481,6 +486,7 @@ AddPackage :{
     pointofsale:"نقطة البيع",
     membershipprogram: 'برنامج العضوية',
     maxuserpercentage:'أقصى نسبة مستخدم',
+    matchstatus:'حالة المباراة',
     usersignedin: 'قام المستخدم بتسجيل الدخول',
     isdomestic: 'هو محلي',
     expirationtimezone: 'المنطقة الزمنية لانتهاء الصلاحية',

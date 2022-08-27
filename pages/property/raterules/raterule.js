@@ -1161,7 +1161,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       {language?.usercountry}
+                       {language?.userdevice}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">

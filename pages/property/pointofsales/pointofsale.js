@@ -8,7 +8,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
-import arabic from "../../../components/Languages/ar"
+import arabic from "../../../components/Languages/ar";
+import Headloader from '../../../components/loaders/headloader';
+import Lineloader from '../../../components/loaders/lineloader';
 import Router from "next/router";
 var langs = require('langs');
 var language;
@@ -17,7 +19,6 @@ var language_data=[];
 var j = 1;
 var i =0;
 var currentSale;
-var resLang=[]
 const logger = require("../../../services/logger");
 
 function Allpointofsale() {
@@ -25,6 +26,7 @@ function Allpointofsale() {
   const [visible, setVisible] = useState(0);
   const [sales, setSales] = useState(0);
   const [languageData,setLanguageData]=useState([])
+  const [resLang,setResLang]=useState([])
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
@@ -46,7 +48,6 @@ function Allpointofsale() {
    
     firstfun();
     createLanguages();
-  Router.push('./pointofsale')
   }, [])
 
   useEffect(() => {
@@ -58,8 +59,9 @@ function Allpointofsale() {
     console.log("url " +url)
     axios.get(url)
     .then((response)=>{setSales(response.data);
-    logger.info("url  to fetch room hitted successfully");
-    setVisible(1);
+    logger.info("url  to fetch room hitted successfully"); 
+    
+  
   })
     .catch((error)=>{logger.error("url to fetch room, failed")}); 
   }
@@ -80,13 +82,15 @@ function Allpointofsale() {
    } 
 
    const filterByLanguage = (language_data) => {
-    resLang = language_data.filter(el => {
+    setResLang(()=>language_data.filter(el => {
       return sales?.display_language === el.language_code;
-    });   
-  }
-    
+    }));
+   
+      setVisible(1)
+   Router.push('./pointofsale')
+   }
   
-  
+ 
   return (
     <div>
         <Header Primary={english?.Side}/>
@@ -127,9 +131,11 @@ function Allpointofsale() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                <div className={visible === 1 ? 'block' : 'hidden'}>
               <Link href="../propertysummary" >
                <a> {currentProperty?.property_name}</a>
-              </Link></span>
+              </Link></div></span>
             </div>
           </li>
           <li>
@@ -203,6 +209,8 @@ function Allpointofsale() {
                   >
                   Point of Sale Name
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -211,7 +219,7 @@ function Allpointofsale() {
                       (e) => (
                        setSales({ ...sales, display_name: e.target.value })
                       )
-                    } />
+                    } /></div>
                 </div>
               </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -222,6 +230,8 @@ function Allpointofsale() {
                   >
                   Point of Sale Language
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
@@ -235,7 +245,7 @@ function Allpointofsale() {
                         }
                         )}
                    
-                  </select>
+                  </select></div>
                 </div>
               </div>
             
@@ -247,6 +257,8 @@ function Allpointofsale() {
                   >
                 Point of Sale URL
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -255,7 +267,7 @@ function Allpointofsale() {
                       (e) => (
                         setSales({ ...sales, url: e.target.value })
                       )
-                    } />
+                    } /></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -288,7 +300,7 @@ function Allpointofsale() {
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
          Match Status
         </h6>  
-        
+
       </div></div>
       
 </div>

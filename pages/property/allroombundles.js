@@ -43,16 +43,8 @@ function Allroombundles() {
             currentPackageDetails=JSON.parse(localStorage.getItem('packageDescription'))
             currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
           } 
-
-        }
-        if (locale === "fr") {
-          language = french;
-        }
-        /** Current Property Basic Details fetched from the local storage **/
-        currentProperty = JSON.parse(localStorage.getItem('property'))
-        currentPackageDetails = JSON.parse(localStorage.getItem('packageDescription'))
+        
       }
-    }
     firstfun();
     Router.push("./allroombundles");
   }, [])

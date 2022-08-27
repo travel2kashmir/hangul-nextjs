@@ -10,6 +10,7 @@ const Table = (args) => {
         "edit": 0,
         "id": ''
     });
+    
     const [del, setDel] = useState({
         "delete": 0,
         "id": ''

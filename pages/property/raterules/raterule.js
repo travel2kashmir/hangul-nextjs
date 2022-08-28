@@ -279,6 +279,7 @@ const url = "/api/rate_rule/rate_rules";
         });
     
         setBasicFlag([])
+
       
       }
     )
@@ -334,9 +335,7 @@ const url = "/api/rate_rule/rate_rules";
           draggable: true,
           progress: undefined,
         });
-
         Router.push("../raterules");
-
       })
       .catch((error) => {
 
@@ -463,6 +462,7 @@ const url = "/api/rate_rule/rate_rules";
  // Device Edit Submit
   const submitDeviceEdit = () => {
     const final_data = { "user_rate_device": finalDevice }
+    alert("finalDevice" +JSON.stringify(final_data));
     const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
       axios
         .put(url, final_data, { 
@@ -662,7 +662,7 @@ const url = "/api/rate_rule/rate_rules";
     dev.map(item => {
       var temp = {
         user_rate_condition_id: userSign?.UserRateCondition_id,
-        user_device: item?.user_device
+        user_device_type: item?.user_device
       }
       device_data.push(temp) } );
       setFinalDevice(device_data);
@@ -674,7 +674,7 @@ const url = "/api/rate_rule/rate_rules";
    pro.map(item => {
        var temp = {
          user_rate_condition_id: userSign?.UserRateCondition_id,
-         program_id: item.program_id
+         always_eligible_membership_id: item.program_id
        }
        program_data.push(temp) } );
        setFinalProgram(program_data);  
@@ -751,12 +751,11 @@ Router.push('./raterule')
     console.log("url" + url)
     axios.get(url)
       .then((response) => {
-       
         setRateRule(response.data);
         setAllUserRateDetails(response.data.conditional_rate)
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
-        setVisible(1);
+        setVisible(1)
         logger.info("url  to fetch raterules hitted successfully")
        
       })
@@ -1708,9 +1707,7 @@ Router.push('./raterule')
                 </div>
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
-              {Button !== 'undefined' ?
               <Button Primary={language?.Previous}   onClick={() => {setDisp(1);}} />
-              : <></>}
                 {Button !== 'undefined' ?
                   <Button Primary={language?.Update} onClick={submitRateEdit} />
                   : <></>

@@ -966,7 +966,7 @@ function Addraterule() {
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-          {language?.raterulecondition}
+          {language?.ratecondition}
           </h6>
           <div className="flex flex-wrap">
            <div className="w-full lg:w-6/12 px-4">

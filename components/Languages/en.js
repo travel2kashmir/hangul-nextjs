@@ -53,6 +53,7 @@ export default {
   longitude: "Longitude",
   postalcode: " Postal Code",
   precision: "Precision",
+  signingin:"Signing In",
   seemore: "See More..",
   allrightsreserved: "All rights reserved",
   privacypolicy: "Privacy Policy",

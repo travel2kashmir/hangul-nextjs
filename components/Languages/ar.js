@@ -487,6 +487,7 @@ AddPackage :{
     membershipprogram: 'برنامج العضوية',
     maxuserpercentage:'أقصى نسبة مستخدم',
     matchstatus:'حالة المباراة',
+    signingin:'تسجيل الدخول',
     usersignedin: 'قام المستخدم بتسجيل الدخول',
     isdomestic: 'هو محلي',
     expirationtimezone: 'المنطقة الزمنية لانتهاء الصلاحية',

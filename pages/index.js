@@ -19,6 +19,7 @@ function Signin(args) {
   const router = useRouter();
   const { locale } = router;
   const [current, setCurrent] = useState(false)
+  const [error, setError] = useState({})
   /** State for internationalization **/
   useEffect(() => {
     firstfun()
@@ -94,6 +95,8 @@ function Signin(args) {
   /** Sign In Submit Function **/
   const submitSignIn = async (e) => {
     e.preventDefault()
+   if (validation(signinDetails)){
+    setSpinner(1)
     var item = {
       user_email: signinDetails.email,
     };
@@ -131,7 +134,7 @@ function Signin(args) {
         } else {
           setSpinner(0)
           /** Toast emitter for error wrong email password combination  **/
-          toast.error("Please check your email and password", {
+          toast.error("API: The password that you've entered is incorrect.", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -141,16 +144,18 @@ function Signin(args) {
             progress: undefined,
           });
 
-          logger.error('Incorrect email and password combination.')
+          logger.error("API: The password that you've entered is incorrect.")
 
         }
       })
 
       .catch((error) => {
-        logger.error('Sign In error!');
+        if(error.message===`Request failed with status code 401`)
+        {
+          logger.error("API:The email address you entered isn't connected to an account.");
         setSpinner(0);
-        /** Toast emitter for Sign in error  **/
-        toast.error("Sign in Error!", {
+        /** Toast emitter fo: Invalid Email error  **/
+        toast.error("API: The email address you entered isn't connected to an account.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -159,11 +164,56 @@ function Signin(args) {
           draggable: true,
           progress: undefined,
         });
+        }
+        else{
+          logger.error('API: Network error');
+        setSpinner(0);
+        /** Toast emitter for Sign in error  **/
+        toast.error("API: Network error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        }
+        
       });
+    }
   };
+  // Validation Function
+  const validation = (signinDetails) => {
+     var Result = checkFormData(signinDetails);
+     if (Result === true){
+      return true;
+     }
+     else{
+      setError(Result);
+      return false;
 
+     }
+
+  }
+  //Checking Form Data for Validations
+   const checkFormData = (signinDetails) => {
+    var error={};
+    if(signinDetails?.email === "" ||  signinDetails.email === undefined){
+      error.email = "The email field is required."
+    }
+    if((!signinDetails?.email?.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) && (signinDetails?.email != "" &&  signinDetails.email != undefined))){
+      error.email = "The email field is in invalid format."
+    }
+    if(signinDetails?.password === "" || signinDetails.password === undefined){
+      error.password = "The password field is required"
+    }
+    
+   return Object.keys(error).length === 0 ? true :  error;
+
+   }
   return (
-    <div className="h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div
         className="mx-auto  flex flex-col justify-center items-center 
   px-4 pt-8 pt:mt-0"
@@ -199,14 +249,18 @@ function Signin(args) {
                   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
                    focus:border-cyan-600 block w-full p-2.5"
                   onChange={(e) =>
-                    setSigninDetails({
+                    {setSigninDetails({
                       ...signinDetails,
                       email: e.target.value,
-                    })
+                    }),
+                    setError({...error,email:''})}
                   }
                   placeholder={language?.enteremail}
                   required
                 ></input>
+                 <p className="text-red-700 font-light">
+                   {error?.email}
+            </p>
               </div>
               <div>
                 <label
@@ -219,16 +273,22 @@ function Signin(args) {
                   type="password"
                   name="password"
                   id="password"
-                  onChange={(e) =>
+                  onChange={(e) =>{
                     setSigninDetails({
                       ...signinDetails,
                       password: e.target.value,
                     })
+                    setError({...error,password:''})
+                  }
+                    
                   }
                   placeholder={language?.enterpassword}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   required
                 ></input>
+                <p className="text-red-700 font-light">
+                   {error?.password}
+            </p>
               </div>
               <div className="flex items-start">
                 <div className="flex items-center h-5">
@@ -262,7 +322,7 @@ function Signin(args) {
                   type="submit"
                   onClick={(e) => {
                     submitSignIn(e);
-                    setSpinner(1)
+                   
                   }}
                   className={`font-semibold text-white bg-cyan-600 
               hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
@@ -272,12 +332,15 @@ function Signin(args) {
                 </button>
               </div>
               <div className={spinner === 1 ? 'block' : 'hidden'}>
-
-                <div className="flex  space-x-2 animate-bounce">
-                  <div className="w-4 h-4 bg-cyan-600 rounded-full"></div>
-                  <div className="w-4 h-4 bg-cyan-600 rounded-full"></div>
-                  <div className="w-4 h-4 bg-cyan-600 rounded-full"></div>
-                </div>
+              <button disabled type="button" className="font-semibold text-white bg-cyan-600 
+              hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
+              rounded-lg text-base px-5 py-2 capitalize w-full sm:w-auto text-center">
+    <svg role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
+    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
+    </svg>
+    {language?.signingin}
+</button>
               </div>
 
               <div className="text-base font-semibold text-gray-500">

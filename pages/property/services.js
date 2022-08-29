@@ -23,7 +23,7 @@ import Addservices from '../admin/addProperty/addservices';
 var currentLogged;
 
 function Services() {
-    const [visible,setVisible]=useState(0) 
+    const [visible, setVisible] = useState(0)
     const [services, setServices] = useState([])
     const [edit, setEdit] = useState(0)
     const [actionService, setActionService] = useState([])
@@ -71,7 +71,7 @@ function Services() {
                 logger.info("url  to fetch property details hitted successfully")
                 setVisible(1)
                 if (response?.data.services === undefined) { Router.push('../admin/addProperty/addservices') }
-               
+
                 {
                     response.data?.services?.map((item) => {
                         var temp = {
@@ -148,22 +148,13 @@ function Services() {
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
+
                         <li className="inline-flex items-center">
-                            <svg
-                                className="w-5 h-5 mr-2.5"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                            </svg>
-                            <Link
-                                href="./landing"
-                                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
-                            >
-                                <a>{language?.home}</a>
+                            <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                            <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
                             </Link>
                         </li>
+
                         <li>
                             <div className="flex items-center">
                                 <svg
@@ -179,11 +170,11 @@ function Services() {
                                     ></path>
                                 </svg>
                                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                                <div className={visible === 1 ? 'block' : 'hidden'}> 
-                                    <Link href="./propertysummary" >
-                                        <a> {services?.property_name}</a>
-                                    </Link></div></span>
+                                    <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                    <div className={visible === 1 ? 'block' : 'hidden'}>
+                                        <Link href="./propertysummary" >
+                                            <a> {services?.property_name}</a>
+                                        </Link></div></span>
                             </div>
                         </li>
                         <li>
@@ -211,11 +202,11 @@ function Services() {
                     </ol>
                 </nav>
                 <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
-                 <div className={visible === 1 ? 'block' : 'hidden'}>
-               <Table  gen={gen} setGen={setGen}   
-                edit={updateServices}  common={language?.common} cols={language?.ServicesCols}
-                name="Services"/> </div>
-              {/* Toast Container */}
+                <div className={visible === 1 ? 'block' : 'hidden'}>
+                    <Table gen={gen} setGen={setGen}
+                        edit={updateServices} common={language?.common} cols={language?.ServicesCols}
+                        name="Services" /> </div>
+                {/* Toast Container */}
                 <ToastContainer position="top-center"
                     autoClose={5000}
                     hideProgressBar={false}

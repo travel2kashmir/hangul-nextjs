@@ -13,6 +13,7 @@ import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router';
+var currentLogged;
 var i = 0;
 var j = 1;
 var res =[]
@@ -76,6 +77,7 @@ function Addraterule() {
             currentraterule = localStorage.getItem('RateRuleId');
             /** Current Property Details fetched from the local storage **/
             currentProperty = JSON.parse(localStorage.getItem("property"));
+            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
          }
         }
         firstfun();
@@ -665,22 +667,13 @@ function Addraterule() {
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
-            <li className="inline-flex items-center">
-              <svg
-                className="w-5 h-5 mr-2.5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-              </svg>
-              <Link
-                href="../landing"
-                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
-              >
-                <a>{language?.home}</a>
-              </Link>
-            </li>
+            
+          <li className="inline-flex items-center">
+                <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link>
+              </li>
+          
             <li>
               <div className="flex items-center">
                 <svg
@@ -845,7 +838,6 @@ function Addraterule() {
                     <textarea rows="2" columns="50"
                       className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       required
-
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
@@ -966,9 +958,9 @@ function Addraterule() {
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
+
           {language?.ratecondition}
-          </h6>
+
           </h6>
           <div className="flex flex-wrap">
            <div className="w-full lg:w-6/12 px-4">
@@ -1221,7 +1213,7 @@ function Addraterule() {
          <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-               <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"> 1</button>
+            <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"> 1</button>
               <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
             </div>
 
@@ -1230,8 +1222,8 @@ function Addraterule() {
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Conditions</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">
-             
+          
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">
             3</button>
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rates </div>
             </div>
@@ -1464,7 +1456,7 @@ function Addraterule() {
                           } />
 
                             <p className="invisible peer-invalid:visible text-red-700 font-light">
-                            {language?.number}
+                            {language?.num}
                             </p>
                       </div>
                     </div>

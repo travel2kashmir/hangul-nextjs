@@ -16,6 +16,7 @@ import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router';
+var currentLogged;
 var i = 0;
 var j = 1;
 var res =[]
@@ -79,6 +80,7 @@ function Raterule() {
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
         createCountry();
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       
       }
     }
@@ -279,6 +281,7 @@ const url = "/api/rate_rule/rate_rules";
         });
     
         setBasicFlag([])
+
       
       }
     )
@@ -334,9 +337,7 @@ const url = "/api/rate_rule/rate_rules";
           draggable: true,
           progress: undefined,
         });
-
         Router.push("../raterules");
-
       })
       .catch((error) => {
 
@@ -463,6 +464,7 @@ const url = "/api/rate_rule/rate_rules";
  // Device Edit Submit
   const submitDeviceEdit = () => {
     const final_data = { "user_rate_device": finalDevice }
+    alert("finalDevice" +JSON.stringify(final_data));
     const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
       axios
         .put(url, final_data, { 
@@ -662,7 +664,7 @@ const url = "/api/rate_rule/rate_rules";
     dev.map(item => {
       var temp = {
         user_rate_condition_id: userSign?.UserRateCondition_id,
-        user_device: item?.user_device
+        user_device_type: item?.user_device
       }
       device_data.push(temp) } );
       setFinalDevice(device_data);
@@ -674,7 +676,7 @@ const url = "/api/rate_rule/rate_rules";
    pro.map(item => {
        var temp = {
          user_rate_condition_id: userSign?.UserRateCondition_id,
-         program_id: item.program_id
+         always_eligible_membership_id: item.program_id
        }
        program_data.push(temp) } );
        setFinalProgram(program_data);  
@@ -751,12 +753,11 @@ Router.push('./raterule')
     console.log("url" + url)
     axios.get(url)
       .then((response) => {
-       
         setRateRule(response.data);
         setAllUserRateDetails(response.data.conditional_rate)
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
-        setVisible(1);
+        setVisible(1)
         logger.info("url  to fetch raterules hitted successfully")
        
       })
@@ -785,22 +786,13 @@ Router.push('./raterule')
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
-            <li className="inline-flex items-center">
-              <svg
-                className="w-5 h-5 mr-2.5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-              </svg>
-              <Link
-                href="../landing"
-                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
-              >
-                <a>{language?.home} </a>
-              </Link>
-            </li>
+        
+              <li className="inline-flex items-center">
+                <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link>
+              </li>
+          
             <li>
               <div className="flex items-center">
                 <svg
@@ -1708,9 +1700,7 @@ Router.push('./raterule')
                 </div>
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
-              {Button !== 'undefined' ?
               <Button Primary={language?.Previous}   onClick={() => {setDisp(1);}} />
-              : <></>}
                 {Button !== 'undefined' ?
                   <Button Primary={language?.Update} onClick={submitRateEdit} />
                   : <></>

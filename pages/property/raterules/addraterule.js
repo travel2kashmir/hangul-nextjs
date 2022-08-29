@@ -785,7 +785,6 @@ function Addraterule() {
                     <input type="text" 
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       required
-
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
@@ -967,7 +966,9 @@ function Addraterule() {
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-          {language?.raterulecondition}
+          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
+          {language?.ratecondition}
+          </h6>
           </h6>
           <div className="flex flex-wrap">
            <div className="w-full lg:w-6/12 px-4">

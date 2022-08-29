@@ -189,7 +189,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       
 {/* Rooms Table */}
 <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
- <div className={visible === 1 ? 'block' : 'hidden'}></div>
+ <div className={visible === 1 ? 'block' : 'hidden'}>
 <Table  gen={gen} setGen={setGen} add={addRoom} 
       edit={currentRoom}
         delete={deleteRooms} common={language?.common} cols={language?.RoomCols} name="Rooms"/>
@@ -205,6 +205,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+        </div>
 </>
 )
 }

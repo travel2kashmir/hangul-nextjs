@@ -254,6 +254,7 @@ const validationMatchStatus = (sales) => {
             sale_id:sale_id
             }];
             const final_datas={pos_match_status_link: datas}
+            alert(JSON.stringify(final_datas));
            const url = "/api/point_of_sale/pos_match_status_link";
             axios
               .post(url, final_datas, {

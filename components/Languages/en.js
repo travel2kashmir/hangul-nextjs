@@ -159,6 +159,12 @@ Cancel:"Cancel"
  col2:"Package Name"
   
 },
+"MatchStatusCols":{
+  name:"Match Status",
+ col1 : "Match Status Name",
+ col2:"Match Status"
+  
+},
 "SaleCols":{
   name:"Point of Sales",
  col1 : "Sale Name",

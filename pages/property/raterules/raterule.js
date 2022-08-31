@@ -750,11 +750,32 @@ Router.push('./raterule')
 
   const fetchRateRule = async () => {
     const url = `/api/rate_rule/${currentraterule}`
+    var isRatePresent=false
     console.log("url" + url)
     axios.get(url)
       .then((response) => {
         setRateRule(response.data);
-        setAllUserRateDetails(response.data.conditional_rate)
+       console.log(Object.keys(response.data))
+       for(let item in Object.keys(response.data)){
+        alert(Object.keys(response.data.item))
+        if(Object.keys(response.data).item==='conditional_rate') isRatePresent=true
+    }
+        isRatePresent===true?setAllUserRateDetails(response.data?.conditional_rate):setAllUserRateDetails({
+          "rate_rule_id": "",
+          "conditional_rate_id": "",
+          "base_rate_currency": "",
+          "base_rate_amount": "",
+          "tax_amount": "",
+          "tax_currency": "",
+          "otherfees_currency": "",
+          "otherfees_amount": "",
+          "refundable": "",
+          "refundable_until_days": "",
+          "refundable_until_time": "",
+          "expiration_time": "",
+          "charge_currency": "",
+          "room_id": ""
+        })
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
         setVisible(1)

@@ -444,8 +444,8 @@ const filterByMLanguage = (props) => {
 
   return (
     <div>
-        <Header Primary={english?.Side}/>
-      <Sidebar  Primary={english?.Side}/>
+        <Header Primary={english?.Side1}/>
+      <Sidebar  Primary={english?.Side1}/>
       <div id="main-content"
        className= {disp===1? "bg-white pt-24 relative overflow-y-auto lg:ml-64" :
        "bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"}>

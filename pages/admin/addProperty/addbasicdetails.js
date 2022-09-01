@@ -73,7 +73,7 @@ function AddBasicDetails() {
     if (address.length === undefined) {
       //detect empty values in basic details
       for (let item in allHotelDetails) {
-        if ((allHotelDetails[item] === '') && (item != "description_date")) {
+        if ((allHotelDetails[item] === '') && (item != "description_date") && (item != "property_brand")) {
           return `APP:insert value of ${item?.replace("_", " ")}`
         }
       }
@@ -169,9 +169,9 @@ const validateAddress = () => {
     }
   }
   return (
-    <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/20 
-    md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full ">
-      <div className="bg-white py-8 rounded-lg shadow relative">
+    <>
+    <div className="flex backdrop-blur-sm bg-black/5 overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="user-modal">
+        <div className="relative w-full max-w-5xl px-4 h-full md:h-auto">
         <button
           className="float-right my-8 sm:inline-flex  text-gray-800  
             font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
@@ -183,9 +183,8 @@ const validateAddress = () => {
           </path></svg>
         </button>
 
-        {/* Basic Details Form */}
-        <div className={basic === 0 ? "block" : "hidden"}>
-          <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2 ">
+        <div className={basic === 0 ? "block " : "hidden"}>
+          <div className=" bg-white shadow rounded-lg py-12  px-12 sm:p-6 xl:p-8  2xl:col-span-2 ">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[45%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
@@ -196,11 +195,6 @@ const validateAddress = () => {
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.address}</div>
             </div>
-           
-           
-          
-            
-          
         </div>
             <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
               {language?.basicdetails}
@@ -355,9 +349,9 @@ const validateAddress = () => {
           </div>
         </div>
 
-        {/*Address Form*/}
-        <div className={basic === 1 ? "block" : "hidden"}>
-        <div className=" bg-white shadow rounded-lg   sm:p-6 xl:p-8  2xl:col-span-2 ">
+         {/*Address Form*/}
+         <div className={basic === 1 ? "block" : "hidden"}>
+        <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2 ">
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[45%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -526,12 +520,7 @@ const validateAddress = () => {
                     />
                   </div>
                 </div>
-                  
-         
-           
-            
-
-                <div className="col-span-6 sm:col-span-3">
+                <div className="lg:col-span-6 col-span-6 sm:col-span-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
@@ -569,17 +558,16 @@ const validateAddress = () => {
                   </div>
                
                 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                <Button Primary={
+                    {
+                      label: "<-Edit Basic Details",
+                      color: "bg-cyan-600 hover:bg-cyan-700 text-white",
+                    }} onClick={() => setBasic(0)} />
+                
                   {Button !== 'undefined' ?
                     <Button Primary={language?.Submit} onClick={submitBasic} />
                     : <></>
                   }
-                  <Button Primary={
-                    {
-                      label: "Basic Details",
-                      color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-                    }} onClick={() => setBasic(0)} />
-              
-            
                 </div>
                 </div>
             
@@ -597,10 +585,9 @@ const validateAddress = () => {
           pauseOnFocusLoss
           draggable
           pauseOnHover />
-      </div>
-    </div>
 
-  )
+        </div></div></>
+ )
 }
 
 export default AddBasicDetails

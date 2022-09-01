@@ -216,7 +216,7 @@ function Addraterule() {
               progress: undefined,
             });
             setRateModificationId(response.data.rate_modification_id);   
-            
+            submitDiscountAdd(response.data.rate_modification_id);
     
           })
           .catch((error) => {
@@ -235,11 +235,11 @@ function Addraterule() {
       }
       
       //Rate rule Id generation
-      const submitRateRule = () => {
+      const submitRateRule = (rm_id,rd_id) => {
         const final_data = {
           "rate_rule":[{
-           "rate_ineligiblity_id": rateIneligiblityId,
-           "rate_modification_id": rateModificationId,
+           "rate_ineligiblity_id": rd_id,
+           "rate_modification_id": rm_id,
            "property_id": currentProperty?.property_id,
            "status": true,
            "rate_rule_name": allUserRateDetails?.program
@@ -259,7 +259,7 @@ function Addraterule() {
                progress: undefined,
              });
             setRateRuleId(response.data.rate_rule_id);
-     
+            submitRateConditionAdd(response.data.rate_rule_id);
            setDisp(2);
            })
            .catch((error) => {
@@ -278,11 +278,11 @@ function Addraterule() {
        }
       
        //Rate rule Id generation
-       const submitRateRuleLink = () => {
+       const submitRateRuleLink = (rr_id,urc_id) => {
         const final_data = {
           "rate_rule_link":[{
-           "rate_rule_id": rateRuleId,
-           "user_rate_condition_id": userRateConditionId
+           "rate_rule_id": rr_id,
+           "user_rate_condition_id": urc_id
         }
         ] 
          }
@@ -320,7 +320,7 @@ function Addraterule() {
        }
        
       // Rate Discount Submit
-      const submitDiscountAdd = () => {
+      const submitDiscountAdd = (rm_id) => {
         const final_data = {
           "ineligiblity_type": allUserRateDetails?.ineligibility_type,
            "ineligiblity_reason": allUserRateDetails?.program  
@@ -340,6 +340,7 @@ function Addraterule() {
                 progress: undefined,
               });
               setRateIneligiblityId(response.data.user_rate_ineligiblity_id);
+              submitRateRule(rm_id,response.data.user_rate_ineligiblity_id)
               setDisp(1);
             })
       
@@ -358,7 +359,7 @@ function Addraterule() {
         };
         
       //Rate Condition Submit
-        const submitRateConditionAdd = () => {
+        const submitRateConditionAdd = (rr_id) => {
           const final_data = {
           "user_rate_condition" :  [
               {
@@ -382,6 +383,7 @@ function Addraterule() {
                   progress: undefined,
                 });
              setUserRateConditionId(response.data?.user_rate_condition_id)
+             submitRateRuleLink(rr_id,response.data?.user_rate_condition_id)
             
               }
               )
@@ -922,9 +924,7 @@ function Addraterule() {
                   <div className="relative w-full ml-4 mb-4">
                   <Button Primary={language?.Next} onClick = {()=>{
                  submitRateModAdd();
-                 submitRateConditionAdd();
-                 submitDiscountAdd();
-                }}/>  
+                 }}/>  
                   </div>
                 </div>
                 <div>
@@ -1187,7 +1187,7 @@ function Addraterule() {
                 <Button Primary={language?.Next} onClick={()=>{
                   if(basicFlag?.length != 0){
                   submitAdditional();}
-                  submitRateRule();
+                  
                 if(countryCheck === true){
                   submitCountryAdd();
                 }
@@ -1527,7 +1527,7 @@ function Addraterule() {
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
                 {Button !== 'undefined' ?
-                  <Button Primary={language?.Submit}  onClick={()=>{submitRateAdd(); submitRateRuleLink(); }}/>
+                  <Button Primary={language?.Submit}  onClick={()=>{submitRateAdd();  }}/>
                   : <></>
                 }
               </div>

@@ -23,9 +23,7 @@ var currentLogged;
 function Contact() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
-
   const [visible,setVisible]=useState(0) 
-
   const [deleteContact, setDeleteContact] = useState(0);
   const [viewDel, setViewDel] = useState(0);
   const [editContact, setEditContact] = useState({});

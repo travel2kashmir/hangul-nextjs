@@ -10,6 +10,7 @@ const Table = (args) => {
         "edit": 0,
         "id": ''
     });
+    
     const [del, setDel] = useState({
         "delete": 0,
         "id": ''
@@ -138,16 +139,18 @@ const Table = (args) => {
                                             </th> : <></>}
                                         <th scope="col"
                                             className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col1}</th>
-                                        {args?.name != "Packages" ?
+                                        {args?.name != "Packages"?
                                             <th scope="col"
                                                 className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col2}</th>
                                             :
                                             <></>}
+                                         {args?.status != "matchstatus"?    
                                         <th scope="col"
                                             className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.common?.Status}</th>
-                                        <th scope="col"
+                                            : <></>}
+                                            <th scope="col"
                                             className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.common?.Action}
-                                        </th>
+                                        </th> 
                                     </tr>
                                 </thead>
 
@@ -314,7 +317,7 @@ const Table = (args) => {
                                                             <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
                                                             {item?.name}
                                                         </td>
-                                                        {args?.name === "Packages" ? <></> :
+                                                        {args?.name === "Packages"  ? <></> :
                                                            <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
 
                                                                 {item?.type}
@@ -326,6 +329,7 @@ const Table = (args) => {
                                                                     {args?.common?.Active}
                                                                 </span>
                                                             </td> :
+                                                              args?.status === "matchstatus" ? <></> :
                                                             <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
                                                                 <span className="flex items-center">
                                                                     <span className="h-2.5 w-2.5 capitalize rounded-full bg-red-600 mr-2"></span>
@@ -345,7 +349,7 @@ const Table = (args) => {
                                                             :
                                                             <td className="p-4 whitespace-nowrap capitalize space-x-2">
                                                                
-                                                                {(args?.name != "Rooms") && (args?.name != "Packages")?
+                                                                {(args?.name != "Rooms") && (args?.name != "Packages") ?
 
                                                                     <div>
                                                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
@@ -360,9 +364,8 @@ const Table = (args) => {
                                                                                 }} >{args?.common?.Delete}</button> : <></>}
                                                                     </div>
                                                                 
-                                                                    :
                                                                    
-                                                                    
+                                                                    :
                                                                     // Room Button
                                                                     <div>
                                                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"

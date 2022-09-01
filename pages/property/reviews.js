@@ -1,6 +1,8 @@
 import React,{useState, useEffect} from "react";
 import axios from 'axios';
 import Link from "next/link";
+import Headloader from "../../components/loaders/headloader";
+import Reviewloader from "../../components/loaders/reviewloader";
 import Sidebar  from "../../components/Sidebar";
 import Header  from "../../components/Header";
 import english from "../../components/Languages/en"
@@ -53,13 +55,12 @@ function Reviews() {
     axios.get(url)
     .then((response)=>{setReviews(response.data);
     logger.info("url  to fetch property details hitted successfully")
-  setVisible(1)})
+    setVisible(1);
+  })
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
   }
   return (
     <>
-    <div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
     <div id="main-content"
@@ -94,9 +95,11 @@ function Reviews() {
                 ></path>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+              <div className={visible === 1 ? 'block' : 'hidden'}>
               <Link href="./propertysummary" >
               <a>  {reviews?.property_name}</a>
-              </Link></span>
+              </Link></div></span>
             </div>
           </li>
           <li>
@@ -124,11 +127,14 @@ function Reviews() {
         </ol>
       </nav>
        {/* Header */}
+
        <div>
      <h1 className="text-xl sm:text-2xl mx-2 font-semibold mb-2 text-gray-900">{language?.reviews}</h1>
         </div>
-
+           
             {/* Form Property Reviews */}
+            <div className={visible === 0 ? 'block' : 'hidden'}><Reviewloader /></div>
+            <div className={visible === 1 ? 'block' : 'hidden'}>
             {reviews?.Reviews?.map((item,idx) => (
                 <div className="bg-white shadow rounded-lg mx-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2" key={idx}>
                     <div className="pt-2">
@@ -163,13 +169,11 @@ function Reviews() {
                     </div>
                 </div>
             ))}
-        
+        </div>
     </div>
     <Footer/>
-    </div>
     </>)
 }
-
 export default Reviews
 Reviews.getLayout = function PageLayout(page){
   return(

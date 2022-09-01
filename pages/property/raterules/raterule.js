@@ -7,12 +7,16 @@ import countries from "countries-list";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from '../../../components/Header'
-import Sidebar from '../../../components/Sidebar'
+import Sidebar from '../../../components/Sidebar';
+import Headloader from '../../../components/loaders/headloader';
+import Lineloader from '../../../components/loaders/lineloader';
+import Textboxloader from '../../../components/loaders/textboxloader'
 import english from '../../../components/Languages/en'
 import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router';
+var currentLogged;
 var i = 0;
 var j = 1;
 var res =[]
@@ -26,7 +30,7 @@ var language;
 var currentProperty;
 
 function Raterule() {
-
+  const [visible,setVisible]=useState(0) 
   const [countryData,setCountryData]=useState([])
   const [basicFlag,setBasicFlag]=useState([])
   const [languageData,setLanguageData]=useState([])
@@ -50,13 +54,16 @@ function Raterule() {
   const [checkLanguage, setCheckLanguage] = useState(false);
   const [checkCountry, setCheckCountry] = useState(false);
   const [checkProgram, setCheckProgram] = useState(false);
-  const [checkPercentage, setCheckPercentage] = useState();
+  const [checkPercentage, setCheckPercentage] = useState(false);
   const[userRateDetails, setUserRateDetails] = useState([])
+  const [rooms,setRooms]=useState([])
+
   const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
   var language_data=[];
   var country_data=[];
   var device_data=[];
   var program_data=[];
+  const [isRatePresent,setIsRatePresent]=useState(false)
   
   useEffect(() => {
     const firstfun = () => {
@@ -76,13 +83,32 @@ function Raterule() {
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
         createCountry();
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       
       }
     }
     firstfun();
+    fetchRooms()
     Router.push("./raterule")
   }, [])
 
+/* fetch rooms of this property */
+  const fetchRooms = async () => {
+    try {
+      var genData=[];
+        const url = `/api/rooms/${currentProperty.property_id}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+       setRooms(response.data)
+    }
+    catch (error) {
+
+        if (error.response) {
+            } 
+        else {
+        }
+    }
+}
+ 
    /* Function to load  when page loads*/
    useEffect(() => {
     fetchRateRule();
@@ -90,6 +116,92 @@ function Raterule() {
     createLanguages();
 }, [])
 
+//submit rate add
+ 
+ const submitRateAdd = () => {
+  var time;
+  var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
+  time = new Date(temp.toString())
+  const final_data = {
+    "base_rate_currency": allUserRateDetails?.base_rate_currency,
+    "base_rate_amount": allUserRateDetails.base_rate_amount,
+    "tax_amount": allUserRateDetails.tax_amount,
+    "tax_currency": allUserRateDetails.tax_currency,
+    "otherfees_currency": allUserRateDetails.otherfees_currency,
+    "otherfees_amount": allUserRateDetails.otherfees_amount,
+    "refundable": allUserRateDetails.refundable,
+    "refundable_until_days": allUserRateDetails.refundable_until_days,
+    "refundable_until_time": allUserRateDetails?.refundable_until_time ? time.getTime() : allUserRateDetails?.refundable_until_time,
+    "otherfees_amount": allUserRateDetails.otherfees_amount,
+    "expiration_time":allUserRateDetails.expiration_time,
+    "charge_currency": allUserRateDetails.charge_currency,
+    "rate_rule_id": rateRule.rate_rule_id,
+    "status": true
+  }
+
+  const url = '/api/rate_rule/conditional_rate'
+  axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+
+    ((response) => {
+      toast.success("User Rate Condition added Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    
+      const room_data ={
+        "rate_rule":[{
+        "conditional_rate_id": response.data.conditional_rate_id,
+        "room_id": allUserRateDetails.room_id,
+        
+      }]}
+    
+      const url = '/api/rate_rule/conditional_rate/conditional_rate_room_link'
+      axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
+  
+        ((response) => {
+          toast.success("User Rate Condition added Successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          
+    })
+    .catch((error) => {
+
+      toast.error(" Conditional Rates Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });})
+      Router.push("../raterules");
+    })
+
+    .catch((error) => {
+      toast.error("User Rate Condition Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+
+}
 
 /**  Delete Rate Rules **/
 // Delete Country
@@ -213,7 +325,7 @@ const deleteLanguage = () =>{
   });
 }
 
-
+//urc update
 const submitRateUpdate = () =>{
   const data = {
     rate_rule_name:rateRule?.rate_rule_name,
@@ -248,54 +360,8 @@ const url = "/api/rate_rule/rate_rules";
       });
     });
 }
-
-  const submitRatesEdit = () => {
-    const data = [{
-      user_rate_condition_op:userRateDetails?.UserRateCondition_op,
-      offer_name: rateRule?.rate_rule_name,
-      description:userRateDetails?.Description,
-      max_user_percentage:userRateDetails?.MaxUsersPercent,
-      user_signed_in: userSign?.UserSignedIn,
-      is_domestic: userSign?.IsDomestic,
-      user_rate_condition_id: userSign?.UserRateCondition_id
-  }];
-  const final_data = { "user_rate_condition": data }
-  const url = "/api/rate_rule/user_rate_conditioning";
-    axios
-      .put(url, final_data, { 
-        header: { "content-type": "application/json" } })
-      .then((response) => {
-        toast.success("Rate rule Updated Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-    
-        setBasicFlag([])
-      
-      }
-    )
-
-      .catch((error) => {
-        toast.error("Rate rule update Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  
-  };
-
    /* Edit Rate Details Function */
-   const submitRateEdit = () => {
+const submitRateEdit = () => {
     var time;
     var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
     time = new Date(temp.toString())
@@ -331,11 +397,7 @@ const url = "/api/rate_rule/rate_rules";
           draggable: true,
           progress: undefined,
         });
-
-        fetchRateRule();
-
         Router.push("../raterules");
-
       })
       .catch((error) => {
 
@@ -350,12 +412,9 @@ const url = "/api/rate_rule/rate_rules";
         });
       })
 
-  }
-   /* Edit Rate Modification Function */
+  }   /* Edit Rate Modification Function */
   const submitRateMod = () => {
-
-    if (lang.length != 0) {
-
+    if (mod.length != 0) {
     const final_data = {
       "rate_modification_id": rateRule?.rate_modification_id,
       "hotel_amenity": rateRule?.hotel_amenity,
@@ -539,7 +598,7 @@ const url = "/api/rate_rule/rate_rules";
         offer_name: rateRule?.rate_rule_name,
         user_signed_in:userSign?.UserSignedIn,
         is_domestic: userSign?.IsDomestic,
-        user_rate_condition_id:userSign?.UserRateCondition_id
+        user_rate_condition_id:userSign?.user_rate_condition_id
     }];
     const final_data = { "user_rate_condition": data }
     const url = "/api/rate_rule/user_rate_conditioning";
@@ -642,7 +701,7 @@ const url = "/api/rate_rule/rate_rules";
   const languages = (lan) => { 
     lan.map(item => {
       var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
+        user_rate_condition_id: userSign?.user_rate_condition_id,
         language: item?.language_code
       }
       language_data.push(temp) } );
@@ -652,19 +711,18 @@ const url = "/api/rate_rule/rate_rules";
   const country = (cou) => { 
     cou.map(item => {
       var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
+        user_rate_condition_id: userSign?.user_rate_condition_id,
        user_country: item?.country_code
       }
       country_data.push(temp) } );
       setFinalCountry(country_data);
-
   }
 
   const devices = (dev) => { 
     dev.map(item => {
       var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
-        user_device: item?.user_device
+        user_rate_condition_id: userSign?.user_rate_condition_id,
+        user_device_type: item?.user_device
       }
       device_data.push(temp) } );
       setFinalDevice(device_data);
@@ -675,11 +733,11 @@ const url = "/api/rate_rule/rate_rules";
 
    pro.map(item => {
        var temp = {
-         user_rate_condition_id: userSign?.UserRateCondition_id,
-         program_id: item.program_id
+         user_rate_condition_id: userSign?.user_rate_condition_id,
+         always_eligible_membership_id: item.program_id
        }
        program_data.push(temp) } );
-       setFinalProgram(program_data);  
+      setFinalProgram(program_data);  
    }
 
    const filterByDevices = () => {
@@ -724,7 +782,6 @@ const filterByCountry = () => {
       return element.user_country === el.country_code;
    });
 });
-
   }
   else{
   resCou= []
@@ -734,7 +791,7 @@ Router.push('./raterule')
 
 const filterByLanguage = () => {
   if(rateRule?.user_rate_condition?.[i]?.language != undefined) {
-    setCheckLanguage(true)
+  setCheckLanguage(true)
   resLang = languageData.filter(el => {
     return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
@@ -754,11 +811,38 @@ Router.push('./raterule')
     console.log("url" + url)
     axios.get(url)
       .then((response) => {
-       
         setRateRule(response.data);
-        setAllUserRateDetails(response.data.conditional_rate)
+        var keys= Object.keys(response.data)
+       for(let item in keys){
+        if(keys[item]==='conditional_rate') { setIsRatePresent(true)
+        setAllUserRateDetails(response.data?.conditional_rate)
+      break;}
+      else{
+        setAllUserRateDetails({
+          "rate_rule_id": "",
+          "conditional_rate_id": "",
+          "base_rate_currency": "",
+          "base_rate_amount": "",
+          "tax_amount": "",
+          "tax_currency": "",
+          "otherfees_currency": "",
+          "otherfees_amount": "",
+          "refundable": "",
+          "refundable_until_days": "",
+          "refundable_until_time": "",
+          "expiration_time": "",
+          "charge_currency": "",
+          "room_id": ""
+        })
+    
+      }
+
+    }
+       
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
+        
+        setVisible(1)
         logger.info("url  to fetch raterules hitted successfully")
        
       })
@@ -787,22 +871,13 @@ Router.push('./raterule')
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
-            <li className="inline-flex items-center">
-              <svg
-                className="w-5 h-5 mr-2.5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-              </svg>
-              <Link
-                href="../landing"
-                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
-              >
-                <a>{language?.home} </a>
-              </Link>
-            </li>
+        
+              <li className="inline-flex items-center">
+                <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link>
+              </li>
+          
             <li>
               <div className="flex items-center">
                 <svg
@@ -818,9 +893,11 @@ Router.push('./raterule')
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                <div className={visible === 1 ? 'block' : 'hidden'}>
                   <Link href="../propertysummary" >
                     <a> {currentProperty?.property_name}</a>
-                  </Link></span>
+                  </Link></div></span>
               </div>
             </li>
             <li>
@@ -839,7 +916,7 @@ Router.push('./raterule')
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                   <Link href="../raterules" >
-                    <a> Rate Rules</a>
+                    <a>{language?.raterules}</a>
                   </Link></span>
               </div>
             </li>
@@ -861,7 +938,7 @@ Router.push('./raterule')
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  Edit Rate Rule
+                  {language?.editraterules}
                 </span>
               </div>
             </li>
@@ -874,22 +951,22 @@ Router.push('./raterule')
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}
              </div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.rates}</div>
             </div>
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Rate Rule Description
+          {language?.rateruledescription}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -900,26 +977,24 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Program Name 
+                      {language?.programname}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input type="text"
-
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={rateRule?.rate_rule_name} 
                       required
-
                       onChange={(e) =>
                         setRateRule({
                           ...rateRule,
                           rate_rule_name: e.target.value,
                         },setBasicFlag(1))
                       }/>
-
                <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter program name
-            </p>
-n
+               {language?.required}
+            </p></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -928,9 +1003,11 @@ n
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Discount Type 
+                 {language?.discounttype}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
+                <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   onChange={(e) =>
@@ -939,13 +1016,11 @@ n
                       ineligibility_type: e.target.value,
                     },setBasicFlag(1))}
                 >
-
                   <option selected >{rateRule?.ineligiblity_type?.replace('_',' ')}</option>
-
                   <option value="exact">exact</option>
                   <option value="price_band">price band</option>
                   <option value="existence">existence</option>
-             </select>
+             </select></div>
               </div>
             </div>
             
@@ -955,32 +1030,31 @@ n
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
-                  Hotel Amenity(Free Wifi)
+                    {language?.hotelamenity}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
+                <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.hotel_amenity}
-
                 readOnly
-
-                /></div></div>
-
+                /></div></div></div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
-                  Price Multiplier
+                    {language?.pricemultiplier}
                   <span style={{color:"#ff0000"}}>*</span>
                 </label>
+                <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
                   type="text"
-
                   pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                   required
                   className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
                   defaultValue={rateRule?.price_multiplier}
                   onChange={(e) =>
                     setRateRule({
@@ -988,16 +1062,11 @@ n
                       price_multiplier: e.target.value,
                     },setMod(1))
                   }
-
-
                 />
                   <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter valid discount code
-            </p></div></div>
-
-              
-
-                <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
+                 {language?.num}
+            </p></div></div></div>
+               <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                     <button
                       className="sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 
@@ -1044,21 +1113,21 @@ n
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
                 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Rate Rule Description</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">  2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
            
              <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates} </div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-            Rate Condition
+          {language?.ratecondition}
           </h6>
           <div className="flex flex-wrap">
           <div className="w-full lg:w-6/12 px-4">
@@ -1067,11 +1136,11 @@ n
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-
-                      Rate Condition
+                       {language?.ratecondition}
                       <span style={{color:"#ff0000"}}>*</span>
-
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
@@ -1081,31 +1150,30 @@ n
                         },setBasicFlag(1))
                       }
                     >
-
-                      <option selected >{rateRule?.user_rate_condition?.[i]?.UserRateCondition_op}</option>
-                      <option value="all">All</option>
-                      <option value="any">Any</option>
-                      <option value="none">None</option>
-                    </select>
+                     
+                      <option selected >{rateRule?.user_rate_condition?.[i]?.user_rate_condition_op}</option>
+                      <option value="all">{language?.all}</option>
+                      <option value="any">{language?.any}</option>
+                      <option value="none">{language?.none}</option>
+                    </select></div>
                   </div>
                 </div>
-
+                
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Rate Description 
-
+                       {language?.ratedescription}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
-                    
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Textboxloader/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <textarea rows="2" columns="50"
                       className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      defaultValue={rateRule?.user_rate_condition?.[i]?.Description}
+                      defaultValue={rateRule?.user_rate_condition?.[i]?.description}
                       required
-
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
@@ -1113,18 +1181,16 @@ n
                         },setBasicFlag(1))
                       }
                   />
-
                      <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter rate description
-            </p>
-
+                     {language?.required}
+            </p></div>
                   </div>
                 </div>
 
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                      Conditions 
+                   {language?.conditions}
                     </h4></div>
                     </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1145,9 +1211,11 @@ n
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Country 
+                        {language?.usercountry}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1155,7 +1223,7 @@ n
                       displayValue="country_name"
                       selectedValues={resCou}
                       onRemove={(event) => {country(event)}}
-                      onSelect={(event) => {country(event) }} /></div>
+                      onSelect={(event) => {country(event) }} /></div></div>
                     </div>
 
                     <div className='flex mb-2'>
@@ -1170,10 +1238,12 @@ n
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Device
+                       {language?.userdevice}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1181,7 +1251,7 @@ n
                       displayValue="user_device"
                       selectedValues={resDev}
                       onRemove={(event) => { devices(event) }}
-                      onSelect={(event) => { devices(event) }} /></div>
+                      onSelect={(event) => { devices(event) }} /></div></div>
                     </div>
 
                     <div className='flex mb-2'>
@@ -1194,9 +1264,11 @@ n
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        Language
+                        {language?.language}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1204,7 +1276,7 @@ n
                       selectedValues={resLang}
                       displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
-                      onSelect={(event) => { languages(event) }} />
+                      onSelect={(event) => { languages(event) }} /></div>
                       </div>
                       </div>
 
@@ -1221,9 +1293,11 @@ n
                         className="text-sm font-medium text-gray-900 mx-2 block "
                         htmlFor="grid-password"
                       >
-                        Membership Program
+                          {language?.membershipprogram}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
@@ -1231,7 +1305,7 @@ n
                       displayValue="program_name"
                       selectedValues={res}
                       onRemove={(event) => {program(event)}}
-                      onSelect= {(event)=>{program(event)}} /></div>
+                      onSelect= {(event)=>{program(event)}} /></div></div>
                       </div>
 
                     <div className='flex mb-2'>
@@ -1247,35 +1321,32 @@ n
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       Maximum User Percentage 
+                       {language?.maxuserpercentage}
                       </label> </span></div>
-
                       <div className="w-full lg:w-4/12 ">
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input type="text" 
-
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
-                      defaultValue={conditions?.MaxUsersPercent} 
+                      defaultValue={conditions.max_user_percentage} 
                       pattern="[0-9]+(\.[0-9]{1,2})?%?"
-
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
                           MaxUsersPercent: e.target.value,
                         },setBasicFlag(1))
                       }/>
-
                        <p className="invisible peer-invalid:visible text-red-700 font-light">
-                Please enter valid max user percentage
-            </p>
-
+                       {language?.float}
+                       </p></div>
                       </div>
-                        </div>
+                        </div> 
 
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-3/12 ">
                       <span className="flex">
-                        <input id="checkbox-1" checked={ userSign?.UserSignedIn === true} onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true})}}
+                        <input id="checkbox-1" checked={ userSign.user_signed_in === true} onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true})}}
                           aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
@@ -1283,16 +1354,16 @@ n
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        User Signed In
+                        {language?.usersignedin}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                      
-                      <div className="form-check mx-2 my-4 form-check-inline">
-
+                      <div className="form-check mx-2 form-check-inline">
+                          
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={userSign?.UserSignedIn} checked={ userSign?.UserSignedIn === true}
+                          <input type="checkbox" value={userSign.user_signed_in} checked={ userSign.user_signed_in === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true },setBasicFlag(1))
+                              setUserSign({ ...userSign, user_signed_in: userSign?.user_signed_in === true ? false : true },setBasicFlag(1))
                             }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -1321,14 +1392,14 @@ n
                         className="text-sm mx-2 font-medium text-gray-900 block"
                         htmlFor="grid-password"
                       >
-                        Is Domestic
+                         {language?.isdomestic}
                       </label>
                       </span>
                       
                       </div>
                       <div className="w-full lg:w-4/12 ">
                       <div className="flex">
-                      <div className="form-check mx-2  form-check-inline">
+                      <div className="form-check mx-2 form-check-inline">
 
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSign?.IsDomestic} checked={ userSign?.IsDomestic === true}
@@ -1354,7 +1425,6 @@ n
      
         </div>
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
-
         <Button Primary={language?.Previous}   onClick={() => {setDisp(0);}} />
 
               {Button !== 'undefined' ?
@@ -1400,23 +1470,22 @@ n
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">  {language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">  {language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
           
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">
             3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">  {language?.rates}</div>
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-            Rates
-
+          {language?.rates}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1430,18 +1499,20 @@ n
                       {language?.baserate} {language?.currency}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
                       onChange={
-                        (e) => (
+                        (e) => {  
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
-                        )
+                      }
                       }>
                       <option selected>{allUserRateDetails?.base_rate_currency}</option>
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1453,13 +1524,13 @@ n
                       {language?.baserate} {language?.amount}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
-
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                       required
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
                       defaultValue={allUserRateDetails?.base_rate_amount}
                       onChange={
                         (e) => (
@@ -1467,11 +1538,9 @@ n
                         )
                       }
                     />
-
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid base rate amount
-                  </p>
-
+                      {language?.float}
+                  </p></div>
                   </div>
                 </div>
 
@@ -1484,6 +1553,8 @@ n
                       {language?.taxrate} {language?.currency}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1494,7 +1565,7 @@ n
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1507,23 +1578,22 @@ n
                       {language?.taxrate} {language?.amount}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
-
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.tax_amount}
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                       required
-
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
-                    <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid tax rate amount
-                      </p>
-
+                        <p className="invisible peer-invalid:visible text-red-700 font-light">
+                        {language?.float}
+                      </p></div>
                   </div>
                 </div>
 
@@ -1536,6 +1606,8 @@ n
                       {language?.other} {language?.capacity} {language?.currency}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
                       onChange={
@@ -1547,7 +1619,7 @@ n
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1560,25 +1632,23 @@ n
                       {language?.other} {language?.charges} {language?.amount}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
-
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.otherfees_amount}
                       pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
                       required
-
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_amount: e.target.value })
                         )
                       }
                     />
-
                       <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      Please enter valid other charges amount
-                  </p>
-
+                      {language?.float}
+                  </p></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1587,21 +1657,23 @@ n
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Payment Holder
+                        {language?.paymentholder}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
-                        (e) => (
-                          setAllUserRateDetails({ ...allUserRateDetails, charges_currency: e.target.value })
-                        )
+                        (e) => {
+                          setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
+                        }
                       }>
                       <option selected >{allUserRateDetails.charge_currency}</option>
-                      <option value="web">Web</option>
-                      <option value="hotel">Hotel</option>
-                      <option value="installment">Installment</option>
-                      <option value="deposit">Deposit</option>
-                    </select>
+                      <option value="web">  {language?.web}</option>
+                      <option value="hotel">  {language?.hotel}</option>
+                      <option value="installment">  {language?.installment}</option>
+                      <option value="deposit">  {language?.deposit}</option>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1611,9 +1683,11 @@ n
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Refundable
+                       {language?.refundable}
                       <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1622,12 +1696,12 @@ n
                       }>
                       {allUserRateDetails?.refundable === "true"
                         ?
-                        <option selected value={true}>Yes</option>
-                        : <option value={false}>No</option>}
+                        <option selected value={true}>  {language?.yes}</option>
+                        : <option value={false}> {language?.no}</option>}
 
-                      <option value={true}>Yes</option>
-                      <option selected value={false}>No</option>
-                    </select>
+                      <option value={true}> {language?.yes}</option>
+                      <option selected value={false}> {language?.no}</option>
+                    </select></div>
                   </div>
                 </div>
 
@@ -1639,26 +1713,25 @@ n
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until days  <span style={{color:"#ff0000"}}>*</span>
+                            {language?.refundable} {language?.till} {language?.days}
+                              <span style={{color:"#ff0000"}}>*</span>
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="text"
-
                           className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                           defaultValue={allUserRateDetails?.refundable_until_days}
                           pattern='^[1-9]+[0-9]*$'
                           required
-
                           onChange={
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_days: e.target.value })
                             )
                           } />
-
                           <p className="invisible peer-invalid:visible text-red-700 font-light">
-                            Please enter valid refundable days
-                          </p>
-
+                         {language?.num}
+                          </p></div>
                       </div>
                     </div>
 
@@ -1668,9 +1741,11 @@ n
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                          Refundable until time
+                        {language?.refundable} {language?.till} {language?.time}
                           <span style={{color:"#ff0000"}}>*</span>
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="time" step="2"
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1679,7 +1754,7 @@ n
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_time: e.target.value })
                             )
-                          } />
+                          } /></div>
                       </div>
                     </div></>)
                   :
@@ -1691,10 +1766,12 @@ n
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      Expiration Timezone <span style={{color:"#ff0000"}}>*</span>
+                       {language?.expirationtimezone}  <span style={{color:"#ff0000"}}>*</span>
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
-                      type="text"
+                      type="datetime-local"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.expiration_time}
                       onChange={
@@ -1702,16 +1779,35 @@ n
                           setAllUserRateDetails({ ...allUserRateDetails, expiration_time: e.target.value })
                         )
                       } />
-
+                     </div>
                   </div>
                 </div>
+                      
+                      {JSON.stringify(isRatePresent)==="false"?
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="text-sm font-medium text-gray-900 block mb-2"
+                        htmlFor="grid-password">
+                       {language?.room}
+                      </label>
+                      <select
+                        onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
+                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                        <option selected >{language?.select}</option>
+                        {rooms?.map(i => {
+                          return (
+                            <option key={i} value={i.room_id}>{i.room_name}</option>)
+                        }
+                        )}
+                      </select>
+                    </div>
+                  </div>:<></>
+                      }
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
-
               <Button Primary={language?.Previous}   onClick={() => {setDisp(1);}} />
-
                 {Button !== 'undefined' ?
-                  <Button Primary={language?.Update} onClick={submitRateEdit} />
+                  <Button Primary={language?.Update} onClick={isRatePresent?submitRateEdit:submitRateAdd} />
                   : <></>
                 }
               </div>
@@ -1719,6 +1815,8 @@ n
             </div>
           </div>
         </div></div>
+
+        
 
         {/* Toast Container */}
         <ToastContainer position="top-center"

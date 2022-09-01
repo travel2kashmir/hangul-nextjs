@@ -409,12 +409,12 @@ const filterByMLanguage = (props) => {
   const submitPointOfSaleEdit = () => {
     if (validationPOS(sales)){ 
     const final_data ={
-       display_name:dSales?.display_name,
-       display_language:dSales?.display_language,
-        url: dSales?.url,
+       display_name:sales?.display_name,
+       display_language:sales?.display_language,
+        url: sales?.url,
         sale_id:sales?.sale_id  
     };
-    alert(JSON.stringify(final_data))
+  
       const url = '/api/point_of_sale'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {

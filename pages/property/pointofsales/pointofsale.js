@@ -202,13 +202,13 @@ const submitMatchstatus = () =>
  { if (validationMatchStatus(dSales)){ 
   if(couCheck || currCheck || langCheck || devCheck || siCheck === true){
     const data =[{
-      match_status: sales?.match_status,
-        match_status_name:sales?.match_status_name,
-        country: sales?.country,
-        language: sales?.language,
-        device:sales?.device,
-        currency:sales?.currency,
-        site_type: sales?.site_type  
+        match_status: dSales?.match_status,
+        match_status_name:dSales?.match_status_name,
+        country: dSales?.country,
+        language: dSales?.language,
+        device:dSales?.device,
+        currency:dSales?.currency,
+        site_type: dSales?.site_type  
     }];
     const final_data={match_status: data}
     const url = "/api/point_of_sale/match_status";
@@ -231,13 +231,15 @@ const submitMatchstatus = () =>
           sale_id:sales?.sale_id
           }];
           const final_datas={pos_match_status_link: datas}
-        const url = "/api/point_of_sale/pos_match_status_link";
-          axios
-            .post(url, final_datas, {
-              header: { "content-type": "application/json" },
-            })
+          alert(JSON.stringify(final_datas))
+          setView(0);
+          fetchDetails();
+          Router.push('./pointofsale');
+          setDisp(1);
+          const url = "/api/point_of_sale/pos_match_status_link";
+          axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
             .then((response) => {
-              toast.success("Match Status added successfully!", {
+              toast.success("Match Status conditions added successfully!", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -245,9 +247,8 @@ const submitMatchstatus = () =>
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
-            setSales([])
-            Router.push("../pointofsales")
+              })
+           
             })
             .catch((error) => {
               toast.error("API: Match Status error", {
@@ -259,8 +260,7 @@ const submitMatchstatus = () =>
                 draggable: true,
                 progress: undefined,
               });
-            });  
-       
+            })      
       })
       .catch((error) => {
         toast.error("API: Match status add error", {
@@ -288,8 +288,6 @@ const submitMatchstatus = () =>
     }
   }
 };
-
-  
 
   /**Function to save Current property to be viewed to Local Storage**/
   const currentMatch = (props) => {
@@ -414,7 +412,6 @@ const filterByMLanguage = (props) => {
         url: sales?.url,
         sale_id:sales?.sale_id  
     };
-  
       const url = '/api/point_of_sale'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
@@ -625,10 +622,15 @@ const filterByMLanguage = (props) => {
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3"></div></div>
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+              <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
-                      <Button Primary={language?.Update} onClick={submitPointOfSaleEdit}  />
+                      <Button Primary={language?.Update} onClick={()=>{{
+                        if(flag.length != undefined){
+                        submitPointOfSaleEdit}
+                      }} }/>
                       : <></>
                     }
+                   
                   </div>
             </div>
           </div>
@@ -862,7 +864,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setSiCheck(!si) }} checked={siCheck === true}
+                              onClick={() => { setSiCheck(!siCheck) }} checked={siCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>

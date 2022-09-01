@@ -54,13 +54,16 @@ function Raterule() {
   const [checkLanguage, setCheckLanguage] = useState(false);
   const [checkCountry, setCheckCountry] = useState(false);
   const [checkProgram, setCheckProgram] = useState(false);
-  const [checkPercentage, setCheckPercentage] = useState();
+  const [checkPercentage, setCheckPercentage] = useState(false);
   const[userRateDetails, setUserRateDetails] = useState([])
+  const [rooms,setRooms]=useState([])
+
   const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
   var language_data=[];
   var country_data=[];
   var device_data=[];
   var program_data=[];
+  const [isRatePresent,setIsRatePresent]=useState(false)
   
   useEffect(() => {
     const firstfun = () => {
@@ -85,9 +88,27 @@ function Raterule() {
       }
     }
     firstfun();
+    fetchRooms()
     Router.push("./raterule")
   }, [])
 
+/* fetch rooms of this property */
+  const fetchRooms = async () => {
+    try {
+      var genData=[];
+        const url = `/api/rooms/${currentProperty.property_id}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+       setRooms(response.data)
+    }
+    catch (error) {
+
+        if (error.response) {
+            } 
+        else {
+        }
+    }
+}
+ 
    /* Function to load  when page loads*/
    useEffect(() => {
     fetchRateRule();
@@ -95,6 +116,92 @@ function Raterule() {
     createLanguages();
 }, [])
 
+//submit rate add
+ 
+ const submitRateAdd = () => {
+  var time;
+  var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
+  time = new Date(temp.toString())
+  const final_data = {
+    "base_rate_currency": allUserRateDetails?.base_rate_currency,
+    "base_rate_amount": allUserRateDetails.base_rate_amount,
+    "tax_amount": allUserRateDetails.tax_amount,
+    "tax_currency": allUserRateDetails.tax_currency,
+    "otherfees_currency": allUserRateDetails.otherfees_currency,
+    "otherfees_amount": allUserRateDetails.otherfees_amount,
+    "refundable": allUserRateDetails.refundable,
+    "refundable_until_days": allUserRateDetails.refundable_until_days,
+    "refundable_until_time": allUserRateDetails?.refundable_until_time ? time.getTime() : allUserRateDetails?.refundable_until_time,
+    "otherfees_amount": allUserRateDetails.otherfees_amount,
+    "expiration_time":allUserRateDetails.expiration_time,
+    "charge_currency": allUserRateDetails.charge_currency,
+    "rate_rule_id": rateRule.rate_rule_id,
+    "status": true
+  }
+
+  const url = '/api/rate_rule/conditional_rate'
+  axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+
+    ((response) => {
+      toast.success("User Rate Condition added Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    
+      const room_data ={
+        "rate_rule":[{
+        "conditional_rate_id": response.data.conditional_rate_id,
+        "room_id": allUserRateDetails.room_id,
+        
+      }]}
+    
+      const url = '/api/rate_rule/conditional_rate/conditional_rate_room_link'
+      axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
+  
+        ((response) => {
+          toast.success("User Rate Condition added Successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          
+    })
+    .catch((error) => {
+
+      toast.error(" Conditional Rates Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });})
+      Router.push("../raterules");
+    })
+
+    .catch((error) => {
+      toast.error("User Rate Condition Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+
+}
 
 /**  Delete Rate Rules **/
 // Delete Country
@@ -218,7 +325,7 @@ const deleteLanguage = () =>{
   });
 }
 
-
+//urc update
 const submitRateUpdate = () =>{
   const data = {
     rate_rule_name:rateRule?.rate_rule_name,
@@ -253,55 +360,8 @@ const url = "/api/rate_rule/rate_rules";
       });
     });
 }
-
-  const submitRatesEdit = () => {
-    const data = [{
-      user_rate_condition_op:userRateDetails?.UserRateCondition_op,
-      offer_name: rateRule?.rate_rule_name,
-      description:userRateDetails?.Description,
-      max_user_percentage:userRateDetails?.MaxUsersPercent,
-      user_signed_in: userSign?.UserSignedIn,
-      is_domestic: userSign?.IsDomestic,
-      user_rate_condition_id: userSign?.UserRateCondition_id
-  }];
-  const final_data = { "user_rate_condition": data }
-  const url = "/api/rate_rule/user_rate_conditioning";
-    axios
-      .put(url, final_data, { 
-        header: { "content-type": "application/json" } })
-      .then((response) => {
-        toast.success("Rate rule Updated Successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-    
-        setBasicFlag([])
-
-      
-      }
-    )
-
-      .catch((error) => {
-        toast.error("Rate rule update Error!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-  
-  };
-
    /* Edit Rate Details Function */
-   const submitRateEdit = () => {
+const submitRateEdit = () => {
     var time;
     var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
     time = new Date(temp.toString())
@@ -352,8 +412,7 @@ const url = "/api/rate_rule/rate_rules";
         });
       })
 
-  }
-   /* Edit Rate Modification Function */
+  }   /* Edit Rate Modification Function */
   const submitRateMod = () => {
     if (mod.length != 0) {
     const final_data = {
@@ -464,7 +523,6 @@ const url = "/api/rate_rule/rate_rules";
  // Device Edit Submit
   const submitDeviceEdit = () => {
     const final_data = { "user_rate_device": finalDevice }
-    alert("finalDevice" +JSON.stringify(final_data));
     const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_device_link";
       axios
         .put(url, final_data, { 
@@ -540,7 +598,7 @@ const url = "/api/rate_rule/rate_rules";
         offer_name: rateRule?.rate_rule_name,
         user_signed_in:userSign?.UserSignedIn,
         is_domestic: userSign?.IsDomestic,
-        user_rate_condition_id:userSign?.UserRateCondition_id
+        user_rate_condition_id:userSign?.user_rate_condition_id
     }];
     const final_data = { "user_rate_condition": data }
     const url = "/api/rate_rule/user_rate_conditioning";
@@ -643,7 +701,7 @@ const url = "/api/rate_rule/rate_rules";
   const languages = (lan) => { 
     lan.map(item => {
       var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
+        user_rate_condition_id: userSign?.user_rate_condition_id,
         language: item?.language_code
       }
       language_data.push(temp) } );
@@ -653,7 +711,7 @@ const url = "/api/rate_rule/rate_rules";
   const country = (cou) => { 
     cou.map(item => {
       var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
+        user_rate_condition_id: userSign?.user_rate_condition_id,
        user_country: item?.country_code
       }
       country_data.push(temp) } );
@@ -663,7 +721,7 @@ const url = "/api/rate_rule/rate_rules";
   const devices = (dev) => { 
     dev.map(item => {
       var temp = {
-        user_rate_condition_id: userSign?.UserRateCondition_id,
+        user_rate_condition_id: userSign?.user_rate_condition_id,
         user_device_type: item?.user_device
       }
       device_data.push(temp) } );
@@ -675,11 +733,11 @@ const url = "/api/rate_rule/rate_rules";
 
    pro.map(item => {
        var temp = {
-         user_rate_condition_id: userSign?.UserRateCondition_id,
+         user_rate_condition_id: userSign?.user_rate_condition_id,
          always_eligible_membership_id: item.program_id
        }
        program_data.push(temp) } );
-       setFinalProgram(program_data);  
+      setFinalProgram(program_data);  
    }
 
    const filterByDevices = () => {
@@ -754,9 +812,36 @@ Router.push('./raterule')
     axios.get(url)
       .then((response) => {
         setRateRule(response.data);
-        setAllUserRateDetails(response.data.conditional_rate)
+        var keys= Object.keys(response.data)
+       for(let item in keys){
+        if(keys[item]==='conditional_rate') { setIsRatePresent(true)
+        setAllUserRateDetails(response.data?.conditional_rate)
+      break;}
+      else{
+        setAllUserRateDetails({
+          "rate_rule_id": "",
+          "conditional_rate_id": "",
+          "base_rate_currency": "",
+          "base_rate_amount": "",
+          "tax_amount": "",
+          "tax_currency": "",
+          "otherfees_currency": "",
+          "otherfees_amount": "",
+          "refundable": "",
+          "refundable_until_days": "",
+          "refundable_until_time": "",
+          "expiration_time": "",
+          "charge_currency": "",
+          "room_id": ""
+        })
+    
+      }
+
+    }
+       
         setConditions(response.data.user_rate_condition?.[i])
         setUserSign(response.data.user_rate_condition?.[i])
+        
         setVisible(1)
         logger.info("url  to fetch raterules hitted successfully")
        
@@ -1065,15 +1150,15 @@ Router.push('./raterule')
                         },setBasicFlag(1))
                       }
                     >
-
-                      <option selected >{rateRule?.user_rate_condition?.[i]?.UserRateCondition_op}</option>
+                     
+                      <option selected >{rateRule?.user_rate_condition?.[i]?.user_rate_condition_op}</option>
                       <option value="all">{language?.all}</option>
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
                     </select></div>
                   </div>
                 </div>
-
+                
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -1087,7 +1172,7 @@ Router.push('./raterule')
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <textarea rows="2" columns="50"
                       className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      defaultValue={rateRule?.user_rate_condition?.[i]?.Description}
+                      defaultValue={rateRule?.user_rate_condition?.[i]?.description}
                       required
                       onChange={(e) =>
                         setUserRateDetails({
@@ -1238,14 +1323,13 @@ Router.push('./raterule')
                       >
                        {language?.maxuserpercentage}
                       </label> </span></div>
-
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input type="text" 
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
-                      defaultValue={conditions?.MaxUsersPercent} 
+                      defaultValue={conditions.max_user_percentage} 
                       pattern="[0-9]+(\.[0-9]{1,2})?%?"
                       onChange={(e) =>
                         setUserRateDetails({
@@ -1262,7 +1346,7 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-3/12 ">
                       <span className="flex">
-                        <input id="checkbox-1" checked={ userSign?.UserSignedIn === true} onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true})}}
+                        <input id="checkbox-1" checked={ userSign.user_signed_in === true} onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true})}}
                           aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
@@ -1275,11 +1359,11 @@ Router.push('./raterule')
                       <div className="w-full lg:w-4/12 ">
                      
                       <div className="form-check mx-2 form-check-inline">
-
+                          
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={userSign?.UserSignedIn} checked={ userSign?.UserSignedIn === true}
+                          <input type="checkbox" value={userSign.user_signed_in} checked={ userSign.user_signed_in === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true },setBasicFlag(1))
+                              setUserSign({ ...userSign, user_signed_in: userSign?.user_signed_in === true ? false : true },setBasicFlag(1))
                             }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -1420,9 +1504,9 @@ Router.push('./raterule')
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
                       onChange={
-                        (e) => (
+                        (e) => {  
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
-                        )
+                      }
                       }>
                       <option selected>{allUserRateDetails?.base_rate_currency}</option>
                       <option value="USD" >USD</option>
@@ -1580,9 +1664,9 @@ Router.push('./raterule')
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
-                        (e) => (
-                          setAllUserRateDetails({ ...allUserRateDetails, charges_currency: e.target.value })
-                        )
+                        (e) => {
+                          setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
+                        }
                       }>
                       <option selected >{allUserRateDetails.charge_currency}</option>
                       <option value="web">  {language?.web}</option>
@@ -1682,12 +1766,12 @@ Router.push('./raterule')
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.expirationtimezone} <span style={{color:"#ff0000"}}>*</span>
+                       {language?.expirationtimezone}  <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
-                      type="text"
+                      type="datetime-local"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={allUserRateDetails?.expiration_time}
                       onChange={
@@ -1698,11 +1782,32 @@ Router.push('./raterule')
                      </div>
                   </div>
                 </div>
+                      
+                      {JSON.stringify(isRatePresent)==="false"?
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="text-sm font-medium text-gray-900 block mb-2"
+                        htmlFor="grid-password">
+                       {language?.room}
+                      </label>
+                      <select
+                        onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
+                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                        <option selected >{language?.select}</option>
+                        {rooms?.map(i => {
+                          return (
+                            <option key={i} value={i.room_id}>{i.room_name}</option>)
+                        }
+                        )}
+                      </select>
+                    </div>
+                  </div>:<></>
+                      }
               </div>
               <div id="btn" className="flex items-center justify-end mt-2 space-x-2 sm:space-x-3 ml-auto">
               <Button Primary={language?.Previous}   onClick={() => {setDisp(1);}} />
                 {Button !== 'undefined' ?
-                  <Button Primary={language?.Update} onClick={submitRateEdit} />
+                  <Button Primary={language?.Update} onClick={isRatePresent?submitRateEdit:submitRateAdd} />
                   : <></>
                 }
               </div>
@@ -1710,6 +1815,8 @@ Router.push('./raterule')
             </div>
           </div>
         </div></div>
+
+        
 
         {/* Toast Container */}
         <ToastContainer position="top-center"

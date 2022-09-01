@@ -205,7 +205,9 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+
           </div>
+
 </>
 )
 }

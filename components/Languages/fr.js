@@ -333,6 +333,7 @@ export default {
   matchstatus:'Statut de correspondance',
   salename: 'Nom du Point de Vente',
   salelanguage:'Langue du Point de Vente',
+  signingin:"Connectez-vous",
   pointofsale:"Point de Vente",
   enteremail: "entrer votre email",
   enterpassword: "tapez votre mot de passe",

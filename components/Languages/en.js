@@ -53,6 +53,7 @@ export default {
   longitude: "Longitude",
   postalcode: " Postal Code",
   precision: "Precision",
+  signingin:"Signing In",
   seemore: "See More..",
   allrightsreserved: "All rights reserved",
   privacypolicy: "Privacy Policy",
@@ -156,6 +157,12 @@ Cancel:"Cancel"
   name:"Room Bundles",
  col1 : "Room Name",
  col2:"Package Name"
+  
+},
+"MatchStatusCols":{
+  name:"Match Status",
+ col1 : "Match Status Name",
+ col2:"Match Status"
   
 },
 "SaleCols":{

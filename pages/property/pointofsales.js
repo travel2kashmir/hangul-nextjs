@@ -85,7 +85,7 @@ const addSale = () =>{
   const deleteSale = (props) => {
     const url = `/api/point_of_sale/${props}`
     axios.delete(url).then((response) => {
-        toast.success(("Package Deleted Successfully!"), {
+        toast.success(("Point of sale deleted successfully!"), {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -98,7 +98,7 @@ const addSale = () =>{
         Router.push("./pointofsales");
     })
         .catch((error) => {
-            toast.error(("Package Delete Error!"), {
+            toast.error(("Point of sale delete error."), {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -121,7 +121,7 @@ const addSale = () =>{
         <Header Primary={english?.Side}/>
       <Sidebar  Primary={english?.Side}/>
       <div id="main-content"
-    className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+    className="  bg-gray-50  pt-24 relative overflow-y-auto lg:ml-64">
        {/* Navbar */}
        <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -195,6 +195,17 @@ const addSale = () =>{
               
                
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

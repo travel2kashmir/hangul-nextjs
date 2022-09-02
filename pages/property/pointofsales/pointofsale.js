@@ -625,8 +625,8 @@ const filterByMLanguage = (props) => {
               <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
                       <Button Primary={language?.Update} onClick={()=>{{
-                        if(flag.length != undefined){
-                        submitPointOfSaleEdit}
+                        if(flag === 1){
+                        submitPointOfSaleEdit()}
                       }} }/>
                       : <></>
                     }

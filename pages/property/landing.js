@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Landingloader from "../../components/loaders/landingloader";
 import { useRouter } from "next/router";
+import Button from "../../components/Button";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
@@ -19,7 +20,7 @@ const  Landing=() =>{
 
   /** State Intialisation for storing all Properties of Current User **/
   const [ownerdata, setOwnerdata] = useState([]);
-  const [visible, setVisible] = useState(0);
+ const [visible, setVisible] = useState(0);
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -165,18 +166,13 @@ const  Landing=() =>{
                                 </div>
                               </td>
                               <td className="p-2 whitespace-nowrap space-x-1">
-                                <button
-                                  type="button"
-                                  onClick={() => {
+                                           
+                               <Button Primary={language?.View}  onClick={() => {
                                     LocalProperty({ item});
                                     router.push("./propertysummary");
-                                  }}
-                                  className="text-white bg-cyan-600
-                                         hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
-                                        text-sm inline-flex items-center px-2 py-1.5 text-center"
-                                >
-                                 {language?.view}
-                                </button>
+                                  }} />
+                      
+               
                               </td>
                             </tr>
                           );

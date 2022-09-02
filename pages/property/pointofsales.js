@@ -172,7 +172,7 @@ const addSale = () =>{
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-               Point of Sales 
+             {language?.pointofsales}
               </span>
             </div>
           </li>

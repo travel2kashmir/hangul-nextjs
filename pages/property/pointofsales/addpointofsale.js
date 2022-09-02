@@ -249,13 +249,11 @@ const validationMatchStatus = (sales) => {
             draggable: true,
             progress: undefined,
           });
-          alert(JSON.stringify(response?.data))
-          const datas = [{
+         const datas = [{
              match_status_id:response.data.sale_id,
             sale_id:sale_id
             }];
             const final_datas={pos_match_status_link: datas}
-            alert(JSON.stringify(final_datas));
            const url = "/api/point_of_sale/pos_match_status_link";
             axios
               .post(url, final_datas, {

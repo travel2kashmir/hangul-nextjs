@@ -227,7 +227,7 @@ const submitMatchstatus = () =>
           progress: undefined,
         });
         const datas = [{
-           match_status_id:response.data.match_status_id,
+           match_status_id:response.data.sale_id,
           sale_id:sales?.sale_id
           }];
           const final_datas={pos_match_status_link: datas}
@@ -495,7 +495,7 @@ const filterByMLanguage = (props) => {
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
               <Link href="../pointofsales" >
-               <a> Point of Sales</a>
+               <a>{language?.pointofsales}</a>
               </Link></span>
             </div>
           </li>
@@ -517,7 +517,7 @@ const filterByMLanguage = (props) => {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-               Point of Sale
+              {language?.pointofsale}
               </span>
             </div>
           </li>
@@ -529,16 +529,16 @@ const filterByMLanguage = (props) => {
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[45%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> {language?.pointofsale}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
             </div>
         </div>
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Point of Sale 
+        {language?.pointofsale}
         </h6>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -549,7 +549,7 @@ const filterByMLanguage = (props) => {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  Point of Sale Name
+                   {language?.pointofsale} {language?.name}
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -574,7 +574,7 @@ const filterByMLanguage = (props) => {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  Point of Sale Language
+                 {language?.pointofsale} {language?.language}
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -601,7 +601,7 @@ const filterByMLanguage = (props) => {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                Point of Sale URL
+               {language?.pointofsale} URL
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -624,10 +624,10 @@ const filterByMLanguage = (props) => {
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
               <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
-                      <Button Primary={language?.Update} onClick={()=>{{
-                        if(flag.length != undefined){
-                        submitPointOfSaleEdit}
-                      }} }/>
+                      <Button Primary={language?.Update} onClick={()=>{
+                       if(flag === 1){
+                        submitPointOfSaleEdit()}
+                      } }/>
                       : <></>
                     }
                    
@@ -642,12 +642,12 @@ const filterByMLanguage = (props) => {
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[43%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.pointofsale}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
             </div>
         </div> 
       <Table gen={gen} setGen={setGen} 
@@ -692,7 +692,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status Name
+                        {language?.matchstatus} {language?.name} 
                       </label>
                       <input
                         type="text"
@@ -713,7 +713,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status
+                      {language?.matchstatus} 
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
@@ -721,7 +721,7 @@ const filterByMLanguage = (props) => {
                             setDSales({ ...dSales, match_status: e.target.value })
                           )
                         }>
-                        <option selected>Select</option>
+                        <option selected>{language?.select}</option>
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
@@ -746,7 +746,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Country
+                             {language?.country}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
@@ -756,7 +756,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, country: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
@@ -779,7 +779,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Device
+                            {language?.device}
                             </label> </span></div>
 
                         <div className="w-full lg:w-4/12 ">
@@ -789,7 +789,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, device: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
@@ -810,7 +810,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Language
+                             {language?.language}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -819,7 +819,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, language: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
@@ -842,7 +842,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Currency
+                             {language?.currency}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -851,7 +851,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, currency: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
@@ -873,7 +873,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Site Type
+                               {language?.sitetype}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -882,7 +882,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, site_type: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
@@ -935,7 +935,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                      Match Status Name
+                     {language?.matchstatus} {language?.name} 
                       </label>
                       <input
                         type="text"
@@ -958,7 +958,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status
+                       {language?.matchstatus} 
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={current?.match_status}
@@ -992,7 +992,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Country
+                              {language?.country}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
@@ -1026,7 +1026,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Device
+                              {language?.device}
                             </label> </span></div>
 
                         <div className="w-full lg:w-4/12 ">
@@ -1057,7 +1057,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Language
+                             {language?.language}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           
@@ -1091,7 +1091,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Currency
+                              {language?.currency}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1122,7 +1122,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Site Type
+                             {language?.sitetype}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"

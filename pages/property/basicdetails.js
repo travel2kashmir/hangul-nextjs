@@ -22,6 +22,7 @@ const logger = require("../../services/logger");
 
 export default function BasicDetails() {
   const [visible, setVisible] = useState(0);
+  const [spinner, setSpinner] = useState(0)
   const [basicDetails, setBasicDetails] = useState([]);
   /** Fetching language from the local storage **/
   useEffect(() => {
@@ -77,6 +78,7 @@ export default function BasicDetails() {
   /* Edit Basic Details Function */
   const submitBasicEdit = () => {
     if (allHotelDetails.length !== 0) {
+      setSpinner(1)
       const final_data = {
         "property_id": currentProperty?.property_id,
         "property_name": allHotelDetails.property_name?.toLowerCase(),
@@ -91,6 +93,7 @@ export default function BasicDetails() {
       const url = '/api/basic'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
+          setSpinner(0);
           toast.success("Basic Details Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -105,6 +108,7 @@ export default function BasicDetails() {
           setAllHotelDetails([])
         })
         .catch((error) => {
+          setSpinner(0)
           toast.error("Basic Details Update Error!", {
             position: "top-center",
             autoClose: 5000,
@@ -342,10 +346,14 @@ export default function BasicDetails() {
                   </div>
 
                   <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    {Button !== 'undefined' ?
+                   
+                    <div className={spinner === 0 ? 'block' : 'hidden'}>
                       <Button Primary={language?.Update} onClick={submitBasicEdit} />
-                      : <></>
-                    }
+                     </div>
+                     <div className={spinner === 1 ? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerUpdate} />
+                       </div>
+
                   </div>
 
 

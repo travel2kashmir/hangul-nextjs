@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
 import Button from '../../../components/Button';
+import lang from "../../../components/GlobalData"
 import Sidebar  from "../../../components/Sidebar";
 import Header  from "../../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,20 +14,14 @@ import Table from '../../../components/Table';
 import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import Router from "next/router";
-var currency = require('currency-codes');
-import countries from "countries-list";
-var langs = require('langs');
 var language;
 var currentProperty;
-var language_data=[];
 var j = 1;
 var i =0;
 var currentSale;
-var language_data=[];
-var country_data=[];
-var currency_data=[];
-var resCou = []
-var resLang = []
+var resCou = [];
+var disLang = [];
+var resLang = [];
 var resCurr = [];
 const logger = require("../../../services/logger");
 var currentLogged;
@@ -35,25 +30,24 @@ function Allpointofsale() {
   const [disp, setDisp] = useState(0);
   const [view, setView] = useState(0);
   const [viewEdit, setViewEdit] = useState(0);
+  const [flag, setFlag] = useState([]); 
   const [visible, setVisible] = useState(0);
   const [current, setCurrent] = useState([]);
-  const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
-  const [languageData,setLanguageData]=useState([])
-  const [currencyData,setCurrencyData]=useState([])
-  const [countryData,setCountryData]=useState([])
   const [countryCheck, setCountryCheck] = useState(false);
   const [languageCheck, setLanguageCheck] = useState(false);
   const [deviceCheck, setDeviceCheck] = useState(false);
   const [siteCheck, setSiteCheck] = useState(false);
   const [currencyCheck, setCurrencyCheck] = useState(false);
+  const [couCheck, setCouCheck] = useState(false);
+  const [langCheck, setLangCheck] = useState(false);
+  const [devCheck, setDevCheck] = useState(false);
+  const [siCheck, setSiCheck] = useState(false);
+  const [currCheck, setCurrCheck] = useState(false);
   const [error, setError] = useState({})
   const [sales, setSales] = useState([]);
   const [dSales, setDSales] = useState([]);
-  const [resLang,setResLang]=useState([])
   const [gen, setGen] = useState([])
   
-  
-
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
@@ -71,11 +65,9 @@ function Allpointofsale() {
         currentProperty = JSON.parse(localStorage.getItem('property'));
         currentSale = localStorage.getItem('saleId');
         currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-        createCountry();
       }
     }
     firstfun();
-    createLanguages();
   }, [])
 
   useEffect(() => {
@@ -89,12 +81,14 @@ function Allpointofsale() {
     console.log("url " +url)
     axios.get(url)
     .then((response)=>{setSales(response.data);
-      filterByLanguage(response.data.display_language)
+    
       {
         response.data?.match_status?.map((item) => {
           var temp = {
             name: item.match_status_name,
+            match_status_name: item.match_status_name,
             type: item.match_status,
+            match_status: item.match_status,
             status: item.status,
             country: item?.country,
             device:item?.device,
@@ -106,42 +100,77 @@ function Allpointofsale() {
           genData.push(temp)
         })
         setGen(genData);
-       
+        disLang = lang?.LanguageData.filter(el => {
+          return response?.data?.display_language === el.language_code;
+        });
+       setVisible(1)
       }
     logger.info("url  to fetch point of sale hitted successfully"); 
   })
-    .catch((error)=>{logger.error("url to fetch room, failed")}); 
+    .catch((error)=>{logger.error("url to fetch point of sale, failed")}); 
+  } 
+    // Validation Function
+const validationMatchStatus = (data) => {
+  var Result = checkMatchStatusData(data);
+  if (Result === true){
+   return true;
   }
+  else{
+    setError(Result);
+    return false;
 
- /** Languages Dropdown **/
-  const createLanguages = () => {
-    var languageCodes = langs.all();
-    console.log(languageCodes)
-     languageCodes.map(code => {
-       var temp = {
-         language_name: code.name,
-         language_code: code?.[j]
-       }
-     language_data.push(temp) } );
-     setLanguageData(language_data);
-     
-   } 
-
-   const filterByLanguage = (display_language) => {
-    setResLang(()=>languageData.filter(el => {
-      return display_language === el.language_code;
-    }));
-   
-      setVisible(1)
+   }
+  }
+   //Checking Form Data for Validations
+  const checkMatchStatusData = (data) => {
+    var error={};
+    if(data?.match_status_name === "" ||data?.match_status_name === undefined){
+      error.match_status_name = "This field is required."
+    } 
+    if(data?.match_status === "" || data?.match_status === undefined){
+      error.match_status = "This field is required."
+    }  
+  
+   return Object.keys(error).length === 0 ? true :  error;
   
    }
+   const validationPOS = (data) => {
+    var Result = checkPOSData(data);
+    if (Result === true){
+     return true;
+    }
+    else{
+     setError(Result);
+     return false;
+
+    }
+
+ }
+
+ //Checking Form Data for Validations
+ const checkPOSData = (data) => {
+  var error={};
+  if(data?.display_name === "" || data?.display_name === undefined){
+    error.display_name = "This field is required."
+  }
+  if(data?.url === "" || data?.url === undefined){
+    error.url = "This field is required."
+  }
+  if((!data?.url?.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) && (data.url != "" &&  data.url != undefined))){
+    error.url = "The url has invalid format."
+  } 
   
+ return Object.keys(error).length === 0 ? true :  error;
+
+ }
+
+ //Delete Match status 
    const submitMatchStatusDelete = (props) => {
     const url = `/api/point_of_sale/${props}`;
     axios
       .delete(url)
       .then((response) => {
-        toast.success("Match status deleted successfully.", {
+        toast.success("API: Match status deleted successfully.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -154,7 +183,7 @@ function Allpointofsale() {
         Router.push("./pointofsale");
       })
       .catch((error) => {
-        toast.error("Match status delete error.", {
+        toast.error("API: Match status delete error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -167,77 +196,28 @@ function Allpointofsale() {
       });
   };
 
- // Currency for Dropdown 
- const createCurrency = () => {
-  var cc=currency.data;
-  cc?.map(code => {
-     var temp = {
-       currency_code: code.code,
-       currency_name: code?.currency
-     }
-   currency_data.push(temp) } );
-   setCurrencyData(currency_data);  
- }
- // Country for Dropdown   
- const createCountry = () => {
-  var countryCodes = Object.keys(countries.countries);
-    countryCodes.map(code => {
-      var temp = {
-        country_name: countries.countries[code].name,
-        country_code: code
-      }
-    country_data.push(temp) } );
-    setCountryData(country_data);
-  }
-// Validation Function
-const validationMatchStatus = (sales) => {
-var Result = checkMatchStatusData(sales);
-if (Result === true){
- return true;
-}
-else{
- setError(Result);
- return false;
 
-}
-
-}
-
- //Checking Form Data for Validations
-const checkMatchStatusData = (sales) => {
-  var error={};
- 
-  if(sales?.match_status_name === "" || sales?.match_status_name === undefined){
-    error.match_status_name = "This field is required."
-  } 
-  if(sales?.match_status === "" || sales?.match_status === undefined){
-    error.match_status = "This field is required."
-  }   
- return Object.keys(error).length === 0 ? true :  error;
-
- }
    // Point of Sale Add Function
 const submitMatchstatus = () =>
- { if (validationMatchStatus(sales)){ 
-  if(countryCheck || currencyCheck || languageCheck || deviceCheck || siteCheck === true){
+ { if (validationMatchStatus(dSales)){ 
+  if(couCheck || currCheck || langCheck || devCheck || siCheck === true){
     const data =[{
-      match_status: sales?.match_status,
-        match_status_name:sales?.match_status_name,
-        country: sales?.country,
-        language: sales?.language,
-        device:sales?.device,
-        currency:sales?.currency,
-        site_type: sales?.site_type  
+        match_status: dSales?.match_status,
+        match_status_name:dSales?.match_status_name,
+        country: dSales?.country,
+        language: dSales?.language,
+        device:dSales?.device,
+        currency:dSales?.currency,
+        site_type: dSales?.site_type  
     }];
     const final_data={match_status: data}
-    alert(JSON.stringify(final_data))
     const url = "/api/point_of_sale/match_status";
     axios
       .post(url, final_data, {
         header: { "content-type": "application/json" },
       })
       .then((response) => {
-        toast.success("Match Status added successfully!", {
+        toast.success("API: Match Status added successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -250,28 +230,25 @@ const submitMatchstatus = () =>
            match_status_id:response.data.match_status_id,
           sale_id:sales?.sale_id
           }];
+        
           const final_datas={pos_match_status_link: datas}
-          alert(JSON.stringify(final_datas));
-         const url = "/api/point_of_sale/pos_match_status_link";
-          axios
-            .post(url, final_datas, {
-              header: { "content-type": "application/json" },
-            })
+          const url = "/api/point_of_sale/pos_match_status_link";
+          axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
             .then((response) => {
-              toast.success("Match Status added successfully!", {
-                position: "top-center",
+
+              toast.success("API: Match Status added successfully!", {
+   position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
-            setSales([])
-            Router.push("../pointofsales")
+              })
+              setView(0);
             })
             .catch((error) => {
-              toast.error("POS link error!", {
+              toast.error("API: Match Status error", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -280,12 +257,10 @@ const submitMatchstatus = () =>
                 draggable: true,
                 progress: undefined,
               });
-            });
-        
-       
+            })      
       })
       .catch((error) => {
-        toast.error("Match Status Add Error!", {
+        toast.error("API: Match status add error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -297,7 +272,7 @@ const submitMatchstatus = () =>
       });
     }
     else{
-      toast.error("Please select at least one condition", {
+      toast.error("APP: Please select at least one condition", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -311,28 +286,42 @@ const submitMatchstatus = () =>
   }
 };
 
-
   /**Function to save Current property to be viewed to Local Storage**/
   const currentMatch = (props) => {
     setCurrent(props)
+    setError([])
     setViewEdit(1);
     filterByCountry(props)
-    filterByMLanguage(props)
    
     if(props?.device != undefined){
       setDeviceCheck(true)
     }
+    filterByMLanguage(props)
     if(props?.site_type != undefined){
       setSiteCheck(true)
     }
     filterByCurrency(props)
   };
 
+{/** Filter Functions for Drop Down **/}
+// Filter Language Selected One in Dropdown
+const filterByMLanguage = (props) => {
+  if(props?.language != undefined) {
+  setLanguageCheck(true)
+  resLang = lang?.LanguageData.filter(el => {
+    return props?.language === el?.language_code;
+   });
+  }
+  else{
+    resLang= []
+    }
+}
+
   // Filter Country Selected One in Dropdown
   const filterByCountry = (props) => {
     if(props?.country != undefined) {
     setCountryCheck(true)
-    resCou = countryData.filter(el => {
+    resCou = lang?.CountryData.filter(el => {
      return props?.country === el.country_code;
      });
     }
@@ -341,27 +330,12 @@ const submitMatchstatus = () =>
     }
   Router.push('./pointofsale')
   }
-  
-  // Filter Language Selected One in Dropdown
-  const filterByMLanguage = (props) => {
-    if(props?.language != undefined) {
-    setLanguageCheck(true)
-    resLang = languageData.filter(el => {
-      return props?.language === el?.language_code;
-     });
  
-    }
-    else{
-      resLang= []
-      }
-  Router.push('./pointofsale')
-  }
-
   // Filter Currency Selected One in Dropdown
   const filterByCurrency = (props) => {
     if(props?.currency != undefined) {
     setCurrencyCheck(true)
-    resCurr = currencyData.filter(el => {
+    resCurr = lang?.CurrencyData.filter(el => {
       return props?.currency === el?.currency_code;
      });
  
@@ -372,10 +346,105 @@ const submitMatchstatus = () =>
   Router.push('./pointofsale')
   }
 
+  const submitMatchStatusEdit = () => {
+    if (validationMatchStatus(current)){
+    if(deviceCheck || countryCheck || currencyCheck || siteCheck  === true){
+     
+    const final_data ={
+      match_status:current?.match_status,
+        match_status_name:current?.match_status_name,
+        country: current?.country,
+        language: current?.language,
+        device:current?.device,
+        currency:current?.currency,
+        site_type: current?.site_type,
+        match_status_id:current?.id  
+    };
+      const url = '/api/point_of_sale/match_status'
+      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          toast.success("API: Match Status Updated Successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          fetchDetails();
+          setViewEdit(0);
+          setFlag([])
+          setCurrent([])
+        })
+        .catch((error) => {
+          toast.error("API: Match Status Update Error!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        })
+      } 
+      else{
+        toast.error("APP: Please check one of the condition", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }
+  }
+  
+  const submitPointOfSaleEdit = () => {
+    if (validationPOS(sales)){ 
+    const final_data ={
+       display_name:sales?.display_name,
+       display_language:sales?.display_language,
+        url: sales?.url,
+        sale_id:sales?.sale_id  
+    };
+      const url = '/api/point_of_sale'
+      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          toast.success("API: Point of sale Updated Successfully!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          fetchDetails();
+          setDisp(1)
+        })
+        .catch((error) => {
+          toast.error("API: Point of sale update error!", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        })
+      }  
+    
+  }
+
   return (
     <div>
-        <Header Primary={english?.Side}/>
-      <Sidebar  Primary={english?.Side}/>
+        <Header Primary={english?.Side1}/>
+      <Sidebar  Primary={english?.Side1}/>
       <div id="main-content"
        className= {disp===1? "bg-white pt-24 relative overflow-y-auto lg:ml-64" :
        "bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"}>
@@ -425,7 +494,7 @@ const submitMatchstatus = () =>
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
               <Link href="../pointofsales" >
-               <a> Point of Sales</a>
+               <a>{language?.pointofsales}</a>
               </Link></span>
             </div>
           </li>
@@ -447,7 +516,7 @@ const submitMatchstatus = () =>
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-               Point of Sale
+              {language?.pointofsale}
               </span>
             </div>
           </li>
@@ -459,16 +528,16 @@ const submitMatchstatus = () =>
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[45%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> {language?.pointofsale}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
             </div>
         </div>
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Point of Sale 
+        {language?.pointofsale}
         </h6>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -479,7 +548,7 @@ const submitMatchstatus = () =>
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  Point of Sale Name
+                   {language?.pointofsale} {language?.name}
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -489,9 +558,12 @@ const submitMatchstatus = () =>
                   defaultValue={sales?.display_name}
                     onChange={
                       (e) => (
-                       setSales({ ...sales, display_name: e.target.value })
+                       setSales({ ...sales, display_name: e.target.value },setFlag(1))
                       )
                     } />
+                      <p className="text-red-700 font-light">
+                   {error?.display_name}
+            </p>
                     </div>
                 </div>
               </div>
@@ -501,18 +573,18 @@ const submitMatchstatus = () =>
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  Point of Sale Language
+                 {language?.pointofsale} {language?.language}
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
-                        setSales({ ...sales,display_language: e.target.value })
+                        setSales({ ...sales,display_language: e.target.value },setFlag(1))
                       )
                     }>
-                    <option selected>{sales?.display_language}</option>
-                    {languageData?.map(i => {
+                    <option selected>{disLang?.[i]?.language_name}</option>
+                    {lang?.LanguageData?.map(i => {
                           return (
                             <option key={i} value={i.language_code}>{i.language_name}</option>)
                         }
@@ -528,7 +600,7 @@ const submitMatchstatus = () =>
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                Point of Sale URL
+               {language?.pointofsale} URL
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -538,18 +610,26 @@ const submitMatchstatus = () =>
                     defaultValue={sales?.url}
                     onChange={
                       (e) => (
-                        setSales({ ...sales, url: e.target.value })
+                        setSales({ ...sales, url: e.target.value },setFlag(1))
                       )
-                    } /></div>
+                    } />
+                      <p className="text-red-700 font-light">
+                   {error?.url}
+            </p></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3"></div></div>
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+              <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
-                      <Button Primary={language?.Update} onClick={()=>{setDisp(1);createCurrency();}}  />
+                      <Button Primary={language?.Update} onClick={()=>{
+                       if(flag === 1){
+                        submitPointOfSaleEdit()}
+                      } }/>
                       : <></>
                     }
+                   
                   </div>
             </div>
           </div>
@@ -561,16 +641,16 @@ const submitMatchstatus = () =>
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[43%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.pointofsale}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
             </div>
         </div> 
       <Table gen={gen} setGen={setGen} 
-            common={language?.common} add={()=> setView(1)} edit={currentMatch} 
+            common={language?.common} add={()=> {setView(1);setError([])}} edit={currentMatch} 
             cols={language?.MatchStatusCols} name="Rooms" 
             delete={submitMatchStatusDelete} status="matchstatus"/></div>
         
@@ -611,14 +691,14 @@ const submitMatchstatus = () =>
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status Name
+                        {language?.matchstatus} {language?.name} 
                       </label>
                       <input
                         type="text"
                         className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
                           (e) => (
-                            setSales({ ...sales, match_status_name: e.target.value })
+                            setDSales({ ...dSales, match_status_name: e.target.value })
                           )
                         } />
                          <p className="text-red-700 font-light">
@@ -632,15 +712,15 @@ const submitMatchstatus = () =>
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status
+                      {language?.matchstatus} 
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
                           (e) => (
-                            setSales({ ...sales, match_status: e.target.value })
+                            setDSales({ ...dSales, match_status: e.target.value })
                           )
                         }>
-                        <option selected>Select</option>
+                        <option selected>{language?.select}</option>
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
@@ -658,25 +738,25 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCountryCheck(!countryCheck) }} checked={countryCheck === true}
+                              onClick={() => { setCouCheck(!couCheck) }} checked={couCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Country
+                             {language?.country}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
                       text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setSales({ ...sales, country: e.target.value })
+                                setDSales({ ...dSales, country: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {countryData?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
@@ -690,7 +770,7 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setDeviceCheck(!deviceCheck) }} checked={deviceCheck === true}
+                              onClick={() => { setDevCheck(!devCheck) }} checked={devCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
 
@@ -698,18 +778,18 @@ const submitMatchstatus = () =>
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Device
+                            {language?.device}
                             </label> </span></div>
 
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setSales({ ...sales, device: e.target.value })
+                                setDSales({ ...dSales, device: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {device?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
@@ -722,24 +802,24 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setLanguageCheck(!languageCheck) }} checked={languageCheck === true}
+                              onClick={() => { setLangCheck(!langCheck) }} checked={langCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Language
+                             {language?.language}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setSales({ ...sales, language: e.target.value })
+                                setDSales({ ...dSales, language: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {languageData?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
                             }
@@ -752,7 +832,7 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCurrencyCheck(!currencyCheck) }} checked={currencyCheck === true}
+                              onClick={() => { setCurrCheck(!currCheck) }} checked={currCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 my-2 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -761,17 +841,17 @@ const submitMatchstatus = () =>
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Currency
+                             {language?.currency}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setSales({ ...sales, currency: e.target.value })
+                                setDSales({ ...dSales, currency: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {currencyData?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
                             }
@@ -783,7 +863,7 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setSiteCheck(!siteCheck) }} checked={siteCheck === true}
+                              onClick={() => { setSiCheck(!siCheck) }} checked={siCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -792,16 +872,16 @@ const submitMatchstatus = () =>
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Site Type
+                               {language?.sitetype}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setSales({ ...sales, site_type: e.target.value })
+                                setDSales({ ...dSales, site_type: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
@@ -812,7 +892,8 @@ const submitMatchstatus = () =>
                 </div>
               </div></div>
                 <div className="items-center flex p-6 border-t border-gray-200 rounded-b">
-                  <Button  Primary={language?.Add} onClick={() => { submitMatchstatus() }}  />
+                  <Button  Primary={language?.Add}
+                   onClick={() => {  submitMatchstatus() }}  />
                 </div></div>
 </div> 
 </div>
@@ -853,15 +934,15 @@ const submitMatchstatus = () =>
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                      Match Status Name
+                     {language?.matchstatus} {language?.name}
                       </label>
                       <input
                         type="text"
                         className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                         defaultValue={current?.name}
+                         defaultValue={current?.match_status_name}
                         onChange={
                           (e) => (
-                            setCurrent({ ...current, match_status_name: e.target.value })
+                            setCurrent({ ...current, match_status_name: e.target.value},setFlag(1))
                           )
                         }
                       />
@@ -876,13 +957,13 @@ const submitMatchstatus = () =>
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status
+                       {language?.matchstatus} 
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      defaultValue={current?.name}
+                      defaultValue={current?.match_status}
                       onChange={
                           (e) => (
-                            setCurrent({...current, match_status: e.target.value })
+                            setCurrent({...current, match_status: e.target.value},setFlag(1))
                           )
                         }>
                         <option selected>{current?.type}</option>
@@ -903,14 +984,14 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCountryCheck(!countryCheck) }} checked={countryCheck === true}
+                              onClick={() => { setCountryCheck(!countryCheck),setFlag(1) }} checked={countryCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Country
+                              {language?.country}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
@@ -918,11 +999,11 @@ const submitMatchstatus = () =>
                             
                           onChange={
                               (e) => (
-                                setCurrent({ ...current, country: e.target.value })
+                                setCurrent({ ...current, country: e.target.value },setFlag(1))
                               )
                             }>
                             <option selected>{resCou?.[i]?.country_name}</option>
-                            {countryData?.map(i => {
+                            {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
@@ -936,7 +1017,7 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setDeviceCheck(!deviceCheck) }} checked={deviceCheck === true}
+                              onClick={() => { setDeviceCheck(!deviceCheck),setFlag(1) }} checked={deviceCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
 
@@ -944,18 +1025,18 @@ const submitMatchstatus = () =>
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Device
+                              {language?.device}
                             </label> </span></div>
 
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, device: e.target.value })
+                                setCurrent({ ...current, device: e.target.value },setFlag(1))
                               )
                             }>
                             <option selected>{current?.device}</option>
-                            {device?.map(i => {
+                            {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
@@ -968,24 +1049,26 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setLanguageCheck(!languageCheck) }} checked={languageCheck === true}
+                              onClick={() => { setLanguageCheck(!languageCheck),setFlag(1) }} checked={languageCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Language
+                             {language?.language}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
+                          
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, language: e.target.value })
+                                setCurrent({ ...current, language: e.target.value },setFlag(1))
                               )
                             }>
                             <option selected>{resLang?.[i]?.language_name}</option>
-                            {languageData?.map(i => {
+                            
+                            {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
                             }
@@ -998,7 +1081,7 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCurrencyCheck(!currencyCheck) }} checked={currencyCheck === true}
+                              onClick={() => { setCurrencyCheck(!currencyCheck),setFlag(1) }} checked={currencyCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 my-2 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1007,17 +1090,17 @@ const submitMatchstatus = () =>
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Currency
+                              {language?.currency}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, currency: e.target.value })
+                                setCurrent({ ...current, currency: e.target.value },setFlag(1))
                               )
                             }>
                             <option selected>{resCurr?.[i]?.currency_name}</option>
-                            {currencyData?.map(i => {
+                            {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
                             }
@@ -1029,7 +1112,7 @@ const submitMatchstatus = () =>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setSiteCheck(!siteCheck) }} checked={siteCheck === true}
+                              onClick={() => { setSiteCheck(!siteCheck),setFlag(1) }} checked={siteCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1038,13 +1121,13 @@ const submitMatchstatus = () =>
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Site Type
+                             {language?.sitetype}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, site_type: e.target.value })
+                                setCurrent({ ...current, site_type: e.target.value },setFlag(1))
                               )
                             }>
                             <option selected>{current?.site_type}</option>
@@ -1058,7 +1141,9 @@ const submitMatchstatus = () =>
                 </div>
               </div></div>
                 <div className="items-center flex p-6 border-t border-gray-200 rounded-b">
-                  <Button  Primary={language?.Update} onClick={() => { submitEditMatchstatus() }}  />
+                  <Button  Primary={language?.Update}  onClick= {()=>{
+                    if(flag === 1){
+                    submitMatchStatusEdit()}}} />
                 </div></div>
 </div> 
 </div>

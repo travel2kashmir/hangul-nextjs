@@ -125,10 +125,11 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
           <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
-                <span className="text-xl sm:text-xl leading-none font-bold text-gray-800">
+              <h3 className="text-base font-bold text-gray-900">
                   {allHotelDetails?.property_name}
-                </span>
-                <h3 className="text-base font-normal text-gray-500">
+                </h3>
+
+                <h3 className="whitespace-wrap text-xs font-semibold text-gray-500">
                   {allHotelDetails?.star_rating}-Star{" "}
                   {allHotelDetails?.property_category}
                 </h3>
@@ -143,10 +144,11 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 </span>
               </div>
             </div>
-            <p className="text-base font-semibold text-gray-500 truncate">
+            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
               {allHotelDetails?.description_title}
-            </p>
-            <p className="text-sm font-medium text-gray-90  line-clamp-10 ">
+            </span>
+         
+            <p className="p-1 whitespace-wrap text-xs font-medium text-gray-900 line-clamp-10 ">
               {allHotelDetails?.description_body}
             </p>
           </div>
@@ -171,141 +173,70 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 </span>
               </div>
             </div>
-            {allHotelDetails?.address?.map((item, idx) => {
-              return (
-                <div className="flex flex-wrap" key={idx}>
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.streetaddress}
-                      </label>
-                      <label
-                        className="text-xs font-medium  text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_street_address}
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.landmark}
-                      </label>
-                      <label
-                        className="text-xs  font-medium  text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_landmark}
-                      </label>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.province}
-                      </label>
-                      <label
-                        className="text-xs  font-medium text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_province}
-                      </label>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.latitude}
-                      </label>
-                      <label
-                        className="text-xs  font-medium text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_latitude}
-                      </label>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.longitude}
-                      </label>
-                      <label
-                        className="text-xs  font-medium text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_longitude}
-                      </label>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.postalcode}
-                      </label>
-                      <label
-                        className="text-xs font-medium text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_zipcode}
-                      </label>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.precision}
-                      </label>
-                      <label
-                        className="text-xs font-semibold  text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_precision}
-                      </label>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 sm:w-6/12 sm:px-4 lg:px-2">
-                    <div className="relative w-full mb-2">
-                      <label
-                        className="text-xs font-semibold text-gray-500 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {language?.countrycode}
-                      </label>
-                      <label
-                        className="text-xs  font-medium text-gray-900 block mb-1"
-                        htmlFor="grid-password"
-                      >
-                        {item.address_country}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            <div className="align-middle inline-block  min-w-full">
+              <div className="overflow-hidden">
+                <table className="table-fixed min-w-full  ">
+                  <tbody className="bg-white ">
+                    {allHotelDetails?.address?.map((item, idx) => {
+                      return (
+                        <>
+                        <tr key={idx}>
+                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                            {language?.address}
+                            </td>
+                          </td>
+                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          {item.address_street_address}{" "}
+                          </td>
+                        </tr>
+                        <tr key={idx}>
+                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                            {language?.landmark}
+                            </td>
+                          </td>
+                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          {item.address_landmark}{" "}
+                          </td>
+                        </tr>
+                        <tr key={idx}>
+                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                            {language?.postalcode}
+                            </td>
+                          </td>
+                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          {item.address_zipcode}{" "}
+                          </td>
+                        </tr>
+                        <tr key={idx}>
+                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                            {language?.province}
+                            </td>
+                          </td>
+                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          {item.address_city}{" "}
+                          </td>
+                        </tr>
+                        <tr key={idx}>
+                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                            {language?.countrycode}
+                            </td>
+                          </td>
+                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          {item.address_country}{" "}
+                          </td>
+                        </tr>
+                        </>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
 
           {/*Contact */}
@@ -328,16 +259,16 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
               </div>
             </div>
             <div className="align-middle inline-block  min-w-full">
-              <div className="shadow overflow-hidden">
-                <table className="table-fixed min-w-full divide-y divide-gray-200">
-                  <tbody className="bg-white divide-y divide-gray-200">
+              <div className="overflow-hidden">
+                <table className="table-fixed min-w-full  ">
+                  <tbody className="bg-white ">
                     {allHotelDetails?.contacts?.map((item, idx) => {
                       return (
-                        <tr className="hover:bg-gray-100" key={idx}>
+                        <tr key={idx}>
                           <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
                               {item?.contact_type}{" "}
-                            </span>
+                            </td>
                           </td>
                           <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
                             {item?.contact_data}{" "}
@@ -352,7 +283,9 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
           </div>
         </div>
 
-        <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
+        
+         
+          <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
           {/* Services */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between mb-4">
@@ -371,7 +304,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 </span>
               </div>
             </div>
-            <div className="flex flex-wrap">
+            <div className="flex  flex-wrap">
               <span>
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
@@ -448,6 +381,10 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
               </span>
             </div>
           </div>
+        
+            
+            
+          
 
           {/* Reviews */}
           <div className="col-span-2 bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
@@ -507,7 +444,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
               </div>
             ))}
           </div>
-        </div>
+          </div>
 
         {/* Gallery */}
         <div className="mt-2 grid grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
@@ -547,7 +484,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
           </div>
         </div>
 
-      </div>
+      
       {/* Toast Container */}
       <ToastContainer position="top-center"
         autoClose={5000}
@@ -558,7 +495,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
         pauseOnFocusLoss
         draggable
         pauseOnHover />
-
+</div>
       <Footer />
     </div>
 

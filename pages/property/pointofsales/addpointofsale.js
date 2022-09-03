@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
-import CurrencyList from 'currency-list'
-import Headloader from '../../../components/loaders/headloader';
-import Lineloader from '../../../components/loaders/lineloader';
+import lang from "../../../components/GlobalData"
 import Sidebar  from "../../../components/Sidebar";
 import Header  from "../../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
@@ -32,9 +30,6 @@ function Addpointofsale() {
   const [sales, setSales] = useState([]);
   const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
   const [allbundles,setAllBundles]=useState([])
-  const [languageData,setLanguageData]=useState([])
-  const [currencyData,setCurrencyData]=useState([])
-  const [countryData,setCountryData]=useState([])
   const [countryCheck, setCountryCheck] = useState(false);
   const [languageCheck, setLanguageCheck] = useState(false);
   const [deviceCheck, setDeviceCheck] = useState(false);
@@ -61,7 +56,6 @@ function Addpointofsale() {
      }
     }
     firstfun();
-    createLanguages();
   }, [])
 
 //  Fetch Room Bundles
@@ -73,50 +67,15 @@ function Addpointofsale() {
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
   }
-  // Languages for Drop Down
-  const createLanguages = () => {
-    var languageCodes = langs.all();
-    console.log(languageCodes)
-     languageCodes.map(code => {
-       var temp = {
-         language_name: code.name,
-         language_code: code?.[j]
-       }
-     language_data.push(temp) } );
-     setLanguageData(language_data);   
-   }
-   // Languages for Dropdown 
-   const createCurrency = () => {
-    var cc=currency.data;
-    cc?.map(code => {
-       var temp = {
-         currency_code: code.code,
-         currency_name: code?.currency
-       }
-     currency_data.push(temp) } );
-     setCurrencyData(currency_data);  
-   }
-   // Country for Dropdown   
-   const createCountry = () => {
-    var countryCodes = Object.keys(countries.countries);
-      countryCodes.map(code => {
-        var temp = {
-          country_name: countries.countries[code].name,
-          country_code: code
-        }
-      country_data.push(temp) } );
-      setCountryData(country_data);
-    }
+   
   //  To Fetch Room Bundles
    useEffect(() => {
     fetchBundles();
-    createCountry();
   }
     , [])
 
     // Point of Sale Add Function
     const submitPointofsale = () => {
-    createCurrency();
     if (validationPOS(sales)){ 
         const final_data ={
           property_id: currentProperty?.property_id,
@@ -189,13 +148,13 @@ const validationMatchStatus = (sales) => {
   const checkPOSData = (sales) => {
     var error={};
     if(sales?.display_name === "" || sales?.display_name === undefined){
-      error.display_name = "The point of sale name field is required."
+      error.display_name = "The field is required."
     }
     if(sales?.display_language === "" || sales?.display_language === undefined){
-      error.display_language = "This point of sale language field is required."
+      error.display_language = "This field is required."
     }
     if(sales?.rate_master_id === "" || sales?.rate_master_id === undefined){
-      error.rate_master_id = "This is required."
+      error.rate_master_id = "This field is required."
     }
     if(sales?.url === "" || sales?.url === undefined){
       error.url = "This field is required."
@@ -249,12 +208,11 @@ const validationMatchStatus = (sales) => {
             draggable: true,
             progress: undefined,
           });
-          const datas = [{
+         const datas = [{
              match_status_id:response.data.match_status_id,
-            sale_id:sale_id
+             sale_id:sale_id
             }];
             const final_datas={pos_match_status_link: datas}
-            alert(JSON.stringify(final_datas));
            const url = "/api/point_of_sale/pos_match_status_link";
             axios
               .post(url, final_datas, {
@@ -316,8 +274,8 @@ const validationMatchStatus = (sales) => {
 
   return (
     <>
-      <Header Primary={english?.Side} />
-      <Sidebar Primary={english?.Side} />
+      <Header Primary={english?.Side1} />
+      <Sidebar Primary={english?.Side1} />
       <div id="main-content"
         className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
         {/* Navbar */}
@@ -375,7 +333,7 @@ const validationMatchStatus = (sales) => {
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                   <Link href="../pointofsales" >
-                    <a> Point of Sales</a>
+                    <a> {language?.pointofsales}</a>
                   </Link></span>
               </div>
             </li>
@@ -397,7 +355,7 @@ const validationMatchStatus = (sales) => {
                   className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                   aria-current="page"
                 >
-                  Add Point of Sale
+                 {language?.add} {language?.pointofsale}
                 </span>
               </div>
             </li>
@@ -406,19 +364,19 @@ const validationMatchStatus = (sales) => {
         {/* Point of Sale */}
         <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
           <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-            <div className="relative before:hidden  before:lg:block before:absolute before:w-[39%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[42%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
               <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.pointofsale}</div>
               </div>
 
               <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
               </div>
             </div>
             <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-              Point of Sale
+            {language?.pointofsale}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
@@ -429,7 +387,7 @@ const validationMatchStatus = (sales) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Point of Sale Name
+                        {language?.pointofsale} {language?.name}
                       </label>
                       <input
                         type="text"
@@ -450,7 +408,7 @@ const validationMatchStatus = (sales) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Point of Sale Language
+                        {language?.pointofsale} {language?.language}
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
@@ -458,8 +416,8 @@ const validationMatchStatus = (sales) => {
                             setSales({ ...sales, display_language: e.target.value })
                           )
                         }>
-                        <option selected>Select</option>
-                        {languageData?.map(i => {
+                        <option selected>{language?.select}</option>
+                        {lang?.LanguageData?.map(i => {
                           return (
                             <option key={i} value={i.language_code}>{i.language_name}</option>)
                         }
@@ -485,7 +443,7 @@ const validationMatchStatus = (sales) => {
                             setSales({ ...sales, rate_master_id: e.target.value })
                           )
                         }>
-                        <option selected>Select</option>
+                        <option selected>{language?.select}</option>
                         {allbundles?.map(i => {
                           return (
                             <option key={i} value={i.rate_master_id}>{i.package_name}- {i.room_name}</option>)
@@ -505,7 +463,7 @@ const validationMatchStatus = (sales) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Point of Sale URL
+                        {language?.pointofsale} URL
                       </label>
                       <input
                         type="text"
@@ -534,19 +492,19 @@ const validationMatchStatus = (sales) => {
         </div>
         <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
           <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-            <div className="relative before:hidden  before:lg:block before:absolute before:w-[39%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[42%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
               <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">  1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.pointofsale}</div>
               </div>
 
               <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
               </div>
             </div>
             <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-              Match Status
+            {language?.matchstatus}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
@@ -557,7 +515,7 @@ const validationMatchStatus = (sales) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status Name
+                        {language?.matchstatus} {language?.name}
                       </label>
                       <input
                         type="text"
@@ -578,7 +536,7 @@ const validationMatchStatus = (sales) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status
+                        {language?.matchstatus}
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
@@ -586,7 +544,7 @@ const validationMatchStatus = (sales) => {
                             setSales({ ...sales, match_status: e.target.value })
                           )
                         }>
-                        <option selected>Select</option>
+                        <option selected>{language?.select}</option>
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
@@ -611,7 +569,7 @@ const validationMatchStatus = (sales) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Country
+                             {language?.country}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
@@ -621,8 +579,8 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, country: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {countryData?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
@@ -644,7 +602,7 @@ const validationMatchStatus = (sales) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Device
+                              {language?.device}
                             </label> </span></div>
 
                         <div className="w-full lg:w-4/12 ">
@@ -654,8 +612,8 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, device: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {device?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
@@ -675,7 +633,7 @@ const validationMatchStatus = (sales) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Language
+                              {language?.language}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -684,8 +642,8 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, language: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {languageData?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
                             }
@@ -707,7 +665,7 @@ const validationMatchStatus = (sales) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Currency
+                              {language?.currency}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -716,8 +674,8 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, currency: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
-                            {currencyData?.map(i => {
+                            <option selected>{language?.select}</option>
+                            {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
                             }
@@ -738,7 +696,7 @@ const validationMatchStatus = (sales) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Site Type
+                              {language?.sitetype}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -747,7 +705,7 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, site_type: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>

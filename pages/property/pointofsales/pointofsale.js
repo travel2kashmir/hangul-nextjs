@@ -202,13 +202,13 @@ const submitMatchstatus = () =>
  { if (validationMatchStatus(dSales)){ 
   if(couCheck || currCheck || langCheck || devCheck || siCheck === true){
     const data =[{
-      match_status: sales?.match_status,
-        match_status_name:sales?.match_status_name,
-        country: sales?.country,
-        language: sales?.language,
-        device:sales?.device,
-        currency:sales?.currency,
-        site_type: sales?.site_type  
+        match_status: dSales?.match_status,
+        match_status_name:dSales?.match_status_name,
+        country: dSales?.country,
+        language: dSales?.language,
+        device:dSales?.device,
+        currency:dSales?.currency,
+        site_type: dSales?.site_type  
     }];
     const final_data={match_status: data}
     const url = "/api/point_of_sale/match_status";
@@ -230,24 +230,22 @@ const submitMatchstatus = () =>
            match_status_id:response.data.match_status_id,
           sale_id:sales?.sale_id
           }];
+        
           const final_datas={pos_match_status_link: datas}
-        const url = "/api/point_of_sale/pos_match_status_link";
-          axios
-            .post(url, final_datas, {
-              header: { "content-type": "application/json" },
-            })
+          const url = "/api/point_of_sale/pos_match_status_link";
+          axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
             .then((response) => {
+
               toast.success("API: Match Status added successfully!", {
-                position: "top-center",
+   position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
-            setSales([])
-            Router.push("../pointofsales")
+              })
+              setView(0);
             })
             .catch((error) => {
               toast.error("API: Match Status error", {
@@ -259,8 +257,7 @@ const submitMatchstatus = () =>
                 draggable: true,
                 progress: undefined,
               });
-            });  
-       
+            })      
       })
       .catch((error) => {
         toast.error("API: Match status add error", {
@@ -288,8 +285,6 @@ const submitMatchstatus = () =>
     }
   }
 };
-
-  
 
   /**Function to save Current property to be viewed to Local Storage**/
   const currentMatch = (props) => {
@@ -352,8 +347,9 @@ const filterByMLanguage = (props) => {
   }
 
   const submitMatchStatusEdit = () => {
-    if (validationMatchStatus(current)){ 
-    if(deviceCheck || countryCheck || currencyCheck || siteCheck  || deviceCheck === true){
+    if (validationMatchStatus(current)){
+    if(deviceCheck || countryCheck || currencyCheck || siteCheck  === true){
+     
     const final_data ={
       match_status:current?.match_status,
         match_status_name:current?.match_status_name,
@@ -392,7 +388,7 @@ const filterByMLanguage = (props) => {
             progress: undefined,
           });
         })
-      }
+      } 
       else{
         toast.error("APP: Please check one of the condition", {
           position: "top-center",
@@ -406,15 +402,15 @@ const filterByMLanguage = (props) => {
       }
     }
   }
+  
   const submitPointOfSaleEdit = () => {
     if (validationPOS(sales)){ 
     const final_data ={
-       display_name:dSales?.display_name,
-       display_language:dSales?.display_language,
-        url: dSales?.url,
+       display_name:sales?.display_name,
+       display_language:sales?.display_language,
+        url: sales?.url,
         sale_id:sales?.sale_id  
     };
-    alert(JSON.stringify(final_data))
       const url = '/api/point_of_sale'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
@@ -447,8 +443,8 @@ const filterByMLanguage = (props) => {
 
   return (
     <div>
-        <Header Primary={english?.Side}/>
-      <Sidebar  Primary={english?.Side}/>
+        <Header Primary={english?.Side1}/>
+      <Sidebar  Primary={english?.Side1}/>
       <div id="main-content"
        className= {disp===1? "bg-white pt-24 relative overflow-y-auto lg:ml-64" :
        "bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"}>
@@ -498,7 +494,7 @@ const filterByMLanguage = (props) => {
               </svg>
               <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
               <Link href="../pointofsales" >
-               <a> Point of Sales</a>
+               <a>{language?.pointofsales}</a>
               </Link></span>
             </div>
           </li>
@@ -520,7 +516,7 @@ const filterByMLanguage = (props) => {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-               Point of Sale
+              {language?.pointofsale}
               </span>
             </div>
           </li>
@@ -532,16 +528,16 @@ const filterByMLanguage = (props) => {
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[45%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> {language?.pointofsale}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
             </div>
         </div>
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-         Point of Sale 
+        {language?.pointofsale}
         </h6>
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
@@ -552,7 +548,7 @@ const filterByMLanguage = (props) => {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  Point of Sale Name
+                   {language?.pointofsale} {language?.name}
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -577,7 +573,7 @@ const filterByMLanguage = (props) => {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                  Point of Sale Language
+                 {language?.pointofsale} {language?.language}
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -604,7 +600,7 @@ const filterByMLanguage = (props) => {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                Point of Sale URL
+               {language?.pointofsale} URL
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -625,10 +621,15 @@ const filterByMLanguage = (props) => {
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3"></div></div>
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+              <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
-                      <Button Primary={language?.Update} onClick={submitPointOfSaleEdit}  />
+                      <Button Primary={language?.Update} onClick={()=>{
+                       if(flag === 1){
+                        submitPointOfSaleEdit()}
+                      } }/>
                       : <></>
                     }
+                   
                   </div>
             </div>
           </div>
@@ -640,12 +641,12 @@ const filterByMLanguage = (props) => {
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[43%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Point of Sale</div>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.pointofsale}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Match Status</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
             </div>
         </div> 
       <Table gen={gen} setGen={setGen} 
@@ -690,7 +691,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status Name
+                        {language?.matchstatus} {language?.name} 
                       </label>
                       <input
                         type="text"
@@ -711,7 +712,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status
+                      {language?.matchstatus} 
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
@@ -719,7 +720,7 @@ const filterByMLanguage = (props) => {
                             setDSales({ ...dSales, match_status: e.target.value })
                           )
                         }>
-                        <option selected>Select</option>
+                        <option selected>{language?.select}</option>
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
@@ -744,7 +745,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Country
+                             {language?.country}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
@@ -754,7 +755,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, country: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
@@ -777,7 +778,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Device
+                            {language?.device}
                             </label> </span></div>
 
                         <div className="w-full lg:w-4/12 ">
@@ -787,7 +788,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, device: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
@@ -808,7 +809,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Language
+                             {language?.language}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -817,7 +818,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, language: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
@@ -840,7 +841,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Currency
+                             {language?.currency}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -849,7 +850,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, currency: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
@@ -862,7 +863,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setSiCheck(!si) }} checked={siCheck === true}
+                              onClick={() => { setSiCheck(!siCheck) }} checked={siCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -871,7 +872,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Site Type
+                               {language?.sitetype}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -880,7 +881,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, site_type: e.target.value })
                               )
                             }>
-                            <option selected>Select</option>
+                            <option selected>{language?.select}</option>
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
@@ -933,7 +934,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                      Match Status Name
+                     {language?.matchstatus} {language?.name}
                       </label>
                       <input
                         type="text"
@@ -956,7 +957,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                        Match Status
+                       {language?.matchstatus} 
                       </label>
                       <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       defaultValue={current?.match_status}
@@ -983,14 +984,14 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCountryCheck(!countryCheck) }} checked={countryCheck === true}
+                              onClick={() => { setCountryCheck(!countryCheck),setFlag(1) }} checked={countryCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Country
+                              {language?.country}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
@@ -1016,7 +1017,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setDeviceCheck(!deviceCheck) }} checked={deviceCheck === true}
+                              onClick={() => { setDeviceCheck(!deviceCheck),setFlag(1) }} checked={deviceCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
 
@@ -1024,7 +1025,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Device
+                              {language?.device}
                             </label> </span></div>
 
                         <div className="w-full lg:w-4/12 ">
@@ -1048,14 +1049,14 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setLanguageCheck(!languageCheck) }} checked={languageCheck === true}
+                              onClick={() => { setLanguageCheck(!languageCheck),setFlag(1) }} checked={languageCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                              Language
+                             {language?.language}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           
@@ -1080,7 +1081,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCurrencyCheck(!currencyCheck) }} checked={currencyCheck === true}
+                              onClick={() => { setCurrencyCheck(!currencyCheck),setFlag(1) }} checked={currencyCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 my-2 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1089,7 +1090,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Currency
+                              {language?.currency}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1111,7 +1112,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setSiteCheck(!siteCheck) }} checked={siteCheck === true}
+                              onClick={() => { setSiteCheck(!siteCheck),setFlag(1) }} checked={siteCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1120,7 +1121,7 @@ const filterByMLanguage = (props) => {
                               className="text-sm font-medium my-1 text-gray-900 mx-2 block "
                               htmlFor="grid-password"
                             >
-                              Site Type
+                             {language?.sitetype}
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"

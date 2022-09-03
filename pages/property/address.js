@@ -21,7 +21,7 @@ var i=0;
 var currentLogged;
 function Address() {
   const [visible,setVisible]=useState(0) 
-  
+  const [spinner, setSpinner] = useState(0)
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -68,6 +68,7 @@ function Address() {
   /* Edit Address Function */
   const submitAddressEdit = () => {
     if (allHotelDetails.length !== 0){
+      setSpinner(1)
     const final_data = {
       address_id: address?.address?.[i]?.address_id,
       address_street_address: allHotelDetails.address_street_address,
@@ -84,6 +85,7 @@ function Address() {
     axios
       .put(url, final_data, { header: { "content-type": "application/json" } })
       .then((response) => {
+        setSpinner(0)
         toast.success("Address Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
@@ -98,6 +100,7 @@ function Address() {
         setAllHotelDetails([])
       })
       .catch((error) => {
+        setSpinner(0)
         toast.error("Address Update Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -420,7 +423,11 @@ function Address() {
                     </div>
                   </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Update}  onClick={submitAddressEdit}/>
+                  <div className={spinner === 0 ? 'block' : 'hidden'}>
+                  <Button Primary={language?.Update}  onClick={submitAddressEdit}/></div>
+                  <div className={spinner === 1 ? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerUpdate} />
+                       </div>
               </div>  
                 </div>
               </div>

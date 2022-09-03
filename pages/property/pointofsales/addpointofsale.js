@@ -209,7 +209,7 @@ const validationMatchStatus = (sales) => {
             progress: undefined,
           });
          const datas = [{
-             match_status_id:response.data.sale_id,
+             match_status_id:response.data.match_status_id,
              sale_id:sale_id
             }];
             const final_datas={pos_match_status_link: datas}

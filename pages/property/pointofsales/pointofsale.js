@@ -227,7 +227,7 @@ const submitMatchstatus = () =>
           progress: undefined,
         });
         const datas = [{
-           match_status_id:response.data.sale_id,
+           match_status_id:response.data.match_status_id,
           sale_id:sales?.sale_id
           }];
         

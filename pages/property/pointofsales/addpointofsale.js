@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
-import CurrencyList from 'currency-list'
-import Headloader from '../../../components/loaders/headloader';
-import Lineloader from '../../../components/loaders/lineloader';
+import lang from "../../../components/GlobalData"
 import Sidebar  from "../../../components/Sidebar";
 import Header  from "../../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';
@@ -32,9 +30,6 @@ function Addpointofsale() {
   const [sales, setSales] = useState([]);
   const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
   const [allbundles,setAllBundles]=useState([])
-  const [languageData,setLanguageData]=useState([])
-  const [currencyData,setCurrencyData]=useState([])
-  const [countryData,setCountryData]=useState([])
   const [countryCheck, setCountryCheck] = useState(false);
   const [languageCheck, setLanguageCheck] = useState(false);
   const [deviceCheck, setDeviceCheck] = useState(false);
@@ -61,7 +56,6 @@ function Addpointofsale() {
      }
     }
     firstfun();
-    createLanguages();
   }, [])
 
 //  Fetch Room Bundles
@@ -73,50 +67,15 @@ function Addpointofsale() {
       })
       .catch((error) => { logger.error("url to fetch property details, failed") });
   }
-  // Languages for Drop Down
-  const createLanguages = () => {
-    var languageCodes = langs.all();
-    console.log(languageCodes)
-     languageCodes.map(code => {
-       var temp = {
-         language_name: code.name,
-         language_code: code?.[j]
-       }
-     language_data.push(temp) } );
-     setLanguageData(language_data);   
-   }
-   // Languages for Dropdown 
-   const createCurrency = () => {
-    var cc=currency.data;
-    cc?.map(code => {
-       var temp = {
-         currency_code: code.code,
-         currency_name: code?.currency
-       }
-     currency_data.push(temp) } );
-     setCurrencyData(currency_data);  
-   }
-   // Country for Dropdown   
-   const createCountry = () => {
-    var countryCodes = Object.keys(countries.countries);
-      countryCodes.map(code => {
-        var temp = {
-          country_name: countries.countries[code].name,
-          country_code: code
-        }
-      country_data.push(temp) } );
-      setCountryData(country_data);
-    }
+   
   //  To Fetch Room Bundles
    useEffect(() => {
     fetchBundles();
-    createCountry();
   }
     , [])
 
     // Point of Sale Add Function
     const submitPointofsale = () => {
-    createCurrency();
     if (validationPOS(sales)){ 
         const final_data ={
           property_id: currentProperty?.property_id,
@@ -249,13 +208,11 @@ const validationMatchStatus = (sales) => {
             draggable: true,
             progress: undefined,
           });
-          alert(JSON.stringify(response?.data))
-          const datas = [{
+         const datas = [{
              match_status_id:response.data.sale_id,
-            sale_id:sale_id
+             sale_id:sale_id
             }];
             const final_datas={pos_match_status_link: datas}
-            alert(JSON.stringify(final_datas));
            const url = "/api/point_of_sale/pos_match_status_link";
             axios
               .post(url, final_datas, {
@@ -407,7 +364,7 @@ const validationMatchStatus = (sales) => {
         {/* Point of Sale */}
         <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
           <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-            <div className="relative before:hidden  before:lg:block before:absolute before:w-[39%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[42%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
               <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.pointofsale}</div>
@@ -415,7 +372,7 @@ const validationMatchStatus = (sales) => {
 
               <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.match_status}</div>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.matchstatus}</div>
               </div>
             </div>
             <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
@@ -460,7 +417,7 @@ const validationMatchStatus = (sales) => {
                           )
                         }>
                         <option selected>{language?.select}</option>
-                        {languageData?.map(i => {
+                        {lang?.LanguageData?.map(i => {
                           return (
                             <option key={i} value={i.language_code}>{i.language_name}</option>)
                         }
@@ -535,7 +492,7 @@ const validationMatchStatus = (sales) => {
         </div>
         <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
           <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-            <div className="relative before:hidden  before:lg:block before:absolute before:w-[39%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[42%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
               <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">  1</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.pointofsale}</div>
@@ -623,7 +580,7 @@ const validationMatchStatus = (sales) => {
                               )
                             }>
                             <option selected>{language?.select}</option>
-                            {countryData?.map(i => {
+                            {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
@@ -656,7 +613,7 @@ const validationMatchStatus = (sales) => {
                               )
                             }>
                             <option selected>{language?.select}</option>
-                            {device?.map(i => {
+                            {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
@@ -686,7 +643,7 @@ const validationMatchStatus = (sales) => {
                               )
                             }>
                             <option selected>{language?.select}</option>
-                            {languageData?.map(i => {
+                            {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
                             }
@@ -718,7 +675,7 @@ const validationMatchStatus = (sales) => {
                               )
                             }>
                             <option selected>{language?.select}</option>
-                            {currencyData?.map(i => {
+                            {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
                             }

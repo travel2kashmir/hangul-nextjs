@@ -230,12 +230,8 @@ const submitMatchstatus = () =>
            match_status_id:response.data.sale_id,
           sale_id:sales?.sale_id
           }];
+        
           const final_datas={pos_match_status_link: datas}
-          alert(JSON.stringify(final_datas))
-          setView(0);
-          fetchDetails();
-          Router.push('./pointofsale');
-          setDisp(1);
           const url = "/api/point_of_sale/pos_match_status_link";
           axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
             .then((response) => {
@@ -248,7 +244,7 @@ const submitMatchstatus = () =>
                 draggable: true,
                 progress: undefined,
               })
-           
+              setView(0);
             })
             .catch((error) => {
               toast.error("API: Match Status error", {

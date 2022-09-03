@@ -1,7 +1,7 @@
 export default {
    "CountryData":
    [
-      {country_name:"Andorra",country_code:"AD"},
+   {country_name:"Andorra",country_code:"AD"},
    {country_name:"United Arab Emirates",country_code:"AE"},
    {country_name:"Afghanistan",country_code:"AF"},
    {country_name:"Antigua and Barbuda",country_code:"AG"},

@@ -346,8 +346,9 @@ const filterByMLanguage = (props) => {
   }
 
   const submitMatchStatusEdit = () => {
-    if (validationMatchStatus(current)){ 
-    if(deviceCheck || countryCheck || currencyCheck || siteCheck  || deviceCheck === true){
+    if (validationMatchStatus(current)){
+    if(deviceCheck || countryCheck || currencyCheck || siteCheck  === true){
+     
     const final_data ={
       match_status:current?.match_status,
         match_status_name:current?.match_status_name,
@@ -386,7 +387,7 @@ const filterByMLanguage = (props) => {
             progress: undefined,
           });
         })
-      }
+      } 
       else{
         toast.error("UI: Please check one of the condition", {
           position: "top-center",
@@ -400,6 +401,7 @@ const filterByMLanguage = (props) => {
       }
     }
   }
+  
   const submitPointOfSaleEdit = () => {
     if (validationPOS(sales)){ 
     const final_data ={
@@ -933,7 +935,7 @@ const filterByMLanguage = (props) => {
                         className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password"
                       >
-                     {language?.matchstatus} {language?.name} 
+                     {language?.matchstatus} {language?.name}
                       </label>
                       <input
                         type="text"
@@ -983,7 +985,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCountryCheck(!countryCheck) }} checked={countryCheck === true}
+                              onClick={() => { setCountryCheck(!countryCheck),setFlag(1) }} checked={countryCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
@@ -1016,7 +1018,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setDeviceCheck(!deviceCheck) }} checked={deviceCheck === true}
+                              onClick={() => { setDeviceCheck(!deviceCheck),setFlag(1) }} checked={deviceCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
 
@@ -1048,7 +1050,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setLanguageCheck(!languageCheck) }} checked={languageCheck === true}
+                              onClick={() => { setLanguageCheck(!languageCheck),setFlag(1) }} checked={languageCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
@@ -1080,7 +1082,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCurrencyCheck(!currencyCheck) }} checked={currencyCheck === true}
+                              onClick={() => { setCurrencyCheck(!currencyCheck),setFlag(1) }} checked={currencyCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 my-2 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1111,7 +1113,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setSiteCheck(!siteCheck) }} checked={siteCheck === true}
+                              onClick={() => { setSiteCheck(!siteCheck),setFlag(1) }} checked={siteCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>

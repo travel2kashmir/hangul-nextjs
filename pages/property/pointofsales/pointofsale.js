@@ -620,10 +620,12 @@ const filterByMLanguage = (props) => {
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
               <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
+
                       <Button Primary={language?.Update} onClick={()=>{
                        if(flag === 1){
                         submitPointOfSaleEdit()}
                       } }/>
+
                       : <></>
                     }
                    

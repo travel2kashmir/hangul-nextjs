@@ -10,6 +10,9 @@ import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Footer from '../../components/Footer';
 import Loader from "../../components/loader";
+import Button from "../../components/Button";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 var currentLogged;
 var language;
 var currentProperty;
@@ -18,7 +21,16 @@ const logger = require("../../services/logger");
 
 function Reviews() {
   const [reviews, setReviews] = useState([]);
-  const [visible,setVisible]=useState(0) 
+  const [visible,setVisible]=useState(0);
+  const [view,setView]=useState(0);
+  const [del,setDel]=useState('');
+  const delConfirm =(id)=>{
+    alert(id)
+    var url=`/api/${id}`;
+    alert(id);
+    axios.delete(`/api/${id}`).then(()=>{fetchReviews(); alert(`${del} deleted sucessfully`);}).catch(()=>alert("some error occured"))
+  }
+  
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -59,6 +71,89 @@ function Reviews() {
   })
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
   }
+
+  //functions to add review
+  const reviewTemplate = {
+    property_id: currentProperty?.property_id,
+    review_link: '',
+    review_title: '',
+    review_author: '',
+    review_rating: '',
+    review_type: '',
+    service_date: '',
+    review_date: '',
+    review_content: ''
+  }
+  const [review, setReview] = useState([reviewTemplate]?.map((i, id) => { return { ...i, index: id } }))
+
+  const addReview = () => {
+    setReview([...review, reviewTemplate]?.map((i, id) => { return { ...i, index: id } }))
+  }
+  function handleSubmit(e, index) {
+    e.preventDefault()
+    const reviewdata = review?.map((i => {
+      return {
+        property_id: currentProperty?.property_id,
+        review_link: i.review_link,
+        review_title: i.review_title,
+        review_author: i.review_author,
+        review_rating: i.review_rating,
+        review_type: i.review_type,
+        service_date: i.service_date,
+        review_date: i.review_date,
+        review_content: i.review_content
+      }
+    }))
+    const finalData = { reviews: reviewdata }
+    console.log(JSON.stringify(finalData), 'finaldata')
+    axios.post(`/api/review`, finalData,
+      {
+        headers: { 'content-type': 'application/json' }
+      }).then(response => {
+        console.log(response)
+        toast.success("API: Review Saved Sucessfully.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        fetchReviews();
+       setView(0);
+      })
+      .catch(error => {
+        console.log(JSON.stringify(error))
+        toast.error("API: Review Add Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      });
+
+  }
+  const onChange = (e, index, i) => {
+    console.log(index, 'index')
+    setReview(review?.map((item, id) => {
+      if (item.index === index) {
+        item[i] = e.target.value
+      }
+      return item
+    }))
+  }
+  const removeReview = (index) => {
+    console.log("index is" + index)
+    const filteredReviews = review.filter((i, id) => i.index !== index)
+    console.log("data sent to state " + JSON.stringify(filteredReviews))
+    setReview(filteredReviews)
+  }
+
   return (
     <>
      <Header Primary={english?.Side}/>
@@ -128,13 +223,14 @@ function Reviews() {
       </nav>
        {/* Header */}
 
-       <div>
-     <h1 className="text-xl sm:text-2xl mx-2 font-semibold mb-2 text-gray-900">{language?.reviews}</h1>
-        </div>
+    <div className="flex justify-between">
+     <h1 className=" text-xl sm:text-2xl mx-2 font-semibold mb-2 text-gray-900">{language?.reviews} </h1>
+    <div className="mx-8"> {currentLogged?.id.match(/admin.[0-9]*/)? <Button Primary={language?.Add} onClick={(e) => { setView(1) }} />:<></>}</div>
+    </div>
            
             {/* Form Property Reviews */}
-            <div className={visible === 0 ? 'block' : 'hidden'}><Reviewloader /></div>
-            <div className={visible === 1 ? 'block' : 'hidden'}>
+           
+            <div>
             {reviews?.Reviews?.map((item,idx) => (
                 <div className="bg-white shadow rounded-lg mx-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2" key={idx}>
                     <div className="pt-2">
@@ -143,7 +239,20 @@ function Reviews() {
 
                                 <div className="flex items-center justify-between mb-2">
                                     <div>
-                                        <span className="text-xl sm:text-xl leading-none font-bold text-gray-900">{item?.review_author}</span>
+                                        <span className="text-xl sm:text-xl leading-none font-bold text-gray-900">{item?.review_author}  
+                                        <button
+                                                onClick={() => {  }}
+                                                className={currentLogged.id.match(/admin.[0-9]*/)?`text-gray-500   ml-4 mr-2 hover:text-gray-900 
+                                         cursor-pointer hover:bg-gray-100 rounded `:'hidden'}>
+                                                <svg className=" h-5  w-5 font-semibold "
+                                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
+                                            </button>
+                                            <button
+                                                onClick={() => { alert(item?.review_id); setDel(item?.review_id); delConfirm(item?.review_id) }} className={currentLogged.id.match(/admin.[0-9]*/)?`text-gray-500   ml-4 mr-2 hover:text-gray-900 
+                                                cursor-pointer hover:bg-gray-100 rounded `:'hidden'}>
+                                                <svg className="  w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
+                                            </button>
+                                        </span>
                                         <h3 className="text-base font-normal text-gray-500">{item?.review_date}</h3>
                                     </div>
                                     <div className="flex-shrink-0">
@@ -171,7 +280,206 @@ function Reviews() {
             ))}
         </div>
     </div>
+      {/* Modal Add */}
+      <div className={view === 1 ? "block" : "hidden"}>
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div className="bg-white rounded-lg shadow relative m-4 px-4 py-6">
+              <button
+                    type="button"
+                    onClick={() => setView(0)}
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center allign-end"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+              {
+          review?.map((review, index) =>
+          (<div  key={review?.index} >
+            <div className="flex flex-wrap">
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                   Review link
+                  </label>
+                  <input
+                    type="text"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={e => onChange(e, review?.index, 'review_link')}
+                    placeholder="link of review"                  />
+                 
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                  >
+                    Review title
+                  </label>
+                  <input
+                    type="text"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={e => onChange(e, review?.index, 'review_title')}
+                    placeholder="Review title"
+                  />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                  >
+                   Review author
+                  </label>
+                  <input
+                    type="text"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={e => onChange(e, review?.index, 'review_author')}
+                    placeholder="Review Author"
+                  />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                  >
+                   Review Rating
+                  </label>
+                  <input
+                    type="text"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={e => onChange(e, review?.index, 'review_rating')}
+                    placeholder="Ratings"
+                  />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                  >
+                   Reviewer Category
+                  </label>
+                  <select 
+                  onChange={e => onChange(e, review?.index, 'review_type')}
+                  className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150">
+          <option selected>Select Reviewer Category</option>
+          <option value="user" >User</option>
+          <option value="editorial">Editorial</option>
+          </select>
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                  >
+                   Service Date
+                  </label>
+                  <input
+                    type="date"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={e => onChange(e, review?.index, 'service_date')}
+                  />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                  >
+                  Review Date
+                  </label>
+                  <input
+                    type="date"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={e => onChange(e, review?.index, 'review_date')}
+                  />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  htmlFor="grid-password"
+                  >
+                   Review Content
+                  </label>
+                  <textarea rows="3" columns="60"
+                    className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={e => onChange(e, review?.index, 'review_content')}
+                  />
+                </div>
+              </div>
+            </div>
+            {/*commented might need them latter <div className="text-center flex justify-end">
+           
+           
+            <button   
+             className=" text-white bg-cyan-500 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" type="button"
+             onClick={() => removeReview(review?.index)}
+            >
+              -Remove Review
+            </button>
+          </div>*/}
+           </div> )
+          )}
+
+            <div className="text-center flex justify-end"  style={{marginTop:"10px"}}>
+           
+            {/*commented might need them latter <button
+             className="
+              text-white bg-cyan-500 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" type="button"
+             onClick={addReview}
+            >
+              +Add Review
+          </button>*/ }
+            <button
+              className="text-white bg-cyan-500 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+              type="button"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+          </div>
+              </div>
+            </div>
+          </div>
+        </div>
     <Footer/>
+      {/* Toast Container */}
+      <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
     </>)
 }
 export default Reviews

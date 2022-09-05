@@ -246,6 +246,7 @@ function Addraterule() {
         }
         ] 
          }
+         console.log(JSON.stringify(final_data))
          const url = '/api/rate_rule/rate_rule'
          axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
@@ -260,7 +261,7 @@ function Addraterule() {
              });
             setRateRuleId(response.data.rate_rule_id);
             submitRateConditionAdd(response.data.rate_rule_id);
-           setDisp(2);
+          setDisp(1);
            })
            .catch((error) => {
      

@@ -176,7 +176,7 @@ const validationMatchStatus = (data) => {
     axios
       .delete(url)
       .then((response) => {
-        toast.success("Match status deleted successfully.", {
+        toast.success("API: Match status deleted successfully.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -189,7 +189,7 @@ const validationMatchStatus = (data) => {
         Router.push("./pointofsale");
       })
       .catch((error) => {
-        toast.error("Match status delete error.", {
+        toast.error("API: Match status delete error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -223,7 +223,7 @@ const submitMatchstatus = () =>
         header: { "content-type": "application/json" },
       })
       .then((response) => {
-        toast.success("Match Status added successfully!", {
+        toast.success("API: Match Status added successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -241,8 +241,9 @@ const submitMatchstatus = () =>
           const url = "/api/point_of_sale/pos_match_status_link";
           axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
             .then((response) => {
-              toast.success("Match Status conditions added successfully!", {
-                position: "top-center",
+
+              toast.success("API: Match Status added successfully!", {
+   position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -277,7 +278,7 @@ const submitMatchstatus = () =>
       });
     }
     else{
-      toast.error("Please select at least one condition", {
+      toast.error("APP: Please select at least one condition", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -368,8 +369,8 @@ const filterByMLanguage = (props) => {
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
           fetchDetails();
-          toast.success("Match Status Updated Successfully!", {
-            position: "top-center",
+          toast.success("API: Match Status Updated Successfully!", {
+          position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -384,7 +385,7 @@ const filterByMLanguage = (props) => {
           
         })
         .catch((error) => {
-          toast.error("Match Status Update Error!", {
+          toast.error("API: Match Status Update Error!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -394,7 +395,8 @@ const filterByMLanguage = (props) => {
             progress: undefined,
           });
         })
-     
+
+    
     }
   }
   
@@ -409,7 +411,7 @@ const filterByMLanguage = (props) => {
       const url = '/api/point_of_sale'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
-          toast.success("Point of sale Updated Successfully!", {
+          toast.success("API: Point of sale Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -425,7 +427,7 @@ const filterByMLanguage = (props) => {
           
         })
         .catch((error) => {
-          toast.error("Point of sale update error!", {
+          toast.error("API: Point of sale update error!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -634,12 +636,10 @@ const filterByMLanguage = (props) => {
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
               <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
-
                       <Button Primary={language?.Update} onClick={()=>{
                        if(flag === 1){
                         submitPointOfSaleEdit()}
                       } }/>
-
                       : <></>
                     }
                    

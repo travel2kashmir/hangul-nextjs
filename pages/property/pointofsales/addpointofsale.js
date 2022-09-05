@@ -416,7 +416,7 @@ const validationMatchStatus = (sales) => {
                             setSales({ ...sales, display_language: e.target.value })
                           )
                         }>
-                        <option selected>{language?.select}</option>
+                        <option selected disabled>{language?.select}</option>
                         {lang?.LanguageData?.map(i => {
                           return (
                             <option key={i} value={i.language_code}>{i.language_name}</option>)
@@ -443,7 +443,7 @@ const validationMatchStatus = (sales) => {
                             setSales({ ...sales, rate_master_id: e.target.value })
                           )
                         }>
-                        <option selected>{language?.select}</option>
+                        <option selected disabled>{language?.select}</option>
                         {allbundles?.map(i => {
                           return (
                             <option key={i} value={i.rate_master_id}>{i.package_name}- {i.room_name}</option>)
@@ -544,7 +544,7 @@ const validationMatchStatus = (sales) => {
                             setSales({ ...sales, match_status: e.target.value })
                           )
                         }>
-                        <option selected>{language?.select}</option>
+                        <option selected disabled>{language?.select}</option>
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
@@ -579,7 +579,7 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, country: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+                            <option selected disabled>{language?.select}</option>
                             {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
@@ -612,7 +612,7 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, device: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+                            <option selected disabled>{language?.select}</option>
                             {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
@@ -642,7 +642,7 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, language: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+                            <option selected disabled>{language?.select}</option>
                             {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
@@ -674,7 +674,7 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, currency: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+                            <option selected disabled>{language?.select}</option>
                             {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
@@ -705,7 +705,7 @@ const validationMatchStatus = (sales) => {
                                 setSales({ ...sales, site_type: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+                            <option selected disabled>{language?.select}</option>
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>

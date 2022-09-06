@@ -189,7 +189,6 @@ function Reviews() {
   }
 
   const handleEdit = () =>{
-    
     console.log(JSON.stringify(active))
     console.log(objChecker.isEqual(active,org))
     if(objChecker.isEqual(active,org)){
@@ -410,7 +409,7 @@ function Reviews() {
                   Add Review
                 </h3>
                 <button type="button"
-                  onClick={() => setView(0)}
+                  onClick={() => {setView(0);setError({})}}
                   className="text-gray-400 bg-transparent
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -612,7 +611,7 @@ function Reviews() {
                   Edit Review
                 </h3>
                 <button type="button"
-                  onClick={() => {setEdit(0)}}
+                  onClick={() => {setEdit(0); setError({});}}
                   className="text-gray-400 bg-transparent
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"

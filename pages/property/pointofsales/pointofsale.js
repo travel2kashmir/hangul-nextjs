@@ -37,8 +37,7 @@ function Allpointofsale() {
   const[siteData,setSiteData]=useState({})
   const [viewEdit, setViewEdit] = useState(0);
   const [flag, setFlag] = useState([]); 
-  const [flagCheck, setFlagCheck] = useState([]); 
-  const [visible, setVisible] = useState(0);
+ const [visible, setVisible] = useState(0);
   const [current, setCurrent] = useState([]);
   const [countryCheck, setCountryCheck] = useState(false);
   const [languageCheck, setLanguageCheck] = useState(false);
@@ -163,7 +162,7 @@ const validationMatchStatus = (data) => {
   if(data?.url === "" || data?.url === undefined){
     error.url = "This field is required."
   }
-  if((!data?.url?.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) && (data.url != "" &&  data.url != undefined))){
+  if((!data?.url?.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/) && (data.url != "" &&  data.url != undefined))){
     error.url = "The url has invalid format."
   } 
  return Object.keys(error).length === 0 ? true :  error;
@@ -354,16 +353,16 @@ const filterByMLanguage = (props) => {
   const submitMatchStatusEdit = () => {
     if (validationMatchStatus(current)){
     const final_data ={
-      match_status:current?.match_status,
+        match_status:current?.match_status,
         match_status_name:current?.match_status_name,
-        country: countryData.data,
-        language: languageData.data,
-        device:deviceData.data,
-        currency:currencyData.data,
-        site_type: siteData.data,
+        country: countryData.tick === false ? "" :  countryData.data ,
+        language:  languageData.tick  === false ? "" : languageData.data ,
+        device:deviceData.tick === false ? "" : deviceData.data ,
+        currency:currencyData.tick === false ? "" : currencyData.data ,
+        site_type: siteData.tick  === false ? "" : siteData.data,
         match_status_id:current?.id  
     };
-   
+     alert("final" +JSON.stringify(final_data))
       const url = '/api/point_of_sale/match_status'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
@@ -997,8 +996,8 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() =>(
-                                setCountryData({ ...countryData,  tick: !countryCheck }),setCountryCheck(!countryCheck))} checked={countryCheck === true}
+                              onClick={() =>{ setCountryData({ ...countryData,  tick: !countryCheck, });setCountryCheck(!countryCheck)}}
+                               checked={countryCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
@@ -1010,12 +1009,15 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
                       text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                            
+                           
                           onChange={
                               (e) => (
+                            
                                 setCountryData({ ...countryData, data: e.target.value },setFlag(1))
+                            
                               )
                             }>
+                          
                             {current?.country != undefined ?
                             <option selected disabled>{resCou?.[i]?.country_name}</option>
                             : 
@@ -1034,8 +1036,10 @@ const filterByMLanguage = (props) => {
                       <div className='flex mb-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
+                           
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => {setDeviceData({ ...deviceData,  tick:!deviceCheck }),setDeviceCheck(!deviceCheck)}} checked={deviceCheck === true}
+                                onClick={() => {setDeviceData({ ...deviceData,  tick:!deviceCheck }),
+                                setDeviceCheck(!deviceCheck)}} checked={deviceCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
 
@@ -1064,7 +1068,8 @@ const filterByMLanguage = (props) => {
                             }
                             )}
 
-                          </select></div>
+                          </select> </div>
+                         
                       </div>
 
                       <div className='flex mb-2'>
@@ -1174,27 +1179,39 @@ const filterByMLanguage = (props) => {
               </div></div>
                 <div className="items-center flex p-6 border-t border-gray-200 rounded-b">
                   <Button  Primary={language?.Update}  onClick= {()=>{
-                 if((flag === 1)
-                  || ((countryData.data != "") && (countryData.tick === true) && (countryData.data != undefined))
-                  || ((deviceData.data != "") && (deviceData.tick === true) &&  (deviceData.data != undefined))
-                  || ((languageData.data != "") && (languageData.tick === true) && (languageData.data != undefined))
-                  || ((currencyData.data != "") && (currencyData.tick === true) && (currencyData.data != undefined))
-                  || ((siteData.data != "") && (siteData.tick === true) && (siteData.data != undefined))
-                 ){
+                 if((flag === 1) ||
+                 (countryData.data !== undefined && countryData.tick === true && countryData.data !== "")||
+                (countryData.tick === false) ||
+                 (deviceData.data !== undefined && deviceData.tick === true)
+                 ||
+                 (deviceData.tick === false)||
+                 (languageData.data !== undefined && languageData.tick === true)
+                 ||
+                 ( languageData.tick === false)||
+                 (currencyData.tick === false) ||
+                 (currencyData.data !== undefined && currencyData.tick === true)
+                 ||
+                 (siteData.tick === false) ||
+                 (siteData.data !== undefined && siteData.tick === true))
+                 {
                     submitMatchStatusEdit()}
-                    else{
-                      toast.error("App: Please edit the form first", {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                      });
-                    
-                    }}} />
-                </div></div>
+                   
+                  else{
+                    toast.error("APP: Please edit the details, first.", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                  }
+                  } } 
+                  />
+                </div>
+                {countryCheck}
+                </div>
 </div> 
 </div>
 </div>

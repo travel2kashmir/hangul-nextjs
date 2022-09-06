@@ -35,13 +35,12 @@ function Addraterule() {
     const [rateModificationId, setRateModificationId] = useState([])
     const [rateIneligiblityId, setRateIneligiblityId] = useState([])
     const [userRateConditionId, setUserRateConditionId] = useState([])
-    const [conditionalRateId, setConditionalRateId] = useState([])
     const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
     const [countryCheck, setCountryCheck] = useState(false);
     const [languageCheck, setLanguageCheck] = useState(false);
     const [deviceCheck, setDeviceCheck] = useState(false);
     const [basicFlag,setBasicFlag]=useState([])
-    const [disp,setDisp]=useState(0)
+    const [disp,setDisp]=useState(1)
     const [programCheck, setProgramCheck] = useState(false);
     const [finalLang,setFinalLang]=useState([])
     const [finalCountry,setFinalCountry]=useState([])
@@ -56,12 +55,10 @@ function Addraterule() {
     const [programs, setPrograms] = useState([])
     const [languageData,setLanguageData]=useState([])
     const [rooms,setRooms]=useState([])
-
-    const [drp,setDrp]=useState(false)
+    const [error, setError] = useState({})
 
     useEffect(() => {
-
-        const firstfun = () => {
+       const firstfun = () => {
           if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
             if (locale === "ar") {
@@ -195,17 +192,15 @@ function Addraterule() {
       
      //Rate Modification Submit
       const submitRateModAdd = () => {
+        if (validationRateDescription(allUserRateDetails)){ 
        const final_data = {
           "hotel_amenity": "free_wifi",
           "price_multiplier": allUserRateDetails?.price_multiplier,
           "modification_name":allUserRateDetails?.program
-     }
-       
+     } 
         const url = '/api/rate_rule/rate_modification'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-    
           ((response) => {
-    
             toast.success("User Rate Modification Added Successfully!", {
               position: "top-center",
               autoClose: 5000,
@@ -233,7 +228,7 @@ function Addraterule() {
           })
         
       }
-      
+    }
       //Rate rule Id generation
       const submitRateRule = (rm_id,rd_id) => {
         const final_data = {
@@ -659,6 +654,48 @@ function Addraterule() {
                final_program_data.push(temp) } );
                setFinalProgram(final_program_data);  
            }
+{/** Validation **/}
+
+//Rate Description
+// Validation Function
+const validationRateDescription = (data) => {
+  var Result = checkRateDescription(data);
+  if (Result === true){
+   return true;
+  }
+  else{
+   setError(Result);
+   return false;
+
+  }
+
+}
+//Checking Form Data for rate Description
+const checkRateDescription = (data) => {
+ var error={};
+ if(data?.program === "" ||  data.program === undefined){
+   error.program = "This field is required."
+ }
+ if(data?.UserRateCondition_op === "" ||  data.UserRateCondition_op === undefined){
+  error.UserRateCondition_op = "This field is required."
+}
+if(data?.Description === "" ||  data.Description === undefined){
+  error.Description = "This field is required."
+}
+if(data?.ineligibility_type === "" ||  data.ineligibility_type === undefined){
+  error.ineligibility_type = "This field is required."
+}
+if(data?.price_multiplier === "" ||  data.price_multiplier === undefined){
+  error.price_multiplier = "This field is required."
+}
+ if((!data?.price_multiplier?.match(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/) && (data?.price_multiplier != "" &&  data.price_multiplier != undefined))){
+   error.price_multiplier = "This field accept possitive and decimal values only."
+ }
+ 
+ 
+return Object.keys(error).length === 0 ? true :  error;
+
+}
 
   return (
     <>
@@ -774,21 +811,17 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                     {language?.programname}
-                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
-
-                    <input type="text" 
+                  <input type="text" 
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      required
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
                           program: e.target.value,
                         })
                       }/>
-
-                     <p className="invisible peer-invalid:visible text-red-700 font-light">
-                {language?.required}
+                     <p className="text-red-700 font-light">
+                   {error?.program}
             </p>
 
                   </div>
@@ -800,31 +833,19 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                        {language?.ratecondition}
-                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
-                      required
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
-                          UserRateCondition_op: e.target.value
-
-                        })
-                      }
-                    >
-
-                      <option selected >{language?.select}</option>
+                          UserRateCondition_op: e.target.value}) }>
+                      <option selected disabled>{language?.select}</option>
                       <option value="all">{language?.all}</option>
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
                     </select>
-
-                    <p className="invisible peer:visible text-red-700 font-light">
-             {language?.required}
-            </p>
-
+                    <p className="text-red-700 font-light">{error?.Description}</p>
                   </div>
                 </div>
 
@@ -835,20 +856,17 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                        {language?.ratedescription}
-                      <span style={{color:"#ff0000"}}>*</span>
+                     
                     </label>
                     <textarea rows="2" columns="50"
-                      className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       required
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
-                          Description: e.target.value,
-                        })
-                      }
-
-                    />
-              <p className="invisible peer-invalid:visible text-red-700 font-light">    
+                          Description: e.target.value,})} />
+                    <p className="text-red-700 font-light">
+                   {error?.Description}
             </p>
                   </div>
                 </div>
@@ -860,7 +878,7 @@ function Addraterule() {
                   htmlFor="grid-password"
                 >
                    {language?.discounttype}
-                  <span style={{color:"#ff0000"}}>*</span>
+                  
                 </label>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -870,11 +888,14 @@ function Addraterule() {
                       ineligibility_type: e.target.value,
                     })}
                 >
-                  <option selected >{language?.select}</option>
+                  <option selected disabled>{language?.select}</option>
                   <option value="exact">{language?.exact}</option>
                   <option value="price_band">{language?.priceband}</option>
                   <option value="existence">{language?.existence}</option>
              </select>
+             <p className="text-red-700 font-light">
+                   {error?.ineligibility_type}
+            </p>
               </div>
             </div>
             
@@ -885,8 +906,7 @@ function Addraterule() {
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
-                  <span style={{color:"#ff0000"}}>*</span>
-                </label>
+                 </label>
                 <input
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -899,25 +919,16 @@ function Addraterule() {
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                    {language?.pricemultiplier}
-                  <span style={{color:"#ff0000"}}>*</span>
-                </label>
+                  </label>
                 <input
                   type="text"
-
-                  pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
-                  required
-                  className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
+                 className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                  onChange={(e) =>
                     setAllUserRateDetails({
                       ...allUserRateDetails,
-                      price_multiplier: e.target.value,
-                    })
-                  }
-
-               />
-                 <p className="invisible peer-invalid:visible text-red-700 font-light">
-              {language?.float}
+                      price_multiplier: e.target.value,}) }/>
+                  <p className="text-red-700 font-light">
+                   {error?.price_multiplier}
             </p>
                 </div></div>
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">

@@ -159,7 +159,7 @@ const validationMatchStatus = (sales) => {
     if(sales?.url === "" || sales?.url === undefined){
       error.url = "This field is required."
     }
-    if((!sales?.url?.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) && (sales.url != "" &&  sales.url != undefined))){
+    if((!sales?.url?.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/) && (sales.url != "" &&  sales.url != undefined))){
       error.url = "The url has invalid format."
     } 
     

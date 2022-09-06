@@ -596,11 +596,12 @@ const submitRateEdit = () => {
         max_user_percentage:userRateDetails?.MaxUsersPercent,
         user_rate_condition_op:userRateDetails?.UserRateCondition_op,
         offer_name: rateRule?.rate_rule_name,
-        user_signed_in:userSign?.UserSignedIn,
-        is_domestic: userSign?.IsDomestic,
+        user_signed_in:userSign?.user_signed_in,
+        is_domestic: userSign?.is_domestic,
         user_rate_condition_id:userSign?.user_rate_condition_id
     }];
     const final_data = { "user_rate_condition": data }
+    alert(JSON.stringify(final_data))
     const url = "/api/rate_rule/user_rate_conditioning";
       axios
         .put(url, final_data, { 
@@ -1190,7 +1191,7 @@ Router.push('./raterule')
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                   {language?.conditions}
+                   {language?.conditions} {userSign?.is_domestic}
                     </h4></div>
                     </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1211,7 +1212,7 @@ Router.push('./raterule')
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        {language?.usercountry}
+                        {language?.usercountry} 
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1346,7 +1347,10 @@ Router.push('./raterule')
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-3/12 ">
                       <span className="flex">
-                        <input id="checkbox-1" checked={ userSign.user_signed_in === true} onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.UserSignedIn === true ? false : true})}}
+                        <input id="checkbox-1" checked={ userSign.user_signed_in === true} 
+                        onChange={(e) =>
+                          setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
+                        }
                           aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
@@ -1361,9 +1365,10 @@ Router.push('./raterule')
                       <div className="form-check mx-2 form-check-inline">
                           
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={userSign.user_signed_in} checked={ userSign.user_signed_in === true}
+                          <input type="checkbox" value={userSign.user_signed_in} 
+                          checked={ userSign?.user_signed_in === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, user_signed_in: userSign?.user_signed_in === true ? false : true },setBasicFlag(1))
+                              setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
                             }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -1383,8 +1388,8 @@ Router.push('./raterule')
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex ">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"  
-                        checked={ userSign?.IsDomestic === true}
-                          onChange={()=>{setUserSign( { ...userSign, UserSignedIn: userSign?.IsDomestic === true ? false : true})}}
+                        checked={userSign?.is_domestic === true}
+                          onChange={()=>{setUserSign( { ...userSign, is_domestic:!userSign?.is_domestic}),setBasicFlag(1)}}
                           className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       
@@ -1392,7 +1397,7 @@ Router.push('./raterule')
                         className="text-sm mx-2 font-medium text-gray-900 block"
                         htmlFor="grid-password"
                       >
-                         {language?.isdomestic}
+                         {language?.isdomestic} 
                       </label>
                       </span>
                       
@@ -1402,9 +1407,10 @@ Router.push('./raterule')
                       <div className="form-check mx-2 form-check-inline">
 
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={userSign?.IsDomestic} checked={ userSign?.IsDomestic === true}
+                          <input type="checkbox" value={userSign?.is_domestic} 
+                          checked={userSign.is_domestic === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, IsDomestic: userSign?.IsDomestic === true ? false : true },setBasicFlag(1))
+                              setUserSign({ ...userSign, is_domestic: !userSign?.is_domestic},setBasicFlag(1))
                             }
                             id="default" className="sr-only peer" />
                           <div

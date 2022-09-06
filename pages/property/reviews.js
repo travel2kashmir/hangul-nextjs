@@ -224,7 +224,7 @@ function Reviews() {
             progress: undefined,
           });
 
-          setView(0);
+          setEdit(0);
         })
         .catch(error => {
           

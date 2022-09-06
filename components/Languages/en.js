@@ -86,7 +86,7 @@ export default {
    color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
 },
 "Delete" :{
-  label:'yes, I am sure',
+  label:'Yes, I am sure',
    color: "bg-red-600 hover:bg-red-800 text-white mx-2 ",
 },
 "Addnewproperty":{

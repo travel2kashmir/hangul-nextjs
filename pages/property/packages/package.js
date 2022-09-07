@@ -152,7 +152,7 @@ function Package() {
             {/* Body */} 
             <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
                 {/* Package Description */}
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <p className="text-xl sm:text-xl leading-none capitalize font-bold text-gray-800">{allPackageDetails?.package_name}</p>
@@ -166,7 +166,7 @@ function Package() {
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
+                        <div className="shadow-xl overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     <tr>
@@ -216,7 +216,7 @@ function Package() {
                 </div>
 
                 {/* Package Rates */}
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4">  {language?.package} {language?.rates}</h3>
@@ -230,7 +230,7 @@ function Package() {
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
+                        <div className="shadow-xl overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     <tr>
@@ -262,7 +262,7 @@ function Package() {
 
                 {/* Package Services */}
                
-                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                 <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4">{language?.package} {language?.services}</h3>
@@ -322,7 +322,7 @@ function Package() {
 
             <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
                 {/* Elite Membership Benefits */}
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4">{language?.elite} {language?.membership}</h3>
@@ -336,7 +336,7 @@ function Package() {
                     </div>
 
                     <div className="align-middle inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
+                        <div className="shadow-xl overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {allPackageDetails?.membership?.map((item,idx) => {
@@ -364,7 +364,7 @@ function Package() {
                 </div>
 
                 {/* Package Miles */}
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4"> {language?.package} {language?.miles}</h3>
@@ -377,7 +377,7 @@ function Package() {
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
+                        <div className="shadow-xl overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {allPackageDetails?.package_miles?.map((item,idx) => {
@@ -405,7 +405,7 @@ function Package() {
                 </div>
 
                 {/* Property Credit */}
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4">{language?.property} {language?.credit}</h3>
@@ -418,7 +418,7 @@ function Package() {
                         </div>
                     </div>
                     <div className="align-middle inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
+                        <div className="shadow-xl overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {allPackageDetails?.package_property_credit?.map((item,idx) => {
@@ -441,7 +441,7 @@ function Package() {
                 </div>
                 
                  {/* Package Rooms */}
-                <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                 <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4"> {language?.package} {language?.rooms}</h3>
@@ -455,7 +455,7 @@ function Package() {
                         </div>
                     </div>
                 <div className="align-middle pt-4 inline-block min-w-full">
-                        <div className="shadow overflow-hidden">
+                        <div className="shadow-xl overflow-hidden">
                             <table className="table-fixed min-w-full divide-y divide-gray-200">
                                 <tbody className="bg-white divide-y divide-gray-200">
                                 <tr className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">

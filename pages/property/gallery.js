@@ -253,7 +253,7 @@ function Gallery() {
             </nav>
 
             {/* Header */}
-            <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+            <div className=" bg-white shadow-xl rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
                 <h6 className="text-xl mb-2 flex leading-none pl-4 pt-2 font-bold text-gray-900 ">
                     {language?.gallery}
                 </h6>

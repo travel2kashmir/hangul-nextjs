@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
+import Headloader from '../../../../components/loaders/headloader';
+import Lineloader from '../../../../components/loaders/lineloader';
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -17,6 +19,7 @@ var currentProperty;
 var max_age = [];
 var final = [];
 var currentPackage;
+var currentLogged;
 
 function Packagedescription() {
   const [disp, setDisp] = useState([]);
@@ -39,6 +42,7 @@ function Packagedescription() {
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem('property'))
         currentPackage = localStorage.getItem('packageId')
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         setDisp([])
       }
     }
@@ -48,7 +52,7 @@ function Packagedescription() {
 
   const [allPackageDetails, setAllPackageDetails] = useState([])
   const [packageDetails, setPackageDetails] = useState([])
-
+  const [visible,setVisible]=useState(0) 
  
   /* Edit Package Fetch Function */
   const fetchDetails = async () => {
@@ -57,6 +61,7 @@ function Packagedescription() {
       ((response) => {
         logger.info("package success");
         setAllPackageDetails(response.data)
+        setVisible(1)
       })
       .catch((error) => {
         logger.info("Package fetch error")
@@ -71,7 +76,7 @@ function Packagedescription() {
   const submitPackageEdit = () => {
     if (flag.length !== 0) {
       var time;
-      var temp = `2022-01-01 ` + packageDetails?.refundable_until_time;
+      var temp = `2022-01-01 ` + allPackageDetails?.refundable_until_time;
       time = new Date(temp.toString())
       const final_data = {
         "package_id": allPackageDetails?.package_id,
@@ -80,7 +85,7 @@ function Packagedescription() {
         "charge_currency": allPackageDetails?.charge_currency,
         "refundable": allPackageDetails?.refundable,
         "refundable_until_days": allPackageDetails?.refundable_until_days,
-        "refundable_until_time": packageDetails?.refundable_until_time ? time.getTime() : packageDetails?.refundable_until_time,
+        "refundable_until_time":  time.getTime() ,
         "max_number_of_intended_occupants": allPackageDetails?.max_number_of_intended_occupants,
         "max_number_of_adult_guest": allPackageDetails?.max_number_of_adult_guest
       }
@@ -97,7 +102,6 @@ function Packagedescription() {
             progress: undefined,
           });
           fetchDetails();
-          Router.push("./packagedescription");
           setFlag([])
           setPackageDetails([])
         })
@@ -182,8 +186,7 @@ function Packagedescription() {
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
               <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-                <Link href="../../landing">
-                  <a> {language?.home}</a>
+              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../../admin/AdminLanding":"../../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
                 </Link>
               </span>
             </li>
@@ -202,9 +205,11 @@ function Packagedescription() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                   <Link href="../../propertysummary">
                     <a>{currentProperty?.property_name}</a>
-                  </Link>
+                  </Link></div>
                 </span>
               </div>
             </li>
@@ -244,9 +249,12 @@ function Packagedescription() {
                   ></path>
                 </svg>
                 <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+		
                   <Link href="../package">
                     <a> {allPackageDetails?.package_name}</a>
-                  </Link>
+                  </Link></div>
                 </span>
               </div>
             </li>
@@ -303,6 +311,8 @@ function Packagedescription() {
                     >
                       {language?.package} {language?.name}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -313,7 +323,7 @@ function Packagedescription() {
                           package_name: e.target.value
                         }, setFlag(1))
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -325,6 +335,8 @@ function Packagedescription() {
                     >
                       {language?.package} {language?.description}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <textarea
                       rows="2"
                       columns="50"
@@ -336,7 +348,7 @@ function Packagedescription() {
                           package_description: e.target.value,
                         }, setFlag(1))
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -348,6 +360,8 @@ function Packagedescription() {
                     >
                       {language?.paymentholder}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
@@ -361,7 +375,7 @@ function Packagedescription() {
                       <option value="hotel">Hotel</option>
                       <option value="installment">Installment</option>
                       <option value="deposit">Deposit</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
 
@@ -373,6 +387,8 @@ function Packagedescription() {
                     >
                       {language?.refundable}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
@@ -389,7 +405,7 @@ function Packagedescription() {
 
                       <option value={true}>Yes</option>
                       <option value={false}>No</option>
-                    </select>
+                    </select></div>
                   </div>
                 </div>
                 {allPackageDetails?.refundable === "true" ? (
@@ -402,6 +418,8 @@ function Packagedescription() {
                         >
                           {language?.refundable} {language?.till} {language?.days}
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="text"
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -412,7 +430,7 @@ function Packagedescription() {
                               refundable_until_days: e.target.value,
                             }, setFlag(1))
                           }
-                        />
+                        /></div>
                       </div>
                     </div>
 
@@ -424,6 +442,8 @@ function Packagedescription() {
                         >
                           {language?.refundable} {language?.till} {language?.time}
                         </label>
+                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="time" step="2"
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -434,7 +454,7 @@ function Packagedescription() {
                               refundable_until_time: e.target.value,
                             }, setFlag(1))
                           }
-                        />
+                        /></div>
                       </div>
                     </div>
                   </>
@@ -450,6 +470,8 @@ function Packagedescription() {
                     >
                       {language?.number} {language?.of} {language?.occupants}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -462,7 +484,7 @@ function Packagedescription() {
                       defaultValue={
                         allPackageDetails?.max_number_of_intended_occupants
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -474,6 +496,8 @@ function Packagedescription() {
                     >
                       {language?.number} {language?.of} {language?.adult}
                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -484,7 +508,7 @@ function Packagedescription() {
                           max_number_of_adult_guest: e.target.value,
                         }, setFlag(1), setDisp(1))
                       }
-                    />
+                    /></div>
                   </div>
                 </div>
 
@@ -504,6 +528,8 @@ function Packagedescription() {
                               >
                                 Maximum Age Of Child
                               </label>
+                              <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                               <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                 onChange={(e) =>
@@ -522,7 +548,7 @@ function Packagedescription() {
                                 <option value="10">10</option>
                                 <option value="11">11</option>
                                 <option value="12">12</option>
-                              </select>
+                              </select></div>
                             </div>
 
                           </div>
@@ -542,6 +568,8 @@ function Packagedescription() {
                           >
                             Maximum Age Of Child
                           </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                           <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                          sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={(e) =>
@@ -560,7 +588,7 @@ function Packagedescription() {
                             <option value="10">10</option>
                             <option value="11">11</option>
                             <option value="12">12</option>
-                          </select>
+                          </select></div>
                         </div>
 
                       </div>
@@ -591,6 +619,7 @@ function Packagedescription() {
         />
       </div>
       <Footer />
+    
     </>
   );
 }

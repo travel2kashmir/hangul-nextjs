@@ -17,7 +17,7 @@ var currentProperty;
 var currentPackageDetails;
 var max_age=[];
 var final=[];
-
+var currentLogged;
 
 function Addpackage() {
   const [packageId, setPackageId] = useState()
@@ -43,6 +43,7 @@ function Addpackage() {
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))  
         currentPackageDetails=JSON.parse(localStorage.getItem('packageDescription'))
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       } 
     }
     firstfun();
@@ -503,9 +504,8 @@ function Addpackage() {
           <li className="inline-flex items-center">
               <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
               <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-              <Link href="../landing" >
-            <a> {language?.home}</a>
-            </Link>
+              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../admin/AdminLanding":"../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link>
             </span>
           </li>
           <li>
@@ -689,7 +689,7 @@ function Addpackage() {
                     
                     onChange={
                       (e) => (
-                          setAllPackageDetails({ ...allPackageDetails,  refundable_until_time: e.target.value })
+                          setAllPackageDetails({ ...allPackageDetails, refundable_until_time: e.target.value })
                       )
                   }
                   />
@@ -1049,11 +1049,7 @@ function Addpackage() {
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <button type="button" onClick={addMiles}
-                      className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                      <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      {language?.add} {language?.miles}
-                    </button>
+                    
                     <Button Primary={language?.AddMiles}  onClick={addMiles} />
                   </div>
                 </div>
@@ -1499,7 +1495,7 @@ function Addpackage() {
                     <button type="button" onClick={addService}
                       className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                       <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      {language?.add} {language?.program}
+                      {language?.add} {language?.service}
                     </button>
                   </div>
                 </div>

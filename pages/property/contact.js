@@ -10,15 +10,24 @@ import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import Footer from '../../components/Footer';
 var language;
 var currentProperty;
 var propertyName;
+import Headloader from "../../components/loaders/headloader";
 import Router from 'next/router'
+import LoaderTable from "./loaderTable";
 const logger = require("../../services/logger");
+var currentLogged;
 
-function Scaffold() {
+function Contact() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
+
+  const [spinner, setSpinner] = useState(0)
+  const [spin, setSpin] = useState(0)
+
+  const [visible,setVisible]=useState(0) 
   const [deleteContact, setDeleteContact] = useState(0);
   const [viewDel, setViewDel] = useState(0);
   const [editContact, setEditContact] = useState({});
@@ -41,6 +50,7 @@ function Scaffold() {
         }
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       }
     }
     firstfun();
@@ -49,8 +59,9 @@ function Scaffold() {
   }, [])
   /* Function Add Contact*/
   function submitContactAdd(e) {
+    setSpinner(1)
     e.preventDefault();
-    if (gen.length !== 0) {
+    if (contact.contact_type!==undefined) {
       const contactdata = [{
         property_id: currentProperty?.property_id,
         contact_type: contact?.contact_type,
@@ -58,11 +69,13 @@ function Scaffold() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
+      alert(JSON.stringify(finalContact))
       axios
-        .post(`/api/contact`, {
+        .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
         })
         .then((response) => {
+          setSpinner(0)
           toast.success("Contact Added Successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -74,10 +87,11 @@ function Scaffold() {
           });
           setView(0)
           fetchHotelDetails();
-          Router.push("./scaffoldedtable");
+          Router.push("./contact");
           setContact([])
         })
         .catch((error) => {
+          setSpinner(0)
           toast.error("Contact Add Error!", {
             position: "top-center",
             autoClose: 5000,
@@ -93,17 +107,17 @@ function Scaffold() {
   }
  /* Function Edit Contact*/
  const submitContactEdit = (props) => {
-  
+  setSpinner(1)
   const final_data = {
     contact_id: props.id,
     contact_data: props.type,
     status: props.status
   };
-
   const url = "/api/contact";
   axios
     .put(url, final_data, { header: { "content-type": "application/json" } })
     .then((response) => {
+      setSpinner(0)
       toast.success("Contact Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
@@ -117,6 +131,7 @@ function Scaffold() {
       Router.push("./contact");
     })
     .catch((error) => {
+      setSpinner(0)
       toast.error("Contact Update Error!", {
         position: "top-center",
         autoClose: 5000,
@@ -153,7 +168,8 @@ function Scaffold() {
           })
           setGen(genData);
         }
-      })
+        setVisible(1);
+ })
       .catch((error) => { logger.error("url to fetch property details, failed") });
 
 
@@ -165,10 +181,12 @@ function Scaffold() {
   }, []);
 
   const submitContactDelete = (props) => {
+    setSpin(1);
     const url = `/api/${props}`;
     axios
       .delete(url)
       .then((response) => {
+        setSpin(0);
         toast.success("Contact Deleted Successfully!", {
           position: "top-center",
           autoClose: 5000,
@@ -183,6 +201,7 @@ function Scaffold() {
         Router.push("./contact");
       })
       .catch((error) => {
+        setSpin(0);
         toast.error("Contact Delete Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -199,11 +218,12 @@ function Scaffold() {
   return (
     <>
 
-      <Header Primary={english?.Side} />
+     <Header Primary={english?.Side} />
+
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64"
+        className="  bg-white pt-24 relative overflow-y-auto lg:ml-64"
       >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -217,12 +237,8 @@ function Scaffold() {
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
-              <Link
-                href="./landing"
-                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
-              >
-                <a>{language?.home}</a>
-              </Link>
+              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link>
             </li>
             <li>
               <div className="flex items-center">
@@ -238,10 +254,11 @@ function Scaffold() {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="./propertysummary">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
                     <a>{propertyName}</a>
-                  </Link></span>
+                  </Link>
+                  </div>
               </div>
             </li>
             <li>
@@ -269,10 +286,16 @@ function Scaffold() {
           </ol>
         </nav>
         {/* Header */}
-        <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit}
+        <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
+
+        <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit} 
+        delSpin={language?.SpinnerDelete} saveSpinner={language?.SpinnerSave} spinner={spinner}
+        setSpinner={setSpinner}
+        spin={spin} 
         delete={submitContactDelete} common={language?.common} cols={language?.ContactCols}
         name="Contact"/> 
-
+        </div>
 
       
 
@@ -357,7 +380,9 @@ function Scaffold() {
                 </div>
 
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                  <Button Primary={language?.Add} onClick={(e) => { submitContactAdd(e) }} />
+                  {spinner === 0 ?
+                  <Button Primary={language?.Add} onClick={(e) => { submitContactAdd(e) }} />:
+                  <Button Primary={language?.SpinnerAdd} />}
                 </div>
               </div>
             </div>
@@ -379,8 +404,19 @@ function Scaffold() {
           pauseOnHover
         />
       </div>
+
     </>
+
+
   );
 }
 
-export default Scaffold
+export default Contact
+Contact.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }
+

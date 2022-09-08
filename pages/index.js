@@ -4,43 +4,78 @@ import bcrypt from "bcryptjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import Cookies from 'js-cookie';
+import Button from "../components/Button";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 const logger = require("../services/logger");
-
-function Signin() {
+var language;
+function Signin(args) {
+  const [lang, setLang] = useState("");
+  const [spinner, setSpinner] = useState(0)
   /** Router for Redirection **/
   const router = useRouter();
   const { locale } = router;
-
-  useEffect(() => {
-    const setLanguage = async () => {
-      localStorage.setItem("Language", "en");
-    };
-    setLanguage();
-  }
-    , [])
-
+  const [current, setCurrent] = useState(false)
+  const [error, setError] = useState({})
   /** State for internationalization **/
-  const [lang, setLang] = useState("en");
-  var language;
-  if (locale === "en") {
-    language = english
-
+  useEffect(() => {
+    firstfun()
+    getCookieData();
+  }, [locale])
+  const firstfun = () => {
+    if (typeof window !== 'undefined') {
+      locale = localStorage.getItem("Language");
+      /*checks if language is already there in local storage */
+      if (locale === null) {
+        language = english
+        setLang("en")
+        localStorage.setItem("Language", "en")
+      }
+      else {
+        if (locale === "ar") {
+          language = arabic;
+          setLang("ar")
+        }
+        if (locale === "en") {
+          language = english;
+          setLang("en")
+        }
+        if (locale === "fr") {
+          language = french;
+          setLang("fr")
+        }
+      }
+    }
   }
-  if (locale === "ar") {
-    language = arabic
+  //write into cookies
+  function setCookieData(checked) {
+    if (checked) {
+      Cookies.set("email", signinDetails.email, { expires: 30 })
+      Cookies.set("password", signinDetails.password, { expires: 30 })
+    }
+    else {
+      Cookies.remove("email");
+      Cookies.remove("password")
+    }
   }
-  if (locale === "fr") {
-    language = french
+  //read from cookies
+  function getCookieData() {
+    var mail = Cookies.get("email");
+    var pass = Cookies.get("password")
+    setSigninDetails({ "email": mail, "password": pass })
+    if (mail != undefined) {
+      document.getElementById('email').value = mail;
+      document.getElementById('password').value = pass;
+    }
   }
-
   /** Function for Internationalisation **/
   const changelanguage = (item) => {
     const locale = item;
     /** Language selected stored to the localstorage **/
     localStorage.setItem("Language", locale);
+    language = locale;
     router.push("/", "/", { locale });
     logger.info("Language fetched: " + locale);
   };
@@ -57,7 +92,10 @@ function Signin() {
   };
 
   /** Sign In Submit Function **/
-  const submitSignIn = async (item) => {
+  const submitSignIn = async (e) => {
+    e.preventDefault()
+   if (validation(signinDetails)){
+    setSpinner(1)
     var item = {
       user_email: signinDetails.email,
     };
@@ -68,7 +106,7 @@ function Signin() {
     })
       .then(async (response) => {
         /** Password Decryption **/
-       const salt = response.data.salt;
+        const salt = response.data.salt;
         const EncryptedPass = await bcrypt.hash(signinDetails.password, salt);
         if (EncryptedPass === response.data.password) {
           /** Toast emitter Sign in Successfull **/
@@ -93,8 +131,9 @@ function Signin() {
 
 
         } else {
+          setSpinner(0)
           /** Toast emitter for error wrong email password combination  **/
-          toast.error("Please check your email and password", {
+          toast.error("API: The password that you've entered is incorrect.", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -104,16 +143,18 @@ function Signin() {
             progress: undefined,
           });
 
-          logger.error('Incorrect email and password combination.')
+          logger.error("API: The password that you've entered is incorrect.")
 
         }
       })
 
       .catch((error) => {
-        logger.error('Sign In error!');
-
-        /** Toast emitter for Sign in error  **/
-        toast.error("Sign in Error!", {
+        if(error.message===`Request failed with status code 401`)
+        {
+          logger.error("API:The email address you entered isn't connected to an account.");
+        setSpinner(0);
+        /** Toast emitter fo: Invalid Email error  **/
+        toast.error("API: The email address you entered isn't connected to an account.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -122,11 +163,56 @@ function Signin() {
           draggable: true,
           progress: undefined,
         });
+        }
+        else{
+          logger.error('API: Network error');
+        setSpinner(0);
+        /** Toast emitter for Sign in error  **/
+        toast.error("API: Network error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        }
+        
       });
+    }
   };
+  // Validation Function
+  const validation = (signinDetails) => {
+     var Result = checkFormData(signinDetails);
+     if (Result === true){
+      return true;
+     }
+     else{
+      setError(Result);
+      return false;
 
+     }
+
+  }
+  //Checking Form Data for Validations
+   const checkFormData = (signinDetails) => {
+    var error={};
+    if(signinDetails?.email === "" ||  signinDetails.email === undefined){
+      error.email = "The email field is required."
+    }
+    if((!signinDetails?.email?.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) && (signinDetails?.email != "" &&  signinDetails.email != undefined))){
+      error.email = "The email field is in invalid format."
+    }
+    if(signinDetails?.password === "" || signinDetails.password === undefined){
+      error.password = "The password field is required"
+    }
+    
+   return Object.keys(error).length === 0 ? true :  error;
+
+   }
   return (
-    <div className="bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div
         className="mx-auto  flex flex-col justify-center items-center 
   px-4 pt-8 pt:mt-0"
@@ -162,14 +248,18 @@ function Signin() {
                   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
                    focus:border-cyan-600 block w-full p-2.5"
                   onChange={(e) =>
-                    setSigninDetails({
+                    {setSigninDetails({
                       ...signinDetails,
                       email: e.target.value,
-                    })
+                    }),
+                    setError({...error,email:''})}
                   }
                   placeholder={language?.enteremail}
                   required
                 ></input>
+                 <p className="text-red-700 font-light">
+                   {error?.email}
+            </p>
               </div>
               <div>
                 <label
@@ -182,16 +272,22 @@ function Signin() {
                   type="password"
                   name="password"
                   id="password"
-                  onChange={(e) =>
+                  onChange={(e) =>{
                     setSigninDetails({
                       ...signinDetails,
                       password: e.target.value,
                     })
+                    setError({...error,password:''})
+                  }
+                    
                   }
                   placeholder={language?.enterpassword}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   required
                 ></input>
+                <p className="text-red-700 font-light">
+                   {error?.password}
+            </p>
               </div>
               <div className="flex items-start">
                 <div className="flex items-center h-5">
@@ -203,7 +299,8 @@ function Signin() {
                     className="bg-gray-50 
                    border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
                     rounded"
-                    required
+                    onClick={() => { setCookieData(!current); setCurrent(!current) }}
+
                   />
                 </div>
                 <div className="text-sm ml-3">
@@ -219,18 +316,16 @@ function Signin() {
                   {language?.lost}
                 </a>
               </div>
+              <div className={spinner === 0 ? 'block' : 'hidden'}>
+              <Button Primary={language?.Signin} onClick={(e) => {
+                    submitSignIn(e);
+                   
+                  }}/>
+              </div>
+              <div className={spinner === 1 ? 'block' : 'hidden'}>
+              <Button Primary={language?.SpinnerSignin} />
+              </div>
 
-              <button
-                type="submit"
-                onClick={() => {
-                  submitSignIn("fr");
-                }}
-                className="font-semibold text-white bg-cyan-600 
-              hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
-              rounded-lg text-base px-5 py-2 capitalize w-full sm:w-auto text-center"
-              >
-                {language?.title}
-              </button>
               <div className="text-base font-semibold text-gray-500">
                 {language?.remember}
                 <a href="" className="text-teal-500 hover:underline px-2">
@@ -240,73 +335,36 @@ function Signin() {
             </form>
           </div>
         </div>
-        <div className="mx-64 mt-2">
-          {lang === "en" ? (
-            <div>
-              <button
-                className="text-teal-600 text-sm "
-                onClick={() => {
-                  setLang("fr");
-                  changelanguage("fr");
-                }}
-              >
-                Français |
-              </button>
-              <button
-                className="text-teal-600 text-sm mx-1"
-                onClick={() => {
-                  setLang("ar");
-                  changelanguage("ar");
-                }}
-              >
-                عربى
-              </button>
-            </div>
-          ) : lang === "fr" ? (
-            <div>
-              <button
-                className="text-teal-600 text-sm"
-                onClick={() => {
-                  setLang("en");
-                  changelanguage("en");
-                }}
-              >
-                English |
-              </button>
-              <button
-                className="text-teal-600 text-sm mx-1"
-                onClick={() => {
-                  setLang("ar");
-                  changelanguage("ar");
-                }}
-              >
-                عربى
-              </button>
-            </div>
-          ) : lang === "ar" ? (
-            <div>
-              <button
-                className="text-teal-600 text-sm "
-                onClick={() => {
-                  setLang("en");
-                  changelanguage("en");
-                }}
-              >
-                English |
-              </button>
-              <button
-                className="text-teal-600 text-sm mx-1"
-                onClick={() => {
-                  setLang("fr");
-                  changelanguage("fr");
-                }}
-              >
-                Français
-              </button>
-            </div>
-          ) : (
-            <></>
-          )}
+        <div className="mx-64 mt-2 text-teal-600">
+          <div>
+            <button
+              className={lang === "en" ? "text-teal-600 text-sm font-bold mx-1 " : "mx-1 text-teal-600 text-sm"}
+              onClick={() => {
+                setLang("en");
+                changelanguage("en");
+              }}
+            >
+              English
+            </button>|
+            <button
+              className={lang === "fr" ? "mx-1 text-teal-600 text-sm font-bold" : "mx-1 text-teal-600 text-sm"}
+              onClick={() => {
+                setLang("fr");
+                changelanguage("fr");
+              }}
+            >
+              Français
+            </button>|
+            <button
+              className={lang === "ar" ? "text-teal-600 text-sm font-bold mx-1" : "mx-1 text-teal-600 text-sm"}
+              onClick={() => {
+                setLang("ar");
+                changelanguage("ar");
+              }}
+            >
+              عربى
+            </button>
+          </div>
         </div>
       </div>
 
@@ -325,7 +383,6 @@ function Signin() {
     </div>
   );
 }
-
 export default Signin;
 
 Signin.getLayout = function PageLayout(page) {
@@ -334,6 +391,4 @@ Signin.getLayout = function PageLayout(page) {
       {page}
     </>
   )
-
-
 }

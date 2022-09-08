@@ -6,8 +6,10 @@ import Link from 'next/link'
 var language;
 
 const Sidebar = (args) => {
- 
+
+  const [services, setServices] = useState(false)
   useEffect(()=>{
+
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language");
@@ -30,13 +32,13 @@ const Sidebar = (args) => {
       <div
         id="sidebar"
         className="hidden  fixed z-20 h-full 
-      top-0 left-0 pt-14  lg:flex flex-shrink-0 flex-col w-64 
+      top-0 left-0 pt-16  lg:flex flex-shrink-0 flex-col w-64 
       transition-width duration-75"
         aria-label="Sidebar"
       >
         <div className="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
-          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-            <div className="flex-1 px-3 bg-white divide-y space-y-1">
+          <div className="flex-1 flex flex-col  pb-4 overflow-y-auto">
+            <div className="flex-1 py-4 px-3 bg-white divide-y space-y-1">
               <ul className="space-y-2 pb-2">
                 <li>
                   <form action="#" method="GET" className="lg:hidden">
@@ -141,8 +143,14 @@ const Sidebar = (args) => {
                   <span className="ml-3 flex-1 whitespace-nowrap">
                   <Link href={{pathname:args?.Primary?.reviews, query: { id: 1 }}}><a>{language?.reviews}</a></Link></span>
                 </li>
-                <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
-                  <svg
+
+               
+
+                {/** Drop down example **/}
+                <li>
+					<button type="button" onClick={()=>{setServices(!services)} }className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                   <svg
+
                     className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -150,10 +158,30 @@ const Sidebar = (args) => {
                   >
                     <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                   </svg>
-                  <span className="ml-3 flex-1 whitespace-nowrap">
-                  <Link href={{pathname:args?.Primary?.services, query: { id: 1 }}}><a>{language?.services}</a></Link>
-                  </span>
-                </li>
+
+                  <span className="flex-1 ml-3 text-left whitespace-nowrap" >{language?.services}</span>
+                  <svg sidebar-toggle-item className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" 
+                  xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+            </button>
+           <div className={services === true ? 'block' : 'hidden'}>
+					<ul  className="py-2 space-y-2">
+						<li className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75
+                 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
+							<Link  href={{pathname:args?.Primary?.services, query: { id: 1 }}}>
+            	<a>Basic Services</a></Link>
+						</li>
+						<li 	className="flex items-center w-full p-2 text-base font-normal text-gray-900 transition duration-75 
+                rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 pl-11">
+						<Link  href={{pathname:args?.Primary?.additionalservices, query: { id: 1 }}}>
+              <a 
+							>
+                  {language?.additionalservices}</a>
+						</Link></li>
+					
+					</ul></div>
+				</li>
+
+
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg
                     className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
@@ -195,7 +223,7 @@ const Sidebar = (args) => {
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
                   <svg className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clipRule="evenodd"></path></svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
-                    <Link href={{pathname:args?.Primary?.roombundles, query: { id: 1 }}}>
+                    <Link href={{pathname:args?.Primary?.roombundle, query: { id: 1 }}}>
                     <a>{language?.roombundle}</a></Link>
                       </span>
                 </li>
@@ -204,6 +232,13 @@ const Sidebar = (args) => {
                     <span className="ml-3 flex-1 whitespace-nowrap">
                     <Link href={{pathname:args?.Primary?.raterules, query: { id: 1 }}}>
                     <a>{language?.raterules}</a></Link>
+                      </span>
+                </li>
+                <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
+                  <svg className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.802 8.249 16 9.1 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a4.002 4.002 0 01-.041-2.08l-.08.08-1.53-1.533A5.98 5.98 0 004 10c0 .954.223 1.856.619 2.657l1.54-1.54zm1.088-6.45A5.974 5.974 0 0110 4c.954 0 1.856.223 2.657.619l-1.54 1.54a4.002 4.002 0 00-2.346.033L7.246 4.668zM12 10a2 2 0 11-4 0 2 2 0 014 0z" clipRule="evenodd"></path></svg>
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                    <Link href={{pathname:args?.Primary?.pointofsale, query: { id: 1 }}}>
+                    <a>{language?.pointofsale}</a></Link>
                       </span>
                 </li>
                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
@@ -231,6 +266,23 @@ const Sidebar = (args) => {
                     </svg>
                     <span className="ml-3 flex-1 whitespace-nowrap">
                     <Link  href={{pathname:args?.Primary?.propertysummary, query: { id: 1 }}}><a>{language?.propertysummary}</a></Link>
+                    </span>
+                  </li>
+                  <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
+                    <svg
+                      className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 
+              0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2
+               2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                      ></path>
+                    </svg>
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                    <Link  href={{pathname:args?.Primary?.theme, query: { id: 1 }}}><a>{language?.theme}</a></Link>
                     </span>
                   </li>
                   <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">

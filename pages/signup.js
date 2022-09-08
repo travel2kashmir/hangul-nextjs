@@ -21,13 +21,11 @@ export default function Register(props) {
 
 
   const validateAdminData = (props) => {
-
     const pswdValid = CheckPassword(props.admin.admin_password)
     return pswdValid
   }
 
   const validateUserData = (props) => {
-
     const pswdValid = CheckPassword(props.user.user_password)
     return pswdValid
   }
@@ -108,7 +106,7 @@ export default function Register(props) {
                 setAdmin({...admin,admin_password:enc_pass})
             })
         });
-        alert(JSON.stringify(admin))
+      
         
 
       Axios.post('/signup/admin', JSON.stringify(admin),

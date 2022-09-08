@@ -6,7 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import Button from '../../../../components/Button';
 import english from "../../../../components/Languages/en"
 import french from "../../../../components/Languages/fr"
-import arabic from "../../../../components/Languages/ar"
+import arabic from "../../../../components/Languages/ar";
+import Headloader from '../../../../components/loaders/headloader';
+import Lineloader from '../../../../components/loaders/lineloader';
 import Header from "../../../../components/Header"
 import Footer from "../../../../components/Footer"
 import Sidebar from "../../../../components/Sidebar"
@@ -16,9 +18,11 @@ const logger = require("../../../../services/logger");
 var currentProperty;
 var currentPropertyCredit;
 var currentPackage;
+var currentLogged;
 var i=0;
 
 function Propertycredit() {
+  const [visible,setVisible]=useState(0) 
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -35,6 +39,7 @@ function Propertycredit() {
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
         currentPackage=localStorage.getItem('packageId')
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
        } 
     }
     firstfun();
@@ -65,7 +70,7 @@ function Propertycredit() {
         });
         setPropertyCredit([])
         fetchDetails(); 
-        Router.push("./propertycredit");
+        Router.push("../package")
       })
       .catch((error) => {
        toast.error("Property Credit Error!", {
@@ -87,6 +92,7 @@ function Propertycredit() {
        ((response) => {
        logger.info("package success");
        setCurrentPropertyCredit(response.data)
+       setVisible(1)
        })
        .catch((error) => {
         logger.info("Delete error")
@@ -108,15 +114,16 @@ function Propertycredit() {
           <li className="inline-flex items-center">
               <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
               <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-              <Link href="../../landing" >
-              <a>{language?.home}</a>
-            </Link></span>
+              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../../admin/AdminLanding":"../../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link></span>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="../../propertysummary" ><a>{currentProperty?.property_name}</a></Link>
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
+              <Link href="../../propertysummary" ><a>{currentProperty?.property_name}</a></Link></div>
               </span>
             </div>
           </li>
@@ -132,8 +139,10 @@ function Propertycredit() {
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
               <Link href='../package'>
-                <a>{currentPropertyCredit?.package_name}</a></Link>
+                <a>{currentPropertyCredit?.package_name}</a></Link></div>
             </span>
             </div>
           </li>
@@ -165,6 +174,8 @@ function Propertycredit() {
                   >
                    {language?.creditcurrency}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select
                     className="shadow-sm bg-gray-50 border  border-gray-
                      text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
@@ -176,7 +187,7 @@ function Propertycredit() {
                     <option value="Euro" >Euro</option>
 
                   </select>
-
+                 </div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -187,6 +198,8 @@ function Propertycredit() {
                   >
                     {language?.creditamount}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                                <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900
@@ -194,7 +207,7 @@ function Propertycredit() {
                   block w-full p-2.5"
                     defaultValue={currentPropertyCredit?.package_property_credit?.[i]?.property_credit_amount}
                     onChange={(e) => (setPropertyCredit({ ...propertycredit, property_credit_amount: e.target.value }))} />
-                </div>
+                </div></div>
               </div>
 
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
@@ -219,7 +232,7 @@ function Propertycredit() {
         pauseOnHover />
       </div>
       <Footer/>
-      </>
+     </>
   )
 }
 

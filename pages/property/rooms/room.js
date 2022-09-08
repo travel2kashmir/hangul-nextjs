@@ -7,7 +7,10 @@ import Footer from "../../../components/Footer";
 import Sidebar from '../../../components/Sidebar'
 import Header from '../../../components/Header'
 import french from "../../../components/Languages/fr"
-import arabic from "../../../components/Languages/ar"
+import arabic from "../../../components/Languages/ar";
+import Headloader from '../../../components/loaders/headloader';
+import Imageloader from '../../../components/loaders/imageloader';
+import Lineloader from '../../../components/loaders/lineloader';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 var language;
@@ -16,9 +19,10 @@ var currentroom;
 var room;
 import Router from 'next/router'
 const logger = require("../../../services/logger");
+var currentLogged;
 
 function Room() {
-
+  const [visible,setVisible]=useState(0) 
    /** Use Effect to fetch details from the Local Storage **/
    useEffect(()=>{  
     const firstfun=()=>{
@@ -37,6 +41,7 @@ function Room() {
 currentroom =localStorage.getItem('RoomId');
 /** Current Property Details fetched from the local storage **/
 currentProperty = JSON.parse(localStorage.getItem("property"));
+currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         } }
 firstfun(); 
  Router.push("./room")   
@@ -47,6 +52,7 @@ firstfun();
 }  
  
   const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [disp, setDisp] = useState(0);
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomimages, setRoomimages] = useState({})
@@ -142,7 +148,9 @@ firstfun();
     console.log("url " +url)
     axios.get(url)
     .then((response)=>{setRoomDetails(response.data);
-    logger.info("url  to fetch room hitted successfully")})
+    logger.info("url  to fetch room hitted successfully");
+    setVisible(1);
+  })
     .catch((error)=>{logger.error("url to fetch room, failed")}); 
   }
 
@@ -151,7 +159,10 @@ firstfun();
     console.log("url " +url)
     axios.get(url)
   .then((response)=>{setRoomimages(response.data);
-   logger.info("url  to fetch room images hitted successfully")})
+   logger.info("url  to fetch room images hitted successfully")
+   setVisibleImage(1);
+  })
+   
    .catch((error)=>{logger.error("url to fetch room images, failed")}); 
   }
 
@@ -269,6 +280,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
         });
         fetchImages(); 
         fetchDetails();
+       
       Router.push("./room");
       })
       .catch((error) => {
@@ -313,8 +325,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           draggable: true,
           progress: undefined,
         });
+        setDisp(1);
       fetchDetails(); 
-    Router.push("./room");
      setAllRoomDetails([])
       })
       .catch((error) => {
@@ -378,7 +390,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
   
   return (
     <>
-    <Header  Primary={english?.Side1}/>
+    
+<Header  Primary={english?.Side1}/>
     <Sidebar Primary={english?.Side1}/>
     <div id="main-content"
     className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
@@ -388,15 +401,16 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           <li className="inline-flex items-center">
            <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
          <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-           <Link href="../landing" >
-              <a> {language?.home}</a>
-            </Link></span>
+         <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../../admin/AdminLanding":"../../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                </Link></span>
           </li>
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
              <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                <Link href="../propertysummary" ><a>{currentProperty?.property_name}</a></Link></span>
+             <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                <div className={visible === 1 ? 'block' : 'hidden'}>
+								 <Link href="../propertysummary" ><a>{currentProperty?.property_name}</a></Link></div></span>
             </div>
           </li>
           <li>
@@ -422,7 +436,23 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
       
      
           {/* Room Description */}
-          <div className="bg-white shadow rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+        <div id='0' className={disp===0?'block':'hidden'}>
+          <div className="bg-white shadow-xl rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Description</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Gallery</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Rates</div>
+            </div>
+        </div>
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {language?.room} {language?.description}
             </h6>
@@ -437,6 +467,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                        {language?.room} {language?.name}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         defaultValue={roomDetails?.room_name}
@@ -446,7 +478,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                           )
                         }
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -455,6 +487,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                         htmlFor="grid-password">
                        {language?.room} {language?.type} 
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select
                         defaultValue={roomDetails?.room_type}
                         onClick={(e) => setAllRoomDetails({ ...allRoomDetails, room_type_id: e.target.value })}
@@ -465,7 +499,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             <option key={i} value={i.room_type_id}>{i.room_type_name}</option>)
                         }
                         )}
-                      </select>
+                      </select></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -476,6 +510,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                        {language?.room} {language?.description}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <textarea rows="2" columns="50"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         onChange={
@@ -484,7 +520,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                           )
                         }
                         defaultValue={roomDetails?.room_description}
-                      />
+                      /></div>
                     </div>
                   </div>
 
@@ -496,6 +532,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                         {language?.room} {language?.capacity}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -505,7 +543,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value })
                           )
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -516,6 +554,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                         {language?.maximum} {language?.number} {language?.of} {language?.occupants}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -525,7 +565,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value })
                           )
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -536,6 +576,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                         {language?.minimum} {language?.number} {language?.of} {language?.occupants}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -545,7 +587,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, minimum_number_of_occupants: e.target.value })
                           )
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -556,6 +598,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                        {language?.maximum} {language?.age} {language?.of} {language?.occupants}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -565,7 +609,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value })
                           )
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -576,6 +620,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                        {language?.room} {language?.length}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text" defaultValue={roomDetails?.room_length}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -584,7 +630,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value })
                           )
                         }
-                      /></div>
+                      /></div></div>
                   </div>
 
                   <div className="w-full lg:w-6/12 px-4">
@@ -595,6 +641,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                        {language?.room} {language?.breadth}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -604,7 +652,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value })
                           )
                         }
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -615,6 +663,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                         {language?.room} {language?.height}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -623,7 +673,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                             setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value })
                           )
                         }
-                        defaultValue={roomDetails?.room_height} />
+                        defaultValue={roomDetails?.room_height} /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -634,11 +684,13 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                         {language?.room} {language?.area}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         defaultValue={roomDetails?.carpet_area} readOnly="readonly"
-                      />
+                      /></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -649,23 +701,43 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       >
                        {language?.room} {language?.volume}
                       </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                         defaultValue={roomDetails?.room_volume} readOnly="readonly" />
-                    </div>
+                    </div></div>
                   </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
              
-                <Button Primary={language?.Update}     onClick={submitRoomDescriptionEdit} /> 
+                <Button Primary={language?.Next} onClick={()=>{submitRoomDescriptionEdit,setDisp(1)} }/> 
               </div> 
                 </div>
               </div>
             </div>
           </div>
+         </div>
 
           {/* Room Gallery */}
-          <div className="bg-white shadow rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
+          <div id='1' className={disp===1?'block':'hidden'}>
+          <div className="bg-white shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Description</div>
+            </div>
+          
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Room Gallery </div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Rates</div>
+            </div>
+           
+        </div>
           <h6 className="text-base  flex leading-none mb-2 pt-2 font-semibold text-gray-800 ">
                  {language?.room}  {language?.gallery}
                 </h6>
@@ -705,6 +777,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                 </div>
            
             <div className="flex flex-wrap" >
+            <div className={visible === 0 ? 'block w-auto h-auto m-6 w-32 flex' : 'hidden'}><Imageloader /> <Imageloader /><Imageloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
               {roomDetails?.room_images?.map((item, index) => {
                 return (
                   <div className="block text-blueGray-600 text-xs pt-2 px-2 " key={index}>
@@ -727,10 +801,13 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                     </table>
                   </div>
                 )
-              })}
+              })}</div>
             </div>
+            <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(2)}} />
+                    </div>
           </div>
-       
+       </div>
       
       {/* Room Services Table */}
       <div className="bg-white hidden shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3">
@@ -757,7 +834,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
           </div>
 
           {/* Room Services Table */}
-          <div className="flex flex-col my-4">
+          {/* <div className="flex flex-col my-4">
             <div className="overflow-x-auto">
               <div className="align-middle inline-block min-w-full">
                 <div className="shadow overflow-hidden">
@@ -813,11 +890,30 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
       </div>
 
       {/* Room Rates*/}
-      <div className="bg-white shadow rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
+      <div id='2' className={disp===2?'block':'hidden'}>
+      <div className="bg-white shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
+      <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Description</div>
+            </div>
+          
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+               Room Gallery</div>
+            </div>
+           
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Rates</div>
+            </div>
+            
+        </div>
             <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
               {language?.room} {language?.rates} 
             </h6>
@@ -832,6 +928,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   >
                     {language?.baserate} {language?.currency}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
@@ -841,7 +939,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select>
+                  </select></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -852,6 +950,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   >
                     {language?.baserate} {language?.amount}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -861,7 +961,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                         setAllRoomRates({ ...allRoomRates, baserate_amount: e.target.value })
                       )
                     }
-                  />
+                  /></div>
                 </div>
               </div>
 
@@ -873,6 +973,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   >
                     {language?.taxrate} {language?.currency}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
@@ -882,7 +984,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select>
+                  </select></div>
                 </div>
               </div>
 
@@ -894,6 +996,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   >
                     {language?.taxrate} {language?.amount}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -902,7 +1006,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       (e) => (
                         setAllRoomRates({ ...allRoomRates, tax_amount: e.target.value,un_rate_id:allRoomDetails?.unconditional_rates?.[0]?.un_rate_id })
                       )
-                    } />
+                    } /></div>
                 </div>
               </div>
 
@@ -914,6 +1018,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   >
                     {language?.other} {language?.capacity} {language?.currency}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
@@ -923,7 +1029,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select>
+                  </select></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -934,6 +1040,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                   >
                     {language?.other} {language?.charges} {language?.amount}
                   </label>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -942,7 +1050,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
                       (e) => (
                         setAllRoomRates({ ...allRoomRates, otherfees_amount: e.target.value })
                       )
-                    } />
+                    } /></div>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -962,7 +1070,8 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
             </div>
           </div>
           </div>
-       
+         
+       </div>
      
        {/* Modal Image Enlarge */}
        <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
@@ -1176,7 +1285,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
 
     </div>
     <Footer/>
-    </>
+   </>
   )
 }
 

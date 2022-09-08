@@ -349,7 +349,8 @@ export default {
 
   "SpinnerAdd" :{
     label: "Ajouter",
-
+    color: "bg-cyan-600 hover:bg-cyan-700 text-white " 
+  },
  
   "SpinnerUpdate" :{
     label: "Mise à jour",

@@ -30,7 +30,6 @@ var currentLogged;
 function Allpointofsale() {
   const [disp, setDisp] = useState(0);
   const [view, setView] = useState(0);
-
   const[countryData,setCountryData]=useState({})
   const[deviceData,setDeviceData]=useState({})
   const[languageData,setLanguageData]=useState({})
@@ -39,7 +38,7 @@ function Allpointofsale() {
   const [viewEdit, setViewEdit] = useState(0);
   const [flag, setFlag] = useState([]); 
  const [visible, setVisible] = useState(0);
- const [current, setCurrent] = useState([]);
+  const [current, setCurrent] = useState([]);
   const [countryCheck, setCountryCheck] = useState(false);
   const [languageCheck, setLanguageCheck] = useState(false);
   const [deviceCheck, setDeviceCheck] = useState(false);
@@ -163,11 +162,9 @@ const validationMatchStatus = (data) => {
   if(data?.url === "" || data?.url === undefined){
     error.url = "This field is required."
   }
-
   if((!data?.url?.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/) && (data.url != "" &&  data.url != undefined))){
     error.url = "The url has invalid format."
   } 
-
  return Object.keys(error).length === 0 ? true :  error;
 
  }
@@ -178,7 +175,7 @@ const validationMatchStatus = (data) => {
     axios
       .delete(url)
       .then((response) => {
-        toast.success("API: Match status deleted successfully.", {
+        toast.success("Match status deleted successfully.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -191,7 +188,7 @@ const validationMatchStatus = (data) => {
         Router.push("./pointofsale");
       })
       .catch((error) => {
-toast.error("API: Match status delete error.", {
+        toast.error("Match status delete error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -225,7 +222,7 @@ const submitMatchstatus = () =>
         header: { "content-type": "application/json" },
       })
       .then((response) => {
-toast.success("API: Match Status added successfully!", {
+        toast.success("Match Status added successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -243,9 +240,8 @@ toast.success("API: Match Status added successfully!", {
           const url = "/api/point_of_sale/pos_match_status_link";
           axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
             .then((response) => {
- toast.success("API: Match Status added successfully!", {
-   position: "top-center",
-
+              toast.success("Match Status conditions added successfully!", {
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -280,8 +276,7 @@ toast.success("API: Match Status added successfully!", {
       });
     }
     else{
-toast.error("APP: Please select at least one condition", {
-
+      toast.error("Please select at least one condition", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -357,7 +352,6 @@ const filterByMLanguage = (props) => {
 
   const submitMatchStatusEdit = () => {
     if (validationMatchStatus(current)){
-
     const final_data ={
         match_status:current?.match_status,
         match_status_name:current?.match_status_name,
@@ -374,7 +368,6 @@ const filterByMLanguage = (props) => {
         ((response) => {
           fetchDetails();
           toast.success("Match Status Updated Successfully!", {
-
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -383,14 +376,14 @@ const filterByMLanguage = (props) => {
             draggable: true,
             progress: undefined,
           });
-
           setViewEdit(0);
           clearData();
           Router.push('./pointofsale')
+         
+          
         })
         .catch((error) => {
           toast.error("Match Status Update Error!", {
-
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -400,19 +393,7 @@ const filterByMLanguage = (props) => {
             progress: undefined,
           });
         })
-} 
-      else{
-        toast.error("APP: Please check one of the condition", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      }
-
+     
     }
   }
   
@@ -427,8 +408,7 @@ const filterByMLanguage = (props) => {
       const url = '/api/point_of_sale'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
- toast.success("API: Point of sale Updated Successfully!", {
-
+          toast.success("Point of sale Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -437,7 +417,6 @@ const filterByMLanguage = (props) => {
             draggable: true,
             progress: undefined,
           });
-
           setFlag([]);
           fetchDetails();
           Router.push('./pointofsale')
@@ -445,8 +424,7 @@ const filterByMLanguage = (props) => {
           
         })
         .catch((error) => {
-          toast.error("API: Point of sale update error!", {
-
+          toast.error("Point of sale update error!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -459,7 +437,6 @@ const filterByMLanguage = (props) => {
       }  
     
   }
-
   const clearData = () => {
   setFlag([]);
   setCountryData({});
@@ -474,7 +451,6 @@ const filterByMLanguage = (props) => {
   setSiteCheck(false);
   fetchDetails();
  }
-
   return (
     <div>
         <Header Primary={english?.Side1}/>
@@ -657,7 +633,8 @@ const filterByMLanguage = (props) => {
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
               <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
-                  <Button Primary={language?.Update} onClick={()=>{
+
+                      <Button Primary={language?.Update} onClick={()=>{
                        if(flag === 1){
                         submitPointOfSaleEdit()}
                       } }/>
@@ -755,9 +732,7 @@ const filterByMLanguage = (props) => {
                             setDSales({ ...dSales, match_status: e.target.value })
                           )
                         }>
-
                         <option selected disabled>{language?.select}</option>
-
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
@@ -792,9 +767,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, country: e.target.value })
                               )
                             }>
-
                             <option selected disabled>{language?.select}</option>
-
                             {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
@@ -827,9 +800,8 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, device: e.target.value })
                               )
                             }>
-
                             <option selected disabled>{language?.select}</option>
-{lang?.DeviceData?.map(i => {
+                            {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
@@ -858,9 +830,7 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, language: e.target.value })
                               )
                             }>
-
                             <option selected disabled>{language?.select}</option>
-
                             {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
@@ -892,7 +862,6 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, currency: e.target.value })
                               )
                             }>
-
                             <option selected disabled>{language?.select}</option>
                             {lang?.CurrencyData?.map(i => {
                               return (
@@ -924,7 +893,6 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, site_type: e.target.value })
                               )
                             }>
-
                             <option selected disabled>{language?.select}</option>
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
@@ -952,9 +920,8 @@ const filterByMLanguage = (props) => {
                   <h3 className="text-xl font-semibold">{language?.edit} {language?.MatchStatusCols?.name}</h3>
                   <button
                     type="button"
-
                     onClick={() => {setViewEdit(0);clearData();}}
-className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                   >
                     <svg
                       className="w-5 h-5"
@@ -1011,9 +978,8 @@ className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 ro
                             setCurrent({...current, match_status: e.target.value},setFlag(1))
                           )
                         }>
-
                         <option selected disabled>{current?.type}</option>
- <option value="yes">Yes</option>
+                        <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
                       <p className="text-red-700 font-light">
@@ -1030,10 +996,9 @@ className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 ro
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-
                               onClick={() =>{ setCountryData({ ...countryData,  tick: !countryCheck, });setCountryCheck(!countryCheck)}}
                                checked={countryCheck === true}
-className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
+                              className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
@@ -1044,7 +1009,8 @@ className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
                       text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-onChange={
+                           
+                          onChange={
                               (e) => (
                             
                                 setCountryData({ ...countryData, data: e.target.value },setFlag(1))
@@ -1056,7 +1022,8 @@ onChange={
                             <option selected disabled>{resCou?.[i]?.country_name}</option>
                             : 
                           <option selected disabled>{language?.select}</option>}
-{lang?.CountryData?.map(i => {
+                        
+                            {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
@@ -1069,7 +1036,8 @@ onChange={
                       <div className='flex mb-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
-<input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
+                           
+                            <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                                 onClick={() => {setDeviceData({ ...deviceData,  tick:!deviceCheck }),
                                 setDeviceCheck(!deviceCheck)}} checked={deviceCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
@@ -1111,12 +1079,11 @@ onChange={
                               onClick={() => {setLanguageData({ ...languageData,  tick: !languageCheck }),setLanguageCheck(!languageCheck) }} checked={languageCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-{language?.language} 
+                             {language?.language} 
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           
@@ -1173,16 +1140,13 @@ onChange={
                             }
                             )}
 
-
                           </select></div>
                       </div>
                       <div className='flex my-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-
                               onClick={() => {setSiteData({ ...siteData,  tick: !siteCheck }),setSiteCheck(!siteCheck)  }} checked={siteCheck === true}
-
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1197,7 +1161,6 @@ onChange={
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-
                                 setSiteData({ ...siteData, data: e.target.value })
                               )
                             }>
@@ -1205,7 +1168,6 @@ onChange={
                             <option selected disabled>{current?.site_type}</option>
                          :
                           <option selected disabled>{language?.select}</option>}
-
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
@@ -1217,7 +1179,6 @@ onChange={
               </div></div>
                 <div className="items-center flex p-6 border-t border-gray-200 rounded-b">
                   <Button  Primary={language?.Update}  onClick= {()=>{
-
                  if((flag === 1) ||
                  (countryData.data !== undefined && countryData.tick === true && countryData.data !== "")||
                 (countryData.tick === false) ||
@@ -1251,7 +1212,6 @@ onChange={
                 </div>
                 {countryCheck}
                 </div>
-
 </div> 
 </div>
 </div>

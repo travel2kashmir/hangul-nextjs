@@ -55,11 +55,12 @@ function Addraterule() {
     const [programs, setPrograms] = useState([])
     const [languageData,setLanguageData]=useState([])
     const [rooms,setRooms]=useState([])
+
     const [error, setError] = useState({})
 
     useEffect(() => {
        const firstfun = () => {
-          if (typeof window !== 'undefined') {
+ if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
             if (locale === "ar") {
               language = arabic;
@@ -242,6 +243,7 @@ function Addraterule() {
         }
         ] 
          }
+         console.log(JSON.stringify(final_data))
          const url = '/api/rate_rule/rate_rule'
          axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
@@ -256,7 +258,6 @@ function Addraterule() {
              });
             setRateRuleId(response.data.rate_rule_id);
             submitRateConditionAdd(response.data.rate_rule_id);
-          
            })
            .catch((error) => {
      
@@ -658,7 +659,6 @@ function Addraterule() {
                setFinalProgram(final_program_data);  
            }
 {/** Validation **/}
-
 //Rate Description
 // Validation Function
 const validationRateDescription = (data) => {
@@ -783,6 +783,7 @@ const checkRateCondition = (data) => {
  }
 return Object.keys(error).length === 0 ? true :  error;
 }
+
   return (
     <>
     <Header Primary={english?.Side1} />
@@ -898,6 +899,7 @@ return Object.keys(error).length === 0 ? true :  error;
                     >
                     {language?.programname}
                     </label>
+
                   <input type="text" 
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={(e) =>
@@ -906,8 +908,10 @@ return Object.keys(error).length === 0 ? true :  error;
                           program: e.target.value,
                         })
                       }/>
+
                      <p className="text-red-700 font-light">
                    {error?.program}
+
             </p>
 
                   </div>
@@ -922,6 +926,7 @@ return Object.keys(error).length === 0 ? true :  error;
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
@@ -950,6 +955,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
+
                           Description: e.target.value,})} />
                     <p className="text-red-700 font-light">
                    {error?.Description}
@@ -979,9 +985,11 @@ return Object.keys(error).length === 0 ? true :  error;
                   <option value="price_band">{language?.priceband}</option>
                   <option value="existence">{language?.existence}</option>
              </select>
+
              <p className="text-red-700 font-light">
                    {error?.ineligibility_type}
             </p>
+
               </div>
             </div>
             
@@ -1015,6 +1023,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       price_multiplier: e.target.value,}) }/>
                   <p className="text-red-700 font-light">
                    {error?.price_multiplier}
+
             </p>
                 </div></div>
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
@@ -1053,8 +1062,10 @@ return Object.keys(error).length === 0 ? true :  error;
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates}</div>
             </div>
        </div>
+
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.ratecondition}
+
           </h6>
           <div className="flex flex-wrap">
            <div className="w-full lg:w-6/12 px-4">
@@ -1176,7 +1187,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <input type="text"
-                      className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
+                    className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-1.5 px-4 "
                      
                       onChange={(e) =>
@@ -1185,10 +1196,13 @@ return Object.keys(error).length === 0 ? true :  error;
                           MaxUsersPercent: e.target.value,
                         },setBasicFlag(1))
                       }/>
+
                        <p className=" text-red-700 font-light">
                          {error?.MaxUsersPercent}
                             </p>
+
                       </div>
+
                         </div>
 
                     <div className='flex mb-2'>
@@ -1303,7 +1317,9 @@ return Object.keys(error).length === 0 ? true :  error;
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"> 1</button>
+
               <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.ratedescription}</div>
+
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1413,6 +1429,7 @@ return Object.keys(error).length === 0 ? true :  error;
                         )
                       } />
 
+
                     <p className=" text-red-700 font-light">
                     {error?.tax_amount}
                     </p>
@@ -1455,8 +1472,9 @@ return Object.keys(error).length === 0 ? true :  error;
                      </label>
                     <input
                       type="text"
+
                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                     onChange={
+ onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_amount: e.target.value })
                         )
@@ -1481,7 +1499,9 @@ return Object.keys(error).length === 0 ? true :  error;
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         )
                       }>
+
                       <option selected disabled >{language?.select}</option>
+
                       <option value="web">Web</option>
                       <option value="hotel">Hotel</option>
                       <option value="installment">Installment</option>
@@ -1507,7 +1527,9 @@ return Object.keys(error).length === 0 ? true :  error;
                           setAllUserRateDetails({ ...allUserRateDetails, refundable: e.target.value })
                         )
                       }>
+
                         <option selected disabled>{language?.select}</option> 
+
                         <option value={true}>Yes</option>
                          <option value={false}>No</option>
                     
@@ -1537,9 +1559,9 @@ return Object.keys(error).length === 0 ? true :  error;
                             )
                           } />
 
-                            <p className="text-red-700 font-light">
+ <p className="text-red-700 font-light">
                             {error?.refundable_until_days}
-                            </p>
+ </p>
                       </div>
                     </div>
 

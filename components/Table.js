@@ -139,7 +139,9 @@ const Table = (args) => {
                                                 </div>
                                             </th> : <></>}
                                         <th scope="col"
-                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col1} {args?.spinner}</th>
+
+                                            className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col1}</th>
+
                                         {args?.name != "Packages"?
                                             <th scope="col"
                                                 className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col2}</th>
@@ -171,23 +173,28 @@ const Table = (args) => {
                                                                 </span>
                                                             </td> : <></>}
                                                         {(args?.name != "Additional Services" && args?.name != "Package Miles" && args?.name != "Elite Rewards" )?
-                                                       <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                              <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
                                                                 {item?.name}</td> 
                                                                 :
-                                                       <td className="p-4 whitespace-nowrap  text-base font-normal text-gray-900">
+                                                            <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
+
 
                                                                 <input type="text"
-                                                                    onChange={(e) => setEditContact({ ...editContact, name: e.target.value },  setFlag(1))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
+                                                                    onChange={(e) => setEditContact({ ...editContact, name: e.target.value },  setFlag(1))} className="shadow-sm capitalize bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
                                                                     defaultValue={item?.name}></input> </td>}
 
                                                         {args?.name != "Services" ?
 
+
                                                             <td className="data text-left text-sm font-semibold  ">
+
                                                                 <input type="text"
-                                                                    onChange={(e) => setEditContact({ ...editContact, type: e.target.value }, setFlag(1))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
+                                                                    onChange={(e) => setEditContact({ ...editContact, type: e.target.value }, setFlag(1))} className="shadow-sm capitalize bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5"
                                                                     defaultValue={item?.type}></input> </td>
                                                             :
+
                                                             <td className="data text-left text-sm font-semibold  ">
+
                                                                 {item?.type === 'yes' || item?.type === 'no' ?
                                                                     <div className="flex">
                                                                         <div className="form-check mx-2 form-check-inline">
@@ -215,7 +222,9 @@ const Table = (args) => {
                                                                                 case 'ser0016': return (<div>
                                                                                     {/*Kitchen Availability*/}
                                                                                     <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))}
+
                                                                                         className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5">
+
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="Available in all rooms">Available in all rooms</option>
                                                                                         <option value="Available in some rooms">Available in some rooms</option>
@@ -224,7 +233,9 @@ const Table = (args) => {
                                                                                 </div>)
                                                                                 case 'ser0017': return (<div>
                                                                                     {/*Parking Type*/}
+
                                                                                     <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" >
+
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="No payment required">No Payment Required</option>
                                                                                         <option value="Paid">Paid</option>
@@ -233,7 +244,9 @@ const Table = (args) => {
                                                                                 </div>)
                                                                                 case 'ser0020': return (<div>
                                                                                     {/*Swimming Pool*/}
+
                                                                                     <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5" >
+
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="Indoors">Indoors</option>
                                                                                         <option value="Outdoors">Outdoors</option>
@@ -243,7 +256,9 @@ const Table = (args) => {
                                                                                 </div>)
                                                                                 case 'ser0022': return (<div>
                                                                                     {/*Wifi Type*/}
+
                                                                                     <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))} className="shadow-sm bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5">
+
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="No payment required">No Payment Required</option>
                                                                                         <option value="Paid">Paid</option>
@@ -261,7 +276,7 @@ const Table = (args) => {
 
                                                         }
 
-                                                        <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                        <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
                                                             <div className="flex">
                                                                 <div className="form-check mx-2 form-check-inline">
                                                                     
@@ -284,6 +299,7 @@ const Table = (args) => {
                                                         <td className="p-4 whitespace-nowrap space-x-2">
                                                         {
                                                         (flag.length === 0) ?
+
                                                            <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
                                                            font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
                                                             duration-150 cursor-not-allowed opacity-60 " 
@@ -322,23 +338,26 @@ const Table = (args) => {
                                                                     <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                 </span>
                                                             </td> : <></>}
-                                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                            <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
                                                             {item?.name}
                                                         </td>
                                                         {args?.name === "Packages"  ? <></> :
+
                                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
 
                                                                 {item?.type}
                                                             </td>}
                                                         {item?.status == true ?
-                                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                            <td className="p-4 whitespace-nowrap capitalize text-base font-normal text-gray-900">
                                                                 <span className="flex items-center">
                                                                     <span className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></span>
                                                                     {args?.common?.Active}
                                                                 </span>
                                                             </td> :
                                                               args?.status === "matchstatus" ? <></> :
+
                                                             <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+
                                                                 <span className="flex items-center">
                                                                     <span className="h-2.5 w-2.5 rounded-full bg-red-600 mr-2"></span>
                                                                     {args?.common?.Inactive}
@@ -346,7 +365,9 @@ const Table = (args) => {
                                                             </td>}
 
                                                         {del?.delete === 1 && del?.id === idx ?
+
                                                             <td className="p-4 whitespace-nowrap  space-x-2">
+
                                                                 <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white  sm:inline-flex  
                                                                  font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                  
@@ -355,14 +376,14 @@ const Table = (args) => {
                                                                     onClick={() => { setDel({ ...del, delete: 0, id: '' }) }} >{args?.common?.Cancel}</button>
                                                             </td>
                                                             :
-                                                            <td className="p-4 whitespace-nowrap space-x-2">
-                                                               
+                                                            <td className="p-4 whitespace-nowrap capitalize space-x-2">
+                               
                                                               
                                                          {
                                                                 (args?.name != "Rooms") && (args?.name != "Packages") ?
                                                                  <div>
                                                              
-                                                             
+                                                          
                                                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
                                                                             setEditContact(item);
                                                                             setUpdate({ ...update, edit: 1, id: idx })

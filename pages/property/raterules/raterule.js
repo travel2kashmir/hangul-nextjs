@@ -115,7 +115,7 @@ function Raterule() {
 }, [])
 
 //submit rate add
- const submitRateAdd = () => {
+const submitRateAdd = () => {
   var time;
   var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
   time = new Date(temp.toString())
@@ -329,6 +329,7 @@ const submitRateUpdate = () =>{
     rate_rule_name:rateRule?.rate_rule_name,
    rate_rule_id: rateRule?.rate_rule_id
 };
+
 const url = "/api/rate_rule/rate_rules";
   axios
     .put(url,data, { 
@@ -360,8 +361,9 @@ const url = "/api/rate_rule/rate_rules";
 }
    /* Edit Rate Details Function */
 const submitRateEdit = () => {
+
  if(validationRates(allUserRateDetails)) {
-    var time;
+var time;
     var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
     time = new Date(temp.toString())
     const toTimestamp = (strDate) => {
@@ -395,6 +397,7 @@ const submitRateEdit = () => {
           draggable: true,
           progress: undefined,
         });
+
         setError({})
         Router.push("./raterule");
       })
@@ -597,8 +600,10 @@ const submitRateEdit = () => {
         user_rate_condition_op:userRateDetails?.user_rate_condition_op,
         description:userRateDetails?.description,
         offer_name: rateRule?.rate_rule_name,
+
         user_signed_in:userSign?.user_signed_in,
         is_domestic: userSign?.is_domestic,
+
         user_rate_condition_id:userSign?.user_rate_condition_id
     }];
     const final_data = { "user_rate_condition": data }
@@ -812,7 +817,9 @@ Router.push('./raterule')
     axios.get(url)
       .then((response) => {
         setRateRule(response.data);
+
         setUserRateDetails(response.data.user_rate_condition?.[i])
+
         var keys= Object.keys(response.data)
        for(let item in keys){
         if(keys[item]==='conditional_rate') { setIsRatePresent(true)
@@ -1102,8 +1109,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.programname}
+
                      </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+ <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input type="text"
                       className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1115,6 +1123,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           rate_rule_name: e.target.value,
                         },setBasicFlag(1))
                       }/>
+
                <p className="text-red-700 font-light">
                {error?.rate_rule_name}
             </p></div>
@@ -1127,7 +1136,9 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                  {language?.discounttype}
+
                  </label>
+
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                 <select
@@ -1153,7 +1164,9 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
+
                   </label>
+
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
@@ -1167,7 +1180,9 @@ return Object.keys(error).length === 0 ? true :  error;
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                     {language?.pricemultiplier}
+
                  </label>
+
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
@@ -1181,9 +1196,9 @@ return Object.keys(error).length === 0 ? true :  error;
                     },setMod(1))
                   }
                 />
-                  <p className="text-red-700 font-light">
+<p className="text-red-700 font-light">
                  {err?.price_multiplier}
-            </p></div></div></div>
+          </p></div></div></div>
                <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                   <Button Primary={language?.Next} 
@@ -1266,8 +1281,10 @@ return Object.keys(error).length === 0 ? true :  error;
                           user_rate_condition_op: e.target.value,
                         },setBasicFlag(1))
                       }
+
                     >  
                       <option selected disabled >{userRateDetails.user_rate_condition_op}</option>
+
                       <option value="all">{language?.all}</option>
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
@@ -1287,8 +1304,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <textarea rows="2" columns="50"
                       className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+
                       defaultValue={userRateDetails?.description}
-                      required
+                       
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
@@ -1296,8 +1314,10 @@ return Object.keys(error).length === 0 ? true :  error;
                         },setBasicFlag(1))
                       }
                   />
+
                      <p className="text-red-700 font-light">
                      {error?.description}
+
             </p></div>
                   </div>
                 </div>
@@ -1444,6 +1464,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <input type="text" 
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
+
                       defaultValue={conditions?.max_user_percentage} 
                       onChange={(e) =>
                         setUserRateDetails({
@@ -1451,20 +1472,22 @@ return Object.keys(error).length === 0 ? true :  error;
                           max_user_percentage: e.target.value,
                         },setBasicFlag(1))
                       }/>
+
                        <p className=" text-red-700 font-light">
                        {error?.max_user_percentage}
-                       </p></div>
+ </p></div>
                       </div>
                         </div> 
 
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-3/12 ">
                       <span className="flex">
+
                         <input id="checkbox-1" checked={ userSign.user_signed_in === true} 
                         onChange={(e) =>
                           setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
                         }
-                          aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+              aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
                       <label
@@ -1478,11 +1501,12 @@ return Object.keys(error).length === 0 ? true :  error;
                       <div className="form-check mx-2 form-check-inline">
                           
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
+
                           <input type="checkbox" value={userSign.user_signed_in} 
                           checked={ userSign?.user_signed_in === true}
                             onChange={(e) =>
                               setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
-                            }
+ }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
                             className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
@@ -1545,8 +1569,9 @@ return Object.keys(error).length === 0 ? true :  error;
         </div>
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
         <Button Primary={language?.Previous}   onClick={() => {setDisp(0);}} />
+
                 <Button Primary={language?.Update} onClick={()=>{ 
-                  if (basicFlag.length !== 0){
+if (basicFlag.length !== 0){
                     submitAdditional();
                   }
                   if (finalLang.length !== 0){
@@ -1637,8 +1662,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.baserate} {language?.amount}
+
                        </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1650,9 +1676,10 @@ return Object.keys(error).length === 0 ? true :  error;
                         )
                       }
                     />
+
                       <p className="text-red-700 font-light">
                       {error?.base_rate_amount}
-                  </p></div>
+ </p></div>
                   </div>
                 </div>
 
@@ -1663,8 +1690,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.currency}
+
                       </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1687,8 +1715,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.amount}
+
                       </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1699,9 +1728,10 @@ return Object.keys(error).length === 0 ? true :  error;
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
+
                         <p className="text-red-700 font-light">
                         {error?.tax_amount}
-                      </p></div>
+ </p></div>
                   </div>
                 </div>
 
@@ -1712,8 +1742,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.other} {language?.capacity} {language?.currency}
+
                       </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+ <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1736,8 +1767,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.other} {language?.charges} {language?.amount}
+
                       </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+ <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1749,9 +1781,10 @@ return Object.keys(error).length === 0 ? true :  error;
                         )
                       }
                     />
+
                       <p className="text-red-700 font-light">
                       {error?.otherfees_amount}
-                  </p></div>
+</p></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1761,8 +1794,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                         {language?.paymentholder}
+
                       </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+ <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1786,8 +1820,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                        {language?.refundable}
+
                       </label>
-                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1801,8 +1836,9 @@ return Object.keys(error).length === 0 ? true :  error;
                         : <option value={false}> {language?.no}</option>}
 
                       <option value={true}> {language?.yes}</option>
+
                       <option disabled selected value={false}> {language?.no}</option>
-                    </select></div>
+ </select></div>
                   </div>
                 </div>
 
@@ -1815,8 +1851,9 @@ return Object.keys(error).length === 0 ? true :  error;
                           htmlFor="grid-password"
                         >
                             {language?.refundable} {language?.till} {language?.days}
+
                               </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="text"
@@ -1827,9 +1864,10 @@ return Object.keys(error).length === 0 ? true :  error;
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_days: e.target.value })
                             )
                           } />
+
                           <p className="text-red-700 font-light">
                          {error?.refundable_until_days}
-                          </p></div>
+  </p></div>
                       </div>
                     </div>
 
@@ -1863,8 +1901,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
+
                        {language?.expirationtimezone} 
-                    </label>
+</label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
@@ -1875,8 +1914,9 @@ return Object.keys(error).length === 0 ? true :  error;
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, expiration_time: e.target.value })
                         )
+
                       } /> <p className="text-red-700 font-light"> {error?.expiration_time}</p>
-                     </div>
+ </div>
                   </div>
                 </div>
                       
@@ -1890,8 +1930,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+
                         <option selected disabled>{language?.select}</option>
-                        {rooms?.map(i => {
+ {rooms?.map(i => {
                           return (
                             <option key={i} value={i.room_id}>{i.room_name}</option>)
                         }

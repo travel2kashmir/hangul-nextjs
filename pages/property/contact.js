@@ -23,8 +23,10 @@ var currentLogged;
 function Contact() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
+
   const [spinner, setSpinner] = useState(0)
   const [spin, setSpin] = useState(0)
+
   const [visible,setVisible]=useState(0) 
   const [deleteContact, setDeleteContact] = useState(0);
   const [viewDel, setViewDel] = useState(0);
@@ -286,6 +288,7 @@ function Contact() {
         {/* Header */}
         <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
          <div className={visible === 1 ? 'block' : 'hidden'}>
+
         <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit} 
         delSpin={language?.SpinnerDelete} saveSpinner={language?.SpinnerSave} spinner={spinner}
         setSpinner={setSpinner}

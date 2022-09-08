@@ -43,11 +43,7 @@ export default {
   },
   "PackageCols":{
     name:"Paquets",
-   col1 : "Paquet Nom", 
-  },
-  "RateRuleCols":{
-    name:"Règles de Taux",
-   col1 : "Nom",
+   col1 : "Paquet Nom",
     
   },
   "MilesCols":{
@@ -68,9 +64,9 @@ export default {
   addroom:"Ajouter une salle",
   addnewroom:"Ajouter une nouvelle pièce",
   addnewservices:"Ajouter de nouveaux services",
-  addcontacts:"Ajouter des contacts",
+  "addcontacts":"Ajouter des contacts",
   basicdetails: "Détails De Base ",
-  addbasicdetails:"Ajouter des détails de base",
+addbasicdetails:"Ajouter des détails de base",
 
   "Update" :{
     label: 'Éditer',
@@ -325,79 +321,6 @@ export default {
   lost: "Mot de passe perdu",
   remember: "Non enregistré?",
   create: "Créer un compte",
-  "SaleCols":{
-    name:"Point de Vente",
-   col1 : "Nom de la Vente",
-    
-  },
-  "SpinnerSignin" :{
-    label: "Connectez-vous",
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-     icon:<svg role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
-     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
-     </svg>
-  },
-  "Signin" :{
-    label:"S'identifier",
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-  },
-  "View" :{
-    label: "Voir",
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
-  },
-
-  "SpinnerAdd" :{
-    label: "Ajouter",
-
- 
-  "SpinnerUpdate" :{
-    label: "Mise à jour",
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
-     icon:<svg role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
-     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
-     </svg>
-  },
-
-  "SpinnerDelete" :{
-    label: "Suppression",
-     color: "bg-red-600 hover:bg-red-800 text-white mx-2",
-     icon:<svg role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
-     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
-     </svg>
-  },
-
-  "MatchStatusCols":{
-    name:"Statut de correspondance",
-   col1 : "Nom du statut de correspondance",
-   col2:"Statut de correspondance"
-    
-  },
-
-  "SpinnerUpload" :{
-    label: "Téléchargement",
-     color: "bg-gray-600 hover:bg-gray-700 text-white",
-     icon:<svg role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
-     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
-     </svg>
-  },
-  "SpinnerSave" :{
-    label: "Économie",
-     color: "bg-green-600 hover:bg-green-700 text-white ",
-     icon:<svg role="status" className="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
-     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
-     </svg>
-  },
-
-  matchstatus:'Statut de correspondance',
-  salename: 'Nom du Point de Vente',
-  salelanguage:'Langue du Point de Vente',
-  signingin:"Connectez-vous",
-  pointofsale:"Point de Vente",
   enteremail: "entrer votre email",
   enterpassword: "tapez votre mot de passe",
   language: "Sélectionner",
@@ -418,7 +341,6 @@ export default {
   property: "Biens",
   name: "Nom",
   status: "Statut",
-  theme:'Thème',
   category: "Catégorie",
   active: "Actif",
   action: "Acte",
@@ -452,10 +374,6 @@ export default {
   descriptiondate: "Date Descriptif",
   update:'Éditer',
   country:'Pays',
-  device:"dispositif",
-  pointofsales:"Points de vente",
-  currency:"Devise",
-  sitetype:"Type de site",
   value: 'Valeur',
   delete:'Delete',
   edit:'Éditer',
@@ -466,8 +384,6 @@ export default {
   service:'Le service',
   services:'Le services',
   additional:'Additionnel',
-  additionalservices:"Additionnel Le services",
-  basicservices:"De Base Le services",
   searchforservices:'Rechercher Le services',
   inactive:'Inactif',
   sendto:'Envoyer a`',
@@ -542,57 +458,6 @@ export default {
   imageupload:'Hargement Des Images',
   image:'Image',
   titl:'titre',
-  upload:'Télécharger',
-
-  //Rate Rules
-  programname:'Nom du Programme',
-  ratecondition: 'Conditions Tarifaires',
-  ratedescription: 'Description du Tarif',
-  discounttype: 'Type de Remise',
-  hotelamenity: 'Équipement de l`hôtel(Wifi gratuit)',
-  pricemultiplier: 'Multiplicateur de Prix',
-  rateruledescription: 'Description de la Règle de Tarification',
-  rateruleconditions: "Règle de Taux les Cnditions",
-  rates: 'Les Taux',
-  all: 'Tout',
-  any: 'N`importe Quel',
-  none: 'Rien',
-  select:'Sélectionner',
-  exact: 'exact- Un pourcentage de remise',
-  priceband:'Le prix- Une gamme de rabais',
-  existence:'existence- Une limite non spécifique',
-  addraterules:'Ajouter des Règles de Taux',
-  usercountry: 'Pays de L`utilisateur',
-  userdevice:'Appareil Utilisateur',
-  language:'Langue',
-  "ContactCols":{
-    name:"Contactez",
-   col1 : "Type de contact",
-   col2 : "Détails du Contact", 
-   search: "Chercher"
-  },
-  //Validation
-   required:'Ce champ est requis',
-   float:'Ce champ accepte les flottants et les nombres',
-   num:'Ce champ n`accepte que des nombres',
-
-  editraterule: 'Modifier La Règle de Taux',
-  conditions:'Les conditions',
-  membershipprogram: 'Programme D`adhésion',
-  maxuserpercentage: 'Pourcentage Maximal D`utilisateurs',
-  usersignedin: 'Utilisateur Connecté',
-  isdomestic: 'Est Domestique',
-  expirationtimezone: 'Fuseau Horaire D`expiration',
-  web:'La Toile',
-  hotel:'Hôtel',
-  installment:'Versement',
-  deposit:'Verser',
-  yes:'Oui',
-  no: 'Non',
-
-  "Addnewproperty":{
-    label:'Ajouter une nouvelle propriété',
-    color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
-  }
+  upload:'Télécharger'
 
 };

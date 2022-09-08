@@ -1,31 +1,31 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Buttonloader from '../../components/loaders/buttonloader'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Landingloader from "../../components/loaders/landingloader";
 import { useRouter } from "next/router";
-import Button from "../../components/Button";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 const logger = require("../../services/logger");   
+import Loader from "../../components/loader";  
 var language;
 var currentUser;
 const  Landing=() =>{ 
-  var locale;
+
   /** Router for Redirection **/
   const router = useRouter();
 
   /** State Intialisation for storing all Properties of Current User **/
   const [ownerdata, setOwnerdata] = useState([]);
- const [visible, setVisible] = useState(0);
+ 
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
-       locale = localStorage.getItem("Language");
-         if (locale === "ar") {
+       
+        var locale = localStorage.getItem("Language");
+        
+        if (locale === "ar") {
         language = arabic;
         }
         if (locale === "en") {
@@ -38,39 +38,38 @@ const  Landing=() =>{
       } 
     }
     firstfun();
-    fetchProperty();
   },[])
 
   /** Use Effect to fetch all the properties of Current user **/
-  const fetchProperty = async () => { 
-    try {
-      const l=await localStorage.getItem("Language");
-      console.log("langguage "+l)
-      const url = `/api/${l}/properties/${currentUser.id}`;
-      logger.info("url" +url)
-      const response = await axios.get(url, {
-        headers: { accept: "application/json" },
-      });
-      
-      setOwnerdata(response.data);
-
-      setVisible(1)
-
-    } catch (error) {
-      if (error.response) {
-        logger.error("Current User Properties Error");
-      } else {
-        logger.error("Current User Properties Error");
+  useEffect(() => {
+    const fetchProperty = async () => { 
+      try {
+        const url = `/api/properties/${currentUser.id}`;
+        logger.info("url" +url)
+        const response = await axios.get(url, {
+          headers: { accept: "application/json" },
+        });
+        
+        setOwnerdata(response.data);
+      } catch (error) {
+        if (error.response) {
+          logger.error("Current User Properties Error");
+        } else {
+          logger.error("Current User Properties Error");
+        }
       }
-    }
-  };
+    };
+   
+    fetchProperty();
+    
+  },[]);
 
   /**Function to save Current property to be viewed to Local Storage**/
   const LocalProperty = ({ item }) => {
     localStorage.setItem("property", JSON.stringify(item));
   };
 
-  return ( 
+  return (  <div> {ownerdata.length===0?<div><Loader/></div> :<div>
   <div className="bg-gray-50  pt-8 lg:px-32 sm:px-1 pb-72">
     <div className="mx-auto  flex flex-col justify-center items-center px-4 pt-8 pt:mt-0">
       <span
@@ -83,43 +82,31 @@ const  Landing=() =>{
         <div className="p-4 sm:p-8 lg:p-space-y-2">
 
           {/** Button for Sign out**/}
-          <div className={visible === 0 ? ' block w-32 h-8  float-right' : 'hidden'}><Buttonloader /></div>
-             <div className={visible === 1 ? 'block' : 'hidden'}> 
           <button
             className=" float-right ml-5 text-white bg-cyan-600 
           hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold 
           rounded-lg text-sm px-4 py-2 text-center  mr-2"
             onClick={() => {
               router.push("/");
-              localStorage.removeItem("property");
-              localStorage.removeItem("Signin Details");  
-              //localStorage.clear();
+              localStorage.clear();
             }}
             type="button"
           >
-              {language?.signout}
-          </button></div>
+           {language?.signout}
+          </button>
           <div className="text-center mt-16">
-             <div className={visible === 0 ? ' block w-32 h-8 my-2 flex justify-center' : 'hidden'}><></></div>
-          <div className={visible === 1? ' block' : 'hidden'}>
             <p className="capitalize font-semibold text-3xl font-sans sm:mt-12 mx-12 mt-24 mb-6 text-cyan-500">
-           {language?.welcome} {currentUser?.name}
-            </p></div>
+              {language?.welcome} {currentUser?.name}
+            </p>
           </div>
-          <div className={visible === 0 ? ' block w-36 h-8 my-2 flex justify-center' : 'hidden'}><Buttonloader /></div>
-          <div className={visible === 1? ' block' : 'hidden'}>
           <p className="font-semibold text-lg text-gray-500">
            {language?.List} {language?.ofproperties}
           </p>
-          </div>
-
           <form className=" space-y-1" action="#">
             <div className="flex flex-col">
               <div className="overflow-x-auto">
                 <div className="align-middle inline-block min-w-full">
                   <div className="shadow overflow-hidden">
-                  <div className={visible === 0 ? 'block' : 'hidden'}><Landingloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
                     <table className="table-fixed min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-100">
                         <tr>
@@ -166,20 +153,24 @@ const  Landing=() =>{
                                 </div>
                               </td>
                               <td className="p-2 whitespace-nowrap space-x-1">
-                                           
-                               <Button Primary={language?.View}  onClick={() => {
+                                <button
+                                  type="button"
+                                  onClick={() => {
                                     LocalProperty({ item});
                                     router.push("./propertysummary");
-                                  }} />
-                      
-               
+                                  }}
+                                  className="text-white bg-cyan-600
+                                         hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                        text-sm inline-flex items-center px-2 py-1.5 text-center"
+                                >
+                                 {language?.view}
+                                </button>
                               </td>
                             </tr>
                           );
                         })}
                       </tbody>
                     </table>
-                   </div>
                   </div>
                 </div>
               </div>
@@ -201,7 +192,8 @@ const  Landing=() =>{
       pauseOnHover
     />
   </div>
- 
+</div>}
+</div> 
   );
 }
 

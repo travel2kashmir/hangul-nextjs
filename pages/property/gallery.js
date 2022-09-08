@@ -8,18 +8,14 @@ import Link from "next/link";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-import Footer from '../../components/Footer';
-import Loader from "../../components/loaders/imageloader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
 var language;
 var currentProperty;
-var currentLogged;
 import Router from 'next/router'
 
 function Gallery() {
-    const [visible,setVisible]=useState(0)
     useEffect(() => {
         const firstfun = () => {
             if (typeof window !== 'undefined') {
@@ -35,7 +31,6 @@ function Gallery() {
                 }
                 /** Current Property Details fetched from the local storage **/
                 currentProperty = JSON.parse(localStorage.getItem("property"));
-                currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
             }
         }
@@ -43,7 +38,6 @@ function Gallery() {
         Router.push("./gallery");
     }, [])
     const [allHotelDetails, setAllHotelDetails] = useState([])
-    const [spinner, setSpinner] = useState(0)
     const [gallery, setGallery] = useState([])
     const [image, setImage] = useState({})
     const [editImage, setEditImage] = useState(0)
@@ -64,7 +58,6 @@ function Gallery() {
             .then((response) => {
                 setGallery(response.data);
                 logger.info("url  to fetch property details hitted successfully")
-                setVisible(1)
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
     }  
@@ -78,7 +71,6 @@ function Gallery() {
     
     /* Function to upload image*/
     const uploadImage = () => {
-        setSpinner(1);
         const imageDetails = image.imageFile
         const formData = new FormData();
         formData.append("file", imageDetails);
@@ -87,10 +79,8 @@ function Gallery() {
         axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
             .then(response => {
                 setImage({ ...image, image_link: response?.data?.secure_url })
-                setSpinner(0);
             })
             .catch(error => {
-                setSpinner(0)
                 toast.error("Image Upload Error! ", {
                     position: "top-center",
                     autoClose: 5000,
@@ -109,7 +99,6 @@ function Gallery() {
     /* Function to add images*/
     const submitAddImage = () => {
         if (actionImage.length !== 0) {
-            setSpinner(1)
             const imagedata = [{
                 property_id: currentProperty?.property_id,
                 image_link: image.image_link,
@@ -119,7 +108,6 @@ function Gallery() {
             }]
             const finalImage = { "images": imagedata }
             axios.post(`/api/gallery`, finalImage).then(response => {
-                setSpinner(0)
                 toast.success("Image Added Successfully!", {
                     position: "top-center",
                     autoClose: 5000,
@@ -135,8 +123,9 @@ function Gallery() {
                 Router.push("./gallery");
                 setAddImage(0)
                 setActionImage([]);
-         }).catch(error => {
-                setSpinner(0)
+                
+                
+            }).catch(error => {
                 toast.error(" Gallery Error", {
                     position: "top-center",
                     autoClose: 5000,
@@ -153,7 +142,6 @@ function Gallery() {
     /* Function to edit images*/
     const updateImageDetails = () => {
         if (allHotelDetails.length !== 0) {
-            setSpinner(1)
             const final_data = {
                 "image_id": actionImage?.image_id,
                 "image_title": allHotelDetails.image_title,
@@ -163,7 +151,6 @@ function Gallery() {
             const url = '/api/images'
             axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
                 ((response) => {
-                    setSpinner(0);
                     setEditImage(0);
                     toast.success("Gallery Updated Successfully!", {
                         position: "top-center",
@@ -179,7 +166,6 @@ function Gallery() {
                     setAllHotelDetails([])
                 })
                 .catch((error) => {
-                    setSpinner(0)
                     toast.error("Gallery Update Error! ", {
                         position: "top-center",
                         autoClose: 5000,
@@ -196,11 +182,9 @@ function Gallery() {
 
     /* Function to delete images*/
     const submitDelete = () => {
-        setSpinner(1)
         const url = `/api/${actionImage.image_id}`
         axios.delete(url).then
             ((response) => {
-                setSpinner(0)
                 setdeleteImage(0)
                 toast.success("Image Deleted Successfully", {
                     position: "top-center",
@@ -216,7 +200,6 @@ function Gallery() {
 
             })
             .catch((error) => {
-                setSpinner(0);
                 toast.error("Gallery Delete Error!", {
                     position: "top-center",
                     autoClose: 5000,
@@ -232,7 +215,6 @@ function Gallery() {
 
     return (
         <>
-      <div>
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
@@ -242,8 +224,8 @@ function Gallery() {
                 <ol className="inline-flex items-center space-x-1 md:space-x-2">
                     <li className="inline-flex items-center">
                         <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                        <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link>
+                        <Link href="./landing" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                        </Link>
                     </li>
                     <li>
                         <div className="flex items-center">
@@ -264,7 +246,7 @@ function Gallery() {
             </nav>
 
             {/* Header */}
-            <div className=" bg-white shadow-xl rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+            <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
                 <h6 className="text-xl mb-2 flex leading-none pl-4 pt-2 font-bold text-gray-900 ">
                     {language?.gallery}
                 </h6>
@@ -293,7 +275,7 @@ function Gallery() {
                         </div>
                     </div>
                     <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                        <Button Primary={language?.Add} onClick={() => setAddImage(1)} />
+                        <Button Primary={language?.AddImage} onClick={() => setAddImage(1)} />
                         <a href="#" className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
                             Import
@@ -303,9 +285,6 @@ function Gallery() {
 
 
                 {/* Gallery Form */}
-                <div className={visible===0?'block w-auto h-auto m-6 flex':'hidden'}><Loader/><Loader/><Loader/></div>
-        
-        <div className={visible===1?'block':'hidden'}>
                 <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
                     {gallery?.images?.map((item, idx) => {
                         return (
@@ -340,7 +319,6 @@ function Gallery() {
                     )
                     }
 
-                </div>
                 </div>
             </div>
             {/* Modal Image Enlarge */}
@@ -428,12 +406,7 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                                        <div className={spinner === 0 ? 'block' : 'hidden'}>
-                                            <Button Primary={language?.Update} onClick={() => updateImageDetails()} />
-                                        </div>
-                                        <div className={spinner === 1 ? 'block' : 'hidden'}>
-                                            <Button Primary={language?.SpinnerUpdate} />
-                                        </div>
+                            <Button Primary={language?.Update}   onClick={() => updateImageDetails()}/>
                             </div>
                         </div>
                     </div>
@@ -455,8 +428,7 @@ function Gallery() {
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                                 >
-                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                     xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button>
                             </div>
 
@@ -481,10 +453,7 @@ function Gallery() {
 
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
-                                            {spinner === 0 ?
-                                            <Button Primary={language?.Upload} onClick={uploadImage} />:
-                                            <Button Primary={language?.SpinnerUpload} />
-                                                    }</div>
+                                            <Button Primary={language?.Upload} onClick={uploadImage} /></div>
                                     </div>
                                     <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
@@ -516,11 +485,7 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                            <div className={spinner === 0 ? 'block' : 'hidden'}>
-                                <Button Primary={language?.Add} onClick={() => { submitAddImage(); }} /></div>
-                                <div className={spinner === 1 ? 'block' : 'hidden'}>
-                                <Button Primary={language?.SpinnerAdd} />
-                                   </div>
+                                <Button Primary={language?.Add} onClick={() => { submitAddImage(); }} />
 
                             </div>
                         </div>
@@ -546,15 +511,8 @@ function Gallery() {
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
                                     {language?.areyousureyouwanttodelete}
                                 </h3>
-                               
-                               {spinner === 0 ?
-                                <>
                                 <Button Primary={language?.Delete} onClick={() => submitDelete()}/>
                                 <Button Primary={language?.Cancel}   onClick={() => setdeleteImage(0)}/>
-                               </>
-                              :
-                               <Button Primary={language?.SpinnerDelete} />}
-                              
                             </div>
                         </div>
                     </div>
@@ -572,18 +530,8 @@ function Gallery() {
                 draggable
                 pauseOnHover />
         </div>
-    <Footer/>
-     </div>
      </>
     )
 }
 
 export default Gallery
-Gallery.getLayout = function PageLayout(page) {
-    return (
-      <>
-        {page}
-      </>
-    )
-  }
-  

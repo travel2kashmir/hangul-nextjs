@@ -8,18 +8,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-import Loader from "../../components/loader";
-import Footer from '../../components/Footer';
 const logger = require("../../services/logger");
 var language;
 var currentProperty;
-var currentLogged;
 var format = require('xml-formatter');
 import Router from 'next/router'
 
 function Propertyxml() {
   const [hotelXML, setHotelXML] = useState();
-  const [visible,setVisible]=useState(0) 
+
   /** Use Effect to fetch details from the Local Storage **/
   useEffect(()=>{  
     const firstfun=()=>{
@@ -37,7 +34,6 @@ function Propertyxml() {
 
 /** Current Property Details fetched from the local storage **/
 currentProperty = JSON.parse(localStorage.getItem("property"));
-currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         } }
            firstfun(); 
            Router.push("./propertyxml")   
@@ -69,7 +65,6 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
           headers: { "Content-Type": "application/xml; charset=utf-8" },
         });
         setHotelXML(response.data);
-        setVisible(1)
        
       } catch (error) {
         if (error.response) {
@@ -86,8 +81,6 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
   return (
     <div>
-      <div className={visible===0?'block':'hidden'}><Loader/></div>
-<div className={visible===1?'block':'hidden'}>
       <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
       <div
@@ -106,8 +99,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               >
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
               </svg>
-              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link>
+              <Link
+                href="./landing"
+                className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"
+              >
+                <a>{language?.home} </a>
+              </Link>
             </li>
             <li>
               <div className="flex items-center">
@@ -196,16 +193,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         pauseOnHover
       />
     </div>
-    <Footer/>
-    </div>
   );
 }
 
 export default Propertyxml   
-Propertyxml.getLayout = function PageLayout(page){
-  return(
-    <>
-    {page}
-    </>
-  )
-  }

@@ -251,8 +251,7 @@ useEffect(() => {
             </button>
           </div>
         </div>
-      </div> 
-      <div className=' bg-gray-50 px-2 relative overflow-y-auto lg:ml-64'>
+      </div> <div className=' bg-gray-50 px-2 relative overflow-y-auto lg:ml-64'>
         {contact?.map((contact, index) => (
           <div className='' key={index}>
             <button
@@ -311,7 +310,7 @@ useEffect(() => {
         <div className="items-center p-6 border-t border-gray-200 rounded-b">
           <button
             className="float-right mt-4 bg-blue-600 text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-            onClick={(e) => JSON.stringify(property_id).toUpperCase() != 'NULL' ? handleSubmit(e) : toast.error("APP: Property Not Registered", {
+            onClick={(e) => property_id != '' ? handleSubmit(e) : toast.error("APP: Property Not Registered", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,

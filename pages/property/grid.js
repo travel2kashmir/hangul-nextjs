@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import Button from "../../components/Button";
+import TableList from "../../components/Table/TableList";
 import { ToastContainer, toast } from "react-toastify";
 import Header from "../../components/Header";
 import "react-toastify/dist/ReactToastify.css";
@@ -178,11 +179,14 @@ function Contact() {
   const allDelete = async () => {
     console.log(contacts)
     const checked= contacts.filter(i=>i.isChecked===true).map(j=>{return(j.contact_id)})
+    alert(JSON.stringify(checked))
   }
 
   
     const displayData = useMemo(() => {
         const start = (page - 1) * itemsPerPage;
+       
+     // alert(JSON.stringify(page))  ;
         return gen.slice(start, start + itemsPerPage);
       }, [page,gen]);
 

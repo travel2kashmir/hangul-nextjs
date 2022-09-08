@@ -8,13 +8,10 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
 const logger = require("../../services/logger");
-import Footer from '../../components/Footer';
-import Loader from '../../components/loader';
 var language;
 var currentProperty;
-var currentLogged;
+
 function Roomsxml() {
-    const [visible,setVisible]=useState(0) 
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
@@ -31,7 +28,6 @@ function Roomsxml() {
        
        /** Current Property Details fetched from the local storage **/
        currentProperty = JSON.parse(localStorage.getItem("property"));
-       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       } 
     }
     firstfun();
@@ -49,7 +45,6 @@ function Roomsxml() {
              const url = `/api/rooms/${currentProperty.property_id}`
               const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
             setAllRooms(response.data) 
-            setVisible(1)
           } 
           catch (error) {
               if (error.response) {
@@ -63,8 +58,7 @@ function Roomsxml() {
       ,[])
     
   return (
-    <><div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
+    <>
      <Header Primary={english?.Side}/>
     <Sidebar  Primary={english?.Side}/>
     <div  id="main-content"
@@ -75,8 +69,9 @@ function Roomsxml() {
                     <li className="inline-flex items-center">
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                             <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link></span>
+                            <Link href="./landing">
+                            <a>{language?.home}</a>
+                        </Link></span>
                     </li>
                     <li>
                         <div className="flex items-center">
@@ -191,17 +186,9 @@ function Roomsxml() {
                 </div>
             </div>
         </div>
-       <Footer/>
-       </div> </>
+        </>
     )
 
 }
 
 export default Roomsxml
-Roomsxml.getLayout = function PageLayout(page){
-    return(
-      <>
-      {page}
-      </>
-    )
-    }

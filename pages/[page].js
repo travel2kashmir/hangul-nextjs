@@ -58,13 +58,11 @@ function Page() {
   }
 
   const fetchHotelDetails = async () => {
-
-console.log(router.query.page)
-    if (router?.query?.page) {
+    console.log(router.query.Page)
+    if (router?.query?.Page) {
       var url;
-      url = `/api/property_page/${router?.query?.page}`;
+      url = `/api/property_page/${router?.query?.Page}`;
       console.log(url)
-
       axios.get(url)
         .then((response) => {
          fetchProperty(response.data);
@@ -84,9 +82,8 @@ console.log(router.query.page)
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     fetchHotelDetails();
-  },[router.query.page]);
-
-
+  },[router.query.Page]);
+{}
   return (
     <>{allHotelDetails.length===0?
       <Loader/>
@@ -463,7 +460,7 @@ console.log(router.query.page)
      </div>
 
      {/* Gallery */}
-     <div className="mt-2 grid grid-flow-row-dense md:grid-cols-1 sm:grid-cols-1 mb-4 lg:grid-cols-1 gap-3">
+     <div className="mt-2 grid grid-flow-row-dense md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
        <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
          <div className="flex items-center justify-between ">
            <div className="flex-shrink-0">

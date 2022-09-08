@@ -9,18 +9,14 @@ import arabic from "../../../../components/Languages/ar"
 import Button from '../../../../components/Button'
 import Footer from "../../../../components/Footer";
 import Sidebar from '../../../../components/Sidebar';
-import Headloader from '../../../../components/loaders/headloader';
-import Lineloader from '../../../../components/loaders/lineloader';
-import Header from '../../../../components/Header';
+import Header from '../../../../components/Header'
 import Router from "next/router";
 var language;
 var currentProperty;
-var currentLogged;
 const logger = require("../../../../services/logger"); 
 var currentPackage;
 
 function PackageRates() {
-  const [visible,setVisible]=useState(0) 
   const [allRooms, setAllRooms] = useState([])
   const [allPackageRateDetails, setAllPackageRateDetails] = useState([])
   const[room,setRoom]= useState([])
@@ -42,14 +38,12 @@ function PackageRates() {
         }
         /** Current Property Basic Details fetched from the local storage **/
         currentProperty=JSON.parse(localStorage.getItem('property'))
-        currentPackage=localStorage.getItem('packageId')     
-        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));   
+        currentPackage=localStorage.getItem('packageId')        
     } 
     }
     firstfun();
     Router.push("./packagerates");
   },[]) 
-
 /* Edit Package Fetch Function */
 const fetchDetails = async  () => {
   const url = `/api/package/${currentPackage}`
@@ -57,7 +51,6 @@ const fetchDetails = async  () => {
      ((response) => {
      logger.info("package success");
      setCurrentPackageRates(response.data)
-     setVisible(1)
      })
      .catch((error) => {
       logger.info("Delete error")
@@ -90,7 +83,6 @@ const fetchDetails = async  () => {
       ((response) => {
       logger.info("Delete success");
       submitUpdatedRooms();
-
       })
       .catch((error) => {
        logger.info("Delete error")
@@ -156,7 +148,6 @@ const fetchDetails = async  () => {
           progress: undefined,
         });
         setAllPackageRateDetails([])
-        Router.push("../package")
       })
       .catch((error) => {
        toast.error("Package Rates Error!", {
@@ -197,7 +188,6 @@ const fetchDetails = async  () => {
           progress: undefined,
         });
         setAllPackageRateDetails([])
-        Router.push("../package")
       })
       .catch((error) => {
        toast.error("Package Rates Error!", {
@@ -223,8 +213,9 @@ const fetchDetails = async  () => {
      <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
               <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../../admin/AdminLanding":"../../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link>
+              <Link href="../../landing" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
+             <a> {language?.home}</a>
+            </Link>
           </li>
           <li>
             <div className="flex items-center">
@@ -245,10 +236,7 @@ const fetchDetails = async  () => {
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
               <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 capitalize md:ml-2">
-              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                                <div className={visible === 1 ? 'block' : 'hidden'}>
-		
-                < Link href="../package"><a>{currentPackageRates?.package_name}</a></Link></div></span>
+                < Link href="../package"><a>{currentPackageRates?.package_name}</a></Link></span>
             </div>
           </li>
           <li>
@@ -277,19 +265,17 @@ const fetchDetails = async  () => {
                   >
                     {language?.baserate} {language?.currency}
                   </label>
-                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, base_rate_currency: e.target.value })
                       )
                     }>
-                     <option selected>{currentPackageRates?.base_rate_currency}</option>
+                     <option selected >Select baserate currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select></div>
+                  </select>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -300,8 +286,6 @@ const fetchDetails = async  () => {
                   >
                     {language?.baserate} {language?.amount}
                   </label>
-                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -311,7 +295,7 @@ const fetchDetails = async  () => {
                         setAllPackageRateDetails({ ...allPackageRateDetails, base_rate_amount: e.target.value })
                       )
                     }
-                  /></div>
+                  />
                 </div>
               </div>
 
@@ -323,19 +307,17 @@ const fetchDetails = async  () => {
                   >
                     {language?.taxrate} {language?.currency}
                   </label>
-                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_currency: e.target.value })
                       )
                     }>
-                    <option selected >{currentPackageRates?.tax_rate_currency}</option>
+                    <option selected >Select taxrate currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select></div>
+                  </select>
                 </div>
               </div>
 
@@ -347,8 +329,6 @@ const fetchDetails = async  () => {
                   >
                     {language?.taxrate} {language?.amount}
                   </label>
-                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -357,7 +337,7 @@ const fetchDetails = async  () => {
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, tax_rate_amount: e.target.value })
                       )
-                    } /></div>
+                    } />
                 </div>
               </div>
 
@@ -369,19 +349,17 @@ const fetchDetails = async  () => {
                   >
                     {language?.other} {language?.charges} {language?.currency}
                   </label>
-                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                     onChange={
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_currency: e.target.value })
                       )
                     }>
-                     <option selected >{currentPackageRates?.other_charges_currency}</option>
+                     <option selected >Select other charges currency</option>
                     <option value="USD" >USD</option>
                     <option value="INR">INR</option>
                     <option value="Euro">Euro</option>
-                  </select></div>
+                  </select>
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -392,8 +370,6 @@ const fetchDetails = async  () => {
                   >
                     {language?.other} {language?.charges} {language?.amount}
                   </label>
-                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <input
                     type="text"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -402,7 +378,7 @@ const fetchDetails = async  () => {
                       (e) => (
                         setAllPackageRateDetails({ ...allPackageRateDetails, other_charges_amount: e.target.value })
                       )
-                    } /></div>
+                    } />
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -429,7 +405,6 @@ const fetchDetails = async  () => {
         pauseOnHover />
     </div>
     <Footer/>
-   
       </>
   )
 }

@@ -133,6 +133,7 @@ function Result() {
         "rates_id": result?.rate?.[i]?.rates_id,
         "expiration_time": rates?.expiration_time ? time.getTime() : rates?.expiration_time,
       }
+      alert("rates" + JSON.stringify(final_data))
       const url = '/api/package/rates'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
@@ -175,7 +176,8 @@ function Result() {
         "other_fees_currency": rate?.other_fees_currency,
         "other_fees_amount": rate?.other_fees_amount,
       }
-     const url = '/api/package/rates_master'
+      alert("final_data" + JSON.stringify(final_data))
+      const url = '/api/package/rates_master'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
           toast.success("Package rates master successfully!", {

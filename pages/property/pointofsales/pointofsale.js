@@ -14,6 +14,7 @@ import Table from '../../../components/Table';
 import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import Router from "next/router";
+import { setUncaughtExceptionCaptureCallback } from 'process';
 var language;
 var currentProperty;
 var j = 1;
@@ -29,10 +30,16 @@ var currentLogged;
 function Allpointofsale() {
   const [disp, setDisp] = useState(0);
   const [view, setView] = useState(0);
+
+  const[countryData,setCountryData]=useState({})
+  const[deviceData,setDeviceData]=useState({})
+  const[languageData,setLanguageData]=useState({})
+  const[currencyData,setCurrencyData]=useState({})
+  const[siteData,setSiteData]=useState({})
   const [viewEdit, setViewEdit] = useState(0);
   const [flag, setFlag] = useState([]); 
-  const [visible, setVisible] = useState(0);
-  const [current, setCurrent] = useState([]);
+ const [visible, setVisible] = useState(0);
+ const [current, setCurrent] = useState([]);
   const [countryCheck, setCountryCheck] = useState(false);
   const [languageCheck, setLanguageCheck] = useState(false);
   const [deviceCheck, setDeviceCheck] = useState(false);
@@ -156,10 +163,11 @@ const validationMatchStatus = (data) => {
   if(data?.url === "" || data?.url === undefined){
     error.url = "This field is required."
   }
-  if((!data?.url?.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) && (data.url != "" &&  data.url != undefined))){
+
+  if((!data?.url?.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/) && (data.url != "" &&  data.url != undefined))){
     error.url = "The url has invalid format."
   } 
-  
+
  return Object.keys(error).length === 0 ? true :  error;
 
  }
@@ -183,7 +191,7 @@ const validationMatchStatus = (data) => {
         Router.push("./pointofsale");
       })
       .catch((error) => {
-        toast.error("API: Match status delete error.", {
+toast.error("API: Match status delete error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -217,7 +225,7 @@ const submitMatchstatus = () =>
         header: { "content-type": "application/json" },
       })
       .then((response) => {
-        toast.success("API: Match Status added successfully!", {
+toast.success("API: Match Status added successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -235,9 +243,9 @@ const submitMatchstatus = () =>
           const url = "/api/point_of_sale/pos_match_status_link";
           axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
             .then((response) => {
-
-              toast.success("API: Match Status added successfully!", {
+ toast.success("API: Match Status added successfully!", {
    position: "top-center",
+
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -272,7 +280,8 @@ const submitMatchstatus = () =>
       });
     }
     else{
-      toast.error("APP: Please select at least one condition", {
+toast.error("APP: Please select at least one condition", {
+
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -348,22 +357,24 @@ const filterByMLanguage = (props) => {
 
   const submitMatchStatusEdit = () => {
     if (validationMatchStatus(current)){
-    if(deviceCheck || countryCheck || currencyCheck || siteCheck  === true){
-     
+
     const final_data ={
-      match_status:current?.match_status,
+        match_status:current?.match_status,
         match_status_name:current?.match_status_name,
-        country: current?.country,
-        language: current?.language,
-        device:current?.device,
-        currency:current?.currency,
-        site_type: current?.site_type,
+        country: countryData.tick === false ? "" :  countryData.data ,
+        language:  languageData.tick  === false ? "" : languageData.data ,
+        device:deviceData.tick === false ? "" : deviceData.data ,
+        currency:currencyData.tick === false ? "" : currencyData.data ,
+        site_type: siteData.tick  === false ? "" : siteData.data,
         match_status_id:current?.id  
     };
+     alert("final" +JSON.stringify(final_data))
       const url = '/api/point_of_sale/match_status'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
-          toast.success("API: Match Status Updated Successfully!", {
+          fetchDetails();
+          toast.success("Match Status Updated Successfully!", {
+
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -372,13 +383,14 @@ const filterByMLanguage = (props) => {
             draggable: true,
             progress: undefined,
           });
-          fetchDetails();
+
           setViewEdit(0);
-          setFlag([])
-          setCurrent([])
+          clearData();
+          Router.push('./pointofsale')
         })
         .catch((error) => {
-          toast.error("API: Match Status Update Error!", {
+          toast.error("Match Status Update Error!", {
+
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -388,7 +400,7 @@ const filterByMLanguage = (props) => {
             progress: undefined,
           });
         })
-      } 
+} 
       else{
         toast.error("APP: Please check one of the condition", {
           position: "top-center",
@@ -400,6 +412,7 @@ const filterByMLanguage = (props) => {
           progress: undefined,
         });
       }
+
     }
   }
   
@@ -414,7 +427,8 @@ const filterByMLanguage = (props) => {
       const url = '/api/point_of_sale'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
-          toast.success("API: Point of sale Updated Successfully!", {
+ toast.success("API: Point of sale Updated Successfully!", {
+
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -423,11 +437,16 @@ const filterByMLanguage = (props) => {
             draggable: true,
             progress: undefined,
           });
+
+          setFlag([]);
           fetchDetails();
+          Router.push('./pointofsale')
           setDisp(1)
+          
         })
         .catch((error) => {
           toast.error("API: Point of sale update error!", {
+
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -440,6 +459,21 @@ const filterByMLanguage = (props) => {
       }  
     
   }
+
+  const clearData = () => {
+  setFlag([]);
+  setCountryData({});
+  setDeviceData({});
+  setCurrencyData({});
+  setLanguageData({});
+  setSiteData({})
+  setCountryCheck(false);
+  setDeviceCheck(false);
+  setLanguageCheck(false);
+  setCurrencyCheck(false);
+  setSiteCheck(false);
+  fetchDetails();
+ }
 
   return (
     <div>
@@ -623,10 +657,11 @@ const filterByMLanguage = (props) => {
               <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
               <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/>
                     {Button !== 'undefined' ?
-                      <Button Primary={language?.Update} onClick={()=>{
+                  <Button Primary={language?.Update} onClick={()=>{
                        if(flag === 1){
                         submitPointOfSaleEdit()}
                       } }/>
+
                       : <></>
                     }
                    
@@ -720,7 +755,9 @@ const filterByMLanguage = (props) => {
                             setDSales({ ...dSales, match_status: e.target.value })
                           )
                         }>
-                        <option selected>{language?.select}</option>
+
+                        <option selected disabled>{language?.select}</option>
+
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
@@ -755,7 +792,9 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, country: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+
+                            <option selected disabled>{language?.select}</option>
+
                             {lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
@@ -788,8 +827,9 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, device: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
-                            {lang?.DeviceData?.map(i => {
+
+                            <option selected disabled>{language?.select}</option>
+{lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
@@ -818,7 +858,9 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, language: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+
+                            <option selected disabled>{language?.select}</option>
+
                             {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
@@ -850,7 +892,8 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, currency: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+
+                            <option selected disabled>{language?.select}</option>
                             {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
@@ -881,7 +924,8 @@ const filterByMLanguage = (props) => {
                                 setDSales({ ...dSales, site_type: e.target.value })
                               )
                             }>
-                            <option selected>{language?.select}</option>
+
+                            <option selected disabled>{language?.select}</option>
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
@@ -908,8 +952,9 @@ const filterByMLanguage = (props) => {
                   <h3 className="text-xl font-semibold">{language?.edit} {language?.MatchStatusCols?.name}</h3>
                   <button
                     type="button"
-                    onClick={() => setViewEdit(0)}
-                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+
+                    onClick={() => {setViewEdit(0);clearData();}}
+className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                   >
                     <svg
                       className="w-5 h-5"
@@ -966,8 +1011,9 @@ const filterByMLanguage = (props) => {
                             setCurrent({...current, match_status: e.target.value},setFlag(1))
                           )
                         }>
-                        <option selected>{current?.type}</option>
-                        <option value="yes">Yes</option>
+
+                        <option selected disabled>{current?.type}</option>
+ <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
                       <p className="text-red-700 font-light">
@@ -984,8 +1030,10 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCountryCheck(!countryCheck),setFlag(1) }} checked={countryCheck === true}
-                              className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
+
+                              onClick={() =>{ setCountryData({ ...countryData,  tick: !countryCheck, });setCountryCheck(!countryCheck)}}
+                               checked={countryCheck === true}
+className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 my-2 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
@@ -996,14 +1044,19 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-4/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
                       text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                            
-                          onChange={
+onChange={
                               (e) => (
-                                setCurrent({ ...current, country: e.target.value },setFlag(1))
+                            
+                                setCountryData({ ...countryData, data: e.target.value },setFlag(1))
+                            
                               )
                             }>
-                            <option selected>{resCou?.[i]?.country_name}</option>
-                            {lang?.CountryData?.map(i => {
+                          
+                            {current?.country != undefined ?
+                            <option selected disabled>{resCou?.[i]?.country_name}</option>
+                            : 
+                          <option selected disabled>{language?.select}</option>}
+{lang?.CountryData?.map(i => {
                               return (
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
@@ -1016,8 +1069,9 @@ const filterByMLanguage = (props) => {
                       <div className='flex mb-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
-                            <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setDeviceCheck(!deviceCheck),setFlag(1) }} checked={deviceCheck === true}
+<input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
+                                onClick={() => {setDeviceData({ ...deviceData,  tick:!deviceCheck }),
+                                setDeviceCheck(!deviceCheck)}} checked={deviceCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
 
@@ -1032,42 +1086,51 @@ const filterByMLanguage = (props) => {
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, device: e.target.value },setFlag(1))
+                                setDeviceData({ ...deviceData, data: e.target.value })
                               )
                             }>
-                            <option selected>{current?.device}</option>
+                          {current?.device != undefined ?
+                            <option selected disabled>{current?.device}</option>
+                          :
+                         
+                          <option selected disabled>{language?.select}</option>}
                             {lang?.DeviceData?.map(i => {
                               return (
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
                             )}
 
-                          </select></div>
+                          </select> </div>
+                         
                       </div>
 
                       <div className='flex mb-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex ">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setLanguageCheck(!languageCheck),setFlag(1) }} checked={languageCheck === true}
+                              onClick={() => {setLanguageData({ ...languageData,  tick: !languageCheck }),setLanguageCheck(!languageCheck) }} checked={languageCheck === true}
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+
                             <label
                               className="text-sm font-medium mx-2 my-1 text-gray-900 block "
                               htmlFor="grid-password"
                             >
-                             {language?.language}
+{language?.language} 
                             </label> </span></div>
                         <div className="w-full lg:w-4/12 ">
                           
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, language: e.target.value },setFlag(1))
+                                setLanguageData({ ...languageData, data: e.target.value })
                               )
                             }>
-                            <option selected>{resLang?.[i]?.language_name}</option>
-                            
+                               {current?.language != undefined ?
+                            <option selected disabled>{resLang?.[i]?.language_name}</option>
+                        :
+                          <option selected disabled>{language?.select}</option>}
+                          
                             {lang?.LanguageData?.map(i => {
                               return (
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
@@ -1081,7 +1144,7 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setCurrencyCheck(!currencyCheck),setFlag(1) }} checked={currencyCheck === true}
+                              onClick={() => { setCurrencyData({ ...currencyData,  tick: !currencyCheck }),setCurrencyCheck(!currencyCheck)  }} checked={currencyCheck === true}
                               className="bg-gray-50 border-gray-300 focus:ring-3 my-2 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1096,15 +1159,20 @@ const filterByMLanguage = (props) => {
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, currency: e.target.value },setFlag(1))
+                                setCurrencyData({ ...currencyData, data: e.target.value })
                               )
                             }>
-                            <option selected>{resCurr?.[i]?.currency_name}</option>
+                              {current?.currency != undefined ?
+                            <option selected disabled>{resCurr?.[i]?.currency_name}</option>
+                          :
+                          <option selected disabled>{language?.select}</option>}
+                          
                             {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
                             }
                             )}
+
 
                           </select></div>
                       </div>
@@ -1112,7 +1180,9 @@ const filterByMLanguage = (props) => {
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
                             <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
-                              onClick={() => { setSiteCheck(!siteCheck),setFlag(1) }} checked={siteCheck === true}
+
+                              onClick={() => {setSiteData({ ...siteData,  tick: !siteCheck }),setSiteCheck(!siteCheck)  }} checked={siteCheck === true}
+
                               className="bg-gray-50 border-gray-300 my-2 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                             <label htmlFor="checkbox-1"
                               className="sr-only">checkbox</label>
@@ -1127,10 +1197,15 @@ const filterByMLanguage = (props) => {
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
-                                setCurrent({ ...current, site_type: e.target.value },setFlag(1))
+
+                                setSiteData({ ...siteData, data: e.target.value })
                               )
                             }>
-                            <option selected>{current?.site_type}</option>
+                        {current?.site_type != undefined ?
+                            <option selected disabled>{current?.site_type}</option>
+                         :
+                          <option selected disabled>{language?.select}</option>}
+
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
@@ -1142,9 +1217,41 @@ const filterByMLanguage = (props) => {
               </div></div>
                 <div className="items-center flex p-6 border-t border-gray-200 rounded-b">
                   <Button  Primary={language?.Update}  onClick= {()=>{
-                    if(flag === 1){
-                    submitMatchStatusEdit()}}} />
-                </div></div>
+
+                 if((flag === 1) ||
+                 (countryData.data !== undefined && countryData.tick === true && countryData.data !== "")||
+                (countryData.tick === false) ||
+                 (deviceData.data !== undefined && deviceData.tick === true)
+                 ||
+                 (deviceData.tick === false)||
+                 (languageData.data !== undefined && languageData.tick === true)
+                 ||
+                 ( languageData.tick === false)||
+                 (currencyData.tick === false) ||
+                 (currencyData.data !== undefined && currencyData.tick === true)
+                 ||
+                 (siteData.tick === false) ||
+                 (siteData.data !== undefined && siteData.tick === true))
+                 {
+                    submitMatchStatusEdit()}
+                   
+                  else{
+                    toast.error("APP: Please edit the details, first.", {
+                      position: "top-center",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                  }
+                  } } 
+                  />
+                </div>
+                {countryCheck}
+                </div>
+
 </div> 
 </div>
 </div>

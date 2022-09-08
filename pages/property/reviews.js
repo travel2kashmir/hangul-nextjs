@@ -223,8 +223,8 @@ function Reviews() {
             draggable: true,
             progress: undefined,
           });
+ setEdit(0);
 
-          setEdit(0);
         })
         .catch(error => {
           

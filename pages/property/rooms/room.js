@@ -437,7 +437,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
      
           {/* Room Description */}
         <div id='0' className={disp===0?'block':'hidden'}>
-          <div className="bg-white shadow rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+          <div className="bg-white shadow-xl rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
@@ -721,7 +721,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
 
           {/* Room Gallery */}
           <div id='1' className={disp===1?'block':'hidden'}>
-          <div className="bg-white shadow rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
+          <div className="bg-white shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -895,7 +895,7 @@ axios.post('/api/room-images', finalImage, { header: { "content-type": "applicat
 
       {/* Room Rates*/}
       <div id='2' className={disp===2?'block':'hidden'}>
-      <div className="bg-white shadow rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
+      <div className="bg-white shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
       <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>

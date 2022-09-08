@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import Button from "../../components/Button";
-import TableList from "../../components/Table/TableList";
 import { ToastContainer, toast } from "react-toastify";
 import Header from "../../components/Header";
 import "react-toastify/dist/ReactToastify.css";

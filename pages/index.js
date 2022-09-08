@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import Button from "../components/Button";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
@@ -12,13 +13,12 @@ const logger = require("../services/logger");
 var language;
 function Signin(args) {
   const [lang, setLang] = useState("");
-
-
   const [spinner, setSpinner] = useState(0)
   /** Router for Redirection **/
   const router = useRouter();
   const { locale } = router;
   const [current, setCurrent] = useState(false)
+  const [error, setError] = useState({})
   /** State for internationalization **/
   useEffect(() => {
     firstfun()
@@ -94,6 +94,8 @@ function Signin(args) {
   /** Sign In Submit Function **/
   const submitSignIn = async (e) => {
     e.preventDefault()
+   if (validation(signinDetails)){
+    setSpinner(1)
     var item = {
       user_email: signinDetails.email,
     };
@@ -131,7 +133,7 @@ function Signin(args) {
         } else {
           setSpinner(0)
           /** Toast emitter for error wrong email password combination  **/
-          toast.error("Please check your email and password", {
+          toast.error("API: The password that you've entered is incorrect.", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -141,16 +143,18 @@ function Signin(args) {
             progress: undefined,
           });
 
-          logger.error('Incorrect email and password combination.')
+          logger.error("API: The password that you've entered is incorrect.")
 
         }
       })
 
       .catch((error) => {
-        logger.error('Sign In error!');
+        if(error.message===`Request failed with status code 401`)
+        {
+          logger.error("API:The email address you entered isn't connected to an account.");
         setSpinner(0);
-        /** Toast emitter for Sign in error  **/
-        toast.error("Sign in Error!", {
+        /** Toast emitter fo: Invalid Email error  **/
+        toast.error("API: The email address you entered isn't connected to an account.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -159,11 +163,56 @@ function Signin(args) {
           draggable: true,
           progress: undefined,
         });
+        }
+        else{
+          logger.error('API: Network error');
+        setSpinner(0);
+        /** Toast emitter for Sign in error  **/
+        toast.error("API: Network error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        }
+        
       });
+    }
   };
+  // Validation Function
+  const validation = (signinDetails) => {
+     var Result = checkFormData(signinDetails);
+     if (Result === true){
+      return true;
+     }
+     else{
+      setError(Result);
+      return false;
 
+     }
+
+  }
+  //Checking Form Data for Validations
+   const checkFormData = (signinDetails) => {
+    var error={};
+    if(signinDetails?.email === "" ||  signinDetails.email === undefined){
+      error.email = "The email field is required."
+    }
+    if((!signinDetails?.email?.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) && (signinDetails?.email != "" &&  signinDetails.email != undefined))){
+      error.email = "The email field is in invalid format."
+    }
+    if(signinDetails?.password === "" || signinDetails.password === undefined){
+      error.password = "The password field is required"
+    }
+    
+   return Object.keys(error).length === 0 ? true :  error;
+
+   }
   return (
-    <div className="h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div
         className="mx-auto  flex flex-col justify-center items-center 
   px-4 pt-8 pt:mt-0"
@@ -199,14 +248,18 @@ function Signin(args) {
                   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
                    focus:border-cyan-600 block w-full p-2.5"
                   onChange={(e) =>
-                    setSigninDetails({
+                    {setSigninDetails({
                       ...signinDetails,
                       email: e.target.value,
-                    })
+                    }),
+                    setError({...error,email:''})}
                   }
                   placeholder={language?.enteremail}
                   required
                 ></input>
+                 <p className="text-red-700 font-light">
+                   {error?.email}
+            </p>
               </div>
               <div>
                 <label
@@ -219,16 +272,22 @@ function Signin(args) {
                   type="password"
                   name="password"
                   id="password"
-                  onChange={(e) =>
+                  onChange={(e) =>{
                     setSigninDetails({
                       ...signinDetails,
                       password: e.target.value,
                     })
+                    setError({...error,password:''})
+                  }
+                    
                   }
                   placeholder={language?.enterpassword}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   required
                 ></input>
+                <p className="text-red-700 font-light">
+                   {error?.password}
+            </p>
               </div>
               <div className="flex items-start">
                 <div className="flex items-center h-5">
@@ -258,26 +317,13 @@ function Signin(args) {
                 </a>
               </div>
               <div className={spinner === 0 ? 'block' : 'hidden'}>
-                <button
-                  type="submit"
-                  onClick={(e) => {
+              <Button Primary={language?.Signin} onClick={(e) => {
                     submitSignIn(e);
-                    setSpinner(1)
-                  }}
-                  className={`font-semibold text-white bg-cyan-600 
-              hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 mt-6
-              rounded-lg text-base px-5 py-2 capitalize w-full sm:w-auto text-center`}
-                >
-                  {language?.title}
-                </button>
+                   
+                  }}/>
               </div>
               <div className={spinner === 1 ? 'block' : 'hidden'}>
-
-                <div className="flex  space-x-2 animate-bounce">
-                  <div className="w-4 h-4 bg-cyan-600 rounded-full"></div>
-                  <div className="w-4 h-4 bg-cyan-600 rounded-full"></div>
-                  <div className="w-4 h-4 bg-cyan-600 rounded-full"></div>
-                </div>
+              <Button Primary={language?.SpinnerSignin} />
               </div>
 
               <div className="text-base font-semibold text-gray-500">

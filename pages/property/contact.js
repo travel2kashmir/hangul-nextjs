@@ -11,20 +11,21 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Footer from '../../components/Footer';
-import Loader from "../../components/loader";
 var language;
 var currentProperty;
 var propertyName;
+import Headloader from "../../components/loaders/headloader";
 import Router from 'next/router'
+import LoaderTable from "./loaderTable";
 const logger = require("../../services/logger");
 var currentLogged;
 
 function Contact() {
   const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
-
+  const [spinner, setSpinner] = useState(0)
+  const [spin, setSpin] = useState(0)
   const [visible,setVisible]=useState(0) 
-
   const [deleteContact, setDeleteContact] = useState(0);
   const [viewDel, setViewDel] = useState(0);
   const [editContact, setEditContact] = useState({});
@@ -56,6 +57,7 @@ function Contact() {
   }, [])
   /* Function Add Contact*/
   function submitContactAdd(e) {
+    setSpinner(1)
     e.preventDefault();
     if (contact.contact_type!==undefined) {
       const contactdata = [{
@@ -65,11 +67,13 @@ function Contact() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
+      alert(JSON.stringify(finalContact))
       axios
         .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
         })
         .then((response) => {
+          setSpinner(0)
           toast.success("Contact Added Successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -85,6 +89,7 @@ function Contact() {
           setContact([])
         })
         .catch((error) => {
+          setSpinner(0)
           toast.error("Contact Add Error!", {
             position: "top-center",
             autoClose: 5000,
@@ -100,17 +105,17 @@ function Contact() {
   }
  /* Function Edit Contact*/
  const submitContactEdit = (props) => {
-  
+  setSpinner(1)
   const final_data = {
     contact_id: props.id,
     contact_data: props.type,
     status: props.status
   };
-
   const url = "/api/contact";
   axios
     .put(url, final_data, { header: { "content-type": "application/json" } })
     .then((response) => {
+      setSpinner(0)
       toast.success("Contact Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
@@ -124,6 +129,7 @@ function Contact() {
       Router.push("./contact");
     })
     .catch((error) => {
+      setSpinner(0)
       toast.error("Contact Update Error!", {
         position: "top-center",
         autoClose: 5000,
@@ -160,10 +166,8 @@ function Contact() {
           })
           setGen(genData);
         }
-
         setVisible(1);
-
-      })
+ })
       .catch((error) => { logger.error("url to fetch property details, failed") });
 
 
@@ -175,10 +179,12 @@ function Contact() {
   }, []);
 
   const submitContactDelete = (props) => {
+    setSpin(1);
     const url = `/api/${props}`;
     axios
       .delete(url)
       .then((response) => {
+        setSpin(0);
         toast.success("Contact Deleted Successfully!", {
           position: "top-center",
           autoClose: 5000,
@@ -193,6 +199,7 @@ function Contact() {
         Router.push("./contact");
       })
       .catch((error) => {
+        setSpin(0);
         toast.error("Contact Delete Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -209,10 +216,8 @@ function Contact() {
   return (
     <>
 
-    <div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
+     <Header Primary={english?.Side} />
 
-      <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
       <div
         id="main-content"
@@ -247,10 +252,11 @@ function Contact() {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="./propertysummary">
+                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
                     <a>{propertyName}</a>
-                  </Link></span>
+                  </Link>
+                  </div>
               </div>
             </li>
             <li>
@@ -278,10 +284,15 @@ function Contact() {
           </ol>
         </nav>
         {/* Header */}
-        <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit}
+        <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
+        <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit} 
+        delSpin={language?.SpinnerDelete} saveSpinner={language?.SpinnerSave} spinner={spinner}
+        setSpinner={setSpinner}
+        spin={spin} 
         delete={submitContactDelete} common={language?.common} cols={language?.ContactCols}
         name="Contact"/> 
-
+        </div>
 
       
 
@@ -366,7 +377,9 @@ function Contact() {
                 </div>
 
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                  <Button Primary={language?.Add} onClick={(e) => { submitContactAdd(e) }} />
+                  {spinner === 0 ?
+                  <Button Primary={language?.Add} onClick={(e) => { submitContactAdd(e) }} />:
+                  <Button Primary={language?.SpinnerAdd} />}
                 </div>
               </div>
             </div>
@@ -388,8 +401,9 @@ function Contact() {
           pauseOnHover
         />
       </div>
-    
-    </div></>
+
+    </>
+
 
   );
 }

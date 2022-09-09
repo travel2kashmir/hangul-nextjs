@@ -14,7 +14,6 @@ import Table from '../../../components/Table';
 import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import Router from "next/router";
-import { setUncaughtExceptionCaptureCallback } from 'process';
 var language;
 var currentProperty;
 var j = 1;

@@ -75,7 +75,7 @@ export default {
   additionalservices:"Additional Services",
   "Update" :{
     label: "Update",
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+     color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white "    
 },
 "View" :{
   label: "View",
@@ -83,7 +83,7 @@ export default {
 },
 "Next" :{
   label: "Next",
-   color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+   color: "bg-gray-600 hover:bg-gray-700  text-white "    
 },
 "Delete" :{
   label:'Yes, I am sure',

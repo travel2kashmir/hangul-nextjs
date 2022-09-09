@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
-var langs = require('langs');
 import Multiselect from 'multiselect-react-dropdown';
 import Button from '../../../components/Button';
-import countries from "countries-list";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from '../../../components/Header'
@@ -11,7 +9,8 @@ import Sidebar from '../../../components/Sidebar';
 import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import Textboxloader from '../../../components/loaders/textboxloader'
-import english from '../../../components/Languages/en'
+import english from '../../../components/Languages/en';
+import lang from "../../../components/GlobalData"
 import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
@@ -33,9 +32,7 @@ function Raterule() {
   const [visible,setVisible]=useState(0) 
   const [error, setError] = useState({})
   const [err, setErr] = useState({})
-  const [countryData,setCountryData]=useState([])
   const [basicFlag,setBasicFlag]=useState([])
-  const [languageData,setLanguageData]=useState([])
   const [finalLang,setFinalLang]=useState([])
   const [finalCountry,setFinalCountry]=useState([])
   const [finalDevice,setFinalDevice]=useState([])
@@ -56,8 +53,7 @@ function Raterule() {
   const[userRateDetails, setUserRateDetails] = useState([])
   const [rooms,setRooms]=useState([])
 
-  const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
-  var language_data=[];
+ var language_data=[];
   var country_data=[];
   var device_data=[];
   var program_data=[];
@@ -80,7 +76,6 @@ function Raterule() {
         currentraterule = localStorage.getItem('RateRuleId');
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
-        createCountry();
         currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       
       }
@@ -111,7 +106,6 @@ function Raterule() {
    useEffect(() => {
     fetchRateRule();
     fetchPrograms();
-    createLanguages();
 }, [])
 
 //submit rate add
@@ -140,7 +134,7 @@ const submitRateAdd = () => {
   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
 
     ((response) => {
-      toast.success("User Rate Condition added Successfully!", {
+      toast.success("API:User Rate Condition added Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -161,7 +155,7 @@ const submitRateAdd = () => {
       axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
   
         ((response) => {
-          toast.success("User Rate Condition added Successfully!", {
+          toast.success("API:User Rate Condition added Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -174,7 +168,7 @@ const submitRateAdd = () => {
     })
     .catch((error) => {
 
-      toast.error(" Conditional Rates Error!", {
+      toast.error("API: Conditional Rates Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -187,7 +181,7 @@ const submitRateAdd = () => {
     })
 
     .catch((error) => {
-      toast.error("User Rate Condition Error!", {
+      toast.error("API:User Rate Condition Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -208,7 +202,7 @@ const deleteCountry = () =>{
     .delete(url, { 
       header: { "content-type": "application/json" } })
     .then((response) => {
-      toast.success("Country delete success!", {
+      toast.success("API:Country delete success!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -220,7 +214,7 @@ const deleteCountry = () =>{
     }  
     )
     .catch((error) => {
-      toast.error("Country delete error!", {
+      toast.error("API:Country delete error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -238,7 +232,7 @@ const deleteDevice = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Device delete success!", {
+    toast.success("API:Device delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -250,7 +244,7 @@ const deleteDevice = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Device delete error!", {
+    toast.error("API:Device delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -268,7 +262,7 @@ const deleteProgram = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Program delete success!", {
+    toast.success("API:Program delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -280,7 +274,7 @@ const deleteProgram = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Program delete error!", {
+    toast.error("API:Program delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -298,7 +292,7 @@ const deleteLanguage = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Language delete success!", {
+    toast.success("API:Language delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -310,7 +304,7 @@ const deleteLanguage = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Language delete error!", {
+    toast.error("API:Language delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -335,7 +329,7 @@ const url = "/api/rate_rule/rate_rules";
     .put(url,data, { 
       header: { "content-type": "application/json" } })
     .then((response) => {
-      toast.success("API: Rate rule Updated Successfully!", {
+      toast.success("API:API: Rate rule Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -347,7 +341,7 @@ const url = "/api/rate_rule/rate_rules";
     }  
     )
     .catch((error) => {
-      toast.error("API: Rate rule update Error!", {
+      toast.error("API:API: Rate rule update Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -388,7 +382,7 @@ var time;
     const url = '/api/rate_rule/conditional_rate'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Rates updated successfully!", {
+        toast.success("API:Rates updated successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -402,7 +396,7 @@ var time;
         Router.push("./raterule");
       })
       .catch((error) => {
-        toast.error("API: User Rate Condition Error!", {
+        toast.error("API:API: User Rate Condition Error!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -427,7 +421,7 @@ var time;
     const url = '/api/rate_rule/rate_modification'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("API: User rate modification updated successfully!", {
+        toast.success("API:API: User rate modification updated successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -441,7 +435,7 @@ var time;
 
       })
       .catch((error) => {
-        toast.error("API: User rate modification error.", {
+        toast.error("API:API: User rate modification error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -462,7 +456,7 @@ var time;
       .put(url, final_data, { 
         header: { "content-type": "application/json" } })
       .then((response) => {
-        toast.success("Languages Updated Successfully!", {
+        toast.success("API:Languages Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -476,7 +470,7 @@ var time;
       })
 
       .catch((error) => {
-        toast.error("Languages Error", {
+        toast.error("API:Languages Error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -496,7 +490,7 @@ var time;
       .put(url, final_data, { 
         header: { "content-type": "application/json" } })
       .then((response) => {
-        toast.success("Country Updated Successfully!", {
+        toast.success("API:Country Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -510,7 +504,7 @@ var time;
       })
 
       .catch((error) => {
-        toast.error("Country Error", {
+        toast.error("API:Country Error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -530,7 +524,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Devices Updated Successfully!", {
+          toast.success("API:Devices Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -544,7 +538,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Devices Error", {
+          toast.error("API:Devices Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -565,7 +559,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Programs Updated Successfully!", {
+          toast.success("API:Programs Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -579,7 +573,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Programs Error", {
+          toast.error("API:Programs Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -612,7 +606,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Rate rule Updated Successfully!", {
+          toast.success("API:Rate rule Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -626,7 +620,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Rate rule update Error", {
+          toast.error("API:Rate rule update Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -651,7 +645,7 @@ var time;
           .put(url, final_data, { 
             header: { "content-type": "application/json" } })
           .then((response) => {
-            toast.success("Rate Discount Updated Successfully!", {
+            toast.success("API:Rate Discount Updated Successfully!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -664,7 +658,7 @@ var time;
             setError({});
           })
           .catch((error) => {
-            toast.error("Rate Discount Error", {
+            toast.error("API:Rate Discount Error", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -676,32 +670,7 @@ var time;
           });
         }
       };
-  // Languages JSON for Dropdown
-  const createCountry = () => {
-  var countryCodes = Object.keys(countries.countries);
-    countryCodes.map(code => {
-      var temp = {
-        country_name: countries.countries[code].name,
-        country_code: code
-      }
-    country_data.push(temp) } );
-    setCountryData(country_data);
-  }
-// Languages JSON for Dropdown
-  const createLanguages = () => {
-   var languageCodes = langs.all();
-  console.log(languageCodes)
-    languageCodes.map(code => {
-      var temp = {
-        language_name: code.name,
-        language_code: code?.[j]
-      }
-    language_data.push(temp) } );
-  
-    setLanguageData(language_data);
-    
-    
-  } 
+ 
 
   const languages = (lan) => { 
     lan.map(item => {
@@ -747,7 +716,7 @@ var time;
    const filterByDevices = () => {
    if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined) {
     setCheckDevice(true)
-   resDev =  device?.filter(el => {
+   resDev =  lang?.DeviceData?.filter(el => {
        return rateRule?.user_rate_condition?.[i]?.UserDeviceType.find(element => {
           return element.user_device === el.user_device;
        });
@@ -782,7 +751,7 @@ var time;
 const filterByCountry = () => {
   if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined) {
   setCheckCountry(true)
-  resCou = countryData.filter(el => {
+  resCou = lang?.CountryData.filter(el => {
    return rateRule?.user_rate_condition?.[i]?.UserCountry?.find(element => {
       return element.user_country === el.country_code;
    });
@@ -797,7 +766,7 @@ Router.push('./raterule')
 const filterByLanguage = () => {
   if(rateRule?.user_rate_condition?.[i]?.language != undefined) {
   setCheckLanguage(true)
-  resLang = languageData.filter(el => {
+  resLang = lang?.LanguageData.filter(el => {
     return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
    });
@@ -985,6 +954,8 @@ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) &&
 (data?.otherfees_amount != "" &&  data?.otherfees_amount != undefined))){
   error.otherfees_amount = "This field accept possitive and decimal values only."
 }
+
+
 if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
  (data?.refundable_until_days != "" &&  data?.refundable_until_days != undefined))){
   error.refundable_until_days = "This field accept possitive values only."
@@ -1354,7 +1325,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={countryData}
+                      options={lang?.CountryData}
                       displayValue="country_name"
                       selectedValues={resCou}
                       onRemove={(event) => {country(event)}}
@@ -1382,7 +1353,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={device}
+                      options={lang?.DeviceData}
                       displayValue="user_device"
                       selectedValues={resDev}
                       onRemove={(event) => { devices(event) }}
@@ -1407,7 +1378,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={languageData}
+                      options={lang?.LanguageData}
                       selectedValues={resLang}
                       displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
@@ -1627,7 +1598,7 @@ if (basicFlag.length !== 0){
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {language?.rates}
+          {language?.rates} 
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1717,7 +1688,7 @@ if (basicFlag.length !== 0){
                       {language?.taxrate} {language?.amount}
 
                       </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1728,10 +1699,8 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
-
                         <p className="text-red-700 font-light">
-                        {error?.tax_amount}
- </p></div>
+                        {error?.tax_amount}</p></div>
                   </div>
                 </div>
 

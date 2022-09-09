@@ -310,11 +310,11 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
             <div className="align-middle inline-block  min-w-full">
               <div className="overflow-hidden">
                 <table className="table-fixed min-w-full  ">
-                  <tbody className="bg-white ">
+                  <tbody>
                     {allHotelDetails?.contacts?.map((item, idx) => {
                       return (
                         <tr key={idx}>
-                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                          <td className=" flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
                             <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
                               {item?.contact_type}{" "}
                             </td>

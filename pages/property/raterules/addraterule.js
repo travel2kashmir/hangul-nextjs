@@ -124,7 +124,7 @@ function Addraterule() {
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     
           ((response) => {
-            toast.success("User Rate Condition added Successfully!", {
+            toast.success("API: User Rate Condition added Successfully!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -145,7 +145,7 @@ function Addraterule() {
             axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
         
               ((response) => {
-                toast.success("User Rate Condition added Successfully!", {
+                toast.success("API: User Rate Condition added Successfully!", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -158,7 +158,7 @@ function Addraterule() {
           })
           .catch((error) => {
     
-            toast.error(" Conditional Rates Error!", {
+            toast.error("API:  Conditional Rates Error!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -171,7 +171,7 @@ function Addraterule() {
           })
 
           .catch((error) => {
-            toast.error("User Rate Condition Error!", {
+            toast.error("API: User Rate Condition Error!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -195,7 +195,7 @@ function Addraterule() {
         const url = '/api/rate_rule/rate_modification'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
-            toast.success("User Rate Modification Added Successfully!", {
+            toast.success("API: User Rate Modification Added Successfully!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -210,7 +210,7 @@ function Addraterule() {
           })
           .catch((error) => {
     
-            toast.error("User Rate Modification Error!", {
+            toast.error("API: User Rate Modification Error!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -239,7 +239,7 @@ function Addraterule() {
          const url = '/api/rate_rule/rate_rule'
          axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
-           toast.success("Rate Rule Successfully!", {
+           toast.success("API: Rate Rule Successfully!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -253,7 +253,7 @@ function Addraterule() {
            })
            .catch((error) => {
      
-             toast.error("Rate Rule Error!", {
+             toast.error("API: Rate Rule Error!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -280,7 +280,7 @@ function Addraterule() {
      
            ((response) => {
      
-             toast.success("Rate Rule Link Successfully!", {
+             toast.success("API: Rate Rule Link Successfully!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -295,7 +295,7 @@ function Addraterule() {
            })
            .catch((error) => {
      
-             toast.error("Rate Rule Link Error!", {
+             toast.error("API: Rate Rule Link Error!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -319,7 +319,7 @@ function Addraterule() {
             .post(url, final_data, { 
               header: { "content-type": "application/json" } })
             .then((response) => {
-              toast.success("Rate Discount added successfully!", {
+              toast.success("API: Rate Discount added successfully!", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -334,7 +334,7 @@ function Addraterule() {
             })
       
             .catch((error) => {
-              toast.error("Rate Discount Error", {
+              toast.error("API: Rate Discount Error", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -362,7 +362,7 @@ function Addraterule() {
             axios.post(url, final_data, { 
                 header: { "content-type": "application/json" } })
               .then((response) => {
-                toast.success("User Rate Condition added successfully!", {
+                toast.success("API: User Rate Condition added successfully!", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -378,7 +378,7 @@ function Addraterule() {
               )
         
               .catch((error) => {
-                toast.error("User Rate Condition Error", {
+                toast.error("API: User Rate Condition Error", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -399,7 +399,7 @@ function Addraterule() {
                 .put(url, final_data, { 
                   header: { "content-type": "application/json" } })
                 .then((response) => {
-                  toast.success("Languages Updated Successfully!", {
+                  toast.success("API: Languages Updated Successfully!", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -413,7 +413,7 @@ function Addraterule() {
                 })
           
                 .catch((error) => {
-                  toast.error("Languages Error", {
+                  toast.error("API: Languages Error", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -434,7 +434,7 @@ function Addraterule() {
                 .put(url, final_data, { 
                   header: { "content-type": "application/json" } })
                 .then((response) => {
-                  toast.success("Country Updated Successfully!", {
+                  toast.success("API: Country Updated Successfully!", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -448,7 +448,7 @@ function Addraterule() {
                 })
           
                 .catch((error) => {
-                  toast.error("Country Error", {
+                  toast.error("API: Country Error", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -468,7 +468,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("Devices Added Successfully!", {
+                    toast.success("API: Devices Added Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -482,7 +482,7 @@ function Addraterule() {
                   })
             
                   .catch((error) => {
-                    toast.error("Devices Error", {
+                    toast.error("API: Devices Error", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -503,7 +503,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("Programs Updated Successfully!", {
+                    toast.success("API: Programs Updated Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -518,7 +518,7 @@ function Addraterule() {
                   })
             
                   .catch((error) => {
-                    toast.error("Programs Error", {
+                    toast.error("API: Programs Error", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -545,7 +545,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("Rate rule Updated Successfully!", {
+                    toast.success("API: Rate rule Updated Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -560,7 +560,7 @@ function Addraterule() {
                   )
                   
                   .catch((error) => {
-                    toast.error("Rate rule update Error2!", {
+                    toast.error("API: Rate rule update Error2!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,

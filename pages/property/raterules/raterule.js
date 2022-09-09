@@ -134,7 +134,7 @@ const submitRateAdd = () => {
   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
 
     ((response) => {
-      toast.success("User Rate Condition added Successfully!", {
+      toast.success("API:User Rate Condition added Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -155,7 +155,7 @@ const submitRateAdd = () => {
       axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
   
         ((response) => {
-          toast.success("User Rate Condition added Successfully!", {
+          toast.success("API:User Rate Condition added Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -168,7 +168,7 @@ const submitRateAdd = () => {
     })
     .catch((error) => {
 
-      toast.error(" Conditional Rates Error!", {
+      toast.error("API: Conditional Rates Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -181,7 +181,7 @@ const submitRateAdd = () => {
     })
 
     .catch((error) => {
-      toast.error("User Rate Condition Error!", {
+      toast.error("API:User Rate Condition Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -202,7 +202,7 @@ const deleteCountry = () =>{
     .delete(url, { 
       header: { "content-type": "application/json" } })
     .then((response) => {
-      toast.success("Country delete success!", {
+      toast.success("API:Country delete success!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -214,7 +214,7 @@ const deleteCountry = () =>{
     }  
     )
     .catch((error) => {
-      toast.error("Country delete error!", {
+      toast.error("API:Country delete error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -232,7 +232,7 @@ const deleteDevice = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Device delete success!", {
+    toast.success("API:Device delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -244,7 +244,7 @@ const deleteDevice = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Device delete error!", {
+    toast.error("API:Device delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -262,7 +262,7 @@ const deleteProgram = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Program delete success!", {
+    toast.success("API:Program delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -274,7 +274,7 @@ const deleteProgram = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Program delete error!", {
+    toast.error("API:Program delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -292,7 +292,7 @@ const deleteLanguage = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Language delete success!", {
+    toast.success("API:Language delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -304,7 +304,7 @@ const deleteLanguage = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Language delete error!", {
+    toast.error("API:Language delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -329,7 +329,7 @@ const url = "/api/rate_rule/rate_rules";
     .put(url,data, { 
       header: { "content-type": "application/json" } })
     .then((response) => {
-      toast.success("API: Rate rule Updated Successfully!", {
+      toast.success("API:API: Rate rule Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -341,7 +341,7 @@ const url = "/api/rate_rule/rate_rules";
     }  
     )
     .catch((error) => {
-      toast.error("API: Rate rule update Error!", {
+      toast.error("API:API: Rate rule update Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -382,7 +382,7 @@ var time;
     const url = '/api/rate_rule/conditional_rate'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Rates updated successfully!", {
+        toast.success("API:Rates updated successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -396,7 +396,7 @@ var time;
         Router.push("./raterule");
       })
       .catch((error) => {
-        toast.error("API: User Rate Condition Error!", {
+        toast.error("API:API: User Rate Condition Error!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -421,7 +421,7 @@ var time;
     const url = '/api/rate_rule/rate_modification'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("API: User rate modification updated successfully!", {
+        toast.success("API:API: User rate modification updated successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -435,7 +435,7 @@ var time;
 
       })
       .catch((error) => {
-        toast.error("API: User rate modification error.", {
+        toast.error("API:API: User rate modification error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -456,7 +456,7 @@ var time;
       .put(url, final_data, { 
         header: { "content-type": "application/json" } })
       .then((response) => {
-        toast.success("Languages Updated Successfully!", {
+        toast.success("API:Languages Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -470,7 +470,7 @@ var time;
       })
 
       .catch((error) => {
-        toast.error("Languages Error", {
+        toast.error("API:Languages Error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -490,7 +490,7 @@ var time;
       .put(url, final_data, { 
         header: { "content-type": "application/json" } })
       .then((response) => {
-        toast.success("Country Updated Successfully!", {
+        toast.success("API:Country Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -504,7 +504,7 @@ var time;
       })
 
       .catch((error) => {
-        toast.error("Country Error", {
+        toast.error("API:Country Error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -524,7 +524,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Devices Updated Successfully!", {
+          toast.success("API:Devices Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -538,7 +538,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Devices Error", {
+          toast.error("API:Devices Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -559,7 +559,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Programs Updated Successfully!", {
+          toast.success("API:Programs Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -573,7 +573,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Programs Error", {
+          toast.error("API:Programs Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -606,7 +606,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Rate rule Updated Successfully!", {
+          toast.success("API:Rate rule Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -620,7 +620,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Rate rule update Error", {
+          toast.error("API:Rate rule update Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -645,7 +645,7 @@ var time;
           .put(url, final_data, { 
             header: { "content-type": "application/json" } })
           .then((response) => {
-            toast.success("Rate Discount Updated Successfully!", {
+            toast.success("API:Rate Discount Updated Successfully!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -658,7 +658,7 @@ var time;
             setError({});
           })
           .catch((error) => {
-            toast.error("Rate Discount Error", {
+            toast.error("API:Rate Discount Error", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -954,6 +954,8 @@ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) &&
 (data?.otherfees_amount != "" &&  data?.otherfees_amount != undefined))){
   error.otherfees_amount = "This field accept possitive and decimal values only."
 }
+
+
 if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
  (data?.refundable_until_days != "" &&  data?.refundable_until_days != undefined))){
   error.refundable_until_days = "This field accept possitive values only."
@@ -1596,7 +1598,7 @@ if (basicFlag.length !== 0){
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {language?.rates}
+          {language?.rates} 
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1686,7 +1688,7 @@ if (basicFlag.length !== 0){
                       {language?.taxrate} {language?.amount}
 
                       </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1697,10 +1699,8 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
-
                         <p className="text-red-700 font-light">
-                        {error?.tax_amount}
- </p></div>
+                        {error?.tax_amount}</p></div>
                   </div>
                 </div>
 

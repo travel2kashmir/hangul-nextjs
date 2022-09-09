@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
-var langs = require('langs');
+import lang from "../../../components/GlobalData"
 import Multiselect from 'multiselect-react-dropdown';
 import Button from '../../../components/Button';
-import countries from "countries-list";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from '../../../components/Header'
@@ -35,7 +34,6 @@ function Addraterule() {
     const [rateModificationId, setRateModificationId] = useState([])
     const [rateIneligiblityId, setRateIneligiblityId] = useState([])
     const [userRateConditionId, setUserRateConditionId] = useState([])
-    const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
     const [countryCheck, setCountryCheck] = useState(false);
     const [languageCheck, setLanguageCheck] = useState(false);
     const [deviceCheck, setDeviceCheck] = useState(false);
@@ -51,16 +49,13 @@ function Addraterule() {
     const [isDomestic, setIsDomestic] = useState(false);
     const [signedCheck, setSignedCheck] = useState(false);
     const [domesticCheck, setDomesticCheck] = useState(false);
-    const [countryData,setCountryData]=useState([])
     const [programs, setPrograms] = useState([])
-    const [languageData,setLanguageData]=useState([])
     const [rooms,setRooms]=useState([])
-
     const [error, setError] = useState({})
 
     useEffect(() => {
        const firstfun = () => {
- if (typeof window !== 'undefined') {
+          if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
             if (locale === "ar") {
               language = arabic;
@@ -79,16 +74,13 @@ function Addraterule() {
          }
         }
         firstfun();
-        Router.push("./addraterule")
-        createCountry();
-        createLanguages();
+        Router.push("./addraterule");
       }, [])
 
       useEffect(() => {
        fetchPrograms();
        fetchRooms();
     }, [])
-
 
     const fetchRooms = async () => {
       try {
@@ -581,29 +573,7 @@ function Addraterule() {
                   });
                 }
               };
-          // Country JSON for Dropdown   
-         const createCountry = () => {
-          var countryCodes = Object.keys(countries.countries);
-            countryCodes.map(code => {
-              var temp = {
-                country_name: countries.countries[code].name,
-                country_code: code
-              }
-            country_data.push(temp) } );
-            setCountryData(country_data);
-          }
-        // Languages JSON for Dropdown
-          const createLanguages = () => {
-           languageCodes = langs.all();
-            languageCodes.map(code => {
-              var temp = {
-                language_name: code.name,
-                language_code: code?.[j]
-              }
-            language_data.push(temp) } );
-            setLanguageData(language_data);
-            
-          } 
+        
           // Programs JSON for Dropdown
           const fetchPrograms = async () => {
             const url = `/api/package_membership/${currentProperty?.property_id}`
@@ -669,9 +639,7 @@ const validationRateDescription = (data) => {
   else{
    setError(Result);
    return false;
-
   }
-
 }
 //Checking Form Data for rate Description
 const checkRateDescription = (data) => {
@@ -694,8 +662,6 @@ if(data?.price_multiplier === "" ||  data.price_multiplier === undefined){
  if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.price_multiplier)) && (data?.price_multiplier != "" &&  data.price_multiplier != undefined))){
    error.price_multiplier = "This field accept possitive and decimal values only."
  }
- 
- 
 return Object.keys(error).length === 0 ? true :  error;
 
 }
@@ -1093,7 +1059,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg
                        focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={countryData}
+                      options={lang?.CountryData}
                       displayValue="country_name"
                      onRemove={(event) => {country(event)}}
                       onSelect={(event) => {country(event) }} /></div>
@@ -1118,7 +1084,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={device}
+                      options={lang?.DeviceData}
                       displayValue="user_device"
                      onRemove={(event) => { devices(event) }}
                       onSelect={(event) => { devices(event) }} /></div>
@@ -1141,7 +1107,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={languageData}
+                      options={lang?.LanguageData}
                      displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
                       onSelect={(event) => { languages(event) }} />

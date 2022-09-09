@@ -10,7 +10,6 @@ var currency = require('currency-codes');
 import english from "../../../components/Languages/en"
 import french from "../../../components/Languages/fr"
 import arabic from "../../../components/Languages/ar";
-import countries from "countries-list";
 import Router from "next/router";
 import Button from '../../../components/Button';
 var langs = require('langs');

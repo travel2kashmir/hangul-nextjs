@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
-var langs = require('langs');
 import Multiselect from 'multiselect-react-dropdown';
 import Button from '../../../components/Button';
-import countries from "countries-list";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from '../../../components/Header'
@@ -11,7 +9,8 @@ import Sidebar from '../../../components/Sidebar';
 import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import Textboxloader from '../../../components/loaders/textboxloader'
-import english from '../../../components/Languages/en'
+import english from '../../../components/Languages/en';
+import lang from "../../../components/GlobalData"
 import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
@@ -33,9 +32,7 @@ function Raterule() {
   const [visible,setVisible]=useState(0) 
   const [error, setError] = useState({})
   const [err, setErr] = useState({})
-  const [countryData,setCountryData]=useState([])
   const [basicFlag,setBasicFlag]=useState([])
-  const [languageData,setLanguageData]=useState([])
   const [finalLang,setFinalLang]=useState([])
   const [finalCountry,setFinalCountry]=useState([])
   const [finalDevice,setFinalDevice]=useState([])
@@ -56,8 +53,7 @@ function Raterule() {
   const[userRateDetails, setUserRateDetails] = useState([])
   const [rooms,setRooms]=useState([])
 
-  const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
-  var language_data=[];
+ var language_data=[];
   var country_data=[];
   var device_data=[];
   var program_data=[];
@@ -80,7 +76,6 @@ function Raterule() {
         currentraterule = localStorage.getItem('RateRuleId');
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
-        createCountry();
         currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       
       }
@@ -111,7 +106,6 @@ function Raterule() {
    useEffect(() => {
     fetchRateRule();
     fetchPrograms();
-    createLanguages();
 }, [])
 
 //submit rate add
@@ -676,32 +670,7 @@ var time;
           });
         }
       };
-  // Languages JSON for Dropdown
-  const createCountry = () => {
-  var countryCodes = Object.keys(countries.countries);
-    countryCodes.map(code => {
-      var temp = {
-        country_name: countries.countries[code].name,
-        country_code: code
-      }
-    country_data.push(temp) } );
-    setCountryData(country_data);
-  }
-// Languages JSON for Dropdown
-  const createLanguages = () => {
-   var languageCodes = langs.all();
-  console.log(languageCodes)
-    languageCodes.map(code => {
-      var temp = {
-        language_name: code.name,
-        language_code: code?.[j]
-      }
-    language_data.push(temp) } );
-  
-    setLanguageData(language_data);
-    
-    
-  } 
+ 
 
   const languages = (lan) => { 
     lan.map(item => {
@@ -747,7 +716,7 @@ var time;
    const filterByDevices = () => {
    if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined) {
     setCheckDevice(true)
-   resDev =  device?.filter(el => {
+   resDev =  lang?.DeviceData?.filter(el => {
        return rateRule?.user_rate_condition?.[i]?.UserDeviceType.find(element => {
           return element.user_device === el.user_device;
        });
@@ -782,7 +751,7 @@ var time;
 const filterByCountry = () => {
   if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined) {
   setCheckCountry(true)
-  resCou = countryData.filter(el => {
+  resCou = lang?.CountryData.filter(el => {
    return rateRule?.user_rate_condition?.[i]?.UserCountry?.find(element => {
       return element.user_country === el.country_code;
    });
@@ -797,7 +766,7 @@ Router.push('./raterule')
 const filterByLanguage = () => {
   if(rateRule?.user_rate_condition?.[i]?.language != undefined) {
   setCheckLanguage(true)
-  resLang = languageData.filter(el => {
+  resLang = lang?.LanguageData.filter(el => {
     return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
    });
@@ -1354,7 +1323,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={countryData}
+                      options={lang?.CountryData}
                       displayValue="country_name"
                       selectedValues={resCou}
                       onRemove={(event) => {country(event)}}
@@ -1382,7 +1351,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={device}
+                      options={lang?.DeviceData}
                       displayValue="user_device"
                       selectedValues={resDev}
                       onRemove={(event) => { devices(event) }}
@@ -1407,7 +1376,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={languageData}
+                      options={lang?.LanguageData}
                       selectedValues={resLang}
                       displayValue="language_name"
                       onRemove={(event) => { languages(event) }}

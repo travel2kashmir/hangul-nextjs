@@ -1,5 +1,4 @@
 import React from 'react'
-import Header from './header';
 import Address from './address';
 import Contact from './contact';
 import Review from './review';

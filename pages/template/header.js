@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 function Header(args) {
     const item = {
@@ -21,17 +22,19 @@ function Header(args) {
     }
     return (<>
     
-        <div className={`p-2 ${args.bg} `}>
+        <div className={`p-2 ${args.bg} flex  border-t-2 border-l-2 border-r-2 border-black shadow`}>
         
-            <span className='flex justify-center text-5xl font-black capitalize font-mono'>
+            <span className=' text-2xl font-black capitalize font-mono'>
                 {item?.property_name}</span>
-        
-            <span className='capitalize flex justify-center text-lg font-semibold  text-gray-600 mt-2 pt-2 '>{item?.star_rating} star {item?.property_type} by {item?.brand}</span>
-          
-            <p className='flex justify-center text-lg font-semibold capitalize text-gray-600 mt-2 pt-2'>Since {item?.established_year}</p>
-            <p className='flex justify-start text-sm font-semibold capitalize text-gray-600 font-semibold h-10 mt-8 '>{item?.description}</p>
-
-
+            <div className='flex text-xl font-black capitalize'>
+                <button className="justify-end mx-2 capitalize">home</button>
+                <Link href='#room'>  <button className="mx-2 capitalize">room</button></Link>
+                <button className="mx-2 capitalize">service</button>
+                <button className="mx-2 capitalize">contacts</button>
+                <button className="mx-2 capitalize">review</button>
+                <button className="mx-2 capitalize">about us</button>
+            </div>
+           
         </div>
     </>
     )

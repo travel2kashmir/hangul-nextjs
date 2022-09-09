@@ -24,13 +24,13 @@ function Carousal() {
   
      
   return (
-    <div className='flex'><h1>{current}</h1>
-    <button className="w-2/12" 
+    <div className='flex'>
+    <button  
     onClick={()=>setCurrent(current>0?current-1:images.length-1)}>
       <Image src={prev} alt="prev" height={50} width={50}/>
       </button>
-      <img className="w-9/12" src={images[current]?.image_link} alt={`${images[current]?.image_title}`} style={{ height: "500px", width: "1200px" }} />
-  <button className="w-2/12" onClick={()=>setCurrent(current<images.length-1?current+1:0)}>
+      <img className="mx-auto " src={images[current]?.image_link} alt={`${images[current]?.image_title}`} style={{ height: "500px", width: "1200px" }} />
+  <button  onClick={()=>setCurrent(current<images.length-1?current+1:0)}>
     <Image src={next} alt="next" height={50} width={50}/>
     </button>
     </div>

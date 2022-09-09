@@ -749,7 +749,7 @@ if(data?.room_id === "" ||  data?.room_id === undefined){
  if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.base_rate_amount)) && (data?.base_rate_amount != "" &&  data?.base_rate_amount != undefined))){
    error.base_rate_amount = "This field accept possitive and decimal values only."
  }
- if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.tax_amount_amount)) && (data?.tax_amount != "" &&  data?.tax_amount != undefined))){
+ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.tax_amount)) && (data?.tax_amount != "" &&  data?.tax_amount != undefined))){
   error.tax_amount = "This field accept possitive and decimal values only."
 }
 if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) && (data?.otherfees_amount != "" &&  data?.otherfees_amount != undefined))){

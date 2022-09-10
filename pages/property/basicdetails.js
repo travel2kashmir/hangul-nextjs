@@ -80,8 +80,11 @@ export default function BasicDetails() {
 
   /* Edit Basic Details Function */
   const submitBasicEdit = () => {
+
+    if(flag === 1){
     if(objChecker.isEqual(allHotelDetails,basicDetails)){
-      toast.warn('No change in details detected. ', {
+      toast.warn('No change in Basic Details detected. ', {
+
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -89,9 +92,11 @@ export default function BasicDetails() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
+
         });
       setFlag([]);
     }
+
    else {
       setSpinner(1)
       const final_data = {
@@ -136,6 +141,19 @@ export default function BasicDetails() {
           });
         })
     }
+  }
+  else{
+    toast.warn('No change in Basic Details detected. ', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+
+  }
   }
 
   return (

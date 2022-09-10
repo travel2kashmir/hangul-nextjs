@@ -532,9 +532,11 @@ function Addraterule() {
               };
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
+
                 if((isDomestic === true)
                   ||(userSignedIn === true )||
                   (percentageCheck=== true && basicFlag === 1)){
+
                 if (validationRateCondition(allUserRateDetails)){
                 const data = [{
                   max_user_percentage:allUserRateDetails?.MaxUsersPercent,
@@ -575,7 +577,9 @@ function Addraterule() {
                     setBasicFlag([])
                   });
                 }
+
               }
+
               };
         
           // Programs JSON for Dropdown
@@ -1254,8 +1258,9 @@ return Object.keys(error).length === 0 ? true :  error;
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={()=>{
-                  if((isDomestic === true)
+ if((isDomestic === true)
                   ||(userSignedIn === true )||
+
                   (percentageCheck=== true && basicFlag === 1))
                   {
                   submitAdditional();}

@@ -189,8 +189,7 @@ function Reviews() {
   }
 
   const handleEdit = () =>{
-    console.log(JSON.stringify(active))
-    console.log(objChecker.isEqual(active,org))
+   
     if(objChecker.isEqual(active,org)){
       toast.warn('No changes in review! ', {
         position: "top-center",
@@ -223,8 +222,8 @@ function Reviews() {
             draggable: true,
             progress: undefined,
           });
+ setEdit(0);
 
-          setEdit(0);
         })
         .catch(error => {
           

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
-var langs = require('langs');
+import lang from "../../../components/GlobalData"
 import Multiselect from 'multiselect-react-dropdown';
 import Button from '../../../components/Button';
-import countries from "countries-list";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from '../../../components/Header'
@@ -35,8 +34,6 @@ function Addraterule() {
     const [rateModificationId, setRateModificationId] = useState([])
     const [rateIneligiblityId, setRateIneligiblityId] = useState([])
     const [userRateConditionId, setUserRateConditionId] = useState([])
-    const [conditionalRateId, setConditionalRateId] = useState([])
-    const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
     const [countryCheck, setCountryCheck] = useState(false);
     const [languageCheck, setLanguageCheck] = useState(false);
     const [deviceCheck, setDeviceCheck] = useState(false);
@@ -52,16 +49,12 @@ function Addraterule() {
     const [isDomestic, setIsDomestic] = useState(false);
     const [signedCheck, setSignedCheck] = useState(false);
     const [domesticCheck, setDomesticCheck] = useState(false);
-    const [countryData,setCountryData]=useState([])
     const [programs, setPrograms] = useState([])
-    const [languageData,setLanguageData]=useState([])
     const [rooms,setRooms]=useState([])
-
-    const [drp,setDrp]=useState(false)
+    const [error, setError] = useState({})
 
     useEffect(() => {
-
-        const firstfun = () => {
+       const firstfun = () => {
           if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
             if (locale === "ar") {
@@ -81,16 +74,13 @@ function Addraterule() {
          }
         }
         firstfun();
-        Router.push("./addraterule")
-        createCountry();
-        createLanguages();
+        Router.push("./addraterule");
       }, [])
 
       useEffect(() => {
        fetchPrograms();
        fetchRooms();
     }, [])
-
 
     const fetchRooms = async () => {
       try {
@@ -109,6 +99,7 @@ function Addraterule() {
   }
      // Rates Submit
       const submitRateAdd = () => {
+        if (validationRates(allUserRateDetails)){
         var time;
         var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
         time = new Date(temp.toString())
@@ -133,7 +124,7 @@ function Addraterule() {
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
     
           ((response) => {
-            toast.success("User Rate Condition added Successfully!", {
+            toast.success("API: User Rate Condition added Successfully!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -154,7 +145,7 @@ function Addraterule() {
             axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
         
               ((response) => {
-                toast.success("User Rate Condition added Successfully!", {
+                toast.success("API: User Rate Condition added Successfully!", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -167,7 +158,7 @@ function Addraterule() {
           })
           .catch((error) => {
     
-            toast.error(" Conditional Rates Error!", {
+            toast.error("API:  Conditional Rates Error!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -180,7 +171,7 @@ function Addraterule() {
           })
 
           .catch((error) => {
-            toast.error("User Rate Condition Error!", {
+            toast.error("API: User Rate Condition Error!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -190,23 +181,21 @@ function Addraterule() {
               progress: undefined,
             });
           })
-    
+        }
       }
       
      //Rate Modification Submit
       const submitRateModAdd = () => {
+        if (validationRateDescription(allUserRateDetails)){ 
        const final_data = {
           "hotel_amenity": "free_wifi",
           "price_multiplier": allUserRateDetails?.price_multiplier,
           "modification_name":allUserRateDetails?.program
-     }
-       
+     } 
         const url = '/api/rate_rule/rate_modification'
         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-    
           ((response) => {
-    
-            toast.success("User Rate Modification Added Successfully!", {
+            toast.success("API: User Rate Modification Added Successfully!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -221,7 +210,7 @@ function Addraterule() {
           })
           .catch((error) => {
     
-            toast.error("User Rate Modification Error!", {
+            toast.error("API: User Rate Modification Error!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -233,7 +222,7 @@ function Addraterule() {
           })
         
       }
-      
+    }
       //Rate rule Id generation
       const submitRateRule = (rm_id,rd_id) => {
         const final_data = {
@@ -250,7 +239,7 @@ function Addraterule() {
          const url = '/api/rate_rule/rate_rule'
          axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
-           toast.success("Rate Rule Successfully!", {
+           toast.success("API: Rate Rule Successfully!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -261,11 +250,10 @@ function Addraterule() {
              });
             setRateRuleId(response.data.rate_rule_id);
             submitRateConditionAdd(response.data.rate_rule_id);
-          setDisp(1);
            })
            .catch((error) => {
      
-             toast.error("Rate Rule Error!", {
+             toast.error("API: Rate Rule Error!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -292,7 +280,7 @@ function Addraterule() {
      
            ((response) => {
      
-             toast.success("Rate Rule Link Successfully!", {
+             toast.success("API: Rate Rule Link Successfully!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -307,7 +295,7 @@ function Addraterule() {
            })
            .catch((error) => {
      
-             toast.error("Rate Rule Link Error!", {
+             toast.error("API: Rate Rule Link Error!", {
                position: "top-center",
                autoClose: 5000,
                hideProgressBar: false,
@@ -331,7 +319,7 @@ function Addraterule() {
             .post(url, final_data, { 
               header: { "content-type": "application/json" } })
             .then((response) => {
-              toast.success("Rate Discount added successfully!", {
+              toast.success("API: Rate Discount added successfully!", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -346,7 +334,7 @@ function Addraterule() {
             })
       
             .catch((error) => {
-              toast.error("Rate Discount Error", {
+              toast.error("API: Rate Discount Error", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -374,7 +362,7 @@ function Addraterule() {
             axios.post(url, final_data, { 
                 header: { "content-type": "application/json" } })
               .then((response) => {
-                toast.success("User Rate Condition added successfully!", {
+                toast.success("API: User Rate Condition added successfully!", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -390,7 +378,7 @@ function Addraterule() {
               )
         
               .catch((error) => {
-                toast.error("User Rate Condition Error", {
+                toast.error("API: User Rate Condition Error", {
                   position: "top-center",
                   autoClose: 5000,
                   hideProgressBar: false,
@@ -411,7 +399,7 @@ function Addraterule() {
                 .put(url, final_data, { 
                   header: { "content-type": "application/json" } })
                 .then((response) => {
-                  toast.success("Languages Updated Successfully!", {
+                  toast.success("API: Languages Updated Successfully!", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -425,7 +413,7 @@ function Addraterule() {
                 })
           
                 .catch((error) => {
-                  toast.error("Languages Error", {
+                  toast.error("API: Languages Error", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -446,7 +434,7 @@ function Addraterule() {
                 .put(url, final_data, { 
                   header: { "content-type": "application/json" } })
                 .then((response) => {
-                  toast.success("Country Updated Successfully!", {
+                  toast.success("API: Country Updated Successfully!", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -460,7 +448,7 @@ function Addraterule() {
                 })
           
                 .catch((error) => {
-                  toast.error("Country Error", {
+                  toast.error("API: Country Error", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -480,7 +468,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("Devices Added Successfully!", {
+                    toast.success("API: Devices Added Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -494,7 +482,7 @@ function Addraterule() {
                   })
             
                   .catch((error) => {
-                    toast.error("Devices Error", {
+                    toast.error("API: Devices Error", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -515,7 +503,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("Programs Updated Successfully!", {
+                    toast.success("API: Programs Updated Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -530,7 +518,7 @@ function Addraterule() {
                   })
             
                   .catch((error) => {
-                    toast.error("Programs Error", {
+                    toast.error("API: Programs Error", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -544,6 +532,7 @@ function Addraterule() {
               };
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
+                if (validationRateCondition(allUserRateDetails)){
                 const data = [{
                   max_user_percentage:allUserRateDetails?.MaxUsersPercent,
                   user_signed_in: userSignedIn,
@@ -556,7 +545,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("Rate rule Updated Successfully!", {
+                    toast.success("API: Rate rule Updated Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -566,11 +555,12 @@ function Addraterule() {
                       progress: undefined,
                     });
                     setBasicFlag([])
+                    setDisp(2);
+                  }
+                  )
                   
-                  })
-            
                   .catch((error) => {
-                    toast.error("Rate rule update Error2!", {
+                    toast.error("API: Rate rule update Error2!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -581,31 +571,9 @@ function Addraterule() {
                     });
                     setBasicFlag([])
                   });
-              
+                }
               };
-          // Country JSON for Dropdown   
-         const createCountry = () => {
-          var countryCodes = Object.keys(countries.countries);
-            countryCodes.map(code => {
-              var temp = {
-                country_name: countries.countries[code].name,
-                country_code: code
-              }
-            country_data.push(temp) } );
-            setCountryData(country_data);
-          }
-        // Languages JSON for Dropdown
-          const createLanguages = () => {
-           languageCodes = langs.all();
-            languageCodes.map(code => {
-              var temp = {
-                language_name: code.name,
-                language_code: code?.[j]
-              }
-            language_data.push(temp) } );
-            setLanguageData(language_data);
-            
-          } 
+        
           // Programs JSON for Dropdown
           const fetchPrograms = async () => {
             const url = `/api/package_membership/${currentProperty?.property_id}`
@@ -660,6 +628,127 @@ function Addraterule() {
                final_program_data.push(temp) } );
                setFinalProgram(final_program_data);  
            }
+{/** Validation **/}
+//Rate Description
+// Validation Function
+const validationRateDescription = (data) => {
+  var Result = checkRateDescription(data);
+  if (Result === true){
+   return true;
+  }
+  else{
+   setError(Result);
+   return false;
+  }
+}
+//Checking Form Data for rate Description
+const checkRateDescription = (data) => {
+ var error={};
+ if(data?.program === "" ||  data.program === undefined){
+   error.program = "This field is required."
+ }
+ if(data?.UserRateCondition_op === "" ||  data.UserRateCondition_op === undefined){
+  error.UserRateCondition_op = "This field is required."
+}
+if(data?.Description === "" ||  data.Description === undefined){
+  error.Description = "This field is required."
+}
+if(data?.ineligibility_type === "" ||  data.ineligibility_type === undefined){
+  error.ineligibility_type = "This field is required."
+}
+if(data?.price_multiplier === "" ||  data.price_multiplier === undefined){
+  error.price_multiplier = "This field is required."
+}
+ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.price_multiplier)) && (data?.price_multiplier != "" &&  data.price_multiplier != undefined))){
+   error.price_multiplier = "This field accept possitive and decimal values only."
+ }
+return Object.keys(error).length === 0 ? true :  error;
+
+}
+//Rates
+// Validation Function
+const validationRates = (data) => {
+  var Result = checkRates(data);
+  if (Result === true){
+   return true;
+  }
+  else{
+   setError(Result);
+   return false;
+
+  }
+
+}
+//Checking Form Data for rate Description
+const checkRates = (data) => {
+ var error={};
+ if(data?.base_rate_currency === "" ||  data?.base_rate_currency === undefined){
+   error.base_rate_currency = "This field is required."
+ }
+ if(data?.base_rate_amount === "" ||  data?.base_rate_amount === undefined){
+  error.base_rate_amount = "This field is required."
+}
+if(data?.tax_currency === "" ||  data.tax_currency === undefined){
+  error.tax_currency= "This field is required."
+}
+if(data?.tax_amount === "" ||  data?.tax_amount === undefined){
+  error.tax_amount = "This field is required."
+}
+if(data?.otherfees_currency === "" ||  data?.otherfees_currency === undefined){
+  error.otherfees_currency = "This field is required."
+}
+if(data?.otherfees_amount === "" ||  data?.otherfees_amount === undefined){
+  error.otherfees_amount = "This field is required."
+}
+if(data?.charge_currency === "" ||  data?.charge_currency === undefined){
+  error.charge_currency = "This field is required."
+}
+if(data?.refundable === "" ||  data?.refundable === undefined){
+  error.refundable = "This field is required."
+}
+if(data?.expiration_time === "" ||  data?.expiration_time === undefined){
+  error.expiration_time = "This field is required."
+}
+if(data?.room_id === "" ||  data?.room_id === undefined){
+  error.room_id = "This field is required."
+}
+ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.base_rate_amount)) && (data?.base_rate_amount != "" &&  data?.base_rate_amount != undefined))){
+   error.base_rate_amount = "This field accept possitive and decimal values only."
+ }
+ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.tax_amount)) && (data?.tax_amount != "" &&  data?.tax_amount != undefined))){
+  error.tax_amount = "This field accept possitive and decimal values only."
+}
+if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) && (data?.otherfees_amount != "" &&  data?.otherfees_amount != undefined))){
+  error.otherfees_amount = "This field accept possitive and decimal values only."
+}
+if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) && (data?.refundable_until_days != "" &&  data?.refundable_until_days != undefined))){
+  error.refundable_until_days = "This field accept possitive values only."
+}
+return Object.keys(error).length === 0 ? true :  error;
+
+}
+//Rate Conditions
+// Validation Function
+const validationRateCondition = (data) => {
+  var Result = checkRateCondition(data);
+  if (Result === true){
+   return true;
+  }
+  else{
+   setError(Result);
+   return false;
+
+  }
+
+}
+//Checking Form Data for rate Description
+const checkRateCondition = (data) => {
+ var error={};
+ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.MaxUsersPercent))&& (data?.MaxUsersPercent != "" &&  data.MaxUsersPercent!= undefined))){
+   error.MaxUsersPercent = "This field accept possitive and decimal values only."
+ }
+return Object.keys(error).length === 0 ? true :  error;
+}
 
   return (
     <>
@@ -775,12 +864,10 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                     {language?.programname}
-                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
 
-                    <input type="text" 
+                  <input type="text" 
                       className="peer shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                      required
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
@@ -788,8 +875,9 @@ function Addraterule() {
                         })
                       }/>
 
-                     <p className="invisible peer-invalid:visible text-red-700 font-light">
-                {language?.required}
+                     <p className="text-red-700 font-light">
+                   {error?.program}
+
             </p>
 
                   </div>
@@ -801,31 +889,20 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                        {language?.ratecondition}
-                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
-                      required
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
-                          UserRateCondition_op: e.target.value
-
-                        })
-                      }
-                    >
-
-                      <option selected >{language?.select}</option>
+                          UserRateCondition_op: e.target.value}) }>
+                      <option selected disabled>{language?.select}</option>
                       <option value="all">{language?.all}</option>
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
                     </select>
-
-                    <p className="invisible peer:visible text-red-700 font-light">
-             {language?.required}
-            </p>
-
+                    <p className="text-red-700 font-light">{error?.Description}</p>
                   </div>
                 </div>
 
@@ -836,20 +913,18 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                        {language?.ratedescription}
-                      <span style={{color:"#ff0000"}}>*</span>
+                     
                     </label>
                     <textarea rows="2" columns="50"
-                      className="peer shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       required
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
-                          Description: e.target.value,
-                        })
-                      }
 
-                    />
-              <p className="invisible peer-invalid:visible text-red-700 font-light">    
+                          Description: e.target.value,})} />
+                    <p className="text-red-700 font-light">
+                   {error?.Description}
             </p>
                   </div>
                 </div>
@@ -861,7 +936,7 @@ function Addraterule() {
                   htmlFor="grid-password"
                 >
                    {language?.discounttype}
-                  <span style={{color:"#ff0000"}}>*</span>
+                  
                 </label>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -871,11 +946,16 @@ function Addraterule() {
                       ineligibility_type: e.target.value,
                     })}
                 >
-                  <option selected >{language?.select}</option>
+                  <option selected disabled>{language?.select}</option>
                   <option value="exact">{language?.exact}</option>
                   <option value="price_band">{language?.priceband}</option>
                   <option value="existence">{language?.existence}</option>
              </select>
+
+             <p className="text-red-700 font-light">
+                   {error?.ineligibility_type}
+            </p>
+
               </div>
             </div>
             
@@ -886,8 +966,7 @@ function Addraterule() {
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
-                  <span style={{color:"#ff0000"}}>*</span>
-                </label>
+                 </label>
                 <input
                   type="text"
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -900,25 +979,17 @@ function Addraterule() {
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                    {language?.pricemultiplier}
-                  <span style={{color:"#ff0000"}}>*</span>
-                </label>
+                  </label>
                 <input
                   type="text"
-
-                  pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
-                  required
-                  className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
+                 className="peer shadow-sm bg-gray-50 border my-2 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                  onChange={(e) =>
                     setAllUserRateDetails({
                       ...allUserRateDetails,
-                      price_multiplier: e.target.value,
-                    })
-                  }
+                      price_multiplier: e.target.value,}) }/>
+                  <p className="text-red-700 font-light">
+                   {error?.price_multiplier}
 
-               />
-                 <p className="invisible peer-invalid:visible text-red-700 font-light">
-              {language?.float}
             </p>
                 </div></div>
                 <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
@@ -931,7 +1002,6 @@ function Addraterule() {
                 <div>
                 </div>
               </div>
-
             </div>
 
           </div>
@@ -958,8 +1028,8 @@ function Addraterule() {
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates}</div>
             </div>
        </div>
-          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
 
+          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.ratecondition}
 
           </h6>
@@ -972,30 +1042,31 @@ function Addraterule() {
                   <div className="relative w-full ">
 
                     <div className='flex mb-2'>
-                    <div className="w-full lg:w-3/12 ">
+                    <div className="w-full lg:w-4/12 ">
                       <span className="flex  ">
                       <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
                       onClick={() => {setCountryCheck(!countryCheck)}} checked={countryCheck === true}
                       className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
-                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        className="text-sm font-medium mx-2 -mt-0.5 text-gray-900 block "
                         htmlFor="grid-password"
                       >
                           {language?.usercountry}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
-                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg
+                       focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={countryData}
+                      options={lang?.CountryData}
                       displayValue="country_name"
                      onRemove={(event) => {country(event)}}
                       onSelect={(event) => {country(event) }} /></div>
                     </div>
 
                     <div className='flex mb-2'>
-                    <div className="w-full lg:w-3/12 ">
+                    <div className="w-full lg:w-4/12 ">
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
                          onClick={() => {setDeviceCheck(!deviceCheck)}} checked={deviceCheck === true}
@@ -1003,7 +1074,7 @@ function Addraterule() {
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
                       <label
-                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        className="text-sm font-medium mx-2 text-gray-900 block  -mt-0.5 "
                         htmlFor="grid-password"
                       >
                          {language?.userdevice}
@@ -1011,57 +1082,55 @@ function Addraterule() {
 
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
-                      className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={device}
+                      options={lang?.DeviceData}
                       displayValue="user_device"
                      onRemove={(event) => { devices(event) }}
                       onSelect={(event) => { devices(event) }} /></div>
                     </div>
 
                     <div className='flex mb-2'>
-                    <div className="w-full lg:w-3/12 ">
+                    <div className="w-full lg:w-4/12 ">
                       <span className="flex ">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
                          onClick={() => {setLanguageCheck(!languageCheck)}} checked={languageCheck === true}
                         className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
-                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        className="text-sm font-medium mx-2  -mt-0.5 text-gray-900 block "
                         htmlFor="grid-password"
                       >
                           {language?.language}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
-                      className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={languageData}
+                      options={lang?.LanguageData}
                      displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
                       onSelect={(event) => { languages(event) }} />
                       </div>
                       </div>
 
-
                     <div className='flex mb-2'>
-                    <div className="w-full lg:w-3/12 ">
+                    <div className="w-full lg:w-4/12 ">
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                          onClick={() => {setProgramCheck(!programCheck)}} checked={programCheck === true}
                         className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" 
                          className="sr-only">checkbox</label>
-                     
                       <label
-                        className="text-sm font-medium text-gray-900 mx-2 block "
+                        className="text-sm font-medium  -mt-0.5 text-gray-900 mx-2 block "
                         htmlFor="grid-password"
                       >
                           {language?.membershipprogram}
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
-                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      className="shadow-sm bg-gray-50 text-gray-900  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={programs}
                       displayValue="program_name"
@@ -1070,42 +1139,40 @@ function Addraterule() {
                       </div>
 
                     <div className='flex mb-2'>
-                    <div className="w-full lg:w-3/12 ">
+                    <div className="w-full lg:w-4/12 ">
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                          onClick={() => {setPercentageCheck(!percentageCheck)}} checked={percentageCheck === true} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
                       <label
-                        className="text-sm font-medium mx-2 text-gray-900 block "
+                        className="text-sm font-medium mx-2  -mt-0.5 text-gray-900 block "
                         htmlFor="grid-password"
                       >
                        {language?.maxuserpercentage}
                       </label> </span></div>
-
                       <div className="w-full lg:w-4/12 ">
                       <input type="text"
-
-                      pattern="[0-9]+(\.[0-9]{1,2})?%?"
-                      className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
-                      focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
+                    className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
+                      focus:ring-cyan-600 focus:border-cyan-600 block w-full py-1.5 px-4 "
                      
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
                           MaxUsersPercent: e.target.value,
-                        })
+                        },setBasicFlag(1))
                       }/>
 
-                       <p className="invisible peer-invalid:visible text-red-700 font-light">
-              {language?.float}
-            </p>
+                       <p className=" text-red-700 font-light">
+                         {error?.MaxUsersPercent}
+                            </p>
+
                       </div>
 
                         </div>
 
                     <div className='flex mb-2'>
-                        <div className="w-full lg:w-3/12 ">
+                        <div className="w-full lg:w-4/12 ">
                       <span className="flex">
                         <input id="checkbox-1"
                           aria-describedby="checkbox-1" type="checkbox"
@@ -1119,14 +1186,12 @@ function Addraterule() {
                       >
                        {language?.usersignedin}
                       </label> </span></div>
-                      <div className="w-full lg:w-4/12 ">
-                     
-                      <div className="form-check mx-2 my-4 form-check-inline">
-
+                      <div className="w-full lg:w-4/12">
+                      <div className="form-check mx-2  form-check-inline">
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={userSignedIn} 
                             onChange={(e) =>
-                              setUserSignedIn( (!userSignedIn) ,setBasicFlag(1))
+                              setUserSignedIn( (!userSignedIn))
                             }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -1143,7 +1208,7 @@ function Addraterule() {
                       </div>
 
                     <div className='flex mb-2'>
-                    <div className="w-full lg:w-3/12 ">
+                    <div className="w-full lg:w-4/12 ">
                       <span className="flex ">
                         <input id="checkbox-1" aria-describedby="checkbox-1"
                          onClick={() => {setDomesticCheck(!domesticCheck)}}  type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
@@ -1165,7 +1230,7 @@ function Addraterule() {
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
                           <input type="checkbox" value={isDomestic} 
                             onChange={(e) =>
-                              setIsDomestic((!isDomestic),setBasicFlag(1))
+                              setIsDomestic((!isDomestic))
                             }
                             id="default" className="sr-only peer" />
                           <div
@@ -1186,7 +1251,10 @@ function Addraterule() {
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={()=>{
-                  if(basicFlag?.length != 0){
+                  if((domesticCheck=== true && isDomestic === true)
+                  ||(userSignedIn === true && signedCheck === true)||
+                  (percentageCheck=== true && basicFlag === 1))
+                  {
                   submitAdditional();}
                   
                 if(countryCheck === true){
@@ -1215,18 +1283,20 @@ function Addraterule() {
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"> 1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Rate Rule Description</div>
+
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.ratedescription}</div>
+
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Rate Rule Conditions</div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.ratecondition}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
           
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">
             3</button>
-              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Rates </div>
+              <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates}</div>
             </div>
 
 
@@ -1244,21 +1314,21 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.baserate} {language?.currency}
-                      <span style={{color:"#ff0000"}}>*</span>
-                    </label>
+                     </label>
                     
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
-                      onChange={
+                         onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
                         )
                       }>
-                      <option selected>{language?.select}</option>
+                      <option selected disabled>{language?.select}</option>
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select>
+                    <p className=" text-red-700 font-light">
+                    {error?.base_rate_currency}</p>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1268,22 +1338,18 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.baserate} {language?.amount}
-                      <span style={{color:"#ff0000"}}>*</span>
-                    </label>
+                      </label>
                     <input
                       type="text"
-                      pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
-                      required
-                      className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                     className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                      onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_amount: e.target.value })
                         )
                       }
                     />
-                    <p className="invisible peer-invalid:visible text-red-700 font-light">
-                    {language?.float}
-            </p>
+                    <p className=" text-red-700 font-light">
+                    {error?.base_rate_amount}</p>
                   </div>
                 </div>
 
@@ -1294,7 +1360,6 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.currency}
-                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1302,11 +1367,14 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, tax_currency: e.target.value })
                         )
                       }>
-                      <option selected>{language?.select}</option>
+                      <option selected disabled>{language?.select}</option>
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select>
+                    <p className=" text-red-700 font-light">
+                    {error?.tax_currency}
+            </p>
                   </div>
                 </div>
 
@@ -1317,12 +1385,9 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.amount}
-                      <span style={{color:"#ff0000"}}>*</span>
-                    </label>
+                     </label>
                     <input
                       type="text"
-                      pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
-                      required
                       className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1330,9 +1395,10 @@ function Addraterule() {
                         )
                       } />
 
-                        <p className="invisible peer-invalid:visible text-red-700 font-light">
-                        {language?.float}
-            </p>
+
+                    <p className=" text-red-700 font-light">
+                    {error?.tax_amount}
+                    </p>
                   </div>
                 </div>
 
@@ -1342,21 +1408,23 @@ function Addraterule() {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.capacity} {language?.currency}
-                      <span style={{color:"#ff0000"}}>*</span>
+                      {language?.other} {language?.charges} {language?.currency}
+                     
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_currency: e.target.value })
                         )
                       }>
-                      <option value="USD" >{language?.select}</option>
+                      <option disabled selected >{language?.select}</option>
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select>
+                    <p className=" text-red-700 font-light">
+                      {error?.otherfees_currency}
+                    </p>
                   </div>
                 </div>
 
@@ -1367,23 +1435,20 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                       {language?.other} {language?.charges} {language?.amount}
-                      <span style={{color:"#ff0000"}}>*</span>
-                    </label>
+                     </label>
                     <input
                       type="text"
 
-                      pattern='^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$'
-                      required
-                      className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                     onChange={
+                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+ onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_amount: e.target.value })
                         )
                       }
                     />
-                      <p className="invisible peer-invalid:visible text-red-700 font-light">
-                      {language?.float}
-            </p>
+                      <p className=" text-red-700 font-light">
+                      {error?.otherfees_amount}
+                    </p>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1393,7 +1458,6 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                         {language?.paymentholder}
-                      <span style={{color:"#ff0000"}}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1401,12 +1465,17 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         )
                       }>
-                      <option selected >{language?.select}</option>
+
+                      <option selected disabled >{language?.select}</option>
+
                       <option value="web">Web</option>
                       <option value="hotel">Hotel</option>
                       <option value="installment">Installment</option>
                       <option value="deposit">Deposit</option>
                     </select>
+                    <p className=" text-red-700 font-light">
+                    {error?.charge_currency}
+                      </p>
                   </div>
                 </div>
 
@@ -1417,20 +1486,23 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                         {language?.refundable}
-                      <span style={{color:"#ff0000"}}>*</span>
-                    </label>
+                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
                           setAllUserRateDetails({ ...allUserRateDetails, refundable: e.target.value })
                         )
                       }>
-                        <option selected>  {language?.select}</option> 
-                    
+
+                        <option selected disabled>{language?.select}</option> 
+
                         <option value={true}>Yes</option>
                          <option value={false}>No</option>
                     
                     </select>
+                    <p className=" text-red-700 font-light">
+                    {error?.refundable}
+                     </p>
                   </div>
                 </div>
 
@@ -1443,22 +1515,19 @@ function Addraterule() {
                           htmlFor="grid-password"
                         >
                            {language?.refundable} {language?.till} {language?.days}
-                              <span style={{color:"#ff0000"}}>*</span>
-                        </label>
+                          </label>
                         <input
                           type="text"
-                          pattern='^[1-9]+[0-9]*$'
-                          required
-                          className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          className=" shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                           onChange={
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_days: e.target.value })
                             )
                           } />
 
-                            <p className="invisible peer-invalid:visible text-red-700 font-light">
-                            {language?.num}
-                            </p>
+ <p className="text-red-700 font-light">
+                            {error?.refundable_until_days}
+ </p>
                       </div>
                     </div>
 
@@ -1469,7 +1538,7 @@ function Addraterule() {
                           htmlFor="grid-password"
                         >
                        {language?.refundable} {language?.till} {language?.time}
-                          <span style={{color:"#ff0000"}}>*</span>
+                          
                        </label>
                         <input
                           type="time" step="2"
@@ -1492,8 +1561,7 @@ function Addraterule() {
                       htmlFor="grid-password"
                     >
                         {language?.expirationtimezone}
-                      <span style={{color:"#ff0000"}}>*</span>
-                    </label>
+                     </label>
                     <input
                       type="datetime-local"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1503,7 +1571,9 @@ function Addraterule() {
                           setAllUserRateDetails({ ...allUserRateDetails, expiration_time: e.target.value })
                         )
                       } />
-
+                    <p className=" text-red-700 font-light">
+                    {error?.expiration_time}
+                    </p>
                   </div>
                 </div>
 
@@ -1523,6 +1593,9 @@ function Addraterule() {
                         }
                         )}
                       </select>
+                      <p className="text-red-700 font-light">
+                    {error?.room_id}
+            </p>
                     </div>
                   </div>
               </div>

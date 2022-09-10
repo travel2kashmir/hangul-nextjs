@@ -18,10 +18,10 @@ function Carousal({images}) {
   //   "image_description": "Mesmerising place to get the feel of solitude."}
   // ]
     const [current,setCurrent]=useState(0)
-    setInterval(()=>{
-      if(images)
-      {setCurrent(current<images.length-1?current+1:0)}
-},2000);
+//     setInterval(()=>{
+//       if(images)
+//       {setCurrent(current<images.length-1?current+1:0)}
+// },2000);
   
      
   return (

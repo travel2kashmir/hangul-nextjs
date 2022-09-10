@@ -871,7 +871,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                    {language?.programname}
+                    {language?.programname} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
 
                   <input type="text" 
@@ -896,7 +896,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratecondition}
+                       {language?.ratecondition} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -920,8 +920,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratedescription}
-                     
+                       {language?.ratedescription} <span style={{ color: "#ff0000" }}>*</span>  
                     </label>
                     <textarea rows="2" columns="50"
                       className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -944,7 +943,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                    {language?.discounttype}
-                  
+                   <span style={{ color: "#ff0000" }}>*</span>
                 </label>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -974,6 +973,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
+                    <span style={{ color: "#ff0000" }}>*</span>
                  </label>
                 <input
                   type="text"
@@ -986,7 +986,7 @@ return Object.keys(error).length === 0 ? true :  error;
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
-                   {language?.pricemultiplier}
+                   {language?.pricemultiplier} <span style={{ color: "#ff0000" }}>*</span>
                   </label>
                 <input
                   type="text"
@@ -1321,7 +1321,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.currency}
+                      {language?.baserate} {language?.currency}<span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1345,7 +1345,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.amount}
+                      {language?.baserate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                     <input
                       type="text"
@@ -1367,7 +1367,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.taxrate} {language?.currency}
+                      {language?.taxrate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1392,7 +1392,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.taxrate} {language?.amount}
+                      {language?.taxrate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <input
                       type="text"
@@ -1416,7 +1416,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.currency}
+                      {language?.other} {language?.charges} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                      
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1442,7 +1442,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.amount}
+                      {language?.other} {language?.charges} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <input
                       type="text"
@@ -1465,7 +1465,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.paymentholder}
+                        {language?.paymentholder} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1493,7 +1493,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.refundable}
+                        {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1522,7 +1522,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                           {language?.refundable} {language?.till} {language?.days}
+                           {language?.refundable} {language?.till} {language?.days} 
                           </label>
                         <input
                           type="text"
@@ -1545,7 +1545,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                       {language?.refundable} {language?.till} {language?.time}
+                       {language?.refundable} {language?.till} {language?.time} 
                           
                        </label>
                         <input
@@ -1568,7 +1568,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.expirationtimezone}
+                        {language?.expirationtimezone} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <input
                       type="datetime-local"
@@ -1589,7 +1589,7 @@ return Object.keys(error).length === 0 ? true :  error;
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
-                       {language?.room}
+                       {language?.room} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}

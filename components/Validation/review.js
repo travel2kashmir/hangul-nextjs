@@ -1,6 +1,6 @@
 const validateReview = (data) =>{
     var error={};
-    alert(typeof data[0].review_rating)
+    
     if(data[0].review_link==="")
     {
         error.review_link="The review link is required"

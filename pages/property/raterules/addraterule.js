@@ -532,6 +532,11 @@ function Addraterule() {
               };
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
+
+                if((isDomestic === true)
+                  ||(userSignedIn === true )||
+                  (percentageCheck=== true && basicFlag === 1)){
+
                 if (validationRateCondition(allUserRateDetails)){
                 const data = [{
                   max_user_percentage:allUserRateDetails?.MaxUsersPercent,
@@ -572,6 +577,9 @@ function Addraterule() {
                     setBasicFlag([])
                   });
                 }
+
+              }
+
               };
         
           // Programs JSON for Dropdown
@@ -1031,7 +1039,6 @@ return Object.keys(error).length === 0 ? true :  error;
 
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.ratecondition}
-
           </h6>
           <div className="flex flex-wrap">
            <div className="w-full lg:w-6/12 px-4">
@@ -1176,7 +1183,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex">
                         <input id="checkbox-1"
                           aria-describedby="checkbox-1" type="checkbox"
-                          onClick={() => {setSignedCheck(!signedCheck)}} 
+                          onClick={() => {setUserSignedIn(!userSignedIn)}} checked={userSignedIn===true}
                           className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
@@ -1184,12 +1191,12 @@ return Object.keys(error).length === 0 ? true :  error;
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       {language?.usersignedin}
+                       {language?.usersignedin} 
                       </label> </span></div>
                       <div className="w-full lg:w-4/12">
                       <div className="form-check mx-2  form-check-inline">
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={userSignedIn} 
+                          <input type="checkbox" value={userSignedIn} checked={userSignedIn===true}
                             onChange={(e) =>
                               setUserSignedIn( (!userSignedIn))
                             }
@@ -1211,7 +1218,7 @@ return Object.keys(error).length === 0 ? true :  error;
                     <div className="w-full lg:w-4/12 ">
                       <span className="flex ">
                         <input id="checkbox-1" aria-describedby="checkbox-1"
-                         onClick={() => {setDomesticCheck(!domesticCheck)}}  type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                         onClick={() => { setIsDomestic(!isDomestic)}} checked={isDomestic === true}  type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       
                       <label
@@ -1228,7 +1235,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <div className="form-check mx-2  form-check-inline">
 
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={isDomestic} 
+                          <input type="checkbox" value={isDomestic} checked={isDomestic === true}
                             onChange={(e) =>
                               setIsDomestic((!isDomestic))
                             }
@@ -1251,8 +1258,9 @@ return Object.keys(error).length === 0 ? true :  error;
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={()=>{
-                  if((domesticCheck=== true && isDomestic === true)
-                  ||(userSignedIn === true && signedCheck === true)||
+ if((isDomestic === true)
+                  ||(userSignedIn === true )||
+
                   (percentageCheck=== true && basicFlag === 1))
                   {
                   submitAdditional();}

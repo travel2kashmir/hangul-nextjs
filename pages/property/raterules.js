@@ -177,7 +177,7 @@ function Raterules() {
                 className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                 aria-current="page"
               >
-                Rate Rules
+                {language?.RateRuleCols?.name}
               </span>
             </div>
           </li>

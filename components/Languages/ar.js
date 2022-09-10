@@ -6,6 +6,7 @@ export default {
   addnewroom:"أضف غرفة جديدة",
   addnewservices:"أضف خدمات جديدة",
   addcontacts:"ضف جهات اتصال",
+  editraterules:"تحرير قواعد السعر",
   Update :{
     label:' أَجَدّ',
      color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
@@ -63,6 +64,7 @@ ContactCols:{
    
  common:{
  Status:"الحالة",
+ yesdelete:"نعم ، احذف",
  Action: "أجراءات",
  Edit: "تعديل",
  Delete:"حذف",
@@ -78,6 +80,10 @@ ContactCols:{
  Save:"غير نشط",
  Cancel:"إلغاء"
  },
+ "Previous" :{
+  label:"سابق",
+   color: "bg-gray-600 hover:bg-gray-700 text-white ",
+},
 
   AdditionalServicesCols:{
     name:"خدمات إضافية",

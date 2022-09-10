@@ -193,6 +193,7 @@ function Reviews() {
   const handleEdit = () => {
 
     if (objChecker.isEqual(active, org)) {
+
       toast.warn('No changes in review! ', {
         position: "top-center",
         autoClose: 5000,
@@ -222,10 +223,12 @@ function Reviews() {
             draggable: true,
             progress: undefined,
           });
+
           setActive({});
           setEdit(0);
           document.getElementById('editform').reset()
           Router.push('./reviews')
+
         })
           .catch(error => {
 

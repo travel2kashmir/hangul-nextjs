@@ -1,5 +1,6 @@
 const validateReview = (data) =>{
     var error={};
+    
     if(data[0].review_link==="")
     {
         error.review_link="The review link is required"
@@ -16,6 +17,13 @@ const validateReview = (data) =>{
     {
         error.review_rating="The review rating is required"
     }
+    // if(data[0].review_rating!="")
+    // { alert(data[0].review_rating)
+    //     if(typeof data[0].review_rating != 'number' && data[0].review_rating === NaN)
+    //     {
+    //         error.review_rating="The review rating must be number"
+    //     }
+    // }
     if(data[0].review_date==="")
     {
         error.review_date="The review date is required"

@@ -31,8 +31,10 @@ function Reviews() {
   const [edit, setEdit] = useState(0)
   const [active, setActive] = useState({})
   const [org, setOrg] = useState({})
+  
   const delConfirm = () => {
     var url = `/api/${del}`;
+   
     axios.delete(`${url}`).then((response) => {
       fetchReviews();
       toast.success("API: Review Deleted Sucessfully.", {
@@ -222,7 +224,8 @@ function Reviews() {
           });
           setActive({});
           setEdit(0);
-
+          document.getElementById('editform').reset()
+          Router.push('./reviews')
         })
           .catch(error => {
 
@@ -320,7 +323,7 @@ function Reviews() {
 
         {/* Form Property Reviews */}
 
-        {JSON.stringify(active)}
+        
         <div>
           {reviews?.Reviews?.map((item, idx) => (
             <div className="bg-white shadow rounded-lg mx-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2" key={idx}>
@@ -608,7 +611,10 @@ function Reviews() {
                   {language?.editreview}
                 </h3>
                 <button type="button"
-                  onClick={() => { setEdit(0); setError({}); }}
+                  onClick={() => { setActive({}); 
+                  setEdit(0); setError({}); 
+                 document.getElementById('editform').reset()
+                }}
                   className="text-gray-400 bg-transparent
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -616,10 +622,12 @@ function Reviews() {
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                 </button>
               </div>
-              <div className='mt-4'>
+              <div className='mt-4'><form id="editform">
                 <div className="flex flex-wrap">
+                  
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
+                      
                       <label
                         className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                         htmlFor="grid-password"
@@ -669,7 +677,7 @@ function Reviews() {
                         type="text"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         onChange={e => setActive({ ...active, review_author: e.target.value })}
-                        defaultValue={active?.review_author || ''}
+                        defaultValue={active?.review_author }
                       />
                       <p className=" peer-invalid:visible text-red-700 font-light">
                         {error?.review_author}
@@ -687,7 +695,7 @@ function Reviews() {
                       <input
                         type="text"
                         className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                        onChange={e => setActive({ ...active, review_rating: e.target.value })}
+                        onChange={e => setActive({ ...active, review_rating: Number(e.target.value) })}
                         defaultValue={active?.review_rating || ''}
                       />
                       <p className="peer-invalid:visible text-red-700 font-light">
@@ -765,7 +773,8 @@ function Reviews() {
                       </p>
                     </div>
                   </div>
-                </div>
+                  </div>
+                  </form> 
 
               </div>
 

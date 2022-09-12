@@ -15,11 +15,13 @@ import Button from "../../components/Button";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import validateReview from '../../components/Validation/review'
+import reviewImage from '../../public/review.png'
 var currentLogged;
 var language;
 var currentProperty;
 import Router from 'next/router'
 const logger = require("../../services/logger");
+import Image from 'next/image'
 
 function Reviews() {
   const [reviews, setReviews] = useState([]);
@@ -326,7 +328,9 @@ function Reviews() {
         </div>
 
         {/* Form Property Reviews */}
-
+        <div className="lg:mx-64 sm:mx-24 md:mx-10 ">
+        <Image src={reviewImage} height={400} width={800} alt='some image'/>
+        </div>
         
         <div>
           {reviews?.Reviews?.map((item, idx) => (

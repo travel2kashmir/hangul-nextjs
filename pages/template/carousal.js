@@ -25,10 +25,10 @@ function Carousal({ images }) {
 
 
   return (
-    <div className="flex">
+    <div className="flex mx-auto w-auto">
       <div className="bg-gray-400  relative z-0">
         {/*image on show*/}
-        {images === undefined ? <></> : <img className="mx-auto " src={images?.[current]?.image_link} alt={`${images[current]?.image_title}`} style={{ height: "500px", width: "1200px" }} />}
+        {images === undefined ? <></> : <img  src={images?.[current]?.image_link} alt={`${images[current]?.image_title}`} style={{ height: "600px", width: "2000px" }} />}
         {/*div for buttons */}
         <div className="absolute inset-0 flex  z-10">
           {/*Previous Button */}

@@ -11,8 +11,9 @@ export default {
   Status:"Statut",
   Action: "Acte",
   Edit: "Éditer",
-  Delete:"Delete",
+  Delete:"Effacer",
   Add:"Ajouter",
+  yesdelete:"Oui, Supprimer",
   Search:"Chercher",
   Previous:"Précédent",
   Next:"Suivant",
@@ -62,8 +63,12 @@ export default {
    col2 : "Programme Niveau",
     
   },
-
-   addimages:"Ajouter des images",
+  "Previous" :{
+    label:"Précédent",
+     color: "bg-gray-600 hover:bg-gray-700 text-white ",
+  },
+  addimages:"Ajouter des images",
+  editraterules:"Modifier les règles de taux",
   addservices:"Ajouter des services",
   addroom:"Ajouter une salle",
   addnewroom:"Ajouter une nouvelle pièce",
@@ -74,11 +79,11 @@ export default {
 
   "Update" :{
     label: 'Éditer',
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+     color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white "    
 },
 "Next" :{
   label: 'Suivant',
-   color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+   color: "bg-gray-600 hover:bg-gray-700 text-white "    
 },
 "Skip" :{
   label:"Sauter",
@@ -594,6 +599,34 @@ export default {
   "Addnewproperty":{
     label:'Ajouter une nouvelle propriété',
     color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+  },
+  // reviews
+  addreview:'Ajouter un commentaire',
+  reviewlink:'Lien de révision',
+  reviewtitle: 'Titre du commentaire',
+  reviewauthor: 'Auteur de la critique',
+  reviewrating: "Note d'examen",
+  reviewercategory: "Catégorie d'examinateur",
+  servicedate:"Date d'entretien",
+  reviewdate:"Date de révision",
+  reviewcontent:"Examiner le contenu",
+  editreview:"Modifier l'avis",
+  "EditReview" :{
+    label: "Modifier l'avis",
+     color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
+     icon:<svg
+     className="mr-2 h-5 w-5"
+     fill="currentColor"
+     viewBox="0 0 20 20"
+     xmlns="http://www.w3.org/2000/svg"
+   >
+     <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+     <path
+       fillRule="evenodd"
+       d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+       clipRule="evenodd"
+     ></path>
+   </svg>
   }
 
 };

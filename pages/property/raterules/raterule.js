@@ -102,15 +102,17 @@ function Raterule() {
     }
 }
  
-   /* Function to load  when page loads*/
-   useEffect(() => {
+/* Function to load  when page loads*/
+useEffect(() => {
     fetchRateRule();
     fetchPrograms();
 }, [])
 
 //submit rate add
 const submitRateAdd = () => {
-  var time;
+
+  if(validationRates(allUserRateDetails)) {
+var time;
   var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
   time = new Date(temp.toString())
   const final_data = {
@@ -129,10 +131,8 @@ const submitRateAdd = () => {
     "rate_rule_id": rateRule.rate_rule_id,
     "status": true
   }
-
   const url = '/api/rate_rule/conditional_rate'
   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-
     ((response) => {
       toast.success("API:User Rate Condition added Successfully!", {
         position: "top-center",
@@ -143,14 +143,11 @@ const submitRateAdd = () => {
         draggable: true,
         progress: undefined,
       });
-    
       const room_data ={
         "rate_rule":[{
         "conditional_rate_id": response.data.conditional_rate_id,
-        "room_id": allUserRateDetails.room_id,
-        
+        "room_id": allUserRateDetails.room_id 
       }]}
-    
       const url = '/api/rate_rule/conditional_rate/conditional_rate_room_link'
       axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
   
@@ -192,6 +189,7 @@ const submitRateAdd = () => {
       });
     })
 
+}
 }
 
 /**  Delete Rate Rules **/
@@ -355,7 +353,6 @@ const url = "/api/rate_rule/rate_rules";
 }
    /* Edit Rate Details Function */
 const submitRateEdit = () => {
-
  if(validationRates(allUserRateDetails)) {
 var time;
     var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
@@ -516,6 +513,7 @@ var time;
       });
   
   };
+
  // Device Edit Submit
   const submitDeviceEdit = () => {
     const final_data = { "user_rate_device": finalDevice }
@@ -536,7 +534,6 @@ var time;
           setDevice([])
           Router.push("./raterule");
         })
-  
         .catch((error) => {
           toast.error("API:Devices Error", {
             position: "top-center",
@@ -551,7 +548,7 @@ var time;
     
     };
 
-  // Device Edit Submit
+  //Program Edit Submit
   const submitProgramEdit = () => {
     const final_data = { "user_rate_program": finalProgram }
    const url = "/api/rate_rule/user_rate_conditioning/rate_condition_membership_link";
@@ -734,7 +731,6 @@ var time;
     setCheckPercentage(true)
   }
   if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined) {
-    
     setCheckProgram(true)
     res = programs.filter(el => {
      return rateRule?.user_rate_condition?.[i]?.PackageMembership.find(element => {
@@ -778,7 +774,6 @@ const filterByLanguage = () => {
     }
 Router.push('./raterule')
 }
-
 
   const fetchRateRule = async () => {
     const url = `/api/rate_rule/${currentraterule}`
@@ -954,15 +949,12 @@ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) &&
 (data?.otherfees_amount != "" &&  data?.otherfees_amount != undefined))){
   error.otherfees_amount = "This field accept possitive and decimal values only."
 }
-
-
 if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
  (data?.refundable_until_days != "" &&  data?.refundable_until_days != undefined))){
   error.refundable_until_days = "This field accept possitive values only."
 }
  
 return Object.keys(error).length === 0 ? true :  error;
-
 }
   return (
     <>
@@ -973,7 +965,6 @@ return Object.keys(error).length === 0 ? true :  error;
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
-        
               <li className="inline-flex items-center">
                 <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                 <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
@@ -1080,7 +1071,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.programname}
-
+                      <span style={{ color: "#ff0000" }}>*</span>
                      </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1107,7 +1098,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                  {language?.discounttype}
-
+                 <span style={{ color: "#ff0000" }}>*</span>
                  </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1135,7 +1126,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
-
+                    <span style={{ color: "#ff0000" }}>*</span>
                   </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1151,7 +1142,7 @@ return Object.keys(error).length === 0 ? true :  error;
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                     {language?.pricemultiplier}
-
+                    <span style={{ color: "#ff0000" }}>*</span>
                  </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1240,7 +1231,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratecondition}
+                       {language?.ratecondition} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1269,7 +1260,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratedescription}
+                       {language?.ratedescription} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Textboxloader/></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1296,7 +1287,7 @@ return Object.keys(error).length === 0 ? true :  error;
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                   {language?.conditions} {userSign?.is_domestic}
+                   {language?.conditions} 
                     </h4></div>
                     </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1543,18 +1534,19 @@ return Object.keys(error).length === 0 ? true :  error;
 
                 <Button Primary={language?.Update} onClick={()=>{ 
 if (basicFlag.length !== 0){
+
                     submitAdditional();
                   }
-                  if (finalLang.length !== 0){
+                  if (finalLang.length !== 0 && checkLanguage === true){
                     submitLanguageEdit()
                   }
-                  if (finalCountry.length !== 0 && checkCountry == true){
+                  if (finalCountry.length !== 0 && checkCountry === true){
                     submitCountryEdit()
                   }
-                  if (finalDevice.length !== 0){
+                  if (finalDevice.length !== 0 && checkDevice === true){
                     submitDeviceEdit()
                   }
-                  if (finalProgram.length !== 0){
+                  if (finalProgram.length !== 0 && checkProgram === true){
                     submitProgramEdit()
                   }
                   if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
@@ -1568,11 +1560,10 @@ if (basicFlag.length !== 0){
                   }
                   if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
                     deleteProgram()
-                  }
-                  
+}  
                 }} /> 
             <Button Primary={language?.Next}   onClick={() => {setDisp(2);}} />    
-               
+
             </div>
         </div>
         </div>
@@ -1609,7 +1600,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.currency}
+                      {language?.baserate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1618,8 +1609,11 @@ if (basicFlag.length !== 0){
                         (e) => {  
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
                       }
-                      }>
-                      <option selected disabled>{allUserRateDetails?.base_rate_currency}</option>
+  }>{allUserRateDetails?.base_rate_currency === ""
+                      ?
+                      <option selected disabled>{language?.select}</option>:
+                      <option selected disabled>{allUserRateDetails?.base_rate_currency}</option>}
+
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1632,10 +1626,11 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.amount}
+                      {language?.baserate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                        </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+ <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1660,10 +1655,11 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.taxrate} {language?.currency}
 
+                      {language?.taxrate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1671,7 +1667,10 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, tax_currency: e.target.value })
                         )
                       }>
-                      <option selected disabled >{allUserRateDetails?.tax_currency}</option>
+ {allUserRateDetails?.tax_currency === ""
+                      ? <option selected disabled >{language?.select}</option>:
+                      <option selected disabled >{allUserRateDetails?.tax_currency}</option>}
+
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1686,7 +1685,7 @@ if (basicFlag.length !== 0){
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.amount}
-
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1710,7 +1709,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.capacity} {language?.currency}
+                      {language?.other} {language?.capacity} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1721,7 +1720,10 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_currency: e.target.value })
                         )
                       }>
-                      <option selected disabled >{allUserRateDetails?.otherfees_currency}</option>
+ {allUserRateDetails?.otherfees_currency === ""
+                      ? <option selected disabled >{language?.select}</option>:
+                      <option selected disabled >{allUserRateDetails?.otherfees_currency}</option>}
+
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1735,7 +1737,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.amount}
+                      {language?.other} {language?.charges} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1762,7 +1764,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.paymentholder}
+                        {language?.paymentholder} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1773,7 +1775,10 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         }
                       }>
-                      <option selected disabled >{allUserRateDetails.charge_currency}</option>
+ {allUserRateDetails?.charge_currency === ""
+                      ? <option selected disabled >{language?.select}</option>:
+                      <option selected disabled >{allUserRateDetails.charge_currency}</option>}
+
                       <option value="web">  {language?.web}</option>
                       <option value="hotel">  {language?.hotel}</option>
                       <option value="installment">  {language?.installment}</option>
@@ -1788,10 +1793,13 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.refundable}
+
+                       {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
+
 
                       </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1799,15 +1807,26 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, refundable: e.target.value })
                         )
                       }>
+                       {allUserRateDetails?.refundable === ""?
+                        <>
+                        <option selected disabled>  {language?.select}</option>
+                         <option value={false}> {language?.no}</option>
+                         </>:
+                         <>
                       {allUserRateDetails?.refundable === "true"
                         ?
+  <>
                         <option selected disabled value={true}>  {language?.yes}</option>
-                        : <option value={false}> {language?.no}</option>}
-
+                         <option value={false}> {language?.no}</option>
+                         </>
+                       : 
+                        <>
                       <option value={true}> {language?.yes}</option>
-
                       <option disabled selected value={false}> {language?.no}</option>
- </select></div>
+                      </>
+                     }</>}
+                        </select></div>
+
                   </div>
                 </div>
 
@@ -1871,7 +1890,7 @@ if (basicFlag.length !== 0){
                       htmlFor="grid-password"
                     >
 
-                       {language?.expirationtimezone} 
+                       {language?.expirationtimezone} <span style={{ color: "#ff0000" }}>*</span>
 </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1894,19 +1913,20 @@ if (basicFlag.length !== 0){
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
-                       {language?.room}
+                       {language?.room} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+ <option selected disabled>{language?.select}</option>
+                         {rooms?.map(i => {
 
-                        <option selected disabled>{language?.select}</option>
- {rooms?.map(i => {
                           return (
                             <option key={i} value={i.room_id}>{i.room_name}</option>)
                         }
                         )}
                       </select>
+                      <p className="text-red-700 font-light"> {error?.room_id}</p>
                     </div>
                   </div>:<></>
                       }

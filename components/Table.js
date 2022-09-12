@@ -81,7 +81,7 @@ const Table = (args) => {
                             <label htmlFor="users-search" className="sr-only">{args?.common?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
                                 <input type="text" name="email" id="myInput" onKeyUp={myFunction}
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search">
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={args?.common?.Search}>
                                 </input>
                             </div>
                         </form>
@@ -371,7 +371,7 @@ const Table = (args) => {
                                                                 <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white  sm:inline-flex  
                                                                  font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                  
-                                                                    onClick={() => { { setDel({ ...del, delete: 0, id: '' }) }; args.delete(item?.id) }} >Yes, Delete</button>
+                                                                    onClick={() => { { setDel({ ...del, delete: 0, id: '' }) }; args.delete(item?.id) }} >{args?.common?.yesdelete}</button>
                                                                 <button className="bg-gradient-to-r bg-gray-400 hover:bg-gray-500 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                     onClick={() => { setDel({ ...del, delete: 0, id: '' }) }} >{args?.common?.Cancel}</button>
                                                             </td>

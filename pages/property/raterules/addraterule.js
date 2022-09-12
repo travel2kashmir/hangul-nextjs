@@ -532,6 +532,11 @@ function Addraterule() {
               };
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
+
+                if((isDomestic === true)
+                  ||(userSignedIn === true )||
+                  (percentageCheck=== true && basicFlag === 1)){
+
                 if (validationRateCondition(allUserRateDetails)){
                 const data = [{
                   max_user_percentage:allUserRateDetails?.MaxUsersPercent,
@@ -572,6 +577,9 @@ function Addraterule() {
                     setBasicFlag([])
                   });
                 }
+
+              }
+
               };
         
           // Programs JSON for Dropdown
@@ -863,7 +871,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                    {language?.programname}
+                    {language?.programname} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
 
                   <input type="text" 
@@ -888,7 +896,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratecondition}
+                       {language?.ratecondition} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <select
                       className="shadow-sm capitalize bg-gray-50 mb-1.5 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -912,8 +920,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratedescription}
-                     
+                       {language?.ratedescription} <span style={{ color: "#ff0000" }}>*</span>  
                     </label>
                     <textarea rows="2" columns="50"
                       className="shadow-sm bg-gray-50 capitalize border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -936,7 +943,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                    {language?.discounttype}
-                  
+                   <span style={{ color: "#ff0000" }}>*</span>
                 </label>
                 <select
                   className="shadow-sm bg-gray-50 border mb-1.5 border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -966,6 +973,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
+                    <span style={{ color: "#ff0000" }}>*</span>
                  </label>
                 <input
                   type="text"
@@ -978,7 +986,7 @@ return Object.keys(error).length === 0 ? true :  error;
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
-                   {language?.pricemultiplier}
+                   {language?.pricemultiplier} <span style={{ color: "#ff0000" }}>*</span>
                   </label>
                 <input
                   type="text"
@@ -1031,7 +1039,6 @@ return Object.keys(error).length === 0 ? true :  error;
 
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.ratecondition}
-
           </h6>
           <div className="flex flex-wrap">
            <div className="w-full lg:w-6/12 px-4">
@@ -1176,7 +1183,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex">
                         <input id="checkbox-1"
                           aria-describedby="checkbox-1" type="checkbox"
-                          onClick={() => {setSignedCheck(!signedCheck)}} 
+                          onClick={() => {setUserSignedIn(!userSignedIn)}} checked={userSignedIn===true}
                           className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      
@@ -1184,12 +1191,12 @@ return Object.keys(error).length === 0 ? true :  error;
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       {language?.usersignedin}
+                       {language?.usersignedin} 
                       </label> </span></div>
                       <div className="w-full lg:w-4/12">
                       <div className="form-check mx-2  form-check-inline">
                         <label htmlFor={`default-toggle`} className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={userSignedIn} 
+                          <input type="checkbox" value={userSignedIn} checked={userSignedIn===true}
                             onChange={(e) =>
                               setUserSignedIn( (!userSignedIn))
                             }
@@ -1211,7 +1218,7 @@ return Object.keys(error).length === 0 ? true :  error;
                     <div className="w-full lg:w-4/12 ">
                       <span className="flex ">
                         <input id="checkbox-1" aria-describedby="checkbox-1"
-                         onClick={() => {setDomesticCheck(!domesticCheck)}}  type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                         onClick={() => { setIsDomestic(!isDomestic)}} checked={isDomestic === true}  type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       
                       <label
@@ -1228,7 +1235,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <div className="form-check mx-2  form-check-inline">
 
                         <label htmlFor="default" className="inline-flex relative items-center cursor-pointer">
-                          <input type="checkbox" value={isDomestic} 
+                          <input type="checkbox" value={isDomestic} checked={isDomestic === true}
                             onChange={(e) =>
                               setIsDomestic((!isDomestic))
                             }
@@ -1251,8 +1258,9 @@ return Object.keys(error).length === 0 ? true :  error;
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={()=>{
-                  if((domesticCheck=== true && isDomestic === true)
-                  ||(userSignedIn === true && signedCheck === true)||
+ if((isDomestic === true)
+                  ||(userSignedIn === true )||
+
                   (percentageCheck=== true && basicFlag === 1))
                   {
                   submitAdditional();}
@@ -1313,7 +1321,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.currency}
+                      {language?.baserate} {language?.currency}<span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     
                     <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1337,7 +1345,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.amount}
+                      {language?.baserate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                     <input
                       type="text"
@@ -1359,7 +1367,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.taxrate} {language?.currency}
+                      {language?.taxrate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1384,7 +1392,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.taxrate} {language?.amount}
+                      {language?.taxrate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <input
                       type="text"
@@ -1408,7 +1416,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.currency}
+                      {language?.other} {language?.charges} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                      
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1434,7 +1442,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.amount}
+                      {language?.other} {language?.charges} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <input
                       type="text"
@@ -1457,7 +1465,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.paymentholder}
+                        {language?.paymentholder} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1485,7 +1493,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.refundable}
+                        {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1514,7 +1522,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                           {language?.refundable} {language?.till} {language?.days}
+                           {language?.refundable} {language?.till} {language?.days} 
                           </label>
                         <input
                           type="text"
@@ -1537,7 +1545,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                       {language?.refundable} {language?.till} {language?.time}
+                       {language?.refundable} {language?.till} {language?.time} 
                           
                        </label>
                         <input
@@ -1560,7 +1568,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.expirationtimezone}
+                        {language?.expirationtimezone} <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <input
                       type="datetime-local"
@@ -1581,7 +1589,7 @@ return Object.keys(error).length === 0 ? true :  error;
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
-                       {language?.room}
+                       {language?.room} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}

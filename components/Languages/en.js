@@ -77,6 +77,7 @@ export default {
     label: "Update",
      color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white "    
   },
+
 "UpdateDisabled" :{
   label: "Update",
    color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    

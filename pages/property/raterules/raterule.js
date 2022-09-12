@@ -1071,7 +1071,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       htmlFor="grid-password"
                     >
                       {language?.programname}
-
+                      <span style={{ color: "#ff0000" }}>*</span>
                      </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1098,7 +1098,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                  {language?.discounttype}
-
+                 <span style={{ color: "#ff0000" }}>*</span>
                  </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1126,7 +1126,7 @@ return Object.keys(error).length === 0 ? true :  error;
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
-
+                    <span style={{ color: "#ff0000" }}>*</span>
                   </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1142,7 +1142,7 @@ return Object.keys(error).length === 0 ? true :  error;
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                     {language?.pricemultiplier}
-
+                    <span style={{ color: "#ff0000" }}>*</span>
                  </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1231,7 +1231,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratecondition}
+                       {language?.ratecondition} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1260,7 +1260,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratedescription}
+                       {language?.ratedescription} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Textboxloader/></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1287,7 +1287,7 @@ return Object.keys(error).length === 0 ? true :  error;
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                   {language?.conditions} {userSign?.is_domestic}
+                   {language?.conditions} 
                     </h4></div>
                     </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1600,7 +1600,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.currency}
+                      {language?.baserate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1626,7 +1626,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.amount}
+                      {language?.baserate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                        </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1655,8 +1655,9 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.taxrate} {language?.currency}
-</label>
+
+                      {language?.taxrate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
 
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1684,7 +1685,7 @@ if (basicFlag.length !== 0){
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.amount}
-
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1708,7 +1709,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.capacity} {language?.currency}
+                      {language?.other} {language?.capacity} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1736,7 +1737,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.amount}
+                      {language?.other} {language?.charges} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1763,7 +1764,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.paymentholder}
+                        {language?.paymentholder} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1792,7 +1793,9 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
- {language?.refundable} {(allUserRateDetails?.refundable)}
+
+                       {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
+
 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1887,7 +1890,7 @@ if (basicFlag.length !== 0){
                       htmlFor="grid-password"
                     >
 
-                       {language?.expirationtimezone} 
+                       {language?.expirationtimezone} <span style={{ color: "#ff0000" }}>*</span>
 </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1910,7 +1913,7 @@ if (basicFlag.length !== 0){
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
-                       {language?.room}
+                       {language?.room} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}

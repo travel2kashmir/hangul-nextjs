@@ -31,10 +31,16 @@ function Reviews() {
   const [edit, setEdit] = useState(0)
   const [active, setActive] = useState({})
   const [org, setOrg] = useState({})
-  
+  var date = new Date();
+  var currentDate = {
+    "day": date?.getDate() < 10 ? `0${date?.getDate()}` : date?.getDate(),
+    "month": date?.getMonth() + 1 < 10 ? `0${date?.getMonth() + 1}` : date?.getMonth() + 1,
+    "year": date?.getUTCFullYear()
+  }
+
   const delConfirm = () => {
     var url = `/api/${del}`;
-   
+
     axios.delete(`${url}`).then((response) => {
       fetchReviews();
       toast.success("API: Review Deleted Sucessfully.", {
@@ -195,7 +201,7 @@ function Reviews() {
 
     if (objChecker.isEqual(active, org)) {
 
-      toast.warn('No changes in review! ', {
+      toast.warn('APP: No changes in review! ', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -208,7 +214,7 @@ function Reviews() {
     else {
       const edited = [active]
       var res = validateReview(edited)
-      console.log("validation res is " + res)
+
       if (res === true) {
         axios.put('/api/review', active, {
           headers: { 'content-type': 'application/json' }
@@ -227,6 +233,7 @@ function Reviews() {
 
           setActive({});
           setEdit(0);
+          setError({})
           document.getElementById('editform').reset()
           Router.push('./reviews')
 
@@ -327,7 +334,7 @@ function Reviews() {
 
         {/* Form Property Reviews */}
 
-        
+
         <div>
           {reviews?.Reviews?.map((item, idx) => (
             <div className="bg-white shadow rounded-lg mx-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2" key={idx}>
@@ -409,173 +416,184 @@ function Reviews() {
       {/* Modal Add */}
       <div className={view === 1 ? "block" : "hidden"}>
         <form id="addform">
-        <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-          <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-            <div className="bg-white rounded-lg shadow relative m-4 px-4 py-6">
-              <div className="flex items-start justify-between p-5 border-b rounded-t">
-                <h3 className="text-xl font-semibold">
-                  {language?.addreview}
-                </h3>
-                <button type="button"
-                  onClick={() => { setActive({}); setView(0); setError({});  document.getElementById('addform').reset(); }}
-                  className="text-gray-400 bg-transparent
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div className="bg-white rounded-lg shadow relative m-4 px-4 py-6">
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className="text-xl font-semibold">
+                    {language?.addreview}
+                  </h3>
+                  <button type="button"
+                    onClick={() => { setActive({}); setView(0); setError({}); document.getElementById('addform').reset(); }}
+                    className="text-gray-400 bg-transparent
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
-                >
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                </button>
-              </div>
-              {
-                review?.map((review, index) =>
-                (<div key={review?.index} className='mt-4'>
-                  <div className="p-6 space-y-6" >
-                  <div className="grid grid-cols-6 gap-6">
-                    
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.reviewlink}   <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                          onChange={e => onChange(e, review?.index, 'review_link')}
-                          placeholder="link of review" />
-                        <p className=" peer-invalid:visible text-red-700 font-light">
-                          {error?.review_link}
-                        </p>
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                  </button>
+                </div>
+                {
+                  review?.map((review, index) =>
+                  (<div key={review?.index} className='mt-4'>
+                    <div className="p-6 space-y-6" >
+                      <div className="grid grid-cols-6 gap-6">
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.reviewlink}   <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            onChange={e => onChange(e, review?.index, 'review_link')}
+                            placeholder="link of review" />
+                          <p className=" peer-invalid:visible text-red-700 font-light">
+                            {error?.review_link}
+                          </p>
+
+                        </div>
+
+
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.reviewtitle}   <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            onChange={e => onChange(e, review?.index, 'review_title')}
+                            placeholder="Review title"
+                          />
+                          <p className="peer-invalid:visible text-red-700 font-light">
+                            {error?.review_title}
+                          </p>
+                        </div>
+
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.reviewauthor}   <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <input
+                            type="text"
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            onChange={e => onChange(e, review?.index, 'review_author')}
+                            placeholder="Review Author"
+                          />
+                          <p className=" peer-invalid:visible text-red-700 font-light">
+                            {error?.review_author}
+                          </p>
+                        </div>
+
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.reviewrating} <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <select
+                            onChange={e => onChange(e, review?.index, 'review_rating')}
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                            <option selected disabled>Select Rating </option>
+                            <option value="1" >1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                          </select>
+
+                          <p className="peer-invalid:visible text-red-700 font-light">
+                            {error?.review_rating}
+                          </p>
+                        </div>
+
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.reviewercategory}  <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <select
+                            onChange={e => onChange(e, review?.index, 'review_type')}
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                            <option selected disabled>Select Reviewer Category</option>
+                            <option value="user" >User</option>
+                            <option value="editorial">Editorial</option>
+                          </select>
+                          <p className=" peer-invalid:visible text-red-700 font-light">
+                            {error?.review_type}
+                          </p>
+                        </div>
+
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.servicedate}
+                          </label>
+                          <input
+                            type="date"
+                            max={`${currentDate.year}-${currentDate.month}-${currentDate.day}`}
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            onChange={e => onChange(e, review?.index, 'service_date')}
+                          />
+                        </div>
+
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.reviewdate}<span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <input
+                            type="date"
+                            max={`${currentDate.year}-${currentDate.month}-${currentDate.day}`}
+
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            onChange={e => onChange(e, review?.index, 'review_date')}
+                          />
+                          <p className="peer-invalid:visible text-red-700 font-light">
+                            {error?.review_date}
+                          </p>
+                        </div>
+
+
+                        <div className="col-span-6 sm:col-span-3">
+                          <label
+                            className="text-sm font-medium text-gray-900 block mb-2"
+                            htmlFor="grid-password"
+                          >
+                            {language?.reviewcontent}  <span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <textarea rows="3" columns="60"
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            onChange={e => onChange(e, review?.index, 'review_content')}
+                          />
+                          <p className="peer-invalid:visible text-red-700 font-light">
+                            {error?.review_content}
+                          </p>
+                        </div>
 
                       </div>
-
-                 
-                    
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.reviewtitle}   <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                          onChange={e => onChange(e, review?.index, 'review_title')}
-                          placeholder="Review title"
-                        />
-                        <p className="peer-invalid:visible text-red-700 font-light">
-                          {error?.review_title}
-                        </p>
-                      </div>
-                    
-                   
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.reviewauthor}   <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                          onChange={e => onChange(e, review?.index, 'review_author')}
-                          placeholder="Review Author"
-                        />
-                        <p className=" peer-invalid:visible text-red-700 font-light">
-                          {error?.review_author}
-                        </p>
-                      </div>
-                   
-                  
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.reviewrating} <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <input
-                          type="text"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                          onChange={e => onChange(e, review?.index, 'review_rating')}
-                          placeholder="Ratings"
-                        />
-                        <p className="peer-invalid:visible text-red-700 font-light">
-                          {error?.review_rating}
-                        </p>
-                      </div>
-                  
-                  
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.reviewercategory}
-                        </label>
-                        <select
-                          onChange={e => onChange(e, review?.index, 'review_type')}
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
-                          <option selected>Select Reviewer Category</option>
-                          <option value="user" >User</option>
-                          <option value="editorial">Editorial</option>
-                        </select>
-                      </div>
-                  
-                    
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.servicedate}
-                        </label>
-                        <input
-                          type="date"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                          onChange={e => onChange(e, review?.index, 'service_date')}
-                        />
-                      </div>
-                    
-                    
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.reviewdate}<span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <input
-                          type="date"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                          onChange={e => onChange(e, review?.index, 'review_date')}
-                        />
-                        <p className="peer-invalid:visible text-red-700 font-light">
-                          {error?.review_date}
-                        </p>
-                      </div>
-                    
-                    
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
-                          htmlFor="grid-password"
-                        >
-                          {language?.reviewcontent}  <span style={{ color: "#ff0000" }}>*</span>
-                        </label>
-                        <textarea rows="3" columns="60"
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                          onChange={e => onChange(e, review?.index, 'review_content')}
-                        />
-                        <p className="peer-invalid:visible text-red-700 font-light">
-                          {error?.review_content}
-                        </p>
-                      </div>
-                    
-                  </div>
-                  {/*commented might need them latter <div className="text-center flex justify-end">
+                      {/*commented might need them latter <div className="text-center flex justify-end">
            
            
             <button   
@@ -585,10 +603,10 @@ function Reviews() {
               -Remove Review
             </button>
           </div>*/}
-                </div></div>)
-                )}
+                    </div></div>)
+                  )}
 
-              
+
 
                 {/*commented might need them latter <button
              className="
@@ -598,13 +616,13 @@ function Reviews() {
               +Add Review
           </button>*/ }
 
-<div className="items-center p-6 border-t border-gray-200 rounded-b">
-                <Button Primary={language?.Add} onClick={(e) => handleSubmit(e)} />
+                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                  <Button Primary={language?.Add} onClick={(e) => handleSubmit(e)} />
 
                 </div>
+              </div>
             </div>
           </div>
-        </div>
         </form>
       </div>
 
@@ -618,10 +636,11 @@ function Reviews() {
                   {language?.editreview}
                 </h3>
                 <button type="button"
-                  onClick={() => { setActive({}); 
-                  setEdit(0); setError({}); 
-                 document.getElementById('editform').reset()
-                }}
+                  onClick={() => {
+                    setActive({});
+                    setEdit(0); setError({});
+                    document.getElementById('editform').reset()
+                  }}
                   className="text-gray-400 bg-transparent
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -632,167 +651,175 @@ function Reviews() {
 
               <div className='mt-4'>
                 <form id="editform">
-                <div className="p-6 space-y-6" >
-                  <div className="grid grid-cols-6 gap-6">
-                    
-                 
-                    <div className="col-span-6 sm:col-span-3">
-                      
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.reviewlink}  <span style={{ color: "#ff0000" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        onChange={e => setActive({ ...active, review_link: e.target.value })}
-                        defaultValue={active?.review_link || ''} />
-                      <p className=" peer-invalid:visible text-red-700 font-light">
-                        {error?.review_link}
-                      </p>
+                  <div className="p-6 space-y-6" >
+                    <div className="grid grid-cols-6 gap-6">
+
+
+                      <div className="col-span-6 sm:col-span-3">
+
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.reviewlink}  <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          onChange={e => setActive({ ...active, review_link: e.target.value })}
+                          defaultValue={active?.review_link || ''} />
+                        <p className=" peer-invalid:visible text-red-700 font-light">
+                          {error?.review_link}
+                        </p>
+
+                      </div>
+
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.reviewtitle}  <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          onChange={e => setActive({ ...active, review_title: e.target.value })}
+                          defaultValue={active?.review_title || ''}
+                        />
+                        <p className="peer-invalid:visible text-red-700 font-light">
+                          {error?.review_title}
+                        </p>
+                      </div>
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.reviewauthor}  <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <input
+                          type="text"
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          onChange={e => setActive({ ...active, review_author: e.target.value })}
+                          defaultValue={active?.review_author}
+                        />
+                        <p className=" peer-invalid:visible text-red-700 font-light">
+                          {error?.review_author}
+                        </p>
+                      </div>
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.reviewrating}  <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <select
+                          onChange={e => setActive({ ...active, review_rating: Number(e.target.value) })}
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                          <option selected disabled>{active?.review_rating}  </option>
+                          <option value="1" >1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                        <p className="peer-invalid:visible text-red-700 font-light">
+                          {error?.review_rating}
+                        </p>
+                      </div>
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.reviewercategory}
+                        </label>
+                        <select
+                          onChange={e => setActive({ ...active, review_type: e.target.value })}
+                          className="shadow-sm bg-gray-50 border  border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                          <option selected disabled>{active?.review_type?.charAt(0).toUpperCase() + active?.review_type?.slice(1) || 'select'}</option>
+                          <option value="user" >User</option>
+                          <option value="editorial">Editorial</option>
+                        </select>
+                      </div>
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.servicedate}
+                        </label>
+                        <input
+                          type="date"
+                          max={`${currentDate.year}-${currentDate.month}-${currentDate.day}`}
+
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          onChange={e => setActive({ ...active, service_date: e.target.value })}
+                          defaultValue={active?.service_date || ''}
+                        />
+                      </div>
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.reviewdate} <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <input
+                          type="date"
+                          max={`${currentDate.year}-${currentDate.month}-${currentDate.day}`}
+
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          onChange={e => setActive({ ...active, review_date: e.target.value })}
+                          defaultValue={active?.review_date || ''}
+                        />
+                        <p className="peer-invalid:visible text-red-700 font-light">
+                          {error?.review_date}
+                        </p>
+                      </div>
+
+
+                      <div className="col-span-6 sm:col-span-3">
+                        <label
+                          className="text-sm font-medium text-gray-900 block mb-2"
+                          htmlFor="grid-password"
+                        >
+                          {language?.reviewcontent} <span style={{ color: "#ff0000" }}>*</span>
+                        </label>
+                        <textarea rows="3" columns="60"
+                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          onChange={e => setActive({ ...active, review_content: e.target.value })}
+                          defaultValue={active?.review_content || ''}
+                        />
+                        <p className="peer-invalid:visible text-red-700 font-light">
+                          {error?.review_content}
+                        </p>
+                      </div>
 
                     </div>
-
-                  
-                  
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.reviewtitle}  <span style={{ color: "#ff0000" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        onChange={e => setActive({ ...active, review_title: e.target.value })}
-                        defaultValue={active?.review_title || ''}
-                      />
-                      <p className="peer-invalid:visible text-red-700 font-light">
-                        {error?.review_title}
-                      </p>
-                    </div>
-                  
-                  
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.reviewauthor}  <span style={{ color: "#ff0000" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        onChange={e => setActive({ ...active, review_author: e.target.value })}
-                        defaultValue={active?.review_author }
-                      />
-                      <p className=" peer-invalid:visible text-red-700 font-light">
-                        {error?.review_author}
-                      </p>
-                    </div>
-                  
-                  
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.reviewrating}  <span style={{ color: "#ff0000" }}>*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        onChange={e => setActive({ ...active, review_rating: Number(e.target.value) })}
-                        defaultValue={active?.review_rating || ''}
-                      />
-                      <p className="peer-invalid:visible text-red-700 font-light">
-                        {error?.review_rating}
-                      </p>
-                    </div>
-                  
-                  
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.reviewercategory}
-                      </label>
-                      <select
-                        onChange={e => setActive({ ...active, review_type: e.target.value })}
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
-                        <option selected>{active?.review_type || 'select'}</option>
-                        <option value="user" >User</option>
-                        <option value="editorial">Editorial</option>
-                      </select>
-                    </div>
-                  
-                  
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.servicedate}
-                      </label>
-                      <input
-                        type="date"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        onChange={e => setActive({ ...active, service_date: e.target.value })}
-                        defaultValue={active?.service_date || ''}
-                      />
-                    </div>
-                  
-                  
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.reviewdate} <span style={{ color: "#ff0000" }}>*</span>
-                      </label>
-                      <input
-                        type="date"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        onChange={e => setActive({ ...active, review_date: e.target.value })}
-                        defaultValue={active?.service_date || ''}
-                      />
-                      <p className="peer-invalid:visible text-red-700 font-light">
-                        {error?.review_date}
-                      </p>
-                    </div>
-                  
-               
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
-                        htmlFor="grid-password"
-                      >
-                        {language?.reviewcontent} <span style={{ color: "#ff0000" }}>*</span>
-                      </label>
-                      <textarea rows="3" columns="60"
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        onChange={e => setActive({ ...active, review_content: e.target.value })}
-                        defaultValue={active?.review_content || ''}
-                      />
-                      <p className="peer-invalid:visible text-red-700 font-light">
-                        {error?.review_content}
-                      </p>
-                    </div>
-               
                   </div>
-                  </div>
-                  </form> 
+                </form>
 
               </div>
 
 
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
 
-                <Button Primary={language?.EditReview} onClick={(e) => handleEdit(e)} />
+                <Button Primary={language?.Update} onClick={(e) => handleEdit(e)} />
 
               </div>
             </div>

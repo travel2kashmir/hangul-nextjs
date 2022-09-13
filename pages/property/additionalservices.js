@@ -9,30 +9,25 @@ import Table from '../../components/Table';
 import Button from "../../components/Button";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import english from "../../components/Languages/en"
-import french from "../../components/Languages/fr"
+import english from "../../components/Languages/en";
+import french from "../../components/Languages/fr";
+import arabic from "../../components/Languages/ar";
 const logger = require("../../services/logger");
 var language;
 var currentProperty;
 var currentLogged;
-var propertyName;
-var propertyId;
-import Router from 'next/router'
-import arabic from "../../components/Languages/ar"
+import Router from 'next/router';
 
 function AdditionalServices() {
-        const [visible,setVisible]=useState(0) 
+        const [visible,setVisible]=useState(0); 
         const [additionalServices, setAdditionalServices] = useState({})
         const [services, setServices] = useState([])
-        const [edit, setEdit] = useState(0)
-        const [actionService, setActionService] = useState([])
         const [view, setView] = useState(0);
         const [modified, setModified] = useState([])
-        const [addEdit, setAddEdit] = useState(0)
-        const [addDel, setAddDel] = useState(0)
         const [add, setAdd] = useState(0)
         const [gen, setGen] = useState([])
         const [gene, setGene] = useState([])
+
     useEffect(() => {
         const firstfun = () => {
             if (typeof window !== 'undefined') {
@@ -80,11 +75,13 @@ function AdditionalServices() {
             })
             .catch((error) => { logger.error("url to fetch additional services, failed") });
     }
+
     useEffect(() => {
         fetchAdditionalServices();
         fetchHotelDetails();
 
     }, [])
+
   /* Function call to fetch Current Property Details when page loads */
   const fetchHotelDetails = async () => {
     var genData = [];
@@ -97,7 +94,6 @@ function AdditionalServices() {
         .then((response) => {
             setServices(response.data);
             logger.info("url  to fetch property details hitted successfully")
-
             {
                 response.data?.services?.map((item) => {
                     var temp = {
@@ -112,12 +108,11 @@ function AdditionalServices() {
                 setGen(genData);
             }
             setVisible(1)
-
         })
-
         .catch((error) => { logger.error("url to fetch property details, failed") });
 }
-      /*Function to edit additional services*/
+
+    /* Function to edit additional services */
       const editAdditionalServices = (props) => { 
         const final_data = {
             "add_service_id": props.id,
@@ -143,7 +138,6 @@ function AdditionalServices() {
                 setModified([])
             })
             .catch((error) => {
-
                 toast.error("Additional Services Update Error!", {
                     position: "top-center",
                     autoClose: 5000,
@@ -155,7 +149,8 @@ function AdditionalServices() {
                 });
             })
     }
-     /* Function to delete additional service */
+
+     /* Function to delete additional services */
      const deleteAdditionalServices = (props) => {
       const url = `/api/additional_service/${props}`
         axios.delete(url).then((response) => {
@@ -184,8 +179,9 @@ function AdditionalServices() {
             })
     }
 
-    /*Function to add additional service*/
+    /* Function to add additional services */
     const newAdditionalService = () => {
+        setSpinner(1);
         if (modified.length !== 0) {
             const final_data = {
 
@@ -199,6 +195,7 @@ function AdditionalServices() {
             const url = '/api/additional_services'
             axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
                 ((response) => {
+                    setSpinner(0);
                     toast.success("Service Added Successfully!", {
                         position: "top-center",
                         autoClose: 5000,
@@ -215,6 +212,7 @@ function AdditionalServices() {
                     setView(0)
                 })
                 .catch((error) => {
+                    setSpinner(0);
                     toast.error("Additional Services Add Error! ", {
                         position: "top-center",
                         autoClose: 5000,
@@ -233,8 +231,7 @@ function AdditionalServices() {
         <>
         <Header Primary={english?.Side} />
             <Sidebar Primary={english?.Side} />
-            <div id="main-content"
-                className="  bg-white pt-24 relative overflow-y-auto lg:ml-64">
+            <div id="main-content" className="  bg-white pt-24 relative overflow-y-auto lg:ml-64">
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -339,7 +336,9 @@ function AdditionalServices() {
             </div>
 
             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                <Button Primary={language?.Add} onClick={() => { newAdditionalService(); setAdd(0); }} />
+            {spinner === 0 ?
+                <Button Primary={language?.Add} onClick={() => { newAdditionalService(); setAdd(0); }} />:
+                <Button Primary={language?.SpinnerAdd} />}
             </div>
         </div>
     </div>
@@ -359,7 +358,7 @@ draggable
 pauseOnHover />
         </div>
         </>)
-    }
+}
 export default AdditionalServices
 AdditionalServices.getLayout = function PageLayout(page){
     return(

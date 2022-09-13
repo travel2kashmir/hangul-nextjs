@@ -21,16 +21,11 @@ const logger = require("../../services/logger");
 var currentLogged;
 
 function Contact() {
-  const itemsPerPage = 4;
   const [gen, setGen] = useState([]) 
-
   const [spinner, setSpinner] = useState(0)
   const [spin, setSpin] = useState(0)
-
   const [visible,setVisible]=useState(0) 
   const [deleteContact, setDeleteContact] = useState(0);
-  const [viewDel, setViewDel] = useState(0);
-  const [editContact, setEditContact] = useState({});
   const [contacts, setContacts] = useState([]);
   const [view, setView] = useState(0);
   const [contact, setContact] = useState([]);
@@ -57,6 +52,7 @@ function Contact() {
 
     Router.push("./contact");
   }, [])
+
   /* Function Add Contact*/
   function submitContactAdd(e) {
     setSpinner(1)
@@ -69,7 +65,6 @@ function Contact() {
         status: true
       }];
       const finalContact = { contacts: contactdata };
-      alert(JSON.stringify(finalContact))
       axios
         .post(`/api/contact`,finalContact, {
           headers: { "content-type": "application/json" },
@@ -105,9 +100,9 @@ function Contact() {
         });
     }
   }
+
  /* Function Edit Contact*/
  const submitContactEdit = (props) => {
-  setSpinner(1)
   const final_data = {
     contact_id: props.id,
     contact_data: props.type,
@@ -117,8 +112,7 @@ function Contact() {
   axios
     .put(url, final_data, { header: { "content-type": "application/json" } })
     .then((response) => {
-      setSpinner(0)
-      toast.success("Contact Updated Successfully!", {
+    toast.success("Contact Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -145,6 +139,7 @@ function Contact() {
   
 };
 
+// Fetch Hotel Details
   const fetchHotelDetails = async () => {
     var genData = [];
     const url = `/api/${currentProperty.address_province.replace(
@@ -181,8 +176,7 @@ function Contact() {
   }, []);
 
   const submitContactDelete = (props) => {
-    setSpin(1);
-    const url = `/api/${props}`;
+   const url = `/api/${props}`;
     axios
       .delete(url)
       .then((response) => {
@@ -201,7 +195,6 @@ function Contact() {
         Router.push("./contact");
       })
       .catch((error) => {
-        setSpin(0);
         toast.error("Contact Delete Error!", {
           position: "top-center",
           autoClose: 5000,

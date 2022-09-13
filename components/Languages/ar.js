@@ -80,6 +80,10 @@ ContactCols:{
  Save:"غير نشط",
  Cancel:"إلغاء"
  },
+ "UpdateDisabled" :{
+      label: "التحديث",
+   color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
+},
  "Previous" :{
   label:"سابق",
    color: "bg-gray-600 hover:bg-gray-700 text-white ",

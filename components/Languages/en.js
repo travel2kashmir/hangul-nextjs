@@ -87,7 +87,7 @@ export default {
 },
 "Next" :{
   label: "Next",
-   color: "bg-gray-600 hover:bg-gray-700  text-white "    
+   color: "bg-gray-600 hover:bg-gray-700  text-white"    
 },
 "Delete" :{
   label:'Yes, I am sure',

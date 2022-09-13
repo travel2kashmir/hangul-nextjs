@@ -1399,7 +1399,7 @@ const validationRateCondition = () => {
            <div className="w-full lg:w-6/12 px-4">
             <div className="relative w-full mb-3">
             <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                   {language?.conditions} 
+                   {language?.conditions} {JSON.stringify(userRateDetails)}
                     </h4></div>
             </div>
 
@@ -1549,7 +1549,7 @@ const validationRateCondition = () => {
 
                        <p className=" text-red-700 font-light">
                        {error?.maxuserspercent}
-                      </p></div>
+ </p></div>
                       </div>
                         </div> 
 

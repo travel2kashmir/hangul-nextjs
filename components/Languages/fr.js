@@ -600,6 +600,8 @@ export default {
     label:'Ajouter une nouvelle propriété',
     color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
   },
+
+  deletingthiswillcauseloosingalldata:'Es-tu sûr de vouloir le supprimer? La suppression de la propriété entraînera la perte permanente de toutes les informations'
   // reviews
   addreview:'Ajouter un commentaire',
   reviewlink:'Lien de révision',
@@ -628,5 +630,4 @@ export default {
      ></path>
    </svg>
   }
-
 };

@@ -590,7 +590,7 @@ AddPackage :{
      search: "بحث"
     },
 
-    deletingthiswillcauseloosingalldata:'هل أنت متأكد أنك تريد حذف ذلك؟ سيؤدي حذف الملكية إلى فقدان جميع المعلومات بشكل دائم'
+    deletingthiswillcauseloosingalldata:'هل أنت متأكد أنك تريد حذف ذلك؟ سيؤدي حذف الملكية إلى فقدان جميع المعلومات بشكل دائم',
     //reviews
     addreview: "إضافة مراجعة",
     reviewlink: "رابط المراجعة",

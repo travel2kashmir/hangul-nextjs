@@ -526,6 +526,7 @@ export default {
   "Addnewproperty":{
     label:'Ajouter une nouvelle propriété',
     color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
-  }
+  },
+  deletingthiswillcauseloosingalldata:'Es-tu sûr de vouloir le supprimer? La suppression de la propriété entraînera la perte permanente de toutes les informations'
 
 };

@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "../../components/Button";
 import Footer from '../../components/Footer';
 import Loader from "../../components/loader";
+import Carousal from "../template/carousal";
 var language;
 var currentUser;
 var currentProperty;
@@ -493,6 +494,49 @@ function Theme() {
           </div>
         </div>
 
+
+  {/* Gallery */}
+  <div className="mt-2 grid  grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
+          <div className="bg-white shadow rounded-lg p-4 xl:p-8">
+            <div className="flex items-center justify-between ">
+              <div className="flex-shrink-0">
+                <h3 className="text-base font-bold text-gray-900 mb-4">
+                  {language?.gallery}
+                </h3>
+              </div>
+              <div className="flex items-center justify-end flex-1">
+                <span
+                  className="text-sm font-sans underline decoration-cyan-600
+                             font-semibold text-cyan-600
+                              rounded-lg p-2"
+                >
+                  <Link href="./gallery"><a>{language?.seemore}</a></Link>
+                </span>
+              </div>
+            </div>
+            <div className=" flex-wrap container ">
+              {/*grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 {allHotelDetails?.images?.map((item, idx) => {
+                return (
+                  <div
+                    className="block text-blueGray-600 text-xs font-bold "
+                    key={idx}
+                  >
+                    <img
+                      src={item?.image_link}
+                      alt="property_image"
+                      style={{ width: "450px", height: "180px" }}
+                    />
+                  </div>
+                );
+              })} */}
+              <Carousal images={allHotelDetails?.images}/>
+            </div>
+          </div>
+        </div>
+
+
+
+
         <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
           {/* Services */}
           <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
@@ -650,43 +694,7 @@ function Theme() {
           </div>
         </div>
 
-        {/* Gallery */}
-        <div className="mt-2 grid grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
-            <div className="flex items-center justify-between ">
-              <div className="flex-shrink-0">
-                <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {language?.gallery}
-                </h3>
-              </div>
-              <div className="flex items-center justify-end flex-1">
-                <span
-                  className="text-sm font-sans underline decoration-cyan-600
-                             font-semibold text-cyan-600
-                              rounded-lg p-2"
-                >
-                  <Link href="./gallery"><a>{language?.seemore}</a></Link>
-                </span>
-              </div>
-            </div>
-            <div className=" flex-wrap container grid md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {allHotelDetails?.images?.map((item, idx) => {
-                return (
-                  <div
-                    className="block text-blueGray-600 text-xs font-bold "
-                    key={idx}
-                  >
-                    <img
-                      src={item?.image_link}
-                      alt="property_image"
-                      style={{ width: "400px", height: "180px" }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+      
 
       </div>
       {/* Toast Container */}

@@ -24,7 +24,7 @@ function AdminLanding() {
     /** State Intialisation for storing all Properties of Current User **/
     const [ownerdata, setOwnerdata] = useState([]);
     const [deleteProperty, setDeleteProperty] = useState(0)
-    const [property,setProperty]=useState({})
+    const [property, setProperty] = useState({})
 
     const newProperty = () => {
         router.push('./addProperty/addbasicdetails');
@@ -43,9 +43,9 @@ function AdminLanding() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
-            
-    })
+            });
+
+        })
     }
     useEffect(() => {
         const firstfun = () => {
@@ -73,8 +73,8 @@ function AdminLanding() {
         localStorage.setItem("property", JSON.stringify(item));
     };
 
-    const submitDelete = () =>{
-        axios.delete(`/api/${property?.property_id}`).then((response)=>{
+    const submitDelete = () => {
+        axios.delete(`/api/${property?.property_id}`).then((response) => {
             fetchAllProperties();
             toast.success("Property Deleted Successfully!", {
                 position: "top-center",
@@ -84,11 +84,11 @@ function AdminLanding() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
+            });
             setDeleteProperty(0)
-        setProperty({})
-   
-        }).catch((error)=>{
+            setProperty({})
+
+        }).catch((error) => {
             toast.error("Property Delete Error!", {
                 position: "top-center",
                 autoClose: 5000,
@@ -97,15 +97,15 @@ function AdminLanding() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,
-              });
+            });
             setDeleteProperty(0)
-        setProperty({})
-   
+            setProperty({})
+
         })
-         }
+    }
     return (
         <div>
-             <div className={deleteProperty === 1 ? 'block' : 'hidden'}>
+            <div className={deleteProperty === 1 ? 'block' : 'hidden'}>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative w-full max-w-md px-4 h-full md:h-auto">
                         <div className="bg-white rounded-lg shadow relative">
@@ -122,8 +122,8 @@ function AdminLanding() {
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
                                     {language?.deletingthiswillcauseloosingalldata}
                                 </h3>
-                                <Button Primary={language?.Delete} onClick={() => submitDelete()}/>
-                                <Button Primary={language?.Cancel}   onClick={() => setDeleteProperty(0)}/>
+                                <Button Primary={language?.Delete} onClick={() => submitDelete()} />
+                                <Button Primary={language?.Cancel} onClick={() => setDeleteProperty(0)} />
                             </div>
                         </div>
                     </div>
@@ -133,25 +133,19 @@ function AdminLanding() {
             <Sidebar admin={english?.Sideadminlanding} />
             <div id="main-content"
                 className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
-                     <div className="text-center mt-4">
-                                <p className="capitalize font-semibold text-3xl font-sans sm:mt-12 mx-12 mt-24 mb-6 text-cyan-500">
-                                    {language?.welcome} {currentUser?.name}
-                                </p>
-                            </div>
+                <div className="text-center mt-4">
+                    <p className="capitalize font-semibold text-3xl font-sans sm:mt-12 mx-12 mt-24 mb-6 text-cyan-500">
+                        {language?.welcome} {currentUser?.name}
+                    </p>
+                </div>
 
-                
+
                 <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
                     <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
                         List Of All Properties
                     </h6>
                     <div className="pt-6">
                         <div className=" md:px-4 mx-auto w-full">
-
-
-
-
-
-
                             <div className="flex flex-wrap">
 
                                 <form className=" space-y-1" action="#">
@@ -230,8 +224,8 @@ function AdminLanding() {
                                                             <button
                                                                 type="button"
                                                                 onClick={() => {
-                                                                   setDeleteProperty(1)
-                                                                   setProperty(item)
+                                                                    setDeleteProperty(1)
+                                                                    setProperty(item)
                                                                 }}
                                                                 className="text-white ml-4 bg-red-600
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg

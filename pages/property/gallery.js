@@ -43,6 +43,7 @@ function Gallery() {
         Router.push("./gallery");
     }, [])
     const [allHotelDetails, setAllHotelDetails] = useState([])
+    const [spinner, setSpinner] = useState(0)
     const [gallery, setGallery] = useState([])
     const [image, setImage] = useState({})
     const [editImage, setEditImage] = useState(0)
@@ -77,6 +78,7 @@ function Gallery() {
     
     /* Function to upload image*/
     const uploadImage = () => {
+        setSpinner(1);
         const imageDetails = image.imageFile
         const formData = new FormData();
         formData.append("file", imageDetails);
@@ -85,8 +87,10 @@ function Gallery() {
         axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
             .then(response => {
                 setImage({ ...image, image_link: response?.data?.secure_url })
+                setSpinner(0);
             })
             .catch(error => {
+                setSpinner(0)
                 toast.error("Image Upload Error! ", {
                     position: "top-center",
                     autoClose: 5000,
@@ -105,6 +109,7 @@ function Gallery() {
     /* Function to add images*/
     const submitAddImage = () => {
         if (actionImage.length !== 0) {
+            setSpinner(1)
             const imagedata = [{
                 property_id: currentProperty?.property_id,
                 image_link: image.image_link,
@@ -114,6 +119,7 @@ function Gallery() {
             }]
             const finalImage = { "images": imagedata }
             axios.post(`/api/gallery`, finalImage).then(response => {
+                setSpinner(0)
                 toast.success("Image Added Successfully!", {
                     position: "top-center",
                     autoClose: 5000,
@@ -128,10 +134,8 @@ function Gallery() {
                 fetchHotelDetails();
                 Router.push("./gallery");
                 setAddImage(0)
-                setActionImage([]);
-                
-                
-            }).catch(error => {
+         }).catch(error => {
+                setSpinner(0)
                 toast.error(" Gallery Error", {
                     position: "top-center",
                     autoClose: 5000,
@@ -148,6 +152,7 @@ function Gallery() {
     /* Function to edit images*/
     const updateImageDetails = () => {
         if (allHotelDetails.length !== 0) {
+            setSpinner(1)
             const final_data = {
                 "image_id": actionImage?.image_id,
                 "image_title": allHotelDetails.image_title,
@@ -157,6 +162,7 @@ function Gallery() {
             const url = '/api/images'
             axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
                 ((response) => {
+                    setSpinner(0);
                     setEditImage(0);
                     toast.success("Gallery Updated Successfully!", {
                         position: "top-center",
@@ -168,10 +174,12 @@ function Gallery() {
                         progress: undefined,
                     });
                     fetchHotelDetails();
-                    Router.push("./gallery");
                     setAllHotelDetails([])
+                    setActionImage({})
+                    Router.push("./gallery");
                 })
                 .catch((error) => {
+                    setSpinner(0)
                     toast.error("Gallery Update Error! ", {
                         position: "top-center",
                         autoClose: 5000,
@@ -188,9 +196,11 @@ function Gallery() {
 
     /* Function to delete images*/
     const submitDelete = () => {
+        setSpinner(1)
         const url = `/api/${actionImage.image_id}`
         axios.delete(url).then
             ((response) => {
+                setSpinner(0)
                 setdeleteImage(0)
                 toast.success("Image Deleted Successfully", {
                     position: "top-center",
@@ -206,6 +216,7 @@ function Gallery() {
 
             })
             .catch((error) => {
+                setSpinner(0);
                 toast.error("Gallery Delete Error!", {
                     position: "top-center",
                     autoClose: 5000,
@@ -253,7 +264,7 @@ function Gallery() {
             </nav>
 
             {/* Header */}
-            <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+            <div className=" bg-white shadow-xl rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
                 <h6 className="text-xl mb-2 flex leading-none pl-4 pt-2 font-bold text-gray-900 ">
                     {language?.gallery}
                 </h6>
@@ -417,7 +428,12 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                            <Button Primary={language?.Update}   onClick={() => updateImageDetails()}/>
+                                        <div className={spinner === 0 ? 'block' : 'hidden'}>
+                                            <Button Primary={language?.Update} onClick={() => updateImageDetails()} />
+                                        </div>
+                                        <div className={spinner === 1 ? 'block' : 'hidden'}>
+                                            <Button Primary={language?.SpinnerUpdate} />
+                                        </div>
                             </div>
                         </div>
                     </div>
@@ -439,7 +455,8 @@ function Gallery() {
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                                 >
-                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button>
                             </div>
 
@@ -464,7 +481,10 @@ function Gallery() {
 
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
-                                            <Button Primary={language?.Upload} onClick={uploadImage} /></div>
+                                            {spinner === 0 ?
+                                            <Button Primary={language?.Upload} onClick={uploadImage} />:
+                                            <Button Primary={language?.SpinnerUpload} />
+                                                    }</div>
                                     </div>
                                     <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
@@ -496,7 +516,11 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                                <Button Primary={language?.Add} onClick={() => { submitAddImage(); }} />
+                            <div className={spinner === 0 ? 'block' : 'hidden'}>
+                                <Button Primary={language?.Add} onClick={() => { submitAddImage(); }} /></div>
+                                <div className={spinner === 1 ? 'block' : 'hidden'}>
+                                <Button Primary={language?.SpinnerAdd} />
+                                   </div>
 
                             </div>
                         </div>
@@ -522,8 +546,15 @@ function Gallery() {
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
                                     {language?.areyousureyouwanttodelete}
                                 </h3>
+                               
+                               {spinner === 0 ?
+                                <>
                                 <Button Primary={language?.Delete} onClick={() => submitDelete()}/>
                                 <Button Primary={language?.Cancel}   onClick={() => setdeleteImage(0)}/>
+                               </>
+                              :
+                               <Button Primary={language?.SpinnerDelete} />}
+                              
                             </div>
                         </div>
                     </div>

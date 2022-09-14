@@ -134,7 +134,6 @@ function Gallery() {
                 fetchHotelDetails();
                 Router.push("./gallery");
                 setAddImage(0)
-              
          }).catch(error => {
                 setSpinner(0)
                 toast.error(" Gallery Error", {

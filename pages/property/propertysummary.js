@@ -14,10 +14,12 @@ import "react-toastify/dist/ReactToastify.css";
 import Button from "../../components/Button";
 import Footer from '../../components/Footer';
 import Loader from "../../components/loader";
+import Carousal from "../template/carousal";
 var language;
 var currentUser;
 var currentProperty;
 var currentLogged;
+
 function PropertySummary() {
   /** State to store Current Property Details **/
   const [allHotelDetails, setAllHotelDetails] = useState([]);
@@ -123,41 +125,60 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">
-            <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
-              <h3 className="text-base font-bold text-gray-900">
-                  {allHotelDetails?.property_name}
+                <h3 className="text-base font-bold text-gray-900 mb-4">
+                {allHotelDetails?.property_name}
                 </h3>
-
-                <h3 className="whitespace-wrap text-xs font-semibold text-gray-500">
-                  {allHotelDetails?.star_rating}-Star{" "}
-                  {allHotelDetails?.property_category}
-                </h3>
+                
               </div>
               <div className="flex items-center justify-end flex-1">
-                <span
-                  className="text-sm font-sans underline decoration-cyan-600
+                <span className="text-sm font-sans underline decoration-cyan-600
                              font-semibold text-cyan-600
-                              rounded-lg p-2"
-                >
+                              rounded-lg p-2">
                   <Link href="./basicdetails"><a>{language?.seemore}</a></Link>
                 </span>
               </div>
             </div>
-            <span className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+            <div className="flex items-center justify-between ">
+            <span className="text-sm leading-none font-semibold text-gray-800">
               {allHotelDetails?.description_title}
             </span>
-         
-            <p className="p-1 whitespace-wrap text-xs font-medium text-gray-900 line-clamp-10 ">
+            <div className="flex-shrink-0">
+                    <div className="flex items-center flex-1 justify-end px-2 text-yellow-400 text-sm font-bold">
+                      {[...Array(allHotelDetails?.star_rating)].map(
+                        (elementInArray, index) => (
+                          <div key={index}>
+                            <svg
+                              aria-hidden="true"
+                              focusable="false"
+                              data-prefix="fas"
+                              data-icon="star"
+                              className="w-4 text-yellow-500 mr-1"
+                              role="img"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 576 512"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"
+                              ></path>
+                            </svg>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div></div>
+            <p className="text-sm my-2 text-gray-600 line-clamp-10 ">
               {allHotelDetails?.description_body}
             </p>
           </div>
 
           {/* Address */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">
+            <div className="flex items-center justify-between">
               <div className="flex-shrink-0">
-                <h3 className="text-base font-bold text-gray-900 mb-4">
+              <h3 className="text-base font-bold text-gray-900 mb-4">
                   {language?.address}
                 </h3>
               </div>
@@ -173,61 +194,91 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 </span>
               </div>
             </div>
-            <div className="align-middle inline-block  min-w-full">
+            <div className="align-middle inline-block min-w-full">
               <div className="overflow-hidden">
                 <table className="table-fixed min-w-full  ">
-                  <tbody className="bg-white ">
+                  <tbody>
                     {allHotelDetails?.address?.map((item, idx) => {
                       return (
                         <>
                         <tr key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
                             {language?.address}
                             </td>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-1 whitespace-wrap text-sm my-2 text-gray-600">
                           {item.address_street_address}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
                             {language?.landmark}
                             </td>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
                           {item.address_landmark}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
                             {language?.postalcode}
                             </td>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
                           {item.address_zipcode}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className="flex p-1 items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
                             {language?.province}
                             </td>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
                           {item.address_city}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
                             {language?.countrycode}
                             </td>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
                           {item.address_country}{" "}
+                          </td>
+                        </tr>
+                        <tr key={idx}>
+                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
+                            {language?.latitude}
+                            </td>
+                          </td>
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
+                          {item.address_latitude}{" "}
+                          </td>
+                        </tr>
+                        <tr key={idx}>
+                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
+                            {language?.longitude}
+                            </td>
+                          </td>
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
+                          {item.address_longitude}{" "}
+                          </td>
+                        </tr>
+                        <tr key={idx}>
+                          <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
+                            {language?.precision}
+                            </td>
+                          </td>
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
+                          {item.address_precision}{" "}
                           </td>
                         </tr>
                         </>
@@ -240,8 +291,8 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
           </div>
 
           {/*Contact */}
-          <div className="bg-white shadow rounded-lg px-2 py-4 sm:p-6 xl:py-8 xl:px-4 ">
-            <div className="flex items-center justify-between mb-4">
+          <div className="bg-white shadow rounded-lg  p-4 sm:p-6 xl:py-8 xl:px-4 ">
+            <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
                   {language?.contact}
@@ -261,16 +312,16 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
             <div className="align-middle inline-block  min-w-full">
               <div className="overflow-hidden">
                 <table className="table-fixed min-w-full  ">
-                  <tbody className="bg-white ">
+                  <tbody>
                     {allHotelDetails?.contacts?.map((item, idx) => {
                       return (
                         <tr key={idx}>
-                          <td className="p-2 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className="p-1 whitespace-wrap text-xs font-semibold text-gray-500">
+                          <td className=" flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
+                            <td className="p-2 whitespace-wrap text-sm leading-none font-semibold text-gray-800">
                               {item?.contact_type}{" "}
                             </td>
                           </td>
-                          <td className="p-1 whitespace-wrap text-xs font-medium text-gray-900">
+                          <td className="p-2 whitespace-wrap text-sm my-2 text-gray-600">
                             {item?.contact_data}{" "}
                           </td>
                         </tr>
@@ -282,12 +333,51 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
             </div>
           </div>
         </div>
+    {/* Gallery */}
+    <div className="mt-2 grid  grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
+          <div className="bg-white shadow rounded-lg p-4 xl:p-8">
+            <div className="flex items-center justify-between ">
+              <div className="flex-shrink-0">
+                <h3 className="text-base font-bold text-gray-900 mb-4">
+                  {language?.gallery}
+                </h3>
+              </div>
+              <div className="flex items-center justify-end flex-1">
+                <span
+                  className="text-sm font-sans underline decoration-cyan-600
+                             font-semibold text-cyan-600
+                              rounded-lg p-2"
+                >
+                  <Link href="./gallery"><a>{language?.seemore}</a></Link>
+                </span>
+              </div>
+            </div>
+            <div className=" flex-wrap container ">
+              {/*grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 {allHotelDetails?.images?.map((item, idx) => {
+                return (
+                  <div
+                    className="block text-blueGray-600 text-xs font-bold "
+                    key={idx}
+                  >
+                    <img
+                      src={item?.image_link}
+                      alt="property_image"
+                      style={{ width: "450px", height: "180px" }}
+                    />
+                  </div>
+                );
+              })} */}
+              <Carousal images={allHotelDetails?.images}/>
+            </div>
+          </div>
+        </div>
 
-        
-         
+
+
+
           <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
           {/* Services */}
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+          <div className="bg-white  shadow rounded-lg  p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
@@ -304,8 +394,8 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 </span>
               </div>
             </div>
-            <div className="flex  flex-wrap">
-              <span>
+            <div className="flex flex-wrap">
+             
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2 "
@@ -318,9 +408,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 >
                   Swimming Pool
                 </button>
-              </span>
-              <br />
-              <span>
+            
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -333,9 +421,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 >
                   Pets Allowed
                 </button>
-              </span>
-              <br />
-              <span>
+             
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -348,9 +434,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 >
                   Wifi
                 </button>
-              </span>
-              <br />
-              <span>
+              
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -363,9 +447,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 >
                   Spa
                 </button>
-              </span>
-              <br />
-              <span>
+              
                 <button
                   className="text-sm  font-semibold  text-cyan-700 
                             bg-gray-200 rounded-lg p-2 mx-1  mb-2"
@@ -378,14 +460,11 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
                 >
                   Kitchen Available
                 </button>
-              </span>
+             
             </div>
           </div>
         
             
-            
-          
-
           {/* Reviews */}
           <div className="col-span-2 bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between ">
@@ -446,43 +525,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
           </div>
           </div>
 
-        {/* Gallery */}
-        <div className="mt-2 grid grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
-          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
-            <div className="flex items-center justify-between ">
-              <div className="flex-shrink-0">
-                <h3 className="text-base font-bold text-gray-900 mb-4">
-                  {language?.gallery}
-                </h3>
-              </div>
-              <div className="flex items-center justify-end flex-1">
-                <span
-                  className="text-sm font-sans underline decoration-cyan-600
-                             font-semibold text-cyan-600
-                              rounded-lg p-2"
-                >
-                  <Link href="./gallery"><a>{language?.seemore}</a></Link>
-                </span>
-              </div>
-            </div>
-            <div className=" flex-wrap container grid md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {allHotelDetails?.images?.map((item, idx) => {
-                return (
-                  <div
-                    className="block text-blueGray-600 text-xs font-bold "
-                    key={idx}
-                  >
-                    <img
-                      src={item?.image_link}
-                      alt="property_image"
-                      style={{ width: "400px", height: "180px" }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+       
 
       
       {/* Toast Container */}

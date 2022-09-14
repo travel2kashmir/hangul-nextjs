@@ -34,7 +34,9 @@ function Raterule() {
   const [error, setError] = useState({})
   const [err, setErr] = useState({})
   const [basicFlag,setBasicFlag]=useState([])
+
   const [flag,setFlag]=useState([])
+
   const [finalLang,setFinalLang]=useState([])
   const [finalCountry,setFinalCountry]=useState([])
   const [finalDevice,setFinalDevice]=useState([])
@@ -116,9 +118,10 @@ useEffect(() => {
 
 //submit rate add
 const submitRateAdd = () => {
+
   if(validationRates(allUserRateDetails)) {
   var time;
-  var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
+ var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
   time = new Date(temp.toString())
   const final_data = {
     "base_rate_currency": allUserRateDetails?.base_rate_currency,
@@ -671,7 +674,9 @@ var time;
             });
           });
         }
+
     };
+
  
 
   const languages = (lan) => { 
@@ -968,7 +973,6 @@ if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
 }
  
 return Object.keys(error).length === 0 ? true :  error;
-
 }
 
 // Validation Function for Rate Conditions
@@ -1344,7 +1348,9 @@ const validationRateCondition = () => {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
+
                        {language?.ratecondition}<span style={{ color: "#ff0000" }}>*</span>
+
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1371,8 +1377,8 @@ const validationRateCondition = () => {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratedescription} 
-                       <span style={{ color: "#ff0000" }}>*</span>
+
+                       {language?.ratedescription} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Textboxloader/></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1396,10 +1402,11 @@ const validationRateCondition = () => {
                   </div>
           </div>
 
-           <div className="w-full lg:w-6/12 px-4">
-            <div className="relative w-full mb-3">
-            <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                   {language?.conditions} {JSON.stringify(userRateDetails)}
+<div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
+                   {language?.conditions} 
+
                     </h4></div>
             </div>
 
@@ -1647,6 +1654,7 @@ const validationRateCondition = () => {
         <Button Primary={language?.Next}   onClick={() => {setDisp(2);}} />    
         </div>
 
+
         </div>
         </div>
 
@@ -1691,10 +1699,12 @@ const validationRateCondition = () => {
                         (e) => {  
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
                       }
+
                       }>{allUserRateDetails?.base_rate_currency === ""
                       ?
                       <option selected disabled>{language?.select}</option>:
                       <option selected disabled>{allUserRateDetails?.base_rate_currency}</option>}
+
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1710,7 +1720,9 @@ const validationRateCondition = () => {
                       {language?.baserate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                        </label>
+
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1735,9 +1747,11 @@ const validationRateCondition = () => {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
+
                       {language?.taxrate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1745,11 +1759,12 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, tax_currency: e.target.value })
                         )
                       }>
+
                         
                         {allUserRateDetails?.tax_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails?.tax_currency}</option>}
-                      <option value="USD" >USD</option>
+ <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select></div>
@@ -1798,6 +1813,7 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_currency: e.target.value })
                         )
                       }>
+
                         {allUserRateDetails?.otherfees_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails?.otherfees_currency}</option>}
@@ -1852,9 +1868,11 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         }
                       }>
+
                          {allUserRateDetails?.charge_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails.charge_currency}</option>}
+
                       <option value="web">  {language?.web}</option>
                       <option value="hotel">  {language?.hotel}</option>
                       <option value="installment">  {language?.installment}</option>
@@ -1869,11 +1887,12 @@ const validationRateCondition = () => {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
+
                        {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
+ <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1888,6 +1907,7 @@ const validationRateCondition = () => {
                          <>
                       {allUserRateDetails?.refundable === "true"
                         ?
+
                         <>
                         <option selected disabled value={true}>  {language?.yes}</option>
                          <option value={false}> {language?.no}</option>
@@ -1899,7 +1919,7 @@ const validationRateCondition = () => {
                       </>
                      }</>}
                         </select></div>
-                  </div>
+ </div>
                 </div>
 
                 {allUserRateDetails?.refundable === "true" ? (
@@ -1990,8 +2010,10 @@ const validationRateCondition = () => {
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+
                         <option selected disabled>{language?.select}</option>
                          {rooms?.map(i => {
+
                           return (
                             <option key={i} value={i.room_id}>{i.room_name}</option>)
                         }

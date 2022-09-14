@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import objChecker from "lodash"
 import Lineloader from '../../components/loaders/lineloader';
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
@@ -24,6 +25,7 @@ export default function BasicDetails() {
   const [visible, setVisible] = useState(0);
   const [spinner, setSpinner] = useState(0)
   const [basicDetails, setBasicDetails] = useState([]);
+  const [flag, setFlag] = useState([]);
   /** Fetching language from the local storage **/
   useEffect(() => {
     const firstfun = () => {
@@ -59,6 +61,7 @@ export default function BasicDetails() {
     axios.get(url)
       .then((response) => {
         setBasicDetails(response?.data);
+        setAllHotelDetails(response?.data);
         logger.info("url  to fetch property details hitted successfully")
         console.log(response.data)
         setVisible(1)
@@ -77,7 +80,24 @@ export default function BasicDetails() {
 
   /* Edit Basic Details Function */
   const submitBasicEdit = () => {
-    if (allHotelDetails.length !== 0) {
+
+    if(flag === 1){
+    if(objChecker.isEqual(allHotelDetails,basicDetails)){
+      toast.warn('No change in Basic Details detected. ', {
+
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+
+        });
+      setFlag([]);
+    }
+
+   else {
       setSpinner(1)
       const final_data = {
         "property_id": currentProperty?.property_id,
@@ -106,6 +126,7 @@ export default function BasicDetails() {
           fetchBasicDetails();
           Router.push("./basicdetails");
           setAllHotelDetails([])
+          setFlag([]);
         })
         .catch((error) => {
           setSpinner(0)
@@ -120,6 +141,19 @@ export default function BasicDetails() {
           });
         })
     }
+  }
+  else{
+    toast.warn('No change in Basic Details detected. ', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+
+  }
   }
 
   return (
@@ -160,7 +194,7 @@ export default function BasicDetails() {
 
           {/* Basic Details Form */}
           <div className=" bg-white shadow-xl rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-            <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
+            <h6 className="text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold text-gray-900 ">
               {language?.basicdetails}
               <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
             </h6>
@@ -183,7 +217,7 @@ export default function BasicDetails() {
                           defaultValue={basicDetails?.property_name}
                           onChange={
                             (e) => (
-                              setAllHotelDetails({ ...allHotelDetails, property_name: e.target.value })
+                              setAllHotelDetails({ ...allHotelDetails, property_name: e.target.value },setFlag(1))
                             )
                           }
                         /></div>
@@ -201,7 +235,7 @@ export default function BasicDetails() {
                           defaultValue={basicDetails?.property_category}
                           onChange={
                             (e) => (
-                              setAllHotelDetails({ ...allHotelDetails, property_category: e.target.value })
+                              setAllHotelDetails({ ...allHotelDetails, property_category: e.target.value },setFlag(1))
                             )
                           }
                         >
@@ -229,7 +263,7 @@ export default function BasicDetails() {
                           defaultValue={basicDetails?.property_brand}
                           onChange={
                             (e) => (
-                              setAllHotelDetails({ ...allHotelDetails, property_brand: e.target.value })
+                              setAllHotelDetails({ ...allHotelDetails, property_brand: e.target.value },setFlag(1))
                             )
                           }
                         /></div>
@@ -252,7 +286,7 @@ export default function BasicDetails() {
                           defaultValue={basicDetails?.established_year}
                           onChange={
                             (e) => (
-                              setAllHotelDetails({ ...allHotelDetails, established_year: e.target.value })
+                              setAllHotelDetails({ ...allHotelDetails, established_year: e.target.value },setFlag(1))
                             )
                           }
                         /></div>
@@ -275,7 +309,7 @@ export default function BasicDetails() {
                           defaultValue={basicDetails?.star_rating}
                           onChange={
                             (e) => (
-                              setAllHotelDetails({ ...allHotelDetails, star_rating: e.target.value })
+                              setAllHotelDetails({ ...allHotelDetails, star_rating: Number(e.target.value) },setFlag(1))
                             )
                           }
                         /></div>
@@ -298,7 +332,7 @@ export default function BasicDetails() {
                           defaultValue={basicDetails?.description_title}
                           onChange={
                             (e) => (
-                              setAllHotelDetails({ ...allHotelDetails, description_title: e.target.value })
+                              setAllHotelDetails({ ...allHotelDetails, description_title: e.target.value },setFlag(1))
                             )
                           }
                         /></div>
@@ -319,7 +353,7 @@ export default function BasicDetails() {
                           className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                           onChange={
                             (e) => (
-                              setAllHotelDetails({ ...allHotelDetails, description_body: e.target.value })
+                              setAllHotelDetails({ ...allHotelDetails, description_body: e.target.value },setFlag(1))
                             )
                           }
                           defaultValue={basicDetails?.description_body}
@@ -345,15 +379,17 @@ export default function BasicDetails() {
                     </div>
                   </div>
 
-                  <div id="btn" className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                   
-                    <div className={spinner === 0 ? 'block' : 'hidden'}>
+                  <div id="btn" className="flex mr-2 items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                  <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
+                      <Button Primary={language?.UpdateDisabled}  /></div>
+                    <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
                       <Button Primary={language?.Update} onClick={submitBasicEdit} />
                      </div>
-                     <div className={spinner === 1 ? 'block' : 'hidden'}>
+                     <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />
+                   <div>
+                     </div>
                        </div>
-
                   </div>
 
 

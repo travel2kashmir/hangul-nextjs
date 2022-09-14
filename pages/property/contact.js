@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Header from "../../components/Header";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import objChecker from "lodash"
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
@@ -28,6 +29,7 @@ function Contact() {
   const [deleteContact, setDeleteContact] = useState(0);
   const [contacts, setContacts] = useState([]);
   const [view, setView] = useState(0);
+  const [flag, setFlag] = useState([]);
   const [contact, setContact] = useState([]);
  
   useEffect(() => {
@@ -55,6 +57,7 @@ function Contact() {
 
   /* Function Add Contact*/
   function submitContactAdd(e) {
+    if(flag === 1){
     setSpinner(1)
     e.preventDefault();
     if (contact.contact_type!==undefined) {
@@ -71,7 +74,7 @@ function Contact() {
         })
         .then((response) => {
           setSpinner(0)
-          toast.success("Contact Added Successfully!", {
+          toast.success("API:Contact Added Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -83,11 +86,12 @@ function Contact() {
           setView(0)
           fetchHotelDetails();
           Router.push("./contact");
-          setContact([])
+          setContact([]);
+          setFlag([]);
         })
         .catch((error) => {
           setSpinner(0)
-          toast.error("Contact Add Error!", {
+          toast.error("API:Contact Add Error!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -97,12 +101,26 @@ function Contact() {
             progress: undefined,
           });
           setView(0)
+          setFlag([]);
         });
     }
   }
+  }
 
  /* Function Edit Contact*/
- const submitContactEdit = (props) => {
+ const submitContactEdit = (props,noChange) => {
+  if(objChecker.isEqual(props,noChange)){
+    toast.warn('No change in contacts detected. ', {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+  else{
   const final_data = {
     contact_id: props.id,
     contact_data: props.type,
@@ -112,7 +130,7 @@ function Contact() {
   axios
     .put(url, final_data, { header: { "content-type": "application/json" } })
     .then((response) => {
-    toast.success("Contact Updated Successfully!", {
+    toast.success("API:Contact Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -126,7 +144,7 @@ function Contact() {
     })
     .catch((error) => {
       setSpinner(0)
-      toast.error("Contact Update Error!", {
+      toast.error("API:Contact Update Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -136,7 +154,7 @@ function Contact() {
         progress: undefined,
       });
     });
-  
+  }
 };
 
 // Fetch Hotel Details
@@ -181,7 +199,7 @@ function Contact() {
       .delete(url)
       .then((response) => {
         setSpin(0);
-        toast.success("Contact Deleted Successfully!", {
+        toast.success("API:Contact Deleted Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -195,7 +213,7 @@ function Contact() {
         Router.push("./contact");
       })
       .catch((error) => {
-        toast.error("Contact Delete Error!", {
+        toast.error("API:Contact Delete Error!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -281,7 +299,6 @@ function Contact() {
         {/* Header */}
         <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
          <div className={visible === 1 ? 'block' : 'hidden'}>
-
         <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit} 
         delSpin={language?.SpinnerDelete} saveSpinner={language?.SpinnerSave} spinner={spinner}
         setSpinner={setSpinner}
@@ -333,7 +350,7 @@ function Contact() {
                           setContact({
                             ...contact,
                             contact_type: e.target.value,
-                          })
+                          },setFlag(1))
                         }
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       >
@@ -362,7 +379,7 @@ function Contact() {
                           setContact({
                             ...contact,
                             contact_data: e.target.value,
-                          })
+                          },setFlag(1))
                         }
 
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -373,9 +390,14 @@ function Contact() {
                 </div>
 
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                  {spinner === 0 ?
-                  <Button Primary={language?.Add} onClick={(e) => { submitContactAdd(e) }} />:
-                  <Button Primary={language?.SpinnerAdd} />}
+                      <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
+                      <Button Primary={language?.AddDisabled}  /></div>
+                    <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.Add} onClick={(e) => { submitContactAdd(e) }} />
+                     </div>
+                     <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerAdd} />
+                       </div>
                 </div>
               </div>
             </div>

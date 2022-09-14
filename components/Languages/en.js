@@ -83,6 +83,11 @@ export default {
    color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
 
 },
+"AddDisabled" :{
+  label: "Add",
+   color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
+
+},
 "View" :{
   label: "View",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white "    

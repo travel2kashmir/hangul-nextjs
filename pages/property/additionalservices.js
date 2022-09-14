@@ -20,6 +20,7 @@ import Router from 'next/router';
 
 function AdditionalServices() {
         const [visible,setVisible]=useState(0); 
+        const [spinner, setSpinner] = useState(0)
         const [additionalServices, setAdditionalServices] = useState({})
         const [services, setServices] = useState([])
         const [view, setView] = useState(0);

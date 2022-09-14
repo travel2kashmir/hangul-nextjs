@@ -51,11 +51,8 @@ const  Landing=() =>{
       const response = await axios.get(url, {
         headers: { accept: "application/json" },
       });
-      
       setOwnerdata(response.data);
-
       setVisible(1)
-
     } catch (error) {
       if (error.response) {
         logger.error("Current User Properties Error");
@@ -150,7 +147,7 @@ const  Landing=() =>{
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {ownerdata?.map((item, idx) => {
+                        {Object.keys(ownerdata).length!=0?ownerdata?.map((item, idx) => {
                           return (
                             <tr className="hover:bg-gray-100" key={idx}>
                               <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
@@ -176,7 +173,7 @@ const  Landing=() =>{
                               </td>
                             </tr>
                           );
-                        })}
+                        }):<></>}
                       </tbody>
                     </table>
                    </div>

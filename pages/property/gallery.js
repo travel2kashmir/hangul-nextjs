@@ -231,8 +231,7 @@ function Gallery() {
     }
 
     return (
-        <>
-      <div>
+        <>   
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
@@ -572,8 +571,7 @@ function Gallery() {
                 draggable
                 pauseOnHover />
         </div>
-    <Footer/>
-     </div>
+    <Footer/>  
      </>
     )
 }

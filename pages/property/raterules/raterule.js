@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import Multiselect from 'multiselect-react-dropdown';
+import validateRateConditions from '../../../components/Validation/AddRateRules/RateConditions';
 import Button from '../../../components/Button';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,10 +34,17 @@ function Raterule() {
   const [error, setError] = useState({})
   const [err, setErr] = useState({})
   const [basicFlag,setBasicFlag]=useState([])
+
+  const [flag,setFlag]=useState([])
+
   const [finalLang,setFinalLang]=useState([])
   const [finalCountry,setFinalCountry]=useState([])
   const [finalDevice,setFinalDevice]=useState([])
   const [finalProgram,setFinalProgram]=useState([])
+  const [editLang,setEditLang]=useState([])
+  const [editCountry,setEditCountry]=useState([])
+  const [editDevice,setEditDevice]=useState([])
+  const [editProgram,setEditProgram]=useState([])
   const [rateRule, setRateRule] = useState([])
   const [discount, setDiscount] = useState([])
   const [programs, setPrograms] = useState([])
@@ -112,8 +120,8 @@ useEffect(() => {
 const submitRateAdd = () => {
 
   if(validationRates(allUserRateDetails)) {
-var time;
-  var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
+  var time;
+ var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
   time = new Date(temp.toString())
   const final_data = {
     "base_rate_currency": allUserRateDetails?.base_rate_currency,
@@ -585,13 +593,12 @@ var time;
 
     //User Signed In, Max percentage and Domestic Submit
     const submitAdditional = () => {
-      if(validationRateAdditional(userRateDetails)){
+    
       const data = [{
         max_user_percentage:userRateDetails?.max_user_percentage,
         user_rate_condition_op:userRateDetails?.user_rate_condition_op,
         description:userRateDetails?.description,
         offer_name: rateRule?.rate_rule_name,
-
         user_signed_in:userSign?.user_signed_in,
         is_domestic: userSign?.is_domestic,
 
@@ -628,8 +635,9 @@ var time;
           });
           setBasicFlag([])
         });
-      }
+      
     };
+
     const submitDiscountEdit = () => {
       if (validationRateDescription(rateRule)){ 
       const final_data = {
@@ -666,7 +674,9 @@ var time;
             });
           });
         }
-      };
+
+    };
+
  
 
   const languages = (lan) => { 
@@ -676,7 +686,9 @@ var time;
         language: item?.language_code
       }
       language_data.push(temp) } );
+      setEditLang(language_data);
       setFinalLang(language_data);
+      setFlag(1);
   }
 
   const country = (cou) => { 
@@ -686,7 +698,9 @@ var time;
        user_country: item?.country_code
       }
       country_data.push(temp) } );
+      setEditCountry(country_data);
       setFinalCountry(country_data);
+      setFlag(1);
   }
 
   const devices = (dev) => { 
@@ -696,8 +710,9 @@ var time;
         user_device_type: item?.user_device
       }
       device_data.push(temp) } );
+      setEditDevice(device_data)
       setFinalDevice(device_data);
-      
+      setFlag(1);
   }
 
   const program = (pro) => { 
@@ -707,7 +722,9 @@ var time;
          always_eligible_membership_id: item.program_id
        }
        program_data.push(temp) } );
+       setEditProgram(program_data)
       setFinalProgram(program_data);  
+      setFlag(1);
    }
 
    const filterByDevices = () => {
@@ -718,6 +735,7 @@ var time;
           return element.user_device === el.user_device;
        });
     });
+    setFinalDevice(resDev)
   }
   else{
     resDev= []
@@ -726,7 +744,6 @@ var time;
    }
 
  const filterByProgram = () => {
-  
   if(conditions?.max_user_percentage != undefined){
     setCheckPercentage(true)
   }
@@ -736,7 +753,9 @@ var time;
      return rateRule?.user_rate_condition?.[i]?.PackageMembership.find(element => {
         return element.program_id === el.program_id;
      });
-  });}
+  });
+setFinalProgram(res)
+}
   else{
     res= []
   }
@@ -752,6 +771,7 @@ const filterByCountry = () => {
       return element.user_country === el.country_code;
    });
 });
+setFinalCountry(resCou)
   }
   else{
   resCou= []
@@ -768,6 +788,7 @@ const filterByLanguage = () => {
    });
    
 });
+setFinalLang(resLang)
   }
   else{
     resLang= []
@@ -783,7 +804,6 @@ Router.push('./raterule')
         setRateRule(response.data);
 
         setUserRateDetails(response.data.user_rate_condition?.[i])
-
         var keys= Object.keys(response.data)
        for(let item in keys){
         if(keys[item]==='conditional_rate') { setIsRatePresent(true)
@@ -901,13 +921,9 @@ const checkRateAdditional = (data) => {
 if(data?.description === "" ||  data.description === undefined){
   error.description = "This field is required."
 }
- if((!data?.max_user_percentage.match(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/) && (data?.max_user_percentage != "" &&  data.max_user_percentage != undefined))){
-   error.max_user_percentage = "This field accept possitive and decimal values only."
- }
 return Object.keys(error).length === 0 ? true :  error;
 
 }
-
 
 //Rates
 // Validation Function
@@ -949,12 +965,104 @@ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) &&
 (data?.otherfees_amount != "" &&  data?.otherfees_amount != undefined))){
   error.otherfees_amount = "This field accept possitive and decimal values only."
 }
+
+
 if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
  (data?.refundable_until_days != "" &&  data?.refundable_until_days != undefined))){
   error.refundable_until_days = "This field accept possitive values only."
 }
  
 return Object.keys(error).length === 0 ? true :  error;
+}
+
+// Validation Function for Rate Conditions
+const validationRateCondition = () => {
+  if(flag !== 1){
+      toast.warn('Please, select at least one condition', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }  
+  else{
+  setError([]);
+    var validateData=[{
+    "country":
+    {
+      "checkCountry" :checkCountry,
+      "finalCountry":finalCountry,
+       "selectedCountry":resCou
+    } ,
+    "device":
+    {
+      "checkDevice" : checkDevice,
+      "finalDevice":finalDevice ,
+      "selectedDevice":resDev
+    },
+    "program":
+    {
+      "checkProgram" :checkProgram,
+      "finalProgram":finalProgram,
+      "selectedProgram":res
+    },
+    "language":
+    {
+      "checkLanguage" : checkLanguage,
+      "finalLang":finalLang,
+      "selectedLanguage":resLang
+    },
+    "additional":
+    {
+      "checkPercentage" : checkPercentage,
+      "finalMaxUsersPercentage": userRateDetails.max_user_percentage,
+      "domestic":userSign?.user_signed_in,
+     "description":userRateDetails.description,
+      "signed": userSign?.isDomestic
+    }
+    }
+    ]
+   var result = validateRateConditions(validateData)
+   console.log("Result" +JSON.stringify(result))
+   if(result===true)
+   {
+    //db request
+    if(checkCountry === true && editCountry?.length !== 0){
+      submitCountryEdit();
+    }
+    if(checkDevice === true && editDevice?.length !== 0){
+      submitDeviceEdit()
+    }
+    if(checkLanguage === true && editLang?.length !== 0){
+      submitLanguageEdit();
+    }
+    if(checkProgram === true && editProgram?.length !== 0){
+      submitProgramEdit() 
+    }
+    if (basicFlag.length !== 0){
+      submitAdditional();
+    }
+    }
+   else
+   {
+    setError(result)
+   }
+  }
+  if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
+    deleteDevice()
+  }
+  if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false){
+    deleteCountry()
+  } 
+  if(rateRule?.user_rate_condition?.[i]?.language != undefined && checkLanguage == false){
+    deleteLanguage()
+  }
+  if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
+    deleteProgram()
+  } 
 }
   return (
     <>
@@ -1064,7 +1172,7 @@ return Object.keys(error).length === 0 ? true :  error;
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 px-4">
+            <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
@@ -1090,8 +1198,8 @@ return Object.keys(error).length === 0 ? true :  error;
                {error?.rate_rule_name}
             </p></div>
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
+            </div>
+            <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label
                   className="text-sm font-medium text-gray-900 block mb-2"
@@ -1117,9 +1225,8 @@ return Object.keys(error).length === 0 ? true :  error;
                   <option value="existence">existence</option>
              </select></div>
               </div>
-            </div>
-            
-            <div className="w-full lg:w-6/12 px-4">
+            </div> 
+           <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label
                   className="text-sm font-medium text-gray-900 block mb-2"
@@ -1136,7 +1243,10 @@ return Object.keys(error).length === 0 ? true :  error;
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.hotel_amenity}
                 readOnly
-                /></div></div></div>
+                />
+                </div>
+                </div>
+            </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
@@ -1144,7 +1254,6 @@ return Object.keys(error).length === 0 ? true :  error;
                     {language?.pricemultiplier}
                     <span style={{ color: "#ff0000" }}>*</span>
                  </label>
-
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
@@ -1158,21 +1267,29 @@ return Object.keys(error).length === 0 ? true :  error;
                     },setMod(1))
                   }
                 />
-<p className="text-red-700 font-light">
-                 {err?.price_multiplier}
-          </p></div></div></div>
-               <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
+              <p className="text-red-700 font-light">{err?.price_multiplier}</p>
+                 </div>
+                 </div>
+                 </div>
+             <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                   <Button Primary={language?.Next} 
                      onClick={()=>{
+                      setUserRateDetails({
+                        ...userRateDetails,
+                        max_user_percentage:conditions.max_user_percentage});
                      filterByCountry();
                      filterByProgram();
                      filterByDevices();
                       filterByLanguage();
                      setDisp(1)
+                     
                      }}/>
                       <Button Primary={language?.Update}
                      onClick={()=>{
+                      setUserRateDetails({
+                        ...userRateDetails,
+                        max_user_percentage:conditions.max_user_percentage});
                      filterByCountry();
                      filterByProgram();
                      filterByDevices();
@@ -1221,9 +1338,9 @@ return Object.keys(error).length === 0 ? true :  error;
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates} </div>
             </div>
        </div>
-          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-          {language?.ratecondition}
-          </h6>
+        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-4">
+        {language?.ratecondition}
+        </h6>
           <div className="flex flex-wrap">
           <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -1231,7 +1348,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratecondition} <span style={{ color: "#ff0000" }}>*</span>
+
+                       {language?.ratecondition}<span style={{ color: "#ff0000" }}>*</span>
+
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1242,24 +1361,23 @@ return Object.keys(error).length === 0 ? true :  error;
                           ...userRateDetails,
                           user_rate_condition_op: e.target.value,
                         },setBasicFlag(1))
-                      }
-
-                    >  
+                      }>  
                       <option selected disabled >{userRateDetails.user_rate_condition_op}</option>
-
                       <option value="all">{language?.all}</option>
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
-                    </select></div>
+                    </select>
+                    </div>
                   </div>
-                </div>
+           </div>
                 
-                <div className="w-full lg:w-6/12 px-4">
+          <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
+
                        {language?.ratedescription} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Textboxloader/></div>
@@ -1282,27 +1400,29 @@ return Object.keys(error).length === 0 ? true :  error;
 
             </p></div>
                   </div>
-                </div>
+          </div>
 
-                <div className="w-full lg:w-6/12 px-4">
+<div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
                    {language?.conditions} 
+
                     </h4></div>
-                    </div>
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3"></div>
-                </div>
+            </div>
 
-                <div className="lg:w-10/12  px-1">
+            <div className="w-full lg:w-6/12 px-4">
+            <div className="relative w-full mb-3">
+            </div>
+             </div>
+
+            <div className="lg:w-10/12  px-1">
                   <div className="relative w-full ">
-
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex  ">
                       <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                       checked={checkCountry === true}
-                      onChange={()=>{setCheckCountry(!checkCountry)}} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                      onChange={()=>{setCheckCountry(!checkCountry),setFlag(1)}} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
@@ -1320,7 +1440,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       displayValue="country_name"
                       selectedValues={resCou}
                       onRemove={(event) => {country(event)}}
-                      onSelect={(event) => {country(event) }} /></div></div>
+                      onSelect={(event) => {country(event) }} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.country}</p></div></div>
                     </div>
 
                     <div className='flex mb-2'>
@@ -1328,14 +1450,14 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
                         checked={checkDevice === true} 
-                        onChange={()=>{setCheckDevice(!checkDevice)}}
+                        onChange={()=>{setCheckDevice(!checkDevice),setFlag(1)}}
                         className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       {language?.userdevice}
+                       {language?.userdevice}  
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1348,20 +1470,22 @@ return Object.keys(error).length === 0 ? true :  error;
                       displayValue="user_device"
                       selectedValues={resDev}
                       onRemove={(event) => { devices(event) }}
-                      onSelect={(event) => { devices(event) }} /></div></div>
+                      onSelect={(event) => { devices(event) }} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.device}</p></div></div>
                     </div>
 
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex ">
                         <input id="checkbox-1"  checked={checkLanguage === true} 
-                        onChange={()=>{setCheckLanguage(!checkLanguage)}} aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        onChange={()=>{setCheckLanguage(!checkLanguage),setFlag(1)}} aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        {language?.language}
+                        {language?.language}  
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1373,25 +1497,22 @@ return Object.keys(error).length === 0 ? true :  error;
                       selectedValues={resLang}
                       displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
-                      onSelect={(event) => { languages(event) }} /></div>
+                      onSelect={(event) => { languages(event) }} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.language}</p></div>
                       </div>
                       </div>
-
 
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
                             checked={checkProgram === true}
-                            onChange={()=>{setCheckProgram(!checkProgram)}}className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                            onChange={()=>{setCheckProgram(!checkProgram),setFlag(1)}}className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                     
-                      <label
-                        className="text-sm font-medium text-gray-900 mx-2 block "
-                        htmlFor="grid-password"
-                      >
-                          {language?.membershipprogram}
-                      </label> </span></div>
+                     <label className="text-sm font-medium text-gray-900 mx-2 block "
+                        htmlFor="grid-password">
+                          {language?.membershipprogram}</label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1402,7 +1523,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       displayValue="program_name"
                       selectedValues={res}
                       onRemove={(event) => {program(event)}}
-                      onSelect= {(event)=>{program(event)}} /></div></div>
+                      onSelect= {(event)=>{program(event)}} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.program}</p></div></div>
                       </div>
 
                     <div className='flex mb-2'>
@@ -1410,33 +1533,29 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                          checked={checkPercentage === true}
-                         onChange={()=>{setCheckPercentage(!checkPercentage)}}
+                         onChange={()=>{setCheckPercentage(!checkPercentage),setFlag(1)}}
                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                     
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
-                        htmlFor="grid-password"
-                      >
-                       {language?.maxuserpercentage}
-                      </label> </span></div>
+                        htmlFor="grid-password"> {language?.maxuserpercentage}</label> 
+                        </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input type="text" 
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
-
                       defaultValue={conditions?.max_user_percentage} 
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
                           max_user_percentage: e.target.value,
-                        },setBasicFlag(1))
+                        },setBasicFlag(1),setFlag(1))
                       }/>
 
                        <p className=" text-red-700 font-light">
-                       {error?.max_user_percentage}
+                       {error?.maxuserspercent}
  </p></div>
                       </div>
                         </div> 
@@ -1447,7 +1566,7 @@ return Object.keys(error).length === 0 ? true :  error;
 
                         <input id="checkbox-1" checked={ userSign.user_signed_in === true} 
                         onChange={(e) =>
-                          setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
+                          setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1),setFlag(1))
                         }
               aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
@@ -1467,7 +1586,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           <input type="checkbox" value={userSign.user_signed_in} 
                           checked={ userSign?.user_signed_in === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
+                              setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1),setFlag(1))
  }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -1488,7 +1607,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex ">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"  
                         checked={userSign?.is_domestic === true}
-                          onChange={()=>{setUserSign( { ...userSign, is_domestic:!userSign?.is_domestic}),setBasicFlag(1)}}
+                          onChange={()=>{setUserSign( { ...userSign, is_domestic:!userSign?.is_domestic}),setFlag(1),setBasicFlag(1)}}
                           className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       
@@ -1509,7 +1628,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           <input type="checkbox" value={userSign?.is_domestic} 
                           checked={userSign.is_domestic === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, is_domestic: !userSign?.is_domestic},setBasicFlag(1))
+                              setUserSign({ ...userSign, is_domestic: !userSign?.is_domestic},setBasicFlag(1),setFlag(1))
                             }
                             id="default" className="sr-only peer" />
                           <div
@@ -1526,45 +1645,16 @@ return Object.keys(error).length === 0 ? true :  error;
                   </div>
        </div>
         
-        </div>
+            </div>
      
-        </div>
+        </div>       
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
         <Button Primary={language?.Previous}   onClick={() => {setDisp(0);}} />
+        <Button Primary={language?.Update} onClick={()=>{validationRateCondition();}}/> 
+        <Button Primary={language?.Next}   onClick={() => {setDisp(2);}} />    
+        </div>
 
-                <Button Primary={language?.Update} onClick={()=>{ 
-if (basicFlag.length !== 0){
 
-                    submitAdditional();
-                  }
-                  if (finalLang.length !== 0 && checkLanguage === true){
-                    submitLanguageEdit()
-                  }
-                  if (finalCountry.length !== 0 && checkCountry === true){
-                    submitCountryEdit()
-                  }
-                  if (finalDevice.length !== 0 && checkDevice === true){
-                    submitDeviceEdit()
-                  }
-                  if (finalProgram.length !== 0 && checkProgram === true){
-                    submitProgramEdit()
-                  }
-                  if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
-                    deleteDevice()
-                  }
-                  if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false){
-                    deleteCountry()
-                  } 
-                  if(rateRule?.user_rate_condition?.[i]?.language != undefined && checkLanguage == false){
-                    deleteLanguage()
-                  }
-                  if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
-                    deleteProgram()
-}  
-                }} /> 
-            <Button Primary={language?.Next}   onClick={() => {setDisp(2);}} />    
-
-            </div>
         </div>
         </div>
 
@@ -1574,7 +1664,7 @@ if (basicFlag.length !== 0){
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">  {language?.rateruledescription}</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1609,7 +1699,8 @@ if (basicFlag.length !== 0){
                         (e) => {  
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
                       }
-  }>{allUserRateDetails?.base_rate_currency === ""
+
+                      }>{allUserRateDetails?.base_rate_currency === ""
                       ?
                       <option selected disabled>{language?.select}</option>:
                       <option selected disabled>{allUserRateDetails?.base_rate_currency}</option>}
@@ -1629,7 +1720,8 @@ if (basicFlag.length !== 0){
                       {language?.baserate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                        </label>
- <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
 
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
@@ -1667,11 +1759,12 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, tax_currency: e.target.value })
                         )
                       }>
- {allUserRateDetails?.tax_currency === ""
+
+                        
+                        {allUserRateDetails?.tax_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails?.tax_currency}</option>}
-
-                      <option value="USD" >USD</option>
+ <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select></div>
@@ -1720,10 +1813,10 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_currency: e.target.value })
                         )
                       }>
- {allUserRateDetails?.otherfees_currency === ""
+
+                        {allUserRateDetails?.otherfees_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails?.otherfees_currency}</option>}
-
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1775,7 +1868,8 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         }
                       }>
- {allUserRateDetails?.charge_currency === ""
+
+                         {allUserRateDetails?.charge_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails.charge_currency}</option>}
 
@@ -1796,11 +1890,9 @@ if (basicFlag.length !== 0){
 
                        {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
 
-
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
+ <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1815,7 +1907,8 @@ if (basicFlag.length !== 0){
                          <>
                       {allUserRateDetails?.refundable === "true"
                         ?
-  <>
+
+                        <>
                         <option selected disabled value={true}>  {language?.yes}</option>
                          <option value={false}> {language?.no}</option>
                          </>
@@ -1826,8 +1919,7 @@ if (basicFlag.length !== 0){
                       </>
                      }</>}
                         </select></div>
-
-                  </div>
+ </div>
                 </div>
 
                 {allUserRateDetails?.refundable === "true" ? (
@@ -1918,7 +2010,8 @@ if (basicFlag.length !== 0){
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
- <option selected disabled>{language?.select}</option>
+
+                        <option selected disabled>{language?.select}</option>
                          {rooms?.map(i => {
 
                           return (
@@ -1943,8 +2036,6 @@ if (basicFlag.length !== 0){
           </div>
         </div></div>
 
-        
-
         {/* Toast Container */}
         <ToastContainer position="top-center"
           autoClose={5000}
@@ -1955,7 +2046,6 @@ if (basicFlag.length !== 0){
           pauseOnFocusLoss
           draggable
           pauseOnHover />
-
    </div>
     </>
   )

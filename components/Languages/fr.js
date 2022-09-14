@@ -11,8 +11,9 @@ export default {
   Status:"Statut",
   Action: "Acte",
   Edit: "Éditer",
-  Delete:"Delete",
+  Delete:"Effacer",
   Add:"Ajouter",
+  yesdelete:"Oui, Supprimer",
   Search:"Chercher",
   Previous:"Précédent",
   Next:"Suivant",
@@ -62,8 +63,16 @@ export default {
    col2 : "Programme Niveau",
     
   },
-
-   addimages:"Ajouter des images",
+  "UpdateDisabled" :{
+    label: "Éditer",
+     color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
+  },
+  "Previous" :{
+    label:"Précédent",
+     color: "bg-gray-600 hover:bg-gray-700 text-white ",
+  },
+  addimages:"Ajouter des images",
+  editraterules:"Modifier les règles de taux",
   addservices:"Ajouter des services",
   addroom:"Ajouter une salle",
   addnewroom:"Ajouter une nouvelle pièce",
@@ -74,11 +83,11 @@ export default {
 
   "Update" :{
     label: 'Éditer',
-     color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+     color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white "    
 },
 "Next" :{
   label: 'Suivant',
-   color: "bg-cyan-600 hover:bg-cyan-700 text-white "    
+   color: "bg-gray-600 hover:bg-gray-700 text-white "    
 },
 "Skip" :{
   label:"Sauter",
@@ -576,10 +585,9 @@ export default {
    required:'Ce champ est requis',
    float:'Ce champ accepte les flottants et les nombres',
    num:'Ce champ n`accepte que des nombres',
-
-  editraterule: 'Modifier La Règle de Taux',
-  conditions:'Les conditions',
-  membershipprogram: 'Programme D`adhésion',
+   editraterule: 'Modifier La Règle de Taux',
+   conditions:'Les conditions',
+   membershipprogram: 'Programme D`adhésion',
   maxuserpercentage: 'Pourcentage Maximal D`utilisateurs',
   usersignedin: 'Utilisateur Connecté',
   isdomestic: 'Est Domestique',

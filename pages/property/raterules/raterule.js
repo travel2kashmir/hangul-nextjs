@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
-var langs = require('langs');
 import Multiselect from 'multiselect-react-dropdown';
+import validateRateConditions from '../../../components/Validation/AddRateRules/RateConditions';
 import Button from '../../../components/Button';
-import countries from "countries-list";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from '../../../components/Header'
@@ -11,7 +10,8 @@ import Sidebar from '../../../components/Sidebar';
 import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
 import Textboxloader from '../../../components/loaders/textboxloader'
-import english from '../../../components/Languages/en'
+import english from '../../../components/Languages/en';
+import lang from "../../../components/GlobalData"
 import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
@@ -33,13 +33,16 @@ function Raterule() {
   const [visible,setVisible]=useState(0) 
   const [error, setError] = useState({})
   const [err, setErr] = useState({})
-  const [countryData,setCountryData]=useState([])
   const [basicFlag,setBasicFlag]=useState([])
-  const [languageData,setLanguageData]=useState([])
+  const [flag,setFlag]=useState([])
   const [finalLang,setFinalLang]=useState([])
   const [finalCountry,setFinalCountry]=useState([])
   const [finalDevice,setFinalDevice]=useState([])
   const [finalProgram,setFinalProgram]=useState([])
+  const [editLang,setEditLang]=useState([])
+  const [editCountry,setEditCountry]=useState([])
+  const [editDevice,setEditDevice]=useState([])
+  const [editProgram,setEditProgram]=useState([])
   const [rateRule, setRateRule] = useState([])
   const [discount, setDiscount] = useState([])
   const [programs, setPrograms] = useState([])
@@ -56,8 +59,7 @@ function Raterule() {
   const[userRateDetails, setUserRateDetails] = useState([])
   const [rooms,setRooms]=useState([])
 
-  const [device, setDevice] = useState([{user_device:'tablet'}, {user_device:'mobile'},{user_device:'laptop'} ])
-  var language_data=[];
+ var language_data=[];
   var country_data=[];
   var device_data=[];
   var program_data=[];
@@ -80,7 +82,6 @@ function Raterule() {
         currentraterule = localStorage.getItem('RateRuleId');
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
-        createCountry();
         currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       
       }
@@ -107,15 +108,15 @@ function Raterule() {
     }
 }
  
-   /* Function to load  when page loads*/
-   useEffect(() => {
+/* Function to load  when page loads*/
+useEffect(() => {
     fetchRateRule();
     fetchPrograms();
-    createLanguages();
 }, [])
 
 //submit rate add
 const submitRateAdd = () => {
+  if(validationRates(allUserRateDetails)) {
   var time;
   var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
   time = new Date(temp.toString())
@@ -135,12 +136,10 @@ const submitRateAdd = () => {
     "rate_rule_id": rateRule.rate_rule_id,
     "status": true
   }
-
   const url = '/api/rate_rule/conditional_rate'
   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-
     ((response) => {
-      toast.success("User Rate Condition added Successfully!", {
+      toast.success("API:User Rate Condition added Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -149,19 +148,16 @@ const submitRateAdd = () => {
         draggable: true,
         progress: undefined,
       });
-    
       const room_data ={
         "rate_rule":[{
         "conditional_rate_id": response.data.conditional_rate_id,
-        "room_id": allUserRateDetails.room_id,
-        
+        "room_id": allUserRateDetails.room_id 
       }]}
-    
       const url = '/api/rate_rule/conditional_rate/conditional_rate_room_link'
       axios.post(url,room_data, { header: { "content-type": "application/json" } }).then
   
         ((response) => {
-          toast.success("User Rate Condition added Successfully!", {
+          toast.success("API:User Rate Condition added Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -174,7 +170,7 @@ const submitRateAdd = () => {
     })
     .catch((error) => {
 
-      toast.error(" Conditional Rates Error!", {
+      toast.error("API: Conditional Rates Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -187,7 +183,7 @@ const submitRateAdd = () => {
     })
 
     .catch((error) => {
-      toast.error("User Rate Condition Error!", {
+      toast.error("API:User Rate Condition Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -199,6 +195,7 @@ const submitRateAdd = () => {
     })
 
 }
+}
 
 /**  Delete Rate Rules **/
 // Delete Country
@@ -208,7 +205,7 @@ const deleteCountry = () =>{
     .delete(url, { 
       header: { "content-type": "application/json" } })
     .then((response) => {
-      toast.success("Country delete success!", {
+      toast.success("API:Country delete success!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -220,7 +217,7 @@ const deleteCountry = () =>{
     }  
     )
     .catch((error) => {
-      toast.error("Country delete error!", {
+      toast.error("API:Country delete error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -238,7 +235,7 @@ const deleteDevice = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Device delete success!", {
+    toast.success("API:Device delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -250,7 +247,7 @@ const deleteDevice = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Device delete error!", {
+    toast.error("API:Device delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -268,7 +265,7 @@ const deleteProgram = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Program delete success!", {
+    toast.success("API:Program delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -280,7 +277,7 @@ const deleteProgram = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Program delete error!", {
+    toast.error("API:Program delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -298,7 +295,7 @@ const deleteLanguage = () =>{
   .delete(url, { 
     header: { "content-type": "application/json" } })
   .then((response) => {
-    toast.success("Language delete success!", {
+    toast.success("API:Language delete success!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -310,7 +307,7 @@ const deleteLanguage = () =>{
   }  
   )
   .catch((error) => {
-    toast.error("Language delete error!", {
+    toast.error("API:Language delete error!", {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,
@@ -335,7 +332,7 @@ const url = "/api/rate_rule/rate_rules";
     .put(url,data, { 
       header: { "content-type": "application/json" } })
     .then((response) => {
-      toast.success("API: Rate rule Updated Successfully!", {
+      toast.success("API:API: Rate rule Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -347,7 +344,7 @@ const url = "/api/rate_rule/rate_rules";
     }  
     )
     .catch((error) => {
-      toast.error("API: Rate rule update Error!", {
+      toast.error("API:API: Rate rule update Error!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -361,7 +358,6 @@ const url = "/api/rate_rule/rate_rules";
 }
    /* Edit Rate Details Function */
 const submitRateEdit = () => {
-
  if(validationRates(allUserRateDetails)) {
 var time;
     var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
@@ -388,7 +384,7 @@ var time;
     const url = '/api/rate_rule/conditional_rate'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Rates updated successfully!", {
+        toast.success("API:Rates updated successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -402,7 +398,7 @@ var time;
         Router.push("./raterule");
       })
       .catch((error) => {
-        toast.error("API: User Rate Condition Error!", {
+        toast.error("API:API: User Rate Condition Error!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -427,7 +423,7 @@ var time;
     const url = '/api/rate_rule/rate_modification'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("API: User rate modification updated successfully!", {
+        toast.success("API:API: User rate modification updated successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -441,7 +437,7 @@ var time;
 
       })
       .catch((error) => {
-        toast.error("API: User rate modification error.", {
+        toast.error("API:API: User rate modification error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -462,7 +458,7 @@ var time;
       .put(url, final_data, { 
         header: { "content-type": "application/json" } })
       .then((response) => {
-        toast.success("Languages Updated Successfully!", {
+        toast.success("API:Languages Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -476,7 +472,7 @@ var time;
       })
 
       .catch((error) => {
-        toast.error("Languages Error", {
+        toast.error("API:Languages Error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -496,7 +492,7 @@ var time;
       .put(url, final_data, { 
         header: { "content-type": "application/json" } })
       .then((response) => {
-        toast.success("Country Updated Successfully!", {
+        toast.success("API:Country Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -510,7 +506,7 @@ var time;
       })
 
       .catch((error) => {
-        toast.error("Country Error", {
+        toast.error("API:Country Error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -522,6 +518,7 @@ var time;
       });
   
   };
+
  // Device Edit Submit
   const submitDeviceEdit = () => {
     const final_data = { "user_rate_device": finalDevice }
@@ -530,7 +527,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Devices Updated Successfully!", {
+          toast.success("API:Devices Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -542,9 +539,8 @@ var time;
           setDevice([])
           Router.push("./raterule");
         })
-  
         .catch((error) => {
-          toast.error("Devices Error", {
+          toast.error("API:Devices Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -557,7 +553,7 @@ var time;
     
     };
 
-  // Device Edit Submit
+  //Program Edit Submit
   const submitProgramEdit = () => {
     const final_data = { "user_rate_program": finalProgram }
    const url = "/api/rate_rule/user_rate_conditioning/rate_condition_membership_link";
@@ -565,7 +561,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Programs Updated Successfully!", {
+          toast.success("API:Programs Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -579,7 +575,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Programs Error", {
+          toast.error("API:Programs Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -594,13 +590,12 @@ var time;
 
     //User Signed In, Max percentage and Domestic Submit
     const submitAdditional = () => {
-      if(validationRateAdditional(userRateDetails)){
+    
       const data = [{
         max_user_percentage:userRateDetails?.max_user_percentage,
         user_rate_condition_op:userRateDetails?.user_rate_condition_op,
         description:userRateDetails?.description,
         offer_name: rateRule?.rate_rule_name,
-
         user_signed_in:userSign?.user_signed_in,
         is_domestic: userSign?.is_domestic,
 
@@ -612,7 +607,7 @@ var time;
         .put(url, final_data, { 
           header: { "content-type": "application/json" } })
         .then((response) => {
-          toast.success("Rate rule Updated Successfully!", {
+          toast.success("API:Rate rule Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -626,7 +621,7 @@ var time;
         })
   
         .catch((error) => {
-          toast.error("Rate rule update Error", {
+          toast.error("API:Rate rule update Error", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -637,8 +632,9 @@ var time;
           });
           setBasicFlag([])
         });
-      }
+      
     };
+
     const submitDiscountEdit = () => {
       if (validationRateDescription(rateRule)){ 
       const final_data = {
@@ -651,7 +647,7 @@ var time;
           .put(url, final_data, { 
             header: { "content-type": "application/json" } })
           .then((response) => {
-            toast.success("Rate Discount Updated Successfully!", {
+            toast.success("API:Rate Discount Updated Successfully!", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -664,7 +660,7 @@ var time;
             setError({});
           })
           .catch((error) => {
-            toast.error("Rate Discount Error", {
+            toast.error("API:Rate Discount Error", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -675,33 +671,8 @@ var time;
             });
           });
         }
-      };
-  // Languages JSON for Dropdown
-  const createCountry = () => {
-  var countryCodes = Object.keys(countries.countries);
-    countryCodes.map(code => {
-      var temp = {
-        country_name: countries.countries[code].name,
-        country_code: code
-      }
-    country_data.push(temp) } );
-    setCountryData(country_data);
-  }
-// Languages JSON for Dropdown
-  const createLanguages = () => {
-   var languageCodes = langs.all();
-  console.log(languageCodes)
-    languageCodes.map(code => {
-      var temp = {
-        language_name: code.name,
-        language_code: code?.[j]
-      }
-    language_data.push(temp) } );
-  
-    setLanguageData(language_data);
-    
-    
-  } 
+    };
+ 
 
   const languages = (lan) => { 
     lan.map(item => {
@@ -710,7 +681,9 @@ var time;
         language: item?.language_code
       }
       language_data.push(temp) } );
+      setEditLang(language_data);
       setFinalLang(language_data);
+      setFlag(1);
   }
 
   const country = (cou) => { 
@@ -720,7 +693,9 @@ var time;
        user_country: item?.country_code
       }
       country_data.push(temp) } );
+      setEditCountry(country_data);
       setFinalCountry(country_data);
+      setFlag(1);
   }
 
   const devices = (dev) => { 
@@ -730,8 +705,9 @@ var time;
         user_device_type: item?.user_device
       }
       device_data.push(temp) } );
+      setEditDevice(device_data)
       setFinalDevice(device_data);
-      
+      setFlag(1);
   }
 
   const program = (pro) => { 
@@ -741,17 +717,20 @@ var time;
          always_eligible_membership_id: item.program_id
        }
        program_data.push(temp) } );
+       setEditProgram(program_data)
       setFinalProgram(program_data);  
+      setFlag(1);
    }
 
    const filterByDevices = () => {
    if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined) {
     setCheckDevice(true)
-   resDev =  device?.filter(el => {
+   resDev =  lang?.DeviceData?.filter(el => {
        return rateRule?.user_rate_condition?.[i]?.UserDeviceType.find(element => {
           return element.user_device === el.user_device;
        });
     });
+    setFinalDevice(resDev)
   }
   else{
     resDev= []
@@ -760,18 +739,18 @@ var time;
    }
 
  const filterByProgram = () => {
-  
   if(conditions?.max_user_percentage != undefined){
     setCheckPercentage(true)
   }
   if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined) {
-    
     setCheckProgram(true)
     res = programs.filter(el => {
      return rateRule?.user_rate_condition?.[i]?.PackageMembership.find(element => {
         return element.program_id === el.program_id;
      });
-  });}
+  });
+setFinalProgram(res)
+}
   else{
     res= []
   }
@@ -782,11 +761,12 @@ var time;
 const filterByCountry = () => {
   if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined) {
   setCheckCountry(true)
-  resCou = countryData.filter(el => {
+  resCou = lang?.CountryData.filter(el => {
    return rateRule?.user_rate_condition?.[i]?.UserCountry?.find(element => {
       return element.user_country === el.country_code;
    });
 });
+setFinalCountry(resCou)
   }
   else{
   resCou= []
@@ -797,19 +777,19 @@ Router.push('./raterule')
 const filterByLanguage = () => {
   if(rateRule?.user_rate_condition?.[i]?.language != undefined) {
   setCheckLanguage(true)
-  resLang = languageData.filter(el => {
+  resLang = lang?.LanguageData.filter(el => {
     return rateRule?.user_rate_condition?.[i]?.language.find(element => {
       return element.LanguageCode === el.language_code;
    });
    
 });
+setFinalLang(resLang)
   }
   else{
     resLang= []
     }
 Router.push('./raterule')
 }
-
 
   const fetchRateRule = async () => {
     const url = `/api/rate_rule/${currentraterule}`
@@ -819,7 +799,6 @@ Router.push('./raterule')
         setRateRule(response.data);
 
         setUserRateDetails(response.data.user_rate_condition?.[i])
-
         var keys= Object.keys(response.data)
        for(let item in keys){
         if(keys[item]==='conditional_rate') { setIsRatePresent(true)
@@ -937,13 +916,9 @@ const checkRateAdditional = (data) => {
 if(data?.description === "" ||  data.description === undefined){
   error.description = "This field is required."
 }
- if((!data?.max_user_percentage.match(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/) && (data?.max_user_percentage != "" &&  data.max_user_percentage != undefined))){
-   error.max_user_percentage = "This field accept possitive and decimal values only."
- }
 return Object.keys(error).length === 0 ? true :  error;
 
 }
-
 
 //Rates
 // Validation Function
@@ -985,6 +960,8 @@ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) &&
 (data?.otherfees_amount != "" &&  data?.otherfees_amount != undefined))){
   error.otherfees_amount = "This field accept possitive and decimal values only."
 }
+
+
 if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
  (data?.refundable_until_days != "" &&  data?.refundable_until_days != undefined))){
   error.refundable_until_days = "This field accept possitive values only."
@@ -992,6 +969,96 @@ if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
  
 return Object.keys(error).length === 0 ? true :  error;
 
+}
+
+// Validation Function for Rate Conditions
+const validationRateCondition = () => {
+  if(flag !== 1){
+      toast.warn('Please, select at least one condition', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }  
+  else{
+  setError([]);
+    var validateData=[{
+    "country":
+    {
+      "checkCountry" :checkCountry,
+      "finalCountry":finalCountry,
+       "selectedCountry":resCou
+    } ,
+    "device":
+    {
+      "checkDevice" : checkDevice,
+      "finalDevice":finalDevice ,
+      "selectedDevice":resDev
+    },
+    "program":
+    {
+      "checkProgram" :checkProgram,
+      "finalProgram":finalProgram,
+      "selectedProgram":res
+    },
+    "language":
+    {
+      "checkLanguage" : checkLanguage,
+      "finalLang":finalLang,
+      "selectedLanguage":resLang
+    },
+    "additional":
+    {
+      "checkPercentage" : checkPercentage,
+      "finalMaxUsersPercentage": userRateDetails.max_user_percentage,
+      "domestic":userSign?.user_signed_in,
+     "description":userRateDetails.description,
+      "signed": userSign?.isDomestic
+    }
+    }
+    ]
+   var result = validateRateConditions(validateData)
+   console.log("Result" +JSON.stringify(result))
+   if(result===true)
+   {
+    //db request
+    if(checkCountry === true && editCountry?.length !== 0){
+      submitCountryEdit();
+    }
+    if(checkDevice === true && editDevice?.length !== 0){
+      submitDeviceEdit()
+    }
+    if(checkLanguage === true && editLang?.length !== 0){
+      submitLanguageEdit();
+    }
+    if(checkProgram === true && editProgram?.length !== 0){
+      submitProgramEdit() 
+    }
+    if (basicFlag.length !== 0){
+      submitAdditional();
+    }
+    }
+   else
+   {
+    setError(result)
+   }
+  }
+  if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
+    deleteDevice()
+  }
+  if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false){
+    deleteCountry()
+  } 
+  if(rateRule?.user_rate_condition?.[i]?.language != undefined && checkLanguage == false){
+    deleteLanguage()
+  }
+  if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
+    deleteProgram()
+  } 
 }
   return (
     <>
@@ -1002,7 +1069,6 @@ return Object.keys(error).length === 0 ? true :  error;
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
-        
               <li className="inline-flex items-center">
                 <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                 <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
@@ -1102,14 +1168,14 @@ return Object.keys(error).length === 0 ? true :  error;
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
               <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 px-4">
+            <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
                       {language?.programname}
-
+                      <span style={{ color: "#ff0000" }}>*</span>
                      </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1128,15 +1194,15 @@ return Object.keys(error).length === 0 ? true :  error;
                {error?.rate_rule_name}
             </p></div>
                   </div>
-                </div>
-                <div className="w-full lg:w-6/12 px-4">
+            </div>
+            <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
                  {language?.discounttype}
-
+                 <span style={{ color: "#ff0000" }}>*</span>
                  </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1155,16 +1221,15 @@ return Object.keys(error).length === 0 ? true :  error;
                   <option value="existence">existence</option>
              </select></div>
               </div>
-            </div>
-            
-            <div className="w-full lg:w-6/12 px-4">
+            </div> 
+           <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label
                   className="text-sm font-medium text-gray-900 block mb-2"
                   htmlFor="grid-password"
                 >
                     {language?.hotelamenity}
-
+                    <span style={{ color: "#ff0000" }}>*</span>
                   </label>
 
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1174,15 +1239,17 @@ return Object.keys(error).length === 0 ? true :  error;
                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   defaultValue={rateRule?.hotel_amenity}
                 readOnly
-                /></div></div></div>
+                />
+                </div>
+                </div>
+            </div>
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative w-full mb-3">
                 <label className="text-sm font-medium text-gray-900 block"
                   htmlFor="grid-password">
                     {language?.pricemultiplier}
-
+                    <span style={{ color: "#ff0000" }}>*</span>
                  </label>
-
                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                 <input
@@ -1196,21 +1263,29 @@ return Object.keys(error).length === 0 ? true :  error;
                     },setMod(1))
                   }
                 />
-<p className="text-red-700 font-light">
-                 {err?.price_multiplier}
-          </p></div></div></div>
-               <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
+              <p className="text-red-700 font-light">{err?.price_multiplier}</p>
+                 </div>
+                 </div>
+                 </div>
+             <div className="flex items-center justify-end space-x-2  sm:space-x-3 ml-auto">
                   <div className="relative w-full ml-4 mb-4">
                   <Button Primary={language?.Next} 
                      onClick={()=>{
+                      setUserRateDetails({
+                        ...userRateDetails,
+                        max_user_percentage:conditions.max_user_percentage});
                      filterByCountry();
                      filterByProgram();
                      filterByDevices();
                       filterByLanguage();
                      setDisp(1)
+                     
                      }}/>
                       <Button Primary={language?.Update}
                      onClick={()=>{
+                      setUserRateDetails({
+                        ...userRateDetails,
+                        max_user_percentage:conditions.max_user_percentage});
                      filterByCountry();
                      filterByProgram();
                      filterByDevices();
@@ -1259,9 +1334,9 @@ return Object.keys(error).length === 0 ? true :  error;
               <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.rates} </div>
             </div>
        </div>
-          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900  mb-4">
-          {language?.ratecondition}
-          </h6>
+        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-4">
+        {language?.ratecondition}
+        </h6>
           <div className="flex flex-wrap">
           <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
@@ -1269,7 +1344,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratecondition}
+                       {language?.ratecondition}<span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1280,25 +1355,24 @@ return Object.keys(error).length === 0 ? true :  error;
                           ...userRateDetails,
                           user_rate_condition_op: e.target.value,
                         },setBasicFlag(1))
-                      }
-
-                    >  
+                      }>  
                       <option selected disabled >{userRateDetails.user_rate_condition_op}</option>
-
                       <option value="all">{language?.all}</option>
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
-                    </select></div>
+                    </select>
+                    </div>
                   </div>
-                </div>
+           </div>
                 
-                <div className="w-full lg:w-6/12 px-4">
+          <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratedescription}
+                       {language?.ratedescription} 
+                       <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Textboxloader/></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1320,27 +1394,28 @@ return Object.keys(error).length === 0 ? true :  error;
 
             </p></div>
                   </div>
-                </div>
+          </div>
 
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3">
-                    <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
-                   {language?.conditions} {userSign?.is_domestic}
+           <div className="w-full lg:w-6/12 px-4">
+            <div className="relative w-full mb-3">
+            <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
+                   {language?.conditions} {JSON.stringify(userRateDetails)}
                     </h4></div>
-                    </div>
-                <div className="w-full lg:w-6/12 px-4">
-                  <div className="relative w-full mb-3"></div>
-                </div>
+            </div>
 
-                <div className="lg:w-10/12  px-1">
+            <div className="w-full lg:w-6/12 px-4">
+            <div className="relative w-full mb-3">
+            </div>
+             </div>
+
+            <div className="lg:w-10/12  px-1">
                   <div className="relative w-full ">
-
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex  ">
                       <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                       checked={checkCountry === true}
-                      onChange={()=>{setCheckCountry(!checkCountry)}} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                      onChange={()=>{setCheckCountry(!checkCountry),setFlag(1)}} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
@@ -1354,11 +1429,13 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={countryData}
+                      options={lang?.CountryData}
                       displayValue="country_name"
                       selectedValues={resCou}
                       onRemove={(event) => {country(event)}}
-                      onSelect={(event) => {country(event) }} /></div></div>
+                      onSelect={(event) => {country(event) }} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.country}</p></div></div>
                     </div>
 
                     <div className='flex mb-2'>
@@ -1366,14 +1443,14 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
                         checked={checkDevice === true} 
-                        onChange={()=>{setCheckDevice(!checkDevice)}}
+                        onChange={()=>{setCheckDevice(!checkDevice),setFlag(1)}}
                         className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                      <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                       {language?.userdevice}
+                       {language?.userdevice}  
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1382,24 +1459,26 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={device}
+                      options={lang?.DeviceData}
                       displayValue="user_device"
                       selectedValues={resDev}
                       onRemove={(event) => { devices(event) }}
-                      onSelect={(event) => { devices(event) }} /></div></div>
+                      onSelect={(event) => { devices(event) }} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.device}</p></div></div>
                     </div>
 
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex ">
                         <input id="checkbox-1"  checked={checkLanguage === true} 
-                        onChange={()=>{setCheckLanguage(!checkLanguage)}} aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                        onChange={()=>{setCheckLanguage(!checkLanguage),setFlag(1)}} aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
                         htmlFor="grid-password"
                       >
-                        {language?.language}
+                        {language?.language}  
                       </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1407,29 +1486,26 @@ return Object.keys(error).length === 0 ? true :  error;
                       <Multiselect
                       className="shadow-sm bg-gray-50   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
-                      options={languageData}
+                      options={lang?.LanguageData}
                       selectedValues={resLang}
                       displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
-                      onSelect={(event) => { languages(event) }} /></div>
+                      onSelect={(event) => { languages(event) }} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.language}</p></div>
                       </div>
                       </div>
-
 
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-3/12 ">
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox" 
                             checked={checkProgram === true}
-                            onChange={()=>{setCheckProgram(!checkProgram)}}className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
+                            onChange={()=>{setCheckProgram(!checkProgram),setFlag(1)}}className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                     
-                      <label
-                        className="text-sm font-medium text-gray-900 mx-2 block "
-                        htmlFor="grid-password"
-                      >
-                          {language?.membershipprogram}
-                      </label> </span></div>
+                     <label className="text-sm font-medium text-gray-900 mx-2 block "
+                        htmlFor="grid-password">
+                          {language?.membershipprogram}</label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1440,7 +1516,9 @@ return Object.keys(error).length === 0 ? true :  error;
                       displayValue="program_name"
                       selectedValues={res}
                       onRemove={(event) => {program(event)}}
-                      onSelect= {(event)=>{program(event)}} /></div></div>
+                      onSelect= {(event)=>{program(event)}} />
+                       <p className="text-red-700 text-sm font-light">
+                      {error?.program}</p></div></div>
                       </div>
 
                     <div className='flex mb-2'>
@@ -1448,33 +1526,29 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                          checked={checkPercentage === true}
-                         onChange={()=>{setCheckPercentage(!checkPercentage)}}
+                         onChange={()=>{setCheckPercentage(!checkPercentage),setFlag(1)}}
                          className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                     
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block "
-                        htmlFor="grid-password"
-                      >
-                       {language?.maxuserpercentage}
-                      </label> </span></div>
+                        htmlFor="grid-password"> {language?.maxuserpercentage}</label> 
+                        </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input type="text" 
                       className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-4 "
-
                       defaultValue={conditions?.max_user_percentage} 
                       onChange={(e) =>
                         setUserRateDetails({
                           ...userRateDetails,
                           max_user_percentage: e.target.value,
-                        },setBasicFlag(1))
+                        },setBasicFlag(1),setFlag(1))
                       }/>
 
                        <p className=" text-red-700 font-light">
-                       {error?.max_user_percentage}
+                       {error?.maxuserspercent}
  </p></div>
                       </div>
                         </div> 
@@ -1485,7 +1559,7 @@ return Object.keys(error).length === 0 ? true :  error;
 
                         <input id="checkbox-1" checked={ userSign.user_signed_in === true} 
                         onChange={(e) =>
-                          setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
+                          setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1),setFlag(1))
                         }
               aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
@@ -1505,7 +1579,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           <input type="checkbox" value={userSign.user_signed_in} 
                           checked={ userSign?.user_signed_in === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1))
+                              setUserSign({ ...userSign, user_signed_in: !userSign?.user_signed_in },setBasicFlag(1),setFlag(1))
  }
                             id={`default-toggle`} className="sr-only peer" />
                           <div
@@ -1526,7 +1600,7 @@ return Object.keys(error).length === 0 ? true :  error;
                       <span className="flex ">
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"  
                         checked={userSign?.is_domestic === true}
-                          onChange={()=>{setUserSign( { ...userSign, is_domestic:!userSign?.is_domestic}),setBasicFlag(1)}}
+                          onChange={()=>{setUserSign( { ...userSign, is_domestic:!userSign?.is_domestic}),setFlag(1),setBasicFlag(1)}}
                           className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       
@@ -1547,7 +1621,7 @@ return Object.keys(error).length === 0 ? true :  error;
                           <input type="checkbox" value={userSign?.is_domestic} 
                           checked={userSign.is_domestic === true}
                             onChange={(e) =>
-                              setUserSign({ ...userSign, is_domestic: !userSign?.is_domestic},setBasicFlag(1))
+                              setUserSign({ ...userSign, is_domestic: !userSign?.is_domestic},setBasicFlag(1),setFlag(1))
                             }
                             id="default" className="sr-only peer" />
                           <div
@@ -1564,45 +1638,15 @@ return Object.keys(error).length === 0 ? true :  error;
                   </div>
        </div>
         
-        </div>
+            </div>
      
-        </div>
+        </div>       
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
         <Button Primary={language?.Previous}   onClick={() => {setDisp(0);}} />
+        <Button Primary={language?.Update} onClick={()=>{validationRateCondition();}}/> 
+        <Button Primary={language?.Next}   onClick={() => {setDisp(2);}} />    
+        </div>
 
-                <Button Primary={language?.Update} onClick={()=>{ 
-if (basicFlag.length !== 0){
-                    submitAdditional();
-                  }
-                  if (finalLang.length !== 0){
-                    submitLanguageEdit()
-                  }
-                  if (finalCountry.length !== 0 && checkCountry == true){
-                    submitCountryEdit()
-                  }
-                  if (finalDevice.length !== 0){
-                    submitDeviceEdit()
-                  }
-                  if (finalProgram.length !== 0){
-                    submitProgramEdit()
-                  }
-                  if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
-                    deleteDevice()
-                  }
-                  if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false){
-                    deleteCountry()
-                  } 
-                  if(rateRule?.user_rate_condition?.[i]?.language != undefined && checkLanguage == false){
-                    deleteLanguage()
-                  }
-                  if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
-                    deleteProgram()
-                  }
-                  
-                }} /> 
-            <Button Primary={language?.Next}   onClick={() => {setDisp(2);}} />    
-               
-            </div>
         </div>
         </div>
 
@@ -1612,7 +1656,7 @@ if (basicFlag.length !== 0){
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">  {language?.rateruledescription}</div>
+              <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.rateruledescription}</div>
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1627,7 +1671,7 @@ if (basicFlag.length !== 0){
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {language?.rates}
+          {language?.rates} 
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1638,7 +1682,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.currency}
+                      {language?.baserate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1647,8 +1691,10 @@ if (basicFlag.length !== 0){
                         (e) => {  
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
                       }
-                      }>
-                      <option selected disabled>{allUserRateDetails?.base_rate_currency}</option>
+                      }>{allUserRateDetails?.base_rate_currency === ""
+                      ?
+                      <option selected disabled>{language?.select}</option>:
+                      <option selected disabled>{allUserRateDetails?.base_rate_currency}</option>}
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1661,10 +1707,10 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.baserate} {language?.amount}
+                      {language?.baserate} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                        </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1689,10 +1735,9 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.taxrate} {language?.currency}
-
+                      {language?.taxrate} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm ca bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1700,7 +1745,10 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, tax_currency: e.target.value })
                         )
                       }>
-                      <option selected disabled >{allUserRateDetails?.tax_currency}</option>
+                        
+                        {allUserRateDetails?.tax_currency === ""
+                      ? <option selected disabled >{language?.select}</option>:
+                      <option selected disabled >{allUserRateDetails?.tax_currency}</option>}
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1715,9 +1763,9 @@ if (basicFlag.length !== 0){
                       htmlFor="grid-password"
                     >
                       {language?.taxrate} {language?.amount}
-
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
@@ -1728,10 +1776,8 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
-
                         <p className="text-red-700 font-light">
-                        {error?.tax_amount}
- </p></div>
+                        {error?.tax_amount}</p></div>
                   </div>
                 </div>
 
@@ -1741,7 +1787,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.capacity} {language?.currency}
+                      {language?.other} {language?.capacity} {language?.currency} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1752,7 +1798,9 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_currency: e.target.value })
                         )
                       }>
-                      <option selected disabled >{allUserRateDetails?.otherfees_currency}</option>
+                        {allUserRateDetails?.otherfees_currency === ""
+                      ? <option selected disabled >{language?.select}</option>:
+                      <option selected disabled >{allUserRateDetails?.otherfees_currency}</option>}
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
@@ -1766,7 +1814,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                      {language?.other} {language?.charges} {language?.amount}
+                      {language?.other} {language?.charges} {language?.amount} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1793,7 +1841,7 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.paymentholder}
+                        {language?.paymentholder} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
  <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1804,7 +1852,9 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         }
                       }>
-                      <option selected disabled >{allUserRateDetails.charge_currency}</option>
+                         {allUserRateDetails?.charge_currency === ""
+                      ? <option selected disabled >{language?.select}</option>:
+                      <option selected disabled >{allUserRateDetails.charge_currency}</option>}
                       <option value="web">  {language?.web}</option>
                       <option value="hotel">  {language?.hotel}</option>
                       <option value="installment">  {language?.installment}</option>
@@ -1819,10 +1869,10 @@ if (basicFlag.length !== 0){
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.refundable}
+                       {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
 
                       </label>
-<div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1830,15 +1880,25 @@ if (basicFlag.length !== 0){
                           setAllUserRateDetails({ ...allUserRateDetails, refundable: e.target.value })
                         )
                       }>
+                       {allUserRateDetails?.refundable === ""?
+                        <>
+                        <option selected disabled>  {language?.select}</option>
+                         <option value={false}> {language?.no}</option>
+                         </>:
+                         <>
                       {allUserRateDetails?.refundable === "true"
                         ?
+                        <>
                         <option selected disabled value={true}>  {language?.yes}</option>
-                        : <option value={false}> {language?.no}</option>}
-
+                         <option value={false}> {language?.no}</option>
+                         </>
+                       : 
+                        <>
                       <option value={true}> {language?.yes}</option>
-
                       <option disabled selected value={false}> {language?.no}</option>
- </select></div>
+                      </>
+                     }</>}
+                        </select></div>
                   </div>
                 </div>
 
@@ -1902,7 +1962,7 @@ if (basicFlag.length !== 0){
                       htmlFor="grid-password"
                     >
 
-                       {language?.expirationtimezone} 
+                       {language?.expirationtimezone} <span style={{ color: "#ff0000" }}>*</span>
 </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1925,19 +1985,19 @@ if (basicFlag.length !== 0){
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
                         htmlFor="grid-password">
-                       {language?.room}
+                       {language?.room} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-
                         <option selected disabled>{language?.select}</option>
- {rooms?.map(i => {
+                         {rooms?.map(i => {
                           return (
                             <option key={i} value={i.room_id}>{i.room_name}</option>)
                         }
                         )}
                       </select>
+                      <p className="text-red-700 font-light"> {error?.room_id}</p>
                     </div>
                   </div>:<></>
                       }
@@ -1954,8 +2014,6 @@ if (basicFlag.length !== 0){
           </div>
         </div></div>
 
-        
-
         {/* Toast Container */}
         <ToastContainer position="top-center"
           autoClose={5000}
@@ -1966,7 +2024,6 @@ if (basicFlag.length !== 0){
           pauseOnFocusLoss
           draggable
           pauseOnHover />
-
    </div>
     </>
   )

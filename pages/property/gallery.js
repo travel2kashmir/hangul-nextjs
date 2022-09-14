@@ -134,7 +134,7 @@ function Gallery() {
                 fetchHotelDetails();
                 Router.push("./gallery");
                 setAddImage(0)
-                setActionImage([]);
+              
          }).catch(error => {
                 setSpinner(0)
                 toast.error(" Gallery Error", {
@@ -175,8 +175,9 @@ function Gallery() {
                         progress: undefined,
                     });
                     fetchHotelDetails();
-                    Router.push("./gallery");
                     setAllHotelDetails([])
+                    setActionImage({})
+                    Router.push("./gallery");
                 })
                 .catch((error) => {
                     setSpinner(0)
@@ -231,8 +232,7 @@ function Gallery() {
     }
 
     return (
-        <>
-      <div>
+        <>   
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
@@ -572,8 +572,7 @@ function Gallery() {
                 draggable
                 pauseOnHover />
         </div>
-    <Footer/>
-     </div>
+    <Footer/>  
      </>
     )
 }

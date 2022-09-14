@@ -972,96 +972,6 @@ return Object.keys(error).length === 0 ? true :  error;
 
 }
 
-// Validation Function for Rate Conditions
-const validationRateCondition = () => {
-  if(flag !== 1){
-      toast.warn('Please, select at least one condition', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
-    }  
-  else{
-  setError([]);
-    var validateData=[{
-    "country":
-    {
-      "checkCountry" :checkCountry,
-      "finalCountry":finalCountry,
-       "selectedCountry":resCou
-    } ,
-    "device":
-    {
-      "checkDevice" : checkDevice,
-      "finalDevice":finalDevice ,
-      "selectedDevice":resDev
-    },
-    "program":
-    {
-      "checkProgram" :checkProgram,
-      "finalProgram":finalProgram,
-      "selectedProgram":res
-    },
-    "language":
-    {
-      "checkLanguage" : checkLanguage,
-      "finalLang":finalLang,
-      "selectedLanguage":resLang
-    },
-    "additional":
-    {
-      "checkPercentage" : checkPercentage,
-      "finalMaxUsersPercentage": userRateDetails.max_user_percentage,
-      "domestic":userSign?.user_signed_in,
-     "description":userRateDetails.description,
-      "signed": userSign?.isDomestic
-    }
-    }
-    ]
-   var result = validateRateConditions(validateData)
-   console.log("Result" +JSON.stringify(result))
-   if(result===true)
-   {
-    //db request
-    if(checkCountry === true && editCountry?.length !== 0){
-      submitCountryEdit();
-    }
-    if(checkDevice === true && editDevice?.length !== 0){
-      submitDeviceEdit()
-    }
-    if(checkLanguage === true && editLang?.length !== 0){
-      submitLanguageEdit();
-    }
-    if(checkProgram === true && editProgram?.length !== 0){
-      submitProgramEdit() 
-    }
-    if (basicFlag.length !== 0 && flag===1){
-      submitAdditional();
-    }
-    if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false && finalDevice.length === 0){
-      deleteDevice()
-    }
-    if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false && finalCountry.length === 0){
-      deleteCountry()
-    } 
-    if(rateRule?.user_rate_condition?.[i]?.language != undefined && checkLanguage == false && finalLang.length === 0){
-      deleteLanguage()
-    }
-    if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false && finalProgram.length === 0){
-      deleteProgram()
-    } 
-    }
-   else
-   {
-    setError(result)
-   }
-  }
- 
-}
 
 // Validation Function for Rate Conditions
 const validationRateCondition = () => {
@@ -1133,13 +1043,7 @@ const validationRateCondition = () => {
     if (basicFlag.length !== 0){
       submitAdditional();
     }
-    }
-   else
-   {
-    setError(result)
-   }
-  }
-  if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
+    if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
     deleteDevice()
   }
   if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false){
@@ -1151,6 +1055,13 @@ const validationRateCondition = () => {
   if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
     deleteProgram()
   } 
+   }
+   else
+   {
+    setError(result)
+   }
+  }
+ 
 }
   return (
     <>

@@ -118,8 +118,8 @@ useEffect(() => {
 const submitRateAdd = () => {
   if(validationRates(allUserRateDetails)) {
   var time;
-  var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
-  time = new Date(temp.toString())
+var temp = `2022-01-01 ` + allUserRateDetails?.refundable_until_time;
+   time = new Date(temp.toString())
   const final_data = {
     "base_rate_currency": allUserRateDetails?.base_rate_currency,
     "base_rate_amount": allUserRateDetails.base_rate_amount,
@@ -590,7 +590,7 @@ var time;
 
     //User Signed In, Max percentage and Domestic Submit
     const submitAdditional = () => {
-      const data = [{
+     const data = [{
         max_user_percentage:userRateDetails?.max_user_percentage,
         user_rate_condition_op:userRateDetails?.user_rate_condition_op,
         description:userRateDetails?.description,
@@ -673,6 +673,7 @@ var time;
           });
         }
     };
+
  
   const languages = (lan) => { 
     lan.map(item => {
@@ -1061,6 +1062,96 @@ const validationRateCondition = () => {
   }
  
 }
+
+// Validation Function for Rate Conditions
+const validationRateCondition = () => {
+  if(flag !== 1){
+      toast.warn('Please, select at least one condition', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }  
+  else{
+  setError([]);
+    var validateData=[{
+    "country":
+    {
+      "checkCountry" :checkCountry,
+      "finalCountry":finalCountry,
+       "selectedCountry":resCou
+    } ,
+    "device":
+    {
+      "checkDevice" : checkDevice,
+      "finalDevice":finalDevice ,
+      "selectedDevice":resDev
+    },
+    "program":
+    {
+      "checkProgram" :checkProgram,
+      "finalProgram":finalProgram,
+      "selectedProgram":res
+    },
+    "language":
+    {
+      "checkLanguage" : checkLanguage,
+      "finalLang":finalLang,
+      "selectedLanguage":resLang
+    },
+    "additional":
+    {
+      "checkPercentage" : checkPercentage,
+      "finalMaxUsersPercentage": userRateDetails.max_user_percentage,
+      "domestic":userSign?.user_signed_in,
+     "description":userRateDetails.description,
+      "signed": userSign?.isDomestic
+    }
+    }
+    ]
+   var result = validateRateConditions(validateData)
+   console.log("Result" +JSON.stringify(result))
+   if(result===true)
+   {
+    //db request
+    if(checkCountry === true && editCountry?.length !== 0){
+      submitCountryEdit();
+    }
+    if(checkDevice === true && editDevice?.length !== 0){
+      submitDeviceEdit()
+    }
+    if(checkLanguage === true && editLang?.length !== 0){
+      submitLanguageEdit();
+    }
+    if(checkProgram === true && editProgram?.length !== 0){
+      submitProgramEdit() 
+    }
+    if (basicFlag.length !== 0){
+      submitAdditional();
+    }
+    }
+   else
+   {
+    setError(result)
+   }
+  }
+  if(rateRule?.user_rate_condition?.[i]?.UserDeviceType != undefined && checkDevice == false){
+    deleteDevice()
+  }
+  if(rateRule?.user_rate_condition?.[i]?.UserCountry != undefined && checkCountry == false){
+    deleteCountry()
+  } 
+  if(rateRule?.user_rate_condition?.[i]?.language != undefined && checkLanguage == false){
+    deleteLanguage()
+  }
+  if(rateRule?.user_rate_condition?.[i]?.PackageMembership != undefined && checkProgram == false){
+    deleteProgram()
+  } 
+}
   return (
     <>
       <Header Primary={english?.Side1} />
@@ -1345,7 +1436,8 @@ const validationRateCondition = () => {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                       {language?.ratecondition}<span style={{ color: "#ff0000" }}>*</span>
+             {language?.ratecondition}<span style={{ color: "#ff0000" }}>*</span>
+
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1396,11 +1488,12 @@ const validationRateCondition = () => {
             </p></div>
                   </div>
           </div>
-
            <div className="w-full lg:w-6/12 px-4">
             <div className="relative w-full mb-3">
             <h4 className="text-medium flex leading-none  pt-2 font-semibold text-gray-900 mb-2">
+
                    {language?.conditions} 
+
                     </h4></div>
             </div>
 
@@ -1647,7 +1740,6 @@ const validationRateCondition = () => {
         <Button Primary={language?.Update} onClick={()=>{validationRateCondition();}}/> 
         <Button Primary={language?.Next}   onClick={() => {setDisp(2);}} />    
         </div>
-
         </div>
         </div>
 
@@ -1692,7 +1784,7 @@ const validationRateCondition = () => {
                         (e) => {  
                           setAllUserRateDetails({ ...allUserRateDetails, base_rate_currency: e.target.value })
                       }
-                      }>{allUserRateDetails?.base_rate_currency === ""
+         }>{allUserRateDetails?.base_rate_currency === ""
                       ?
                       <option selected disabled>{language?.select}</option>:
                       <option selected disabled>{allUserRateDetails?.base_rate_currency}</option>}
@@ -1712,7 +1804,7 @@ const validationRateCondition = () => {
 
                        </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
+        <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1799,6 +1891,7 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, otherfees_currency: e.target.value })
                         )
                       }>
+
                         {allUserRateDetails?.otherfees_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails?.otherfees_currency}</option>}
@@ -1853,11 +1946,11 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, charge_currency: e.target.value })
                         }
                       }>
-                         {allUserRateDetails?.charge_currency === ""
+                  {allUserRateDetails?.charge_currency === ""
                       ? <option selected disabled >{language?.select}</option>:
                       <option selected disabled >{allUserRateDetails.charge_currency}</option>}
                       <option value="web">  {language?.web}</option>
-                      <option value="hotel">  {language?.hotel}</option>
+                          <option value="hotel">  {language?.hotel}</option>
                       <option value="installment">  {language?.installment}</option>
                       <option value="deposit">  {language?.deposit}</option>
                     </select></div>
@@ -1874,7 +1967,9 @@ const validationRateCondition = () => {
 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+
                       <div className={visible === 1 ? 'block' : 'hidden'}>
+
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
                         (e) => (
@@ -1900,7 +1995,9 @@ const validationRateCondition = () => {
                       </>
                      }</>}
                         </select></div>
-                  </div>
+
+ </div>
+
                 </div>
 
                 {allUserRateDetails?.refundable === "true" ? (
@@ -1991,7 +2088,7 @@ const validationRateCondition = () => {
                       <select
                         onClick={(e) => setAllUserRateDetails({ ...allUserRateDetails, room_id: e.target.value })}
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                        <option selected disabled>{language?.select}</option>
+                  <option selected disabled>{language?.select}</option>
                          {rooms?.map(i => {
                           return (
                             <option key={i} value={i.room_id}>{i.room_name}</option>)

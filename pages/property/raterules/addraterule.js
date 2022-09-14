@@ -538,8 +538,7 @@ function Addraterule() {
               };
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
-               
-                const data = [{
+              const data = [{
                   max_user_percentage:allUserRateDetails?.max_user_percentage,
                   user_signed_in: userSignedIn,
                   is_domestic: isDomestic,
@@ -577,7 +576,7 @@ function Addraterule() {
                     });
                     setBasicFlag([])
                   });
-                
+
               };
         
           // Programs JSON for Dropdown
@@ -1112,7 +1111,9 @@ const validationRateCondition = () => {
 
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.ratecondition}
+
         </h6>
+
 
       <div className="flex flex-wrap">
        <div className="w-full lg:w-6/12 px-4">
@@ -1345,7 +1346,7 @@ const validationRateCondition = () => {
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={
                   validationRateCondition}
-                /> 
+               /> 
                 : <></>
               }
         </div>

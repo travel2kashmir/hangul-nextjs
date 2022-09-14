@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import objChecker from "lodash"
 import Sidebar  from "../../components/Sidebar";
 import Headloader from '../../components/loaders/headloader';
 import Lineloader from '../../components/loaders/lineloader';
@@ -17,11 +18,13 @@ import Loader from "../../components/loader";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import { number } from "currency-codes";
 var i=0;
 var currentLogged;
 function Address() {
   const [visible,setVisible]=useState(0) 
   const [spinner, setSpinner] = useState(0)
+  const [flag, setFlag] = useState([]);
   useEffect(()=>{  
     const firstfun=()=>{  
       if (typeof window !== 'undefined'){ 
@@ -55,8 +58,8 @@ function Address() {
       currentProperty.property_category
     }s/${currentProperty.property_id}`;  
     axios.get(url)
-    .then((response)=>{setAddress(response.data);
-      
+    .then((response)=>{setAddress(response.data.address?.[i]);
+      setAllHotelDetails(response.data.address?.[i])
     logger.info("url  to fetch property details hitted successfully")
      setVisible(1)})
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
@@ -67,10 +70,23 @@ function Address() {
 
   /* Edit Address Function */
   const submitAddressEdit = () => {
-    if (allHotelDetails.length !== 0){
+    if(flag === 1){
+      if(objChecker.isEqual(allHotelDetails,address)){
+        toast.warn('No change in Address detected. ', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+          setFlag([])
+      }
+     else{
       setSpinner(1)
     const final_data = {
-      address_id: address?.address?.[i]?.address_id,
+      address_id: address?.address_id,
       address_street_address: allHotelDetails.address_street_address,
       address_longitude: allHotelDetails.address_longitude,
       address_latitude: allHotelDetails.address_latitude,
@@ -86,6 +102,7 @@ function Address() {
       .put(url, final_data, { header: { "content-type": "application/json" } })
       .then((response) => {
         setSpinner(0)
+        setFlag([])
         toast.success("Address Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
@@ -101,6 +118,7 @@ function Address() {
       })
       .catch((error) => {
         setSpinner(0)
+        setFlag([])
         toast.error("Address Update Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -111,6 +129,7 @@ function Address() {
           progress: undefined,
         });
       });
+    }
     }
   };
 
@@ -156,7 +175,7 @@ function Address() {
                   <div className={visible === 1 ? 'block' : 'hidden'}>  
               <Link href="./propertysummary" >
              
-              <a>  {address?.property_name} </a>
+              <a>  {currentProperty?.property_name} </a>
               </Link></div></span>
             </div>
           </li>
@@ -188,7 +207,7 @@ function Address() {
       {/* Update Address Form */}
       <div className="bg-white shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <h6 className="text-xl  flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-          {language?.address} 
+          {language?.address}
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"
@@ -203,8 +222,6 @@ function Address() {
             ></path>
           </svg>
         </h6>
-       
-        
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
@@ -221,12 +238,12 @@ function Address() {
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.address_street_address}
+                        defaultValue={address?.address_street_address}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_street_address: e.target.value,
-                          })
+                          },setFlag(1))
                         }
                       /></div>
                     </div>
@@ -244,12 +261,12 @@ function Address() {
                       <input
                         type="text"
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.address_landmark}
+                        defaultValue={address?.address_landmark}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_landmark: e.target.value,
-                          })
+                          },setFlag(1))
                         }
                       /></div>
                     </div>
@@ -270,14 +287,13 @@ function Address() {
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_city: e.target.value,
-                          })
+                          },setFlag(1))
                         }
                       >
-                        <option value="srinagar">Srinagar</option>
-                        <option value="baramulla">Baramulla</option>
-                        <option value="budgam">Budgam</option>
-                        <option value="pahalgam">Pahalgam</option>
-                        <option value="gulmarg">Gulmarg</option>
+                        <option disabled selected>{address?.address_city}</option>
+                        <option value="Baramulla">Baramulla</option>
+                        <option value="Pahalgam">Pahalgam</option>
+                        <option value="Gulmarg">Gulmarg</option>
                       </select>
                       </div>
                     </div>
@@ -298,15 +314,14 @@ function Address() {
                           setAllHotelDetails({
                             ...allHotelDetails,
                             address_province: e.target.value,
-                          })
+                          },setFlag(1))
                         }
                       >
-                        <option value="jammu and kashmir">
-                          Jammu and Kashmir
-                        </option>
-                        <option value="kargil">Kargil</option>
-                        <option value="delhi">Delhi</option>
-                        <option value="maharastra">Maharastra</option>
+                         <option selected disabled>{address?.address_province}</option>
+                        <option value="Jammu And Kashmir">Jammu and Kashmir</option>
+                        <option value="Kargil">Kargil</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Maharastra">Maharastra</option>
                       </select></div>
                     </div>
                   </div>
@@ -321,16 +336,16 @@ function Address() {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                        type="text"
+                       type="text" 
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900
                      sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600
                       block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.address_latitude}
+                        defaultValue={address?.address_latitude}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
-                            address_latitude: e.target.value,
-                          })
+                            address_latitude: Number(e.target.value),
+                          },setFlag(1))
                         }
                       /></div>
                     </div>
@@ -346,14 +361,14 @@ function Address() {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                        type="text"
+                        type="text" 
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.address_longitude}
+                        defaultValue={address?.address_longitude}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
-                            address_longitude: e.target.value,
-                          })
+                            address_longitude: Number(e.target.value),
+                          },setFlag(1))
                         }
                       /></div>
                     </div>
@@ -369,14 +384,14 @@ function Address() {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                        type="text"
+                        type="text" 
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.address_zipcode}
+                        defaultValue={address?.address_zipcode}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
-                            address_zipcode: e.target.value,
-                          })
+                            address_zipcode: Number(e.target.value),
+                          },setFlag(1))
                         }
                       /></div>
                     </div>
@@ -392,14 +407,14 @@ function Address() {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                        type="text"
+                       type="text"   
                         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                        defaultValue={address?.address?.[i]?.address_precision}
+                        defaultValue={address?.address_precision}
                         onChange={(e) =>
                           setAllHotelDetails({
                             ...allHotelDetails,
-                            address_precision: e.target.value,
-                          })
+                            address_precision: Number(e.target.value)
+                          },setFlag(1))
                         }
                       /></div>
                     </div>
@@ -415,6 +430,13 @@ function Address() {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5">
+                      onChange={(e) =>
+                          setAllHotelDetails({
+                            ...allHotelDetails,
+                            address_country: e.target.value
+                          },setFlag(1))
+                        }
+                        <option selected disabled>{address?.address_country}</option>
                         <option value="IN">India</option>
                         <option value="PK">Pakistan</option>
                         <option value="UN">United States of America</option>
@@ -422,10 +444,16 @@ function Address() {
                       </select></div>
                     </div>
                   </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      </div></div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <div className={spinner === 0 ? 'block' : 'hidden'}>
-                  <Button Primary={language?.Update}  onClick={submitAddressEdit}/></div>
-                  <div className={spinner === 1 ? 'block' : 'hidden'}>
+                   <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
+                      <Button Primary={language?.UpdateDisabled}  /></div>
+                    <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.Update} onClick={submitAddressEdit} />
+                     </div>
+                     <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />
                        </div>
               </div>  
@@ -454,7 +482,6 @@ function Address() {
     </>
   );
 }
-
 export default Address;
 Address.getLayout = function PageLayout(page){
   return(

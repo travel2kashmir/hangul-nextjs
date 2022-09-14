@@ -63,6 +63,18 @@ export default {
    col2 : "Programme Niveau",
     
   },
+
+  "UpdateDisabled" :{
+    label: "Éditer",
+     color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
+  },
+
+  "AddDisabled" :{
+    label: "Ajouter",
+     color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
+  },
+
+
   "Previous" :{
     label:"Précédent",
      color: "bg-gray-600 hover:bg-gray-700 text-white ",
@@ -581,10 +593,9 @@ export default {
    required:'Ce champ est requis',
    float:'Ce champ accepte les flottants et les nombres',
    num:'Ce champ n`accepte que des nombres',
-
-  editraterule: 'Modifier La Règle de Taux',
-  conditions:'Les conditions',
-  membershipprogram: 'Programme D`adhésion',
+   editraterule: 'Modifier La Règle de Taux',
+   conditions:'Les conditions',
+   membershipprogram: 'Programme D`adhésion',
   maxuserpercentage: 'Pourcentage Maximal D`utilisateurs',
   usersignedin: 'Utilisateur Connecté',
   isdomestic: 'Est Domestique',
@@ -599,6 +610,7 @@ export default {
   "Addnewproperty":{
     label:'Ajouter une nouvelle propriété',
     color: "bg-blue-500 hover:bg-blue-700 text-white float-right " 
+
   },
 
   deletingthiswillcauseloosingalldata:'Es-tu sûr de vouloir le supprimer? La suppression de la propriété entraînera la perte permanente de toutes les informations',
@@ -629,5 +641,6 @@ export default {
        clipRule="evenodd"
      ></path>
    </svg>
+
   }
 };

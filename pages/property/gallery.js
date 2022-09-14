@@ -1,4 +1,5 @@
 import React from 'react'
+import objChecker from "lodash"
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import Sidebar  from "../../components/Sidebar";
@@ -45,11 +46,14 @@ function Gallery() {
     }, [])
     const [allHotelDetails, setAllHotelDetails] = useState([])
     const [spinner, setSpinner] = useState(0)
+    const [spin, setSpin] = useState(0)
     const [gallery, setGallery] = useState([])
     const [image, setImage] = useState({})
     const [editImage, setEditImage] = useState(0)
     const [deleteImage, setdeleteImage] = useState(0)
     const [actionImage, setActionImage] = useState({})
+    const [updateImage, setUpdateImage] = useState({})
+    const [flag, setFlag] = useState([])
     const [addImage, setAddImage] = useState(0)
     const [enlargeImage, setEnlargeImage] = useState(0)
     const [actionEnlargeImage, setActionEnlargeImage] = useState({})
@@ -79,7 +83,7 @@ function Gallery() {
     
     /* Function to upload image*/
     const uploadImage = () => {
-        setSpinner(1);
+        setSpin(1);
         const imageDetails = image.imageFile
         const formData = new FormData();
         formData.append("file", imageDetails);
@@ -88,10 +92,10 @@ function Gallery() {
         axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
             .then(response => {
                 setImage({ ...image, image_link: response?.data?.secure_url })
-                setSpinner(0);
+                setSpin(0);
             })
             .catch(error => {
-                setSpinner(0)
+                setSpin(0)
                 toast.error("Image Upload Error! ", {
                     position: "top-center",
                     autoClose: 5000,
@@ -109,6 +113,7 @@ function Gallery() {
 
     /* Function to add images*/
     const submitAddImage = () => {
+        if (flag === 1) {
         if (actionImage.length !== 0) {
             setSpinner(1)
             const imagedata = [{
@@ -149,16 +154,32 @@ function Gallery() {
             });
         }
     }
+    }
 
     /* Function to edit images*/
     const updateImageDetails = () => {
-        if (allHotelDetails.length !== 0) {
+
+        if (flag === 1) {
+            if(objChecker.isEqual(actionImage,updateImage)){
+                toast.warn('No change in Image Details detected. ', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    });
+                    setAllHotelDetails([])
+                    
+            }
+            else{
             setSpinner(1)
             const final_data = {
                 "image_id": actionImage?.image_id,
-                "image_title": allHotelDetails.image_title,
-                "image_description": allHotelDetails.image_description,
-                "image_type": allHotelDetails.image_type
+                "image_title": actionImage.image_title,
+                "image_description": actionImage.image_description,
+                "image_type": actionImage.image_type
             }
             const url = '/api/images'
             axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -193,6 +214,7 @@ function Gallery() {
                     });
 
                 })
+            }
         }
     }
 
@@ -233,8 +255,7 @@ function Gallery() {
     }
 
     return (
-        <>
-      <div>
+        <>   
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
@@ -302,12 +323,9 @@ function Gallery() {
                         </a>
                     </div>
                 </div>
-
-
                 {/* Gallery Form */}
-                <div className={visible===0?'block w-auto h-auto m-6 flex':'hidden'}><Loader/><Loader/><Loader/></div>
-        
-        <div className={visible===1?'block':'hidden'}>
+                <div className={visible===0?'block w-auto h-auto m-6 flex':'hidden'}><Loader/><Loader/><Loader/></div> 
+               <div className={visible===1?'block':'hidden'}>
                 <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
                     {gallery?.images?.map((item, idx) => {
                         return (
@@ -322,7 +340,7 @@ function Gallery() {
                                         </td>
                                         <td className="flex justify-end">
                                             <button
-                                                onClick={() => { setEditImage(1); setActionImage(item) }}
+                                                onClick={() => { setEditImage(1); setActionImage(item);setUpdateImage(item) }}
                                                 className="text-gray-500   hover:text-gray-900 
                                          cursor-pointer hover:bg-gray-100 rounded ">
                                                 <svg className=" h-5  w-5 font-semibold "
@@ -373,7 +391,8 @@ function Gallery() {
                         <div className="bg-white rounded-lg shadow relative">
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className="text-xl font-semibold">
-                                    {language?.edit} {language?.image}
+                                    {language?.edit} {language?.image} 
+                                  
                                 </h3>
                                 <button type="button"
                                     onClick={() => {
@@ -401,10 +420,10 @@ function Gallery() {
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                             onChange={
                                                 (e) => (
-                                                    setAllHotelDetails({
-                                                        ...allHotelDetails,
+                                                    setActionImage({
+                                                        ...actionImage,
                                                         image_description: e.target.value
-                                                    })
+                                                    },setFlag(1))
                                                 )
                                             }
                                             defaultValue={actionImage?.image_description}
@@ -421,10 +440,10 @@ function Gallery() {
                                             defaultValue={actionImage?.image_title}
                                             onChange={
                                                 (e) => (
-                                                    setAllHotelDetails({
-                                                        ...allHotelDetails,
+                                                    setActionImage({
+                                                        ...actionImage,
                                                         image_title: e.target.value
-                                                    })
+                                                    },setFlag(1))
                                                 )
                                             }
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -435,14 +454,16 @@ function Gallery() {
                                 </form>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                                        <div className={spinner === 0 ? 'block' : 'hidden'}>
-                                            <Button Primary={language?.Update} onClick={() => updateImageDetails()} />
-                                        </div>
-                                        <div className={spinner === 1 ? 'block' : 'hidden'}>
-                                            <Button Primary={language?.SpinnerUpdate} />
-                                        </div>
+                            <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
+                      <Button Primary={language?.UpdateDisabled}  /></div>
+                    <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.Update} onClick={updateImageDetails} />
+                     </div>
+                     <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerUpdate} />
                             </div>
                             
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -489,7 +510,7 @@ function Gallery() {
 
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
-                                            {spinner === 0 ?
+                                            {spin === 0 ?
                                             <Button Primary={language?.Upload} onClick={uploadImage} />:
                                             <Button Primary={language?.SpinnerUpload} />
                                                     }</div>
@@ -504,7 +525,7 @@ function Gallery() {
                                         </label>
                                         <input
                                             type="text"
-                                            onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value }))}
+                                            onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value },setFlag(1)))}
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                             placeholder="Image Title" />
                                     </div>
@@ -516,7 +537,7 @@ function Gallery() {
                                             {language?.image} {language?.description}
                                         </label>
                                         <textarea rows="2" columns="60"
-                                            onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value }))}
+                                            onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value },setFlag(1)))}
                                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                             defaultValue="" />
                                     </div>
@@ -524,11 +545,14 @@ function Gallery() {
                                 </div>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                            <div className={spinner === 0 ? 'block' : 'hidden'}>
-                                <Button Primary={language?.Add} onClick={() => { submitAddImage(); }} /></div>
-                                <div className={spinner === 1 ? 'block' : 'hidden'}>
-                                <Button Primary={language?.SpinnerAdd} />
-                                   </div>
+                     <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
+                      <Button Primary={language?.AddDisabled}  /></div>
+                    <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.Add} onClick={() => { submitAddImage();}} />
+                     </div>
+                     <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerAdd} />
+                       </div>
 
                             </div>
                         </div>
@@ -580,8 +604,7 @@ function Gallery() {
                 draggable
                 pauseOnHover />
         </div>
-    <Footer/>
-     </div>
+    <Footer/>  
      </>
     )
 }

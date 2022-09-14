@@ -12,7 +12,6 @@ import french from '../../../components/Languages/fr'
 import arabic from '../../../components/Languages/ar'
 import axios from "axios";
 import Router from 'next/router';
-import validateRateConditions from '../../../components/Validation/AddRateRules/RateConditions';
 var currentLogged;
 var i = 0;
 var j = 1;
@@ -309,8 +308,8 @@ function Addraterule() {
          
        }
        
-    // Rate Discount Submit
-    const submitDiscountAdd = (rm_id) => {
+      // Rate Discount Submit
+      const submitDiscountAdd = (rm_id) => {
         const final_data = {
           "ineligiblity_type": allUserRateDetails?.ineligibility_type,
            "ineligiblity_reason": allUserRateDetails?.program  
@@ -346,10 +345,10 @@ function Addraterule() {
               });
             });
         
-    };
+        };
         
-    //Rate Condition Submit
-     const submitRateConditionAdd = (rr_id) => {
+      //Rate Condition Submit
+        const submitRateConditionAdd = (rr_id) => {
           const final_data = {
           "user_rate_condition" :  [
               {
@@ -390,10 +389,10 @@ function Addraterule() {
                 });
               });
           
-      };
+          };
 
-     //Language Submit
-     const submitLanguageAdd = () => { 
+          //Language Submit
+          const submitLanguageAdd = () => { 
             const final_data = { "user_rate_language": finalLang }
             const url = "/api/rate_rule/user_rate_conditioning/rate_condition_language_link";
               axios
@@ -410,8 +409,7 @@ function Addraterule() {
                     progress: undefined,
                   });
                  setFinalLang([]) 
-                 final_language_data=[];
-                 setDisp(2);
+                 final_language_data=[]
                 })
           
                 .catch((error) => {
@@ -426,9 +424,8 @@ function Addraterule() {
                   });
                 });
             
-      };
-
-       // Country Edit Submit
+            };
+            // Country Edit Submit
              const submitCountryAdd = () => {
             const final_data = { "user_rate_country": finalCountry }
 
@@ -448,7 +445,6 @@ function Addraterule() {
                   });
                   setFinalCountry([])
                   final_country_data=[]
-                  setDisp(2);
                 })
           
                 .catch((error) => {
@@ -481,9 +477,8 @@ function Addraterule() {
                       draggable: true,
                       progress: undefined,
                     });
-                    setFinalDevice([]);
+                    setDevice([])
                     final_device_data=[]
-                    setDisp(2);
                   })
             
                   .catch((error) => {
@@ -518,9 +513,8 @@ function Addraterule() {
                       progress: undefined,
                     });
                     
-                  setFinalProgram([])
+                    setFinalProgram([])
                   final_program_data= []
-                  setDisp(2);
                   })
             
                   .catch((error) => {
@@ -538,9 +532,14 @@ function Addraterule() {
               };
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
-               
+
+                if((isDomestic === true)
+                  ||(userSignedIn === true )||
+                  (percentageCheck=== true && basicFlag === 1)){
+
+                if (validationRateCondition(allUserRateDetails)){
                 const data = [{
-                  max_user_percentage:allUserRateDetails?.max_user_percentage,
+                  max_user_percentage:allUserRateDetails?.MaxUsersPercent,
                   user_signed_in: userSignedIn,
                   is_domestic: isDomestic,
                   user_rate_condition_id: userRateConditionId
@@ -577,7 +576,10 @@ function Addraterule() {
                     });
                     setBasicFlag([])
                   });
-                
+                }
+
+              }
+
               };
         
           // Programs JSON for Dropdown
@@ -592,11 +594,8 @@ function Addraterule() {
               })
               .catch((error) => { logger.error("url to fetch programs, failed") });
           }
-         
           //Languages
           const languages = (lan) => { 
-            setFinalLang([]);
-           final_language_data=[];
             lan.map(item => {
               var temp = {
                 user_rate_condition_id: userRateConditionId,
@@ -607,21 +606,17 @@ function Addraterule() {
           }
         // Country
           const country = (cou) => { 
-            setFinalCountry([]);
-            final_country_data=[]
            cou.map(item => {
               var temp = {
                 user_rate_condition_id:  userRateConditionId,
                user_country: item.country_code
               }
              final_country_data.push(temp) } );
-             setFinalCountry(final_country_data);   
+              setFinalCountry(final_country_data);
+              
           }
-         
         //Devices
           const devices = (dev) => { 
-            setFinalDevice([]);
-            final_device_data=[]
            dev.map(item => {
               var temp = {
                 user_rate_condition_id: userRateConditionId,
@@ -633,8 +628,6 @@ function Addraterule() {
           }
          //Programs
           const program = (pro) => {   
-            setFinalProgram([]);
-            final_program_data=[];
             pro.map(item => {
                var temp = {
                  user_rate_condition_id: userRateConditionId,
@@ -743,91 +736,26 @@ return Object.keys(error).length === 0 ? true :  error;
 
 }
 //Rate Conditions
-// Validation Function for Rate Conditions
-const validationRateCondition = () => {
-  if(
-    (percentageCheck === false && (allUserRateDetails.max_user_percentage === "" || 
-    allUserRateDetails.max_user_percentage === undefined)
-    && (countryCheck === false && finalCountry?.length === 0) 
-    &&(deviceCheck === false  && finalDevice?.length === 0)
-   && (languageCheck === false  && finalLang?.length === 0) 
-   && (programCheck === false  && finalProgram?.length === 0)&&
-   (userSignedIn === false) && (isDomestic === false))  
-  ){
-      toast.warn('Please, select at least one condition', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        });
-    }
-
-  else{
-  setError([]);
-    var validateData=[{
-    "country":
-    {
-      "checkCountry" :countryCheck,
-      "finalCountry":finalCountry
-    } ,
-    "device":
-    {
-      "checkDevice" : deviceCheck,
-      "finalDevice":finalDevice  
-    },
-    "program":
-    {
-      "checkProgram" : programCheck,
-      "finalProgram":finalProgram
-      
-    },
-    "language":
-    {
-      "checkLanguage" : languageCheck,
-      "finalLang":finalLang
-      
-    },
-    "additional":
-    {
-      "checkPercentage" : percentageCheck,
-      "finalMaxUsersPercentage": allUserRateDetails?.max_user_percentage,
-      "domestic":isDomestic,
-      "signed":userSignedIn 
-    }
-    }
-    ]
-   var result = validateRateConditions(validateData)
-   console.log("Result" +JSON.stringify(result))
-   if(result===true)
-   {
-    //db request
-    if(countryCheck === true && finalCountry?.length != 0){
-      submitCountryAdd();
-    }
-    if(deviceCheck === true && finalDevice?.length != 0){
-     submitDeviceAdd(); 
-    }
-    if(languageCheck === true && finalLang?.length != 0){
-     submitLanguageAdd(); 
-    }
-    if(programCheck === true && finalProgram?.length != 0){
-     submitProgramAdd();
-    }
-    if((isDomestic === true)
-    ||(userSignedIn === true )||
-    (percentageCheck=== true && (allUserRateDetails.max_user_percentage !== "" && 
-    allUserRateDetails.max_user_percentage !== undefined)))
-    {
-    submitAdditional();
-    }}
-   else
-   {
-    setError(result)
-   }
+// Validation Function
+const validationRateCondition = (data) => {
+  var Result = checkRateCondition(data);
+  if (Result === true){
+   return true;
   }
+  else{
+   setError(Result);
+   return false;
+
+  }
+
+}
+//Checking Form Data for rate Description
+const checkRateCondition = (data) => {
+ var error={};
+ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.MaxUsersPercent))&& (data?.MaxUsersPercent != "" &&  data.MaxUsersPercent!= undefined))){
+   error.MaxUsersPercent = "This field accept possitive and decimal values only."
+ }
+return Object.keys(error).length === 0 ? true :  error;
 }
 
   return (
@@ -955,7 +883,7 @@ const validationRateCondition = () => {
                         })
                       }/>
 
-                     <p className="text-red-700 text-sm font-light">
+                     <p className="text-red-700 font-light">
                    {error?.program}
 
             </p>
@@ -982,7 +910,7 @@ const validationRateCondition = () => {
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
                     </select>
-                    <p className="text-red-700 text-sm font-light">{error?.Description}</p>
+                    <p className="text-red-700 font-light">{error?.Description}</p>
                   </div>
                 </div>
 
@@ -1002,7 +930,7 @@ const validationRateCondition = () => {
                           ...allUserRateDetails,
 
                           Description: e.target.value,})} />
-                    <p className="text-red-700 text-sm font-light">
+                    <p className="text-red-700 font-light">
                    {error?.Description}
             </p>
                   </div>
@@ -1031,7 +959,7 @@ const validationRateCondition = () => {
                   <option value="existence">{language?.existence}</option>
              </select>
 
-             <p className="text-red-700 text-sm font-light">
+             <p className="text-red-700 font-light">
                    {error?.ineligibility_type}
             </p>
 
@@ -1067,7 +995,7 @@ const validationRateCondition = () => {
                     setAllUserRateDetails({
                       ...allUserRateDetails,
                       price_multiplier: e.target.value,}) }/>
-                  <p className="text-red-700 text-sm font-light">
+                  <p className="text-red-700 font-light">
                    {error?.price_multiplier}
 
             </p>
@@ -1089,10 +1017,9 @@ const validationRateCondition = () => {
          </div>
  
           {/** Rate Rule Conditions  **/}
-        <div id='1' className={disp===1?'block':'hidden'}>
-        <div className="bg-white  shadow rounded-lg mx-1 px-1 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
-
-        <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+          <div id='1' className={disp===1?'block':'hidden'}>
+         <div className="bg-white  shadow rounded-lg mx-1 px-1 sm:p-6 xl:p-8 mt-3 2xl:col-span-2">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[56%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
               <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">
                 1</button>
@@ -1110,17 +1037,16 @@ const validationRateCondition = () => {
             </div>
        </div>
 
-        <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
+          <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.ratecondition}
-        </h6>
+          </h6>
+          <div className="flex flex-wrap">
+           <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3"></div>
+                </div>
 
-      <div className="flex flex-wrap">
-       <div className="w-full lg:w-6/12 px-4">
-          <div className="relative w-full mb-3">
-          </div>
-        </div>
-      <div className="lg:w-10/12  px-1">
-      <div className="relative w-full ">
+                <div className="lg:w-10/12  px-1">
+                  <div className="relative w-full ">
 
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-4/12 ">
@@ -1135,21 +1061,17 @@ const validationRateCondition = () => {
                       >
                           {language?.usercountry}
                       </label> </span></div>
-                      <div className="w-full lg:w-4/12">
+                      <div className="w-full lg:w-4/12 ">
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg
                        focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.CountryData}
                       displayValue="country_name"
-                      onRemove={(event) => {country(event)}}
-                      onSelect={(event) => {country(event) }} />
-                      <p className="text-red-700 text-sm font-light">
-                      {error?.country}</p>
-                      </div>
-                     
+                     onRemove={(event) => {country(event)}}
+                      onSelect={(event) => {country(event) }} /></div>
                     </div>
-                    
+
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-4/12 ">
                       <span className="flex">
@@ -1157,11 +1079,12 @@ const validationRateCondition = () => {
                          onClick={() => {setDeviceCheck(!deviceCheck)}} checked={deviceCheck === true}
                         className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                     
                       <label
                         className="text-sm font-medium mx-2 text-gray-900 block  -mt-0.5 "
                         htmlFor="grid-password"
                       >
-                         {language?.userdevice} 
+                         {language?.userdevice}
                       </label> </span></div>
 
                       <div className="w-full lg:w-4/12 ">
@@ -1171,10 +1094,7 @@ const validationRateCondition = () => {
                       options={lang?.DeviceData}
                       displayValue="user_device"
                      onRemove={(event) => { devices(event) }}
-                      onSelect={(event) => { devices(event) }} />
-                       <p className="text-red-700 text-sm font-light">
-                      {error?.device}</p>
-                      </div>
+                      onSelect={(event) => { devices(event) }} /></div>
                     </div>
 
                     <div className='flex mb-2'>
@@ -1186,9 +1106,10 @@ const validationRateCondition = () => {
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                       <label
                         className="text-sm font-medium mx-2  -mt-0.5 text-gray-900 block "
-                        htmlFor="grid-password">{language?.language}</label> 
-                        </span>
-                        </div>
+                        htmlFor="grid-password"
+                      >
+                          {language?.language}
+                      </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
@@ -1197,8 +1118,6 @@ const validationRateCondition = () => {
                      displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
                       onSelect={(event) => { languages(event) }} />
-                     <p className="text-red-700 text-sm font-light">
-                      {error?.language}</p>
                       </div>
                       </div>
 
@@ -1210,11 +1129,12 @@ const validationRateCondition = () => {
                         className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" 
                          className="sr-only">checkbox</label>
-                       <label
+                      <label
                         className="text-sm font-medium  -mt-0.5 text-gray-900 mx-2 block "
-                        htmlFor="grid-password">{language?.membershipprogram}
-                       </label> 
-                        </span></div>
+                        htmlFor="grid-password"
+                      >
+                          {language?.membershipprogram}
+                      </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <Multiselect
                       className="shadow-sm bg-gray-50 text-gray-900  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
@@ -1222,9 +1142,7 @@ const validationRateCondition = () => {
                       options={programs}
                       displayValue="program_name"
                       onRemove={(event) => {program(event)}}
-                      onSelect= {(event)=>{program(event)}} />
-                       <p className="text-red-700 text-sm font-light">
-                      {error?.program}</p></div>
+                      onSelect= {(event)=>{program(event)}} /></div>
                       </div>
 
                     <div className='flex mb-2'>
@@ -1233,27 +1151,32 @@ const validationRateCondition = () => {
                         <input id="checkbox-1" aria-describedby="checkbox-1" type="checkbox"
                          onClick={() => {setPercentageCheck(!percentageCheck)}} checked={percentageCheck === true} className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
                         <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                     
                       <label
                         className="text-sm font-medium mx-2  -mt-0.5 text-gray-900 block "
-                        htmlFor="grid-password">{language?.maxuserpercentage}</label> </span></div>
+                        htmlFor="grid-password"
+                      >
+                       {language?.maxuserpercentage}
+                      </label> </span></div>
                       <div className="w-full lg:w-4/12 ">
                       <input type="text"
                     className="peer shadow-sm bg-gray-50 border  border-gray-300 text-gray-900  rounded-lg 
                       focus:ring-cyan-600 focus:border-cyan-600 block w-full py-1.5 px-4 "
+                     
                       onChange={(e) =>
                         setAllUserRateDetails({
                           ...allUserRateDetails,
-                          max_user_percentage: e.target.value,
+                          MaxUsersPercent: e.target.value,
                         },setBasicFlag(1))
                       }/>
 
-                       <p className=" text-red-700 text-sm font-light">
-                         {error?.maxuserspercent}
+                       <p className=" text-red-700 font-light">
+                         {error?.MaxUsersPercent}
                             </p>
 
                       </div>
 
-                     </div>
+                        </div>
 
                     <div className='flex mb-2'>
                         <div className="w-full lg:w-4/12 ">
@@ -1303,15 +1226,6 @@ const validationRateCondition = () => {
                         htmlFor="grid-password"
                       >
                          {language?.isdomestic}
-                         {JSON.stringify((
-                    (percentageCheck=== false && (allUserRateDetails.max_user_percentage === "" || 
-                    allUserRateDetails.max_user_percentage === undefined) )
-                    && (countryCheck === false && finalCountry?.length === 0) 
-                    &&(deviceCheck === false  && finalDevice?.length === 0)
-                   && (languageCheck === false  && finalLang?.length === 0) 
-                   && (programCheck === false  && finalProgram?.length === 0)&&
-                   (userSignedIn === false) && (isDomestic === false)))
-                 }
                       </label>
                       </span>
                       
@@ -1336,19 +1250,38 @@ const validationRateCondition = () => {
                         </label>
                       </div>
                     </div> </div>
+
                   </div>
        </div>
        </div>
       </div>
-
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
-                <Button Primary={language?.Next} onClick={
-                  validationRateCondition}
-                /> 
+                <Button Primary={language?.Next} onClick={()=>{
+ if((isDomestic === true)
+                  ||(userSignedIn === true )||
+
+                  (percentageCheck=== true && basicFlag === 1))
+                  {
+                  submitAdditional();}
+                  
+                if(countryCheck === true){
+                  submitCountryAdd();
+                }
+                if(deviceCheck === true){
+                 submitDeviceAdd(); 
+                }
+                if(languageCheck === true){
+                 submitLanguageAdd(); 
+                }
+                if(programCheck === true){
+                 submitProgramAdd();
+                }
+               }
+              } /> 
                 : <></>
               }
-        </div>
+            </div>
         </div>
          </div>
 
@@ -1600,9 +1533,9 @@ const validationRateCondition = () => {
                             )
                           } />
 
-                  <p className="text-red-700 text-sm font-light">
+ <p className="text-red-700 font-light">
                             {error?.refundable_until_days}
-                   </p>
+ </p>
                       </div>
                     </div>
 
@@ -1668,7 +1601,7 @@ const validationRateCondition = () => {
                         }
                         )}
                       </select>
-                      <p className="text-red-700 text-sm font-light">
+                      <p className="text-red-700 font-light">
                     {error?.room_id}
             </p>
                     </div>

@@ -84,7 +84,6 @@ export default function BasicDetails() {
     if(flag === 1){
     if(objChecker.isEqual(allHotelDetails,basicDetails)){
       toast.warn('No change in Basic Details detected. ', {
-
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -387,8 +386,6 @@ export default function BasicDetails() {
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />
-                   <div>
-                     </div>
                        </div>
                   </div>
 

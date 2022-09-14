@@ -67,6 +67,7 @@ const Table = (args) => {
         const checked = args?.gen.filter(i => i.isChecked === true).map(j => { return (j.id) })
     }
     const [editContact, setEditContact] = useState({});
+    const [updateContact, setUpdateContact] = useState({});
     const [deleteContact, setDeleteContact] = useState({});
    
     return (
@@ -310,7 +311,7 @@ const Table = (args) => {
                                                           font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
                                                            duration-150"
                                                              onClick={() =>
-                                                                 {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact);  setFlag([])}}}
+                                                                 {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact,updateContact);  setFlag([])}}}
                                                          >{args?.common?.Save}</button>  
                                                           
                                                       
@@ -386,6 +387,7 @@ const Table = (args) => {
                                                           
                                                                         <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
                                                                             setEditContact(item);
+                                                                            setUpdateContact(item);
                                                                             setUpdate({ ...update, edit: 1, id: idx })
                                                                         }}>{args?.common?.Edit}</button>
                                                                         {args?.name != "Services" ?

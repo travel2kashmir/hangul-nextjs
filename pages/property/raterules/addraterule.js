@@ -538,13 +538,7 @@ function Addraterule() {
               };
             //User Signed In, Max percentage and Domestic Submit
               const submitAdditional = () => {
-  if((isDomestic === true)
-                  ||(userSignedIn === true )||
-                  (percentageCheck=== true && basicFlag === 1)){
-
-                if (validationRateCondition(allUserRateDetails)){
-
-                const data = [{
+              const data = [{
                   max_user_percentage:allUserRateDetails?.max_user_percentage,
                   user_signed_in: userSignedIn,
                   is_domestic: isDomestic,
@@ -582,11 +576,6 @@ function Addraterule() {
                     });
                     setBasicFlag([])
                   });
-
-                }
-
-              }
-
 
               };
         
@@ -1125,6 +1114,7 @@ const validationRateCondition = () => {
 
         </h6>
 
+
       <div className="flex flex-wrap">
        <div className="w-full lg:w-6/12 px-4">
           <div className="relative w-full mb-3">
@@ -1132,7 +1122,6 @@ const validationRateCondition = () => {
         </div>
       <div className="lg:w-10/12  px-1">
       <div className="relative w-full ">
-
 
                     <div className='flex mb-2'>
                     <div className="w-full lg:w-4/12 ">
@@ -1355,10 +1344,9 @@ const validationRateCondition = () => {
 
         <div id="btn" className="flex items-center  justify-end sm:space-x-3 my-4 ml-auto">
               {Button !== 'undefined' ?
-
                 <Button Primary={language?.Next} onClick={
                   validationRateCondition}
-                /> 
+               /> 
                 : <></>
               }
         </div>

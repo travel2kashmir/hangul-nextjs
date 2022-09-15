@@ -76,12 +76,10 @@ export default {
   "Update" :{
     label: "Update",
      color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white "    
-  },
-  
+},
 "UpdateDisabled" :{
   label: "Update",
    color: "bg-cyan-600 hover:bg-cyan-700 mx-2 text-white opacity-60 cursor-not-allowed"    
-
 },
 "AddDisabled" :{
   label: "Add",
@@ -334,7 +332,13 @@ Cancel:"Cancel"
    ></path>
  </svg>
 },
-  "Sideadmin":{
+"Sideadminlanding":{
+  adduser:'./adduser',
+  allproperties:'./allproperties',
+  allusers:'./allusers',
+  addnewproperty: './addProperty/addbasicdetails'
+},  
+"Sideadmin":{
 basicdetails:'./addbasicdetails',
 contact:'./addcontacts',
 gallery:'./addimages',
@@ -690,6 +694,7 @@ pointofsale:'../../pointofsales'
   propertycredit:'Property Credit',
   new:'new',
   areyousureyouwanttodelete:'Are you sure you want to Delete?',
+  deletingthiswillcauseloosingalldata:'Are you sure you want to Delete? Deleting property will cause loosing all the information permanently',
   yesiamsure: 'Yes, I`m sure',
   nocancel:'No, cancel',
   searchforprograms:'Search for programs',

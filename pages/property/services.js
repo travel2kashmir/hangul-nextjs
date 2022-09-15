@@ -21,6 +21,7 @@ import Router from 'next/router';
 import arabic from "../../components/Languages/ar";
 import Addservices from '../admin/addProperty/addservices';
 var currentLogged;
+import objChecker from "lodash"
 
 function Services() {
     const [visible, setVisible] = useState(0)
@@ -99,9 +100,19 @@ function Services() {
 
 
     /* Function to edit services*/
-    const updateServices = (props) => {
-
-
+    const updateServices = (props,noChange) => {
+        if(objChecker.isEqual(props,noChange)){
+            toast.warn('No change in Services detected. ', {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
+          }
+ else{
         const final_data = {
             "service_id": props.id,
             "property_id": currentProperty.property_id,
@@ -135,7 +146,7 @@ function Services() {
                     progress: undefined,
                 });
             })
-
+        }
     }
 
 

@@ -8,11 +8,13 @@ const validateRateConditions = (data) =>{
     var flag=[]
     var final_flag=true;
    
-    alert(JSON.stringify(additional));
-if(additional?.description === "" ||  additional.description === undefined){
+if(additional?.description === ""){
     flag.push(false)
     error.description='This field is required'
     } 
+    if(additional?.description === undefined){
+        flag.push(true)
+       }    
 if (country.checkCountry && country.finalCountry.length!==0)
 {
     flag.push(true)

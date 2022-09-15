@@ -203,7 +203,7 @@ const validationMatchStatus = (data) => {
 
    // Point of Sale Add Function
 const submitMatchstatus = () =>
- { if (validationMatchStatus(dSales)){ 
+ { if (validationMatchStatus(dSales)){
   if(couCheck || currCheck || langCheck || devCheck || siCheck === true){
     const data =[{
         match_status: dSales?.match_status,

@@ -536,7 +536,7 @@ var time;
             draggable: true,
             progress: undefined,
           });
-          setDevice([])
+          setFinalDevice([])
           Router.push("./raterule");
         })
         .catch((error) => {
@@ -898,29 +898,6 @@ return Object.keys(error).length === 0 ? true :  error;
 
 }
 
-// Validation Function
-const validationRateAdditional = (data) => {
-  var Result = checkRateAdditional(data);
-  if (Result === true){
-   return true;
-  }
-  else{
-   setError(Result);
-   return false;
-
-  }
-
-}
-//Checking Form Data for rate Description
-const checkRateAdditional = (data) => {
- var error={};
-if(data?.description === "" ||  data.description === undefined){
-  error.description = "This field is required."
-}
-return Object.keys(error).length === 0 ? true :  error;
-
-}
-
 //Rates
 // Validation Function
 const validationRates = (data) => {
@@ -937,14 +914,35 @@ const validationRates = (data) => {
 //Checking Form Data for Rates
 const checkRates = (data) => {
  var error={};
+ if(data?.base_rate_currency === "" ||  data?.base_rate_currency === undefined){
+  error.base_rate_currency = "This field is required."
+}
  if(data?.base_rate_amount === "" ||  data?.base_rate_amount === undefined){
   error.base_rate_amount = "This field is required."
+}
+if(data?.tax_currency === "" ||  data?.tax_currency === undefined){
+  error.tax_currency = "This field is required."
+}
+  if(data?.room_id === "" ||  data?.room_id === undefined){
+    error.room_id = "This field is required."
 }
 if(data?.tax_amount === "" ||  data?.tax_amount === undefined){
   error.tax_amount = "This field is required."
 }
+if(data?.refundable === "" ||  data?.refundable === undefined){
+  error.refundable = "This field is required."
+}
+  if(data?.room_id === "" ||  data?.room_id === undefined){
+    error.room_id = "This field is required."
+}
+if(data?.otherfees_currency === "" ||  data?.otherfees_currency === undefined){
+  error.otherfees_currency = "This field is required."
+}
 if(data?.otherfees_amount === "" ||  data?.otherfees_amount === undefined){
   error.otherfees_amount = "This field is required."
+}
+if(data?.charge_currency === "" ||  data?.charge_currency === undefined){
+  error.charge_currency = "This field is required."
 }
 if(data?.expiration_time === "" ||  data?.expiration_time === undefined){
   error.expiration_time = "This field is required."
@@ -962,7 +960,16 @@ if((!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.otherfees_amount)) &&
   error.otherfees_amount = "This field accept possitive and decimal values only."
 }
 
-
+if(data?.refundable === "true"){
+  if(data.refundable_until_days === "" || data.refundable_until_days === undefined)
+  {
+    error.refundable_until_days="This field is required"
+  }
+  if(data.refundable_until_time === "" || data.refundable_until_time === undefined)
+  {
+    error.refundable_until_time="This field is required"
+  }
+}
 if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
  (data?.refundable_until_days != "" &&  data?.refundable_until_days != undefined))){
   error.refundable_until_days = "This field accept possitive values only."
@@ -971,7 +978,6 @@ if((!(/^([1-9]+[0-9]*)$/.test(data?.refundable_until_days)) &&
 return Object.keys(error).length === 0 ? true :  error;
 
 }
-
 
 // Validation Function for Rate Conditions
 const validationRateCondition = () => {
@@ -1193,7 +1199,7 @@ const validationRateCondition = () => {
                         },setBasicFlag(1))
                       }/>
 
-               <p className="text-red-700 font-light">
+               <p className="text-sm text-red-700 font-light">
                {error?.rate_rule_name}
             </p></div>
                   </div>
@@ -1266,7 +1272,7 @@ const validationRateCondition = () => {
                     },setMod(1))
                   }
                 />
-              <p className="text-red-700 font-light">{err?.price_multiplier}</p>
+              <p className="text-sm text-red-700 font-light">{err?.price_multiplier}</p>
                  </div>
                  </div>
                  </div>
@@ -1393,7 +1399,7 @@ const validationRateCondition = () => {
                       }
                   />
 
-                     <p className="text-red-700 font-light">
+                     <p className="text-sm text-red-700 font-light">
                      {error?.description}
 
             </p></div>
@@ -1552,7 +1558,7 @@ const validationRateCondition = () => {
                         },setBasicFlag(1),setFlag(1))
                       }/>
 
-                       <p className=" text-red-700 font-light">
+                       <p className=" text-sm text-red-700 font-light">
                        {error?.maxuserspercent}
  </p></div>
                       </div>
@@ -1675,7 +1681,7 @@ const validationRateCondition = () => {
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {language?.rates} 
+          {language?.rates} {allUserRateDetails.refundable}
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1702,7 +1708,10 @@ const validationRateCondition = () => {
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select></div>
+                    </select>
+                    <p className="text-sm text-red-700 font-light">
+                      {error?.base_rate_currency}
+                      </p></div>
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
@@ -1715,7 +1724,7 @@ const validationRateCondition = () => {
 
                        </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-        <div className={visible === 1 ? 'block' : 'hidden'}>
+                     <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
                       type="text"
                       className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
@@ -1727,9 +1736,9 @@ const validationRateCondition = () => {
                       }
                     />
 
-                      <p className="text-red-700 font-light">
+                      <p className="text-sm text-red-700 font-light">
                       {error?.base_rate_amount}
- </p></div>
+                      </p></div>
                   </div>
                 </div>
 
@@ -1756,7 +1765,10 @@ const validationRateCondition = () => {
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select></div>
+                    </select>
+                    <p className="text-sm text-red-700 font-light">
+                      {error?.tax_currency}
+                      </p></div>
                   </div>
                 </div>
 
@@ -1780,7 +1792,7 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, tax_amount: e.target.value })
                         )
                       } />
-                        <p className="text-red-700 font-light">
+                        <p className="text-sm text-red-700 font-light">
                         {error?.tax_amount}</p></div>
                   </div>
                 </div>
@@ -1809,7 +1821,10 @@ const validationRateCondition = () => {
                       <option value="USD" >USD</option>
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
-                    </select></div>
+                    </select>
+                    <p className="text-sm text-red-700 font-light">
+                      {error?.otherfees_currency}
+                      </p></div>
                   </div>
                 </div>
 
@@ -1835,7 +1850,7 @@ const validationRateCondition = () => {
                       }
                     />
 
-                      <p className="text-red-700 font-light">
+                      <p className="text-sm text-red-700 font-light">
                       {error?.otherfees_amount}
 </p></div>
                   </div>
@@ -1844,12 +1859,11 @@ const validationRateCondition = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
-                      htmlFor="grid-password"
-                    >
-                        {language?.paymentholder} <span style={{ color: "#ff0000" }}>*</span>
-
-                      </label>
- <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      htmlFor="grid-password" >
+                        {language?.paymentholder}
+                         <span style={{ color: "#ff0000" }}>*</span>
+                     </label>
+                    <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1864,7 +1878,11 @@ const validationRateCondition = () => {
                           <option value="hotel">  {language?.hotel}</option>
                       <option value="installment">  {language?.installment}</option>
                       <option value="deposit">  {language?.deposit}</option>
-                    </select></div>
+                    </select>
+                    <p className="text-sm text-red-700 font-light">
+                      {error?.charge_currency}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -1875,7 +1893,6 @@ const validationRateCondition = () => {
                       htmlFor="grid-password"
                     >
                        {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
-
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
 
@@ -1890,6 +1907,7 @@ const validationRateCondition = () => {
                        {allUserRateDetails?.refundable === ""?
                         <>
                         <option selected disabled>  {language?.select}</option>
+                        <option value={true}> {language?.yes}</option>
                          <option value={false}> {language?.no}</option>
                          </>:
                          <>
@@ -1905,11 +1923,11 @@ const validationRateCondition = () => {
                       <option disabled selected value={false}> {language?.no}</option>
                       </>
                      }</>}
-                        </select></div>
-
- </div>
-
-                </div>
+                        </select>
+                        <p className="text-sm text-red-700 font-light">
+                      {error?.refundable}
+                      </p></div></div>
+                        </div>
 
                 {allUserRateDetails?.refundable === "true" ? (
                   <>
@@ -1919,7 +1937,8 @@ const validationRateCondition = () => {
                           className="text-sm font-medium text-gray-900 block mb-2"
                           htmlFor="grid-password"
                         >
-                            {language?.refundable} {language?.till} {language?.days}
+                            {language?.refundable} {language?.till} {language?.days} 
+                            <span style={{ color: "#ff0000" }}>*</span>
 
                               </label>
 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1928,13 +1947,14 @@ const validationRateCondition = () => {
                           type="text"
                           className="peer shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                           defaultValue={allUserRateDetails?.refundable_until_days}
+                          
                         onChange={
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_days: e.target.value })
                             )
                           } />
 
-                          <p className="text-red-700 font-light">
+                          <p className="text-sm text-red-700 font-light">
                          {error?.refundable_until_days}
   </p></div>
                       </div>
@@ -1947,6 +1967,7 @@ const validationRateCondition = () => {
                           htmlFor="grid-password"
                         >
                         {language?.refundable} {language?.till} {language?.time}
+                        <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1958,21 +1979,24 @@ const validationRateCondition = () => {
                             (e) => (
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_time: e.target.value })
                             )
-                          } /></div>
+                          } />
+                            <p className="text-sm text-red-700 font-light">
+                         {error?.refundable_until_time}
+  </p></div>
                       </div>
                     </div></>)
                   :
-                  (<></>)}
+                  (<>
+                </>)}
 
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
                       className="text-sm font-medium text-gray-900 block mb-2"
-                      htmlFor="grid-password"
-                    >
-
-                       {language?.expirationtimezone} <span style={{ color: "#ff0000" }}>*</span>
-</label>
+                      htmlFor="grid-password">
+                     {language?.expirationtimezone}
+                      <span style={{ color: "#ff0000" }}>*</span>
+                   </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <input
@@ -1984,12 +2008,12 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, expiration_time: e.target.value })
                         )
 
-                      } /> <p className="text-red-700 font-light"> {error?.expiration_time}</p>
- </div>
+                      } /> <p className="text-sm text-red-700 font-light"> {error?.expiration_time}</p>
+                  </div>
                   </div>
                 </div>
                       
-                      {JSON.stringify(isRatePresent)==="false"?
+                 {JSON.stringify(isRatePresent)==="false"?
                 <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label className="text-sm font-medium text-gray-900 block mb-2"
@@ -2006,7 +2030,7 @@ const validationRateCondition = () => {
                         }
                         )}
                       </select>
-                      <p className="text-red-700 font-light"> {error?.room_id}</p>
+                      <p className="text-sm text-red-700 font-light"> {error?.room_id}</p>
                     </div>
                   </div>:<></>
                       }

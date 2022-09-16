@@ -19,117 +19,305 @@ var locale;
 const logger = require("../../services/logger");
 
 function userDetails() {
-  const [spinner, setSpinner] = useState(0)
-  const [error, setError] = useState({})
-  const [userData, setUserdata] = useState([])
-useEffect(()=>{
-    const firstfun=()=>{
-      if (typeof window !== 'undefined'){
-       locale = localStorage.getItem("Language");
-         if (locale === "ar") {
-        language = arabic;
+    const [spinner, setSpinner] = useState(0)
+    const [error, setError] = useState({})
+    const [userData, setUserdata] = useState([])
+    const [saveData,setSaveData] = useState('')
+    useEffect(() => {
+        const firstfun = () => {
+            if (typeof window !== 'undefined') {
+                locale = localStorage.getItem("Language");
+                if (locale === "ar") {
+                    language = arabic;
+                }
+                if (locale === "en") {
+                    language = english;
+                }
+                if (locale === "fr") {
+                    language = french;
+                }
+                currentUser = JSON.parse(localStorage.getItem("user"));
+                currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+            }
         }
-        if (locale === "en") {
-        language=english;
-        }
-        if (locale === "fr") {
-          language = french;
-        } 
-        currentUser = JSON.parse(localStorage.getItem("user"));    
-      } 
-    }
-    firstfun();
-    fetchProperty();
-  },[])
+        firstfun();
+        fetchProperty();
+        fetchAllProperties();
+    }, [])
 
-  const fetchProperty = async () => { 
-    try {
-      const url = `/api/properties/${currentUser.id}`;
-      logger.info("url" +url)
-      const response = await axios.get(url, {
-        headers: { accept: "application/json" },
-      });
-      setUserdata(response.data);
-      setVisible(1)
-    } catch (error) {
-      if (error.response) {
-        logger.error("Current User Properties Error");
-      } else {
-        logger.error("Current User Properties Error");
-      }
+    const [properties, setProperties] = useState([])
+    const fetchAllProperties = () => {
+        axios.get('/api/all_properties').then(response => {
+            setProperties(response.data)
+        }).catch(error => {
+            toast.error("Error in fetching Properties!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+
+        })
     }
-  };
-  return (<>
+
+    const fetchProperty = async () => {
+        try {
+            console.log(JSON.stringify(currentUser))
+            const url = `/api/properties/${currentUser.user_id}`;
+            logger.info("url" + url)
+            const response = await axios.get(url, {
+                headers: { accept: "application/json" },
+            });
+            setUserdata(response.data);
+            
+            setVisible(1)
+        } catch (error) {
+            if (error.response) {
+                logger.error("Current User Properties Error");
+            } else {
+                logger.error("Current User Properties Error");
+            }
+        }
+    };
+    const [assignProperty,setAssignProperty] =useState(0);
+
+    const submitNew = () =>{
+        var item=JSON.parse(saveData)
+        console.log(item)
+        const data = {
+            property_id,
+            user_id,
+            status,
+            province,
+            city,
+            property_type,
+            language
+        }
+    }
+    return (<>
+ {<div className={assignProperty===1?'block':'hidden'}>
+    <div className="flex backdrop-blur-sm bg-black/5 overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="user-modal">
+        <div className="relative w-full max-w-5xl px-4 h-full md:h-auto">
+        <button
+          className="float-right my-8 sm:inline-flex  text-gray-800  
+            font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
+            rounded-lg text-sm px-1 py-1 text-center 
+            items-center mb-1 ml-16 mr-4 ease-linear transition-all duration-150"
+          type="button"
+          onClick={() => setAssignProperty(0)}>
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd">
+          </path></svg>
+        </button>
+        <div className=" bg-white shadow rounded-lg py-12  px-12 sm:p-6 xl:p-8  2xl:col-span-2 ">
+          <div className="relative before:hidden  before:lg:block before:absolute before:w-[45%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+          <div className="col-span-6 sm:col-span-3">
+                      <label className="text-sm font-medium text-gray-900 block mb-2"
+                        htmlFor="grid-password">
+                        {language?.propertycategory}
+                      </label>
+                      <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+
+                        onChange={
+                          (e) => (
+                            setSaveData(e.target.value)
+                          )
+                        }
+                      >
+                        <option defaultValue="" >Select</option>
+                        {properties.map(item=>{
+                            return(
+                                <option Value={JSON.stringify(item)} >{item?.property_name}</option>
+                            )
+                            
+                        })}
+                      </select>
+
+                      <button onClick={()=>submitNew()}
+                      className='text-white bg-cyan-600
+                                         hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                        text-sm inline-flex items-center px-2 py-1.5 text-center'>
+                                            Add Property To User</button>
+                                            
+                    </div>    
     
-    <Header admin={english?.Sideadminlanding}/>
-    <Sidebar admin={english?.Sideadminlanding}/>
-    <div id="main-content"
-      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
-      {/*Nav Bar*/}
-      <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-        <ol className="inline-flex items-center space-x-1 md:space-x-2">
-          <li className="inline-flex items-center">
-            <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-            <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-            </Link>
-          </li>
-
-          <li>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">User Detail</span>
-            </div>
-          </li>
-        </ol>
-      </nav>
-
       
-      <div className=" bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2">
-      <div className='flex'>
-        <p className="text-l flex justify-start  leading-none pl-6 pt-2  text-gray-900 ">
-          User Name
-        </p>
+      </div></div>
+      </div></div></div>}
    
-        <p className="text-l flex justify-end  leading-none pl-6 pt-2  text-gray-900 ">
-         Status
-        </p>
-     </div>
-    <p className="text-l   leading-none pl-6 pt-2  text-gray-900 ">
-         User Email
-    </p> 
-      
-                    <div className="pt-6">
-                        <div className=" md:px-4 mx-auto w-full">
-                            <div className="flex flex-wrap">
+        <Header admin={english?.Sideadminlanding} />
+        <Sidebar admin={english?.Sideadminlanding} />
+        <div id="main-content"
+            className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+            {/*Nav Bar*/}
+            <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
+                <ol className="inline-flex items-center space-x-1 md:space-x-2">
+                    <li className="inline-flex items-center">
+                        <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                        <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
+                            <a>{language?.home}</a>
+                        </Link>
+                    </li>
 
-                               <p>list of properties</p> 
-                               <button className='ml-auto' onClick={()=>alert("assigned")}>Assign Property</button>
-                              
+                    <li>
+                        <div className="flex items-center">
+                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">User Detail</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
 
-                            </div>
+
+            <div className=" bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2">
+                <div className='flex justify-self-auto'>
+                    <p className="text-l capitalize flex justify-start  leading-none pl-6 pt-2  text-gray-900 ">
+                       Welcome {currentUser?.user_name}
+                    </p>
+
+                    <p className="text-l ml-auto capitalize flex justify-end  leading-none pl-6 pt-2  text-gray-900 ">
+                       Account Status: {currentUser?.status === true ? 'Active' : 'Inactive'}
+                    </p>
+                
+                <p className="text-l ml-auto capitalize text-bold leading-none pl-6 pt-2  text-gray-900 ">
+                   Registered Email: {currentUser?.user_email}
+                </p>
+                </div>
+                <h6 className="text-xl my-4 flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
+                    List of All Active Properties
+                    <button className='ml-auto text-white bg-cyan-600
+                                         hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                        text-sm inline-flex items-center px-2 py-1.5 text-center"' onClick={() => setAssignProperty(1)}>
+                        Assign Property
+                      </button>
+                </h6>
+                <div className="pt-6">
+                    <div className=" md:px-4 mx-auto w-full">
+                        <div className="flex flex-wrap">
+
+                            <form className=" space-y-1" action="#">
+                                <table className="table-fixed  w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-100">
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                            >
+                                                {language?.property} {language?.name}
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                            >
+                                                {language?.property} {language?.category}
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-8  py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                            >
+                                                {language?.Province}
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                            >
+                                                {language?.Status}
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                            >
+                                                {language?.action}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    {Object.keys(userData).length!==0?<tbody className="bg-white divide-y divide-gray-200">
+                                    {userData?.map((item, idx) => {
+                                        return (
+                                            <tr className="hover:bg-gray-100" key={idx}>
+                                                <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
+                                                    {item?.property_name}
+                                                </td>
+                                                <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
+                                                    {item?.property_category}
+                                                </td>
+                                                <td className="pr-4 pl-0 whitespace-nowrap text-base font-normal text-gray-900">
+                                                    <div className="flex items-center">
+
+                                                        {item?.address_province}
+                                                    </div>
+                                                </td>
+                                                <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                    <div className="flex items-center">
+                                                        <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
+                                                        {item?.status === true ? "Active" : "Inactive"}
+                                                    </div>
+                                                </td>
+                                                <td className="p-2 whitespace-nowrap space-x-1">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            LocalProperty({ item });
+                                                            router.push("../property/propertysummary");
+                                                        }}
+                                                        className="text-white bg-cyan-600
+                                     hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                    text-sm inline-flex items-center px-2 py-1.5 text-center"
+                                                    >
+                                                        {language?.view}
+                                                    </button>
+
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setDeleteProperty(1)
+                                                            setProperty(item)
+                                                        }}
+                                                        className="text-white ml-4 bg-red-600
+                                     hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                    text-sm inline-flex items-center px-2 py-1.5 text-center"
+                                                    >
+                                                        De-activate
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody> :<></>}
+                                </table>
+
+                            </form>
+
+                            {Object.keys(userData).length===0?<h1 className='capitalize'>{currentUser?.user_name} has no property</h1>:<></>}
                         </div>
                     </div>
-      </div>
-    </div>
+                </div>
 
-    <div>
+            </div>
+        </div>
 
-    </div>
-    {/** Toast Container **/}
-    <ToastContainer
-      position="top-center"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-    />
-  </>
+        <div>
 
-)}
+        </div>
+        {/** Toast Container **/}
+        <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+        />
+    </>
+
+    )
+}
 
 export default userDetails
 

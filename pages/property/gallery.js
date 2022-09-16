@@ -18,6 +18,7 @@ var language;
 var currentProperty;
 var currentLogged;
 import Router from 'next/router'
+import { getEmojiFlag } from 'countries-list';
 
 function Gallery() {
     const [visible,setVisible]=useState(0)
@@ -194,6 +195,7 @@ function Gallery() {
                         draggable: true,
                         progress: undefined,
                     });
+                    document.getElementById('editImage').reset();
                     fetchHotelDetails();
                     setAllHotelDetails([])
                     setActionImage({})
@@ -257,7 +259,7 @@ function Gallery() {
      <Header Primary={english?.Side}/>
      <Sidebar  Primary={english?.Side}/>
         <div id="main-content"
-            className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+            className="  bg-gray-50 px-4 pt-24 py-2 relative overflow-y-auto lg:ml-64">
             {/* Navbar */}
             <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                 <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -285,7 +287,7 @@ function Gallery() {
             </nav>
 
             {/* Header */}
-            <div className=" bg-white shadow-xl rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+            <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
                 <h6 className="text-xl mb-2 flex leading-none pl-4 pt-2 font-bold text-gray-900 ">
                     {language?.gallery}
                 </h6>
@@ -393,13 +395,17 @@ function Gallery() {
                                   
                                 </h3>
                                 <button type="button"
-                                    onClick={() => setEditImage(0)}
+                                    onClick={() => {
+                                        document.getElementById('editImage').reset();
+                                        setEditImage(0);}}
                                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="user-modal">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button>
                             </div>
+                            
                             <div className="p-6 space-y-6">
-                                <div className="grid grid-cols-6 gap-6">
+                            <form id='editImage'>
+                                  <div className="grid grid-cols-6 gap-6">
                                     <div className="col-span-6 sm:col-span-3">
                                         <img src={actionImage?.image_link} alt='property_image' height={"200"} width={"400"} />
                                     </div> <div className="col-span-6 sm:col-span-3">
@@ -445,6 +451,7 @@ function Gallery() {
                                     </div>
 
                                 </div>
+                                </form>
                             </div>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
                             <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
@@ -455,6 +462,7 @@ function Gallery() {
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />
                             </div>
+                            
                         </div>
                         </div>
                     </div>

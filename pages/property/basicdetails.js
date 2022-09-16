@@ -162,7 +162,7 @@ export default function BasicDetails() {
         <Sidebar Primary={english.Side} />
 
         <div id="main-content"
-          className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+          className="  bg-gray-50 px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64" >
           {/* Navbar */}
           <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -192,7 +192,7 @@ export default function BasicDetails() {
           </nav>
 
           {/* Basic Details Form */}
-          <div className=" bg-white shadow-xl rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+          <div className=" bg-white shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2">
             <h6 className="text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold text-gray-900 ">
               {language?.basicdetails}
               <svg className="ml-2 h-6 mb-2 w-6 font-semibold" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>

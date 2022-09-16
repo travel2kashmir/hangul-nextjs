@@ -43,6 +43,11 @@ function Allpointofsale() {
   const [deviceCheck, setDeviceCheck] = useState(false);
   const [siteCheck, setSiteCheck] = useState(false);
   const [currencyCheck, setCurrencyCheck] = useState(false);
+  const [co1Check, setCo1Check] = useState(false);
+  const [co2Check, setCo2Check] = useState(false);
+  const [co3Check, setCo3Check] = useState(false);
+  const [co4Check, setCo4Check] = useState(false);
+  const [co5Check, setCo5Check] = useState(false);
   const [couCheck, setCouCheck] = useState(false);
   const [langCheck, setLangCheck] = useState(false);
   const [devCheck, setDevCheck] = useState(false);
@@ -139,6 +144,58 @@ const validationMatchStatus = (data) => {
    return Object.keys(error).length === 0 ? true :  error;
   
    }
+   const validationMatchStatusAdd = (data,couCheck,currCheck,langCheck,devCheck,siCheck) => {
+    var Result = checkMatchStatusDataAdd(data,couCheck,currCheck,langCheck,devCheck,siCheck);
+    if (Result === true){
+     return true;
+    }
+    else{
+      setError(Result);
+      return false;
+  
+     }
+    }
+    const checkMatchStatusDataAdd = (data,couCheck,currCheck,langCheck,devCheck,siCheck) => {
+      var error={};
+      if(data?.match_status_name === "" ||data?.match_status_name === undefined){
+        error.match_status_name = "This field is required."
+      } 
+      if(data?.match_status === "" || data?.match_status === undefined){
+        error.match_status = "This field is required."
+      }  
+      if((data.country === "" || data.country === undefined) && couCheck ===true){
+        error.country="Please, select the value for country"
+      }
+      if((data.language === "" || data.language === undefined) && langCheck ===true){
+        error.language="Please, select the value for language"
+      }
+      if((data.device === "" || data.device === undefined) && devCheck ===true){
+        error.device="Please, select the value for device"
+      }
+      if((data.currency=== "" || data.currency === undefined) && currCheck ===true){
+        error.currency="Please, select the value for currency"
+      }
+      if((data.site_type=== "" || data.site_type === undefined) && siCheck ===true){
+        error.sitetype="Please, select the value for site type"
+      }
+      if((data.country !== "" && data.country !== undefined) && couCheck ===false){
+        error.country="Please, check the the country, first"
+      }
+      if((data.language !== "" && data.language !== undefined) && langCheck ===false){
+        error.language="Please, check the the language, first"
+      }
+      if((data.device !== "" && data.device !== undefined) && devCheck ===false){
+        error.device="Please, check the the device, first"
+      }
+      if((data.currency !== "" && data.currency !== undefined) && currCheck ===false){
+        error.currency="Please, check the the currency, first"
+      }
+      if((data.site_type !== "" && data.site_type !== undefined) && siCheck ===false){
+        error.sitetype="Please, check the the currency, first"
+      }
+     return Object.keys(error).length === 0 ? true :  error;
+    
+     }
    const validationPOS = (data) => {
     var Result = checkPOSData(data);
     if (Result === true){
@@ -200,95 +257,6 @@ const validationMatchStatus = (data) => {
       });
   };
 
-
-   // Point of Sale Add Function
-const submitMatchstatus = () =>
- { if (validationMatchStatus(dSales)){
-  if(couCheck || currCheck || langCheck || devCheck || siCheck === true){
-    const data =[{
-        match_status: dSales?.match_status,
-        match_status_name:dSales?.match_status_name,
-        country: dSales?.country,
-        language: dSales?.language,
-        device:dSales?.device,
-        currency:dSales?.currency,
-        site_type: dSales?.site_type  
-    }];
-    const final_data={match_status: data}
-    const url = "/api/point_of_sale/match_status";
-    axios
-      .post(url, final_data, {
-        header: { "content-type": "application/json" },
-      })
-      .then((response) => {
-        toast.success("Match Status added successfully!", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        const datas = [{
-           match_status_id:response.data.match_status_id,
-          sale_id:sales?.sale_id
-          }];
-        
-          const final_datas={pos_match_status_link: datas}
-          const url = "/api/point_of_sale/pos_match_status_link";
-          axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
-            .then((response) => {
-              toast.success("Match Status conditions added successfully!", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              })
-              setView(0);
-            })
-            .catch((error) => {
-              toast.error("API: Match Status error", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-              });
-            })      
-      })
-      .catch((error) => {
-        toast.error("API: Match status add error", {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-    }
-    else{
-      toast.error("Please select at least one condition", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-
-    }
-  }
-};
-
   /**Function to save Current property to be viewed to Local Storage**/
   const currentMatch = (props) => {
     setCurrent(props)
@@ -298,10 +266,13 @@ const submitMatchstatus = () =>
    
     if(props?.device != undefined){
       setDeviceCheck(true)
+     setCo3Check(true)
     }
     filterByMLanguage(props)
     if(props?.site_type != undefined){
       setSiteCheck(true)
+      setCo4Check(true)
+      
     }
     filterByCurrency(props)
   };
@@ -311,6 +282,7 @@ const submitMatchstatus = () =>
 const filterByMLanguage = (props) => {
   if(props?.language != undefined) {
   setLanguageCheck(true)
+  setCo2Check(true)
   resLang = lang?.LanguageData.filter(el => {
     return props?.language === el?.language_code;
    });
@@ -324,6 +296,7 @@ const filterByMLanguage = (props) => {
   const filterByCountry = (props) => {
     if(props?.country != undefined) {
     setCountryCheck(true)
+    setCo1Check(true)
     resCou = lang?.CountryData.filter(el => {
      return props?.country === el.country_code;
      });
@@ -338,6 +311,7 @@ const filterByMLanguage = (props) => {
   const filterByCurrency = (props) => {
     if(props?.currency != undefined) {
     setCurrencyCheck(true)
+    setCo5Check(true)
     resCurr = lang?.CurrencyData.filter(el => {
       return props?.currency === el?.currency_code;
      });
@@ -354,11 +328,11 @@ const filterByMLanguage = (props) => {
     const final_data ={
         match_status:current?.match_status,
         match_status_name:current?.match_status_name,
-        country: countryData.tick === false ? "" :  countryData.data ,
-        language:  languageData.tick  === false ? "" : languageData.data ,
-        device:deviceData.tick === false ? "" : deviceData.data ,
-        currency:currencyData.tick === false ? "" : currencyData.data ,
-        site_type: siteData.tick  === false ? "" : siteData.data,
+        country: countryData.tick === false  && co1Check === true? "" :  countryData.data ,
+        language:  languageData.tick  === false && co2Check === true ? "" : languageData.data ,
+        device:deviceData.tick === false && co3Check === true ? "" : deviceData.data ,
+        currency:currencyData.tick === false && co4Check === true ? "" : currencyData.data ,
+        site_type: siteData.tick  === false && co5Check === true? "" : siteData.data,
         match_status_id:current?.id  
     };
      alert("final" +JSON.stringify(final_data))
@@ -436,6 +410,93 @@ const filterByMLanguage = (props) => {
       }  
     
   }
+   // Point of Sale Add Function
+const submitMatchstatus = () =>
+{ if (validationMatchStatusAdd(dSales,couCheck,currCheck,langCheck,devCheck,siCheck)){ 
+ if(couCheck || currCheck || langCheck || devCheck || siCheck === true){
+   const data =[{
+       match_status: dSales?.match_status,
+       match_status_name:dSales?.match_status_name,
+       country: dSales?.country,
+       language: dSales?.language,
+       device:dSales?.device,
+       currency:dSales?.currency,
+       site_type: dSales?.site_type  
+   }];
+   const final_data={match_status: data}
+   const url = "/api/point_of_sale/match_status";
+   axios
+     .post(url, final_data, {
+       header: { "content-type": "application/json" },
+     })
+     .then((response) => {
+       toast.success("Match Status added successfully!", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+       const datas = [{
+          match_status_id:response.data.match_status_id,
+         sale_id:sales?.sale_id
+         }];
+       
+         const final_datas={pos_match_status_link: datas}
+         const url = "/api/point_of_sale/pos_match_status_link";
+         axios.post(url, final_datas, {header: { "content-type": "application/json" }, })
+           .then((response) => {
+             toast.success("Match Status conditions added successfully!", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             })
+             setView(0);
+           })
+           .catch((error) => {
+             toast.error("API: Match Status error", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             });
+           })      
+     })
+     .catch((error) => {
+       toast.error("API: Match status add error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     });
+   }
+   else{
+     toast.warn("APP: Please select at least one condition", {
+       position: "top-center",
+       autoClose: 5000,
+       hideProgressBar: false,
+       closeOnClick: true,
+       pauseOnHover: true,
+       draggable: true,
+       progress: undefined,
+     });
+
+   }
+ }
+};
   const clearData = () => {
   setFlag([]);
   setCountryData({});
@@ -570,7 +631,7 @@ const filterByMLanguage = (props) => {
                        setSales({ ...sales, display_name: e.target.value },setFlag(1))
                       )
                     } />
-                      <p className="text-red-700 font-light">
+                      <p className="text-red-700 font-xs font-light">
                    {error?.display_name}
             </p>
                     </div>
@@ -622,7 +683,7 @@ const filterByMLanguage = (props) => {
                         setSales({ ...sales, url: e.target.value },setFlag(1))
                       )
                     } />
-                      <p className="text-red-700 font-light">
+                      <p className="text-red-700 font-xs font-light">
                    {error?.url}
             </p></div>
                 </div>
@@ -712,7 +773,7 @@ const filterByMLanguage = (props) => {
                             setDSales({ ...dSales, match_status_name: e.target.value })
                           )
                         } />
-                         <p className="text-red-700 font-light">
+                         <p className="text-red-700 font-xs font-light">
                    {error?.match_status_name}
             </p>
                     </div>
@@ -735,9 +796,8 @@ const filterByMLanguage = (props) => {
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
-                      <p className="text-red-700 font-light">
-                   {error?.match_status}
-            </p>
+                      <p className="text-red-700 font-xs font-light">
+                   {error?.match_status}</p>
                     </div>
                   </div>
                 </div>
@@ -758,7 +818,7 @@ const filterByMLanguage = (props) => {
                             >
                              {language?.country}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
                       text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
@@ -772,8 +832,8 @@ const filterByMLanguage = (props) => {
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
                             )}
-
-                          </select>
+                            </select>
+                          <p className="text-red-700 font-xs font-light">{error?.country}</p>
                         </div>
                       </div>
 
@@ -792,7 +852,7 @@ const filterByMLanguage = (props) => {
                             {language?.device}
                             </label> </span></div>
 
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
@@ -806,7 +866,9 @@ const filterByMLanguage = (props) => {
                             }
                             )}
 
-                          </select></div>
+                          </select>
+                          <p className="text-red-700 font-xs font-light">
+                          {error?.device} </p></div>
                       </div>
 
                       <div className='flex mb-2'>
@@ -822,7 +884,7 @@ const filterByMLanguage = (props) => {
                             >
                              {language?.language}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
@@ -837,6 +899,9 @@ const filterByMLanguage = (props) => {
                             )}
 
                           </select>
+                          <p className="text-red-700 font-xs font-light">
+                          {error?.language}
+                         </p>
                         </div>
                       </div>
                       <div className='flex mb-2'>
@@ -854,7 +919,7 @@ const filterByMLanguage = (props) => {
                             >
                              {language?.currency}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
@@ -868,7 +933,9 @@ const filterByMLanguage = (props) => {
                             }
                             )}
 
-                          </select></div>
+                          </select>
+                          <p className="text-red-700 font-xs font-light">
+                          {error?.currency}</p></div>
                       </div>
                       <div className='flex my-2'>
                         <div className="w-full lg:w-2/12 ">
@@ -885,7 +952,7 @@ const filterByMLanguage = (props) => {
                             >
                                {language?.sitetype}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
@@ -896,7 +963,10 @@ const filterByMLanguage = (props) => {
                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
-                          </select></div>
+                          </select>
+                          <p className="text-red-700 font-xs font-light">
+                   {error?.sitetype}
+            </p></div>
                       </div>
                     </div>
                   </div>
@@ -957,7 +1027,7 @@ const filterByMLanguage = (props) => {
                           )
                         }
                       />
-                         <p className="text-red-700 font-light">
+                         <p className="text-red-700 font-xs font-light">
                    {error?.match_status_name}
             </p>
                     </div>
@@ -981,7 +1051,7 @@ const filterByMLanguage = (props) => {
                         <option value="yes">Yes</option>
                         <option value="never">Never</option>
                       </select>
-                      <p className="text-red-700 font-light">
+                      <p className="text-red-700 font-xs font-light">
                    {error?.match_status}
             </p>
                     </div>
@@ -1196,7 +1266,7 @@ const filterByMLanguage = (props) => {
                     submitMatchStatusEdit()}
                    
                   else{
-                    toast.error("APP: Please edit the details, first.", {
+                    toast.warn("APP: Please edit the details, first.", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,

@@ -74,9 +74,10 @@ function AdminLanding() {
     };
 
     const submitDelete = () => {
-        axios.delete(`/api/${property?.property_id}`).then((response) => {
+        axios.put(`/api/basic`,{ property_id:property?.property_id, status: false},{ header: { "content-type": "application/json" } })
+        .then((response) => {
             fetchAllProperties();
-            toast.success("Property Deleted Successfully!", {
+            toast.success("Property De-activated Successfully!", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -89,7 +90,40 @@ function AdminLanding() {
             setProperty({})
 
         }).catch((error) => {
-            toast.error("Property Delete Error!", {
+            toast.error("Property De-activate Error!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            setDeleteProperty(0)
+            setProperty({})
+
+        })
+    }
+
+
+    const activateProperty = (property_id) => {
+        axios.put(`/api/basic`,{ property_id:property_id, status: true},{ header: { "content-type": "application/json" } })
+        .then((response) => {
+            fetchAllProperties();
+            toast.success("Property Activated Successfully!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            setDeleteProperty(0)
+            setProperty({})
+
+        }).catch((error) => {
+            toast.error("Property De-activate Error!", {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -120,7 +154,8 @@ function AdminLanding() {
                             <div className="p-6 pt-0 text-center">
                                 <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
-                                    {language?.deletingthiswillcauseloosingalldata}
+                                    {/*language?.deletingthiswillcauseloosingalldata*/}
+                                    Are you sure you want to deactivate property
                                 </h3>
                                 <Button Primary={language?.Delete} onClick={() => submitDelete()} />
                                 <Button Primary={language?.Cancel} onClick={() => setDeleteProperty(0)} />
@@ -133,16 +168,14 @@ function AdminLanding() {
             <Sidebar admin={english?.Sideadminlanding} />
             <div id="main-content"
                 className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
-                <div className="text-center mt-4">
-                    <p className="capitalize font-semibold text-3xl font-sans sm:mt-12 mx-12 mt-24 mb-6 text-cyan-500">
-                        {language?.welcome} {currentUser?.name}
-                    </p>
-                </div>
-
-
                 <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+                    <div className="text-center ">
+                        <p className="capitalize font-semibold text-3xl font-sans  mx-12  mb-6 text-cyan-500">
+                            {language?.welcome} {currentUser?.name}
+                        </p>
+                    </div>
                     <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-                        List Of All Properties
+                        List of All Active Properties
                     </h6>
                     <div className="pt-6">
                         <div className=" md:px-4 mx-auto w-full">
@@ -186,7 +219,7 @@ function AdminLanding() {
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
                                             {properties?.map((item, idx) => {
-                                                return (
+                                                return (item?.status === true ?
                                                     <tr className="hover:bg-gray-100" key={idx}>
                                                         <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
                                                             {item?.property_name}
@@ -231,10 +264,106 @@ function AdminLanding() {
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"
                                                             >
-                                                                {language?.common.Delete}
+                                                                De-activate
                                                             </button>
                                                         </td>
-                                                    </tr>
+                                                    </tr> : <></>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+
+                                </form>
+                                <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
+                                    List of All In-Active Properties
+                                </h6>
+                                <form className=" space-y-1" action="#">
+                                    <table className="table-fixed  w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-100">
+                                            <tr>
+                                                <th
+                                                    scope="col"
+                                                    className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                                >
+                                                    {language?.property} {language?.name}
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                                >
+                                                    {language?.property} {language?.category}
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="px-8  py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                                >
+                                                    {language?.Province}
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                                >
+                                                    {language?.Status}
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                                >
+                                                    {language?.action}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {properties?.map((item, idx) => {
+                                                return (item?.status !== true ?
+                                                    <tr className="hover:bg-gray-100" key={idx}>
+                                                        <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
+                                                            {item?.property_name}
+                                                        </td>
+                                                        <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
+                                                            {item?.property_category}
+                                                        </td>
+                                                        <td className="pr-4 pl-0 whitespace-nowrap text-base font-normal text-gray-900">
+                                                            <div className="flex items-center">
+
+                                                                {item?.address_province}
+                                                            </div>
+                                                        </td>
+                                                        <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                            <div className="flex items-center">
+                                                                <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
+                                                                {item?.status === true ? "Active" : "Inactive"}
+                                                            </div>
+                                                        </td>
+                                                        <td className="p-2 whitespace-nowrap space-x-1">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    LocalProperty({ item });
+                                                                    router.push("../property/propertysummary");
+                                                                }}
+                                                                className="text-white bg-cyan-600
+                                         hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                        text-sm inline-flex items-center px-2 py-1.5 text-center"
+                                                            >
+                                                                {language?.view}
+                                                            </button>
+
+
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    activateProperty(item?.property_id)
+                                                                    setProperty(item)
+                                                                }}
+                                                                className="text-white ml-4 bg-red-600
+                                         hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                        text-sm inline-flex items-center px-2 py-1.5 text-center"
+                                                            >
+                                                                Activate
+                                                            </button>
+                                                        </td>
+                                                    </tr> : <></>
                                                 );
                                             })}
                                         </tbody>
@@ -260,6 +389,7 @@ function AdminLanding() {
 
 
             </div>
+
         </div>
     );
 }
@@ -267,10 +397,3 @@ function AdminLanding() {
 export default AdminLanding
 
 
-AdminLanding.getLayout = function PageLayout(page) {
-    return (
-        <>
-            {page}
-        </>
-    )
-}

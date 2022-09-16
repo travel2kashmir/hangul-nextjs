@@ -140,7 +140,7 @@ function Address() {
      <Sidebar  Primary={english?.Side}/>
      
     <div id="main-content"
-    className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+    className="  bg-gray-50 px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64">
       {/* Navbar */}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">

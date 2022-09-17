@@ -143,6 +143,59 @@ const validationMatchStatus = (sales) => {
   }
 
 }
+
+const validationMatchStatusAdd = (data,couCheck,currCheck,langCheck,devCheck,siCheck) => {
+  var Result = checkMatchStatusDataAdd(data,couCheck,currCheck,langCheck,devCheck,siCheck);
+  if (Result === true){
+   return true;
+  }
+  else{
+    setError(Result);
+    return false;
+
+   }
+  }
+  const checkMatchStatusDataAdd = (data,couCheck,currCheck,langCheck,devCheck,siCheck) => {
+    var error={};
+    if(data?.match_status_name === "" ||data?.match_status_name === undefined){
+      error.match_status_name = "This field is required."
+    } 
+    if(data?.match_status === "" || data?.match_status === undefined){
+      error.match_status = "This field is required."
+    }  
+    if((data.country === "" || data.country === undefined) && couCheck ===true){
+      error.country="Please, select the value for country"
+    }
+    if((data.language === "" || data.language === undefined) && langCheck ===true){
+      error.language="Please, select the value for language"
+    }
+    if((data.device === "" || data.device === undefined) && devCheck ===true){
+      error.device="Please, select the value for device"
+    }
+    if((data.currency=== "" || data.currency === undefined) && currCheck ===true){
+      error.currency="Please, select the value for currency"
+    }
+    if((data.site_type=== "" || data.site_type === undefined) && siCheck ===true){
+      error.sitetype="Please, select the value for site type"
+    }
+    if((data.country !== "" && data.country !== undefined) && couCheck ===false){
+      error.country="Please, check the the country, first"
+    }
+    if((data.language !== "" && data.language !== undefined) && langCheck ===false){
+      error.language="Please, check the the language, first"
+    }
+    if((data.device !== "" && data.device !== undefined) && devCheck ===false){
+      error.device="Please, check the the device, first"
+    }
+    if((data.currency !== "" && data.currency !== undefined) && currCheck ===false){
+      error.currency="Please, check the the currency, first"
+    }
+    if((data.site_type !== "" && data.site_type !== undefined) && siCheck ===false){
+      error.sitetype="Please, check the the currency, first"
+    }
+   return Object.keys(error).length === 0 ? true :  error;
+  
+   }
   //Checking Form Data for Validations
   const checkPOSData = (sales) => {
     var error={};
@@ -182,7 +235,7 @@ const validationMatchStatus = (sales) => {
    }
      // Point of Sale Add Function
   const submitMatchstatus = () =>
-   { if (validationMatchStatus(sales)){ 
+   { if (validationMatchStatusAdd(sales,countryCheck,currencyCheck,languageCheck,deviceCheck,siteCheck)){ 
     if(countryCheck || currencyCheck || languageCheck || deviceCheck || siteCheck === true){
       const data =[{
         match_status: sales?.match_status,
@@ -278,7 +331,7 @@ const validationMatchStatus = (sales) => {
       <Header Primary={english?.Side1} />
       <Sidebar Primary={english?.Side1} />
       <div id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+        className="  bg-gray-50 px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64">
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -563,7 +616,6 @@ const validationMatchStatus = (sales) => {
                 <div className="flex mx-2 flex-wrap my-4">
                   <div className="lg:w-10/12  px-1">
                     <div className="relative w-full ">
-
                       <div className='flex mb-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex  ">
@@ -577,7 +629,7 @@ const validationMatchStatus = (sales) => {
                             >
                              {language?.country}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
                       text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
@@ -593,11 +645,12 @@ const validationMatchStatus = (sales) => {
                                 <option key={i} value={i.country_code}>{i.country_name}</option>)
                             }
                             )}
-
                           </select>
+                          <p className="text-red-700 font-light">
+                   {error?.country}
+            </p>
                         </div>
                       </div>
-
                       <div className='flex mb-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex">
@@ -613,7 +666,7 @@ const validationMatchStatus = (sales) => {
                               {language?.device}
                             </label> </span></div>
 
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
@@ -628,10 +681,11 @@ const validationMatchStatus = (sales) => {
                                 <option key={i} value={i.user_device}>{i.user_device}</option>)
                             }
                             )}
-
-                          </select></div>
+                          </select>
+                          <p className="text-red-700 font-light">
+                   {error?.language}
+            </p></div>
                       </div>
-
                       <div className='flex mb-2'>
                         <div className="w-full lg:w-2/12 ">
                           <span className="flex ">
@@ -645,7 +699,7 @@ const validationMatchStatus = (sales) => {
                             >
                               {language?.language}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
@@ -660,8 +714,10 @@ const validationMatchStatus = (sales) => {
                                 <option key={i} value={i.language_code}>{i.language_name}</option>)
                             }
                             )}
-
                           </select>
+                          <p className="text-red-700 font-light">
+                   {error?.language}
+            </p>
                         </div>
                       </div>
                       <div className='flex mb-2'>
@@ -679,22 +735,24 @@ const validationMatchStatus = (sales) => {
                             >
                               {language?.currency}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
                                 setSales({ ...sales, currency: e.target.value })
                               )
                             }>
-
                             <option selected disabled>{language?.select}</option>
-               {lang?.CurrencyData?.map(i => {
+                                {lang?.CurrencyData?.map(i => {
                               return (
                                 <option key={i} value={i.currency_code}>{i.currency_name}</option>)
                             }
                             )}
 
-                          </select></div>
+                          </select>
+                          <p className="text-red-700 font-light">
+                   {error?.currency}
+                       </p></div>
                       </div>
                       <div className='flex my-2'>
                         <div className="w-full lg:w-2/12 ">
@@ -711,7 +769,7 @@ const validationMatchStatus = (sales) => {
                             >
                               {language?.sitetype}
                             </label> </span></div>
-                        <div className="w-full lg:w-4/12 ">
+                        <div className="w-full lg:w-6/12 ">
                           <select className="shadow-sm capitalize bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                             onChange={
                               (e) => (
@@ -720,10 +778,13 @@ const validationMatchStatus = (sales) => {
                             }>
 
                             <option selected disabled>{language?.select}</option>
-              <option value="localuniversal">Google</option>
+                             <option value="localuniversal">Google</option>
                             <option value="mapresults">Google Maps</option>
                             <option value="placepage">Place page</option>
-                          </select></div>
+                          </select>
+                          <p className="text-red-700 font-light">
+                   {error?.sitetype}
+            </p></div>
                       </div>
                     </div>
                   </div>

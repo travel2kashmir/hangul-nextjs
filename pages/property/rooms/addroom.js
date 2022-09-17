@@ -408,7 +408,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
     <Header  Primary={english?.Side1}/>
     <Sidebar Primary={english?.Side1}/>
     <div id="main-content"
-    className="  bg-gray-50  pt-24 relative overflow-y-auto lg:ml-64">
+    className="  bg-gray-50 py-2 px-4 pt-24 relative overflow-y-auto lg:ml-64">
       {/* Header */}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -444,14 +444,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         </ol>
       </nav>
       {/* Title */}
-      <div className=" pt-2 px-4">
+      <div className=" pt-2 ">
         <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
           {language?.add} {language?.room}
         </h6>
         {/* Room Forms */}
         {/* Room Description */}
         <div id='0' className={disp===0?'block':'hidden'}>
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+        <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>

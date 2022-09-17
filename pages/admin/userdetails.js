@@ -20,7 +20,7 @@ var locale;
 
 const logger = require("../../services/logger");
 
-function userDetails() {
+function UserDetails() {
     const [properties, setProperties] = useState([]);
     const [spinner, setSpinner] = useState(0);
     const [error, setError] = useState({});
@@ -163,9 +163,9 @@ function userDetails() {
                                         }
                                     >
                                         <option defaultValue="" disabled selected>Select</option>
-                                        {properties.map(item => {
+                                        {properties.map((item,idx) => {
                                             return (
-                                                <option Value={JSON.stringify(item)} >{item?.property_name}</option>
+                                                <option Value={JSON.stringify(item)} key={idx}>{item?.property_name}</option>
                                             )
                                         })}
                                     </select>
@@ -342,7 +342,7 @@ function userDetails() {
     )
 }
 
-export default userDetails
+export default UserDetails
 
 
 

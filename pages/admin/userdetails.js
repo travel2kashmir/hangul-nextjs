@@ -73,7 +73,7 @@ function UserDetails() {
 
     const fetchProperty = async () => {
         try {
-            console.log(JSON.stringify(currentUser))
+            
             const url = `/api/properties/${currentUser.user_id}`;
             logger.info("url" + url)
             const response = await axios.get(url, {
@@ -92,7 +92,7 @@ function UserDetails() {
 
     const submitNew = () => {
         var item = JSON.parse(saveData)
-        console.log(item)
+       
         const data = {
             property_id: item?.property_id,
             user_id: currentUser.user_id,
@@ -102,7 +102,11 @@ function UserDetails() {
             property_type: item?.property_category,
             language: locale
         }
-        axios.post('/api/add_property_user', data, { header: { "content-type": "application/json" } }).then((response) => {
+       
+
+        axios.post('/api/add_property_user', data, { header: { "content-type": "application/json" } })
+        .then((response) => {
+            fetchProperty();
             toast.success("API: Property For User Assigned", {
                 position: "top-center",
                 autoClose: 5000,
@@ -112,9 +116,11 @@ function UserDetails() {
                 draggable: true,
                 progress: undefined,
             });
-            document.getElementById('ownerform').reset();
+           // document.getElementById('ownerform').reset();
             assignProperty(0);
-        }).catch(error => toast.error("API: Error In Property User Assignment", {
+        }).catch(error => 
+            {
+            toast.error("API: Error In Property User Assignment", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -122,7 +128,7 @@ function UserDetails() {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-        }))
+        })})
     }
     return (<>
         {<div className={assignProperty === 1 ? 'block' : 'hidden'}>
@@ -152,7 +158,7 @@ function UserDetails() {
                                 <div className="col-span-6 sm:col-span-3">
                                     <label className="text-sm font-medium text-gray-900 block mb-2"
                                         htmlFor="grid-password">
-                                        {language?.propertycategory}
+                                        {language?.propertyname}
                                     </label>
                                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
 
@@ -169,7 +175,9 @@ function UserDetails() {
                                             )
                                         })}
                                     </select>
-                                    {saveData === '' ? <></> : <button onClick={() => submitNew()}
+                                    {saveData === '' ? <></> : <button 
+                                    onClick={() => submitNew()}
+                                    type="button"
                                         className='text-white mt-2 bg-cyan-600
                                          hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center'>

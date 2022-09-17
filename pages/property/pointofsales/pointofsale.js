@@ -335,8 +335,7 @@ const filterByMLanguage = (props) => {
         site_type: siteData.tick  === false && co5Check === true? "" : siteData.data,
         match_status_id:current?.id  
     };
-     alert("final" +JSON.stringify(final_data))
-      const url = '/api/point_of_sale/match_status'
+    const url = '/api/point_of_sale/match_status'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
           fetchDetails();
@@ -503,6 +502,11 @@ const submitMatchstatus = () =>
   setDeviceData({});
   setCurrencyData({});
   setLanguageData({});
+  setCo1Check(false);
+  setCo2Check(false);
+  setCo3Check(false);
+  setCo4Check(false);
+  setCo5Check(false);
   setSiteData({})
   setCountryCheck(false);
   setDeviceCheck(false);
@@ -1082,7 +1086,7 @@ const submitMatchstatus = () =>
                           onChange={
                               (e) => (
                             
-                                setCountryData({ ...countryData, data: e.target.value },setFlag(1))
+                                setCountryData({ ...countryData, data: e.target.value })
                             
                               )
                             }>
@@ -1249,21 +1253,31 @@ const submitMatchstatus = () =>
                 <div className="items-center flex p-6 border-t border-gray-200 rounded-b">
                   <Button  Primary={language?.Update}  onClick= {()=>{
                  if((flag === 1) ||
-                 (countryData.data !== undefined && countryData.tick === true && countryData.data !== "")||
-                (countryData.tick === false) ||
-                 (deviceData.data !== undefined && deviceData.tick === true)
+                 (countryData.data !== undefined && countryData.tick === true && countryCheck===true && countryData.data !== "")||
+                (countryData.tick === false && co1Check === true ) ||
+                (countryCheck === true && countryData.data !== undefined && countryData.data !== "")
+                ||
+                 (deviceData.data !== undefined && deviceData.tick === true && deviceCheck===true && deviceData.data !== "")
                  ||
-                 (deviceData.tick === false)||
-                 (languageData.data !== undefined && languageData.tick === true)
+                 (deviceData.tick === false && co3Check === true)||
+                 (deviceCheck === true && deviceData.data !== undefined && deviceData.data !== "")
+                 (languageData.data !== undefined && languageData.tick === true && languageCheck===true && languageData.data !== "")
                  ||
-                 ( languageData.tick === false)||
-                 (currencyData.tick === false) ||
-                 (currencyData.data !== undefined && currencyData.tick === true)
+                 (languageData.tick === false && co2Check === true)||
+                 (languageCheck === true && languageData.data !== undefined && languageData.data !== "")
+                ||
+                (currencyData.data !== undefined && currencyData.tick === true && currencyCheck===true && currencyData.data !== "")
                  ||
-                 (siteData.tick === false) ||
-                 (siteData.data !== undefined && siteData.tick === true))
+                 (currencyData.tick === false && co5Check === true)||
+                 (currencyCheck === true && currencyData.data !== undefined && currencyData.data !== "")
+                 ||
+                 (siteData.data !== undefined && siteData.tick === true && siteCheck===true && siteData.data !== "")
+                 ||
+                 (siteData.tick === false && co4Check === true)||
+                 (siteCheck === true && siteData.data !== undefined && siteData.data !== ""))
                  {
-                    submitMatchStatusEdit()}
+                    submitMatchStatusEdit()
+                  }
                    
                   else{
                     toast.warn("APP: Please edit the details, first.", {
@@ -1279,7 +1293,7 @@ const submitMatchstatus = () =>
                   } } 
                   />
                 </div>
-                {countryCheck}
+                
                 </div>
 </div> 
 </div>

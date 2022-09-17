@@ -642,5 +642,14 @@ export default {
      ></path>
    </svg>
 
-  }
+  },
+  assignpropertytouser:"Attribuer la propriété à l'utilisateur",
+  addpropertytouser:"Ajouter une propriété à l'utilisateur",
+  allusers:"Tous les utilisateurs",
+  welcome:"Bienvenu",
+  account:"Compte",
+  Email:"E-mail",
+  Registered:"Inscrit",
+  listofallpropertiesforuser: "Liste de toutes les propriétés pour l'utilisateur",
+  assignProperty:"Attribuer une propriété"
 };

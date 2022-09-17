@@ -105,9 +105,6 @@ function Allusers() {
     })
   }
 
-  
-
-
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {

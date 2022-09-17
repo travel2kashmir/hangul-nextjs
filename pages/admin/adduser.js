@@ -102,9 +102,7 @@ function Adduser() {
 
         }
         /** Current Property Details fetched from the local storage **/
-
-
-        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
       }
     }

@@ -628,7 +628,16 @@ AddPackage :{
          clipRule="evenodd"
        ></path>
      </svg>
-    }
+    },
+    assignpropertytouser:"تعيين خاصية للمستخدم",
+    addpropertytouser:"إضافة خاصية للمستخدم",
+    allusers:"جميع المستخدمين",
+    welcome:"أهلا وسهلا",
+    account:"الحساب",
+    Email:"البريد الإلكتروني",
+  Registered:"مسجل",
+  listofallpropertiesforuser: "  قائمة بجميع الخصائص للمستخدم",
+  assignProperty:"تعيين خاصية"
 
   };
 

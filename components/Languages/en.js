@@ -780,7 +780,16 @@ pointofsale:'../../pointofsales'
        clipRule="evenodd"
      ></path>
    </svg>
-  }
+  },
+  assignpropertytouser:"Assign Property To User",
+  addpropertytouser:"Add Property To User",
+  allusers:"All Users",
+  welcome:"Welcome",
+  account:"Account",
+  Email:"Email",
+  Registered:"Registered",
+  listofallpropertiesforuser: "List of All Properties For User",
+  assignProperty:"Assign Property"
   
   
 

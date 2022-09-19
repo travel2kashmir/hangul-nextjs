@@ -146,7 +146,7 @@ function Allusers() {
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">All Users</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.allusers}</span>
             </div>
           </li>
         </ol>
@@ -162,7 +162,7 @@ function Allusers() {
 
               {/*active users */}
               <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
-                List of All Active Users
+                {language?.listofactive}
               </h6>
               <form className=" space-y-1" action="#">
                 <table className="table-fixed  w-full divide-y divide-gray-200">
@@ -172,20 +172,20 @@ function Allusers() {
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Name
+                        {language?.username}
                       </th>
                       <th
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Email
+                        {language?.email}
                       </th>
 
                       <th
                         scope="col"
                         className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        {language?.Status}
+                        {language?.Status} 
                       </th>
                       <th
                         scope="col"
@@ -209,7 +209,7 @@ function Allusers() {
                           <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                             <div className="flex items-center">
                               <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                              {item?.status === true ? "Active" : "Inactive"}
+                              {item?.status === true ? <>{language?.active}</> :<> {language?.inactive}</>}
                             </div>
                           </td>
                           <td className="p-2 whitespace-nowrap space-x-1">
@@ -237,7 +237,7 @@ function Allusers() {
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"
                             >
-                              De-Activate
+                            {language?.deactivate}
                             </button>
                           </td>
                         </tr> : <></>
@@ -254,7 +254,7 @@ function Allusers() {
               
               {falseFlag===true?<>
                 <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
-                List of All In-Active Users {JSON.stringify(falseFlag)}
+                {language?.listofinactive} 
               </h6>
               <form className=" space-y-1" action="#">
                 <table className="table-fixed  w-full divide-y divide-gray-200">
@@ -264,13 +264,13 @@ function Allusers() {
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Name
+                        {language?.username}
                       </th>
                       <th
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Email
+                        {language?.email}
                       </th>
 
                       <th
@@ -301,7 +301,7 @@ function Allusers() {
                           <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                             <div className="flex items-center">
                               <div className="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div>
-                              {item?.status === true ? "Active" : "Inactive"}
+                              {item?.status === true ? <>{language?.active}</> :<> {language?.inactive}</>}
                             </div>
                           </td>
                           <td className="p-2 whitespace-nowrap space-x-1">
@@ -329,7 +329,7 @@ function Allusers() {
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"
                             >
-                              Activate
+                            {language?.activate}
                             </button>
                           </td>
                         </tr> : <></>

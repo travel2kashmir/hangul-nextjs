@@ -346,7 +346,7 @@ AddPackage :{
     signout: "خروج",
     property: "منشأه",
     name: "اسم",
-    status: "دَرَجَة",
+    Status: "دَرَجَة",
     category:  "أُفنُون",
     active: "رشيق",
     action: " اِنعِكاس",
@@ -637,7 +637,19 @@ AddPackage :{
     Email:"البريد الإلكتروني",
   Registered:"مسجل",
   listofallpropertiesforuser: "  قائمة بجميع الخصائص للمستخدم",
-  assignProperty:"تعيين خاصية"
+  assignProperty:"تعيين خاصية",
+  deactivate:"تعطيل",
+  activate:"تفعيل",
+  active:"نشيط",
+  inactive:"غير نشط",
+  listofactive:"قائمة بجميع المستخدمين النشطين",
+  username:"اسم االمستخدم",
+  email:"البريد الإلكتروني",
+  listofinactive:"قائمة بجميع المستخدمين غير النشطين",
+  userPassword:"كلمة المرور",
+  createuser:"إنشاء مستخدم",
+  creatinguser:"إنشاء المستخدم"
+ 
 
   };
 

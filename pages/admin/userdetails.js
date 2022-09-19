@@ -73,14 +73,14 @@ function UserDetails() {
 
     const fetchProperty = async () => {
         try {
-            
+
             const url = `/api/properties/${currentUser.user_id}`;
             logger.info("url" + url)
             const response = await axios.get(url, {
                 headers: { accept: "application/json" },
             });
             setUserdata(response.data);
-} catch (error) {
+        } catch (error) {
             if (error.response) {
                 logger.error("Current User Properties Error");
             } else {
@@ -92,7 +92,6 @@ function UserDetails() {
 
     const submitNew = () => {
         var item = JSON.parse(saveData)
-       
         const data = {
             property_id: item?.property_id,
             user_id: currentUser.user_id,
@@ -102,33 +101,32 @@ function UserDetails() {
             property_type: item?.property_category,
             language: locale
         }
-       
 
         axios.post('/api/add_property_user', data, { header: { "content-type": "application/json" } })
-        .then((response) => {
-            fetchProperty();
-            toast.success("API: Property For User Assigned", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-           // document.getElementById('ownerform').reset();
-            assignProperty(0);
-        }).catch(error => 
-            {
-            toast.error("API: Error In Property User Assignment", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        })})
+            .then((response) => {
+                fetchProperty();
+                toast.success("API: Property For User Assigned", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                // document.getElementById('ownerform').reset();
+                assignProperty(0);
+            }).catch(error => {
+                toast.error("API: Error In Property User Assignment", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            })
     }
     return (<>
         {<div className={assignProperty === 1 ? 'block' : 'hidden'}>
@@ -169,15 +167,15 @@ function UserDetails() {
                                         }
                                     >
                                         <option defaultValue="" disabled selected>Select</option>
-                                        {properties.map((item,idx) => {
+                                        {properties.map((item, idx) => {
                                             return (
                                                 <option Value={JSON.stringify(item)} key={idx}>{item?.property_name}</option>
                                             )
                                         })}
                                     </select>
-                                    {saveData === '' ? <></> : <button 
-                                    onClick={() => submitNew()}
-                                    type="button"
+                                    {saveData === '' ? <></> : <button
+                                        onClick={() => submitNew()}
+                                        type="button"
                                         className='text-white mt-2 bg-cyan-600
                                          hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center'>
@@ -203,7 +201,7 @@ function UserDetails() {
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                           <Link href="./allusers" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>  {language?.allusers}</a></Link>
+                            <Link href="./allusers" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>  {language?.allusers}</a></Link>
                         </div>
                     </li>
 
@@ -297,7 +295,7 @@ function UserDetails() {
                                                     <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                         <div className="flex items-center">
                                                             <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                                                            {item?.status === true ? "Active" : "Inactive"}
+                                                            {item?.status === true ? <>{language?.active}</> : <> {language?.inactive}</>}
                                                         </div>
                                                     </td>
                                                     <td className="p-2 whitespace-nowrap space-x-1">

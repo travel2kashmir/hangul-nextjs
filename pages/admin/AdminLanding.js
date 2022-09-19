@@ -166,10 +166,10 @@ function AdminLanding() {
             </div>
             <Header admin={english?.Sideadminlanding}/>
             <Sidebar admin={english?.Sideadminlanding} />
-            <div id="main-content" className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
-                <div className="flex flex-col my-2 bg-white shadow rounded-lg  px-12 sm:p-6 w-max xl:p-8  2xl:col-span-2 md:mx-auto">
+            <div id="main-content" className="bg-gray-50  md:min-h-screen px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+ <div className="flex flex-col px-2 my-2 bg-white shadow rounded-lg  w-max  xl:p-8 xl:w-full 2xl:col-span-2 md:mx-auto ">
                     <div className="text-center ">
-                        <p className="capitalize mt-4 font-semibold text-3xl font-sans  mx-12  mb-6 text-cyan-500">
+                        <p className="capitalize mt-4 font-semibold text-3xl font-sans  mb-6 text-cyan-500">
                             {language?.welcome} {currentUser?.name}
                         </p>
                     </div>

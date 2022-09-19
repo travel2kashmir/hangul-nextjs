@@ -114,7 +114,7 @@ function Adduser() {
     <Header admin={english?.Sideadminlanding}/>
     <Sidebar admin={english?.Sideadminlanding}/>
     <div id="main-content"
-      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+      className="  bg-gray-50 px-4 min-h-screen pt-24 relative overflow-y-auto lg:ml-64" >
       {/*Nav Bar*/}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -134,7 +134,7 @@ function Adduser() {
       </nav>
 
       {/*Sign up form */}
-      <div className="flex  justify-center bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2">
+      <div className="flex  justify-center bg-white xl:m-64 xl:mt-8 shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2 md:mx-8">
         <form className=' sm:w-full md:w-2/3 lg:w-2/5 py-4'>
           <div className="relative w-full mb-3">
             <label

@@ -413,7 +413,7 @@ var time;
   } } 
  /* Edit Rate Modification Function */
   const submitRateMod = () => {
-    if(validationRateModification(rateRule)){
+   if(validationRateModification(rateRule) === true){
     if (mod.length != 0) {
     const final_data = {
       "rate_modification_id": rateRule?.rate_modification_id,
@@ -423,7 +423,7 @@ var time;
     const url = '/api/rate_rule/rate_modification'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("API:API: User rate modification updated successfully!", {
+        toast.success("API: User rate modification updated successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -437,7 +437,7 @@ var time;
 
       })
       .catch((error) => {
-        toast.error("API:API: User rate modification error.", {
+        toast.error("API: User rate modification error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -889,10 +889,10 @@ const validationRateModification = (data) => {
 const checkRateModification = (data) => {
  var error={};
 if(data?.price_multiplier === "" ||  data.price_multiplier === undefined){
-  err.price_multiplier = "This field is required."
+  error.price_multiplier = "This field is required."
 }
  if((!data?.price_multiplier.match(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/) && (data?.price_multiplier != "" &&  data.price_multiplier != undefined))){
-   err.price_multiplier = "This field accept possitive and decimal values only."
+   error.price_multiplier = "This field accept possitive and decimal values only."
  }
 return Object.keys(error).length === 0 ? true :  error;
 
@@ -1681,7 +1681,7 @@ const validationRateCondition = () => {
             </div>
        </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {language?.rates} {allUserRateDetails.refundable}
+          {language?.rates} 
           </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">

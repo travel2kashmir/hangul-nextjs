@@ -31,7 +31,7 @@ var final_program_data=[];
 
 function Addraterule() {
     const [allUserRateDetails, setAllUserRateDetails] = useState([])
-    const [rateRuleId, setRateRuleId] = useState([])
+    const [rateRuleId, setRateRuleId] = useState()
     const [rateModificationId, setRateModificationId] = useState([])
     const [rateIneligiblityId, setRateIneligiblityId] = useState([])
     const [userRateConditionId, setUserRateConditionId] = useState([])
@@ -249,7 +249,11 @@ function Addraterule() {
                draggable: true,
                progress: undefined,
              });
+             alert(response.data.rate_rule_id)
+             alert(JSON.stringify(response.data))
+             console.log(JSON.stringify(response.data))
             setRateRuleId(response.data.rate_rule_id);
+            
             submitRateConditionAdd(response.data.rate_rule_id);
            })
            .catch((error) => {
@@ -290,10 +294,7 @@ function Addraterule() {
                draggable: true,
                progress: undefined,
              });
-            setRateRuleId(response.data.rate_rule_id);
-           
-     
-           })
+          })
            .catch((error) => {
      
              toast.error("API: Rate Rule Link Error!", {
@@ -870,7 +871,7 @@ const validationRateCondition = () => {
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                   <Link href="../propertysummary" >
-                    <a> {currentProperty?.property_name}</a>
+                    <a> {currentProperty?.property_name}  </a>
                   </Link></span>
               </div>
             </li>
@@ -1311,15 +1312,7 @@ const validationRateCondition = () => {
                         htmlFor="grid-password"
                       >
                          {language?.isdomestic}
-                         {JSON.stringify((
-                    (percentageCheck=== false && (allUserRateDetails.max_user_percentage === "" || 
-                    allUserRateDetails.max_user_percentage === undefined) )
-                    && (countryCheck === false && finalCountry?.length === 0) 
-                    &&(deviceCheck === false  && finalDevice?.length === 0)
-                   && (languageCheck === false  && finalLang?.length === 0) 
-                   && (programCheck === false  && finalProgram?.length === 0)&&
-                   (userSignedIn === false) && (isDomestic === false)))
-                 }
+                      
                       </label>
                       </span>
                       
@@ -1385,7 +1378,7 @@ const validationRateCondition = () => {
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {language?.rates}
+          {language?.rates} {"abcd"+JSON.stringify(rateRuleId)}
             </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">

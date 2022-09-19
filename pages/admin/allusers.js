@@ -133,7 +133,7 @@ function Allusers() {
     <Header admin={english?.Sideadminlanding} />
     <Sidebar admin={english?.Sideadminlanding} />
     <div id="main-content"
-      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64 h-auto" >
+      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64 min-h-screen" >
       {/*Nav Bar*/}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -153,7 +153,7 @@ function Allusers() {
       </nav>
 
       {/*Sign up form  className="flex   bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2 w-10/12"*/}
-      <div className='flex flex-col my-2 bg-white mx-auto shadow rounded-lg  px-12 sm:p-6 w-max xl:p-8  2xl:col-span-2'>
+      <div className='flex flex-col px-2 my-2 bg-white shadow rounded-lg  w-max  xl:p-8 xl:w-full 2xl:col-span-2 md:mx-auto '>
 
 
         <div className="pt-6">

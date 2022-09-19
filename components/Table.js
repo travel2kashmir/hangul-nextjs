@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from "react";
-import Button from "./Button";
+import Router from 'next/router';
+
 const Table = (args) => {
-    const itemsPerPage = 4;
+   const [itemsPerPage, setItemsPerPage] = useState(5);
     const [page, setPage] = useState(1);
     const [viewDel, setViewDel] = useState(0);
     const [flag, setFlag] = useState([]);
@@ -15,7 +16,7 @@ const Table = (args) => {
         "delete": 0,
         "id": ''
     });
-
+    
     function myFunction() {
         // Declare variables
         var input, filter, table, tr, td, i, txtValue;
@@ -41,8 +42,11 @@ const Table = (args) => {
     const displayData = useMemo(() => {
         const start = (page - 1) * itemsPerPage;
         return args?.gen.slice(start, start + itemsPerPage);
-    }, [page, args?.gen]);
+    }, [page, args?.gen,itemsPerPage]);
 
+    function ItemShow(event) {
+    setItemsPerPage(event.target.value) ;
+    }
     const handlecheckbox = (e) => {
         const { name, checked } = e.target;
         setViewDel(1);
@@ -446,26 +450,25 @@ const Table = (args) => {
                     }} className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center mr-2">
                         <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                     </ button>
+                    
                     <span className="text-sm font-normal text-gray-500">{args?.common?.Showing}
+                   
                         <span className="text-gray-900 font-semibold ml-1">{page}</span> {args?.common?.Of} <span className="text-gray-900 font-semibold">{Math.ceil(args?.gen?.length / itemsPerPage)}</span></span>
+                       
                 </div>
                 <div className="flex items-center space-x-3">
-                    <button onClick={() => {
-                        if (page > 1) {
-                            setPage(page - 1);
-                        }
-                    }} className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
-                        <svg className="-ml-1 mr-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                       {args?.common?.Previous}</button>
-                    <button onClick={() => {
-                        if (page < Math.ceil(args?.gen?.length / itemsPerPage)) {
-                            setPage(page + 1);
-
-                        }
-                    }} className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center">
-                       {args?.common?.Next}
-                        <svg className="-mr-1 ml-1 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                    </button>
+                <select
+                         onChange={(e) =>
+                            ItemShow(e)
+                          }
+                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block mr-2 w-full px-3 py-2">
+                         <option selected disabled>{itemsPerPage}</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                      </select>
+                  
                 </div>
             </div>
         </>

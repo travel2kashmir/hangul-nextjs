@@ -1267,21 +1267,21 @@ function Allpointofsale() {
                     (deviceData.data !== undefined && deviceData.tick === true && deviceCheck === true && deviceData.data !== "")
                     ||
                     (deviceData.tick === false && co3Check === true) ||
-                    (deviceCheck === true && deviceData.data !== undefined && deviceData.data !== "") ||
+                    (deviceCheck === true && deviceData.data !== undefined && deviceData.data !== "" && deviceData.tick === undefined) ||
                     (languageData.data !== undefined && languageData.tick === true && languageCheck === true && languageData.data !== "")
                     ||
                     (languageData.tick === false && co2Check === true) ||
-                    (languageCheck === true && languageData.data !== undefined && languageData.data !== "")
+                    (languageCheck === true && languageData.data !== undefined && languageData.data !== "" && languageData.tick === undefined)
                     ||
                     (currencyData.data !== undefined && currencyData.tick === true && currencyCheck === true && currencyData.data !== "")
                     ||
                     (currencyData.tick === false && co5Check === true) ||
-                    (currencyCheck === true && currencyData.data !== undefined && currencyData.data !== "")
+                    (currencyCheck === true && currencyData.data !== undefined && currencyData.data !== "" && currencyData.tick === undefined)
                     ||
                     (siteData.data !== undefined && siteData.tick === true && siteCheck === true && siteData.data !== "")
                     ||
                     (siteData.tick === false && co4Check === true) ||
-                    (siteCheck === true && siteData.data !== undefined && siteData.data !== "")) {
+                    (siteCheck === true && siteData.data !== undefined && siteData.data !== "" && siteData.tick === undefined)) {
                     submitMatchStatusEdit()
                   }
 

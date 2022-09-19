@@ -215,7 +215,7 @@ function UserDetails() {
             </nav>
 
 
-            <div className="flex flex-col my-2 bg-white shadow rounded-lg  px-12 sm:p-6 w-max xl:p-8  2xl:col-span-2">
+            <div className="flex flex-col px-2 my-2 bg-white shadow rounded-lg  w-max  xl:p-8 xl:w-full 2xl:col-span-2 md:mx-auto ">
                 <div className='flex justify-self-auto  text-gray-900 my-4'>
                     <p className="text-l capitalize flex justify-start  leading-none pl-6 pt-2  ">
                         {language?.welcome} {currentUser?.user_name}
@@ -239,9 +239,9 @@ function UserDetails() {
                 </h6>
                 <div className="pt-6">
                     <div className=" md:px-4 mx-auto w-full">
-                        <div className="flex flex-wrap">
-                            <form className=" space-y-1" action="#">
-                                <table className="table data table-fixed min-w-full divide-y divide-gray-200">
+                        <div className="flex flex-wrap ">
+                            <form className="space-y-1" action="#">
+                                <table className="table data  table-fixed  sm:w-full md:w-screen lg:w-full w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-100">
                                         <tr>
                                             <th
@@ -256,12 +256,7 @@ function UserDetails() {
                                             >
                                                 {language?.property} {language?.category}
                                             </th>
-                                            <th
-                                                scope="col"
-                                                className="px-8  py-4 text-left text-sm font-semibold text-gray-500 uppercase"
-                                            >
-                                                {language?.Province}
-                                            </th>
+                                            
                                             <th
                                                 scope="col"
                                                 className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
@@ -286,12 +281,7 @@ function UserDetails() {
                                                     <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
                                                         {item?.property_category}
                                                     </td>
-                                                    <td className="pr-4 pl-0 whitespace-nowrap text-base font-normal text-gray-900">
-                                                        <div className="flex items-center">
-
-                                                            {item?.address_province}
-                                                        </div>
-                                                    </td>
+                                                    
                                                     <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                         <div className="flex items-center">
                                                             <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>

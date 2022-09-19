@@ -658,10 +658,12 @@ export default {
   inactive:"Inactif",
   listofactive:"Liste de tous les utilisateurs actifs",
   username:"Nom d'utilisateur",
-  email:"E-mail",
+  email:"Email",
   listofinactive:"liste de tous les utilisateurs inactifs",
   userPassword:"Mot de passe",
   createuser:"Créer un utilisateur",
-  creatinguser:"Création d'un utilisateur"
+  creatinguser:"Création d'un utilisateur",
+  inactiveproperties:"Liste des propriétés inactives",
+  activeproperties:"Liste des propriétés actives"
  
 };

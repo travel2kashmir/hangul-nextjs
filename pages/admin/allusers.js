@@ -133,7 +133,7 @@ function Allusers() {
     <Header admin={english?.Sideadminlanding} />
     <Sidebar admin={english?.Sideadminlanding} />
     <div id="main-content"
-      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64 h-auto" >
       {/*Nav Bar*/}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -153,19 +153,19 @@ function Allusers() {
       </nav>
 
       {/*Sign up form  className="flex   bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2 w-10/12"*/}
-      <div className='bg-white shadow-xl rounded-lg m-12'>
+      <div className='flex flex-col my-2 bg-white mx-auto shadow rounded-lg  px-12 sm:p-6 w-max xl:p-8  2xl:col-span-2'>
 
 
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
-            <div className="flex flex-wrap">
+            <div className="flex flex-col  flex-wrap">
 
               {/*active users */}
-              <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
+              <h6 className="text-xl mx-auto mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
                 {language?.listofactive}
               </h6>
               <form className=" space-y-1" action="#">
-                <table className="table-fixed  w-full divide-y divide-gray-200">
+                <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-100">
                     <tr>
                       <th
@@ -253,11 +253,11 @@ function Allusers() {
               {/*inactive users */}
               
               {falseFlag===true?<>
-                <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
+                <h6 className="text-xl mt-6 mx-auto flex leading-none  pt-2 font-bold text-gray-900 mb-2">
                 {language?.listofinactive} 
               </h6>
               <form className=" space-y-1" action="#">
-                <table className="table-fixed  w-full divide-y divide-gray-200">
+                <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-100">
                     <tr>
                       <th

@@ -164,25 +164,24 @@ function AdminLanding() {
                     </div>
                 </div>
             </div>
-            <Header />
+            <Header admin={english?.Sideadminlanding}/>
             <Sidebar admin={english?.Sideadminlanding} />
-            <div id="main-content"
-                className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
-                <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+            <div id="main-content" className="bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+                <div className="flex flex-col my-2 bg-white shadow rounded-lg  px-12 sm:p-6 w-max xl:p-8  2xl:col-span-2 md:mx-auto">
                     <div className="text-center ">
-                        <p className="capitalize font-semibold text-3xl font-sans  mx-12  mb-6 text-cyan-500">
+                        <p className="capitalize mt-4 font-semibold text-3xl font-sans  mx-12  mb-6 text-cyan-500">
                             {language?.welcome} {currentUser?.name}
                         </p>
                     </div>
-                    <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-                        List of All Active Properties
+                    <h6 className="text-xl mt-6 mx-auto flex leading-none  pt-2 font-bold text-gray-900 mb-2">
+                    {language?.activeproperties} 
                     </h6>
                     <div className="pt-6">
                         <div className=" md:px-4 mx-auto w-full">
-                            <div className="flex flex-wrap">
+                            <div className="flex flex-col flex-wrap">
 
                                 <form className=" space-y-1" action="#">
-                                    <table className="table-fixed  w-full divide-y divide-gray-200">
+                                    <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                                         <thead className="bg-gray-100">
                                             <tr>
                                                 <th
@@ -264,11 +263,12 @@ function AdminLanding() {
                                     </table>
 
                                 </form>
-                                <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
-                                    List of All In-Active Properties
+
+                                <h6 className="text-xl mx-auto my-6 flex leading-none  pt-2 font-bold text-gray-900 ">
+                                   {language?.inactiveproperties} 
                                 </h6>
                                 <form className=" space-y-1" action="#">
-                                    <table className="table-fixed  w-full divide-y divide-gray-200">
+                                    <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                                         <thead className="bg-gray-100">
                                             <tr>
                                                 <th

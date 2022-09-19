@@ -648,7 +648,9 @@ AddPackage :{
   listofinactive:"قائمة بجميع المستخدمين غير النشطين",
   userPassword:"كلمة المرور",
   createuser:"إنشاء مستخدم",
-  creatinguser:"إنشاء المستخدم"
+  creatinguser:"إنشاء المستخدم",
+  inactiveproperties:"قائمة الخصائص غير النشطة",
+  activeproperties:"قائمة الخصائص النشطة"
  
 
   };

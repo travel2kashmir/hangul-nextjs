@@ -215,9 +215,9 @@ function UserDetails() {
             </nav>
 
 
-            <div className=" bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2">
-                <div className='flex justify-self-auto'>
-                    <p className="text-l capitalize flex justify-start  leading-none pl-6 pt-2  text-gray-900 ">
+            <div className="flex flex-col my-2 bg-white shadow rounded-lg  px-12 sm:p-6 w-max xl:p-8  2xl:col-span-2">
+                <div className='flex justify-self-auto  text-gray-900 my-4'>
+                    <p className="text-l capitalize flex justify-start  leading-none pl-6 pt-2  ">
                         {language?.welcome} {currentUser?.user_name}
                     </p>
 
@@ -241,7 +241,7 @@ function UserDetails() {
                     <div className=" md:px-4 mx-auto w-full">
                         <div className="flex flex-wrap">
                             <form className=" space-y-1" action="#">
-                                <table className="table-fixed  w-full divide-y divide-gray-200">
+                                <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-100">
                                         <tr>
                                             <th

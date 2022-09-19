@@ -796,11 +796,13 @@ pointofsale:'../../pointofsales'
   inactive:"Inactive",
   listofactive:"List of All Active Users",
   username:"User Name",
-  email:"E-Mail",
+  email:"Email",
   listofinactive:"List of All Inactive User",
   userPassword:"Password",
   createuser:"Create User",
-  creatinguser:"Creating User"
+  creatinguser:"Creating User",
+  inactiveproperties:"List of Inactive Properties",
+  activeproperties:"List of Active Properties"
   
   
 

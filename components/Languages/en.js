@@ -789,7 +789,18 @@ pointofsale:'../../pointofsales'
   Email:"Email",
   Registered:"Registered",
   listofallpropertiesforuser: "List of All Properties For User",
-  assignProperty:"Assign Property"
+  assignProperty:"Assign Property",
+  deactivate:"Deactivate",
+  activate:"Activate",
+  active:"Active",
+  inactive:"Inactive",
+  listofactive:"List of All Active Users",
+  username:"User Name",
+  email:"E-Mail",
+  listofinactive:"List of All Inactive User",
+  userPassword:"Password",
+  createuser:"Create User",
+  creatinguser:"Creating User"
   
   
 

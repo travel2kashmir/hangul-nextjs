@@ -435,7 +435,7 @@ export default {
   signout: "Sedéconnecter",
   property: "Biens",
   name: "Nom",
-  status: "Statut",
+  Status: "Statut",
   theme:'Thème',
   category: "Catégorie",
   active: "Actif",
@@ -651,5 +651,17 @@ export default {
   Email:"E-mail",
   Registered:"Inscrit",
   listofallpropertiesforuser: "Liste de toutes les propriétés pour l'utilisateur",
-  assignProperty:"Attribuer une propriété"
+  assignProperty:"Attribuer une propriété",
+  deactivate:"Désactiver",
+  activate:"Activer",
+  active:"Actif",
+  inactive:"Inactif",
+  listofactive:"Liste de tous les utilisateurs actifs",
+  username:"Nom d'utilisateur",
+  email:"E-mail",
+  listofinactive:"liste de tous les utilisateurs inactifs",
+  userPassword:"Mot de passe",
+  createuser:"Créer un utilisateur",
+  creatinguser:"Création d'un utilisateur"
+ 
 };

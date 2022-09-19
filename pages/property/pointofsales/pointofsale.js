@@ -325,6 +325,7 @@ function Allpointofsale() {
   }
 
   const submitMatchStatusEdit = () => {
+
     if (validationMatchStatus(current)) {
       const final_data = {
         match_status: current?.match_status,
@@ -516,6 +517,7 @@ function Allpointofsale() {
     setSiteCheck(false);
     fetchDetails();
   }
+
   return (
     <div>
       <Header Primary={english?.Side1} />
@@ -1084,8 +1086,7 @@ function Allpointofsale() {
                           <div className="w-full lg:w-4/12 ">
                             <select className="shadow-sm capitalize bg-gray-50 border border-gray-300
                       text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-
-                              onChange={
+                     onChange={
                                 (e) => (
 
                                   setCountryData({ ...countryData, data: e.target.value })
@@ -1106,6 +1107,7 @@ function Allpointofsale() {
 
                             </select>
                           </div>
+
                         </div>
 
                         <div className='flex mb-2'>
@@ -1253,6 +1255,7 @@ function Allpointofsale() {
                       </div>
                     </div>
                   </div>
+
                 </div></div>
               <div className="items-center flex p-6 border-t border-gray-200 rounded-b">
                 <Button Primary={language?.Update} onClick={() => {
@@ -1283,6 +1286,7 @@ function Allpointofsale() {
                   }
 
                   else {
+
                     toast.warn("APP: Please edit the details, first.", {
                       position: "top-center",
                       autoClose: 5000,
@@ -1293,6 +1297,7 @@ function Allpointofsale() {
                       progress: undefined,
                     });
                   }
+
                 }}
                 />
               </div>

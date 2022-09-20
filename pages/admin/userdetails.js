@@ -129,7 +129,7 @@ function UserDetails() {
             })
     }
     return (<>
-        {<div className={assignProperty === 1 ? 'block' : 'hidden'}>
+        {<div className={assignProperty === 1 ? 'block ' : 'hidden'}>
             <form id='ownerform'>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative bg-white  w-full max-w-2xl px-4 h-full md:h-auto">
@@ -187,7 +187,7 @@ function UserDetails() {
         <Header admin={english?.Sideadminlanding} />
         <Sidebar admin={english?.Sideadminlanding} />
         <div id="main-content"
-            className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+            className=" min-h-screen bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
             {/*Nav Bar*/}
             <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                 <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -216,21 +216,9 @@ function UserDetails() {
 
 
             <div className="flex flex-col px-2 my-2 bg-white shadow rounded-lg  w-max  xl:p-8 xl:w-full 2xl:col-span-2 md:mx-auto ">
-                <div className='flex justify-self-auto  text-gray-900 my-4'>
-                    <p className="text-l capitalize flex justify-start  leading-none pl-6 pt-2  ">
-                        {language?.welcome} {currentUser?.user_name}
-                    </p>
-
-                    <p className="text-l ml-auto capitalize flex justify-end  leading-none pl-6 pt-2  text-gray-900 ">
-                        {language?.account} {language?.Status}: {currentUser?.status === true ? 'Active' : 'Inactive'}
-                    </p>
-
-                    <p className="text-l ml-auto capitalize text-bold leading-none pl-6 pt-2  text-gray-900 ">
-                        {language?.Registered} {language?.Email}: {currentUser?.user_email}
-                    </p>
-                </div>
-                <h6 className="text-xl my-4 flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-                    {language?.listofallpropertiesforuser}
+               
+                <h6 className="text-xl my-4 flex leading-none capitalize pl-6 pt-2 font-bold text-gray-900 ">
+                    {language?.listofallpropertiesforuser} {currentUser?.user_name}
                     <button className='ml-auto text-white bg-cyan-600
                                          hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"' onClick={() => setAssignProperty(1)}>

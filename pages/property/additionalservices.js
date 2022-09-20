@@ -9,6 +9,7 @@ import Table from '../../components/Table';
 import Button from "../../components/Button";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import objChecker from "lodash"
 import english from "../../components/Languages/en";
 import french from "../../components/Languages/fr";
 import arabic from "../../components/Languages/ar";
@@ -23,6 +24,7 @@ function AdditionalServices() {
         const [spinner, setSpinner] = useState(0)
         const [additionalServices, setAdditionalServices] = useState({})
         const [services, setServices] = useState([])
+        const [flag, setFlag] = useState([])
         const [view, setView] = useState(0);
         const [modified, setModified] = useState([])
         const [add, setAdd] = useState(0)
@@ -114,7 +116,19 @@ function AdditionalServices() {
 }
 
     /* Function to edit additional services */
-      const editAdditionalServices = (props) => { 
+      const editAdditionalServices = (props,noChange) => { 
+        if(objChecker.isEqual(props,noChange)){
+            toast.warn('No change in  Additional Services detected. ', {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              });
+          }
+ else{
         const final_data = {
             "add_service_id": props.id,
             "add_service_name": props.name,
@@ -149,6 +163,7 @@ function AdditionalServices() {
                     progress: undefined,
                 });
             })
+        }
     }
 
      /* Function to delete additional services */
@@ -185,7 +200,6 @@ function AdditionalServices() {
         setSpinner(1);
         if (modified.length !== 0) {
             const final_data = {
-
                 "additional_service": [{
                     "property_id": currentProperty.property_id,
                     "add_service_name": modified.add_service_name,
@@ -210,6 +224,7 @@ function AdditionalServices() {
                     fetchAdditionalServices();
                     Router.push("./additionalservices");
                     setModified([])
+                    setFlag([])
                     setView(0)
                 })
                 .catch((error) => {
@@ -223,6 +238,8 @@ function AdditionalServices() {
                         draggable: true,
                         progress: undefined,
                     });
+                    setFlag([]);
+                  
                 })
         }
 
@@ -312,7 +329,7 @@ function AdditionalServices() {
         <div className="bg-white rounded-lg shadow relative">
             <div className="flex items-start justify-between p-5 border-b rounded-t">
                 <h3 className="text-xl font-semibold">
-                    {language?.add} {language?.new} {language?.service}
+                    {language?.add} {language?.new} {language?.service} 
                 </h3>
                 <button type="button" onClick={() => setView(0)} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="add-user-modal">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
@@ -323,23 +340,28 @@ function AdditionalServices() {
                     <div className="col-span-6 sm:col-span-3">
                         <label htmlFor="first-name" className="text-sm font-medium text-gray-900 block mb-2">{language?.service} {language?.name}</label>
                         <input type="text" name="first-name"
-                            onChange={(e) => { setModified({ ...modified, add_service_name: e.target.value }) }}
+                            onChange={(e) => { setModified({ ...modified, add_service_name: e.target.value },setFlag(1)) }}
                             id="first-name"
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                         <label htmlFor="last-name" className="text-sm font-medium text-gray-900 block mb-2">{language?.service} {language?.description}</label>
                         <textarea rows="2" columns="50" name="last-name"
-                            onChange={(e) => { setModified({ ...modified, add_service_comment: e.target.value }) }}
+                            onChange={(e) => { setModified({ ...modified, add_service_comment: e.target.value },setFlag(1)) }}
                             id="last-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
                     </div>
                 </div>
             </div>
 
             <div className="items-center p-6 border-t border-gray-200 rounded-b">
-            {spinner === 0 ?
-                <Button Primary={language?.Add} onClick={() => { newAdditionalService(); setAdd(0); }} />:
-                <Button Primary={language?.SpinnerAdd} />}
+            <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
+                      <Button Primary={language?.AddDisabled}  /></div>
+                    <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.Add} onClick={() => { newAdditionalService(); setAdd(0); }} />
+                     </div>
+                     <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerAdd} />
+                       </div>
             </div>
         </div>
     </div>

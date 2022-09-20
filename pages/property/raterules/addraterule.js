@@ -31,7 +31,7 @@ var final_program_data=[];
 
 function Addraterule() {
     const [allUserRateDetails, setAllUserRateDetails] = useState([])
-    const [rateRuleId, setRateRuleId] = useState([])
+    const [rateRuleId, setRateRuleId] = useState()
     const [rateModificationId, setRateModificationId] = useState([])
     const [rateIneligiblityId, setRateIneligiblityId] = useState([])
     const [userRateConditionId, setUserRateConditionId] = useState([])
@@ -249,7 +249,11 @@ function Addraterule() {
                draggable: true,
                progress: undefined,
              });
+             alert(response.data.rate_rule_id)
+             alert(JSON.stringify(response.data))
+             console.log(JSON.stringify(response.data))
             setRateRuleId(response.data.rate_rule_id);
+            
             submitRateConditionAdd(response.data.rate_rule_id);
            })
            .catch((error) => {
@@ -290,10 +294,7 @@ function Addraterule() {
                draggable: true,
                progress: undefined,
              });
-            setRateRuleId(response.data.rate_rule_id);
-           
-     
-           })
+          })
            .catch((error) => {
      
              toast.error("API: Rate Rule Link Error!", {
@@ -431,13 +432,12 @@ function Addraterule() {
        // Country Edit Submit
              const submitCountryAdd = () => {
             const final_data = { "user_rate_country": finalCountry }
-
             const url = "/api/rate_rule/user_rate_conditioning/rate_condition_user_country_link";
               axios
                 .put(url, final_data, { 
                   header: { "content-type": "application/json" } })
                 .then((response) => {
-                  toast.success("API: Country Updated Successfully!", {
+                  toast.success("API: Country added successfully!", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -472,7 +472,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("API: Devices Added Successfully!", {
+                    toast.success("API: Devices added successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -508,7 +508,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("API: Programs Updated Successfully!", {
+                    toast.success("API: Programs added successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -537,8 +537,8 @@ function Addraterule() {
               
               };
             //User Signed In, Max percentage and Domestic Submit
-              const submitAdditional = () => {
-              const data = [{
+              const submitAdditional = () => {   
+                const data = [{
                   max_user_percentage:allUserRateDetails?.max_user_percentage,
                   user_signed_in: userSignedIn,
                   is_domestic: isDomestic,
@@ -550,7 +550,7 @@ function Addraterule() {
                   .put(url, final_data, { 
                     header: { "content-type": "application/json" } })
                   .then((response) => {
-                    toast.success("API: Rate rule Updated Successfully!", {
+                    toast.success("API: Additional Details added Successfully!", {
                       position: "top-center",
                       autoClose: 5000,
                       hideProgressBar: false,
@@ -576,7 +576,7 @@ function Addraterule() {
                     });
                     setBasicFlag([])
                   });
-
+                
               };
         
           // Programs JSON for Dropdown
@@ -704,6 +704,16 @@ const checkRates = (data) => {
 }
 if(data?.tax_currency === "" ||  data.tax_currency === undefined){
   error.tax_currency= "This field is required."
+}
+if(data?.refundable === "true"){
+  if(data.refundable_until_days === "" || data.refundable_until_days === undefined)
+  {
+    error.refundable_until_days="This field is required"
+  }
+  if(data.refundable_until_time === "" || data.refundable_until_time === undefined)
+  {
+    error.refundable_until_time="This field is required"
+  }
 }
 if(data?.tax_amount === "" ||  data?.tax_amount === undefined){
   error.tax_amount = "This field is required."
@@ -834,7 +844,7 @@ const validationRateCondition = () => {
     <Header Primary={english?.Side1} />
       <Sidebar Primary={english?.Side1} />
     <div id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+        className="  bg-gray-50 px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64">
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -861,7 +871,7 @@ const validationRateCondition = () => {
                 </svg>
                 <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
                   <Link href="../propertysummary" >
-                    <a> {currentProperty?.property_name}</a>
+                    <a> {currentProperty?.property_name}  </a>
                   </Link></span>
               </div>
             </li>
@@ -954,7 +964,7 @@ const validationRateCondition = () => {
                         })
                       }/>
 
-                     <p className="text-red-700 text-sm font-light">
+                     <p className="text-sm text-sm text-red-700 font-light">
                    {error?.program}
 
             </p>
@@ -981,7 +991,7 @@ const validationRateCondition = () => {
                       <option value="any">{language?.any}</option>
                       <option value="none">{language?.none}</option>
                     </select>
-                    <p className="text-red-700 text-sm font-light">{error?.Description}</p>
+                    <p className="text-sm text-sm text-red-700 font-light">{error?.Description}</p>
                   </div>
                 </div>
 
@@ -1001,7 +1011,7 @@ const validationRateCondition = () => {
                           ...allUserRateDetails,
 
                           Description: e.target.value,})} />
-                    <p className="text-red-700 text-sm font-light">
+                    <p className="text-sm text-sm text-red-700 font-light">
                    {error?.Description}
             </p>
                   </div>
@@ -1030,7 +1040,7 @@ const validationRateCondition = () => {
                   <option value="existence">{language?.existence}</option>
              </select>
 
-             <p className="text-red-700 text-sm font-light">
+             <p className="text-sm text-sm text-red-700 font-light">
                    {error?.ineligibility_type}
             </p>
 
@@ -1066,7 +1076,7 @@ const validationRateCondition = () => {
                     setAllUserRateDetails({
                       ...allUserRateDetails,
                       price_multiplier: e.target.value,}) }/>
-                  <p className="text-red-700 text-sm font-light">
+                  <p className="text-sm text-sm text-red-700 font-light">
                    {error?.price_multiplier}
 
             </p>
@@ -1111,9 +1121,7 @@ const validationRateCondition = () => {
 
         <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
           {language?.ratecondition}
-
         </h6>
-
 
       <div className="flex flex-wrap">
        <div className="w-full lg:w-6/12 px-4">
@@ -1145,7 +1153,7 @@ const validationRateCondition = () => {
                       displayValue="country_name"
                       onRemove={(event) => {country(event)}}
                       onSelect={(event) => {country(event) }} />
-                      <p className="text-red-700 text-sm font-light">
+                      <p className="text-sm text-sm text-red-700 font-light">
                       {error?.country}</p>
                       </div>
                      
@@ -1173,7 +1181,7 @@ const validationRateCondition = () => {
                       displayValue="user_device"
                      onRemove={(event) => { devices(event) }}
                       onSelect={(event) => { devices(event) }} />
-                       <p className="text-red-700 text-sm font-light">
+                       <p className="text-sm text-sm text-red-700 font-light">
                       {error?.device}</p>
                       </div>
                     </div>
@@ -1198,7 +1206,7 @@ const validationRateCondition = () => {
                      displayValue="language_name"
                       onRemove={(event) => { languages(event) }}
                       onSelect={(event) => { languages(event) }} />
-                     <p className="text-red-700 text-sm font-light">
+                     <p className="text-sm text-sm text-red-700 font-light">
                       {error?.language}</p>
                       </div>
                       </div>
@@ -1224,7 +1232,7 @@ const validationRateCondition = () => {
                       displayValue="program_name"
                       onRemove={(event) => {program(event)}}
                       onSelect= {(event)=>{program(event)}} />
-                       <p className="text-red-700 text-sm font-light">
+                       <p className="text-sm text-sm text-red-700 font-light">
                       {error?.program}</p></div>
                       </div>
 
@@ -1248,7 +1256,7 @@ const validationRateCondition = () => {
                         },setBasicFlag(1))
                       }/>
 
-                       <p className=" text-red-700 text-sm font-light">
+                       <p className=" text-sm text-sm text-red-700 font-light">
                          {error?.maxuserspercent}
                             </p>
 
@@ -1304,15 +1312,7 @@ const validationRateCondition = () => {
                         htmlFor="grid-password"
                       >
                          {language?.isdomestic}
-                         {JSON.stringify((
-                    (percentageCheck=== false && (allUserRateDetails.max_user_percentage === "" || 
-                    allUserRateDetails.max_user_percentage === undefined) )
-                    && (countryCheck === false && finalCountry?.length === 0) 
-                    &&(deviceCheck === false  && finalDevice?.length === 0)
-                   && (languageCheck === false  && finalLang?.length === 0) 
-                   && (programCheck === false  && finalProgram?.length === 0)&&
-                   (userSignedIn === false) && (isDomestic === false)))
-                 }
+                      
                       </label>
                       </span>
                       
@@ -1346,7 +1346,7 @@ const validationRateCondition = () => {
               {Button !== 'undefined' ?
                 <Button Primary={language?.Next} onClick={
                   validationRateCondition}
-               /> 
+                /> 
                 : <></>
               }
         </div>
@@ -1378,7 +1378,7 @@ const validationRateCondition = () => {
 
           </div>
           <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-          {language?.rates}
+          {language?.rates} {"abcd"+JSON.stringify(rateRuleId)}
             </h6>
           <div className="pt-6">
             <div className=" md:px-4 mx-auto w-full">
@@ -1403,7 +1403,7 @@ const validationRateCondition = () => {
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select>
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                     {error?.base_rate_currency}</p>
                   </div>
                 </div>
@@ -1424,7 +1424,7 @@ const validationRateCondition = () => {
                         )
                       }
                     />
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                     {error?.base_rate_amount}</p>
                   </div>
                 </div>
@@ -1448,7 +1448,7 @@ const validationRateCondition = () => {
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select>
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                     {error?.tax_currency}
             </p>
                   </div>
@@ -1472,7 +1472,7 @@ const validationRateCondition = () => {
                       } />
 
 
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                     {error?.tax_amount}
                     </p>
                   </div>
@@ -1498,7 +1498,7 @@ const validationRateCondition = () => {
                       <option value="INR">INR</option>
                       <option value="Euro">Euro</option>
                     </select>
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                       {error?.otherfees_currency}
                     </p>
                   </div>
@@ -1522,7 +1522,7 @@ const validationRateCondition = () => {
                         )
                       }
                     />
-                      <p className=" text-red-700 font-light">
+                      <p className=" text-sm text-red-700 font-light">
                       {error?.otherfees_amount}
                     </p>
                   </div>
@@ -1549,7 +1549,7 @@ const validationRateCondition = () => {
                       <option value="installment">Installment</option>
                       <option value="deposit">Deposit</option>
                     </select>
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                     {error?.charge_currency}
                       </p>
                   </div>
@@ -1561,7 +1561,8 @@ const validationRateCondition = () => {
                       className="text-sm font-medium text-gray-900 block mb-2"
                       htmlFor="grid-password"
                     >
-                        {language?.refundable} <span style={{ color: "#ff0000" }}>*</span>
+                        {language?.refundable} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                      </label>
                     <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                       onChange={
@@ -1571,12 +1572,11 @@ const validationRateCondition = () => {
                       }>
 
                         <option selected disabled>{language?.select}</option> 
-
                         <option value={true}>Yes</option>
                          <option value={false}>No</option>
                     
                     </select>
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                     {error?.refundable}
                      </p>
                   </div>
@@ -1591,6 +1591,7 @@ const validationRateCondition = () => {
                           htmlFor="grid-password"
                         >
                            {language?.refundable} {language?.till} {language?.days} 
+                           <span style={{ color: "#ff0000" }}>*</span>
                           </label>
                         <input
                           type="text"
@@ -1601,9 +1602,9 @@ const validationRateCondition = () => {
                             )
                           } />
 
-                  <p className="text-red-700 text-sm font-light">
+                  <p className="text-sm text-sm text-red-700 font-light">
                             {error?.refundable_until_days}
-                   </p>
+                  </p>
                       </div>
                     </div>
 
@@ -1625,6 +1626,9 @@ const validationRateCondition = () => {
                               setAllUserRateDetails({ ...allUserRateDetails, refundable_until_time: e.target.value })
                             )
                           } />
+                           <p className=" text-sm text-red-700 font-light">
+                    {error?.refundable_until_time}
+                    </p>
                       </div>
                     </div></>)
                   :
@@ -1647,7 +1651,7 @@ const validationRateCondition = () => {
                           setAllUserRateDetails({ ...allUserRateDetails, expiration_time: e.target.value })
                         )
                       } />
-                    <p className=" text-red-700 font-light">
+                    <p className=" text-sm text-red-700 font-light">
                     {error?.expiration_time}
                     </p>
                   </div>
@@ -1669,7 +1673,7 @@ const validationRateCondition = () => {
                         }
                         )}
                       </select>
-                      <p className="text-red-700 text-sm font-light">
+                      <p className="text-sm text-sm text-red-700 font-light">
                     {error?.room_id}
             </p>
                     </div>

@@ -397,11 +397,11 @@ function Room() {
 
   return (
     <>
+<Header  Primary={english?.Side1}/>
+    <Sidebar Primary={english?.Side1}/>
+    <div id="main-content"
+    className="  bg-gray-50 px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64">
 
-      <Header Primary={english?.Side1} />
-      <Sidebar Primary={english?.Side1} />
-      <div id="main-content"
-        className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
         {/* Header */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -443,6 +443,7 @@ function Room() {
 
 
           {/* Room Description */}
+
           <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
             <div className="bg-white shadow-xl rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -727,6 +728,7 @@ function Room() {
           </div>
 
           {/* Room Gallery */}
+
           <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
             <div className="bg-white shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -734,7 +736,6 @@ function Room() {
                   <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                   <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Description</div>
                 </div>
-
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
                   <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Room Gallery </div>
@@ -901,6 +902,7 @@ function Room() {
           </div> */}
           </div>
 
+
           {/* Room Rates*/}
           <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
             <div className="bg-white shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
@@ -908,6 +910,7 @@ function Room() {
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                   <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Description</div>
+
                 </div>
 
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">

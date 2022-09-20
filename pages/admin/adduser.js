@@ -61,7 +61,7 @@ function Adduser() {
           })
           setError({})
           setSpinner(0)
-          setTimeout(() => Router.push('./allusers'), 2000)
+          Router.push('./allusers')
         })
         .catch(error => {
           console.log(error.response)

@@ -636,7 +636,7 @@ AddPackage :{
     account:"الحساب",
     Email:"البريد الإلكتروني",
   Registered:"مسجل",
-  listofallpropertiesforuser: "  قائمة بجميع الخصائص للمستخدم",
+  listofallpropertiesforuser: "قائمة بجميع العقارات ل",
   assignProperty:"تعيين خاصية",
   deactivate:"تعطيل",
   activate:"تفعيل",

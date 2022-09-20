@@ -788,7 +788,7 @@ pointofsale:'../../pointofsales'
   account:"Account",
   Email:"Email",
   Registered:"Registered",
-  listofallpropertiesforuser: "List of All Properties For User",
+  listofallpropertiesforuser: "List of All Properties For ",
   assignProperty:"Assign Property",
   deactivate:"Deactivate",
   activate:"Activate",

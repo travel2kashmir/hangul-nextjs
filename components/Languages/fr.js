@@ -650,7 +650,7 @@ export default {
   account:"Compte",
   Email:"E-mail",
   Registered:"Inscrit",
-  listofallpropertiesforuser: "Liste de toutes les propriétés pour l'utilisateur",
+  listofallpropertiesforuser: "Liste de toutes les propriétés pour",
   assignProperty:"Attribuer une propriété",
   deactivate:"Désactiver",
   activate:"Activer",

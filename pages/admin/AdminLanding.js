@@ -164,25 +164,24 @@ function AdminLanding() {
                     </div>
                 </div>
             </div>
-            <Header />
+            <Header admin={english?.Sideadminlanding}/>
             <Sidebar admin={english?.Sideadminlanding} />
-            <div id="main-content"
-                className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
-                <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+            <div id="main-content" className="bg-gray-50  md:min-h-screen px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+ <div className="flex flex-col px-2 my-2 bg-white shadow rounded-lg  w-max  xl:p-8 xl:w-full 2xl:col-span-2 md:mx-auto ">
                     <div className="text-center ">
-                        <p className="capitalize font-semibold text-3xl font-sans  mx-12  mb-6 text-cyan-500">
+                        <p className="capitalize mt-4 font-semibold text-3xl font-sans  mb-6 text-cyan-500">
                             {language?.welcome} {currentUser?.name}
                         </p>
                     </div>
-                    <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-2">
-                        List of All Active Properties
+                    <h6 className="text-xl mt-6 mx-auto flex leading-none  pt-2 font-bold text-gray-900 mb-2">
+                    {language?.activeproperties} 
                     </h6>
                     <div className="pt-6">
                         <div className=" md:px-4 mx-auto w-full">
-                            <div className="flex flex-wrap">
+                            <div className="flex flex-col flex-wrap">
 
                                 <form className=" space-y-1" action="#">
-                                    <table className="table-fixed  w-full divide-y divide-gray-200">
+                                    <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                                         <thead className="bg-gray-100">
                                             <tr>
                                                 <th
@@ -197,12 +196,7 @@ function AdminLanding() {
                                                 >
                                                     {language?.property} {language?.category}
                                                 </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-8  py-4 text-left text-sm font-semibold text-gray-500 uppercase"
-                                                >
-                                                    {language?.Province}
-                                                </th>
+                                               
                                                 <th
                                                     scope="col"
                                                     className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
@@ -227,16 +221,11 @@ function AdminLanding() {
                                                         <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
                                                             {item?.property_category}
                                                         </td>
-                                                        <td className="pr-4 pl-0 whitespace-nowrap text-base font-normal text-gray-900">
-                                                            <div className="flex items-center">
-
-                                                                {item?.address_province}
-                                                            </div>
-                                                        </td>
+                                                        
                                                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                             <div className="flex items-center">
                                                                 <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                                                                {item?.status === true ? "Active" : "Inactive"}
+                                                              {item?.status === true ? <>{language?.active}</> :<> {language?.inactive}</>}
                                                             </div>
                                                         </td>
                                                         <td className="p-2 whitespace-nowrap space-x-1">
@@ -264,7 +253,7 @@ function AdminLanding() {
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"
                                                             >
-                                                                De-activate
+                                                                {language?.deactivate}
                                                             </button>
                                                         </td>
                                                     </tr> : <></>
@@ -274,11 +263,12 @@ function AdminLanding() {
                                     </table>
 
                                 </form>
-                                <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
-                                    List of All In-Active Properties
+
+                                <h6 className="text-xl mx-auto my-6 flex leading-none  pt-2 font-bold text-gray-900 ">
+                                   {language?.inactiveproperties} 
                                 </h6>
                                 <form className=" space-y-1" action="#">
-                                    <table className="table-fixed  w-full divide-y divide-gray-200">
+                                    <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                                         <thead className="bg-gray-100">
                                             <tr>
                                                 <th
@@ -293,12 +283,7 @@ function AdminLanding() {
                                                 >
                                                     {language?.property} {language?.category}
                                                 </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-8  py-4 text-left text-sm font-semibold text-gray-500 uppercase"
-                                                >
-                                                    {language?.Province}
-                                                </th>
+                                               
                                                 <th
                                                     scope="col"
                                                     className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
@@ -323,16 +308,11 @@ function AdminLanding() {
                                                         <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
                                                             {item?.property_category}
                                                         </td>
-                                                        <td className="pr-4 pl-0 whitespace-nowrap text-base font-normal text-gray-900">
-                                                            <div className="flex items-center">
-
-                                                                {item?.address_province}
-                                                            </div>
-                                                        </td>
+                                                        
                                                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                             <div className="flex items-center">
-                                                                <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                                                                {item?.status === true ? "Active" : "Inactive"}
+                                                                <div className="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div>
+                                                              {item?.status === true ? <>{language?.active}</> : <>{language?.inactive}</>}
                                                             </div>
                                                         </td>
                                                         <td className="p-2 whitespace-nowrap space-x-1">
@@ -360,7 +340,7 @@ function AdminLanding() {
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"
                                                             >
-                                                                Activate
+                                                                {language?.activate}
                                                             </button>
                                                         </td>
                                                     </tr> : <></>

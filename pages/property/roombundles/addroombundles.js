@@ -66,17 +66,18 @@ function Addroombundles() {
     };
     fetchRooms();
     const fetchPackages = async () => {
-      try {
+      alert("fetchPackages")
+      
         const url = `/api/package/${currentProperty?.property_id}`;
-        const response = await axios.get(url, {
+        console.log("url"+url)
+        axios.get(url,{
           headers: { accept: "application/json" },
-        });
-        setAllPackages(response.data);
-      } catch (error) {
-        if (error.response) {
-        } else {
-        }
-      }
+        }).then((response)=>{
+          setAllPackages(response.data);
+        console.log("response "+JSON.stringify(response.data));
+        }).catch((error)=>{
+          alert(JSON.stringify(error))
+        })
     };
     fetchPackages();
     const fetchRoomBundle = async () => {
@@ -294,9 +295,9 @@ function Addroombundles() {
                          sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   >
                     <option selected>Select room</option>
-                    {allRooms?.map((i) => {
+                    {allRooms?.map((i,idx) => {
                       return (
-                        <option key={i} value={i.room_id}>
+                        <option key={idx} value={i.room_id}>
                           {i.room_name}
                         </option>
                       );
@@ -320,9 +321,9 @@ function Addroombundles() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                   >
                      <option selected>Select package</option>
-                    {allPackages?.map((i) => {
+                    {allPackages?.map((i,idx) => {
                       return (
-                        <option key={i} value={i.package_id}>
+                        <option key={idx} value={i.package_id}>
                           {i.package_name}
                         </option>
                       );
@@ -337,7 +338,7 @@ function Addroombundles() {
                     className="text-sm font-medium text-gray-900 block  mb-2"
                     htmlFor="grid-password"
                   >
-                    {language?.baserate}
+                    {language?.baserate} 
                   </label>
                   <input
                     type="text"
@@ -552,6 +553,4 @@ Addroombundles.getLayout = function PageLayout(page){
     {page}
     </>
   )
-
-
 }

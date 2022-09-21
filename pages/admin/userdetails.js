@@ -73,14 +73,14 @@ function UserDetails() {
 
     const fetchProperty = async () => {
         try {
-            
+
             const url = `/api/properties/${currentUser.user_id}`;
             logger.info("url" + url)
             const response = await axios.get(url, {
                 headers: { accept: "application/json" },
             });
             setUserdata(response.data);
-} catch (error) {
+        } catch (error) {
             if (error.response) {
                 logger.error("Current User Properties Error");
             } else {
@@ -92,7 +92,6 @@ function UserDetails() {
 
     const submitNew = () => {
         var item = JSON.parse(saveData)
-       
         const data = {
             property_id: item?.property_id,
             user_id: currentUser.user_id,
@@ -102,36 +101,35 @@ function UserDetails() {
             property_type: item?.property_category,
             language: locale
         }
-       
 
         axios.post('/api/add_property_user', data, { header: { "content-type": "application/json" } })
-        .then((response) => {
-            fetchProperty();
-            toast.success("API: Property For User Assigned", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-           // document.getElementById('ownerform').reset();
-            assignProperty(0);
-        }).catch(error => 
-            {
-            toast.error("API: Error In Property User Assignment", {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        })})
+            .then((response) => {
+                fetchProperty();
+                toast.success("API: Property For User Assigned", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                // document.getElementById('ownerform').reset();
+                assignProperty(0);
+            }).catch(error => {
+                toast.error("API: Error In Property User Assignment", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                })
+            })
     }
     return (<>
-        {<div className={assignProperty === 1 ? 'block' : 'hidden'}>
+        {<div className={assignProperty === 1 ? 'block ' : 'hidden'}>
             <form id='ownerform'>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative bg-white  w-full max-w-2xl px-4 h-full md:h-auto">
@@ -169,15 +167,15 @@ function UserDetails() {
                                         }
                                     >
                                         <option defaultValue="" disabled selected>Select</option>
-                                        {properties.map((item,idx) => {
+                                        {properties.map((item, idx) => {
                                             return (
                                                 <option Value={JSON.stringify(item)} key={idx}>{item?.property_name}</option>
                                             )
                                         })}
                                     </select>
-                                    {saveData === '' ? <></> : <button 
-                                    onClick={() => submitNew()}
-                                    type="button"
+                                    {saveData === '' ? <></> : <button
+                                        onClick={() => submitNew()}
+                                        type="button"
                                         className='text-white mt-2 bg-cyan-600
                                          hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center'>
@@ -189,7 +187,7 @@ function UserDetails() {
         <Header admin={english?.Sideadminlanding} />
         <Sidebar admin={english?.Sideadminlanding} />
         <div id="main-content"
-            className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+            className=" min-h-screen bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
             {/*Nav Bar*/}
             <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                 <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -203,7 +201,7 @@ function UserDetails() {
                     <li>
                         <div className="flex items-center">
                             <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                           <Link href="./allusers" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>  {language?.allusers}</a></Link>
+                            <Link href="./allusers" className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>  {language?.allusers}</a></Link>
                         </div>
                     </li>
 
@@ -217,22 +215,10 @@ function UserDetails() {
             </nav>
 
 
-            <div className=" bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2">
-                <div className='flex justify-self-auto'>
-                    <p className="text-l capitalize flex justify-start  leading-none pl-6 pt-2  text-gray-900 ">
-                        {language?.welcome} {currentUser?.user_name}
-                    </p>
-
-                    <p className="text-l ml-auto capitalize flex justify-end  leading-none pl-6 pt-2  text-gray-900 ">
-                        {language?.account} {language?.Status}: {currentUser?.status === true ? 'Active' : 'Inactive'}
-                    </p>
-
-                    <p className="text-l ml-auto capitalize text-bold leading-none pl-6 pt-2  text-gray-900 ">
-                        {language?.Registered} {language?.Email}: {currentUser?.user_email}
-                    </p>
-                </div>
-                <h6 className="text-xl my-4 flex leading-none pl-6 pt-2 font-bold text-gray-900 ">
-                    {language?.listofallpropertiesforuser}
+            <div className="flex flex-col px-2 my-2 bg-white shadow rounded-lg  w-max  xl:p-8 xl:w-full 2xl:col-span-2 md:mx-auto ">
+               
+                <h6 className="text-xl my-4 flex leading-none capitalize pl-6 pt-2 font-bold text-gray-900 ">
+                    {language?.listofallpropertiesforuser} {currentUser?.user_name}
                     <button className='ml-auto text-white bg-cyan-600
                                          hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"' onClick={() => setAssignProperty(1)}>
@@ -241,9 +227,9 @@ function UserDetails() {
                 </h6>
                 <div className="pt-6">
                     <div className=" md:px-4 mx-auto w-full">
-                        <div className="flex flex-wrap">
-                            <form className=" space-y-1" action="#">
-                                <table className="table-fixed  w-full divide-y divide-gray-200">
+                        <div className="flex flex-wrap ">
+                            <form className="space-y-1" action="#">
+                                <table className="table data  table-fixed  sm:w-full md:w-screen lg:w-full w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-100">
                                         <tr>
                                             <th
@@ -258,12 +244,7 @@ function UserDetails() {
                                             >
                                                 {language?.property} {language?.category}
                                             </th>
-                                            <th
-                                                scope="col"
-                                                className="px-8  py-4 text-left text-sm font-semibold text-gray-500 uppercase"
-                                            >
-                                                {language?.Province}
-                                            </th>
+                                            
                                             <th
                                                 scope="col"
                                                 className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
@@ -288,16 +269,11 @@ function UserDetails() {
                                                     <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
                                                         {item?.property_category}
                                                     </td>
-                                                    <td className="pr-4 pl-0 whitespace-nowrap text-base font-normal text-gray-900">
-                                                        <div className="flex items-center">
-
-                                                            {item?.address_province}
-                                                        </div>
-                                                    </td>
+                                                    
                                                     <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                         <div className="flex items-center">
                                                             <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                                                            {item?.status === true ? "Active" : "Inactive"}
+                                                            {item?.status === true ? <>{language?.active}</> : <> {language?.inactive}</>}
                                                         </div>
                                                     </td>
                                                     <td className="p-2 whitespace-nowrap space-x-1">

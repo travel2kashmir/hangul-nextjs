@@ -83,6 +83,7 @@ function Contact() {
             draggable: true,
             progress: undefined,
           });
+          document.getElementById('addcontactform').reset();
           setView(0)
           fetchHotelDetails();
           Router.push("./contact");
@@ -318,7 +319,10 @@ function Contact() {
                   <h3 className="text-xl font-semibold">{language?.add} {language?.new} {language?.contact}</h3>
                   <button
                     type="button"
-                    onClick={() => setView(0)}
+                    onClick={() =>{
+                      document.getElementById('addcontactform').reset();
+                      setView(0);
+                    } }
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                   >
                     <svg
@@ -335,7 +339,7 @@ function Contact() {
                     </svg>
                   </button>
                 </div>
-
+                  <form id='addcontactform'>
                 <div className="p-6 space-y-6" >
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
@@ -388,6 +392,7 @@ function Contact() {
                     </div>
                   </div>
                 </div>
+                </form>
 
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
                       <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>

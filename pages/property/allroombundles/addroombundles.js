@@ -70,6 +70,19 @@ function Addroombundles() {
       }
     };
     fetchRooms();
+
+    const fetchPackages = async () => {
+     const url = `/api/package/${currentProperty?.property_id}`;
+     
+        axios.get(url,{
+          headers: { accept: "application/json" },
+        }).then((response)=>{
+          setAllPackages(response.data);
+     }).catch((error)=>{
+          alert(JSON.stringify(error))
+        })
+    };
+    fetchPackages();
   
   }, []);
   

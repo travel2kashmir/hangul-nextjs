@@ -133,7 +133,7 @@ function Allusers() {
     <Header admin={english?.Sideadminlanding} />
     <Sidebar admin={english?.Sideadminlanding} />
     <div id="main-content"
-      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" >
+      className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64 min-h-screen" >
       {/*Nav Bar*/}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -146,46 +146,46 @@ function Allusers() {
           <li>
             <div className="flex items-center">
               <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">All Users</span>
+              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.allusers}</span>
             </div>
           </li>
         </ol>
       </nav>
 
       {/*Sign up form  className="flex   bg-white shadow-xl rounded-lg  sm: mt-4 p-6 xl:p-8  2xl:col-span-2 w-10/12"*/}
-      <div className='bg-white shadow-xl rounded-lg m-12'>
+      <div className='flex flex-col px-2 my-2 bg-white shadow rounded-lg  w-max  xl:p-8 xl:w-full 2xl:col-span-2 md:mx-auto '>
 
 
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
-            <div className="flex flex-wrap">
+            <div className="flex flex-col  flex-wrap">
 
               {/*active users */}
-              <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
-                List of All Active Users
+              <h6 className="text-xl mx-auto mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
+                {language?.listofactive}
               </h6>
               <form className=" space-y-1" action="#">
-                <table className="table-fixed  w-full divide-y divide-gray-200">
+                <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-100">
                     <tr>
                       <th
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Name
+                        {language?.username}
                       </th>
                       <th
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Email
+                        {language?.email}
                       </th>
 
                       <th
                         scope="col"
                         className="px-8 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        {language?.Status}
+                        {language?.Status} 
                       </th>
                       <th
                         scope="col"
@@ -209,7 +209,7 @@ function Allusers() {
                           <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                             <div className="flex items-center">
                               <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
-                              {item?.status === true ? "Active" : "Inactive"}
+                              {item?.status === true ? <>{language?.active}</> :<> {language?.inactive}</>}
                             </div>
                           </td>
                           <td className="p-2 whitespace-nowrap space-x-1">
@@ -237,7 +237,7 @@ function Allusers() {
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"
                             >
-                              De-Activate
+                            {language?.deactivate}
                             </button>
                           </td>
                         </tr> : <></>
@@ -253,24 +253,24 @@ function Allusers() {
               {/*inactive users */}
               
               {falseFlag===true?<>
-                <h6 className="text-xl mt-6 flex leading-none  pt-2 font-bold text-gray-900 mb-2">
-                List of All In-Active Users {JSON.stringify(falseFlag)}
+                <h6 className="text-xl mt-6 mx-auto flex leading-none  pt-2 font-bold text-gray-900 mb-2">
+                {language?.listofinactive} 
               </h6>
               <form className=" space-y-1" action="#">
-                <table className="table-fixed  w-full divide-y divide-gray-200">
+                <table className="table data table-fixed min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-100">
                     <tr>
                       <th
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Name
+                        {language?.username}
                       </th>
                       <th
                         scope="col"
                         className="px-1 mx-2 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                       >
-                        User Email
+                        {language?.email}
                       </th>
 
                       <th
@@ -301,7 +301,7 @@ function Allusers() {
                           <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                             <div className="flex items-center">
                               <div className="h-2.5 w-2.5 rounded-full bg-red-500 mr-2"></div>
-                              {item?.status === true ? "Active" : "Inactive"}
+                              {item?.status === true ? <>{language?.active}</> :<> {language?.inactive}</>}
                             </div>
                           </td>
                           <td className="p-2 whitespace-nowrap space-x-1">
@@ -329,7 +329,7 @@ function Allusers() {
                                          hover:bg-red-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                         text-sm inline-flex items-center px-2 py-1.5 text-center"
                             >
-                              Activate
+                            {language?.activate}
                             </button>
                           </td>
                         </tr> : <></>

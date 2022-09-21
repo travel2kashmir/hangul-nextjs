@@ -335,12 +335,15 @@ function Reviews() {
         </div>
 
         {/* Form Property Reviews */}
+        <div className="bg-white shadow rounded-lg m-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2" >
+          <div className="p-4">
+            <div className=" md:px-4 mx-auto w-full ">
+              <div className="flex items-center justify-between mb-2">
+                <div className="border border-2 shadow lg:mx-64 md:mx-10 ">
+                  <Image src={reviewImage} height={250} width={500} alt='some image' />
+                </div>
 
-        <div className="lg:mx-64 sm:mx-24 md:mx-10 ">
-        <Image src={reviewImage} height={400} width={800} alt='some image'/>
-        </div>
-        
-
+              </div></div></div></div>
         <div>
           {reviews?.Reviews?.map((item, idx) => (
             <div className="bg-white shadow rounded-lg mx-4 mb-4 px-8 sm:p-6 xl:p-8  2xl:col-span-2" key={idx}>

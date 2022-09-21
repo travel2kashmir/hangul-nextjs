@@ -138,6 +138,7 @@ function Gallery() {
                 );
                
                 fetchHotelDetails();
+                document.getElementById('addgallery').reset()
                 Router.push("./gallery");
                 setAddImage(0)
          }).catch(error => {
@@ -479,7 +480,10 @@ function Gallery() {
                                     {language?.addnewimage}
                                 </h3>
                                 <button type="button"
-                                    onClick={() => setAddImage(0)}
+                                    onClick={() =>{
+                                        document.getElementById('addgallery').reset()
+                                        setAddImage(0);
+                                    } }
                                     className="text-gray-400 bg-transparent
                                  hover:bg-gray-200 
                                  hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -488,7 +492,7 @@ function Gallery() {
                                      xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button>
                             </div>
-
+                                <form id='addgallery'>
                             <div className="p-6 space-y-6">
                                 <div className="grid grid-cols-6 gap-6">
                                     <div className="col-span-6 sm:col-span-3">
@@ -544,6 +548,7 @@ function Gallery() {
 
                                 </div>
                             </div>
+                            </form>
                             <div className="items-center p-6 border-t border-gray-200 rounded-b">
                      <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.AddDisabled}  /></div>

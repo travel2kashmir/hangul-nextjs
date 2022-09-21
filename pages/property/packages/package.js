@@ -150,7 +150,7 @@ function Package() {
                {language?.package} {language?.summary}
             </h6>
             {/* Body */} 
-            <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
+            <div className="py-2 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
                 {/* Package Description */}
                 <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
@@ -320,7 +320,7 @@ function Package() {
                 </div>
             </div>
 
-            <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
+            <div className="py-2 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
                 {/* Elite Membership Benefits */}
                 <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                     <div className="flex items-center justify-between mb-4">
@@ -441,7 +441,7 @@ function Package() {
                 </div>
                 
                  {/* Package Rooms */}
-                <div className="bg-white shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
+                <div className="bg-white py-2 shadow-xl rounded-lg p-4 sm:p-6 xl:p-8 ">
                 <div className="flex items-center justify-between mb-4">
                         <div className="flex-shrink-0">
                             <h3 className="text-base font-bold text-gray-900 mb-4"> {language?.package} {language?.rooms}</h3>

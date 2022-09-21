@@ -79,7 +79,7 @@ function PropertySummary() {
       {/* Body */}
       <div
         id="main-content"
-className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
+className={"bg-gray-50 px-4 pt-24  relative overflow-y-auto lg:ml-64" }
  >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -122,7 +122,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
         <div>
         </div>
 
-        <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
+        <div className=" w-full py-2 grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
           <div className="bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8 ">
           <div className="flex items-center justify-between ">
@@ -333,8 +333,9 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
             </div>
           </div>
         </div>
+
     {/* Gallery */}
-    <div className="mt-2 grid  grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
+    <div className="w-full py-2 grid  grid-flow-row-dense  md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
           <div className="bg-white shadow rounded-lg p-4 xl:p-8">
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
@@ -372,12 +373,9 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
           </div>
         </div>
 
-
-
-
-          <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
+     <div className="w-full py-2 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
           {/* Services */}
-          <div className="bg-white  shadow rounded-lg  p-4 sm:p-6 xl:p-8">
+          <div className="bg-white shadow rounded-lg  p-4 sm:p-6 xl:p-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
@@ -466,7 +464,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
         
             
           {/* Reviews */}
-          <div className="col-span-2 bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
+          <div className="col-span-2 bg-white shadow rounded-lg p-4  sm:p-6 xl:p-8">
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className="text-base font-bold text-gray-900 mb-4">
@@ -523,7 +521,7 @@ className={"bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64" }
               </div>
             ))}
           </div>
-          </div>
+     </div>
 
        
 

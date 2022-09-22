@@ -10,8 +10,11 @@ import Button from "../components/Button";
 import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
+import DarkModeToggle from "../components/darkmodetoggle";
 const logger = require("../services/logger");
 var language;
+
+
 function Signin(args) {
   const [lang, setLang] = useState("");
   const [darkModeSwitcher, setDarkModeSwitcher] = useState(false)
@@ -21,14 +24,17 @@ function Signin(args) {
   const { locale } = router;
   const [current, setCurrent] = useState(false)
   const [error, setError] = useState({})
+  const[modeChanger,setModeChanger] = useState("")
   /** State for internationalization **/
   useEffect(() => {
     firstfun()
     getCookieData();
   }, [locale])
+
   const firstfun = () => {
     if (typeof window !== 'undefined') {
       locale = localStorage.getItem("Language");
+      modeChanger = localStorage.getItem("Mode")
       /*checks if language is already there in local storage */
       if (locale === null) {
         language = english
@@ -49,8 +55,22 @@ function Signin(args) {
           setLang("fr")
         }
       }
+      if (modeChanger === null ) {
+        setDarkModeSwitcher(false)
+        localStorage.setItem("Mode", false)
+      }
+      else {
+        if (modeChanger === "false") {
+          setDarkModeSwitcher(false)
+          localStorage.setItem("Mode", false)
+        }
+        if (modeChanger === "true") {
+         setDarkModeSwitcher(true)
+        localStorage.setItem("Mode", true)
+        }
     }
   }
+}
   //write into cookies
   function setCookieData(checked) {
     if (checked) {
@@ -183,6 +203,10 @@ function Signin(args) {
         });
     }
   };
+
+  const changeTheme = (props) => {
+   localStorage.setItem("Mode", props)
+  }
   // Validation Function
   const validation = (signinDetails) => {
     var Result = checkFormData(signinDetails);
@@ -375,26 +399,7 @@ function Signin(args) {
         draggable
         pauseOnHover
       />
-      <div className="dark-mode-switcher cursor-pointer shadow-md fixed bottom-0 right-0 box border rounded-full w-40 h-12 flex items-center justify-center z-50 mb-10 mr-10">
-        <div className={darkModeSwitcher === false ? `mx-2  text-slate-600` : `mx-2  text-slate-200 `}
-        >Dark Mode</div>
-        <div className="flex">
-          <div className="form-check mt-1 mr-1 form-check-inline">
-            <label htmlFor="default-toggle" className="inline-flex relative items-center cursor-pointer">
-              <input type="checkbox"
-                value={darkModeSwitcher} checked={darkModeSwitcher === true}
-                onChange={() => { setDarkModeSwitcher(!darkModeSwitcher) }}
-                id="default-toggle" className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
-                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
-                                 peer-checked:after:translate-x-full 
-                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
-                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-            </label>
-          </div>
-        </div>
-      </div>
+      <DarkModeToggle Primary={darkModeSwitcher} Sec={setDarkModeSwitcher}  edit={changeTheme}  />
     </div>
   );
 }

@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import mode from '../../components/darkmode'
 import Buttonloader from '../../components/loaders/buttonloader'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Landingloader from "../../components/loaders/landingloader";
 import { useRouter } from "next/router";
+import DarkModeToggle from "../../components/darkmodetoggle";
 import Button from "../../components/Button";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
@@ -15,36 +17,61 @@ var language;
 var currentUser;
 const  Landing=() =>{ 
   var locale;
+  var modeChanger;
   /** Router for Redirection **/
   const router = useRouter();
 
   /** State Intialisation for storing all Properties of Current User **/
-  const [ownerdata, setOwnerdata] = useState([]);
+ const [ownerdata, setOwnerdata] = useState([]);
  const [visible, setVisible] = useState(0);
+ const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+ 
+ 
   useEffect(()=>{
-    const firstfun=()=>{
-      if (typeof window !== 'undefined'){
-       locale = localStorage.getItem("Language");
-         if (locale === "ar") {
-        language = arabic;
-        }
-        if (locale === "en") {
-        language=english;
-        }
-        if (locale === "fr") {
-          language = french;
-        } 
-        currentUser = JSON.parse(localStorage.getItem("Signin Details"));    
-      } 
-    }
     firstfun();
     fetchProperty();
   },[])
 
+  const firstfun=()=>{
+    if (typeof window !== 'undefined'){
+     locale = localStorage.getItem("Language");
+     modeChanger = localStorage.getItem("Mode");
+   
+     if (modeChanger === null) {
+      darkModeSwitcher = false
+      setDarkModeSwitcher(false)
+      localStorage.setItem("Mode", false)
+    }
+    else {
+     if (modeChanger === "false") {
+      setDarkModeSwitcher(false);
+      }
+      if (modeChanger === "true") {
+      setDarkModeSwitcher(true);
+      }
+    }
+        if (locale === "ar") {
+      language = arabic;
+      }
+      if (locale === "en") {
+      language=english;
+      }
+      if (locale === "fr") {
+        language = french;
+      }     
+     
+      currentUser = JSON.parse(localStorage.getItem("Signin Details"));    
+    } 
+  }
+
+  const changeTheme = (props) => {
+    localStorage.setItem("Mode", props)
+   }
+
   /** Use Effect to fetch all the properties of Current user **/
   const fetchProperty = async () => { 
     try {
-      const l=await localStorage.getItem("Language");
+      const l =await localStorage.getItem("Language");
       console.log("langguage "+l)
       const url = `/api/${l}/properties/${currentUser.id}`;
       logger.info("url" +url)
@@ -68,15 +95,16 @@ const  Landing=() =>{
   };
 
   return ( 
-  <div className="bg-gray-50  pt-8 lg:px-32 sm:px-1 pb-72">
+  <div className={darkModeSwitcher === false ? `${mode.light_mode.greybackground} pt-8 lg:px-32 sm:px-1 pb-72` : `${mode?.dark_mode?.greybackground} pt-8 lg:px-32 sm:px-1 pb-72`} >
     <div className="mx-auto  flex flex-col justify-center items-center px-4 pt-8 pt:mt-0">
       <span
-        className="self-center text-3xl  mb-4 mt-2 tracking-normal font-bold
-     text-gray-700 whitespace-nowrap"
-      >
-        Hangul
+      className={darkModeSwitcher === false ? `${mode.light_mode.text} self-center text-3xl  mb-4 mt-2 tracking-normal font-bold
+      whitespace-nowrap` :
+      `${mode?.dark_mode?.text} self-center text-3xl  mb-4 mt-2 tracking-normal font-bold
+      whitespace-nowrap`}>
+        Hangul 
       </span>
-      <div className="bg-white shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0">
+      <div className={darkModeSwitcher === false ? `${mode.light_mode.whitebackground} shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0` : `${mode?.dark_mode?.whitebackground} shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0`} >
         <div className="p-4 sm:p-8 lg:p-space-y-2">
 
           {/** Button for Sign out**/}
@@ -90,6 +118,7 @@ const  Landing=() =>{
               router.push("/");
               localStorage.removeItem("property");
               localStorage.removeItem("Signin Details");  
+             
               //localStorage.clear();
             }}
             type="button"
@@ -105,11 +134,11 @@ const  Landing=() =>{
           </div>
           <div className={visible === 0 ? ' block w-36 h-8 my-2 flex justify-center' : 'hidden'}><Buttonloader /></div>
           <div className={visible === 1? ' block' : 'hidden'}>
-          <p className="font-semibold text-lg text-gray-500">
+          <p className={darkModeSwitcher === false ? `${mode.light_mode.text} font-semibold mb-2 text-lg ` : `${mode?.dark_mode?.text} font-semibold text-lg mb-2 `}
+         >
            {language?.List} {language?.ofproperties}
           </p>
           </div>
-
           <form className=" space-y-1" action="#">
             <div className="flex flex-col">
               <div className="overflow-x-auto">
@@ -118,45 +147,55 @@ const  Landing=() =>{
                   <div className={visible === 0 ? 'block' : 'hidden'}><Landingloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <table className="table-fixed min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-100">
+                      <thead className={darkModeSwitcher === false ? `${mode.light_mode.greybackground}` : `${mode?.dark_mode?.greybackground}`}>
                         <tr>
                           <th
                             scope="col"
-                            className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                            className={darkModeSwitcher === false ? `${mode.light_mode.text}px-1 py-4 text-left text-sm font-semibold  uppercase `
+                             : `${mode?.dark_mode?.text} px-1 py-4 text-left text-sm font-semibold  uppercase`}
+                          
                           >
                            {language?.property} {language?.name}
                           </th>
                           <th
                             scope="col"
-                            className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                            className={darkModeSwitcher === false ? `${mode.light_mode.text}px-1 py-4 text-left text-sm font-semibold  uppercase `
+                            : `${mode?.dark_mode?.text} px-1 py-4 text-left text-sm font-semibold  uppercase`}
                           >
                             {language?.property} {language?.category}
                           </th>
                           <th
                             scope="col"
-                            className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                            className={darkModeSwitcher === false ? `${mode.light_mode.text}px-1 py-4 text-left text-sm font-semibold  uppercase `
+                            : `${mode?.dark_mode?.text} px-1 py-4 text-left text-sm font-semibold  uppercase`}
                           >
                             {language?.status}
                           </th>
                           <th
                             scope="col"
-                            className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                            className={darkModeSwitcher === false ? `${mode.light_mode.text}px-1 py-4 text-left text-sm font-semibold  uppercase `
+                             : `${mode?.dark_mode?.text} px-1 py-4 text-left text-sm font-semibold  uppercase`}
                           >
                             {language?.action}
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
+                      <tbody  className={darkModeSwitcher === false ? `${mode.light_mode.text} divide-y divide-gray-200`
+                             : `${mode?.dark_mode?.text} divide-y divide-gray-200`}>
                         {Object.keys(ownerdata).length!=0?ownerdata?.map((item, idx) => {
                           return (
-                            <tr className="hover:bg-gray-100" key={idx}>
-                              <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
+                            <tr className={darkModeSwitcher === false ? `${mode?.light_mode?.hover}`: `${mode?.dark_mode?.hover}`} key={idx}>
+                              <td 
+                              className={darkModeSwitcher === false ? `${mode.light_mode.text} p-1 whitespace-nowrap text-base font-medium  capitalize` :
+                               `${mode?.dark_mode?.text} p-1 whitespace-nowrap text-base font-medium  capitalize`}
+                              >
                                 {item?.property_name}
                               </td>
-                              <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
+                              <td className={darkModeSwitcher === false ? `${mode.light_mode.text} p-1 whitespace-nowrap text-base font-medium  capitalize` : `${mode?.dark_mode?.text} p-1 whitespace-nowrap text-base font-medium  capitalize`}>
                                 {item?.property_category}
                               </td>
-                              <td className="p-1 whitespace-nowrap text-base font-normal text-gray-900">
+                              <td className={darkModeSwitcher === false ? `${mode.light_mode.text} p-1 whitespace-nowrap text-base font-medium  capitalize` :
+                               `${mode?.dark_mode?.text} p-1 whitespace-nowrap text-base font-medium  capitalize`}>
                                 <div className="flex items-center">
                                   <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>
                                   {language?.active}
@@ -185,7 +224,7 @@ const  Landing=() =>{
         </div>
       </div>
     </div>
-
+    <DarkModeToggle Primary={darkModeSwitcher} Sec={setDarkModeSwitcher} edit={changeTheme}/>
     <ToastContainer
       position="top-center"
       autoClose={10000}
@@ -198,12 +237,9 @@ const  Landing=() =>{
       pauseOnHover
     />
   </div>
- 
   );
 }
-
 export default Landing;
-
 Landing.getLayout = function PageLayout(page){
   return(
     <>

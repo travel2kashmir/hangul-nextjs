@@ -11,19 +11,22 @@ import english from "../components/Languages/en"
 import french from "../components/Languages/fr"
 import arabic from "../components/Languages/ar"
 import DarkModeToggle from "../components/darkmodetoggle";
+import DarkModeLogic from "../components/darkmodelogic";
+import { Router } from "react-router";
 const logger = require("../services/logger");
 var language;
 
 
 function Signin(args) {
   const [lang, setLang] = useState("");
-  const [darkModeSwitcher, setDarkModeSwitcher] = useState(false)
+  const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [spinner, setSpinner] = useState(0)
   /** Router for Redirection **/
   const router = useRouter();
   const { locale } = router;
   const [current, setCurrent] = useState(false)
   const [error, setError] = useState({})
+  const [color, setColor] = useState({})
   const[modeChanger,setModeChanger] = useState("")
   /** State for internationalization **/
   useEffect(() => {
@@ -31,10 +34,18 @@ function Signin(args) {
     getCookieData();
   }, [locale])
 
+  useEffect(()=>{ 
+   setColor(DarkModeLogic(darkModeSwitcher))
+  },[darkModeSwitcher])
+
   const firstfun = () => {
     if (typeof window !== 'undefined') {
+      const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+     const color = JSON.parse(localStorage.getItem("Color"));
+     setColor(color);
+     setDarkModeSwitcher(colorToggle)
       locale = localStorage.getItem("Language");
-      modeChanger = localStorage.getItem("Mode")
+      
       /*checks if language is already there in local storage */
       if (locale === null) {
         language = english
@@ -55,20 +66,7 @@ function Signin(args) {
           setLang("fr")
         }
       }
-      if (modeChanger === null ) {
-        setDarkModeSwitcher(false)
-        localStorage.setItem("Mode", false)
-      }
-      else {
-        if (modeChanger === "false") {
-          setDarkModeSwitcher(false)
-          localStorage.setItem("Mode", false)
-        }
-        if (modeChanger === "true") {
-         setDarkModeSwitcher(true)
-        localStorage.setItem("Mode", true)
-        }
-    }
+     
   }
 }
   //write into cookies
@@ -204,9 +202,7 @@ function Signin(args) {
     }
   };
 
-  const changeTheme = (props) => {
-   localStorage.setItem("Mode", props)
-  }
+  
   // Validation Function
   const validation = (signinDetails) => {
     var Result = checkFormData(signinDetails);
@@ -236,23 +232,23 @@ function Signin(args) {
     return Object.keys(error).length === 0 ? true : error;
 
   }
-  return (
-    <div className={darkModeSwitcher === false ? `${mode.light_mode.greybackground} min-h-screen p-4` : `${mode?.dark_mode?.greybackground} min-h-screen p-4`} >
+  return ( 
+    <div className={`min-h-screen ${color?.greybackground} p-4 `}>
       <div className="mx-auto  flex flex-col justify-center items-center px-4 pt-8 pt:mt-0">
-        <span className={darkModeSwitcher === false ? `${mode.light_mode.text} self-center text-3xl  mb-4 mt-2 tracking-normal font-bold  whitespace-nowrap` : `${mode.dark_mode.text} self-center text-3xl  mb-4 mt-2 tracking-normal font-bold  whitespace-nowrap`}>
+        <span className={ `${color.text} self-center text-3xl  mb-4 mt-2 tracking-normal font-bold  whitespace-nowrap` }>
           enGage
         </span>
 
-        <div className={darkModeSwitcher === false ? `${mode.light_mode.whitebackground} shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0` : `${mode?.dark_mode?.whitebackground} shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0`} >
+        <div className={`${color?.whitebackground} shadow rounded-lg md:mt-0 w-full sm:max-w-screen-sm xl:p-0`} >
           <div className="p-4 sm:p-8 lg:p-16 space-y-8">
-            <h2 className={darkModeSwitcher === false ? `${mode.light_mode.text} text-2xl lg:text-3xl capitalize font-bold` : `${mode?.dark_mode?.text} text-2xl lg:text-3xl capitalize font-bold`}  >
+            <h2 className={ `${color.text} text-2xl lg:text-3xl capitalize font-bold` }  >
               {language?.title}
             </h2>
             {/** Signin Form **/}
             <form className="mt-8 space-y-6" action="#">
               <div>
                 <label
-                  className={darkModeSwitcher === false ? `${mode.light_mode.text} text-base font-semibold block mb-2` : `${mode?.dark_mode?.text} text-base font-semibold block mb-2`}
+                  className={`${color?.text} text-base font-semibold block mb-2`}
                 >
                   {language?.email}
                 </label>
@@ -260,10 +256,9 @@ function Signin(args) {
                   type="email"
                   name="email"
                   id="email"
-                  className={darkModeSwitcher === false ? `${mode.light_mode.whitebackground} border border-gray-300 
+                  className={ `${color?.whitebackground} border border-gray-300 
                   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
-                   focus:border-cyan-600 block w-full p-2.5`  : `${mode?.dark_mode?.whitebackground} border border-gray-300 text-white sm:text-sm rounded-lg focus:ring-cyan-600
-                    focus:border-cyan-600 block w-full p-2.5`}
+                   focus:border-cyan-600 block w-full p-2.5`}
                   onChange={(e) => {
                     setSigninDetails({
                       ...signinDetails,
@@ -281,7 +276,7 @@ function Signin(args) {
               </div>
               <div>
                 <label
-                  className={darkModeSwitcher === false ? `${mode.light_mode.text} text-base font-semibold block mb-2` : `${mode?.dark_mode?.text} text-base font-semibold block mb-2`}
+                  className={ `${color?.text} text-base font-semibold block mb-2`}
                 >
                   {language?.password}
                 </label>
@@ -298,10 +293,9 @@ function Signin(args) {
                   }
                   }
                   placeholder={language?.enterpassword}
-                  className={darkModeSwitcher === false ? `${mode.light_mode.whitebackground} border border-gray-300 
+                  className={`${color.whitebackground} border border-gray-300 
                   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
-                   focus:border-cyan-600 block w-full p-2.5`  : `${mode?.dark_mode?.whitebackground} border border-gray-300 text-white sm:text-sm rounded-lg focus:ring-cyan-600
-                    focus:border-cyan-600 block w-full p-2.5`} required
+                   focus:border-cyan-600 block w-full p-2.5`} required
                 ></input>
                 <p className="text-red-700 font-light">
                   {error?.password}
@@ -323,7 +317,7 @@ function Signin(args) {
                 </div>
                 <div className="text-sm ml-3">
                   <label
-                    className={darkModeSwitcher === false ? `${mode.light_mode.text} text-sm font-semibold ` : `${mode?.dark_mode?.text} text-sm font-semibold `}
+                    className={`${color.text} text-sm font-semibold ` }
                   >
                     {language?.remember}
                   </label>
@@ -346,7 +340,7 @@ function Signin(args) {
                 <Button Primary={language?.SpinnerSignin} />
               </div>
 
-              <div className={darkModeSwitcher === false ? `${mode.light_mode.text} text-base font-semibold` : `${mode?.dark_mode?.text} text-base font-semibold `}>
+              <div className={`${color?.text} text-base font-semibold` }>
                 {language?.remember}
                 <a href="" className="text-teal-500 hover:underline px-2">
                   {language?.create}
@@ -399,7 +393,7 @@ function Signin(args) {
         draggable
         pauseOnHover
       />
-      <DarkModeToggle Primary={darkModeSwitcher} Sec={setDarkModeSwitcher}  edit={changeTheme}  />
+      <DarkModeToggle Primary={darkModeSwitcher} Sec={setDarkModeSwitcher}   />
     </div>
   );
 }

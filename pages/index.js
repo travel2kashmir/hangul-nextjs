@@ -257,7 +257,7 @@ function Signin(args) {
                   name="email"
                   id="email"
                   className={ `${color?.whitebackground} border border-gray-300 
-                  text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
+                  ${color?.text}  sm:text-sm rounded-lg focus:ring-cyan-600
                    focus:border-cyan-600 block w-full p-2.5`}
                   onChange={(e) => {
                     setSigninDetails({
@@ -270,7 +270,7 @@ function Signin(args) {
                   placeholder={language?.enteremail}
                   required
                 ></input>
-                <p className="text-red-700 font-light">
+                <p className={`${color.error} font-light` }>
                   {error?.email}
                 </p>
               </div>
@@ -294,10 +294,10 @@ function Signin(args) {
                   }
                   placeholder={language?.enterpassword}
                   className={`${color.whitebackground} border border-gray-300 
-                  text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
+                  ${color?.text}  sm:text-sm rounded-lg focus:ring-cyan-600
                    focus:border-cyan-600 block w-full p-2.5`} required
                 ></input>
-                <p className="text-red-700 font-light">
+                <p className={`${color.error} font-light` }>
                   {error?.password}
                 </p>
               </div>

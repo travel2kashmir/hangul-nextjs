@@ -5,14 +5,16 @@ if((switcher===false) || (switcher==="") ||  (switcher===undefined)){
     color.text="text-grey-700",
     color.greybackground="bg-gray-50",
     color.whitebackground="bg-white",
-    color.hover='hover:bg-gray-100'
+    color.hover='hover:bg-gray-100',
+    color.error='text-red-500'
 }
 if(switcher === true)
 {
     color.text= "text-white",
     color.greybackground= "bg-gray-900",
     color.whitebackground="bg-gray-800",
-    color.hover='hover:bg-gray-900'
+    color.hover='hover:bg-gray-900',
+    color.error='text-red-500'
 }
 localStorage.setItem("Color",JSON.stringify(color))
 if((switcher===false) || (switcher==="") ||  (switcher===undefined)){

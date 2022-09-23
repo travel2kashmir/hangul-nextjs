@@ -1,5 +1,6 @@
-import '../styles/globals.css'
-import 'tailwindcss/tailwind.css'
+import '../styles/globals.css';
+import 'tailwindcss/tailwind.css';
+import '../styles/themedefault.css'
 import NProgress from 'nprogress'; //nprogress module
 import 'nprogress/nprogress.css';
 import Layout from '../components/Layout'

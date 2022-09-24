@@ -1,14 +1,116 @@
-import React from 'react'
+import { useState, useRef, useEffect } from 'react'
+import data from './data.json'
+import axios from 'axios';
+const logger = require("../../services/logger");
+import Router, { useRouter } from "next/router";
+import english from "../../components/Languages/en"
+import french from "../../components/Languages/fr"
+import arabic from "../../components/Languages/ar"
+var language;
+var currentUser;
+var currentProperty;
+var currentLogged;
+var i =0;
 
 function Themedefault() {
+      const maxScrollWidth = useRef(0);
+      const [currentIndex, setCurrentIndex] = useState(0);
+      const carousel = useRef(null);
+      const [allHotelDetails, setAllHotelDetails] = useState([]);
+
+ /** Router for Redirection **/
+  const router = useRouter();
+  useEffect(() => {
+    const firstfun = () => {
+      if (typeof window !== 'undefined') {
+        var locale = localStorage.getItem("Language");
+        if (locale === "ar") {
+          language = arabic;
+        }
+        if (locale === "en") {
+          language = english;
+        }
+        if (locale === "fr") {
+          language = french;
+        }
+        currentUser = JSON.parse(localStorage.getItem("Signin Details"));
+        /** Current Property Details fetched from the local storage **/
+        currentProperty = JSON.parse(localStorage.getItem("property"));
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+      }
+    }
+    firstfun();
+    router.push("./themedefault");
+  }, [])
+
+  /* Function call to fetch Current Property Details when page loads */
+  useEffect(() => {
+    const fetchHotelDetails = async () => {
+      const url = `/api/${currentProperty.address_province.replace(
+        /\s+/g,
+        "-"
+      )}/${currentProperty.address_city}/${currentProperty.property_category
+        }s/${currentProperty.property_id}`;
+      axios.get(url)
+        .then((response) => {
+          setAllHotelDetails(response.data);
+
+          logger.info("url  to fetch property details hitted successfully")
+        })
+        .catch((error) => { logger.error("url to fetch property details, failed") });
+    }
+
+    fetchHotelDetails();
+
+  }, []);
+
+      const movePrev = () => {
+        if (currentIndex > 0) {
+          setCurrentIndex((prevState) => prevState - 1);
+        }
+      };
+    
+      const moveNext = () => {
+        if (
+          carousel.current !== null &&
+          carousel.current.offsetWidth * currentIndex <= maxScrollWidth.current
+        ) {
+          setCurrentIndex((prevState) => prevState + 1);
+        }
+      };
+    
+      const isDisabled = (direction) => {
+        if (direction === 'prev') {
+          return currentIndex <= 0;
+        }
+    
+        if (direction === 'next' && carousel.current !== null) {
+          return (
+            carousel.current.offsetWidth * currentIndex >= maxScrollWidth.current
+          );
+        }
+    
+        return false;
+      };
+    
+      useEffect(() => {
+        if (carousel !== null && carousel.current !== null) {
+          carousel.current.scrollLeft = carousel.current.offsetWidth * currentIndex;
+        }
+      }, [currentIndex]);
+    
+      useEffect(() => {
+        maxScrollWidth.current = carousel.current
+          ? carousel.current.scrollWidth - carousel.current.offsetWidth
+          : 0;
+      }, []);
   return (
-    <div>
+    <>
         <div className="header">
    <div className="container">
       <div className="header-logo">
          <span className="material-icons-outlined header-logo-icon">
-         mode_of_travel </span
-            >Travel Booking
+         </span>{allHotelDetails?.property_name}
       </div>
     
       <div className="menu-toggle">
@@ -44,16 +146,17 @@ function Themedefault() {
 </div>
 
 <div className="tour container">
+   
    <div className="tour-head">
       <div className="tour-head-left">
          <div className="tour-title">
-            Best of Turkey: Istanbul, Fethiye, Cappadocia
+           {allHotelDetails?.description_title}
          </div>
          <div className="tour-overview">
             <div className="tour-overview-item">
-               Start and end in <span>Istanbul</span>
+               {allHotelDetails?.property_category} in <span>{allHotelDetails?.address?.[i]?.address_city}</span>
             </div>
-            <div className="tour-overview-item"><span>9</span> days</div>
+            <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} Star</span> Accommodation</div>
             <div className="tour-overview-item">
                <span className="material-icons-outlined"> star </span>
                <span>4.7</span> (55 reviews)
@@ -70,100 +173,95 @@ function Themedefault() {
          
          <div className="tour-content-block">
             <div className="tour-description">
-               Discover the ancient wonders of Turkey in our 12 day Best
-               of Turkey by Land tour. Embrace the culture and history of
-               Istanbul and Gallipoli, ride through the magnificent Aegean
-               Coast and in-land wonders of Anatolia. Start your tour
-               exploring the magnificent museums and mosques of Istanbul
-               and then travel south along the Aegean Coast, capturing
-               wonderful visions of ancient cities. After, we`ll head
-               inland to experience the incredible natural marvels of
-               fairy chimney formations in Cappadocia...
+              {allHotelDetails?.description_body}
             </div>
          </div>
       
          <div className="tour-content-block">
-            <div className="tour-content-title">Places You’ll See</div>
-            <div className="tour-places">
-               <div className="swiper">
-                  <div className="swiper-wrapper">
-                     <div className="swiper-slide">
+            <div className="tour-content-title">Gallery</div>
+            <div className="relative overflow-hidden">
+        <div className="flex justify-between absolute top left  h-full">
+          <button
+            onClick={movePrev}
+            className=" text-white w-10 justify-start  h-full text-center opacity-75 hover:bg-gray-400  disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+          
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-12 w-20 -ml-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            <span className="sr-only">Prev</span>
+          </button>
+          <button
+            onClick={moveNext}
+            className=" text-white w-10 h-full justify-end text-center opacity-75 hover:bg-gray-400 disabled:opacity-25 disabled:cursor-not-allowed z-10 p-0 m-0 transition-all ease-in-out duration-300"
+           
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-12 w-20 -ml-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+            <span className="sr-only">Next</span>
+          </button>
+        </div>
+      
                         <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-istanbul.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Istanbul</div>
-                     </div>
-                     <div className="swiper-slide">
-                        <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-gallipoli.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Gallipoli</div>
-                     </div>
-                     <div className="swiper-slide">
-                        <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-troy.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Troy</div>
-                     </div>
-                     <div className="swiper-slide">
-                        <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-kusadasi.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Kusadasi</div>
-                     </div>
-                     <div className="swiper-slide">
-                        <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-fethiye.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Fethiye</div>
-                     </div>
-                     <div className="swiper-slide">
-                        <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-oludeniz.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Oludeniz</div>
-                     </div>
-                     <div className="swiper-slide">
-                        <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-dalyan.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Dalyan</div>
-                     </div>
-                     <div className="swiper-slide">
-                        <div className="swiper-image">
-                           <img
-                              src="https://tailwind-css-travel-booking.vercel.app/dist/images/tour-cappadocia.jpeg"
-                              alt="image"
-                              />
-                        </div>
-                        <div className="swiper-title">Cappadocia</div>
-                     </div>
-                  </div>
-                  <div className="swiper-button-next"></div>
-                  <div className="swiper-button-prev"></div>
-               </div>
-            </div>
+        <div
+          ref={carousel}
+          className="carousel-container relative flex gap-1 overflow-hidden scroll-smooth snap-x snap-mandatory touch-pan-x z-0"
+        >
+          {allHotelDetails?.images?.map((resource, index) => {
+            return (
+              <div
+                key={index}
+                className="carousel-item text-center rounded-lg relative w-64 h-56 snap-start"
+              >
+                <a
+                  href={resource.image_link}
+                  className="h-full w-full aspect-square  block bg-origin-padding  bg-left-top bg-cover bg-no-repeat z-0"
+                  style={{ backgroundImage: `url(${resource.image_link || ''})` }}
+                >
+                  <span className="w-full aspect-square tour-image hidden">
+                  <img
+                    src={resource.image_link || ''}
+                    alt={resource.image_title}
+                    
+                  /></span>
+                </a>
+                
+                <a
+                  href={resource.image_link}
+                  className="h-full w-full aspect-square  block absolute top-0 left-0 transition-opacity duration-300 opacity-0 hover:opacity-100 bg-gray-300 z-10"
+                >
+                  <h3 className="text-white py-6 px-3 mx-auto text-xl">
+                    {resource.image_title}
+                  </h3>
+                </a>
+              </div>
+            );
+          })}
+        </div></div>
+      </div>
          </div>
        
          <div className="tour-content-block">
@@ -257,7 +355,7 @@ function Themedefault() {
                            mythic era when monsters roamed the earth and
                            gods interacted directly with humans. The city
                            was said to have ruled the Troad until the
-                           Trojan War led to its complete destruction at
+                           Trojan War led to its comptempe destruction at
                            the hands of the Greeks. The story of its
                            destruction was one of the cornerstones of
                            Greek mythology and literature, featuring
@@ -415,11 +513,7 @@ function Themedefault() {
                <div className="tour-reviews-feedback">
                   <div className="tour-reviews-feedback-item">
                      <div className="tour-reviews-feedback-content">
-                        <div className="tour-reviews-feedback-icon">
-                           <span className="material-icons-outlined">
-                           earbuds
-                           </span>
-                        </div>
+                       
                         <div className="tour-reviews-feedback-content-inner">
                            <div className="tour-reviews-feedback-title">
                               Itinerary
@@ -653,6 +747,7 @@ function Themedefault() {
       </div>
       
    </div>
+
 </div>
 
 <div className="footer">
@@ -690,8 +785,16 @@ function Themedefault() {
 
 <div className="header-menu-overlay"></div>
 
-    </div>
-  )
-}
+    </>
+  );
+  }
+
 
 export default Themedefault
+Themedefault.getLayout = function PageLayout(page) {
+  return (
+    <>
+      {page}
+    </>
+  )
+}

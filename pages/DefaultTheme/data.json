@@ -1,0 +1,42 @@
+{
+    "resources": [
+        
+      {
+        "title": "Istanbul",
+        "link": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-istanbul.jpeg",
+        "imageUrl": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-istanbul.jpeg"
+      },
+      {
+        "title": "California",
+        "link": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-gallipoli.jpeg",
+        "imageUrl": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-gallipoli.jpeg"
+      },
+      {
+        "title": "New York",
+        "link": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-troy.jpeg",
+        "imageUrl": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-troy.jpeg"
+      },
+      {
+        "title": "Welcome to Ark Labs",
+        "link": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-kusadasi.jpeg",
+        "imageUrl": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-kusadasi.jpeg"
+      },
+      {
+        "title": "Some sort of third title",
+        "link": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-gallipoli.jpeg",
+        "imageUrl": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-gallipoli.jpeg"
+      },
+  
+      {
+        "title": "Some sort of third title",
+        "link": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-hero.jpeg",
+        "imageUrl": "https://tailwind-css-travel-booking.vercel.app/dist/images/tour-hero.jpeg"
+      }, 
+  
+      {
+        "title": "Super item number the last",
+        "link": "https://twitter.com/kendalmintcode",
+        "imageUrl": "https://placeimg.com/300/300/tech"
+      }
+    ]
+}

@@ -1223,6 +1223,7 @@ body::selection{
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  
   padding: 1.25rem;
   font-size: 0.875rem;
   line-height: 1.25rem;

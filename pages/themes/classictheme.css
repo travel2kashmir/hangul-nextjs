@@ -979,6 +979,13 @@ body::selection{
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
   padding-bottom: 2.5rem;
 }
+.tour-content-block1{
+  border-bottom-width: 1px;
+  border-style: solid;
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  margin-bottom: 2rem;
+}
 
 .tour-content-block:first-child{
   margin-top: 0px;

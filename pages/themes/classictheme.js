@@ -14,16 +14,20 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 var language;
+var phone;
 var currentUser;
 var currentProperty;
 var currentLogged;
 var i =0;
 
+
 function Themedefault() {
       const maxScrollWidth = useRef(0);
+      const [phone, setPhone] = useState({});
       const [currentIndex, setCurrentIndex] = useState(0);
       const [amenity, setAmenity] = useState(false);
       const [room, setRoom] = useState(false);
+      const [singleRoom, setSingleRoom] = useState(false);
       const carousel = useRef(null);
       const [allHotelDetails, setAllHotelDetails] = useState([]);
 
@@ -63,7 +67,8 @@ function Themedefault() {
       axios.get(url)
         .then((response) => {
           setAllHotelDetails(response.data);
-
+          response.data.contacts.map(i=>{if(i.contact_type==='Phone'){setPhone(i)}});
+          console.log(response.data.contacts)
           logger.info("url  to fetch property details hitted successfully")
         })
         .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -73,46 +78,6 @@ function Themedefault() {
 
   }, []);
 
-      const movePrev = () => {
-        if (currentIndex > 0) {
-          setCurrentIndex((prevState) => prevState - 1);
-        }
-      };
-    
-      const moveNext = () => {
-        if (
-          carousel.current !== null &&
-          carousel.current.offsetWidth * currentIndex <= maxScrollWidth.current
-        ) {
-          setCurrentIndex((prevState) => prevState + 1);
-        }
-      };
-    
-      const isDisabled = (direction) => {
-        if (direction === 'prev') {
-          return currentIndex <= 0;
-        }
-    
-        if (direction === 'next' && carousel.current !== null) {
-          return (
-            carousel.current.offsetWidth * currentIndex >= maxScrollWidth.current
-          );
-        }
-    
-        return false;
-      };
-    
-      useEffect(() => {
-        if (carousel !== null && carousel.current !== null) {
-          carousel.current.scrollLeft = carousel.current.offsetWidth * currentIndex;
-        }
-      }, [currentIndex]);
-    
-      useEffect(() => {
-        maxScrollWidth.current = carousel.current
-          ? carousel.current.scrollWidth - carousel.current.offsetWidth
-          : 0;
-      }, []);
 
 
   return (
@@ -165,7 +130,7 @@ function Themedefault() {
    <div className="tour-head">
       <div className="tour-head-left">
          <div className="tour-title">
-           {allHotelDetails?.description_title}
+           {allHotelDetails?.description_title} 
          </div>
          <div className="tour-overview">
             <div className="tour-overview-item">
@@ -187,11 +152,13 @@ function Themedefault() {
       <div className="tour-content">
          <div className="tour-hero">
          <Swiper
+            
                spaceBetween={30}
                centeredSlides={true}
                autoplay={{
                    delay: 2500,
                    disableOnInteraction: false,
+                  
                }}
                navigation={true}
                modules={[Autoplay, Pagination, Navigation]}
@@ -220,7 +187,7 @@ function Themedefault() {
          <div className="tour-content-block">
             <div className="tour-content-title">Gallery</div>
             <div className="relative overflow-hidden">
-           <Carousel cols={2} rows={1} gap={10}  loop>
+           <Carousel cols={2} rows={1} gap={10} loop>
                      {allHotelDetails?.images?.map((resource, index) => {
             return (
                <Carousel.Item key={index} >
@@ -237,26 +204,152 @@ function Themedefault() {
                   <div className="accordion-panel accordion-start active">
                      <div className="accordion-trigger mb-8"><button onClick={()=>setRoom(!room)}>Rooms</button></div>
                     
-                     <div className={room===true?'block accordion-content ':'hidden'}>
-                        <div className='flex py-2'>
-                        <div className="font-semibold">Four Categories to choose from:</div>
-                        <div className='mr-2 ml-auto justify-end'>
-                        <button   className='bg-green-600 sm:inline-flex text-white
-            focus:ring-4 focus:ring-green-200 font-semibold text-white ml-96
-             rounded-lg text-sm px-2 py-1 text-center 
-                ease-linear transition-all duration-150'>
-                Book now
-            </button></div>
-            </div>
-                     <Carousel cols={4} rows={1} gap={10}  loop>
+                     <div className={room===true?'block mb-6':'hidden'}>
+                     <div className="text-gray-600 pb-4">Four Categories to choose from:</div>
+                     <div>
+                     <p className='flex capitalize py-1'>
+                        <span className="text-gray-600 text-md" >&#8226;
+                        <button> Rose Suite </button></span>
+                        <button  className='justify-end ml-auto mr-2' onClick={()=>setSingleRoom(!singleRoom)}>
+                        <span className=' font-semibold text-gray-400 text-lg'>
+                         {singleRoom=== false?  "+" : "-"}</span></button>
+                        </p>
+                        <div className={singleRoom===true?'block':'hidden'}>
+                        <div className='tour-content-block1'>
+                        <div className="tour-content-title">Description</div>
+                        <div className="block accordion-content">
+                           This is the dummy room rose suite descrption.
+                         </div>
+                         </div>
+                         <div className='tour-content-block1'>
+                           <div className='py-8'>
+                         <div className="tour-content-title">Room Facilities</div>
+                         <p className='flex capitalize'>
+                        <span>&#10004;
+                        Air Conditioned </span></p>
+                        <p className='flex capitalize'>
+                        <span>&#10004;
+                       Hot Bath Tub </span></p>
+                       <p className='flex capitalize'>
+                        <span>&#10004;
+                        Free Wifi </span></p></div></div>
+                        <div className='tour-content-block1'>
+                           <div className='py-8'>
+                        <div className="tour-content-title">Room Gallery</div>
+                     <Carousel cols={3} rows={1} gap={10}  loop>
                      {allHotelDetails?.images?.map((resource, index) => {
             return (
                <Carousel.Item key={index} >
                <img width="100%" style={{height:"160px"}} src={resource?.image_link} />
                <span className='text-gray-700' >{resource?.image_title}</span>
-               <p>{resource?.image_description}</p>
                </Carousel.Item>
-               )})}</Carousel>
+               )})}</Carousel></div></div>
+                 <div className='flex pb-8'>      
+                        <div className='mr-2 ml-auto justify-end'>
+                        <button   className='bg-green-600 sm:inline-flex text-white
+            focus:ring-4 focus:ring-green-200 font-semibold text-white 
+             rounded-lg text-sm px-4 py-2.5 text-center 
+                ease-linear transition-all duration-150'>
+                Book now
+            </button></div>
+            </div></div>
+            </div>
+            <div>
+                     <p className='flex capitalize py-1'>
+                        <span className="text-gray-600 text-md" >&#8226;
+                        <button> Mini Suite Room </button></span>
+                        <button  className='justify-end ml-auto mr-2' onClick={()=>setSingleRoom(!singleRoom)}>
+                        <span className=' font-semibold text-gray-400 text-lg'>
+                         {singleRoom=== false?  "+" : "-"}</span></button>
+                        </p>
+                        <div className={singleRoom===true?'block':'hidden'}>
+                        <div className='tour-content-block1'>
+                        <div className="tour-content-title">Description</div>
+                        <div className="block accordion-content">
+                           This is the dummy room rose suite descrption.
+                         </div>
+                         </div>
+                         <div className='tour-content-block1'>
+                           <div className='py-8'>
+                         <div className="tour-content-title">Room Facilities</div>
+                         <p className='flex capitalize'>
+                        <span>&#10004;
+                        Air Conditioned </span></p>
+                        <p className='flex capitalize'>
+                        <span>&#10004;
+                       Hot Bath Tub </span></p>
+                       <p className='flex capitalize'>
+                        <span>&#10004;
+                        Free Wifi </span></p></div></div>
+                        <div className='tour-content-block1'>
+                           <div className='py-8'>
+                        <div className="tour-content-title">Room Gallery</div>
+                     <Carousel cols={3} rows={1} gap={10}  loop>
+                     {allHotelDetails?.images?.map((resource, index) => {
+            return (
+               <Carousel.Item key={index} >
+               <img width="100%" style={{height:"160px"}} src={resource?.image_link} />
+               <span className='text-gray-700' >{resource?.image_title}</span>
+               </Carousel.Item>
+               )})}</Carousel></div></div>
+                 <div className='flex pb-8'>      
+                        <div className='mr-2 ml-auto justify-end'>
+                        <button   className='bg-green-600 sm:inline-flex text-white
+            focus:ring-4 focus:ring-green-200 font-semibold text-white 
+             rounded-lg text-sm px-4 py-2.5 text-center 
+                ease-linear transition-all duration-150'>
+                Book now
+            </button></div>
+            </div></div>
+            </div>
+            <div>
+                     <p className='flex capitalize py-1'>
+                        <span className="text-gray-600 text-md" >&#8226;
+                        <button> Presidential Suite </button></span>
+                        <button  className='justify-end ml-auto mr-2' onClick={()=>setSingleRoom(!singleRoom)}>
+                        <span className=' font-semibold text-gray-400 text-lg'>
+                         {singleRoom=== false?  "+" : "-"}</span></button>
+                        </p>
+                        <div className={singleRoom===true?'block':'hidden'}>
+                        <div className='tour-content-block1'>
+                        <div className="tour-content-title">Description</div>
+                        <div className="block accordion-content">
+                           This is the dummy room rose suite descrption.
+                         </div>
+                         </div>
+                         <div className='tour-content-block1'>
+                           <div className='py-8'>
+                         <div className="tour-content-title">Room Facilities</div>
+                         <p className='flex capitalize'>
+                        <span>&#10004;
+                        Air Conditioned </span></p>
+                        <p className='flex capitalize'>
+                        <span>&#10004;
+                       Hot Bath Tub </span></p>
+                       <p className='flex capitalize'>
+                        <span>&#10004;
+                        Free Wifi </span></p></div></div>
+                        <div className='tour-content-block1'>
+                           <div className='py-8'>
+                        <div className="tour-content-title">Room Gallery</div>
+                     <Carousel cols={3} rows={1} gap={10}  loop>
+                     {allHotelDetails?.images?.map((resource, index) => {
+            return (
+               <Carousel.Item key={index} >
+               <img width="100%" style={{height:"160px"}} src={resource?.image_link} />
+               <span className='text-gray-700' >{resource?.image_title}</span>
+               </Carousel.Item>
+               )})}</Carousel></div></div>
+                 <div className='flex pb-8'>      
+                        <div className='mr-2 ml-auto justify-end'>
+                        <button   className='bg-green-600 sm:inline-flex text-white
+            focus:ring-4 focus:ring-green-200 font-semibold text-white 
+             rounded-lg text-sm px-4 py-2.5 text-center 
+                ease-linear transition-all duration-150'>
+                Book now
+            </button></div>
+            </div></div>
+            </div>
                      </div>
                   </div>
                  {/* Amenity */}
@@ -342,7 +435,7 @@ function Themedefault() {
                   <div className="tour-help-call">
                      <span className="material-icons-outlined"> call </span>
                      <div className="tour-help-call-text">
-                        +90 362 555 1919
+                        {phone?.contact_data}
                      </div>
                   </div>
                </div>

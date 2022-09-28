@@ -144,7 +144,6 @@ const Table = (args) => {
                                                 </div>
                                             </th> : <></>}
                                         <th scope="col"
-
                                             className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">{args?.cols?.col1}</th>
 
                                         {args?.name != "Packages"?
@@ -161,11 +160,9 @@ const Table = (args) => {
                                         </th> 
                                     </tr>
                                 </thead>
-
                                 <tbody className="bg-white divide-y divide-gray-200" id="TableList" >
                                     {displayData?.map((item, idx) => (
                                         <>
-                                       
                                             {update?.edit === 1 && update?.id === idx? 
                                              //After Edit
                                                 <>

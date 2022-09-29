@@ -11,7 +11,7 @@ import ar from "../components/Languages/ar"
 import { useRouter } from "next/router";
 import Loader from "../components/loader";
 const logger = require("../services/logger");
-import ClassicTheme from './themes/classictheme'
+
 var language;
 var currentUser;
 var currentProperty;

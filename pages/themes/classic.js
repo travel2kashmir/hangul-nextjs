@@ -85,7 +85,7 @@ function Themedefault() {
             <div className="container">
                <div className="header-logo">
                   <span className="material-icons-outlined header-logo-icon">
-                  </span>{allHotelDetails?.property_name}
+                  mode_of_travel</span>{allHotelDetails?.property_name}
                </div>
 
                <div className="menu-toggle">
@@ -103,21 +103,28 @@ function Themedefault() {
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
-                  >GitHub</a
+                  >Home</a
                   >
                   <a
                      href="https://codepen.io/tangoren/pen/jOajGGv"
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
-                  >CodePen</a
+                  >Gallery</a
                   >
                   <a
                      href="https://www.linkedin.com/in/tangoren/"
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
-                  >LinkedIn</a
+                  >About</a
+                  >
+                  <a
+                     href="https://www.linkedin.com/in/tangoren/"
+                     className="header-menu-item"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                  >Contact us</a
                   >
                   <div className="header-menu-copyright">Made with Tailwind CSS</div>
                </ul>
@@ -125,27 +132,25 @@ function Themedefault() {
             </div>
          </div>
 
+        
          <div className="tour container">
-            <div className="tour-head">
-               <div className="tour-head-left">
-                  <div className="tour-title">
-                     {allHotelDetails?.description_title}
-                  </div>
-                  <div className="tour-overview">
-                     <div className="tour-overview-item">
-                        {allHotelDetails?.property_category} in <span>{allHotelDetails?.address?.[i]?.address_city}</span>
-                     </div>
-                     <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} Star</span> Accommodation</div>
-
-                     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="star" className="w-4 text-yellow-500" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                        <path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path>
-                     </svg>
-
-                     <div className="tour-overview-item">   <span>4.7</span> (55 reviews)</div>
-
-                  </div>
-               </div>
+   <div className="tour-head">
+      <div className="tour-head-left">
+         <div className="tour-title">
+            {allHotelDetails?.description_title}
+         </div>
+         <div className="tour-overview">
+            <div className="tour-overview-item">
+               {allHotelDetails?.property_category} in <span>{allHotelDetails?.address?.[i]?.address_city}</span>
             </div>
+            <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} star</span> Accommodation</div>
+            <div className="tour-overview-item">
+               <span className="material-icons-outlined"> star </span>
+               <span>4.7</span> ({allHotelDetails?.Reviews?.length})
+            </div>
+         </div>
+      </div>
+   </div>
 
             <div className="tour-wrapper">
                <div className="tour-content">
@@ -192,7 +197,7 @@ function Themedefault() {
                      </div>
                   </div>
                   {/* About */}
-                  <div className="tour-content-block">
+                  <div id="#about" className="tour-content-block">
                      <div className="tour-content-title mb-8">
                         About</div>
                      <div className="tour-itinerary">
@@ -306,114 +311,22 @@ function Themedefault() {
                      <div className="tour-content-title">Customer Reviews</div>
                      <div className="tour-reviews">
                         <div className="tour-reviews-feedback">
-                           <div className="tour-reviews-feedback-item">
+                        {allHotelDetails?.Reviews?.map((item, idx) => {
+                                       return (
+                           <div className="tour-reviews-feedback-item" key={idx}>
                               <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       earbuds
-                                    </span>
-                                 </div>
+                                 
                                  <div className="tour-reviews-feedback-content-inner">
                                     <div className="tour-reviews-feedback-title">
-                                       Itinerary
+                                       {item?.review_author}
                                     </div>
                                     <div className="tour-reviews-feedback-text">
-                                       Excellent
+                                      {item?.review_title}
                                     </div>
                                  </div>
                               </div>
-                              <div className="tour-reviews-feedback-rating">4.8</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       record_voice_over
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Guide
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.9</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       directions_bus
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Transport
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.9</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       hotel
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Accommodation
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.5</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       restaurant
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Food
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.5</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       support
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Tour Operator
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Travel Walk
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.5</div>
-                           </div>
+                              <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
+                           </div>)})}
                         </div>
                         <div className="tour-reviews-overall">
                            <div className="tour-reviews-content">
@@ -558,21 +471,28 @@ function Themedefault() {
                         className="footer-menu-item"
                         target="_blank"
                         rel="noopener noreferrer"
-                     >GitHub</a
+                     >Home</a
                      >
                      <a
                         href="https://codepen.io/tangoren/pen/jOajGGv"
                         className="footer-menu-item"
                         target="_blank"
                         rel="noopener noreferrer"
-                     >CodePen</a
+                     >Gallery</a
                      >
                      <a
                         href="https://www.linkedin.com/in/tangoren/"
                         className="footer-menu-item"
                         target="_blank"
                         rel="noopener noreferrer"
-                     >LinkedIn</a
+                     >About</a
+                     >
+                     <a
+                        href="https://www.linkedin.com/in/tangoren/"
+                        className="footer-menu-item"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                     >Contact us</a
                      >
                   </div>
                </div>

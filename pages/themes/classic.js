@@ -193,7 +193,8 @@ function Themedefault() {
                   </div>
                   {/* About */}
                   <div className="tour-content-block">
-                     <div className="tour-content-title mb-8">About</div>
+                     <div className="tour-content-title mb-8">
+                        About</div>
                      <div className="tour-itinerary">
                         <div className="accordion">
                            {/* Rooms */}
@@ -205,9 +206,12 @@ function Themedefault() {
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
                                  {allHotelDetails?.rooms?.map((resource, idx) => {
                                     return (
-                                       <div key={idx}>
-                                          <p className='flex hover:text-gray-600  capitalize py-1'>
-                                                <button className='text-lg text-gray-400  font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
+                                       <div  key={idx}>
+                                          <p className='flex hover:text-gray-600 capitalize py-1'>
+                                            
+                                          <div className=" mt-1 mx-1 border-gray-600 border-0 rounded-full text-lg text-gray-50  font-semibold bg-gray-600 flex items-center justify-center" style={{height: "20px", width: "20px", fontSize: "12px"}}>{idx+1}</div>
+                                               
+                                                <button className='text-lg text-gray-600   font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
                                              <button className='justify-end  ml-auto' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>
                                              {open?.view === true && open?.id === idx ?
                                                 <span className=' font-semibold  '>

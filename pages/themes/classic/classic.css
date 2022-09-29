@@ -1180,6 +1180,7 @@ body::selection{
   content: var(--tw-content);
 }
 
+
 .tour-itinerary .accordion-trigger:hover::before{
   content: var(--tw-content);
   opacity: 1;

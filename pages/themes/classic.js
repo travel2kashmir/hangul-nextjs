@@ -150,9 +150,7 @@ function Themedefault() {
             <div className="tour-wrapper">
                <div className="tour-content">
                   <div className="tour-hero">
-                     <Swiper
-
-                        spaceBetween={30}
+                     <Swiper spaceBetween={30}
                         centeredSlides={true}
                         autoplay={{
                            delay: 2500,
@@ -200,19 +198,23 @@ function Themedefault() {
                         <div className="accordion">
                            {/* Rooms */}
                            <div className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                           <button className='font-bold' onClick={() => setSingleRoom(!singleRoom)}>
-                              <div className="accordion-trigger mb-6">
-                               Rooms to choose ({rooms.length})</div></button>
+                           <div className='accordion-trigger'>
+                           <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
+                              <div className='accordion-trigger'>
+                              Rooms to choose ({rooms.length})</div></button></div>
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
                                  {allHotelDetails?.rooms?.map((resource, idx) => {
                                     return (
                                        <div key={idx}>
-                                          <p className='flex capitalize py-1'>
-                                             <span className="text-gray-600 text-lg font-bold" >
-                                                <button className='text-lg font-semibold'>{resource?.room_name} </button></span>
+                                          <p className='flex hover:text-gray-600  capitalize py-1'>
+                                                <button className='text-lg text-gray-400  font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
                                              <button className='justify-end  ml-auto' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>
-                                                <span className=' font-semibold text-gray-400 text-lg'>
-                                                   {open?.view === true && open?.id === idx ? "-" : "+"}</span></button>
+                                             {open?.view === true && open?.id === idx ?
+                                                <span className=' font-semibold  '>
+                                                  - </span>
+                                                  :
+                                                  <span className=' font-semibold text-gray-50 '>
+                                                  + </span>}</button>
                                           </p>
                                           <div className={open?.view === true && open?.id === idx ? 'block' : 'hidden'}>
                                              <div className="tour-content-block">
@@ -220,10 +222,12 @@ function Themedefault() {
                                                    {resource?.room_description}
                                                 </div>
                                              </div>
+                                             {/* Room Facilities */}
                                              <div className='tour-content-block1'>
-                                                <div className='pb-8'>
-                                                   <div className="accordion-trigger my-2">Room Facilities</div>
-                                                  <div className='flex'>
+                                                <div className='py-10'>
+                                                   <div className="accordion-trigger">Room Facilities</div>
+                                                  
+                                                   <div className=" grid grid-flow-row-dense lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 gap-3">
                                                    {resource.room_facilities.map((item, index) => {
                                                       return (
                                                          <p className='flex mx-4 capitalize' key={index}>
@@ -237,6 +241,7 @@ function Themedefault() {
                                                                {item?.service_name} </span></p>)
                                                    })}</div>
                                                 </div></div>
+                                                {/* Room Gallery */}
                                              <div className='tour-content-block1'>
                                                 <div className='pb-8'>
                                                    <div className="accordion-trigger mb-4">Room Gallery</div>
@@ -265,17 +270,19 @@ function Themedefault() {
                            </div>
                            {/* Amenity */}
                            <div className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                           <button onClick={() => setAmenity(!amenity)}>
-                              <div className="accordion-trigger mb-8"> Property Amenities</div>
-                              </button>
-                              <div className={amenity === true ? 'block accordion-content' : 'hidden'}>
+                           <div className='accordion-trigger'>
+                           <button className="mb-6" onClick={() => setAmenity(!amenity)}>
+                              <div className='accordion-trigger' > Property Amenities</div>
+                              </button></div>
+                              <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
+                              <div className="grid mb- grid-flow-row-dense lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-3">
                                  {allHotelDetails?.services?.map((item, idx) => {
                                     return (
                                        <p className='flex capitalize' key={idx}>
                                           <span>&#10004;
                                              {item?.local_service_name} </span>
                                        </p>)
-                                 })}
+                                 })}</div>
                               </div>
                            </div>
                            
@@ -296,134 +303,7 @@ function Themedefault() {
                         </div>
                      </div>
                   </div>
-                  {/* Reviews */}
-                  {/* <!-- block --> */}
-                  <div className="tour-content-block">
-                     <div className="tour-content-title">Customer Reviews</div>
-                     <div className="tour-reviews">
-                        <div className="tour-reviews-feedback">
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       earbuds
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Itinerary
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.8</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       record_voice_over
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Guide
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.9</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       directions_bus
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Transport
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.9</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       hotel
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Accommodation
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.5</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       restaurant
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Food
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Excellent
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.5</div>
-                           </div>
-                           <div className="tour-reviews-feedback-item">
-                              <div className="tour-reviews-feedback-content">
-                                 <div className="tour-reviews-feedback-icon">
-                                    <span className="material-icons-outlined">
-                                       support
-                                    </span>
-                                 </div>
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       Tour Operator
-                                    </div>
-                                    <div className="tour-reviews-feedback-text">
-                                       Travel Walk
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating">4.5</div>
-                           </div>
-                        </div>
-                        <div className="tour-reviews-overall">
-                           <div className="tour-reviews-content">
-                              <div className="tour-reviews-overall-title">
-                                 Overall Rating
-                              </div>
-                              <div className="tour-reviews-overall-text">
-                                 Excellent
-                              </div>
-                              <div className="tour-reviews-overall-rating">4.7</div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
+                  
                   {/*  Reviews */}
                   <div className="tour-content-block">
                      <div className="tour-content-title">Customer Reviews</div>

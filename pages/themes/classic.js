@@ -85,7 +85,7 @@ function Themedefault() {
             <div className="container">
                <div className="header-logo">
                   <span className="material-icons-outlined header-logo-icon">
-                  mode_of_travel</span>{allHotelDetails?.property_name}
+                  mode_of_travel</span> <span className='text-sky-600'>{allHotelDetails?.property_name}</span>
                </div>
 
                <div className="menu-toggle">
@@ -124,6 +124,27 @@ function Themedefault() {
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
+                  >Rooms</a
+                  >
+                  <a
+                     href="https://www.linkedin.com/in/tangoren/"
+                     className="header-menu-item"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                  >Amenities</a
+                  >
+                  <a
+                     href="https://www.linkedin.com/in/tangoren/"
+                     className="header-menu-item"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                  >Packages</a
+                  >
+                  <a
+                     href="https://www.linkedin.com/in/tangoren/"
+                     className="header-menu-item"
+                     target="_blank"
+                     rel="noopener noreferrer"
                   >Contact us</a
                   >
                   <div className="header-menu-copyright">Made with Tailwind CSS</div>
@@ -137,7 +158,7 @@ function Themedefault() {
    <div className="tour-head">
       <div className="tour-head-left">
          <div className="tour-title">
-            {allHotelDetails?.description_title}
+          {allHotelDetails?.description_title} 
          </div>
          <div className="tour-overview">
             <div className="tour-overview-item">
@@ -213,7 +234,7 @@ function Themedefault() {
                                     return (
                                        <div key={idx}>
                                           <p className='flex mb-2 capitalize py-1'>
-                                             <div className=" mt-1 mr-1 -ml-2 border-gray-600 border-0 rounded-full text-lg text-gray-50  font-semibold bg-gray-600 flex items-center justify-center" style={{ height: "20px", width: "20px", fontSize: "12px" }}>{idx + 1}</div>
+                                             <div className=" mt-1 mr-1 -ml-2 border-gray-200 border-0 rounded-full text-lg font-bold text-gray-600  bg-gray-200 flex items-center justify-center" style={{ height: "20px", width: "20px", fontSize: "12px" }}>{idx + 1}</div>
                                              <button className='text-lg text-gray-600 font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
                                              <button className='justify-end mr-1 ml-auto' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>
                                                 {open?.view === true && open?.id === idx ?
@@ -486,6 +507,27 @@ function Themedefault() {
                         target="_blank"
                         rel="noopener noreferrer"
                      >About</a
+                     >
+                     <a
+                        href="https://www.linkedin.com/in/tangoren/"
+                        className="footer-menu-item"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                     >Rooms</a
+                     >
+                     <a
+                        href="https://www.linkedin.com/in/tangoren/"
+                        className="footer-menu-item"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                     >Amenities</a
+                     >
+                     <a
+                        href="https://www.linkedin.com/in/tangoren/"
+                        className="footer-menu-item"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                     >Packages</a
                      >
                      <a
                         href="https://www.linkedin.com/in/tangoren/"

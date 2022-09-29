@@ -33,14 +33,17 @@ function Theme() {
   const [themeName, setThemeName] = useState()
   const [bgColor, setBgColor] = useState(theme1)
   const [uri, setUri] = useState("")
+  const [loc,setLoc]=useState()
+  const [lang,setLang]=useState('en')
   const [visible,setVisible]=useState(0) 
+  var locale;
 
   /** Router for Redirection **/
   const router = useRouter();
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
-        var locale = localStorage.getItem("Language");
+         locale = localStorage.getItem("Language");
         if (locale === "ar") {
           language = arabic;
         }
@@ -55,6 +58,8 @@ function Theme() {
         currentProperty = JSON.parse(localStorage.getItem("property"));
 
         currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+        setLoc(window.location.origin)
+        setLang(locale)
 
       }
     }
@@ -64,7 +69,7 @@ function Theme() {
 
   const initialtheme = () => {
     var url;
-    url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`;
+    url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty?.address_city}`;
     axios.get(url)
       .then((response) => {
         setTheme(response.data.theme_id);
@@ -96,11 +101,11 @@ function Theme() {
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     const fetchHotelDetails = async () => {
-      const url = `/api/${currentProperty.address_province.replace(
+      const url = `/api/${currentProperty?.address_province.replace(
         /\s+/g,
         "-"
-      )}/${currentProperty.address_city}/${currentProperty.property_category
-        }s/${currentProperty.property_id}`;
+      )}/${currentProperty?.address_city}/${currentProperty?.property_category
+        }s/${currentProperty?.property_id}`;
       axios.get(url)
         .then((response) => {
           setAllHotelDetails(response.data);
@@ -114,8 +119,8 @@ function Theme() {
 
   const sendLink = () => {
     const data = {
-      uuid: `${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`,
-      property_id: currentProperty.property_id,
+      uuid: `${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty?.address_city}`,
+      property_id: currentProperty?.property_id,
       address_id: allHotelDetails.address[0].address_id,
       theme_id: theme,
       lang: localStorage?.getItem("Language")
@@ -243,7 +248,7 @@ function Theme() {
 
             <div>
               <button className="bg-cyan-600 text-sm text-center hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={() => {
-                setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty.address_city}`.toLowerCase());
+                setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase());
                 sendLink();
               }}
               >Save</button>
@@ -254,7 +259,11 @@ function Theme() {
             <svg className="h-6 w-6 pt-1 flex-none stroke-sky-500" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M17.25 10c0 1-1.75 6.25-7.25 6.25S2.75 11 2.75 10 4.5 3.75 10 3.75 17.25 9 17.25 10Z"></path><circle cx="10" cy="10" r="2.25"></circle></svg>
               <button className=" text-base text-center text-cyan-600 mr-2  rounded"
               >  
-               <Link href={`https://hangul-v3.herokuapp.com/${allHotelDetails?.property_name?.replaceAll(' ', '-')}-${currentProperty?.address_city}`}>
+               <Link href={`${loc}/${currentProperty?.address_province.replace(
+        /\s+/g,
+        "-"
+      )}/${currentProperty?.address_city}/${currentProperty?.property_category
+        }s/${allHotelDetails?.property_name?.replaceAll(' ', '-')}/${theme}/${lang}`}>
                <a target="_blank">Preview </a></Link></button>
 
             </div>

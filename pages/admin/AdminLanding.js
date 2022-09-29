@@ -1,4 +1,5 @@
 import React from "react";
+import Link from 'next/link';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,7 +18,8 @@ import Lineloader from "../../components/loaders/lineloader";
 import Textboxloader from "../../components/loaders/textboxloader";
 
 function AdminLanding() {
-
+    const [loc,setLoc]=useState()
+    const [lang,setLang]=useState('en')
     const [properties, setProperties] = useState([])
     const router = useRouter();
 
@@ -61,11 +63,14 @@ function AdminLanding() {
                     language = french;
                 }
                 currentUser = JSON.parse(localStorage.getItem("Signin Details"));
+                setLang(locale)
             }
         }
         firstfun();
         router.push('./AdminLanding');
         fetchAllProperties();
+        setLoc(window.location.origin)
+     
     }, [])
 
 
@@ -209,6 +214,13 @@ function AdminLanding() {
                                                 >
                                                     {language?.action}
                                                 </th>
+
+                                                <th
+                                                    scope="col"
+                                                    className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                                >
+                                                    
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
@@ -221,6 +233,7 @@ function AdminLanding() {
                                                         <td className="p-1 whitespace-nowrap text-base font-medium text-gray-900 capitalize">
                                                             {item?.property_category}
                                                         </td>
+
                                                         
                                                         <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                             <div className="flex items-center">
@@ -235,9 +248,9 @@ function AdminLanding() {
                                                                     LocalProperty({ item });
                                                                     router.push("../property/propertysummary");
                                                                 }}
-                                                                className="text-white bg-cyan-600
+                                                                className={`text-white bg-cyan-600
                                          hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
-                                        text-sm inline-flex items-center px-2 py-1.5 text-center"
+                                        text-sm inline-flex items-center px-2 py-1.5 text-center`}
                                                             >
                                                                 {language?.view}
                                                             </button>
@@ -256,6 +269,19 @@ function AdminLanding() {
                                                                 {language?.deactivate}
                                                             </button>
                                                         </td>
+
+                                                        <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                            <div className="flex items-center">
+                                                            <button
+                                                                className="text-white ml-4 bg-blue-600
+                                                                hover:bg-blue-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                                               text-sm inline-flex items-center px-2 py-1.5 text-center">
+                                                               <Link href={`${loc}/${item?.address_province.replace(/\s+/g,"-")}/${item?.address_city}/${item?.property_category}s/${item?.property_name?.replaceAll(' ', '-')}/bg-lime-50/${lang}`}>
+                                                                    <a target="_blank">Website</a>
+                                                                    </Link></button>
+                                                            </div>
+                                                        </td>
+                                                       
                                                     </tr> : <></>
                                                 );
                                             })}
@@ -295,6 +321,13 @@ function AdminLanding() {
                                                     className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
                                                 >
                                                     {language?.action}
+                                                </th>
+
+                                                <th
+                                                    scope="col"
+                                                    className="px-1 py-4 text-left text-sm font-semibold text-gray-500 uppercase"
+                                                >
+                                                    
                                                 </th>
                                             </tr>
                                         </thead>
@@ -342,6 +375,19 @@ function AdminLanding() {
                                                             >
                                                                 {language?.activate}
                                                             </button>
+                                                        </td>
+
+                                                        <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                                            <div className="flex items-center">
+                                                                <button
+                                                                className="text-white ml-4 bg-blue-600
+                                                                hover:bg-blue-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
+                                                               text-sm inline-flex items-center px-2 py-1.5 text-center">
+                                                                <Link  
+                                                                href={`${loc}/${item?.address_province.replace(/\s+/g,"-")}/${item?.address_city}/${item?.property_category}s/${item?.property_name?.replaceAll(' ', '-')}/bg-lime-50/${lang}`}>
+                                                                    <a target="_blank">Website</a>
+                                                                    </Link></button>
+                                                            </div>
                                                         </td>
                                                     </tr> : <></>
                                                 );

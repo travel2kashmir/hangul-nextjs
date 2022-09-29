@@ -199,30 +199,28 @@ function Themedefault() {
                         <div className="accordion">
                            {/* Rooms */}
                            <div className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                           <div className='accordion-trigger'>
-                           <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
                               <div className='accordion-trigger'>
-                              Rooms to choose ({rooms.length})</div></button></div>
+                                 <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
+                                    <div className='accordion-trigger'>
+                                       Rooms to choose ({rooms.length})</div></button></div>
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
                                  {allHotelDetails?.rooms?.map((resource, idx) => {
                                     return (
-                                       <div  key={idx}>
-                                          <p className='flex hover:text-gray-600 capitalize py-1'>
-                                            
-                                          <div className=" mt-1 mx-1 border-gray-600 border-0 rounded-full text-lg text-gray-50  font-semibold bg-gray-600 flex items-center justify-center" style={{height: "20px", width: "20px", fontSize: "12px"}}>{idx+1}</div>
-                                               
-                                                <button className='text-lg text-gray-600   font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
-                                             <button className='justify-end  ml-auto' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>
-                                             {open?.view === true && open?.id === idx ?
-                                                <span className=' font-semibold  '>
-                                                  - </span>
-                                                  :
-                                                  <span className=' font-semibold text-gray-50 '>
-                                                  + </span>}</button>
+                                       <div key={idx}>
+                                          <p className='flex mb-2 capitalize py-1'>
+                                             <div className=" mt-1 mr-1 -ml-2 border-gray-600 border-0 rounded-full text-lg text-gray-50  font-semibold bg-gray-600 flex items-center justify-center" style={{ height: "20px", width: "20px", fontSize: "12px" }}>{idx + 1}</div>
+                                             <button className='text-lg text-gray-600 font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
+                                             <button className='justify-end mr-1 ml-auto' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>
+                                                {open?.view === true && open?.id === idx ?
+                                                   <span className=' font-semibold text-gray-400  '>
+                                                      - </span>
+                                                   :
+                                                   <span className=' font-semibold text-gray-400'>
+                                                      + </span>}</button>
                                           </p>
                                           <div className={open?.view === true && open?.id === idx ? 'block' : 'hidden'}>
                                              <div className="tour-content-block">
-                                                <div className="tour-description">
+                                                <div className="tour-description mt-4">
                                                    {resource?.room_description}
                                                 </div>
                                              </div>
@@ -230,22 +228,17 @@ function Themedefault() {
                                              <div className='tour-content-block1'>
                                                 <div className='py-10'>
                                                    <div className="accordion-trigger">Room Facilities</div>
-                                                  
+
                                                    <div className="grid grid-flow-row-dense lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 gap-3">
-                                                   {resource.room_facilities.map((item, index) => {
-                                                      return (
-                                                         <p className='flex mx-4 capitalize' key={index}>
-                                                            <span>&#10004;
-                                                               {item?.service_name} </span></p>)
-                                                   })}
-                                                    {resource.room_facilities.map((item, index) => {
-                                                      return (
-                                                         <p className='flex mx-4 capitalize' key={index}>
-                                                            <span>&#10004;
-                                                               {item?.service_name} </span></p>)
-                                                   })}</div>
+                                                      {resource.room_facilities.map((item, index) => {
+                                                         return (
+                                                            <span className='text-gray-700' key={index}>
+                                                               <span>&#10004;
+                                                                  {item?.service_name} </span></span>)
+                                                      })}
+                                                      </div>
                                                 </div></div>
-                                                {/* Room Gallery */}
+                                             {/* Room Gallery */}
                                              <div className='tour-content-block1'>
                                                 <div className='pb-8'>
                                                    <div className="accordion-trigger mb-4">Room Gallery</div>
@@ -274,25 +267,25 @@ function Themedefault() {
                            </div>
                            {/* Amenity */}
                            <div className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                           <div className='accordion-trigger'>
-                           <button className="mb-6" onClick={() => setAmenity(!amenity)}>
-                              <div className='accordion-trigger' > Property Amenities</div>
-                              </button></div>
+                              <div className='accordion-trigger'>
+                                 <button className="mb-6" onClick={() => setAmenity(!amenity)}>
+                                    <div className='accordion-trigger' > Property Amenities</div>
+                                 </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
-                              <div className="grid mb-6 grid-flow-row-dense lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-3">
-                                 {allHotelDetails?.services?.map((item, idx) => {
-                                    return (
-                                       <p className='flex capitalize' key={idx}>
-                                          <span>&#10004;
-                                             {item?.local_service_name} </span>
-                                       </p>)
-                                 })}</div>
+                                 <div className="grid mb-6 grid-flow-row-dense lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-3">
+                                    {allHotelDetails?.services?.map((item, idx) => {
+                                       return (
+                                          <span className='text-gray-700 capitalize' key={idx}>
+                                             <span>&#10004;
+                                                {item?.local_service_name} </span>
+                                          </span>)
+                                    })}</div>
                               </div>
                            </div>
-                           
+
                            {/* Packages */}
                            <div className="accordion-panel">
-                           <button onClick={() => setAmenity(!amenity)}>  <div className="accordion-trigger">
+                              <button onClick={() => setAmenity(!amenity)}>  <div className="accordion-trigger">
                                  Packages
                               </div></button>
                               <div className="accordion-content">
@@ -307,7 +300,7 @@ function Themedefault() {
                         </div>
                      </div>
                   </div>
-                  
+
                   {/*  Reviews */}
                   <div className="tour-content-block">
                      <div className="tour-content-title">Customer Reviews</div>

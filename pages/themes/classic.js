@@ -227,7 +227,7 @@ function Themedefault() {
                                                 <div className='py-10'>
                                                    <div className="accordion-trigger">Room Facilities</div>
                                                   
-                                                   <div className=" grid grid-flow-row-dense lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 gap-3">
+                                                   <div className="grid grid-flow-row-dense lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 gap-3">
                                                    {resource.room_facilities.map((item, index) => {
                                                       return (
                                                          <p className='flex mx-4 capitalize' key={index}>
@@ -275,7 +275,7 @@ function Themedefault() {
                               <div className='accordion-trigger' > Property Amenities</div>
                               </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
-                              <div className="grid mb- grid-flow-row-dense lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-3">
+                              <div className="grid mb-6 grid-flow-row-dense lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-3">
                                  {allHotelDetails?.services?.map((item, idx) => {
                                     return (
                                        <p className='flex capitalize' key={idx}>

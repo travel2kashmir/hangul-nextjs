@@ -99,49 +99,46 @@ function Themedefault() {
                      <option value="ar">Arabic</option>
                   </select>
                   <a
-                     href="https://github.com/tangoren/tailwind-css-travel-booking"
+                     href="#home"
                      className="header-menu-item"
-                     target="_blank"
-                     rel="noopener noreferrer"
                   >Home</a
                   >
                   <a
-                     href="https://codepen.io/tangoren/pen/jOajGGv"
-                     className="header-menu-item"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                  >Gallery</a
-                  >
-                  <a
-                     href="https://www.linkedin.com/in/tangoren/"
+                     href="#about"
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
                   >About</a
                   >
                   <a
-                     href="https://www.linkedin.com/in/tangoren/"
+                     href="#gallery"
+                     className="header-menu-item"
+                  >Gallery</a
+                  >
+                 
+                  <a
+                     href="#rooms"
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
                   >Rooms</a
                   >
                   <a
-                     href="https://www.linkedin.com/in/tangoren/"
+                     href="#amenities"
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
                   >Amenities</a
                   >
                   <a
-                     href="https://www.linkedin.com/in/tangoren/"
+                     href="#packages"
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
                   >Packages</a
                   >
                   <a
-                     href="https://www.linkedin.com/in/tangoren/"
+                     href="contactus"
                      className="header-menu-item"
                      target="_blank"
                      rel="noopener noreferrer"
@@ -155,7 +152,7 @@ function Themedefault() {
 
         
          <div className="tour container">
-   <div className="tour-head">
+          <div className="tour-head">
       <div className="tour-head-left">
          <div className="tour-title">
           {allHotelDetails?.description_title} 
@@ -218,7 +215,7 @@ function Themedefault() {
                      </div>
                   </div>
                   {/* About */}
-                  <div id="#about" className="tour-content-block">
+                  <div id="about" className="tour-content-block">
                      <div className="tour-content-title mb-8">
                         About</div>
                      <div className="tour-itinerary">
@@ -233,9 +230,9 @@ function Themedefault() {
                                  {allHotelDetails?.rooms?.map((resource, idx) => {
                                     return (
                                        <div key={idx}>
-                                          <p className='flex mb-2 capitalize py-1'>
-                                             <div className=" mt-1 mr-1 -ml-2 border-gray-200 border-0 rounded-full text-lg font-bold text-gray-600  bg-gray-200 flex items-center justify-center" style={{ height: "20px", width: "20px", fontSize: "12px" }}>{idx + 1}</div>
-                                             <button className='text-lg text-gray-600 font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
+                                          <p className='flex capitalize mt-4 py-1'>
+                                             <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-600  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
+                                             <button className='text-gray-600 font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.room_name} </button>
                                              <button className='justify-end mr-1 ml-auto' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>
                                                 {open?.view === true && open?.id === idx ?
                                                    <span className=' font-semibold text-gray-400  '>
@@ -245,8 +242,9 @@ function Themedefault() {
                                                       + </span>}</button>
                                           </p>
                                           <div className={open?.view === true && open?.id === idx ? 'block' : 'hidden'}>
+                                            {/* Room Description */}
                                              <div className="tour-content-block">
-                                                <div className="tour-description mt-4">
+                                                <div className="tour-description">
                                                    {resource?.room_description}
                                                 </div>
                                              </div>
@@ -255,7 +253,7 @@ function Themedefault() {
                                                 <div className='py-10'>
                                                    <div className="accordion-trigger">Room Facilities</div>
 
-                                                   <div className="grid grid-flow-row-dense lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 gap-3">
+                                                   <div className="grid grid-flow-row-dense lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-2 mt-2 gap-3">
                                                       {resource.room_facilities.map((item, index) => {
                                                          return (
                                                             <span className='text-gray-700' key={index}>
@@ -272,11 +270,13 @@ function Themedefault() {
                                                       {resource.room_images.map((resource, index) => {
                                                          return (
                                                             <Carousel.Item key={index} >
-                                                               <img width="100%" style={{ height: "160px" }} src={resource?.image_link} />
+                                                               <img width="100%" style={{ height: "160px", marginBottom:"10px" }} src={resource?.image_link} />
                                                                <span className='text-gray-700' >{resource?.image_title}</span>
                                                             </Carousel.Item>
                                                          )
                                                       })}</Carousel></div></div>
+                                             
+                                             {/* Book Now Button */}
                                              <div className='flex pb-8'>
                                                 <div className='mr-2 ml-auto justify-end'>
                                                    <button className='bg-green-600 sm:inline-flex text-white
@@ -298,7 +298,7 @@ function Themedefault() {
                                     <div className='accordion-trigger' > Property Amenities</div>
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
-                                 <div className="grid mb-6 grid-flow-row-dense lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-3">
+                                 <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-4 md:grid-cols-1 sm:grid-cols-1 gap-3">
                                     {allHotelDetails?.services?.map((item, idx) => {
                                        return (
                                           <span className='text-gray-700 capitalize' key={idx}>
@@ -479,6 +479,7 @@ function Themedefault() {
                </div>
             </div>
          </div>
+
          {/* Footer */}
          <div className="footer">
             <div className="container">

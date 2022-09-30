@@ -30,6 +30,7 @@ function Themedefault() {
       "id": ''
    });
    const [singleRoom, setSingleRoom] = useState(false);
+   const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
    /** Router for Redirection **/
@@ -82,16 +83,17 @@ function Themedefault() {
    return (
       <>
          <div className="header">
+
             <div className="container">
                <div className="header-logo">
                   <span className="material-icons-outlined header-logo-icon">
-                  mode_of_travel</span> <span className='text-sky-600'>{allHotelDetails?.property_name}</span>
+                     mode_of_travel</span> <span className='text-sky-600'>{allHotelDetails?.property_name}</span>
                </div>
-
+              
                <div className="menu-toggle">
-                  <span className="material-icons-outlined"> menu </span>
+                 <button onClick={() => setSmSidebar(!smSidebar)} > <span className="material-icons-outlined"> menu </span></button>
                </div>
-
+        
                <ul className="header-menu">
                   <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600 block w-32 py-1 px-2">
                      <option value="en">English</option>
@@ -106,8 +108,6 @@ function Themedefault() {
                   <a
                      href="#about"
                      className="header-menu-item"
-                     target="_blank"
-                     rel="noopener noreferrer"
                   >About</a
                   >
                   <a
@@ -115,63 +115,115 @@ function Themedefault() {
                      className="header-menu-item"
                   >Gallery</a
                   >
-                 
+
                   <a
                      href="#rooms"
                      className="header-menu-item"
-                     target="_blank"
-                     rel="noopener noreferrer"
                   >Rooms</a
                   >
                   <a
                      href="#amenities"
                      className="header-menu-item"
-                     target="_blank"
-                     rel="noopener noreferrer"
                   >Amenities</a
                   >
                   <a
                      href="#packages"
                      className="header-menu-item"
-                     target="_blank"
-                     rel="noopener noreferrer"
                   >Packages</a
                   >
                   <a
-                     href="contactus"
+                     href="#contactus"
                      className="header-menu-item"
-                     target="_blank"
-                     rel="noopener noreferrer"
                   >Contact us</a
                   >
                   <div className="header-menu-copyright">Made with Tailwind CSS</div>
                </ul>
-
+              
             </div>
-         </div>
+          <div className={smSidebar === true ? "block" : "hidden"}>       
+          <aside id="sidebar" className="fixed  lg:hidden z-20 h-full top-14 right-0 h-min flex sm:flex flex-shrink-0 flex-col w-full transition-width duration-75" aria-label="Sidebar">
+          <div className="relative  flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
+            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+              <div className="flex-1 px-3 bg-white divide-y space-y-1">
+                <ul className="space-y-2 pb-2">
 
+                  <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                  <span className="ml-3 flex-1 whitespace-nowrap"> 
+                  <a
+                     href="#home"
+                  > <button onClick={()=>{setSmSidebar(!smSidebar)}}>Home</button></a></span>
+                  </li>
+                  <hr/>
+                    <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                      <span className="ml-3 flex-1 whitespace-nowrap">
+                      <a
+                     href="#about"> <button onClick={()=>{setSmSidebar(!smSidebar)}}>About</button>
+                       </a> </span>
+                    </li>
+                    <hr/>
+                  <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                    <span className="ml-3 flex-1 whitespace-nowrap">
+                    <a
+                     href="#gallery">
+                    <button onClick={()=>{setSmSidebar(!smSidebar)}}> Gallery</button></a>
+                   </span>
+                  </li>
+                  <hr/> 
+                 <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                   <span className="ml-3 flex-1 whitespace-nowrap">
+                   <a
+                     href="#rooms"><button onClick={()=>{setSmSidebar(!smSidebar)}}>Rooms</button></a>
+                    </span>
+                  </li>
+                  <hr/>
+               <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+               <span className="ml-3 flex-1 whitespace-nowrap">
+               <a href="#amenities"><button onClick={()=>{setSmSidebar(!smSidebar)}}>Amenities</button></a>
+                    </span>
+                  </li>
+                  <hr/>
+                <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                   <span className="ml-3 flex-1 whitespace-nowrap">
+                   <a
+                     href="#packages"><button onClick={()=>{setSmSidebar(!smSidebar)}}> Packages</button></a>
+                    </span>
+                  </li>
+                  <hr/>
+                   <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                     <span className="ml-3 flex-1 whitespace-nowrap">
+                     <a
+                     href="#contactus"><button onClick={()=>{setSmSidebar(!smSidebar)}}>Contact us </button></a>
+                      </span>
+                    </li> 
+                </ul>
+              </div>
+            </div>
+          </div>
+        </aside></div>
+         </div>
         
          <div className="tour container">
-          <div className="tour-head">
-      <div className="tour-head-left">
-         <div className="tour-title">
-          {allHotelDetails?.description_title} 
-         </div>
-         <div className="tour-overview">
-            <div className="tour-overview-item">
-               {allHotelDetails?.property_category} in <span>{allHotelDetails?.address?.[i]?.address_city}</span>
+            <div className="tour-head">
+               <div id="home" className="tour-head-left">
+                  <div className="tour-title">
+                     {allHotelDetails?.description_title}
+                  </div>
+                  <div className="tour-overview">
+                     <div className="tour-overview-item">
+                        {allHotelDetails?.property_category} in <span>{allHotelDetails?.address?.[i]?.address_city}</span>
+                     </div>
+                     <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} star</span> Accommodation</div>
+                     <div className="tour-overview-item">
+                        <span className="material-icons-outlined"> star </span>
+                        <span>4.7</span> ({allHotelDetails?.Reviews?.length})
+                     </div>
+                  </div>
+               </div>
             </div>
-            <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} star</span> Accommodation</div>
-            <div className="tour-overview-item">
-               <span className="material-icons-outlined"> star </span>
-               <span>4.7</span> ({allHotelDetails?.Reviews?.length})
-            </div>
-         </div>
-      </div>
-   </div>
-
+            {/* Body */}
             <div className="tour-wrapper">
                <div className="tour-content">
+                  {/* Slider */}
                   <div className="tour-hero">
                      <Swiper spaceBetween={30}
                         centeredSlides={true}
@@ -202,7 +254,7 @@ function Themedefault() {
                      </div>
                   </div>
                   {/* Gallery */}
-                  <div className="tour-content-block">
+                  <div id="gallery" className="tour-content-block">
                      <div className="tour-content-title">Gallery</div>
                      <div className="relative overflow-hidden">
                         <Carousel cols={2} rows={1} gap={10} loop>
@@ -221,7 +273,7 @@ function Themedefault() {
                      <div className="tour-itinerary">
                         <div className="accordion">
                            {/* Rooms */}
-                           <div className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
+                           <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger'>
                                  <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
                                     <div className='accordion-trigger'>
@@ -242,7 +294,7 @@ function Themedefault() {
                                                       + </span>}</button>
                                           </p>
                                           <div className={open?.view === true && open?.id === idx ? 'block' : 'hidden'}>
-                                            {/* Room Description */}
+                                             {/* Room Description */}
                                              <div className="tour-content-block">
                                                 <div className="tour-description">
                                                    {resource?.room_description}
@@ -260,7 +312,7 @@ function Themedefault() {
                                                                <span>&#10004;
                                                                   {item?.service_name} </span></span>)
                                                       })}
-                                                      </div>
+                                                   </div>
                                                 </div></div>
                                              {/* Room Gallery */}
                                              <div className='tour-content-block1'>
@@ -270,12 +322,12 @@ function Themedefault() {
                                                       {resource.room_images.map((resource, index) => {
                                                          return (
                                                             <Carousel.Item key={index} >
-                                                               <img width="100%" style={{ height: "160px", marginBottom:"10px" }} src={resource?.image_link} />
+                                                               <img width="100%" style={{ height: "160px", marginBottom: "10px" }} src={resource?.image_link} />
                                                                <span className='text-gray-700' >{resource?.image_title}</span>
                                                             </Carousel.Item>
                                                          )
                                                       })}</Carousel></div></div>
-                                             
+
                                              {/* Book Now Button */}
                                              <div className='flex pb-8'>
                                                 <div className='mr-2 ml-auto justify-end'>
@@ -292,7 +344,7 @@ function Themedefault() {
                               </div>
                            </div>
                            {/* Amenity */}
-                           <div className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
+                           <div id="amenities" className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger'>
                                  <button className="mb-6" onClick={() => setAmenity(!amenity)}>
                                     <div className='accordion-trigger' > Property Amenities</div>
@@ -310,7 +362,7 @@ function Themedefault() {
                            </div>
 
                            {/* Packages */}
-                           <div className="accordion-panel">
+                           <div id="packages" className="accordion-panel">
                               <button onClick={() => setAmenity(!amenity)}>  <div className="accordion-trigger">
                                  Packages
                               </div></button>
@@ -332,22 +384,23 @@ function Themedefault() {
                      <div className="tour-content-title">Customer Reviews</div>
                      <div className="tour-reviews">
                         <div className="tour-reviews-feedback">
-                        {allHotelDetails?.Reviews?.map((item, idx) => {
-                                       return (
-                           <div className="tour-reviews-feedback-item" key={idx}>
-                              <div className="tour-reviews-feedback-content">
-                                 
-                                 <div className="tour-reviews-feedback-content-inner">
-                                    <div className="tour-reviews-feedback-title">
-                                       {item?.review_author}
+                           {allHotelDetails?.Reviews?.map((item, idx) => {
+                              return (
+                                 <div className="tour-reviews-feedback-item" key={idx}>
+                                    <div className="tour-reviews-feedback-content">
+
+                                       <div className="tour-reviews-feedback-content-inner">
+                                          <div className="tour-reviews-feedback-title">
+                                             {item?.review_author}
+                                          </div>
+                                          <div className="tour-reviews-feedback-text">
+                                             {item?.review_title}
+                                          </div>
+                                       </div>
                                     </div>
-                                    <div className="tour-reviews-feedback-text">
-                                      {item?.review_title}
-                                    </div>
-                                 </div>
-                              </div>
-                              <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
-                           </div>)})}
+                                    <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
+                                 </div>)
+                           })}
                         </div>
                         <div className="tour-reviews-overall">
                            <div className="tour-reviews-content">
@@ -363,7 +416,7 @@ function Themedefault() {
                      </div>
                   </div>
                   {/* Booking */}
-                  <div className="tour-content-block">
+                  <div id="contactus" className="tour-content-block">
                      <div className="tour-help">
                         <div className="tour-help-inner">
                            <div className="tour-help-content">
@@ -489,54 +542,33 @@ function Themedefault() {
                   </div>
                   <div className="footer-menu">
                      <a
-                        href="https://github.com/tangoren/tailwind-css-travel-booking"
+                        href="#home"
                         className="footer-menu-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                     >Home</a
-                     >
+                     >Home</a>
                      <a
-                        href="https://codepen.io/tangoren/pen/jOajGGv"
+                        href="#about"
                         className="footer-menu-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                     >Gallery</a
-                     >
+                     >About</a>
                      <a
-                        href="https://www.linkedin.com/in/tangoren/"
+                        href="#gallery"
                         className="footer-menu-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                     >About</a
-                     >
+                     >Gallery</a>
                      <a
-                        href="https://www.linkedin.com/in/tangoren/"
+                        href="#rooms"
                         className="footer-menu-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                     >Rooms</a
-                     >
+                     >Rooms</a>
                      <a
-                        href="https://www.linkedin.com/in/tangoren/"
+                        href="#amenities"
                         className="footer-menu-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                     >Amenities</a
-                     >
+                     >Amenities</a>
                      <a
-                        href="https://www.linkedin.com/in/tangoren/"
+                        href="#packages"
                         className="footer-menu-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                     >Packages</a
-                     >
+                     >Packages</a>
                      <a
-                        href="https://www.linkedin.com/in/tangoren/"
+                        href="#contactus"
                         className="footer-menu-item"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                     >Contact us</a
-                     >
+                     >Contact us</a>
                   </div>
                </div>
             </div>

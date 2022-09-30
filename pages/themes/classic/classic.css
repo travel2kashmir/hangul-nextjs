@@ -616,8 +616,8 @@ body::selection{
   height: 2.5rem;
   width: 2.5rem;
   cursor: pointer;
-  align-items: center;
-  justify-content: center;
+  align-items: end;
+  justify-content: end;
   --tw-text-opacity: 1;
   color: rgb(71 85 105 / var(--tw-text-opacity));
 }

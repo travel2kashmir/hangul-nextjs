@@ -11,6 +11,7 @@ import ar from "../components/Languages/ar"
 import { useRouter } from "next/router";
 import Loader from "../components/loader";
 const logger = require("../services/logger");
+
 var language;
 var currentUser;
 var currentProperty;
@@ -18,26 +19,27 @@ var flag = false;
 
 function Page() {
   /** State to store Current Property Details **/
-  var theme1 = "bg-red-200";
-  var theme2 = "bg-rose-400";
-  var theme3 = "bg-neutral-400";
-  var theme4 = "bg-yellow-400";
-  var theme5 = "bg-indigo-500";
+  // var theme1 = "bg-red-200";
+  // var theme2 = "bg-rose-400";
+  // var theme3 = "bg-neutral-400";
+  // var theme4 = "bg-yellow-400";
+  // var theme5 = "bg-indigo-500";
   const [allHotelDetails, setAllHotelDetails] = useState([]);
-  const [theme, setTheme] = useState(theme1)
+  const [theme, setTheme] = useState("theme1")
   const [bgColor, setBgColor] = useState(theme)
   const [unique, setUnique] = useState(0)
   const [uri, setUri] = useState("")
   /** Router for Redirection **/
   const router = useRouter();
   const fetchLanguage = (lang) => {
+    console.log("fetched language is "+lang)
     if (lang === "ar") {
       language = ar;
     }
-    if (lang === "en") {
+    else if (lang === "en") {
       language = en;
     }
-    if (lang === "fr") {
+    else if (lang === "fr") {
       language = fr;
     }
     else {
@@ -45,11 +47,13 @@ function Page() {
     }
     
   }
-  const fetchProperty = async (data) => {
-    fetchLanguage(data?.language); 
-    var url = `api/${data?.province.replaceAll(" ", "-")}/${data?.city.replaceAll(" ", "-")}/${data?.property_category}s/${data?.property_id}`
-    setBgColor(data?.theme_id); setTheme(data?.theme_id);
-    
+  const fetchProperty = async (data,theme) => {
+   // fetchLanguage(data?.language); 
+    //var url = `api/${data?.province.replaceAll(" ", "-")}/${data?.city.replaceAll(" ", "-")}/${data?.property_category}s/${data?.property_id}`
+    //setBgColor(data?.theme_id); setTheme(data?.theme_id);
+    setBgColor(theme); setTheme(theme);
+    var url = data;
+    console.log("url to fetch data is "+url)
     axios.get(url)
       .then((response) => {
         setAllHotelDetails(response.data);
@@ -60,18 +64,24 @@ function Page() {
 
   const fetchHotelDetails = async () => {
 
-console.log(router.query.page)
+console.log('page is '+ router.query.page)
     if (router?.query?.page) {
       var url;
-      url = `/api/property_page/${router?.query?.page}`;
-      console.log(url)
+      var language= router?.query?.page[5] || 'en';
+      var theme= router?.query?.page[4];
+      console.log("language is "+language)
+      fetchLanguage(language)
+      //url = `/api/property_page/${router?.query?.page}`;
+      url=`/api/${router?.query?.page[0]}/${router?.query?.page[1]}/${router?.query?.page[2]}/${router?.query?.page[3]}`
+      fetchProperty(url,theme);
+      //   console.log(url)
 
-      axios.get(url)
-        .then((response) => {
-         fetchProperty(response.data);
-          logger.info("url  to fetch property details hitted successfully")
-        })
-        .catch((error) => { logger.error("url to fetch property details, failed") });
+    //   axios.get(url)
+    //     .then((response) => {
+    //      fetchProperty(response.data);
+    //       logger.info("url  to fetch property details hitted successfully")
+    //     })
+    //     .catch((error) => { logger.error("url to fetch property details, failed") });
 
     }
     else
@@ -90,7 +100,7 @@ console.log(router.query.page)
 
   return (
     <>{allHotelDetails.length===0?
-      <Loader/>
+     <Loader/>
 :<div>
    <Website_head property_name={allHotelDetails?.property_name} />
 
@@ -108,7 +118,7 @@ console.log(router.query.page)
          <div className="flex items-center justify-between mb-4">
            <div className="flex-shrink-0">
              <span className="text-xl sm:text-xl leading-none font-bold text-gray-800">
-               {allHotelDetails?.property_name}
+               {allHotelDetails?.property_name} 
              </span>
              <h3 className="text-base font-normal text-gray-500">
                {allHotelDetails?.star_rating}-Star{" "}

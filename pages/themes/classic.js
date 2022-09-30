@@ -14,7 +14,6 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 var language;
-var phone;
 var currentUser;
 var currentProperty;
 var currentLogged;
@@ -144,7 +143,7 @@ function Themedefault() {
             </div>
 
         <div className={smSidebar === true ? "block" : "hidden"}>       
-          <aside id="sidebar" className="fixed  lg:hidden z-20 h-full top-14 right-0 h-min flex sm:flex flex-shrink-0 flex-col w-full transition-width duration-75" aria-label="Sidebar">
+          <aside id="sidebar" className="fixed  lg:hidden z-20 h-full top-14 right-0 h-min flex  flex-shrink-0 flex-col w-full transition-width duration-75" aria-label="Sidebar">
           <div className="relative  flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
               <div className="flex-1 px-3 bg-white divide-y space-y-1">
@@ -570,7 +569,7 @@ function Themedefault() {
          </div>
 
          {/* Footer */}
-         <footer className="bg-gray-800 mt-12 lg:mt:8 p-6">
+    <footer className="bg-gray-800 mt-12 lg:mt:8 p-6">
     <div className="md:flex md:justify-between">
         <div className="mb-6 md:mb-0">
         <div className="header-logo px-8 pt-4">
@@ -579,9 +578,9 @@ function Themedefault() {
                     <span className='text-white text-xl'>{allHotelDetails?.property_name}</span>       
                </div>
                <div className='flex -mt-1 flex-col'>
-               <span className='px-20 text-sm text-gray-200'>{allHotelDetails?.address[i]?.address_street_address}, {allHotelDetails?.address[i]?.address_city}
+               <span className='px-20 text-sm text-gray-200'>{allHotelDetails?.address?.[i]?.address_street_address}, {allHotelDetails?.address?.[i]?.address_city}
                </span>
-               <span className='px-20 text-sm text-gray-200'> {allHotelDetails?.address[i]?.address_province}, {allHotelDetails?.address[i]?.address_zipcode} 
+               <span className='px-20 text-sm text-gray-200'> {allHotelDetails?.address?.[i]?.address_province}, {allHotelDetails?.address?.[i]?.address_zipcode} 
                </span>
                <span className='px-20 text-sm text-gray-200 uppercase'>India
                </span></div>

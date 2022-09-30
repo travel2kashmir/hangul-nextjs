@@ -616,8 +616,8 @@ body::selection{
   height: 2.5rem;
   width: 2.5rem;
   cursor: pointer;
-  align-items: end;
-  justify-content: end;
+  align-items: flex-end;
+  justify-content: flex-end;
   --tw-text-opacity: 1;
   color: rgb(71 85 105 / var(--tw-text-opacity));
 }
@@ -2522,7 +2522,7 @@ span.tour-amount-old{
 }
 
 .snap-end{
-  scroll-snap-align: end;
+  scroll-snap-align: flex-end;
 }
 
 .snap-center{
@@ -2707,7 +2707,7 @@ span.tour-amount-old{
 }
 
 .place-content-end{
-  place-content: end;
+  place-content: flex-end;
 }
 
 .place-content-between{
@@ -2731,7 +2731,7 @@ span.tour-amount-old{
 }
 
 .place-items-end{
-  place-items: end;
+  place-items: flex-end;
 }
 
 .place-items-center{
@@ -2815,7 +2815,7 @@ span.tour-amount-old{
 }
 
 .justify-items-end{
-  justify-items: end;
+  justify-items: flex-end;
 }
 
 .justify-items-center{
@@ -2883,7 +2883,7 @@ span.tour-amount-old{
 }
 
 .place-self-end{
-  place-self: end;
+  place-self: flex-end;
 }
 
 .place-self-center{
@@ -2927,7 +2927,7 @@ span.tour-amount-old{
 }
 
 .justify-self-end{
-  justify-self: end;
+  justify-self: flex-end;
 }
 
 .justify-self-center{

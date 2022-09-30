@@ -559,7 +559,7 @@ body::selection{
 
 @media (min-width: 992px){
   .header{
-    height: 5rem;
+    height: 5rem
   }
 }
 
@@ -2054,6 +2054,7 @@ span.tour-amount-old{
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
   text-align: center;
+  height: 14rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: rgb(255 255 255 / var(--tw-text-opacity));

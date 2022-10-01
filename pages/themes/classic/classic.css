@@ -1124,6 +1124,7 @@ body::selection{
   content: var(--tw-content);
 }
 
+
 .tour-itinerary .accordion-panel:last-child::after{
   content: var(--tw-content);
   display: none;
@@ -1149,7 +1150,14 @@ body::selection{
   --tw-content: '\eb49';
   content: var(--tw-content);
 }
-
+.tour-itinerary .accordion-star::before{
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+  --tw-content: '\e55f';
+  content: var(--tw-content);
+}
 .tour-itinerary .accordion-panel.active::after{
   content: var(--tw-content);
   height: calc(100% + 2.5rem);

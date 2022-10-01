@@ -366,7 +366,7 @@ function Themedefault() {
                            </div>
 
                            {/* Packages */}
-                           <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
+                           <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel '}>
                            <div className='accordion-trigger'>
                                  <button className="mb-6" onClick={() => setPackages(!packages)}>
                                     <div className='accordion-trigger' > Packages</div>
@@ -496,8 +496,8 @@ function Themedefault() {
                         </p>
                         <p>
                            Gallipoli is the Italian form of the Greek name
-                           Καλλίπολις (Kallípolis), meaning 'beautiful
-                           city', the original name of the modern town of
+                           Καλλίπολις (Kallípolis), meaning beautiful
+                           city, the original name of the modern town of
                            Gelibolu. In antiquity, the peninsula was known
                            as the Thracian Chersonese.
                         </p>

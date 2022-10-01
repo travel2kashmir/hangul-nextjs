@@ -66,7 +66,7 @@ function AddBasicDetails() {
   //finding current date 
   var current = new Date();
   let month = current.getMonth() + 1;
-  var descriptionDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month() + 1}`}/${current.getFullYear()}`;
+  var descriptionDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
 
   const validateBasicDetails = (allHotelDetails, address) => {
     console.log("address present"+address.length === undefined )

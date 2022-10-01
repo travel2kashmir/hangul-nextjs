@@ -75,7 +75,7 @@ export default function BasicDetails() {
 
   const current = new Date();
   let month = current.getMonth() + 1;
-  const descriptionDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month() + 1}`}/${current.getFullYear()}`;
+  const descriptionDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
   const [allHotelDetails, setAllHotelDetails] = useState([])
 
   /* Edit Basic Details Function */

@@ -18,12 +18,18 @@ var currentUser;
 var currentProperty;
 var currentLogged;
 var i = 0;
+var defaultRate={
+   base_rate_amount:'1071',
+   tax_rate_amount:'175',
+   other_charges_amount:'0',
+   base_rate_currency:'USD'}
 
 
 function Themedefault() {
    const [phone, setPhone] = useState({});
    const [email, setEmail] = useState({});
    const [rooms, setRooms] = useState({});
+   const [rate,setRate]=useState(defaultRate);
    const [amenity, setAmenity] = useState(false);
    const [packages, setPackages] = useState(false);
    const [open, setOpen] = useState({
@@ -368,7 +374,7 @@ function Themedefault() {
                            {/* Packages */}
                            <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel '}>
                            <div className='accordion-trigger'>
-                                 <button className="mb-6" onClick={() => setPackages(!packages)}>
+                                 <button className="mb-6" onClick={() => {setPackages(!packages)}}>
                                     <div className='accordion-trigger' > Packages</div>
                                  </button></div>
                               <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
@@ -377,8 +383,32 @@ function Themedefault() {
                                        <div key={idx}>
                                           <p className='flex capitalize mt-4 py-1'>
                                              <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-600  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
-                                             <button className='text-gray-600 font-semibold' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>{resource?.package_name} </button>
-                                             <button className='justify-end mr-1 ml-auto' onClick={() => setOpen({ ...open, view: !open.view, id: idx })}>
+                                             <button className='text-gray-600 font-semibold' 
+                                             onClick={() => {setOpen({ ...open, view: !open.view, id: idx });
+                                             {open?.view === true && open?.id === idx 
+                                                ?
+                                                setRate(defaultRate)
+                                                   :
+                                                 setRate({
+                                                   base_rate_amount: resource.base_rate_amount,
+                                                   tax_rate_amount:resource.tax_rate_amount,
+                                                   other_charges_amount:resource.other_charges_amount,
+                                                   base_rate_currency:resource.base_rate_currency
+                                                })
+                                             }}}>{resource?.package_name} </button>
+                                             
+                                             <button className='justify-end mr-1 ml-auto'
+                                              onClick={() => {setOpen({ ...open, view: !open.view, id: idx });
+                                               {open?.view === true && open?.id === idx ?
+                                                setRate(defaultRate)
+                                                   :
+                                                   setRate({
+                                                      base_rate_amount: resource.base_rate_amount,
+                                                      tax_rate_amount:resource.tax_rate_amount,
+                                                      other_charges_amount:resource.other_charges_amount,
+                                                      base_rate_currency:resource.base_rate_currency
+                                                      })
+                                               }}}>
                                                 {open?.view === true && open?.id === idx ?
                                                    <span className=' font-semibold text-gray-400  '>
                                                       - </span>
@@ -751,7 +781,7 @@ function Themedefault() {
                   <div className="tour-receipt">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
-                           <span className="tour-amount-old">$119</span> $109
+                           <span className="tour-amount-old">$119</span> {rate?.base_rate_amount}
                            <span>/night</span>
                         </div>
                         <div className="tour-discount">-10%</div>
@@ -810,25 +840,26 @@ function Themedefault() {
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
-                              $119 x 9 nights
+                              Base Rate
                            </div>
-                           <div className="tour-receipt-detail-price">$1,071</div>
+                           <div className="tour-receipt-detail-price">{rate?.base_rate_amount} {rate?.base_rate_currency}</div>
                         </div>
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
-                              10% campaign discount
+                             Tax Rate
                            </div>
-                           <div className="tour-receipt-detail-price">-$175</div>
+                           <div className="tour-receipt-detail-price">{rate?.tax_rate_amount} {rate?.base_rate_currency}</div>
                         </div>
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">Service fee</div>
-                           <div className="tour-receipt-detail-price">$0</div>
+                           <div className="tour-receipt-detail-price">{rate?.tax_rate_amount} {rate?.base_rate_currency}</div>
                         </div>
                         <div
                            className="tour-receipt-detail-item tour-receipt-detail-total"
                         >
                            <div className="tour-receipt-detail-title">Total</div>
-                           <div className="tour-receipt-detail-price">$1,246</div>
+                           <div className="tour-receipt-detail-price">
+                           {Number(rate?.base_rate_amount) + Number(rate?.tax_rate_amount) + Number(rate?.other_charges_amount)} {rate?.base_rate_currency}</div>
                         </div>
                      </div>
                      <div className="tour-receipt-button">

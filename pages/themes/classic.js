@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import Carousel from 'better-react-carousel'
+import Carousel from 'better-react-carousel';
+import Headloader from './Loaders/headloader';
+import SubHeading from './Loaders/subheading';
+import GallerySlider from './Loaders/galleryslider';
+import ImageLoader from '../../components/loaders/imageloader';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
@@ -13,6 +17,7 @@ import Router, { useRouter } from "next/router";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
+import LineLoader from '../../components/loaders/lineloader';
 var language;
 var currentUser;
 var currentProperty;
@@ -24,9 +29,9 @@ var defaultRate={
    other_charges_amount:'0',
    base_rate_currency:'USD'}
 
-
 function Themedefault() {
    const [phone, setPhone] = useState({});
+   const [visible, setVisible] = useState(0);
    const [email, setEmail] = useState({});
    const [rooms, setRooms] = useState({});
    const [rate,setRate]=useState(defaultRate);
@@ -215,10 +220,15 @@ function Themedefault() {
             <div className="tour-head">
                <div id="home" className="tour-head-left">
                   <div className="tour-title">
-                     {allHotelDetails?.description_title}
+                  <div className={visible === 0 ? 'block w-32 mb-2' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>  
+                     {allHotelDetails?.description_title}</div>
                   </div>
+                  <div className={visible === 0 ? 'block w-64' : 'hidden'}><SubHeading/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                   <div className="tour-overview">
                      <div className="tour-overview-item">
+                   
                         {allHotelDetails?.property_category} in <span>{allHotelDetails?.address?.[i]?.address_city}</span>
                      </div>
                      <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} star</span> Accommodation</div>
@@ -226,13 +236,15 @@ function Themedefault() {
                         <span className="material-icons-outlined"> star </span>
                         <span>4.7</span> ({allHotelDetails?.Reviews?.length})
                      </div>
-                  </div>
+                  </div></div>
                </div>
             </div>
             {/* Body */}
             <div className="tour-wrapper">
                <div className="tour-content">
                   {/* Slider */}
+                  <div className={visible === 0 ? 'block w-32 mb-2' : 'hidden'}><ImageLoader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}> 
                   <div className="tour-hero">
                      <Swiper spaceBetween={30}
                         centeredSlides={true}
@@ -261,18 +273,20 @@ function Themedefault() {
                      <div className="tour-description">
                         {allHotelDetails?.description_body}
                      </div>
-                  </div>
+                  </div></div>
                   {/* Gallery */}
                   <div id="gallery" className="tour-content-block">
                      <div className="tour-content-title">Gallery</div>
                      <div className="relative overflow-hidden">
+                     <div className={visible === 0 ? 'block  mb-2' : 'hidden'}><GallerySlider /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}> 
                         <Carousel cols={2} rows={1} gap={10} loop>
                            {allHotelDetails?.images?.map((resource, index) => {
                               return (
                                  <Carousel.Item key={index} >
-                                    <img width="100%" style={{ height: "300px" }} src={resource?.image_link} /></Carousel.Item>
+                                    <img width="100%" style={{ height: "270px" }} src={resource?.image_link} /></Carousel.Item>
                               )
-                           })}</Carousel>
+                           })}</Carousel></div>
                      </div>
                   </div>
                   {/* About */}
@@ -282,6 +296,8 @@ function Themedefault() {
                      <div className="tour-itinerary">
                         <div className="accordion">
                            {/* Rooms */}
+                           <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading/></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>
                            <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger'>
                                  <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
@@ -352,8 +368,10 @@ function Themedefault() {
                                  })}
 
                               </div>
-                           </div>
+                           </div></div>
                            {/* Amenity */}
+                           <div className={visible === 0 ? 'block w-32 mb-6' : 'hidden'}><SubHeading/></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>
                            <div id="amenities" className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger'>
                                  <button className="mb-6" onClick={() => setAmenity(!amenity)}>
@@ -369,9 +387,11 @@ function Themedefault() {
                                           </span>)
                                     })}</div>
                               </div>
-                           </div>
+                           </div></div>
 
                            {/* Packages */}
+                           <div className={visible === 0 ? 'block  mb-6 w-32' : 'hidden'}><SubHeading/></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>
                            <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel '}>
                            <div className='accordion-trigger'>
                                  <button className="mb-6" onClick={() => {setPackages(!packages)}}>
@@ -713,7 +733,7 @@ function Themedefault() {
 
                               </div>
                            </div>
-
+                             </div>
                         </div>
                      </div>
                   </div>
@@ -730,14 +750,18 @@ function Themedefault() {
 
                                        <div className="tour-reviews-feedback-content-inner">
                                           <div className="tour-reviews-feedback-title">
-                                             {item?.review_author}
+                                          <div className={visible === 0 ? 'block w-24 mb-2' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}> 
+                                             {item?.review_author}</div>
                                           </div>
                                           <div className="tour-reviews-feedback-text">
-                                             {item?.review_title}
+                                          <div className={visible === 0 ? 'block h-2 w-64 mb-6' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}> 
+                                             {item?.review_title}</div>
                                           </div>
                                        </div>
                                     </div>
-                                    <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
+                                    <div className="tour-reviews-feedback-rating capitalize"></div>
                                  </div>)
                            })}
                         </div>
@@ -769,7 +793,9 @@ function Themedefault() {
                            <div className="tour-help-call">
                               <span className="material-icons-outlined"> call </span>
                               <div className="tour-help-call-text">
-                                 {phone?.contact_data}
+                              <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                                 {phone?.contact_data}</div>
                               </div>
                            </div>
                         </div>
@@ -781,10 +807,14 @@ function Themedefault() {
                   <div className="tour-receipt">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
+                        <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                            <span className="tour-amount-old">$119</span> {rate?.base_rate_amount}
-                           <span>/night</span>
+                           <span>/night</span></div>
                         </div>
-                        <div className="tour-discount">-10%</div>
+                        <div className={visible === 0 ? 'block w-10 mr-2' : 'hidden'}><SubHeading/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <div className="tour-discount">-10%</div></div>
                      </div>
                      <div className="tour-receipt-select">
                         <div className="tour-receipt-select-top">
@@ -842,25 +872,36 @@ function Themedefault() {
                            <div className="tour-receipt-detail-title">
                               Base Rate
                            </div>
-                           <div className="tour-receipt-detail-price">{rate?.base_rate_amount} {rate?.base_rate_currency}</div>
+                           <div className="tour-receipt-detail-price">
+                           <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                              {rate?.base_rate_amount} {rate?.base_rate_currency}</div>
+                              </div>
                         </div>
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
                              Tax Rate
                            </div>
-                           <div className="tour-receipt-detail-price">{rate?.tax_rate_amount} {rate?.base_rate_currency}</div>
+                           <div className="tour-receipt-detail-price"> <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                            {rate?.tax_rate_amount} {rate?.base_rate_currency}</div></div>
                         </div>
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">Service fee</div>
-                           <div className="tour-receipt-detail-price">{rate?.tax_rate_amount} {rate?.base_rate_currency}</div>
+                           <div className="tour-receipt-detail-price">
+                           <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                              {rate?.tax_rate_amount} {rate?.base_rate_currency}</div></div>
                         </div>
                         <div
                            className="tour-receipt-detail-item tour-receipt-detail-total"
                         >
                            <div className="tour-receipt-detail-title">Total</div>
                            <div className="tour-receipt-detail-price">
+                           <div className={visible === 0 ? 'block w-24' : 'hidden'}><SubHeading/></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
                            {Number(rate?.base_rate_amount) + Number(rate?.tax_rate_amount) + Number(rate?.other_charges_amount)} {rate?.base_rate_currency}</div>
-                        </div>
+                        </div></div>
                      </div>
                      <div className="tour-receipt-button">
                         <button className="tour-favorite">
@@ -882,15 +923,26 @@ function Themedefault() {
         <div className="header-logo px-8">
                   <span className="material-icons-outlined header-logo-icon">
                      mode_of_travel</span>
-                    <span className='text-sky-600 text-xl'>{allHotelDetails?.property_name}</span>       
+                    <span className='text-sky-600 text-xl'>
+                    <div className={visible === 0 ? 'block w-32 ml-1 mb-2' : 'hidden'}><Headloader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                     {allHotelDetails?.property_name}</div></span>       
                </div>
                <div className='flex -mt-1 flex-col'>
-               <span className='lg:px-20 px-16 text-sm text-gray-600'>{allHotelDetails?.address?.[i]?.address_street_address}, {allHotelDetails?.address?.[i]?.address_city}
+               <span className='lg:px-20 px-16 text-sm text-gray-600'>
+               <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                  {allHotelDetails?.address?.[i]?.address_street_address}, {allHotelDetails?.address?.[i]?.address_city}
+              </div> </span>
+               <span className='lg:px-20 px-16 text-sm text-gray-600'>
+               <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}> {allHotelDetails?.address?.[i]?.address_province}, {allHotelDetails?.address?.[i]?.address_zipcode} 
+               </div>
                </span>
-               <span className='lg:px-20 px-16 text-sm text-gray-600'> {allHotelDetails?.address?.[i]?.address_province}, {allHotelDetails?.address?.[i]?.address_zipcode} 
-               </span>
-               <span className='lg:px-20 px-16 text-sm text-gray-600 uppercase'>India
-               </span></div>
+               <span className='lg:px-20 px-16 text-sm text-gray-600 uppercase'>
+               <div className={visible === 0 ? 'block h-2 w-16 mb-8' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}>India
+               </div></span></div>
         </div>
         <div className=" mt-2 grid grid-cols-2 gap-14 lg:gap-36 sm:grid-cols-3">
             <div>
@@ -914,18 +966,22 @@ function Themedefault() {
                 <h2 className="mb-2 font-semibold  uppercase text-gray-400">Contact Us</h2>
                 <ul className="text-gray-600">
                     <li className="flex mb-2 hover:text-gray-400">
+                    <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="mr-0.5 mt-1 w-3 h-3">
                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                      </svg>
-                        <a href="#" className=" text-sm hover:underline">{phone.contact_data}</a>
+                        <a href="#" className=" text-sm hover:underline">
+                        {phone.contact_data}</a></div>
                     </li>
                     <li className="flex hover:text-gray-400">
+                    <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
+                                          <div className={visible === 1 ? 'block' : 'hidden'}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mt-1 mr-0.5 w-4 h-4">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                           </svg>
-
                         <a href="#" className="text-sm hover:underline">{email?.contact_data}</a>
-                    </li>
+                    </div></li>
                 </ul>
             </div>
             <div className='mr-8'>

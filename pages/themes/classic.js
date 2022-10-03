@@ -85,7 +85,9 @@ function Themedefault() {
                response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
                response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
                console.log(response.data.contacts)
+               setVisible(1)
                logger.info("url  to fetch property details hitted successfully")
+               
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
       }

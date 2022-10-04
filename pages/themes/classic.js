@@ -86,6 +86,7 @@ function Themedefault() {
                response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
                console.log(response.data.contacts)
                setVisible(1)
+               Router.push('./classic')
                logger.info("url  to fetch property details hitted successfully")
                
             })
@@ -241,6 +242,7 @@ function Themedefault() {
                   </div></div>
                </div>
             </div>
+            
             {/* Body */}
             <div className="tour-wrapper">
                <div className="tour-content">
@@ -276,6 +278,7 @@ function Themedefault() {
                         {allHotelDetails?.description_body}
                      </div>
                   </div></div>
+
                   {/* Gallery */}
                   <div id="gallery" className="tour-content-block">
                      <div className="tour-content-title">Gallery</div>
@@ -291,15 +294,17 @@ function Themedefault() {
                            })}</Carousel></div>
                      </div>
                   </div>
+
                   {/* About */}
                   <div id="about" className="tour-content-block">
                      <div className="tour-content-title mb-8">
                         About</div>
                      <div className="tour-itinerary">
+                     <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading/></div>
+                                 <div className={visible === 1 ? 'block' : 'hidden'}>
                         <div className="accordion">
                            {/* Rooms */}
-                           <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading/></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>
+                          
                            <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger'>
                                  <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
@@ -373,11 +378,15 @@ function Themedefault() {
                            </div></div>
                            {/* Amenity */}
                            <div className={visible === 0 ? 'block w-32 mb-6' : 'hidden'}><SubHeading/></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
                            <div id="amenities" className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger'>
                                  <button className="mb-6" onClick={() => setAmenity(!amenity)}>
-                                    <div className='accordion-trigger' > Property Amenities</div>
+                                    <div className='accordion-trigger' > 
+                                 
+                                    Property Amenities
+                                    
+                                    </div>
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
                                  <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
@@ -389,11 +398,11 @@ function Themedefault() {
                                           </span>)
                                     })}</div>
                               </div>
-                           </div></div>
-
+                           </div>
+                             </div>
                            {/* Packages */}
                            <div className={visible === 0 ? 'block  mb-6 w-32' : 'hidden'}><SubHeading/></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>
+                               <div className={visible === 1 ? 'block' : 'hidden'}>
                            <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel '}>
                            <div className='accordion-trigger'>
                                  <button className="mb-6" onClick={() => {setPackages(!packages)}}>
@@ -763,7 +772,7 @@ function Themedefault() {
                                           </div>
                                        </div>
                                     </div>
-                                    <div className="tour-reviews-feedback-rating capitalize"></div>
+                                    <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
                                  </div>)
                            })}
                         </div>
@@ -780,6 +789,7 @@ function Themedefault() {
                         </div>
                      </div>
                   </div>
+
                   {/* Booking */}
                   <div id="contactus" className="tour-content-block">
                      <div className="tour-help">
@@ -803,6 +813,7 @@ function Themedefault() {
                         </div>
                      </div>
                   </div>
+
                </div>
                {/* content  */}
                <div className="tour-sidebar">
@@ -811,12 +822,15 @@ function Themedefault() {
                         <div className="tour-amount">
                         <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading/></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                           <span className="tour-amount-old">$119</span> {rate?.base_rate_amount}
-                           <span>/night</span></div>
+                           {/* <span className="tour-amount-old">$119</span> */}
+                            {rate?.base_rate_amount} {rate?.base_rate_currency}
+                           {/* <span>/night</span> */}
+                           </div>
                         </div>
                         <div className={visible === 0 ? 'block w-10 mr-2' : 'hidden'}><SubHeading/></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                        <div className="tour-discount">-10%</div></div>
+                        {/* <div className="tour-discount">-10%</div> */}
+                        </div>
                      </div>
                      <div className="tour-receipt-select">
                         <div className="tour-receipt-select-top">
@@ -915,6 +929,7 @@ function Themedefault() {
                      </div>
                   </div>
                </div>
+
             </div>
          </div>
 

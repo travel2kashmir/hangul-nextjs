@@ -117,7 +117,7 @@ function Themedefault() {
 
    return (
       
-     <>
+     <div className='bg-gray-800'>
      
          <div className="header w-full">
             <div className="container">
@@ -874,8 +874,9 @@ function Themedefault() {
 
                </div>
                {/* content  */}
+              
                <div className="tour-sidebar">
-                  <div className="tour-receipt">
+                  <div className="tour-receipt bg-gray-900">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
                            <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading /></div>
@@ -1104,7 +1105,7 @@ function Themedefault() {
                </div>
             </div>
          </footer>
-         </>
+         </div>
      
    );
 }

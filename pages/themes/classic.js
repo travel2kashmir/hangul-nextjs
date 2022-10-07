@@ -33,7 +33,8 @@ var defaultRate = {
 function Themedefault() {
    const [phone, setPhone] = useState({});
    const [language, setLanguage] = useState(0);
-   const [calendar, setCalendar] = useState(false);
+   const [calendarIn, setCalendarIn] = useState(false);
+   const [calendarOut, setCalendarOut] = useState(false);
    const [visible, setVisible] = useState(0);
    const [email, setEmail] = useState({});
    const [rooms, setRooms] = useState({});
@@ -51,6 +52,7 @@ function Themedefault() {
    const current = new Date();
    let month = current.getMonth() + 1;
    const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
+   const checkOutDate = `${current.getDate()+1}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
 
    /** Router for Redirection **/
    const router = useRouter();
@@ -878,51 +880,59 @@ function Themedefault() {
                         <div className="tour-amount">
                            <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading /></div>
                            <div className={visible === 1 ? 'block' : 'hidden'}>
-                              {/* <span className="tour-amount-old">$119</span> */}
+                              <span className="tour-amount-old">$119</span>
                               {rate?.base_rate_amount} {rate?.base_rate_currency.toUpperCase()}
-                              {/* <span>/night</span> */}
+                              <span>/night</span>
                            </div>
                         </div>
                         <div className={visible === 0 ? 'block w-10 mr-2' : 'hidden'}><SubHeading /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           {/* <div className="tour-discount">-10%</div> */}
+                           <div className="tour-discount">-10%</div>
                         </div>
                      </div>
                      <div className="tour-receipt-select">
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <button  onClick={() => setCalendar(!calendar)} >
+                                 <button  onClick={() => setCalendarIn(!calendarIn)} >
                                  <span className="material-icons-outlined">
                                     calendar_month
                                  </span></button>
                               </div>
                               <div className="tour-receipt-select-content">
-                                 <input
-                                    type="date"
-                                    className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" />
-                                 <div className="tour-receipt-select-text">
-                                    {language?.checkin}
+                                 {calendarIn === false ?
+                              <div className="tour-receipt-select-title">
+                           {checkInDate}
+                        </div>:
+                                 <input defaultValue={checkInDate}
+                                 className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" type="date" />}
+                            <div className="tour-receipt-select-text">
+                                 {language?.checkin}
                                  </div>
-                              </div>
-                           </div>
-                           <div className="tour-receipt-select-item">
-                              <div className="tour-receipt-select-icon">
+                          </div></div>
+                         <div className="tour-receipt-select-item">
+                             <div className="tour-receipt-select-icon">
+                                 <button  onClick={() => setCalendarOut(!calendarOut)} >
                                  <span className="material-icons-outlined">
-                                    event_available
-                                 </span>
+                                    calendar_month
+                                 </span></button>
                               </div>
                               <div className="tour-receipt-select-content">
+                              {calendarOut === false ?
+                              <div className="tour-receipt-select-title">
+                           {checkOutDate}
+                        </div>:
                                  <input
-                                    type="date"
+                                    type="date" value={checkOutDate}
                                     className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" />
-
+                              }
                                  <div className="tour-receipt-select-text">
                                  {language?.checkout}
                                  </div>
                               </div>
                            </div>
                         </div>
+                     
                         <div className="tour-receipt-select-bottom">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
@@ -939,6 +949,8 @@ function Themedefault() {
                               </div>
                            </div>
                         </div>
+                       
+                       
                      </div>
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
@@ -966,9 +978,7 @@ function Themedefault() {
                               <div className={visible === 1 ? 'block' : 'hidden'}>
                                  {rate?.tax_rate_amount} {rate?.base_rate_currency.toUpperCase()}</div></div>
                         </div>
-                        <div
-                           className="tour-receipt-detail-item tour-receipt-detail-total"
-                        >
+                        <div className="tour-receipt-detail-item tour-receipt-detail-total">
                            <div className="tour-receipt-detail-title">{language?.total}</div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-24' : 'hidden'}><SubHeading /></div>
@@ -1043,7 +1053,7 @@ function Themedefault() {
                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="mr-0.5 mt-1 w-3 h-3">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                            </svg>
-                           <a href="#" className=" text-sm hover:underline">
+                           <a href={`tel:${phone?.contact_data}`} className=" text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
                                  {phone.contact_data}
@@ -1053,7 +1063,7 @@ function Themedefault() {
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mt-1 mr-0.5 w-4 h-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                            </svg>
-                           <a href="#" className="text-sm hover:underline">
+                           <a href={`mailto:${email?.contact_data}`}className="text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
                                  {email?.contact_data} </div></a>

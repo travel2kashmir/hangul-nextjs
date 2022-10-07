@@ -261,7 +261,7 @@ function Themedefault() {
 
                            {allHotelDetails?.property_category} {language?.in} <span>{allHotelDetails?.address?.[i]?.address_city}</span>
                         </div>
-                        <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} {language?.star}</span> {language?.accomodation}</div>
+                        <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} {language?.star}</span> star {language?.accomodation}</div>
                         <div className="tour-overview-item">
                            <span className="material-icons-outlined">star</span>
                            <span>4.7</span> ({allHotelDetails?.Reviews?.length})

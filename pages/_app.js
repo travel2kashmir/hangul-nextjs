@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import 'tailwindcss/tailwind.css';
 import '../pages/themes/classic/classic.css'
+import '../pages/themes/classicdark/classic-dark.css'
 import NProgress from 'nprogress'; //nprogress module
 import 'nprogress/nprogress.css';
 import Layout from '../components/Layout'

@@ -74,7 +74,7 @@ function Themedefault() {
          }
       }
       firstfun();
-      router.push("./classic");
+      router.push("./classic-dark");
    }, [])
 
    /* Function call to fetch Current Property Details when page loads */
@@ -93,7 +93,7 @@ function Themedefault() {
                response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
                console.log(response.data.contacts)
                setVisible(1)
-               Router.push('./classic')
+               Router.push('./classic-dark')
                logger.info("url  to fetch property details hitted successfully")
 
             })
@@ -116,7 +116,9 @@ function Themedefault() {
    })
 
    return (
-      <div >
+      
+     <>
+     
          <div className="header w-full">
             <div className="container">
                <div className="header-logo">
@@ -243,7 +245,7 @@ function Themedefault() {
                </aside>
             </div>
          </div>
-
+       
          <div className="tour container">
             <div className="tour-head">
                <div id="home" className="tour-head-left">
@@ -878,14 +880,14 @@ function Themedefault() {
                         <div className="tour-amount">
                            <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading /></div>
                            <div className={visible === 1 ? 'block' : 'hidden'}>
-                              {/* <span className="tour-amount-old">$119</span> */}
+                              <span className="tour-amount-old">$119</span>
                               {rate?.base_rate_amount} {rate?.base_rate_currency.toUpperCase()}
-                              {/* <span>/night</span> */}
+                              <span>/night</span>
                            </div>
                         </div>
                         <div className={visible === 0 ? 'block w-10 mr-2' : 'hidden'}><SubHeading /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           {/* <div className="tour-discount">-10%</div> */}
+                           <div className="tour-discount">-10%</div>
                         </div>
                      </div>
                      <div className="tour-receipt-select">
@@ -977,8 +979,8 @@ function Themedefault() {
                            </div></div>
                      </div>
                      <div className="tour-receipt-button">
-                        <button className="tour-favorite">
-                           <span className="material-icons-outlined">
+                        <button className="tour-favorite text-white">
+                           <span className="material-icons-outlined text-white">
                               favorite_border
                            </span>
                         </button>
@@ -1102,8 +1104,8 @@ function Themedefault() {
                </div>
             </div>
          </footer>
-
-      </div>
+         </>
+     
    );
 }
 export default Themedefault

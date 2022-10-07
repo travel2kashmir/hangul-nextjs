@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import english from '../../components/Languages/en'
 import french from '../../components/Languages/fr';
+import Marquee from "react-easy-marquee";
 import arabic from '../../components/Languages/ar'
 import Carousel from 'better-react-carousel';
 import Headloader from './Loaders/headloader';
@@ -18,7 +19,6 @@ import axios from 'axios';
 const logger = require("../../services/logger");
 import Router, { useRouter } from "next/router";
 import LineLoader from '../../components/loaders/lineloader';
-var language;
 var currentUser;
 var currentProperty;
 var currentLogged;
@@ -32,6 +32,8 @@ var defaultRate = {
 
 function Themedefault() {
    const [phone, setPhone] = useState({});
+   const [language, setLanguage] = useState(0);
+   const [calendar, setCalendar] = useState(false);
    const [visible, setVisible] = useState(0);
    const [email, setEmail] = useState({});
    const [rooms, setRooms] = useState({});
@@ -46,6 +48,10 @@ function Themedefault() {
    const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
+   const current = new Date();
+   let month = current.getMonth() + 1;
+   const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
+
    /** Router for Redirection **/
    const router = useRouter();
    useEffect(() => {
@@ -53,13 +59,13 @@ function Themedefault() {
          if (typeof window !== 'undefined') {
             var locale = localStorage.getItem("Language");
             if (locale === "ar") {
-               language = arabic;
+              setLanguage(arabic);
             }
             if (locale === "en") {
-               language = english;
+               setLanguage(english);
             }
             if (locale === "fr") {
-               language = french;
+               setLanguage(french);
             }
             currentUser = JSON.parse(localStorage.getItem("Signin Details"));
             /** Current Property Details fetched from the local storage **/
@@ -97,6 +103,18 @@ function Themedefault() {
 
    }, []);
 
+   const changeLanguage = ((props) => {
+   if(props === "en"){
+      setLanguage(english)
+   }
+   if(props === "fr"){
+      setLanguage(french)
+   }
+   if(props === "ar"){
+      setLanguage(arabic)
+   }
+   })
+
    return (
       <>
          <div className="header w-full">
@@ -111,7 +129,12 @@ function Themedefault() {
                </div>
 
                <ul className="header-menu">
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600 block w-32 py-1 px-2">
+                  <select onChange={
+                            (e) => (
+                             changeLanguage(e.target.value)
+                            )
+                          }
+                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600 block w-32 py-1 px-2">
                      <option value="en">English</option>
                      <option value="fr">French</option>
                      <option value="ar">Arabic</option>
@@ -119,38 +142,39 @@ function Themedefault() {
                   <a
                      href="#home"
                      className="header-menu-item"
-                  >Home</a
+                  >{language?.home} 
+                  </a
                   >
                   <a
                      href="#about"
                      className="header-menu-item"
-                  >About</a
+                  >{language?.about}</a
                   >
                   <a
                      href="#gallery"
                      className="header-menu-item"
-                  >Gallery</a
+                  >{language?.gallery}</a
                   >
 
                   <a
                      href="#rooms"
                      className="header-menu-item"
-                  >Rooms</a
+                  >{language?.rooms}</a
                   >
                   <a
                      href="#amenities"
                      className="header-menu-item"
-                  >Amenities</a
+                  >{language?.amenities}</a
                   >
                   <a
                      href="#packages"
                      className="header-menu-item"
-                  >Packages</a
+                  >{language?.packages}</a
                   >
                   <a
                      href="#contactus"
                      className="header-menu-item"
-                  >Contact us</a
+                  >{language?.contactus}</a
                   >
                   <div className="header-menu-copyright">Made with Tailwind CSS</div>
                </ul>
@@ -168,13 +192,13 @@ function Themedefault() {
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
                                        href="#home"
-                                    > <button onClick={() => { setSmSidebar(!smSidebar) }}>Home</button></a></span>
+                                    > <button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.home}</button></a></span>
                               </li>
                               <hr />
                               <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
-                                       href="#about"> <button onClick={() => { setSmSidebar(!smSidebar) }}>About</button>
+                                       href="#about"> <button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.about}</button>
                                     </a> </span>
                               </li>
                               <hr />
@@ -182,34 +206,34 @@ function Themedefault() {
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
                                        href="#gallery">
-                                       <button onClick={() => { setSmSidebar(!smSidebar) }}> Gallery</button></a>
+                                       <button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.gallery}</button></a>
                                  </span>
                               </li>
                               <hr />
                               <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
-                                       href="#rooms"><button onClick={() => { setSmSidebar(!smSidebar) }}>Rooms</button></a>
+                                       href="#rooms"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.rooms}</button></a>
                                  </span>
                               </li>
                               <hr />
                               <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
-                                    <a href="#amenities"><button onClick={() => { setSmSidebar(!smSidebar) }}>Amenities</button></a>
-                                 </span>
-                              </li>
-                              <hr />
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
-                                 <span className="ml-3 flex-1 whitespace-nowrap">
-                                    <a
-                                       href="#packages"><button onClick={() => { setSmSidebar(!smSidebar) }}> Packages</button></a>
+                                    <a href="#amenities"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.amenities}</button></a>
                                  </span>
                               </li>
                               <hr />
                               <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
-                                       href="#contactus"><button onClick={() => { setSmSidebar(!smSidebar) }}>Contact us </button></a>
+                                       href="#packages"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.packages}</button></a>
+                                 </span>
+                              </li>
+                              <hr />
+                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                                 <span className="ml-3 flex-1 whitespace-nowrap">
+                                    <a
+                                       href="#contactus"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.contactus} </button></a>
                                  </span>
                               </li>
                            </ul>
@@ -233,11 +257,11 @@ function Themedefault() {
                      <div className="tour-overview">
                         <div className="tour-overview-item">
 
-                           {allHotelDetails?.property_category} in <span>{allHotelDetails?.address?.[i]?.address_city}</span>
+                           {allHotelDetails?.property_category} {language?.in} <span>{allHotelDetails?.address?.[i]?.address_city}</span>
                         </div>
-                        <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} star</span> Accommodation</div>
+                        <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} {language?.star}</span> {language?.accomodation}</div>
                         <div className="tour-overview-item">
-                           <span className="material-icons-outlined"> star </span>
+                           <span className="material-icons-outlined">star</span>
                            <span>4.7</span> ({allHotelDetails?.Reviews?.length})
                         </div>
                      </div></div>
@@ -282,7 +306,7 @@ function Themedefault() {
 
                   {/* Gallery */}
                   <div id="gallery" className="tour-content-block">
-                     <div className="tour-content-title">Gallery</div>
+                     <div className="tour-content-title">{language?.gallery}</div>
                      <div className="relative overflow-hidden">
                         <div className={visible === 0 ? 'block  mb-2' : 'hidden'}><GallerySlider /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -299,19 +323,18 @@ function Themedefault() {
                   {/* About */}
                   <div id="about" className="tour-content-block">
                      <div className="tour-content-title mb-8">
-                        About</div>
+                        {language?.about}</div>
                      <div className="tour-itinerary">
 
                         <div className="accordion">
                            {/* Rooms */}
-
-                           <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
+                       <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger'>
                                  <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                          Rooms to choose ({rooms.length})</div>
+                                          {language?.roomstochoose} ({rooms.length})</div>
                                     </div></button></div>
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
                                  {allHotelDetails?.rooms?.map((resource, idx) => {
@@ -322,34 +345,21 @@ function Themedefault() {
                                              <button className='text-gray-600 font-semibold'
                                                 onClick={() => {
                                                    setOpen({ ...open, view: !open.view, id: idx });
+                                                   if(open?.view === true && open?.id === idx)
                                                    {
-                                                      open?.view === true && open?.id === idx
-                                                      ?
                                                       setRate(defaultRate)
-                                                      :
-                                                      setRate({
-                                                         base_rate_amount: resource?.unconditional_rates?.[i]?.baserate_amount,
-                                                         tax_rate_amount: resource?.unconditional_rates?.[i]?.tax_amount,
-                                                         other_charges_amount: resource?.unconditional_rates?.[i]?.otherfees_amount,
-                                                         base_rate_currency: resource?.unconditional_rates?.[i]?.baserate_currency
-                                                      })
-                                                   }
+                                                      
+                                                   }  
+                                                   
                                                 }}>{resource?.room_name} </button>
                                              <button className='justify-end mr-1 ml-auto'
                                                 onClick={() => {
                                                    setOpen({ ...open, view: !open.view, id: idx });
-                                                   {
-                                                      open?.view === true && open?.id === idx
-                                                      ?
-                                                      setRate(defaultRate)
-                                                      :
-                                                      setRate({
-                                                         base_rate_amount: resource?.unconditional_rates?.[i]?.baserate_amount,
-                                                         tax_rate_amount: resource?.unconditional_rates?.[i]?.tax_amount,
-                                                         other_charges_amount: resource?.unconditional_rates?.[i]?.otherfees_amount,
-                                                         base_rate_currency: resource?.unconditional_rates?.[i]?.baserate_currency
-                                                      })
-                                                   }
+                                                   
+                                                      if(open?.view === true && open?.id === idx)
+                                                      {
+                                                      setRate(defaultRate)}
+                                                     
                                                 }}>
                                                 {open?.view === true && open?.id === idx ?
                                                    <span className=' font-semibold text-gray-400  '>
@@ -368,7 +378,7 @@ function Themedefault() {
                                              {/* Room Facilities */}
                                              <div className='tour-content-block1'>
                                                 <div className='py-10'>
-                                                   <div className="accordion-trigger">Room Facilities</div>
+                                                   <div className="accordion-trigger">{language?.room} {language?.facilities}</div>
 
                                                    <div className="grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 mt-2 gap-3">
                                                       {resource.room_facilities.map((item, index) => {
@@ -383,7 +393,7 @@ function Themedefault() {
                                              {/* Room Gallery */}
                                              <div className='tour-content-block1'>
                                                 <div className='pb-8'>
-                                                   <div className="accordion-trigger mb-4">Room Gallery</div>
+                                                   <div className="accordion-trigger mb-4">{language?.room} {language?.gallery}</div>
                                                    <Carousel cols={3} rows={1} gap={10} loop>
                                                       {resource.room_images.map((resource, index) => {
                                                          return (
@@ -397,11 +407,17 @@ function Themedefault() {
                                              {/* Book Now Button */}
                                              <div className='flex pb-8'>
                                                 <div className='mr-2 ml-auto justify-end'>
-                                                   <button className='bg-green-600 sm:inline-flex text-white
+                                                   <button  onClick={()=>{ setRate({
+                                                         base_rate_amount: resource?.unconditional_rates?.[i]?.baserate_amount,
+                                                         tax_rate_amount: resource?.unconditional_rates?.[i]?.tax_amount,
+                                                         other_charges_amount: resource?.unconditional_rates?.[i]?.otherfees_amount,
+                                                         base_rate_currency: resource?.unconditional_rates?.[i]?.baserate_currency
+                                                      })}}
+                                                   className='bg-green-600 sm:inline-flex text-white
             focus:ring-4 focus:ring-green-200 font-semibold text-white 
              rounded-lg text-sm px-4 py-2.5 text-center 
                 ease-linear transition-all duration-150'>
-                                                      Book now
+                                                     {language?.booknow}
                                                    </button></div>
                                              </div></div>
                                        </div>)
@@ -416,7 +432,7 @@ function Themedefault() {
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                          Property Amenities</div>
+                                     {language?.property} {language?.amenities}</div>
                                     </div>
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
@@ -438,7 +454,7 @@ function Themedefault() {
                                     <div className='accordion-trigger' >
                                        <div className={visible === 0 ? 'block  mb-6 w-32' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                          Packages
+                                       {language?.packages}
                                        </div>
                                     </div>
                                  </button></div>
@@ -451,34 +467,23 @@ function Themedefault() {
                                              <button className='text-gray-600 font-semibold'
                                                 onClick={() => {
                                                    setOpen({ ...open, view: !open.view, id: idx });
-                                                   {
-                                                      open?.view === true && open?.id === idx
-                                                      ?
+                                                   if(
+                                                      open?.view === true && open?.id === idx)
+                                                      {
                                                       setRate(defaultRate)
-                                                      :
-                                                      setRate({
-                                                         base_rate_amount: resource.base_rate_amount,
-                                                         tax_rate_amount: resource.tax_rate_amount,
-                                                         other_charges_amount: resource.other_charges_amount,
-                                                         base_rate_currency: resource.base_rate_currency
-                                                      })
-                                                   }
+                                                      }
+                                                     
                                                 }}>{resource?.package_name} </button>
 
                                              <button className='justify-end mr-1 ml-auto'
                                                 onClick={() => {
                                                    setOpen({ ...open, view: !open.view, id: idx });
-                                                   {
-                                                      open?.view === true && open?.id === idx ?
+                                                   
+                                                     if( open?.view === true && open?.id === idx ){
                                                       setRate(defaultRate)
-                                                      :
-                                                      setRate({
-                                                         base_rate_amount: resource.base_rate_amount,
-                                                         tax_rate_amount: resource.tax_rate_amount,
-                                                         other_charges_amount: resource.other_charges_amount,
-                                                         base_rate_currency: resource.base_rate_currency
-                                                      })
-                                                   }
+                                                     }
+                                                    
+                                                   
                                                 }}>
                                                 {open?.view === true && open?.id === idx ?
                                                    <span className=' font-semibold text-gray-400  '>
@@ -501,7 +506,7 @@ function Themedefault() {
                                              {/* Package Services */}
                                              <div className='tour-content-block1'>
                                                 <div className='py-10'>
-                                                   <div className="accordion-trigger">Package Services</div>
+                                                   <div className="accordion-trigger">{language?.package} {language?.services}</div>
 
                                                    <div className="grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 mt-2 gap-3">
                                                       {resource.package_services.map((item, index) => {
@@ -520,7 +525,7 @@ function Themedefault() {
                                              {/* Package Rooms */}
                                              <div className='tour-content-block1'>
                                                 <div className='py-10'>
-                                                   <div className="accordion-trigger -mt-8">Package Rooms</div>
+                                                   <div className="accordion-trigger -mt-8">{language?.package} {language?.rooms}</div>
 
                                                    {resource.package_rooms.map((item, index) => {
                                                       return (
@@ -533,7 +538,7 @@ function Themedefault() {
                                              {/* itinerary */}
 
                                              <div className="tour-content-block mb-8">
-                                                <div className="accordion-trigger mb-4">Itinerary</div>
+                                                <div className="accordion-trigger mb-4">{language?.itinerary}</div>
                                                 <div className="tour-itinerary">
                                                    <div className="accordion">
                                                       <div
@@ -772,11 +777,17 @@ function Themedefault() {
                                              {/* Book Now Button */}
                                              <div className='flex pb-8'>
                                                 <div className='mr-2 ml-auto justify-end'>
-                                                   <button className='bg-green-600 sm:inline-flex text-white
+                                                   <button onClick={()=>{  setRate({
+                                                         base_rate_amount: resource.base_rate_amount,
+                                                         tax_rate_amount: resource.tax_rate_amount,
+                                                         other_charges_amount: resource.other_charges_amount,
+                                                         base_rate_currency: resource.base_rate_currency
+                                                      })}} 
+                                                   className='bg-green-600 sm:inline-flex text-white
             focus:ring-4 focus:ring-green-200 font-semibold text-white 
              rounded-lg text-sm px-4 py-2.5 text-center 
                 ease-linear transition-all duration-150'>
-                                                      Book now
+                                                     {language?.booknow}
                                                    </button></div>
                                              </div></div>
                                        </div>)
@@ -791,11 +802,14 @@ function Themedefault() {
 
                   {/*  Reviews */}
                   <div className="tour-content-block">
-                     <div className="tour-content-title">Customer Reviews</div>
+                     <div className="tour-content-title">{language?.customer} {language?.reviews}</div>
                      <div className="tour-reviews">
+                    
                         <div className="tour-reviews-feedback">
+                        <Marquee duration={10000}  height="370px" axis="Y" reverse={true}>
                            {allHotelDetails?.Reviews?.map((item, idx) => {
                               return (
+                                
                                  <div className="tour-reviews-feedback-item" key={idx}>
                                     <div className="tour-reviews-feedback-content">
 
@@ -813,16 +827,20 @@ function Themedefault() {
                                        </div>
                                     </div>
                                     <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
-                                 </div>)
+                                 </div>
+                               
+                                 )
                            })}
+                          </Marquee> 
                         </div>
+                       
                         <div className="tour-reviews-overall">
                            <div className="tour-reviews-content">
                               <div className="tour-reviews-overall-title">
-                                 Overall Rating
+                             {language?.overallrating}
                               </div>
                               <div className="tour-reviews-overall-text">
-                                 Excellent
+                                {language?.excellent}
                               </div>
                               <div className="tour-reviews-overall-rating">4.7</div>
                            </div>
@@ -835,11 +853,9 @@ function Themedefault() {
                      <div className="tour-help">
                         <div className="tour-help-inner">
                            <div className="tour-help-content">
-                              <div className="tour-help-title">Need Help Booking?</div>
+                              <div className="tour-help-title">{language?.needhelpbooking}</div>
                               <div className="tour-help-text">
-                                 Call our customer services team on the number
-                                 below to speak to one of our advisors who will
-                                 help you with all of your holiday needs.
+                                 {language?.bookingtitle}
                               </div>
                            </div>
                            <div className="tour-help-call">
@@ -876,16 +892,17 @@ function Themedefault() {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
+                                 <button  onClick={() => setCalendar(!calendar)} >
                                  <span className="material-icons-outlined">
                                     calendar_month
-                                 </span>
+                                 </span></button>
                               </div>
                               <div className="tour-receipt-select-content">
                                  <input
                                     type="date"
                                     className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" />
                                  <div className="tour-receipt-select-text">
-                                    Check in
+                                    {language?.checkin}
                                  </div>
                               </div>
                            </div>
@@ -901,7 +918,7 @@ function Themedefault() {
                                     className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" />
 
                                  <div className="tour-receipt-select-text">
-                                    Check out
+                                 {language?.checkout}
                                  </div>
                               </div>
                            </div>
@@ -918,7 +935,7 @@ function Themedefault() {
                                     type="number" min={1}
                                     className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-5/6 px-1 py-1" />
 
-                                 <div className="tour-receipt-select-text">Guests</div>
+                                 <div className="tour-receipt-select-text">{language?.guests}</div>
                               </div>
                            </div>
                         </div>
@@ -926,7 +943,7 @@ function Themedefault() {
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
-                              Base Rate
+                           {language?.baserate}
                            </div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading /></div>
@@ -936,14 +953,14 @@ function Themedefault() {
                         </div>
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
-                              Tax Rate
+                           {language?.taxrate}
                            </div>
                            <div className="tour-receipt-detail-price"> <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
                                  {rate?.tax_rate_amount} {rate?.base_rate_currency.toUpperCase()}</div></div>
                         </div>
                         <div className="tour-receipt-detail-item">
-                           <div className="tour-receipt-detail-title">Service fee</div>
+                           <div className="tour-receipt-detail-title">{language?.servicefee}</div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -952,7 +969,7 @@ function Themedefault() {
                         <div
                            className="tour-receipt-detail-item tour-receipt-detail-total"
                         >
-                           <div className="tour-receipt-detail-title">Total</div>
+                           <div className="tour-receipt-detail-title">{language?.total}</div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-24' : 'hidden'}><SubHeading /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -965,7 +982,7 @@ function Themedefault() {
                               favorite_border
                            </span>
                         </button>
-                        <button className="tour-reserve">Book Now</button>
+                        <button className="tour-reserve">{language?.booknow}</button>
                      </div>
                   </div>
                </div>
@@ -1003,24 +1020,24 @@ function Themedefault() {
                </div>
                <div className=" mt-2 grid grid-cols-2 gap-14 lg:gap-36 sm:grid-cols-3">
                   <div>
-                     <h2 className="mb-2 font-semibold text-gray-400 uppercase">Quick Links</h2>
+                     <h2 className="mb-2 font-semibold text-gray-400 uppercase">{language?.quicklinks}</h2>
                      <ul className="text-gray-600 ">
                         <li className="mb-2">
-                           <a href="#home" className="hover:underline hover:text-gray-400  text-sm">Home</a>
+                           <a href="#home" className="hover:underline hover:text-gray-400  text-sm">{language?.home}</a>
                         </li>
                         <li className="mb-2">
-                           <a href="#about" className="hover:underline hover:text-gray-400 text-sm">About</a>
+                           <a href="#about" className="hover:underline hover:text-gray-400 text-sm">{language?.about}</a>
                         </li>
                         <li className="mb-2">
-                           <a href="#gallery" className="hover:underline hover:text-gray-400 text-sm">Gallery</a>
+                           <a href="#gallery" className="hover:underline hover:text-gray-400 text-sm">{language?.gallery}</a>
                         </li>
                         <li>
-                           <a href="#contactus" className="hover:underline hover:text-gray-400 text-sm">Contact</a>
+                           <a href="#contactus" className="hover:underline hover:text-gray-400 text-sm">{language?.contactus}</a>
                         </li>
                      </ul>
                   </div>
                   <div>
-                     <h2 className="mb-2 font-semibold  uppercase text-gray-400">Contact Us</h2>
+                     <h2 className="mb-2 font-semibold  uppercase text-gray-400">{language?.contactus}</h2>
                      <ul className="text-gray-600">
                         <li className="flex mb-2 hover:text-gray-400">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="mr-0.5 mt-1 w-3 h-3">
@@ -1044,14 +1061,14 @@ function Themedefault() {
                      </ul>
                   </div>
                   <div className='mr-8'>
-                     <h2 className="mb-2  font-semibold text-gray-400 uppercase  dark:text-white">Legal</h2>
+                     <h2 className="mb-2  font-semibold text-gray-400 uppercase  dark:text-white">{language?.legal}</h2>
                      <ul className="text-gray-600">
                         <li className="mb-2 flex">
                            <a href="#" className="hover:underline hover:text-gray-400 text-sm">
-                              Privacy Policy</a>
+                           {language?.privacypolicy}</a>
                         </li>
                         <li>
-                           <a href="#" className="hover:underline hover:text-gray-400 text-sm">Terms &amp; Conditions</a>
+                           <a href="#" className="hover:underline hover:text-gray-400 text-sm">{language?.termsandconditions}</a>
                         </li>
                      </ul>
                   </div>
@@ -1059,7 +1076,7 @@ function Themedefault() {
             </div>
             <hr className="my-6 border-gray-400 sm:mx-auto dark:border-gray-700 lg:my-8" />
             <div className="sm:flex sm:items-center mx-2 sm:justify-between">
-               <span className="text-sm text-white sm:text-center text-gray-600">© 2022 <a href="#" className="hover:underline">Powered By Travel2Kashmir</a>. All Rights Reserved.
+               <span className="text-sm text-white sm:text-center text-gray-600">© 2022 <a href="#" className="hover:underline">{language?.poweredby} Travel2Kashmir</a>. {language?.allrightsreserved}.
                </span>
                <div className="flex mt-4 space-x-6  sm:justify-center sm:mt-0">
                   <a href="#" className="text-gray-600 hover:text-gray-400 dark:hover:text-white">

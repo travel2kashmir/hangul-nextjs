@@ -1,5 +1,30 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  about:"Sur",
+   amenities:"Agréments",
+   contactus:"Contactez-nous",
+   star:"Étoile",
+   in:"dans",
+   customer:"Client",
+   accomodation:"Logement",
+   overallrating:"Globalement Évaluation",
+   poweredby:"Alimenté Par",
+   
+   excellent:"Excellent",
+   quicklinks:"Liens Rapides",
+   legal:"Juridique",
+   booknow:"Reserve maintenant",
+   roomstochoose:"Chambres à Choisir",
+   roomfacilities:"Équipements de la Chambre",
+   needhelpbooking:"Besoin d'aide pour une réservation",
+   bookingtitle:"Appelez notre service client au numéro ci-dessous pour parler à l'un de nos conseillers qui vous aidera avec tous vos besoins de vacances.",
+  checkin:"Enregistrement",
+  checkout:"Vérifier",
+  servicefee:"Frais de Service",
+  total:"Total",
+ guests:"Invités",
+ facilities:"Installations",
+ itinerary:"Itinéraire",
 
   "ContactCols":{
     name:"Contacter",

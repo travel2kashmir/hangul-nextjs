@@ -117,9 +117,9 @@ function Themedefault() {
    }
    })
 
-   return (
-      
-     <div className='bg-gray-800'>
+   return ( 
+     <>
+     <div className='bg-gray-900 '>
          <div className="header-dark w-full">
             <div className="container">
                <div className="header-logo">
@@ -145,36 +145,37 @@ function Themedefault() {
                   <a
                      href="#home"
                      className="header-menu-item"
-                  >{language?.home} 
+                  ><span className='text-white hover:text-gray-400'>{language?.home} </span>
                   </a>
                   <a
                      href="#about"
                      className="header-menu-item"
-                  >{language?.about}</a>
+                  >
+                     <span className='text-white hover:text-gray-400'>{language?.about}</span></a>
                   <a
                      href="#gallery"
                      className="header-menu-item"
-                  >{language?.gallery}</a>
+                  ><span className='text-white hover:text-gray-400'>{language?.gallery}</span></a>
                   <a
                      href="#rooms"
                      className="header-menu-item"
-                  >{language?.rooms}</a>
+                  ><span className='text-white hover:text-gray-400'>{language?.rooms}</span></a>
                   <a
                      href="#amenities"
                      className="header-menu-item"
-                  >{language?.amenities}</a
+                  ><span className='text-white hover:text-gray-400'>{language?.amenities}</span></a
                   >
                   <a
                      href="#packages"
                      className="header-menu-item"
-                  >{language?.packages}</a
+                  ><span className='text-white hover:text-gray-400'>{language?.packages}</span></a
                   >
                   <a
                      href="#contactus"
                      className="header-menu-item"
-                  >{language?.contactus}</a
+                  ><span className='text-white hover:text-gray-400'>{language?.contactus}</span></a
                   >
-                  <div className="header-menu-copyright">Made with Tailwind CSS</div>
+                  <div className="header-menu-copyright"><span className='text-white hover:text-gray-200'>Made with Tailwind CSS</span></div>
                </ul>
 
             </div>
@@ -241,32 +242,34 @@ function Themedefault() {
                </aside>
             </div>
          </div>
-       
-         <div className="tour container">
+         <div className='bg-gray-800 -mt-12 px-10 pb-10'>
+         <div className="tour container ">
             <div className="tour-head">
                <div id="home" className="tour-head-left">
                   <div className="tour-title">
-                     <div className={visible === 0 ? 'block w-32 mb-2' : 'hidden'}><Headloader /></div>
-                     <div className={visible === 1 ? 'block text-white' : 'hidden'}>
+                     <div className={visible === 0 ? 'block w-32 my-2' : 'hidden'}><Headloader /></div>
+                     <div className={visible === 1 ? 'block text-white mt-8' : 'hidden'}>
                         {allHotelDetails?.description_title}</div>
                   </div>
                   <div className={visible === 0 ? 'block w-64' : 'hidden'}><SubHeading /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>
                      <div className="tour-overview">
-                        <div className="tour-overview-item">
+                        <div className="tour-overview-item flex">
 
-                           {allHotelDetails?.property_category} {language?.in}  <span className='text-gray-50'>{allHotelDetails?.address?.[i]?.address_city}</span>
+                           {allHotelDetails?.property_category} {language?.in}  <p className='text-white pl-1'>{allHotelDetails?.address?.[i]?.address_city}</p>
                         </div>
-                        <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} {language?.star}</span> star {language?.accomodation}</div>
-                        <div className="tour-overview-item">
-                           <span className="material-icons-outlined">star</span>
-                           <span>4.7</span> ({allHotelDetails?.Reviews?.length})
+                        <div className="tour-overview-item flex">
+                           <p className='text-white pr-1'>{allHotelDetails?.star_rating} {language?.star}</p>
+                            {language?.accomodation}</div>
+                        <div className="tour-overview-item ">
+                           <span className="material-icons-outlined mt-0.5">star</span>
+                          <p className='text-white'>4.7  ({allHotelDetails?.Reviews?.length}) </p>
                         </div>
                      </div></div>
                </div>
             </div>
-
-            {/* Body */}
+            </div>
+            {/* Body */}        
             <div className="tour-wrapper">
                <div className="tour-content">
                   {/* Slider */}
@@ -298,13 +301,13 @@ function Themedefault() {
 
                      <div className="tour-content-block">
                         <div className="tour-description">
-                           {allHotelDetails?.description_body}
+                         <p className='text-gray-400'> {allHotelDetails?.description_body}</p> 
                         </div>
                      </div></div>
 
                   {/* Gallery */}
                   <div id="gallery" className="tour-content-block">
-                     <div className="tour-content-title">{language?.gallery}</div>
+                     <div className="tour-content-title"><span className='text-white'>{language?.gallery}</span></div>
                      <div className="relative overflow-hidden">
                         <div className={visible === 0 ? 'block  mb-2' : 'hidden'}><GallerySlider /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -321,25 +324,26 @@ function Themedefault() {
                   {/* About */}
                   <div id="about" className="tour-content-block">
                      <div className="tour-content-title mb-8">
-                        {language?.about}</div>
+                     <p className='text-white'>{language?.about}</p></div>
                      <div className="tour-itinerary">
 
                         <div className="accordion">
                            {/* Rooms */}
                        <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                              <div className='accordion-trigger'>
-                                 <button className='mb-6' onClick={() => setSingleRoom(!singleRoom)}>
+                             
+                              <div className='accordion-trigger'  onClick={() => setSingleRoom(!singleRoom)}>
+                                 <button className='mb-6' >
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                          {language?.roomstochoose} ({rooms.length})</div>
+                                       <p className='text-white'>{language?.roomstochoose} ({rooms.length})</p></div>
                                     </div></button></div>
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
                                  {allHotelDetails?.rooms?.map((resource, idx) => {
                                     return (
                                        <div key={idx}>
                                           <p className='flex capitalize mt-4 py-1'>
-                                             <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-600  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
+                                             <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-800  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
                                              <button className='text-gray-600 font-semibold'
                                                 onClick={() => {
                                                    setOpen({ ...open, view: !open.view, id: idx });
@@ -349,7 +353,7 @@ function Themedefault() {
                                                       
                                                    }  
                                                    
-                                                }}>{resource?.room_name} </button>
+                                                }}><p className='text-white'>{resource?.room_name}</p> </button>
                                              <button className='justify-end mr-1 ml-auto'
                                                 onClick={() => {
                                                    setOpen({ ...open, view: !open.view, id: idx });
@@ -370,18 +374,19 @@ function Themedefault() {
                                              {/* Room Description */}
                                              <div className="tour-content-block">
                                                 <div className="tour-description">
-                                                   {resource?.room_description}
+                                                  <p className='text-white'> {resource?.room_description} </p>
                                                 </div>
                                              </div>
                                              {/* Room Facilities */}
                                              <div className='tour-content-block1'>
                                                 <div className='py-10'>
-                                                   <div className="accordion-trigger">{language?.room} {language?.facilities}</div>
+                                                   <div className="accordion-trigger">
+                                                   <p className='text-white'>{language?.room} {language?.facilities}</p></div>
 
                                                    <div className="grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 mt-2 gap-3">
                                                       {resource.room_facilities.map((item, index) => {
                                                          return (
-                                                            <span className='text-gray-700' key={index}>
+                                                            <span className='text-gray-400' key={index}>
                                                                <span>&#10004;
                                                                   {item?.service_name} </span></span>)
                                                       })}
@@ -391,13 +396,14 @@ function Themedefault() {
                                              {/* Room Gallery */}
                                              <div className='tour-content-block1'>
                                                 <div className='pb-8'>
-                                                   <div className="accordion-trigger mb-4">{language?.room} {language?.gallery}</div>
+                                                   <div className="accordion-trigger mb-4">
+                                                   <p className='text-white'>{language?.room} {language?.gallery}</p></div>
                                                    <Carousel cols={3} rows={1} gap={10} loop>
                                                       {resource.room_images.map((resource, index) => {
                                                          return (
                                                             <Carousel.Item key={index} >
                                                                <img width="100%" style={{ height: "160px", marginBottom: "10px" }} src={resource?.image_link} />
-                                                               <span className='text-gray-700' >{resource?.image_title}</span>
+                                                               <span className='text-gray-400' >{resource?.image_title}</span>
                                                             </Carousel.Item>
                                                          )
                                                       })}</Carousel></div></div>
@@ -430,14 +436,14 @@ function Themedefault() {
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                     {language?.property} {language?.amenities}</div>
+                                       <p className='text-white'>  {language?.property} {language?.amenities}</p></div>
                                     </div>
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
                                  <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
                                     {allHotelDetails?.services?.map((item, idx) => {
                                        return (
-                                          <span className='text-gray-700 capitalize' key={idx}>
+                                          <span className='text-gray-400 capitalize' key={idx}>
                                              <span>&#10004;
                                                 {item?.local_service_name} </span>
                                           </span>)
@@ -452,7 +458,7 @@ function Themedefault() {
                                     <div className='accordion-trigger' >
                                        <div className={visible === 0 ? 'block  mb-6 w-32' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                       {language?.packages}
+                                       <p className='text-white'> {language?.packages}</p>
                                        </div>
                                     </div>
                                  </button></div>
@@ -461,7 +467,7 @@ function Themedefault() {
                                     return (
                                        <div key={idx}>
                                           <p className='flex capitalize mt-4 py-1'>
-                                             <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-600  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
+                                             <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-800  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
                                              <button className='text-gray-600 font-semibold'
                                                 onClick={() => {
                                                    setOpen({ ...open, view: !open.view, id: idx });
@@ -471,7 +477,7 @@ function Themedefault() {
                                                       setRate(defaultRate)
                                                       }
                                                      
-                                                }}>{resource?.package_name} </button>
+                                                }}><p className='text-white'>{resource?.package_name}</p> </button>
 
                                              <button className='justify-end mr-1 ml-auto'
                                                 onClick={() => {
@@ -800,22 +806,22 @@ function Themedefault() {
 
                   {/*  Reviews */}
                   <div className="tour-content-block">
-                     <div className="tour-content-title">{language?.customer} {language?.reviews}</div>
+                     <div className="tour-content-title">
+                        <p className='text-white'>{language?.customer} {language?.reviews}</p></div>
                      <div className="tour-reviews">
-                    
-                        <div className="tour-reviews-feedback-dark ">
+                        <div className="tour-reviews-feedback-dark">
                         <Marquee duration={10000}  height="370px" axis="Y" reverse={true}>
                            {allHotelDetails?.Reviews?.map((item, idx) => {
                               return (
                                 
-                                 <div className="tour-reviews-feedback-item" key={idx}>
+                                 <div className="tour-reviews-feedback-item  bg-gray-900" key={idx}>
                                     <div className="tour-reviews-feedback-content">
 
                                        <div className="tour-reviews-feedback-content-inner">
                                           <div className="tour-reviews-feedback-title">
                                              <div className={visible === 0 ? 'block w-24 mb-2' : 'hidden'}><LineLoader /></div>
                                              <div className={visible === 1 ? 'block' : 'hidden'}>
-                                                {item?.review_author}</div>
+                                               <p className='text-white'> {item?.review_author}</p></div>
                                           </div>
                                           <div className="tour-reviews-feedback-text">
                                              <div className={visible === 0 ? 'block h-2 w-64 mb-6' : 'hidden'}><LineLoader /></div>
@@ -835,12 +841,14 @@ function Themedefault() {
                         <div className="tour-reviews-overall">
                            <div className="tour-reviews-content">
                               <div className="tour-reviews-overall-title">
-                             {language?.overallrating}
+                              {language?.overallrating}
                               </div>
                               <div className="tour-reviews-overall-text">
-                                {language?.excellent}
+                              <p className='text-white'> {language?.excellent}</p>
                               </div>
-                              <div className="tour-reviews-overall-rating">4.7</div>
+                              <div className="tour-reviews-overall-rating">
+                              <p className='text-white'>4.7</p>
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -870,12 +878,12 @@ function Themedefault() {
 
                </div>
                {/* content  */}
-               <div className="tour-sidebar-dark">
+               <div className="tour-sidebar-dark bg-gray-900 border-0 border-lg">
                   <div className="tour-receipt-dark">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
                            <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading /></div>
-                           <div className={visible === 1 ? 'block' : 'hidden'}>
+                           <div className={visible === 1 ? 'block text-white' : 'hidden'}>
                               <span className="tour-amount-old">$119</span>
                               {rate?.base_rate_amount} {rate?.base_rate_currency.toUpperCase()}
                               <span>/night</span>
@@ -895,16 +903,16 @@ function Themedefault() {
                                     calendar_month
                                  </span></button>
                               </div>
-                              <div className="tour-receipt-select-content">
+                              <div className="tour-receipt-select-content text-white">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                           {checkInDate}
+                          <span className='text-white'>{checkInDate}</span>
                         </div>:
                                  <input defaultValue={checkInDate}
                                  className="my-1 shadow-sm bg-gray-900 border border-white text-gray-50 
                                  text-sm rounded-md block w-100 px-1 py-1" type="date" />}
                             <div className="tour-receipt-select-text">
-                                 {language?.checkin}
+                             {language?.checkin}
                                  </div>
                           </div></div>
                          <div className="tour-receipt-select-item">
@@ -917,7 +925,7 @@ function Themedefault() {
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
                               <div className="tour-receipt-select-title">
-                           {checkOutDate}
+                           <span className='text-white'>{checkOutDate}</span>
                         </div>:
                                  <input
                                     type="date" value={checkOutDate}
@@ -929,8 +937,51 @@ function Themedefault() {
                               </div>
                            </div>
                         </div>
-                     
+                       
+                       
                         <div className="tour-receipt-select-bottom">
+                        <div className="tour-receipt-select-top">
+                           <div className="tour-receipt-select-item">
+                              <div className="tour-receipt-select-icon">
+                                 <button  onClick={() => setCalendarIn(!calendarIn)} >
+                                 <span className="material-icons-outlined">
+                                    calendar_month
+                                 </span></button>
+                              </div>
+                              <div className="tour-receipt-select-content text-white">
+                                 {calendarIn === false ?
+                              <div className="tour-receipt-select-title">
+                          <span className='text-white'>{checkInDate}</span>
+                        </div>:
+                                 <input defaultValue={checkInDate}
+                                 className="my-1 shadow-sm bg-gray-900 border border-white text-gray-50 
+                                 text-sm rounded-md block w-100 px-1 py-1" type="date" />}
+                            <div className="tour-receipt-select-text">
+                             {language?.checkin}
+                                 </div>
+                          </div></div>
+                         <div className="tour-receipt-select-item">
+                             <div className="tour-receipt-select-icon">
+                                 <button  onClick={() => setCalendarOut(!calendarOut)} >
+                                 <span className="material-icons-outlined">
+                                  a
+                                 </span></button>
+                              </div>
+                              <div className="tour-receipt-select-content">
+                              {calendarOut === false ?
+                              <div className="tour-receipt-select-title">
+                           <span className='text-white'>{checkOutDate}</span>
+                        </div>:
+                                 <input
+                                    type="date" value={checkOutDate}
+                                    className="my-1 shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-100 px-1 py-1" />
+                              }
+                                 <div className="tour-receipt-select-text">
+                                 {language?.checkout}
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
                                <button onClick={() => setGuests(!guests)}>  <span className="material-icons-outlined">
@@ -940,13 +991,14 @@ function Themedefault() {
                               <div className="tour-receipt-select-content">
                               {guests === false ?
                               <div className="tour-receipt-select-title">
-                          4 Guests
+                          <span className='text-white'>4 Guests</span>
                         </div>:
                                  <input
                                     type="number" min={1}
                                     className=" shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-32 px-0.5 py-1" />
                                     }
-                                 <div className="tour-receipt-select-text">{language?.guests}</div>
+                                 <div className="tour-receipt-select-text">
+                                    {language?.guests}</div>
                               </div>
                            </div>
                         </div>
@@ -1000,9 +1052,9 @@ function Themedefault() {
 
             </div>
          </div>
-
+         </div>
          {/* Footer */}
-         <footer className="bg-gray-900 mt-12 lg:mt:8 py-6">
+         <footer className="bg-gray-900 lg:mt:8 py-6">
             <div className="md:flex md:justify-between mx-6">
                <div className="mb-6 md:mb-0">
                   <div className="header-logo px-8">
@@ -1054,7 +1106,7 @@ function Themedefault() {
                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="mr-0.5 mt-1 w-3 h-3">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                            </svg>
-                           <a href="#" className=" text-sm hover:underline">
+                           <a href={`tel://${phone?.contact_data}`} className=" text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
                                  {phone.contact_data}
@@ -1064,7 +1116,7 @@ function Themedefault() {
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mt-1 mr-0.5 w-4 h-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                            </svg>
-                           <a href="#" className="text-sm hover:underline">
+                           <a href={`mailto:${email?.contact_data}`}className="text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
                                  {email?.contact_data} </div></a>
@@ -1113,7 +1165,8 @@ function Themedefault() {
                </div>
             </div>
          </footer>
-         </div>
+        
+         </>
      
    );
 }

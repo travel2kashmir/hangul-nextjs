@@ -570,7 +570,13 @@ body::selection{
   align-items: center;
   justify-content: space-between;
 }
-
+.header .container{
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
 .header-logo{
   display: flex;
   -webkit-user-select: none;

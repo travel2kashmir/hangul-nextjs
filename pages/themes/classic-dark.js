@@ -33,11 +33,13 @@ var defaultRate = {
 function Themedefault() {
    const [phone, setPhone] = useState({});
    const [language, setLanguage] = useState(0);
-   const [calendar, setCalendar] = useState(false);
+   const [guests, setGuests] = useState(false);
    const [visible, setVisible] = useState(0);
    const [email, setEmail] = useState({});
    const [rooms, setRooms] = useState({});
    const [rate, setRate] = useState(defaultRate);
+   const [calendarIn, setCalendarIn] = useState(false);
+   const [calendarOut, setCalendarOut] = useState(false);
    const [amenity, setAmenity] = useState(false);
    const [packages, setPackages] = useState(false);
    const [open, setOpen] = useState({
@@ -47,10 +49,10 @@ function Themedefault() {
    const [singleRoom, setSingleRoom] = useState(false);
    const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
-
    const current = new Date();
    let month = current.getMonth() + 1;
    const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
+   const checkOutDate = `${current.getDate()+1}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
 
    /** Router for Redirection **/
    const router = useRouter();
@@ -118,8 +120,7 @@ function Themedefault() {
    return (
       
      <div className='bg-gray-800'>
-     
-         <div className="header w-full">
+         <div className="header-dark w-full">
             <div className="container">
                <div className="header-logo">
                   <span className="material-icons-outlined header-logo-icon">
@@ -136,7 +137,7 @@ function Themedefault() {
                              changeLanguage(e.target.value)
                             )
                           }
-                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600 block w-32 py-1 px-2">
+                   className="shadow-sm bg-gray-900 border border-gray-300 text-white sm:text-sm rounded-md  block w-32 py-1 px-2">
                      <option value="en">English</option>
                      <option value="fr">French</option>
                      <option value="ar">Arabic</option>
@@ -145,24 +146,19 @@ function Themedefault() {
                      href="#home"
                      className="header-menu-item"
                   >{language?.home} 
-                  </a
-                  >
+                  </a>
                   <a
                      href="#about"
                      className="header-menu-item"
-                  >{language?.about}</a
-                  >
+                  >{language?.about}</a>
                   <a
                      href="#gallery"
                      className="header-menu-item"
-                  >{language?.gallery}</a
-                  >
-
+                  >{language?.gallery}</a>
                   <a
                      href="#rooms"
                      className="header-menu-item"
-                  >{language?.rooms}</a
-                  >
+                  >{language?.rooms}</a>
                   <a
                      href="#amenities"
                      className="header-menu-item"
@@ -251,7 +247,7 @@ function Themedefault() {
                <div id="home" className="tour-head-left">
                   <div className="tour-title">
                      <div className={visible === 0 ? 'block w-32 mb-2' : 'hidden'}><Headloader /></div>
-                     <div className={visible === 1 ? 'block' : 'hidden'}>
+                     <div className={visible === 1 ? 'block text-white' : 'hidden'}>
                         {allHotelDetails?.description_title}</div>
                   </div>
                   <div className={visible === 0 ? 'block w-64' : 'hidden'}><SubHeading /></div>
@@ -259,7 +255,7 @@ function Themedefault() {
                      <div className="tour-overview">
                         <div className="tour-overview-item">
 
-                           {allHotelDetails?.property_category} {language?.in} <span>{allHotelDetails?.address?.[i]?.address_city}</span>
+                           {allHotelDetails?.property_category} {language?.in}  <span className='text-gray-50'>{allHotelDetails?.address?.[i]?.address_city}</span>
                         </div>
                         <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} {language?.star}</span> star {language?.accomodation}</div>
                         <div className="tour-overview-item">
@@ -807,7 +803,7 @@ function Themedefault() {
                      <div className="tour-content-title">{language?.customer} {language?.reviews}</div>
                      <div className="tour-reviews">
                     
-                        <div className="tour-reviews-feedback">
+                        <div className="tour-reviews-feedback-dark ">
                         <Marquee duration={10000}  height="370px" axis="Y" reverse={true}>
                            {allHotelDetails?.Reviews?.map((item, idx) => {
                               return (
@@ -874,9 +870,8 @@ function Themedefault() {
 
                </div>
                {/* content  */}
-              
-               <div className="tour-sidebar">
-                  <div className="tour-receipt bg-gray-900">
+               <div className="tour-sidebar-dark">
+                  <div className="tour-receipt-dark">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
                            <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading /></div>
@@ -891,57 +886,72 @@ function Themedefault() {
                            <div className="tour-discount">-10%</div>
                         </div>
                      </div>
-                     <div className="tour-receipt-select">
+                     <div className="tour-receipt-select-dark">
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <button  onClick={() => setCalendar(!calendar)} >
+                                 <button  onClick={() => setCalendarIn(!calendarIn)} >
                                  <span className="material-icons-outlined">
                                     calendar_month
                                  </span></button>
                               </div>
                               <div className="tour-receipt-select-content">
-                                 <input
-                                    type="date"
-                                    className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" />
-                                 <div className="tour-receipt-select-text">
-                                    {language?.checkin}
+                                 {calendarIn === false ?
+                              <div className="tour-receipt-select-title">
+                           {checkInDate}
+                        </div>:
+                                 <input defaultValue={checkInDate}
+                                 className="my-1 shadow-sm bg-gray-900 border border-white text-gray-50 
+                                 text-sm rounded-md block w-100 px-1 py-1" type="date" />}
+                            <div className="tour-receipt-select-text">
+                                 {language?.checkin}
                                  </div>
-                              </div>
-                           </div>
-                           <div className="tour-receipt-select-item">
-                              <div className="tour-receipt-select-icon">
+                          </div></div>
+                         <div className="tour-receipt-select-item">
+                             <div className="tour-receipt-select-icon">
+                                 <button  onClick={() => setCalendarOut(!calendarOut)} >
                                  <span className="material-icons-outlined">
-                                    event_available
-                                 </span>
+                                    calendar_month
+                                 </span></button>
                               </div>
                               <div className="tour-receipt-select-content">
+                              {calendarOut === false ?
+                              <div className="tour-receipt-select-title">
+                           {checkOutDate}
+                        </div>:
                                  <input
-                                    type="date"
-                                    className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" />
-
+                                    type="date" value={checkOutDate}
+                                    className="my-1 shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-100 px-1 py-1" />
+                              }
                                  <div className="tour-receipt-select-text">
                                  {language?.checkout}
                                  </div>
                               </div>
                            </div>
                         </div>
+                     
                         <div className="tour-receipt-select-bottom">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined">
+                               <button onClick={() => setGuests(!guests)}>  <span className="material-icons-outlined">
                                     person_outline
-                                 </span>
+                                 </span></button>
                               </div>
                               <div className="tour-receipt-select-content">
+                              {guests === false ?
+                              <div className="tour-receipt-select-title">
+                          4 Guests
+                        </div>:
                                  <input
                                     type="number" min={1}
-                                    className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-5/6 px-1 py-1" />
-
+                                    className=" shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-32 px-0.5 py-1" />
+                                    }
                                  <div className="tour-receipt-select-text">{language?.guests}</div>
                               </div>
                            </div>
                         </div>
+                       
+                       
                      </div>
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
@@ -950,7 +960,7 @@ function Themedefault() {
                            </div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading /></div>
-                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <div className={visible === 1 ? 'block text-white' : 'hidden'}>
                                  {rate?.base_rate_amount} {rate?.base_rate_currency.toUpperCase()}</div>
                            </div>
                         </div>
@@ -959,28 +969,26 @@ function Themedefault() {
                            {language?.taxrate}
                            </div>
                            <div className="tour-receipt-detail-price"> <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading /></div>
-                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <div className={visible === 1 ? 'block text-white' : 'hidden'}>
                                  {rate?.tax_rate_amount} {rate?.base_rate_currency.toUpperCase()}</div></div>
                         </div>
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">{language?.servicefee}</div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading /></div>
-                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <div className={visible === 1 ? 'block text-white' : 'hidden'}>
                                  {rate?.tax_rate_amount} {rate?.base_rate_currency.toUpperCase()}</div></div>
                         </div>
-                        <div
-                           className="tour-receipt-detail-item tour-receipt-detail-total"
-                        >
+                        <div className="tour-receipt-detail-item tour-receipt-detail-total">
                            <div className="tour-receipt-detail-title">{language?.total}</div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-24' : 'hidden'}><SubHeading /></div>
-                              <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <div className={visible === 1 ? 'block text-white' : 'hidden'}>
                                  {Number(rate?.base_rate_amount) + Number(rate?.tax_rate_amount) + Number(rate?.other_charges_amount)} {rate?.base_rate_currency.toUpperCase()}</div>
                            </div></div>
                      </div>
-                     <div className="tour-receipt-button">
-                        <button className="tour-favorite text-white">
+                     <div className="tour-receipt-button-dark">
+                        <button className="tour-favorite-dark">
                            <span className="material-icons-outlined text-white">
                               favorite_border
                            </span>

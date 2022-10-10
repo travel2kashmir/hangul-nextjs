@@ -5,6 +5,7 @@ export default {
    star:"نجمة",
    customer:"عميل",
    poweredby:"مشغل بواسطة",
+   children:"الأطفال",
    in:"في",
    accomodation:"الإقامة",
    overallrating:"تقييم عام",

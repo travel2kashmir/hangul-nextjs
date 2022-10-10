@@ -746,11 +746,11 @@ function Room() {
                 </div>
 
               </div>
-              <h6 className="text-base  flex leading-none mb-2 pt-2 font-semibold text-gray-800 ">
+              <h6 className="text-base  flex leading-none mb-2 mx-2 pt-2 font-semibold text-gray-800 ">
                 {language?.room}  {language?.gallery}
               </h6>
 
-              <div className="sm:flex py-2">
+              <div className="sm:flex py-2 ">
                 <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
                   <form className="lg:pr-3" action="#" method="GET">
                     <label htmlFor="users-search" className="sr-only">{language?.search}</label>
@@ -786,11 +786,11 @@ function Room() {
 
               <div className="flex flex-wrap" >
                 <div className={visible === 0 ? 'block w-auto h-auto m-6 w-32 flex' : 'hidden'}><Imageloader /> <Imageloader /><Imageloader /></div>
-                <div className={visible === 1 ? 'block' : 'hidden'}>
+                <div className={visible === 1 ? 'block flex flex-wrap' : 'hidden'}>
                   {roomDetails?.room_images?.map((item, index) => {
                     return (
                       <div className="block text-blueGray-600 text-xs pt-2 px-2 " key={index}>
-                        <button onClick={() => { setEnlargeImage(1); setActionEnlargeImage(item) }}><img src={item.image_link} alt='pic_room' height={170} width={210} />
+                        <button onClick={() => { setEnlargeImage(1); setActionEnlargeImage(item) }}><img src={item.image_link} alt='pic_room' style={{ height: "200px", width: "370px" }} />
                         </button>
                         <table>
                           <tr>

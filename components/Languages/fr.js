@@ -9,7 +9,7 @@ export default {
    accomodation:"Logement",
    overallrating:"Globalement Évaluation",
    poweredby:"Alimenté Par",
-   
+   children:"Enfants",
    excellent:"Excellent",
    quicklinks:"Liens Rapides",
    legal:"Juridique",

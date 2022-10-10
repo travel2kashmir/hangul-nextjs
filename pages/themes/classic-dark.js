@@ -40,6 +40,7 @@ function Themedefault() {
    const [rate, setRate] = useState(defaultRate);
    const [calendarIn, setCalendarIn] = useState(false);
    const [calendarOut, setCalendarOut] = useState(false);
+   const [children, setChildren] = useState(false);
    const [amenity, setAmenity] = useState(false);
    const [packages, setPackages] = useState(false);
    const [open, setOpen] = useState({
@@ -341,40 +342,27 @@ function Themedefault() {
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
                                  {allHotelDetails?.rooms?.map((resource, idx) => {
                                     return (
-                                       <div key={idx}>
+                                       <div className='group' key={idx}>
+                                           <div  onClick={() => {
+                                          setOpen({ ...open, view: !open.view, id: idx });
+                                         }}>
                                           <p className='flex capitalize mt-4 py-1'>
                                              <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-800  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
                                              <button className='text-gray-600 font-semibold'
-                                                onClick={() => {
-                                                   setOpen({ ...open, view: !open.view, id: idx });
-                                                   if(open?.view === true && open?.id === idx)
-                                                   {
-                                                      setRate(defaultRate)
-                                                      
-                                                   }  
-                                                   
-                                                }}><p className='text-white'>{resource?.room_name}</p> </button>
-                                             <button className='justify-end mr-1 ml-auto'
-                                                onClick={() => {
-                                                   setOpen({ ...open, view: !open.view, id: idx });
-                                                   
-                                                      if(open?.view === true && open?.id === idx)
-                                                      {
-                                                      setRate(defaultRate)}
-                                                     
-                                                }}>
+                                                ><p className='text-white'>{resource?.room_name}</p> </button>
+                                             <button className='justify-end mr-1 ml-auto'>
                                                 {open?.view === true && open?.id === idx ?
                                                    <span className=' font-semibold text-gray-400  '>
                                                       - </span>
                                                    :
-                                                   <span className=' font-semibold text-gray-400'>
+                                                   <span className=' font-semibold text-gray-400 hidden group-hover:block'>
                                                       + </span>}</button>
-                                          </p>
+                                          </p></div>
                                           <div className={open?.view === true && open?.id === idx ? 'block' : 'hidden'}>
                                              {/* Room Description */}
                                              <div className="tour-content-block">
                                                 <div className="tour-description">
-                                                  <p className='text-white'> {resource?.room_description} </p>
+                                                  <p className='text-gray-400'> {resource?.room_description} </p>
                                                 </div>
                                              </div>
                                              {/* Room Facilities */}
@@ -431,8 +419,8 @@ function Themedefault() {
                            </div>
                            {/* Amenity */}
                            <div id="amenities" className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                              <div className='accordion-trigger'>
-                                 <button className="mb-6" onClick={() => setAmenity(!amenity)}>
+                              <div className='accordion-trigger'  onClick={() => setAmenity(!amenity)}>
+                                 <button className="mb-6">
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -452,9 +440,9 @@ function Themedefault() {
                            </div>
 
                            {/* Packages */}
-                           <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel '}>
-                              <div className='accordion-trigger'>
-                                 <button className="mb-6" onClick={() => { setPackages(!packages) }}>
+                           <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
+                              <div className='accordion-trigger' onClick={() => { setPackages(!packages) }}>
+                                 <button className="mb-6" >
                                     <div className='accordion-trigger' >
                                        <div className={visible === 0 ? 'block  mb-6 w-32' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -465,58 +453,47 @@ function Themedefault() {
                               <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
                                  {allHotelDetails?.packages?.map((resource, idx) => {
                                     return (
-                                       <div key={idx}>
-                                          <p className='flex capitalize mt-4 py-1'>
+                                       <div className='group'key={idx}>
+                                           <div onClick={() => {
+                                          setOpen({ ...open, view: !open.view, id: idx })
+                                         }}>
+                                          <p className='flex capitalize mt-4 py-1 '>
                                              <div className="my-1.5 mr-1.5 -ml-2 border-gray-200 border-0 rounded-full  font-bold text-gray-800  bg-gray-200 flex items-center justify-center" style={{ height: "22px", width: "22px", fontSize: "14px" }}>{idx + 1}</div>
                                              <button className='text-gray-600 font-semibold'
-                                                onClick={() => {
-                                                   setOpen({ ...open, view: !open.view, id: idx });
-                                                   if(
-                                                      open?.view === true && open?.id === idx)
-                                                      {
-                                                      setRate(defaultRate)
-                                                      }
-                                                     
-                                                }}><p className='text-white'>{resource?.package_name}</p> </button>
+                                               ><p className='text-white'>{resource?.package_name}</p> </button>
 
-                                             <button className='justify-end mr-1 ml-auto'
-                                                onClick={() => {
-                                                   setOpen({ ...open, view: !open.view, id: idx });
-                                                   
-                                                     if( open?.view === true && open?.id === idx ){
-                                                      setRate(defaultRate)
-                                                     }
-                                                    
-                                                   
-                                                }}>
+                                             <button className='justify-end mr-1 ml-auto'>
                                                 {open?.view === true && open?.id === idx ?
                                                    <span className=' font-semibold text-gray-400  '>
                                                       - </span>
                                                    :
-                                                   <span className=' font-semibold text-gray-400'>
+                                                   <span className=' font-semibold text-gray-400 hidden group-hover:block'>
                                                       + </span>}</button>
-                                          </p>
+                                          </p></div>
                                           <div className={open?.view === true && open?.id === idx ? 'block' : 'hidden'}>
                                              {/* Package Description */}
                                              <div className="tour-content-block">
                                                 <div className="tour-description">
-                                                   {resource?.package_description}
+                                                 <p className='text-gray-400'> {resource?.package_description}</p> 
                                                    {resource?.refundable === "true" ?
-                                                      <p className='my-2'> <span className='text-gray-600 font-semibold'>Refundable till</span>  {resource?.refundable_until_days}days, {resource?.refundable_until_time}</p> :
+                                                      <p className='my-2 text-gray-400'> 
+                                                      <span className='text-white font-semibold mr-1'>Refundable till</span> 
+                                                       {resource?.refundable_until_days} days, {resource?.refundable_until_time}</p> :
                                                       <></>}
                                                 </div>
                                              </div>
 
                                              {/* Package Services */}
-                                             <div className='tour-content-block1'>
-                                                <div className='py-10'>
-                                                   <div className="accordion-trigger">{language?.package} {language?.services}</div>
+                                             <div className='tour-content-block'>
+                                                <div>
+                                                   <div className="accordion-trigger">
+                                                      <p className='text-white'>{language?.package} {language?.services}</p></div>
 
                                                    <div className="grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 mt-2 gap-3">
                                                       {resource.package_services.map((item, index) => {
                                                          return (
                                                             <>
-                                                               {item?.value === true ? <><span className='capitalize text-gray-700' key={index}>
+                                                               {item?.value === true ? <><span className='capitalize text-gray-400' key={index}>
                                                                   <span>&#10004;
                                                                      {item?.package_service_name.replace(
                                                                         /\_+/g,
@@ -527,28 +504,31 @@ function Themedefault() {
                                                 </div>
                                              </div>
                                              {/* Package Rooms */}
-                                             <div className='tour-content-block1'>
-                                                <div className='py-10'>
-                                                   <div className="accordion-trigger -mt-8">{language?.package} {language?.rooms}</div>
+                                             <div className='tour-content-block'>
+                                                <div className='pt-4'>
+                                                   <div className="accordion-trigger -mt-8">
+                                                      <p className='text-white'>{language?.package} {language?.rooms}</p></div>
 
                                                    {resource.package_rooms.map((item, index) => {
                                                       return (
-                                                         <span className='capitalize text-gray-700' key={index}>
+                                                         <span className='capitalize text-gray-400' key={index}>
                                                             {item?.room_name} </span>)
                                                    })}
                                                 </div>
                                              </div>
 
                                              {/* itinerary */}
-
+                                              
                                              <div className="tour-content-block mb-8">
-                                                <div className="accordion-trigger mb-4">{language?.itinerary}</div>
+                                                <div className="accordion-trigger mb-4">
+                                                   <p className='text-white'>{language?.itinerary}</p></div>
                                                 <div className="tour-itinerary">
                                                    <div className="accordion">
                                                       <div
                                                          className="accordion-panel accordion-introduction active"
                                                       >
-                                                         <div className="accordion-trigger">Introduction</div>
+                                                         <div className="accordion-trigger">
+                                                            <p className='text-white'>Introduction</p></div>
                                                          <div className="accordion-content">
                                                             <p>
                                                                Start and end in Istanbul! With the Explorer
@@ -831,12 +811,15 @@ function Themedefault() {
                                        </div>
                                     </div>
                                     <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
+                                   
                                  </div>
-                               
+                              
                                  )
                            })}
+                           <hr className="border-white sm:mx-auto" />
+                        
                           </Marquee> 
-                        </div>
+                          </div>
                        
                         <div className="tour-reviews-overall">
                            <div className="tour-reviews-content">
@@ -884,7 +867,7 @@ function Themedefault() {
                         <div className="tour-amount">
                            <div className={visible === 0 ? 'block w-32' : 'hidden'}><SubHeading /></div>
                            <div className={visible === 1 ? 'block text-white' : 'hidden'}>
-                              <span className="tour-amount-old">$119</span>
+                          <span className="tour-amount-new">$119</span>
                               {rate?.base_rate_amount} {rate?.base_rate_currency.toUpperCase()}
                               <span>/night</span>
                            </div>
@@ -898,17 +881,16 @@ function Themedefault() {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <button  onClick={() => setCalendarIn(!calendarIn)} >
                                  <span className="material-icons-outlined">
                                     calendar_month
-                                 </span></button>
+                                 </span>
                               </div>
                               <div className="tour-receipt-select-content text-white">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white'>{checkInDate}</span>
+                          <span className='text-white' onClick={() => setCalendarIn(!calendarIn)}>{checkInDate}</span>
                         </div>:
-                                 <input defaultValue={checkInDate}
+                                 <input defaultValue={checkInDate} 
                                  className="my-1 shadow-sm bg-gray-900 border border-white text-gray-50 
                                  text-sm rounded-md block w-100 px-1 py-1" type="date" />}
                             <div className="tour-receipt-select-text">
@@ -916,19 +898,18 @@ function Themedefault() {
                                  </div>
                           </div></div>
                          <div className="tour-receipt-select-item">
-                             <div className="tour-receipt-select-icon">
-                                 <button  onClick={() => setCalendarOut(!calendarOut)} >
+                             <div className="tour-receipt-select-icon">    
                                  <span className="material-icons-outlined">
                                     calendar_month
-                                 </span></button>
+                                 </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
                               <div className="tour-receipt-select-title">
-                           <span className='text-white'>{checkOutDate}</span>
+                           <span className='text-white' onClick={() => setCalendarOut(!calendarOut)}>{checkOutDate}</span>
                         </div>:
                                  <input
-                                    type="date" value={checkOutDate}
+                                    type="date" 
                                     className="my-1 shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-100 px-1 py-1" />
                               }
                                  <div className="tour-receipt-select-text">
@@ -941,66 +922,46 @@ function Themedefault() {
                        
                         <div className="tour-receipt-select-bottom">
                         <div className="tour-receipt-select-top">
-                           <div className="tour-receipt-select-item">
+                        <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <button  onClick={() => setCalendarIn(!calendarIn)} >
                                  <span className="material-icons-outlined">
-                                    calendar_month
-                                 </span></button>
-                              </div>
-                              <div className="tour-receipt-select-content text-white">
-                                 {calendarIn === false ?
-                              <div className="tour-receipt-select-title">
-                          <span className='text-white'>{checkInDate}</span>
-                        </div>:
-                                 <input defaultValue={checkInDate}
-                                 className="my-1 shadow-sm bg-gray-900 border border-white text-gray-50 
-                                 text-sm rounded-md block w-100 px-1 py-1" type="date" />}
-                            <div className="tour-receipt-select-text">
-                             {language?.checkin}
-                                 </div>
-                          </div></div>
-                         <div className="tour-receipt-select-item">
-                             <div className="tour-receipt-select-icon">
-                                 <button  onClick={() => setCalendarOut(!calendarOut)} >
-                                 <span className="material-icons-outlined">
-                                  a
-                                 </span></button>
-                              </div>
-                              <div className="tour-receipt-select-content">
-                              {calendarOut === false ?
-                              <div className="tour-receipt-select-title">
-                           <span className='text-white'>{checkOutDate}</span>
-                        </div>:
-                                 <input
-                                    type="date" value={checkOutDate}
-                                    className="my-1 shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-100 px-1 py-1" />
-                              }
-                                 <div className="tour-receipt-select-text">
-                                 {language?.checkout}
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                           <div className="tour-receipt-select-item">
-                              <div className="tour-receipt-select-icon">
-                               <button onClick={() => setGuests(!guests)}>  <span className="material-icons-outlined">
                                     person_outline
-                                 </span></button>
+                                 </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {guests === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white'>4 Guests</span>
+                          <span onClick={() => setGuests(!guests)} className='text-white'>4 Guests</span>
                         </div>:
                                  <input
-                                    type="number" min={1}
-                                    className=" shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-32 px-0.5 py-1" />
+                                    type="number" min={1} 
+                                    className=" shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-28 px-0.5 py-1" />
                                     }
                                  <div className="tour-receipt-select-text">
                                     {language?.guests}</div>
                               </div>
                            </div>
+                           <div className="tour-receipt-select-item">
+                              <div className="tour-receipt-select-icon">
+                              <span className="material-icons-outlined">
+                                    person_outline
+                                 </span>
+                              </div>
+                              <div className="tour-receipt-select-content">
+                              {children === false ?
+                              <div className="tour-receipt-select-title">
+                          <span onClick={() => setChildren(!children)} className='text-white'>4 {language?.children}</span>
+                        </div>:
+                                 <input
+                                    type="number" min={1} 
+                                    className=" shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-28 px-0.5 py-1" />
+                                    }
+                                 <div className="tour-receipt-select-text">
+                                 {language?.children}</div>
+                              </div>
+                           </div>
+                        </div>
+                           
                         </div>
                        
                        

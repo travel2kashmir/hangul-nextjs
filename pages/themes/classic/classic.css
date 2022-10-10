@@ -1707,13 +1707,34 @@ span.tour-amount-old{
   opacity: 0.3;
 }
 
+
+
 @media (min-width: 992px){
   span.tour-amount-old{
     font-size: 1.875rem;
     line-height: 2.25rem;
   }
 }
+span.tour-amount-new{
+  margin-right: 0.25rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 500;
+  --tw-text-opacity: 0;
+  color: rgb(#F9FAFB / var(--tw-text-opacity));
+  -webkit-text-decoration-line: line-through;
+          text-decoration-line: line-through;
+  opacity: 0.3;
+}
 
+
+
+@media (min-width: 992px){
+  span.tour-amount-new{
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+}
 .tour-discount{
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;

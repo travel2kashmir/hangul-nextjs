@@ -12,6 +12,7 @@ export default {
   accomodation:"Accomodation",
   poweredby:"Powered By",
   star:"Star",
+  children:"Children",
   booknow:"Book Now",
   needhelpbooking:"Need Help Booking?",
   bookingtitle:"Call our customer services team on the number below to speak to one of our advisors who will help you with all of your holiday needs.",

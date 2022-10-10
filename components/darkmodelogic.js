@@ -6,7 +6,8 @@ if((switcher===false) || (switcher==="") ||  (switcher===undefined)){
     color.greybackground="bg-gray-50",
     color.whitebackground="bg-white",
     color.hover='hover:bg-gray-100',
-    color.error='text-red-500'
+    color.error='text-red-500',
+    color.textgray='text-gray-600'
 }
 if(switcher === true)
 {
@@ -14,7 +15,8 @@ if(switcher === true)
     color.greybackground= "bg-gray-900",
     color.whitebackground="bg-gray-800",
     color.hover='hover:bg-gray-900',
-    color.error='text-red-500'
+    color.error='text-red-500',
+    color.textgray='text-gray-400'
 }
 localStorage.setItem("Color",JSON.stringify(color))
 if((switcher===false) || (switcher==="") ||  (switcher===undefined)){

@@ -91,18 +91,17 @@ const changeTheme = (props) => {
  
   return (
     <div>
-
-      <Header Primary={english?.Side} />
-      <Sidebar Primary={english?.Side} />
+      <Header color={color} Primary={english?.Side} />
+      <Sidebar color={color} Primary={english?.Side} />
       {/* Body */}
       <div id="main-content"
-         className={`${color.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }
+         className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }
  >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
             <li className="inline-flex items-center">
-              <div className={`${color.text} text-base font-medium hover:text-gray-900 inline-flex items-center`}>
+              <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                 <svg
                   className="w-5 h-5 mr-2.5"
                   fill="currentColor"
@@ -111,7 +110,7 @@ const changeTheme = (props) => {
                 >
                   <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
-                <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className={`${color.text} text-base font-medium hover:text-gray-900 inline-flex items-center`}><a>{language?.home}</a>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
                 </Link>
               </div>
             </li>
@@ -129,7 +128,7 @@ const changeTheme = (props) => {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <span className={`${color.textgray} text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2`}>
+                <span className={`${color?.textgray} text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2`}>
                   {allHotelDetails?.property_name} 
                 </span>
               </div>
@@ -141,13 +140,12 @@ const changeTheme = (props) => {
 
         <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-1 xl:grid-cols-3 gap-3">
           {/* Basic Details */}
-          <div className={`${color.whitebackground} shadow rounded-lg p-4  sm:p-6 xl:p-8`} >
+          <div className={`${color?.whitebackground} shadow rounded-lg p-4  sm:p-6 xl:p-8`} >
           <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
-                <h3 className={ `${color.text} text-base font-bold  mb-4`}>
+                <h3 className={ `${color?.text} text-base font-bold  mb-4`}>
                 {allHotelDetails?.property_name}
                 </h3>
-                
               </div>
               <div className="flex items-center justify-end flex-1">
                 <span className="text-sm font-sans underline decoration-cyan-600
@@ -158,7 +156,7 @@ const changeTheme = (props) => {
               </div>
             </div>
             <div className="flex items-center justify-between ">
-            <span className={`${color.text} text-sm leading-none font-semibold `}>
+            <span className={`${color?.text} text-sm leading-none font-semibold `}>
               {allHotelDetails?.description_title}
             </span>
             <div className="flex-shrink-0">
@@ -186,16 +184,16 @@ const changeTheme = (props) => {
                       )}
                     </div>
                   </div></div>
-            <p className={`${color.textgray} text-sm my-2 line-clamp-10`}>
+            <p className={`${color?.textgray} text-sm my-2 line-clamp-10`}>
               {allHotelDetails?.description_body}
             </p>
           </div>
 
           {/* Address */}
-          <div className={`${color.whitebackground} shadow rounded-lg p-4  sm:p-6 xl:p-8`}>
+          <div className={`${color?.whitebackground} shadow rounded-lg p-4  sm:p-6 xl:p-8`}>
             <div className="flex items-center justify-between">
               <div className="flex-shrink-0">
-              <h3 className={`${color.text} text-base font-bold  mb-4`}>
+              <h3 className={`${color?.text} text-base font-bold  mb-4`}>
                   {language?.address}
                 </h3>
               </div>
@@ -220,81 +218,81 @@ const changeTheme = (props) => {
                         <>
                         <tr key={idx}>
                           <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
                             {language?.address}
                             </td>
                           </td>
-                          <td className= {`${color.textgray} p-1 whitespace-wrap text-sm my-2`} >
+                          <td className= {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`} >
                           {item.address_street_address}{" "}
                           </td>
                         </tr> 
                         <tr key={idx}>
                           <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
                             {language?.landmark}
                             </td>
                           </td>
-                          <td className= {`${color.textgray} p-1 whitespace-wrap text-sm my-2`}>
+                          <td className= {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`}>
                           {item.address_landmark}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
                           <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold `}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold `}>
                             {language?.postalcode}
                             </td>
                           </td>
-                          <td className=  {`${color.textgray} p-1 whitespace-wrap text-sm my-2`} >
+                          <td className=  {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`} >
                           {item.address_zipcode}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
                           <td className="flex p-1 items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
                             {language?.province}
                             </td>
                           </td>
-                          <td className=  {`${color.textgray} p-1 whitespace-wrap text-sm my-2`} >
+                          <td className=  {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`} >
                           {item.address_city}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
                           <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
                             {language?.countrycode}
                             </td>
                           </td>
-                          <td className=  {`${color.textgray} p-1 whitespace-wrap text-sm my-2`}>
+                          <td className=  {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`}>
                           {item.address_country}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
                           <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
                             {language?.latitude}
                             </td>
                           </td>
-                          <td className=  {`${color.textgray} p-1 whitespace-wrap text-sm my-2`} >
+                          <td className=  {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`} >
                           {item.address_latitude}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
                           <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold `}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold `}>
                             {language?.longitude}
                             </td>
                           </td>
-                          <td className=  {`${color.textgray} p-1 whitespace-wrap text-sm my-2`}>
+                          <td className=  {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`}>
                           {item.address_longitude}{" "}
                           </td>
                         </tr>
                         <tr key={idx}>
                           <td className="p-1 flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold `}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold `}>
                             {language?.precision}
                             </td>
                           </td>
-                          <td className= {`${color.textgray} p-1 whitespace-wrap text-sm my-2`}>
+                          <td className= {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`}>
                           {item.address_precision}{" "}
                           </td>
                         </tr>
@@ -308,10 +306,10 @@ const changeTheme = (props) => {
           </div>
 
           {/*Contact */}
-          <div className={`${color.whitebackground} shadow rounded-lg  p-4 sm:p-6 xl:py-8 xl:px-4`}>
+          <div className={`${color?.whitebackground} shadow rounded-lg  p-4 sm:p-6 xl:py-8 xl:px-4`}>
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
-                <h3 className={`${color.text} text-base font-bold  mb-4`}>
+                <h3 className={`${color?.text} text-base font-bold  mb-4`}>
                   {language?.contact}
                 </h3>
               </div>
@@ -334,11 +332,11 @@ const changeTheme = (props) => {
                       return (
                         <tr key={idx}>
                           <td className=" flex items-center whitespace-nowrap space-x-6 mr-6 lg:mr-0">
-                            <td className={`${color.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
+                            <td className={`${color?.text} p-2 whitespace-wrap text-sm leading-none font-semibold`}>
                               {item?.contact_type}{" "}
                             </td>
                           </td>
-                          <td className={`${color.textgray} p-2 whitespace-wrap text-sm my-2`}>
+                          <td className={`${color?.textgray} p-2 whitespace-wrap text-sm my-2`}>
                             {item?.contact_data}{" "}
                           </td>
                         </tr>
@@ -352,10 +350,10 @@ const changeTheme = (props) => {
         </div>
     {/* Gallery */}
     <div className="mt-2 grid  grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
-          <div className= {`${color.whitebackground} shadow rounded-lg p-4 xl:p-8`}>
+          <div className= {`${color?.whitebackground} shadow rounded-lg p-4 xl:p-8`}>
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
-                <h3 className={`${color.text} text-base font-bold  mb-4`}>
+                <h3 className={`${color?.text} text-base font-bold  mb-4`}>
                   {language?.gallery}
                 </h3>
               </div>
@@ -392,12 +390,12 @@ const changeTheme = (props) => {
 
 
 
-          <div className="mt-4 grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 pb-4 sm:grid-cols-1 gap-3">
+          <div className=" grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1  sm:grid-cols-1 gap-3">
           {/* Services */}
-          <div className={`${color.whitebackground} shadow rounded-lg  p-4 sm:p-6 xl:p-8`}>
+          <div className={`${color?.whitebackground} shadow rounded-lg  p-4 sm:p-6 xl:p-8`}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex-shrink-0">
-                <h3 className={`${color.text} text-base font-bold mb-4`}>
+                <h3 className={`${color?.text} text-base font-bold mb-4`}>
                   {language?.services}
                 </h3>
               </div>
@@ -483,10 +481,10 @@ const changeTheme = (props) => {
         
             
           {/* Reviews */}
-          <div className={ `${color.whitebackground} col-span-2  shadow rounded-lg p-4 sm:p-6 xl:p-8`}>
+          <div className={ `${color?.whitebackground} col-span-2  shadow rounded-lg p-4 sm:p-6 xl:p-8`}>
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
-                <h3 className={`${color.text} text-base font-bold  mb-4`}>
+                <h3 className={`${color?.text} text-base font-bold  mb-4`}>
                   {language?.reviews}
                 </h3>
               </div>
@@ -503,7 +501,7 @@ const changeTheme = (props) => {
             {allHotelDetails?.Reviews?.map((item, idx) => (
               <div key={idx}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className={`${color.text} text-sm leading-none font-semibold`}>
+                  <span className={`${color?.text} text-sm leading-none font-semibold`}>
                     {item?.review_author}
                   </span>
 
@@ -533,7 +531,7 @@ const changeTheme = (props) => {
                     </div>
                   </div>
                 </div>
-                <p className= {`${color.textgray} text-sm my-2  line-clamp-2`}>
+                <p className= {`${color?.textgray} text-sm my-2  line-clamp-2`}>
                   {" "}
                   {item?.review_content}{" "}
                 </p>
@@ -556,7 +554,7 @@ const changeTheme = (props) => {
         draggable
         pauseOnHover />
 </div>
-      <Footer />
+      <Footer color={color}/>
     </div>
 
   );

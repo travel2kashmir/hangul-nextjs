@@ -38,7 +38,7 @@ const Sidebar = (args) => {
       >
         <div className={`${args?.color?.whitebackground} relative flex-1 flex flex-col min-h-0 border-r border-gray-200  pt-0`}>
           <div className="flex-1 flex flex-col  pb-4 overflow-y-auto">
-            <div className={`${args?.color?.greybackground} flex-1 py-4 px-3 divide-y space-y-1`}>
+            <div className={`${args?.color?.whitebackground} flex-1 py-4 px-3 divide-y space-y-1`}>
               <ul className="space-y-2 pb-2">
                 <li>
                   <form action="#" method="GET" className="lg:hidden">

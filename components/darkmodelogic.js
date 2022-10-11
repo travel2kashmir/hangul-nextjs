@@ -7,7 +7,10 @@ if((switcher===false) || (switcher==="") ||  (switcher===undefined)){
     color.whitebackground="bg-white",
     color.hover='hover:bg-gray-100',
     color.error='text-red-500',
-    color.textgray='text-gray-600'
+    color.textgray='text-gray-600',
+    color.sidebar="hover:bg-gray-100",
+    color.iconhover="group-hover:text-gray-900",
+    color.footerhover="hover:text-gray-900"
 }
 if(switcher === true)
 {
@@ -16,7 +19,10 @@ if(switcher === true)
     color.whitebackground="bg-gray-800",
     color.hover='hover:bg-gray-900',
     color.error='text-red-500',
-    color.textgray='text-gray-400'
+    color.textgray='text-gray-400',
+    color.sidebar="hover:bg-gray-700",
+    color.iconhover="group-hover:text-white",
+    color.footerhover="hover:text-white"
 }
 localStorage.setItem("Color",JSON.stringify(color))
 if((switcher===false) || (switcher==="") ||  (switcher===undefined)){

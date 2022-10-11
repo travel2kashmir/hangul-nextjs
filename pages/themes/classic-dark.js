@@ -36,7 +36,8 @@ function Themedefault() {
    const [guests, setGuests] = useState(false);
    const [visible, setVisible] = useState(0);
    const [email, setEmail] = useState({});
-   const [rooms, setRooms] = useState({});
+   const [allRooms, setAllRooms] = useState({});
+   const [allPackages, setAllPackages] = useState({});
    const [rate, setRate] = useState(defaultRate);
    const [calendarIn, setCalendarIn] = useState(false);
    const [calendarOut, setCalendarOut] = useState(false);
@@ -81,30 +82,54 @@ function Themedefault() {
    }, [])
 
    /* Function call to fetch Current Property Details when page loads */
-   useEffect(() => {
-      const fetchHotelDetails = async () => {
-         const url = `/api/${currentProperty.address_province.replace(
-            /\s+/g,
-            "-"
-         )}/${currentProperty.address_city}/${currentProperty.property_category
-            }s/${currentProperty.property_id}`;
-         axios.get(url)
-            .then((response) => {
-               setAllHotelDetails(response.data);
-               setRooms(response.data.rooms)
-               response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
-               response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
-               console.log(response.data.contacts)
-               setVisible(1)
-               Router.push('./classic-dark')
-               logger.info("url  to fetch property details hitted successfully")
+  /* Function call to fetch Current Property Details when page loads */
+  useEffect(() => {
+   fetchHotelDetails();
+   fetchRoomDetails();
+   fetchPackageDetails();
+}, []);
 
-            })
-            .catch((error) => { logger.error("url to fetch property details, failed") });
-      }
-      fetchHotelDetails();
 
-   }, []);
+const fetchHotelDetails = async () => {
+   const url = `/api/${currentProperty.address_province.replace(
+      /\s+/g,
+      "-"
+   )}/${currentProperty.address_city}/${currentProperty.property_category
+      }s/${currentProperty.property_id}`;
+   axios.get(url)
+      .then((response) => {
+         setAllHotelDetails(response.data);
+         response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
+         response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
+         console.log(response.data.contacts)
+         setVisible(1)
+         Router.push('./classic-dark')
+         logger.info("url  to fetch property details hitted successfully")
+
+      })
+      .catch((error) => { logger.error("url to fetch property details, failed") });
+}
+
+const fetchRoomDetails = async () => {
+   const url = `/api/all_rooms_details/${currentProperty.property_id}`;
+   axios.get(url)
+      .then((response) => {
+         setAllRooms(response.data);
+         logger.info("url  to fetch room details hitted successfully")
+        })
+      .catch((error) => { logger.error("url to fetch property details, failed") });
+}
+
+const fetchPackageDetails = async () => {
+   const url = `/api/all_packages_details/${currentProperty.property_id}`;
+   axios.get(url)
+      .then((response) => {
+         console.log(response.data)
+         setAllPackages(response.data);
+         logger.info("url  to fetch package details hitted successfully")
+        })
+      .catch((error) => { logger.error("url to fetch package details, failed") });
+}
 
    const changeLanguage = ((props) => {
    if(props === "en"){
@@ -337,10 +362,10 @@ function Themedefault() {
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                       <p className='text-white'>{language?.roomstochoose} ({rooms.length})</p></div>
+                                       <p className='text-white'>{language?.roomstochoose} ({allRooms?.rooms?.length})</p></div>
                                     </div></button></div>
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
-                                 {allHotelDetails?.rooms?.map((resource, idx) => {
+                                 {allRooms?.rooms?.map((resource, idx) => {
                                     return (
                                        <div className='group' key={idx}>
                                            <div  onClick={() => {
@@ -451,7 +476,7 @@ function Themedefault() {
                                     </div>
                                  </button></div>
                               <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
-                                 {allHotelDetails?.packages?.map((resource, idx) => {
+                                 {allPackages?.packages?.map((resource, idx) => {
                                     return (
                                        <div className='group'key={idx}>
                                            <div onClick={() => {

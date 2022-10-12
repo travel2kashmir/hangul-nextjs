@@ -238,7 +238,7 @@ function Theme() {
        
         <div className="flex px-4" >
           <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
-            {language?.propertysummary} 
+           Themes 
           </h6>
           <div className="flex items-center justify-end space-x-1  sm:space-x-2 ml-auto">
             <div>

@@ -30,7 +30,7 @@ var defaultRate = {
    base_rate_currency: 'USD'
 }
 
-function Themedefault() {
+function Classic(args) {
    const [phone, setPhone] = useState({});
    const [language, setLanguage] = useState(0);
    const [calendarIn, setCalendarIn] = useState(false);
@@ -62,16 +62,7 @@ function Themedefault() {
    useEffect(() => {
       const firstfun = () => {
          if (typeof window !== 'undefined') {
-            var locale = localStorage.getItem("Language");
-            if (locale === "ar") {
-              setLanguage(arabic);
-            }
-            if (locale === "en") {
-               setLanguage(english);
-            }
-            if (locale === "fr") {
-               setLanguage(french);
-            }
+           setLanguage(args?.language)
             currentUser = JSON.parse(localStorage.getItem("Signin Details"));
             /** Current Property Details fetched from the local storage **/
             currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -79,57 +70,19 @@ function Themedefault() {
          }
       }
       firstfun();
-      router.push("./classic");
    }, [])
 
    /* Function call to fetch Current Property Details when page loads */
    useEffect(() => {
       fetchHotelDetails();
-      fetchRoomDetails();
-      fetchPackageDetails();
    }, []);
    
 
    const fetchHotelDetails = async () => {
-      const url = `/api/${currentProperty.address_province.replace(
-         /\s+/g,
-         "-"
-      )}/${currentProperty.address_city}/${currentProperty.property_category
-         }s/${currentProperty.property_id}`;
-      axios.get(url)
-         .then((response) => {
-            setAllHotelDetails(response.data);
-            response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
-            response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
-            console.log(response.data.contacts)
+            setAllHotelDetails(args?.allHotelDetails);
             setVisible(1)
-            Router.push('./classic')
-            logger.info("url  to fetch property details hitted successfully")
-
-         })
-         .catch((error) => { logger.error("url to fetch property details, failed") });
    }
   
-   const fetchRoomDetails = async () => {
-      const url = `/api/all_rooms_details/${currentProperty.property_id}`;
-      axios.get(url)
-         .then((response) => {
-            setAllRooms(response.data);
-            logger.info("url  to fetch room details hitted successfully")
-           })
-         .catch((error) => { logger.error("url to fetch property details, failed") });
-   }
-
-   const fetchPackageDetails = async () => {
-      const url = `/api/all_packages_details/${currentProperty.property_id}`;
-      axios.get(url)
-         .then((response) => {
-            console.log(response.data)
-            setAllPackages(response.data);
-            logger.info("url  to fetch package details hitted successfully")
-           })
-         .catch((error) => { logger.error("url to fetch package details, failed") });
-   }
 
    const changeLanguage = ((props) => {
    if(props === "en"){
@@ -149,7 +102,8 @@ function Themedefault() {
             <div className="container">
                <div className="header-logo">
                   <span className="material-icons-outlined header-logo-icon">
-                     mode_of_travel</span> <span className='text-sky-600'>{allHotelDetails?.property_name}</span>
+                     mode_of_travel</span> <span className='text-sky-600'>{args?.allHotelDetails?.property_name}
+                    </span>
                </div>
 
                <div className="menu-toggle">
@@ -278,19 +232,19 @@ function Themedefault() {
                   <div className="tour-title">
                      <div className={visible === 0 ? 'block w-32 mb-2' : 'hidden'}><Headloader /></div>
                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                        {allHotelDetails?.description_title}</div>
+                        {args?.allHotelDetails?.description_title}</div>
                   </div>
                   <div className={visible === 0 ? 'block w-64' : 'hidden'}><SubHeading /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>
                      <div className="tour-overview">
                         <div className="tour-overview-item">
 
-                           {allHotelDetails?.property_category} {language?.in} <span>{allHotelDetails?.address?.[i]?.address_city}</span>
+                           {args?.allHotelDetails?.property_category} {language?.in} <span>{args?.allHotelDetails?.address?.[i]?.address_city}</span>
                         </div>
-                        <div className="tour-overview-item"><span>{allHotelDetails?.star_rating} {language?.star}</span> {language?.accomodation}</div>
+                        <div className="tour-overview-item"><span>{args?.allHotelDetails?.star_rating} {language?.star}</span> {language?.accomodation}</div>
                         <div className="tour-overview-item">
                            <span className="material-icons-outlined">star</span>
-                           <span>4.7</span> ({allHotelDetails?.Reviews?.length})
+                           <span>4.7</span> ({args?.allHotelDetails?.Reviews?.length})
                         </div>
                      </div></div>
                </div>
@@ -311,7 +265,7 @@ function Themedefault() {
                            }}
                            modules={[Autoplay]}
                            className="mySwiper">
-                           {allHotelDetails?.images?.map((resource, index) => {
+                           {args?.allHotelDetails?.images?.map((resource, index) => {
                               return (<SwiperSlide key={index}>
                                  <img
                                     className="object-fill w-full h-96"
@@ -328,7 +282,7 @@ function Themedefault() {
 
                      <div className="tour-content-block">
                         <div className="tour-description">
-                           {allHotelDetails?.description_body}
+                           {args?.allHotelDetails?.description_body}
                         </div>
                      </div></div>
 
@@ -339,7 +293,7 @@ function Themedefault() {
                         <div className={visible === 0 ? 'block  mb-2' : 'hidden'}><GallerySlider /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                            <Carousel cols={2} rows={1} gap={10} loop>
-                              {allHotelDetails?.images?.map((resource, index) => {
+                              {args?.allHotelDetails?.images?.map((resource, index) => {
                                  return (
                                     <Carousel.Item key={index} >
                                        <img width="100%" style={{ height: "270px" }} src={resource?.image_link} /></Carousel.Item>
@@ -362,11 +316,11 @@ function Themedefault() {
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                          {language?.roomstochoose} ({allRooms?.rooms?.length})
+                                          {language?.roomstochoose} ({args?.allRooms?.rooms?.length})
                                         </div>
                                     </div></button></div>
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
-                                 {allRooms?.rooms?.map((resource, idx) => {
+                                 {args?.allRooms?.rooms?.map((resource, idx) => {
                                     return (
                                        <div  className='group'   key={idx}>
                                           <div  onClick={() => {
@@ -454,7 +408,7 @@ function Themedefault() {
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
                                  <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
-                                    {allHotelDetails?.services?.map((item, idx) => {
+                                    {args?.allHotelDetails?.services?.map((item, idx) => {
                                        return (
                                           <span className='text-gray-700 capitalize' key={idx}>
                                              <span>&#10004;
@@ -476,7 +430,7 @@ function Themedefault() {
                                     </div>
                                  </button></div>
                               <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
-                                 {allPackages?.packages?.map((resource, idx) => {
+                                 {args?.allPackages?.packages?.map((resource, idx) => {
                                     return (
                                        <div className='group'  key={idx}>
                                           <div onClick={() => {
@@ -805,10 +759,9 @@ function Themedefault() {
                   <div className="tour-content-block">
                      <div className="tour-content-title">{language?.customer} {language?.reviews}</div>
                      <div className="tour-reviews">
-                    
-                        <div className="tour-reviews-feedback">
+                     <div className="tour-reviews-feedback">
                         <Marquee duration={10000}  height="370px" axis="Y" reverse={true}>
-                           {allHotelDetails?.Reviews?.map((item, idx) => {
+                           {args?.allHotelDetails?.Reviews?.map((item, idx) => {
                               return (
                                 
                                  <div className="tour-reviews-feedback-item" key={idx}>
@@ -865,7 +818,7 @@ function Themedefault() {
                               <div className="tour-help-call-text">
                                  <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                                  <div className={visible === 1 ? 'block' : 'hidden'}>
-                                    {phone?.contact_data}</div>
+                                    {args?.phone?.contact_data}</div>
                               </div>
                            </div>
                         </div>
@@ -1037,17 +990,17 @@ function Themedefault() {
                      <span className='text-sky-600 text-xl'>
                         <div className={visible === 0 ? 'block w-32 ml-1 mb-2' : 'hidden'}><Headloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           {allHotelDetails?.property_name}</div></span>
+                           {args?.allHotelDetails?.property_name}</div></span>
                   </div>
                   <div className='flex -mt-1 flex-col'>
                      <span className='lg:px-20 px-16 text-sm text-white'>
                         <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           {allHotelDetails?.address?.[i]?.address_street_address}, {allHotelDetails?.address?.[i]?.address_city}
+                           {args?.allHotelDetails?.address?.[i]?.address_street_address}, {args?.allHotelDetails?.address?.[i]?.address_city}
                         </div> </span>
                      <span className='lg:px-20 px-16 text-sm text-white'>
                         <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}> {allHotelDetails?.address?.[i]?.address_province}, {allHotelDetails?.address?.[i]?.address_zipcode}
+                        <div className={visible === 1 ? 'block' : 'hidden'}> {args?.allHotelDetails?.address?.[i]?.address_province}, {args?.allHotelDetails?.address?.[i]?.address_zipcode}
                         </div>
                      </span>
                      <span className='lg:px-20 px-16 text-sm text-white uppercase'>
@@ -1083,17 +1036,17 @@ function Themedefault() {
                            <a href={`tel:${phone?.contact_data}`} className=" text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
-                                 {phone.contact_data}
+                                 {args?.phone?.contact_data}
                               </div></a>
                         </li>
-                        <li className="flex hover:text-gray-400">
+                        <li className="flex  hover:text-gray-400">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mt-1 mr-0.5 w-4 h-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                            </svg>
                            <a href={`mailto:${email?.contact_data}`}className="text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
-                                 {email?.contact_data} </div></a>
+                                 {args?.email?.contact_data} </div></a>
                         </li>
                      </ul>
                   </div>
@@ -1143,8 +1096,8 @@ function Themedefault() {
       </div>
    );
 }
-export default Themedefault
-Themedefault.getLayout = function PageLayout(page) {
+export default Classic
+Classic.getLayout = function PageLayout(page) {
    return (
       <>
          {page}

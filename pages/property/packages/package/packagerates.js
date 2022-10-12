@@ -311,7 +311,7 @@ const fetchDetails = async  () => {
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
+                    className="text-sm font-medium capitalize text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
                     {language?.days}

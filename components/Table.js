@@ -428,7 +428,8 @@ const Table = (args) => {
                         </div>
                     </div></div></div>
             {/* Pagination */}
-            <div className="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
+       {/* Pagination */}
+       <div className="bg-white sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4">
                 <div className="flex items-center mb-4 sm:mb-0">
                     <button onClick={() => {
                         if (page > 1) {
@@ -453,12 +454,13 @@ const Table = (args) => {
                         <span className="text-gray-900 font-semibold ml-1">{page}</span> {args?.common?.Of} <span className="text-gray-900 font-semibold">{Math.ceil(args?.gen?.length / itemsPerPage)}</span></span>
                        
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center w-42 space-x-3">
+                <span className="text-sm font-normal text-gray-500">Entries per page</span>
                 <select
                          onChange={(e) =>
                             ItemShow(e)
                           }
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block mr-2 w-full px-3 py-2">
+                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block mr-2 w-12 px-1 py-1">
                          <option selected disabled>{itemsPerPage}</option>
                         <option value="5">5</option>
                         <option value="10">10</option>

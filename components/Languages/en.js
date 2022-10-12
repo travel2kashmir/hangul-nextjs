@@ -1,4 +1,7 @@
 export default {
+  startdate:"Start Date",
+  enddate:"End Date",
+  days:"Days",
   title: "sign in",
   // classic theme
    about:"About",

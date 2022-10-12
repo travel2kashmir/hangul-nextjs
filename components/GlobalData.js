@@ -792,5 +792,16 @@ export default {
    {user_device:'tablet'},
     {user_device:'mobile'},
     {user_device:'laptop'} 
-   ]
+   ],
+   "DaysData":
+   [
+      {day:'sun'},
+      {day:'mon'},
+      {day:'tue'},
+      {day:'weds'},
+      {day:'thur'},
+      {day:'fri'},
+      {day:'sat'}
+       
+      ],
 };

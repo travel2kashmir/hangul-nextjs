@@ -1,4 +1,7 @@
 export default {
+  startdate:"تاريخ البدء",
+  enddate:"نهاية تاريخ",
+  days:"أيام",
   about:"حول",
    amenities:"وسائل الراحة",
    contactus:"اتصل بنا",

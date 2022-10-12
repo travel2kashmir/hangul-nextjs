@@ -11,7 +11,6 @@ import objChecker from "lodash"
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
-import Footer from '../../components/Footer';
 var language;
 var currentProperty;
 var propertyName;

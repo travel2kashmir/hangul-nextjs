@@ -1,5 +1,8 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  startdate:"Date de Début",
+  enddate:"Fin Date",
+  days:"Journées",
   about:"Sur",
    amenities:"Agréments",
    contactus:"Contactez-nous",

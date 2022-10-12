@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
+import lang from '../../../components/GlobalData'
+import Multiselect from 'multiselect-react-dropdown';
 import Button from '../../../components/Button';
 import Sidebar from '../../../components/Sidebar'
 import Header from '../../../components/Header'
@@ -536,7 +538,7 @@ function Addpackage() {
      {/* Package Details Form */}
      <div id='0' className={disp===0?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-     <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">{language?.packagedescription}</div>
@@ -792,10 +794,10 @@ function Addpackage() {
       </div>
 
     
-     {/*   {language?.package} {language?.rooms} {language?.and} {language?.rates} Form */}
+     {/* package rooms and rates Form */}
      <div id='2' className={disp===2?'block':'hidden'}>
      <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-     <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+     <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
@@ -832,8 +834,7 @@ function Addpackage() {
          </h6>
          {allRooms?.map((item, index) => {
                 return (
-        
-        <div className="flex flex-row ml-6 items-start" key={index}>
+                    <div className="flex flex-row ml-6 items-start" key={index}>
                 <div className="flex items-center h-5">
                   <input
                    onClick={() => {
@@ -866,6 +867,61 @@ function Addpackage() {
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
             <div className="flex flex-wrap">
+            <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.startdate}
+                  </label>
+                  <input
+                    type="date"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllPackageDetails({ ...allPackageDetails, startdate: e.target.value })
+                      )
+                    } />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.enddate}
+                  </label>
+                  <input
+                    type="date"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllPackageDetails({ ...allPackageDetails, enddate: e.target.value })
+                      )
+                    } />
+                </div>
+              </div>
+            
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.days}
+                  </label>
+                  <Multiselect
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={lang?.DaysData}
+                      onRemove={(event) => { days(event) }}
+                      onSelect={(event) => { days(event) }}
+                     displayValue="day"
+                      />
+                </div>
+              </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
@@ -1009,7 +1065,7 @@ function Addpackage() {
       {/* Package Miles */}
       <div id='3' className={disp===3?'block':'hidden'}>
       <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-      <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+      <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
@@ -1123,7 +1179,7 @@ function Addpackage() {
       {/* Elite Membership */}
       <div id='4' className={disp===4?'block':'hidden'}>
       <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-      <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+      <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
@@ -1248,7 +1304,7 @@ function Addpackage() {
        {/* Property Credit */}
        <div id='5' className={disp===5?'block':'hidden'}>
        <div className="bg-white shadow rounded-lg mt-10 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-       <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
        <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.packagedescription}</div>
@@ -1326,6 +1382,7 @@ function Addpackage() {
                     } />
                 </div>
               </div>
+              
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                <Button Primary={language?.Skip} onClick={() => { setDisp(6); }} />
                     <Button Primary={language?.Next}   onClick={() => {submitPackagePropertyCredit(); }} />
@@ -1339,7 +1396,7 @@ function Addpackage() {
        {/* Package Services */}
        <div id='6' className={disp===6?'block':'hidden'}>
        <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-       <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
@@ -1451,7 +1508,7 @@ function Addpackage() {
           {/* Additional Package Services */}
        <div id='7' className={disp===7?'block':'hidden'}>
          <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-         <div className="relative before:hidden  before:lg:block before:absolute before:w-[74%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+         <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
      <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>

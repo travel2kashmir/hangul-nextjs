@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import  Link  from 'next/link';
 import axios from "axios";
+import Multiselect from 'multiselect-react-dropdown';
+import lang from '../../../../components/GlobalData'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import english from "../../../../components/Languages/en"
@@ -269,6 +271,61 @@ const fetchDetails = async  () => {
         <div className="pt-6">
           <div className=" md:px-4 mx-auto w-full">
             <div className="flex flex-wrap">
+            <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.startdate}
+                  </label>
+                  <input
+                    type="date"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllPackageRateDetails({ ...allPackageRateDetails, startdate: e.target.value })
+                      )
+                    } />
+                </div>
+              </div>
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.enddate}
+                  </label>
+                  <input
+                    type="date"
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                   onChange={
+                      (e) => (
+                        setAllPackageRateDetails({ ...allPackageRateDetails, enddate: e.target.value })
+                      )
+                    } />
+                </div>
+              </div>
+            
+              <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.days}
+                  </label>
+                  <Multiselect
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={lang?.DaysData}
+                      onRemove={(event) => { days(event) }}
+                      onSelect={(event) => { days(event) }}
+                     displayValue="day"
+                      />
+                </div>
+              </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label

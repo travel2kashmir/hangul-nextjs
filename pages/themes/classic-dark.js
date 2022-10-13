@@ -838,7 +838,7 @@ function ClassicDark(args) {
 
                </div>
                {/* content  */}
-               <div className="tour-sidebar-dark bg-gray-900 border-0 border-lg">
+               <div className="tour-sidebar-dark bg-gray-900 border-0  border-lg">
                   <div className="tour-receipt-dark">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
@@ -939,9 +939,7 @@ function ClassicDark(args) {
                         </div>
                            
                         </div>
-                       
-                       
-                     </div>
+                   </div>
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
@@ -986,7 +984,7 @@ function ClassicDark(args) {
                      </div>
                   </div>
                </div>
-
+              
             </div>
          </div>
          </div>

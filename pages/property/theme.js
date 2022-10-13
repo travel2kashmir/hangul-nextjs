@@ -52,6 +52,7 @@ function Theme() {
         if (locale === "fr") {
           language = french;
         }
+        setThemeName(localStorage.getItem("ThemeName"));
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -69,7 +70,6 @@ function Theme() {
   
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
-    setThemeName("Classic")
     fetchHotelDetails();
     fetchRoomDetails();
     fetchPackageDetails();
@@ -144,16 +144,16 @@ function Theme() {
       }))
   }
 
+  const changeTheme = (item) => {
+    localStorage.setItem("ThemeName", item);
+  }
+
   return (
-    <div>
-   
-    
-      <Header Primary={english?.Side} />
+    <>
+   <Header Primary={english?.Side} />
       <Sidebar Primary={english?.Side} />
       {/* Body */}
-      <div
-        id="main-content"
-        className={`bg-white  pt-24 relative overflow-y-auto lg:ml-64`}
+      <div id="main-content" className={`bg-white  pt-24 relative overflow-y-auto lg:ml-64`}
       >
         {/* Navbar */}
         <nav className="flex mb-5 px-4 ml-4" aria-label="Breadcrumb">
@@ -199,7 +199,6 @@ function Theme() {
         </div>
  
         {/* Themes Selection*/}
-       
         <div className="flex px-4" >
           <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
            Themes 
@@ -213,7 +212,7 @@ function Theme() {
                       type="button">
                          <span className="flex items-center">
               <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mx-2"></span>
-                     Classic
+                    {themeName}
                         <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none"
                   stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -222,19 +221,10 @@ function Theme() {
                 <div className="z-10 w-40 absolute bg-gray-50 rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700"> 
                   <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
                     <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {setThemeName("Classic");setThemes(!themes) }} >Classic</button>
+                      <button onClick={() => {setThemeName("Classic");setThemes(!themes);changeTheme("Classic") }} >Classic</button>
                     </li>
                     <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {  setThemeName("Classic-Dark"); setThemes(!themes) }} >Classic-Dark</button>
-                    </li>
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {  setThemeName("Theme-3"); setThemes(!themes) }} >Theme-3</button>
-                    </li>
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => { setThemeName("Theme-4"); setThemes(!themes) }} >Theme-4</button>
-                    </li>
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => { setThemeName("Theme-5"); setThemes(!themes) }} >Theme-5</button>
+                      <button onClick={() => {  setThemeName("Classic-Dark"); setThemes(!themes);changeTheme("Classic-Dark")}} >Classic-Dark</button>
                     </li>
                   </ul>
                 </div></div>
@@ -292,9 +282,8 @@ function Theme() {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover />
-        
-    </div>
+        pauseOnHover />  
+    </>
    
   );
 }

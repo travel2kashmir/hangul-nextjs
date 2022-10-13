@@ -7,15 +7,12 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 import Router, { useRouter } from "next/router";
+import DarkModeLogic from "../../components/darkmodelogic";
 const logger = require("../../services/logger");
 import { ToastContainer, toast } from "react-toastify";
 import Classic from "../themes/classic";
 import ClassicDark from '../themes/classic-dark'
 import "react-toastify/dist/ReactToastify.css";
-import Button from "../../components/Button";
-import Footer from '../../components/Footer';
-import Loader from "../../components/loader";
-import Carousal from "../template/carousal";
 var language;
 var currentUser;
 var currentProperty;
@@ -25,6 +22,8 @@ var currentLogged;
 function Theme() {
   /** State to store Current Property Details **/
   const [allHotelDetails, setAllHotelDetails] = useState([]);
+  const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+  const [color, setColor] = useState({})
   const [allRooms, setAllRooms] = useState({});
    const [allPackages, setAllPackages] = useState({});
   const [themes, setThemes] = useState(false)
@@ -43,6 +42,10 @@ function Theme() {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
          locale = localStorage.getItem("Language");
+         const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+         const color = JSON.parse(localStorage.getItem("Color"));
+         setColor(color);
+          setDarkModeSwitcher(colorToggle)
         if (locale === "ar") {
           language = arabic;
         }
@@ -52,6 +55,7 @@ function Theme() {
         if (locale === "fr") {
           language = french;
         }
+        setThemeName(localStorage.getItem("ThemeName"));
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -66,10 +70,12 @@ function Theme() {
     router.push("./theme");
   }, [])
 
+  useEffect(()=>{ 
+    setColor(DarkModeLogic(darkModeSwitcher))
+   },[darkModeSwitcher])
   
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
-    setThemeName("Classic")
     fetchHotelDetails();
     fetchRoomDetails();
     fetchPackageDetails();
@@ -144,22 +150,22 @@ function Theme() {
       }))
   }
 
+  const changeTheme = (item) => {
+    localStorage.setItem("ThemeName", item);
+  }
+
   return (
-    <div>
-   
-    
-      <Header Primary={english?.Side} />
-      <Sidebar Primary={english?.Side} />
+    <>
+   <Header color={color} Primary={english?.Side} />
+      <Sidebar color={color} Primary={english?.Side} />
       {/* Body */}
-      <div
-        id="main-content"
-        className={`bg-white  pt-24 relative overflow-y-auto lg:ml-64`}
+      <div id="main-content" className={`${color?.greybackground}  pt-24 relative overflow-y-auto lg:ml-64`}
       >
         {/* Navbar */}
         <nav className="flex mb-5 px-4 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
             <li className="inline-flex items-center">
-              <div className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
+              <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                 <svg
                   className="w-5 h-5 mr-2.5"
                   fill="currentColor"
@@ -188,7 +194,7 @@ function Theme() {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                <span className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
+                <span className={`${color?.textgray} text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2`}>
                   {allHotelDetails?.property_name}
                 </span>
               </div>
@@ -197,44 +203,35 @@ function Theme() {
         </nav>
         <div>
         </div>
- 
-        {/* Themes Selection*/}
        
+        {/* Themes Selection*/}
         <div className="flex px-4" >
-          <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
+          <h6 className={ `${color?.text} text-xl font-bold mt-2 mb-4`}>
            Themes 
           </h6>
           {/* Header */}
           <div className="flex items-center justify-end space-x-1  sm:space-x-2 ml-auto">
             <div>
-              <button onClick={() => { setThemes(!themes) }} className="text-cyan-600 sm:text-xs bg-white hover:bg-gray-50 
-                    focus:ring-4  border focus:outline-none focus:ring-gray-200 font-semibold rounded-lg text-base px-4 py-2.5 
-                         text-center inline-flex items-center"
+              <button onClick={() => { setThemes(!themes) }} className={`text-cyan-600 text-xs ${color?.whitebackground} hover:${color?.greybackground} 
+                     border font-semibold rounded-lg  pr-2 py-2 
+                         text-center inline-flex items-center`}
                       type="button">
                          <span className="flex items-center">
-              <span className="h-2.5 w-2.5 capitalize rounded-full bg-green-400 mx-2"></span>
-                     Classic
-                        <svg className="ml-2 w-4 h-4" aria-hidden="true" fill="none"
+              <span className="h-2.5 w-2.5 capitalize rounded-full mx-1 bg-green-400"></span>
+                  <span className="mr-0.5">  {themeName}</span>
+                 <svg className=" w-4 h-4 px-0.5" aria-hidden="true" fill="none"
                   stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
              </span> </button>
                <div className={themes === true ?'block': 'hidden'}>
-                <div className="z-10 w-40 absolute bg-gray-50 rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700"> 
-                  <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {setThemeName("Classic");setThemes(!themes) }} >Classic</button>
+                <div className={`z-10 w-40 fixed rounded ${color?.greybackground} overflow-hidden divide-y divide-gray-100 shadow`}> 
+                  <ul className={`py-1 text-sm ${color?.text}`} aria-labelledby="dropdownDefault">
+                    <li className={`block py-2 px-4 ${color?.sidebar} `}>
+                      <button onClick={() => {setThemeName("Classic");setThemes(!themes);changeTheme("Classic") }} >Classic</button>
                     </li>
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {  setThemeName("Classic-Dark"); setThemes(!themes) }} >Classic-Dark</button>
-                    </li>
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {  setThemeName("Theme-3"); setThemes(!themes) }} >Theme-3</button>
-                    </li>
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => { setThemeName("Theme-4"); setThemes(!themes) }} >Theme-4</button>
-                    </li>
-                    <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => { setThemeName("Theme-5"); setThemes(!themes) }} >Theme-5</button>
+                    <li className={`block py-2 px-4 ${color?.sidebar} `}>
+                      <button onClick={() => {  setThemeName("Classic-Dark"); setThemes(!themes);changeTheme("Classic-Dark")}} >Classic-Dark</button>
                     </li>
                   </ul>
                 </div></div>
@@ -266,7 +263,8 @@ function Theme() {
 
           </div>
         </div>
-
+        </div>
+        <div className="lg:ml-64">
         {/* Classic Theme */}
         { themeName === "Classic" ?
         <div className="sticky">
@@ -281,20 +279,9 @@ function Theme() {
         allRooms={allRooms} allPackages={allPackages}
         phone={phone} email={email}/></div>:<div className="sticky"></div>}
 
-
-      </div>
-      {/* Toast Container */}
-      <ToastContainer position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover />
-        
-    </div>
+       
+        </div>
+    </>
    
   );
 }

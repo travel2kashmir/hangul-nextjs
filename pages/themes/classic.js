@@ -984,7 +984,7 @@ function Classic(args) {
          <footer className="bg-gray-900 mt-12 lg:mt:8 py-6">
             <div className="md:flex md:justify-between mx-6">
                <div className="mb-6 md:mb-0">
-                  <div className="header-logo px-8">
+                  <div className="header-logo lg:px-8 px-14">
                      <span className="material-icons-outlined header-logo-icon">
                         mode_of_travel</span>
                      <span className='text-sky-600 text-xl'>

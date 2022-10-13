@@ -104,7 +104,6 @@ function ClassicDark(args) {
                   <span className="material-icons-outlined header-logo-icon">
                      mode_of_travel</span> <span className='text-sky-600'>{args?.allHotelDetails?.property_name}</span>
                </div>
-
                <div className="menu-toggle">
                   <button onClick={() => setSmSidebar(!smSidebar)} > <span className="material-icons-outlined"> menu </span></button>
                </div>
@@ -160,26 +159,26 @@ function ClassicDark(args) {
 
             <div className={smSidebar === true ? "block" : "hidden"}>
                <aside id="sidebar" className="fixed  lg:hidden z-20 h-full top-14 right-0 h-min flex  flex-shrink-0 flex-col w-full transition-width duration-75" aria-label="Sidebar">
-                  <div className="relative  flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
+                  <div className="relative  flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-gray-900 pt-0">
                      <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-                        <div className="flex-1 px-3 bg-white divide-y space-y-1">
+                        <div className="flex-1 px-3 bg-gray-900 divide-y space-y-1">
                            <ul className="space-y-2 pb-2">
 
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                              <li className="text-base text-white font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
                                        href="#home"
                                     > <button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.home}</button></a></span>
                               </li>
                               <hr />
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                              <li className="text-base text-white font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
                                        href="#about"> <button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.about}</button>
                                     </a> </span>
                               </li>
                               <hr />
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                              <li className="text-base text-white font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
                                        href="#gallery">
@@ -187,30 +186,30 @@ function ClassicDark(args) {
                                  </span>
                               </li>
                               <hr />
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                              <li className="text-base text-white font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
                                        href="#rooms"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.rooms}</button></a>
                                  </span>
                               </li>
                               <hr />
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                              <li className="text-base text-white font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a href="#amenities"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.amenities}</button></a>
                                  </span>
                               </li>
                               <hr />
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                              <li className="text-base text-white font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
                                        href="#packages"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.packages}</button></a>
                                  </span>
                               </li>
                               <hr />
-                              <li className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2">
+                              <li  className="text-base text-white font-normal rounded-lg flex items-center p-2">
                                  <span className="ml-3 flex-1 whitespace-nowrap">
                                     <a
-                                       href="#contactus"><button onClick={() => { setSmSidebar(!smSidebar) }}>{language?.contactus} </button></a>
+                                       href="#contactus"><button >{language?.contactus} </button></a>
                                  </span>
                               </li>
                            </ul>
@@ -838,7 +837,7 @@ function ClassicDark(args) {
 
                </div>
                {/* content  */}
-               <div className="tour-sidebar-dark bg-gray-900 border-0 border-lg">
+               <div className="tour-sidebar-dark bg-gray-900 border-0  border-lg">
                   <div className="tour-receipt-dark">
                      <div className="tour-receipt-head">
                         <div className="tour-amount">
@@ -939,9 +938,7 @@ function ClassicDark(args) {
                         </div>
                            
                         </div>
-                       
-                       
-                     </div>
+                   </div>
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
@@ -986,7 +983,7 @@ function ClassicDark(args) {
                      </div>
                   </div>
                </div>
-
+              
             </div>
          </div>
          </div>
@@ -994,7 +991,7 @@ function ClassicDark(args) {
          <footer className="bg-gray-900 lg:mt:8 py-6">
             <div className="md:flex md:justify-between mx-6">
                <div className="mb-6 md:mb-0">
-                  <div className="header-logo px-8">
+                  <div className="header-logo lg:px-8 px-14">
                      <span className="material-icons-outlined header-logo-icon">
                         mode_of_travel</span>
                      <span className='text-sky-600 text-xl'>

@@ -25,14 +25,11 @@ function PropertySummary() {
   /** State to store Current Property Details **/
   const [allHotelDetails, setAllHotelDetails] = useState([]);
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
-   const [color, setColor] = useState({})
-   const[modeChanger,setModeChanger] = useState("")
-
-
-    /** Router for Redirection **/
+  const [color, setColor] = useState({})
+   
+ /** Router for Redirection **/
   const router = useRouter();
   useEffect(() => {
-   
     firstfun();
     fetchHotelDetails();
     router.push("./propertysummary");
@@ -46,7 +43,7 @@ function PropertySummary() {
   if (typeof window !== 'undefined') {
     var locale = localStorage.getItem("Language");
     const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
-      const color = JSON.parse(localStorage.getItem("Color"));
+    const color = JSON.parse(localStorage.getItem("Color"));
      setColor(color);
      setDarkModeSwitcher(colorToggle)
     if (locale === "ar") {
@@ -64,12 +61,9 @@ function PropertySummary() {
     currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
   }
 }
-const changeTheme = (props) => {
-    localStorage.setItem("Mode", props)
-   }
+
 
   /* Function call to fetch Current Property Details when page loads */
-  
     const fetchHotelDetails = async () => {
       const url = `/api/${currentProperty.address_province.replace(
         /\s+/g,
@@ -85,10 +79,6 @@ const changeTheme = (props) => {
         .catch((error) => { logger.error("url to fetch property details, failed") });
     }
 
-   
-
-
- 
   return (
     <div>
       <Header color={color} Primary={english?.Side} />
@@ -144,7 +134,7 @@ const changeTheme = (props) => {
           <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className={ `${color?.text} text-base font-bold  mb-4`}>
-                {allHotelDetails?.property_name}
+                {allHotelDetails?.property_name} 
                 </h3>
               </div>
               <div className="flex items-center justify-end flex-1">

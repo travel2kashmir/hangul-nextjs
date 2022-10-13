@@ -37,6 +37,7 @@ function ClassicDark(args) {
    const [rate, setRate] = useState(defaultRate);
    const [calendarIn, setCalendarIn] = useState(false);
    const [calendarOut, setCalendarOut] = useState(false);
+   const [packages, setPackages] = useState(false);
    const [children, setChildren] = useState(false);
    const [amenity, setAmenity] = useState(false);
    const [open, setOpen] = useState({
@@ -853,7 +854,7 @@ function ClassicDark(args) {
                         </div>:
                                  <input defaultValue={checkInDate} 
                                  className="my-1 shadow-sm bg-gray-900 border border-white text-gray-50 
-                                 text-sm rounded-md block w-100 px-1 py-1" type="date" />}
+                                 text-sm rounded-md block w-16 mr-1 py-0.5" type="date" />}
                             <div className="tour-receipt-select-text">
                              {language?.checkin}
                                  </div>

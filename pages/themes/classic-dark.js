@@ -56,8 +56,11 @@ function ClassicDark(args) {
 
    const current = new Date();
    let month = current.getMonth() + 1;
-   const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
-   const checkOutDate = `${current.getDate()+1}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
+   const checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
+   const d1 = new Date(checkInDate).toString().slice(4,10); 
+   const checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()+1}`;
+   const d2 = new Date(checkOutDate).toString().slice(4,10);
+
    /** Router for Redirection **/
   /** Router for Redirection **/
   const router = useRouter();
@@ -104,7 +107,7 @@ function ClassicDark(args) {
             <div className="container">
                <div className="header-logo">
                   <span className="material-icons-outlined header-logo-icon">
-                     mode_of_travel</span> <span className='text-sky-600'>{args?.allHotelDetails?.property_name}</span>
+                     mode_of_travel</span> <span className='text-sky-600'>{args?.allHotelDetails?.property_name} </span>
                </div>
                <div className="menu-toggle">
                   <button onClick={() => setSmSidebar(!smSidebar)} > <span className="material-icons-outlined"> menu </span></button>
@@ -859,38 +862,41 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined" onClick={() => setCalendarIn(!calendarIn)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content text-white">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white' onClick={() => setCalendarIn(!calendarIn)}>
-                           {checkInDate}
+                          <span className='text-white' >
+                           {d1}
                            </span>
                         </div>:
-                                 <input defaultValue="2000-05-05"
-                                 className="my-1 bg-gray-900 border border-gray-900 text-gray-50 
-                                 text-sm rounded-md block w-16 mr-1 py-0.5" type="date"  />}
+                                 <input defaultValue={checkInDate}
+                                 className="my-1 bg-gray-900  text-gray-50
+                                 focus:ring-gray-50 focus:border-gray-50 border focus:border-gray-50
+                                 text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" type="date"  />}
                             <div className="tour-receipt-select-text">
                              {language?.checkin}
                                  </div>
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">    
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined" onClick={() => setCalendarOut(!calendarOut)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
                               <div className="tour-receipt-select-title">
-                           <span className='text-white' onClick={() => setCalendarOut(!calendarOut)}>{checkOutDate}</span>
+                           <span className='text-white'>{d2}</span>
                         </div>:
                                  <input
-                                    type="date" 
-                                    className="my-1 shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50 block w-16 mr-1 py-0.5" />
+                                    type="date" defaultValue={checkOutDate}
+                                    className="my-1 bg-gray-900  text-gray-50 border focus:border-gray-50
+                                    focus:ring-gray-50 focus:border-gray-50 
+                                    text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
                               }
                                  <div className="tour-receipt-select-text">
                                  {language?.checkout}
@@ -903,18 +909,21 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                         <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined" onClick={() => setGuests(!guests)}>
                                     person_outline
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {guests === false ?
                               <div className="tour-receipt-select-title">
-                          <span onClick={() => setGuests(!guests)} className='text-white'>4 Guests</span>
+                          <span  className='text-white'>4 {language?.guests}</span>
                         </div>:
                                  <input
-                                    type="number" min={1} 
-                                    className=" shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-28 px-0.5 py-1" />
+                                    type="number" min={1} defaultValue="4"
+                                    className=" my-1 bg-gray-900  text-gray-50
+                                    border focus:border-gray-50 px-0.5
+                                    focus:ring-gray-50 focus:border-gray-50  
+                                    text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
                                     }
                                  <div className="tour-receipt-select-text">
                                     {language?.guests}</div>
@@ -922,18 +931,21 @@ function ClassicDark(args) {
                            </div>
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                              <span className="material-icons-outlined">
+                              <span className="material-icons-outlined" onClick={() => setChildren(!children)}>
                                     person_outline
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {children === false ?
                               <div className="tour-receipt-select-title">
-                          <span onClick={() => setChildren(!children)} className='text-white'>4 {language?.children}</span>
+                          <span className='text-white'>2{language?.children}</span>
                         </div>:
-                                 <input
+                                 <input defaultValue="2"
                                     type="number" min={1} 
-                                    className=" shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-28 px-0.5 py-1" />
+                                    className=" my-1 bg-gray-900  text-gray-50 px-0.5
+                                    border focus:border-gray-50
+                                    focus:ring-gray-50 focus:border-gray-50  
+                                    text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
                                     }
                                  <div className="tour-receipt-select-text">
                                  {language?.children}</div>

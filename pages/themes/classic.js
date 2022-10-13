@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import english from '../../components/Languages/en'
 import french from '../../components/Languages/fr';
+import dateFormat from 'dateformat';
 import Marquee from "react-easy-marquee";
 import arabic from '../../components/Languages/ar'
 import Carousel from 'better-react-carousel';
@@ -54,9 +55,10 @@ function Classic(args) {
 
    const current = new Date();
    let month = current.getMonth() + 1;
-   const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
-   const checkOutDate = `${current.getDate()+1}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
-
+   const checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
+   const checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()+1}`;
+   const d1 = new Date(checkInDate).toString().slice(4,10); 
+   const d2 = new Date(checkOutDate).toString().slice(4,10);
    /** Router for Redirection **/
    const router = useRouter();
    useEffect(() => {
@@ -848,35 +850,40 @@ function Classic(args) {
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
                                  
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined"  onClick={() => setCalendarIn(!calendarIn)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                          <span  onClick={() => setCalendarIn(!calendarIn)}> {checkInDate}</span>
+                          <span > {d1}</span>
                         </div>:
-                                 <input defaultValue={checkInDate} 
-                                 className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" type="date" />}
+                                 <input defaultValue={checkInDate}
+                                 className="my-1 bg-gray-50  text-gray-800
+                                 focus:ring-gray-900  border focus:border-gray-900 border-gray-400
+                                 text-sm rounded-md block w-16 mr-1 py-0.5 lg:w-16 w-14"
+                                 type="date" />}
                             <div className="tour-receipt-select-text">
                                  {language?.checkin}
                                  </div>
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined" onClick={() => setCalendarOut(!calendarOut)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
                               <div className="tour-receipt-select-title">
-                         <span  onClick={() => setCalendarOut(!calendarOut)}>  {checkOutDate}</span>
+                         <span  >  {d2}</span>
                         </div>:
                                  <input 
-                                    type="date" 
-                                    className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-100 px-1 py-1" />
+                                    type="date" defaultValue={checkOutDate}
+                                    className="my-1 bg-gray-50  text-gray-800
+                                    focus:ring-gray-900  border focus:border-gray-900 border-gray-400
+                                    text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
                               }
                                  <div className="tour-receipt-select-text">
                                  {language?.checkout}
@@ -889,37 +896,40 @@ function Classic(args) {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 
-                                 <span className="material-icons-outlined">
+                                <span className="material-icons-outlined" onClick={() => setGuests(!guests)}>
                                  person_outline
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                                  {guests === false ?
                               <div className="tour-receipt-select-title">
-                          <span  onClick={() => setGuests(!guests)}> 4 {language?.guests}</span>
+                          <span> 4 {language?.guests}</span>
                         </div>:
                                  <input   
-                                type="number" min={1}  
-                                 className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block w-28 px-0.5 py-1" />
+                                type="number" min={1}  defaultValue={4}
+                                 className="my-1 bg-gray-50  text-gray-800 px-0.5
+                                 focus:ring-gray-900  border focus:border-gray-900 border-gray-400
+                                 text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
                                }  <div className="tour-receipt-select-text">
                                  {language?.guests}
                                  </div>
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined" onClick={() => setChildren(!children)}>
                                  person_outline
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {children === false ?
                               <div className="tour-receipt-select-title">
-                         <span  onClick={() => setChildren(!children)}>2 {language?.children}</span>
+                         <span  >2 {language?.children}</span>
                         </div>:
                                 <input
-                                type="number" min={1} 
-                                className="my-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-md focus:ring-cyan-600 focus:border-cyan-600  block  w-28 px-0.5 py-1" />
+                                type="number" min={1} defaultValue={2}
+                                className="my-1 bg-gray-50  text-gray-800 px-0.5
+                                focus:ring-gray-900  border focus:border-gray-900 border-gray-400
+                                text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
 }
                                  <div className="tour-receipt-select-text">
                                  {language?.children}
@@ -929,9 +939,7 @@ function Classic(args) {
                         </div>
                            
                         </div>
-                       
-                       
-                     </div>
+                   </div>
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">

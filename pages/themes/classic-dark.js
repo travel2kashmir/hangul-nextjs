@@ -31,26 +31,31 @@ var defaultRate = {
 }
 
 function ClassicDark(args) {
+   const [phone, setPhone] = useState({});
    const [language, setLanguage] = useState(0);
-   const [guests, setGuests] = useState(false);
-   const [visible, setVisible] = useState(0);
-   const [rate, setRate] = useState(defaultRate);
    const [calendarIn, setCalendarIn] = useState(false);
-   const [calendarOut, setCalendarOut] = useState(false);
-   const [packages, setPackages] = useState(false);
    const [children, setChildren] = useState(false);
+   const [guests, setGuests] = useState(false);
+   const [calendarOut, setCalendarOut] = useState(false);
+   const [visible, setVisible] = useState(0);
+   const [email, setEmail] = useState({});
+   const [allRooms, setAllRooms] = useState({});
+   const [allPackages, setAllPackages] = useState({});
+   const [rate, setRate] = useState(defaultRate);
    const [amenity, setAmenity] = useState(false);
+   const [packages, setPackages] = useState(false);
    const [open, setOpen] = useState({
       "view": false,
       "id": ''
    });
    const [singleRoom, setSingleRoom] = useState(false);
    const [smSidebar, setSmSidebar] = useState(false)
+   const [allHotelDetails, setAllHotelDetails] = useState([]);
+
    const current = new Date();
    let month = current.getMonth() + 1;
    const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
    const checkOutDate = `${current.getDate()+1}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
-
    /** Router for Redirection **/
    const router = useRouter();
    useEffect(() => {

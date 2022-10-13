@@ -30,27 +30,21 @@ var defaultRate = {
    base_rate_currency: 'USD'
 }
 
-function Themedefault() {
-   const [phone, setPhone] = useState({});
+function ClassicDark(args) {
    const [language, setLanguage] = useState(0);
    const [guests, setGuests] = useState(false);
    const [visible, setVisible] = useState(0);
-   const [email, setEmail] = useState({});
-   const [allRooms, setAllRooms] = useState({});
-   const [allPackages, setAllPackages] = useState({});
    const [rate, setRate] = useState(defaultRate);
    const [calendarIn, setCalendarIn] = useState(false);
    const [calendarOut, setCalendarOut] = useState(false);
    const [children, setChildren] = useState(false);
    const [amenity, setAmenity] = useState(false);
-   const [packages, setPackages] = useState(false);
    const [open, setOpen] = useState({
       "view": false,
       "id": ''
    });
    const [singleRoom, setSingleRoom] = useState(false);
    const [smSidebar, setSmSidebar] = useState(false)
-   const [allHotelDetails, setAllHotelDetails] = useState([]);
    const current = new Date();
    let month = current.getMonth() + 1;
    const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
@@ -61,16 +55,8 @@ function Themedefault() {
    useEffect(() => {
       const firstfun = () => {
          if (typeof window !== 'undefined') {
-            var locale = localStorage.getItem("Language");
-            if (locale === "ar") {
-              setLanguage(arabic);
-            }
-            if (locale === "en") {
-               setLanguage(english);
-            }
-            if (locale === "fr") {
-               setLanguage(french);
-            }
+            setLanguage(args?.language);
+            setVisible(1);
             currentUser = JSON.parse(localStorage.getItem("Signin Details"));
             /** Current Property Details fetched from the local storage **/
             currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -78,58 +64,8 @@ function Themedefault() {
          }
       }
       firstfun();
-      router.push("./classic-dark");
    }, [])
 
-   /* Function call to fetch Current Property Details when page loads */
-  /* Function call to fetch Current Property Details when page loads */
-  useEffect(() => {
-   fetchHotelDetails();
-   fetchRoomDetails();
-   fetchPackageDetails();
-}, []);
-
-
-const fetchHotelDetails = async () => {
-   const url = `/api/${currentProperty.address_province.replace(
-      /\s+/g,
-      "-"
-   )}/${currentProperty.address_city}/${currentProperty.property_category
-      }s/${currentProperty.property_id}`;
-   axios.get(url)
-      .then((response) => {
-         setAllHotelDetails(response.data);
-         response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
-         response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
-         console.log(response.data.contacts)
-         setVisible(1)
-         Router.push('./classic-dark')
-         logger.info("url  to fetch property details hitted successfully")
-
-      })
-      .catch((error) => { logger.error("url to fetch property details, failed") });
-}
-
-const fetchRoomDetails = async () => {
-   const url = `/api/all_rooms_details/${currentProperty.property_id}`;
-   axios.get(url)
-      .then((response) => {
-         setAllRooms(response.data);
-         logger.info("url  to fetch room details hitted successfully")
-        })
-      .catch((error) => { logger.error("url to fetch property details, failed") });
-}
-
-const fetchPackageDetails = async () => {
-   const url = `/api/all_packages_details/${currentProperty.property_id}`;
-   axios.get(url)
-      .then((response) => {
-         console.log(response.data)
-         setAllPackages(response.data);
-         logger.info("url  to fetch package details hitted successfully")
-        })
-      .catch((error) => { logger.error("url to fetch package details, failed") });
-}
 
    const changeLanguage = ((props) => {
    if(props === "en"){
@@ -150,7 +86,7 @@ const fetchPackageDetails = async () => {
             <div className="container">
                <div className="header-logo">
                   <span className="material-icons-outlined header-logo-icon">
-                     mode_of_travel</span> <span className='text-sky-600'>{allHotelDetails?.property_name}</span>
+                     mode_of_travel</span> <span className='text-sky-600'>{args?.allHotelDetails?.property_name}</span>
                </div>
 
                <div className="menu-toggle">
@@ -275,21 +211,21 @@ const fetchPackageDetails = async () => {
                   <div className="tour-title">
                      <div className={visible === 0 ? 'block w-32 my-2' : 'hidden'}><Headloader /></div>
                      <div className={visible === 1 ? 'block text-white mt-8' : 'hidden'}>
-                        {allHotelDetails?.description_title}</div>
+                        {args?.allHotelDetails?.description_title}</div>
                   </div>
                   <div className={visible === 0 ? 'block w-64' : 'hidden'}><SubHeading /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>
                      <div className="tour-overview">
                         <div className="tour-overview-item flex">
 
-                           {allHotelDetails?.property_category} {language?.in}  <p className='text-white pl-1'>{allHotelDetails?.address?.[i]?.address_city}</p>
+                           {args?.allHotelDetails?.property_category} {language?.in}  <p className='text-white pl-1'>{args?.allHotelDetails?.address?.[i]?.address_city}</p>
                         </div>
                         <div className="tour-overview-item flex">
-                           <p className='text-white pr-1'>{allHotelDetails?.star_rating} {language?.star}</p>
+                           <p className='text-white pr-1'>{args?.allHotelDetails?.star_rating} {language?.star}</p>
                             {language?.accomodation}</div>
                         <div className="tour-overview-item ">
                            <span className="material-icons-outlined mt-0.5">star</span>
-                          <p className='text-white'>4.7  ({allHotelDetails?.Reviews?.length}) </p>
+                          <p className='text-white'>4.7  ({args?.allHotelDetails?.Reviews?.length}) </p>
                         </div>
                      </div></div>
                </div>
@@ -310,7 +246,7 @@ const fetchPackageDetails = async () => {
                            }}
                            modules={[Autoplay]}
                            className="mySwiper">
-                           {allHotelDetails?.images?.map((resource, index) => {
+                           {args?.allHotelDetails?.images?.map((resource, index) => {
                               return (<SwiperSlide key={index}>
                                  <img
                                     className="object-fill w-full h-96"
@@ -327,7 +263,7 @@ const fetchPackageDetails = async () => {
 
                      <div className="tour-content-block">
                         <div className="tour-description">
-                         <p className='text-gray-400'> {allHotelDetails?.description_body}</p> 
+                         <p className='text-gray-400'> {args?.allHotelDetails?.description_body}</p> 
                         </div>
                      </div></div>
 
@@ -338,7 +274,7 @@ const fetchPackageDetails = async () => {
                         <div className={visible === 0 ? 'block  mb-2' : 'hidden'}><GallerySlider /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                            <Carousel cols={2} rows={1} gap={10} loop>
-                              {allHotelDetails?.images?.map((resource, index) => {
+                              {args?.allHotelDetails?.images?.map((resource, index) => {
                                  return (
                                     <Carousel.Item key={index} >
                                        <img width="100%" style={{ height: "270px" }} src={resource?.image_link} /></Carousel.Item>
@@ -362,10 +298,10 @@ const fetchPackageDetails = async () => {
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                       <p className='text-white'>{language?.roomstochoose} ({allRooms?.rooms?.length})</p></div>
+                                       <p className='text-white'>{language?.roomstochoose} ({args?.allRooms?.rooms?.length})</p></div>
                                     </div></button></div>
                               <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
-                                 {allRooms?.rooms?.map((resource, idx) => {
+                                 {args?.allRooms?.rooms?.map((resource, idx) => {
                                     return (
                                        <div className='group' key={idx}>
                                            <div  onClick={() => {
@@ -454,7 +390,7 @@ const fetchPackageDetails = async () => {
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
                                  <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
-                                    {allHotelDetails?.services?.map((item, idx) => {
+                                    {args?.allHotelDetails?.services?.map((item, idx) => {
                                        return (
                                           <span className='text-gray-400 capitalize' key={idx}>
                                              <span>&#10004;
@@ -476,7 +412,7 @@ const fetchPackageDetails = async () => {
                                     </div>
                                  </button></div>
                               <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
-                                 {allPackages?.packages?.map((resource, idx) => {
+                                 {args?.allPackages?.packages?.map((resource, idx) => {
                                     return (
                                        <div className='group'key={idx}>
                                            <div onClick={() => {
@@ -816,7 +752,7 @@ const fetchPackageDetails = async () => {
                      <div className="tour-reviews">
                         <div className="tour-reviews-feedback-dark">
                         <Marquee duration={10000}  height="370px" axis="Y" reverse={true}>
-                           {allHotelDetails?.Reviews?.map((item, idx) => {
+                           {args?.allHotelDetails?.Reviews?.map((item, idx) => {
                               return (
                                 
                                  <div className="tour-reviews-feedback-item  bg-gray-900" key={idx}>
@@ -877,7 +813,7 @@ const fetchPackageDetails = async () => {
                               <div className="tour-help-call-text">
                                  <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                                  <div className={visible === 1 ? 'block' : 'hidden'}>
-                                    {phone?.contact_data}</div>
+                                    {args?.phone?.contact_data}</div>
                               </div>
                            </div>
                         </div>
@@ -935,7 +871,7 @@ const fetchPackageDetails = async () => {
                         </div>:
                                  <input
                                     type="date" 
-                                    className="my-1 shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50   block w-100 px-1 py-1" />
+                                    className="my-1 shadow-sm  text-sm rounded-md bg-gray-900 border border-white text-gray-50 block w-16 mr-1 py-0.5" />
                               }
                                  <div className="tour-receipt-select-text">
                                  {language?.checkout}
@@ -943,8 +879,7 @@ const fetchPackageDetails = async () => {
                               </div>
                            </div>
                         </div>
-                       
-                       
+                      
                         <div className="tour-receipt-select-bottom">
                         <div className="tour-receipt-select-top">
                         <div className="tour-receipt-select-item">
@@ -1049,17 +984,17 @@ const fetchPackageDetails = async () => {
                      <span className='text-sky-600 text-xl'>
                         <div className={visible === 0 ? 'block w-32 ml-1 mb-2' : 'hidden'}><Headloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           {allHotelDetails?.property_name}</div></span>
+                           {args?.allHotelDetails?.property_name}</div></span>
                   </div>
                   <div className='flex -mt-1 flex-col'>
                      <span className='lg:px-20 px-16 text-sm text-white'>
                         <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           {allHotelDetails?.address?.[i]?.address_street_address}, {allHotelDetails?.address?.[i]?.address_city}
+                           {args?.allHotelDetails?.address?.[i]?.address_street_address}, {args?.allHotelDetails?.address?.[i]?.address_city}
                         </div> </span>
                      <span className='lg:px-20 px-16 text-sm text-white'>
                         <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}> {allHotelDetails?.address?.[i]?.address_province}, {allHotelDetails?.address?.[i]?.address_zipcode}
+                        <div className={visible === 1 ? 'block' : 'hidden'}> {args?.allHotelDetails?.address?.[i]?.address_province}, {args?.allHotelDetails?.address?.[i]?.address_zipcode}
                         </div>
                      </span>
                      <span className='lg:px-20 px-16 text-sm text-white uppercase'>
@@ -1092,20 +1027,20 @@ const fetchPackageDetails = async () => {
                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="mr-0.5 mt-1 w-3 h-3">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                            </svg>
-                           <a href={`tel://${phone?.contact_data}`} className=" text-sm hover:underline">
+                           <a href={`tel://${args?.phone?.contact_data}`} className=" text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
-                                 {phone.contact_data}
+                                 {args?.phone.contact_data}
                               </div></a>
                         </li>
                         <li className="flex hover:text-gray-400">
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mt-1 mr-0.5 w-4 h-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                            </svg>
-                           <a href={`mailto:${email?.contact_data}`}className="text-sm hover:underline">
+                           <a href={`mailto:${args?.email?.contact_data}`}className="text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
-                                 {email?.contact_data} </div></a>
+                                 {args?.email?.contact_data} </div></a>
                         </li>
                      </ul>
                   </div>
@@ -1156,8 +1091,8 @@ const fetchPackageDetails = async () => {
      
    );
 }
-export default Themedefault
-Themedefault.getLayout = function PageLayout(page) {
+export default ClassicDark
+ClassicDark.getLayout = function PageLayout(page) {
    return (
       <>
          {page}

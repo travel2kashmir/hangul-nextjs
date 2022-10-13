@@ -984,7 +984,7 @@ function Classic(args) {
          <footer className="bg-gray-900 mt-12 lg:mt:8 py-6">
             <div className="md:flex md:justify-between mx-6">
                <div className="mb-6 md:mb-0">
-                  <div className="header-logo lg:px-8 px-14">
+                  <div className="header-logo md:px-8 px-20">
                      <span className="material-icons-outlined header-logo-icon">
                         mode_of_travel</span>
                      <span className='text-sky-600 text-xl'>
@@ -992,7 +992,7 @@ function Classic(args) {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                            {args?.allHotelDetails?.property_name}</div></span>
                   </div>
-                  <div className='flex -mt-1 flex-col'>
+                  <div className='flex -mt-1 flex-col lg:pl-0 pl-14 md:pl-0'>
                      <span className='lg:px-20 px-16 text-sm text-white'>
                         <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>

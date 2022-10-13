@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import english from '../../components/Languages/en'
+import DatePicker from "react-datepicker";  
 import french from '../../components/Languages/fr';
 import Marquee from "react-easy-marquee";
 import arabic from '../../components/Languages/ar'
@@ -36,6 +37,7 @@ function ClassicDark(args) {
    const [calendarIn, setCalendarIn] = useState(false);
    const [children, setChildren] = useState(false);
    const [guests, setGuests] = useState(false);
+   const [date, setDate] = useState();
    const [calendarOut, setCalendarOut] = useState(false);
    const [visible, setVisible] = useState(0);
    const [email, setEmail] = useState({});
@@ -864,11 +866,13 @@ function ClassicDark(args) {
                               <div className="tour-receipt-select-content text-white">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white' onClick={() => setCalendarIn(!calendarIn)}>{checkInDate}</span>
+                          <span className='text-white' onClick={() => setCalendarIn(!calendarIn)}>
+                           {checkInDate}
+                           </span>
                         </div>:
-                                 <input defaultValue={checkInDate} 
-                                 className="my-1 shadow-sm bg-gray-900 border border-white text-gray-50 
-                                 text-sm rounded-md block w-16 mr-1 py-0.5" type="date" />}
+                                 <input defaultValue="2000-05-05"
+                                 className="my-1 bg-gray-900 border border-gray-900 text-gray-50 
+                                 text-sm rounded-md block w-16 mr-1 py-0.5" type="date"  />}
                             <div className="tour-receipt-select-text">
                              {language?.checkin}
                                  </div>
@@ -991,7 +995,7 @@ function ClassicDark(args) {
          <footer className="bg-gray-900 lg:mt:8 py-6">
             <div className="md:flex md:justify-between mx-6">
                <div className="mb-6 md:mb-0">
-                  <div className="header-logo lg:px-8 px-14">
+                  <div className="header-logo lg:px-8 md:px-8 px-20">
                      <span className="material-icons-outlined header-logo-icon">
                         mode_of_travel</span>
                      <span className='text-sky-600 text-xl'>
@@ -999,7 +1003,7 @@ function ClassicDark(args) {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                            {args?.allHotelDetails?.property_name}</div></span>
                   </div>
-                  <div className='flex -mt-1 flex-col'>
+                  <div className='flex -mt-1 flex-col lg:pl-0 pl-14 md:pl-0'>
                      <span className='lg:px-20 px-16 text-sm text-white'>
                         <div className={visible === 0 ? 'block h-2 w-32 mb-8' : 'hidden'}><LineLoader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>

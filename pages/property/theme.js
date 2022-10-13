@@ -10,6 +10,7 @@ import Router, { useRouter } from "next/router";
 const logger = require("../../services/logger");
 import { ToastContainer, toast } from "react-toastify";
 import Classic from "../themes/classic";
+import ClassicDark from '../themes/classic-dark'
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../../components/Button";
 import Footer from '../../components/Footer';
@@ -23,20 +24,13 @@ var currentLogged;
 
 function Theme() {
   /** State to store Current Property Details **/
-  var theme1 = "bg-sky-50";
-  var theme2 = "bg-lime-50";
-  var theme3 = "bg-rose-50";
-  var theme4 = "bg-orange-50";
-  var theme5 = "bg-indigo-50";
   const [allHotelDetails, setAllHotelDetails] = useState([]);
   const [allRooms, setAllRooms] = useState({});
    const [allPackages, setAllPackages] = useState({});
   const [themes, setThemes] = useState(false)
   const [phone, setPhone] = useState({});
   const [email, setEmail] = useState({});
-  const [theme, setTheme] = useState(theme1)
   const [themeName, setThemeName] = useState()
-  const [bgColor, setBgColor] = useState(theme1)
   const [uri, setUri] = useState("")
   const [loc,setLoc]=useState()
   const [lang,setLang]=useState('en')
@@ -72,37 +66,7 @@ function Theme() {
     router.push("./theme");
   }, [])
 
-  const initialtheme = () => {
-    var url;
-    url = `/api/property_page/${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty?.address_city}`;
-    axios.get(url)
-      .then((response) => {
-        setTheme(response.data.theme_id);
-        setBgColor(response.data.theme_id);
-        switch (response.data.theme_id) {
-          case "bg-sky-50":
-            setThemeName("Theme 1");
-            break;
-          case "bg-lime-50":
-            setThemeName("Theme 2");
-            break;
-          case "bg-rose-50":
-            setThemeName("Theme 3");
-            break;
-          case "bg-orange-50":
-            setThemeName("Theme 4");
-            break;
-          case "bg-indigo-50":
-            setThemeName("Theme 5");
-            break;
-          default: setThemeName(response.data.theme_id)
-}
-        logger.info("url  to fetch property details hitted successfully")
-        setVisible(1)
-      })
-      .catch((error) => { logger.error("url to fetch property details, failed") });
-
-  }
+  
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     setThemeName("Classic")
@@ -240,6 +204,7 @@ function Theme() {
           <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
            Themes 
           </h6>
+          {/* Header */}
           <div className="flex items-center justify-end space-x-1  sm:space-x-2 ml-auto">
             <div>
               <button onClick={() => { setThemes(!themes) }} className="text-cyan-600 sm:text-xs bg-white hover:bg-gray-50 
@@ -253,61 +218,69 @@ function Theme() {
                   stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
              </span> </button>
-
                <div className={themes === true ?'block': 'hidden'}>
-                <div className="z-10 w-40 absolute bg-gray-50 rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700">
-                   
+                <div className="z-10 w-40 absolute bg-gray-50 rounded overflow-hidden divide-y divide-gray-100 shadow dark:bg-gray-700"> 
                   <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
                     <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => { setTheme(theme1); setThemeName("Classic");setThemes(!themes) }} >Classic</button>
+                      <button onClick={() => {setThemeName("Classic");setThemes(!themes) }} >Classic</button>
                     </li>
                     <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {  setTheme(theme2); setThemeName("Classic-Dark"); setThemes(!themes) }} >Classic-Dark</button>
+                      <button onClick={() => {  setThemeName("Classic-Dark"); setThemes(!themes) }} >Classic-Dark</button>
                     </li>
                     <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {  setTheme(theme3); setThemeName("Theme-3"); setThemes(!themes) }} >Theme-3</button>
+                      <button onClick={() => {  setThemeName("Theme-3"); setThemes(!themes) }} >Theme-3</button>
                     </li>
                     <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => {  setTheme(theme4); setThemeName("Theme-4"); setThemes(!themes) }} >Theme-4</button>
+                      <button onClick={() => { setThemeName("Theme-4"); setThemes(!themes) }} >Theme-4</button>
                     </li>
                     <li className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                      <button onClick={() => { setTheme(theme5); setThemeName("Theme-5"); setThemes(!themes) }} >Theme-5</button>
+                      <button onClick={() => { setThemeName("Theme-5"); setThemes(!themes) }} >Theme-5</button>
                     </li>
                   </ul>
                 </div></div>
                 </div>
-
             <div>
               <button className="bg-cyan-600 text-sm text-center hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={() => {
-                setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase());
-                sendLink();
+                // setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase());
+                // sendLink();
               }}
               >Save</button>
-
             </div>
 
             <div className="flex hover:underline py-2 hover:decoration-cyan-600">
             <svg className="h-6 w-6 pt-1 flex-none stroke-sky-500" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M17.25 10c0 1-1.75 6.25-7.25 6.25S2.75 11 2.75 10 4.5 3.75 10 3.75 17.25 9 17.25 10Z"></path><circle cx="10" cy="10" r="2.25"></circle></svg>
               <button className=" text-base text-center text-cyan-600 mr-2  rounded"
               >  
-               <Link href={`${loc}/${currentProperty?.address_province.replace(
+               {/* <Link href={
+                `${loc}/${currentProperty?.address_province.replace(
         /\s+/g,
         "-"
       )}/${currentProperty?.address_city}/${currentProperty?.property_category
-        }s/${allHotelDetails?.property_name?.replaceAll(' ', '-')}/${theme}/${lang}`}>
-               <a target="_blank">Preview </a></Link></button>
+        }s/${allHotelDetails?.property_name?.replaceAll(' ', '-')}/${theme}/${lang}`
+        }> */}
+               <a target="_blank">Preview </a>
+               {/* </Link> */}
+               </button>
 
             </div>
 
           </div>
         </div>
+
+        {/* Classic Theme */}
         { themeName === "Classic" ?
         <div className="sticky">
         <Classic language={language} allHotelDetails={allHotelDetails} 
         allRooms={allRooms} allPackages={allPackages}
         phone={phone} email={email}/></div>:<div className="sticky"></div>}
+     
+        {/* Classic Dark */}
+        { themeName === "Classic-Dark" ?
+        <div className="sticky">
+        <ClassicDark language={language} allHotelDetails={allHotelDetails} 
+        allRooms={allRooms} allPackages={allPackages}
+        phone={phone} email={email}/></div>:<div className="sticky"></div>}
 
-        
 
       </div>
       {/* Toast Container */}

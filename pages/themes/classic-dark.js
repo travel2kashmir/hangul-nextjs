@@ -57,21 +57,31 @@ function ClassicDark(args) {
    const checkInDate = `${current.getDate()}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
    const checkOutDate = `${current.getDate()+1}/${month < +10 ? `0${month}` : `${month + 1}`}/${current.getFullYear()}`;
    /** Router for Redirection **/
-   const router = useRouter();
-   useEffect(() => {
-      const firstfun = () => {
-         if (typeof window !== 'undefined') {
-            setLanguage(args?.language);
-            setVisible(1);
-            currentUser = JSON.parse(localStorage.getItem("Signin Details"));
-            /** Current Property Details fetched from the local storage **/
-            currentProperty = JSON.parse(localStorage.getItem("property"));
-            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-         }
-      }
-      firstfun();
-   }, [])
+  /** Router for Redirection **/
+  const router = useRouter();
+  useEffect(() => {
+     const firstfun = () => {
+        if (typeof window !== 'undefined') {
+          setLanguage(args?.language)
+           currentUser = JSON.parse(localStorage.getItem("Signin Details"));
+           /** Current Property Details fetched from the local storage **/
+           currentProperty = JSON.parse(localStorage.getItem("property"));
+           currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+        }
+     }
+     firstfun();
+  }, [])
 
+  /* Function call to fetch Current Property Details when page loads */
+  useEffect(() => {
+     fetchHotelDetails();
+  }, []);
+  
+
+  const fetchHotelDetails = async () => {
+           setAllHotelDetails(args?.allHotelDetails);
+           setVisible(1)
+  }
 
    const changeLanguage = ((props) => {
    if(props === "en"){
@@ -1036,7 +1046,7 @@ function ClassicDark(args) {
                            <a href={`tel://${args?.phone?.contact_data}`} className=" text-sm hover:underline">
                               <div className={visible === 0 ? 'block h-2 w-32 mb-6' : 'hidden'}><LineLoader /></div>
                               <div className={visible === 1 ? 'block' : 'hidden'}>
-                                 {args?.phone.contact_data}
+                                 {args?.phone?.contact_data}
                               </div></a>
                         </li>
                         <li className="flex hover:text-gray-400">

@@ -13,9 +13,10 @@ import ImageLoader from '../../components/loaders/imageloader';
 import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
+import "swiper/css/pagination";
 import "swiper/css/navigation";
 // import required modules
-import { Autoplay, Pagination, Navigation } from "swiper";
+import SwiperCore,{ Autoplay, Pagination, Navigation } from "swiper";
 import axios from 'axios';
 const logger = require("../../services/logger");
 import Router, { useRouter } from "next/router";
@@ -23,6 +24,8 @@ import LineLoader from '../../components/loaders/lineloader';
 var currentUser;
 var currentProperty;
 var currentLogged;
+var checkInDate;
+var checkOutDate;
 var i = 0;
 var defaultRate = {
    base_rate_amount: '1071',
@@ -32,6 +35,7 @@ var defaultRate = {
 }
 
 function ClassicDark(args) {
+   SwiperCore.use([Navigation, Pagination, Autoplay]);
    const [phone, setPhone] = useState({});
    const [language, setLanguage] = useState(0);
    const [calendarIn, setCalendarIn] = useState(false);
@@ -51,15 +55,12 @@ function ClassicDark(args) {
       "id": ''
    });
    const [singleRoom, setSingleRoom] = useState(false);
+   const [d1, setD1] = useState();
+   const [d2, setD2] = useState();
    const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
-   const current = new Date();
-   let month = current.getMonth() + 1;
-   const checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
-   const d1 = new Date(checkInDate).toString().slice(4,10); 
-   const checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()+1}`;
-   const d2 = new Date(checkOutDate).toString().slice(4,10);
+   
 
    /** Router for Redirection **/
   /** Router for Redirection **/
@@ -74,6 +75,12 @@ function ClassicDark(args) {
            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         }
      }
+     const current = new Date();
+      let month = current.getMonth() + 1;
+      checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
+      checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate() + 1}`;
+      setD1(new Date(checkInDate).toString().slice(4, 10));
+      setD2(new Date(checkOutDate).toString().slice(4, 10));
      firstfun();
   }, [])
 
@@ -99,7 +106,16 @@ function ClassicDark(args) {
       setLanguage(arabic)
    }
    })
-
+   // Function for Check In
+   const changeCheckIn =  (d1) => {
+      setD1(new Date(d1).toString().slice(4,10));
+      setCalendarIn(!calendarIn)
+    }
+    // Function for Check Out
+    const changeCheckOut =  (d2) => {
+     setD2(new Date(d2).toString().slice(4,10));
+     setCalendarOut(!calendarOut);
+   }
    return ( 
      <>
      <div className='bg-gray-900 '>
@@ -258,14 +274,18 @@ function ClassicDark(args) {
                   <div className={visible === 0 ? 'block w-32 mb-2' : 'hidden'}><ImageLoader /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>
                      <div className="tour-hero">
-                        <Swiper spaceBetween={30}
-                           centeredSlides={true}
-                           autoplay={{
-                              delay: 2500,
-                              disableOnInteraction: false,
-                           }}
-                           modules={[Autoplay]}
-                           className="mySwiper">
+                           <Swiper
+                              centeredSlides={true}
+                              autoplay={{
+                                 delay: 1000,
+                                 disableOnInteraction: false,
+                              }}
+                              pagination={{
+                                 clickable: true,
+                              }}
+
+                              modules={[Autoplay, Pagination, Navigation]}
+                              className="mySwiper">
                            {args?.allHotelDetails?.images?.map((resource, index) => {
                               return (<SwiperSlide key={index}>
                                  <img
@@ -293,7 +313,34 @@ function ClassicDark(args) {
                      <div className="relative overflow-hidden">
                         <div className={visible === 0 ? 'block  mb-2' : 'hidden'}><GallerySlider /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           <Carousel cols={2} rows={1} gap={10} loop>
+                        <Carousel cols={2} rows={1} gap={10} autoPlay={1000} loop={true} 
+                             responsiveLayout={ [
+                              {
+                                breakpoint: 480,
+                                cols: 1,
+                                rows: 1,
+                                gap: 10,
+                                loop: true,
+                                autoplay: 1000
+                              },
+                              {
+                                 breakpoint: 810,
+                                 cols: 2,
+                                 rows: 1,
+                                 gap: 10,
+                                 loop: true,
+                                 autoplay: 1000
+                               },
+                               {
+                                 breakpoint: 1200,
+                                 cols: 2,
+                                 rows: 1,
+                                 gap: 10,
+                                 loop: true,
+                                 autoplay: 1000
+                               },
+                            ]}
+                            >
                               {args?.allHotelDetails?.images?.map((resource, index) => {
                                  return (
                                     <Carousel.Item key={index} >
@@ -367,7 +414,26 @@ function ClassicDark(args) {
                                                 <div className='pb-8'>
                                                    <div className="accordion-trigger mb-4">
                                                    <p className='text-white'>{language?.room} {language?.gallery}</p></div>
-                                                   <Carousel cols={3} rows={1} gap={10} loop>
+                                                   <Carousel cols={2} rows={1} gap={10} autoPlay={1000} loop={true} 
+                             responsiveLayout={ [
+                              {
+                                breakpoint: 480,
+                                cols: 1,
+                                rows: 1,
+                                gap: 10,
+                                loop: true,
+                                autoplay: 1000
+                              },
+                              {
+                                 breakpoint: 810,
+                                 cols: 2,
+                                 rows: 1,
+                                 gap: 10,
+                                 loop: true,
+                                 autoplay: 1000
+                               }
+                            ]}
+                            >
                                                       {resource.room_images.map((resource, index) => {
                                                          return (
                                                             <Carousel.Item key={index} >
@@ -862,18 +928,23 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" onClick={() => setCalendarIn(!calendarIn)}>
+                                 <span className="material-icons-outlined" >
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content text-white">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white' >
+                          <span className='text-white'onClick={() => setCalendarIn(!calendarIn)} >
                            {d1}
                            </span>
                         </div>:
                                  <input defaultValue={checkInDate}
+                                 onChange={
+                                    (e) => (
+                                      changeCheckIn(e.target.value)
+                                    )
+                                  }
                                  className="my-1 bg-gray-900  text-gray-50
                                  focus:ring-gray-50 focus:border-gray-50 border focus:border-gray-50
                                  text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" type="date"  />}
@@ -890,10 +961,15 @@ function ClassicDark(args) {
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
                               <div className="tour-receipt-select-title">
-                           <span className='text-white'>{d2}</span>
+                           <span className='text-white'onClick={() => setCalendarOut(!calendarOut)}>{d2}</span>
                         </div>:
                                  <input
-                                    type="date" defaultValue={checkOutDate}
+                                    type="date" defaultValue={checkOutDate} 
+                                    onChange={
+                                       (e) => (
+                                         changeCheckOut(e.target.value)
+                                       )
+                                     }
                                     className="my-1 bg-gray-900  text-gray-50 border focus:border-gray-50
                                     focus:ring-gray-50 focus:border-gray-50 
                                     text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />

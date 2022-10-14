@@ -15,7 +15,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 // import required modules
-import { Autoplay, Pagination, Navigation } from "swiper";
+import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 import axios from 'axios';
 const logger = require("../../services/logger");
 import Router, { useRouter } from "next/router";
@@ -24,6 +24,8 @@ var currentUser;
 var currentProperty;
 var currentLogged;
 var i = 0;
+var checkInDate;
+var checkOutDate;
 var defaultRate = {
    base_rate_amount: '1071',
    tax_rate_amount: '175',
@@ -32,6 +34,7 @@ var defaultRate = {
 }
 
 function Classic(args) {
+   SwiperCore.use([Navigation, Pagination, Autoplay]);
    const [phone, setPhone] = useState({});
    const [language, setLanguage] = useState(0);
    const [calendarIn, setCalendarIn] = useState(false);
@@ -39,6 +42,8 @@ function Classic(args) {
    const [guests, setGuests] = useState(false);
    const [calendarOut, setCalendarOut] = useState(false);
    const [visible, setVisible] = useState(0);
+   const [d1, setD1] = useState();
+   const [d2, setD2] = useState();
    const [email, setEmail] = useState({});
    const [allRooms, setAllRooms] = useState({});
    const [allPackages, setAllPackages] = useState({});
@@ -53,12 +58,16 @@ function Classic(args) {
    const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
-   const current = new Date();
-   let month = current.getMonth() + 1;
-   const checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
-   const checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()+1}`;
-   const d1 = new Date(checkInDate).toString().slice(4,10); 
-   const d2 = new Date(checkOutDate).toString().slice(4,10);
+   
+
+  const changeCheckIn =  (d1) => {
+    setD1(new Date(d1).toString().slice(4,10));
+   setCalendarIn(!calendarIn)
+  }
+  const changeCheckOut =  (d2) => {
+   setD2(new Date(d2).toString().slice(4,10));
+   setCalendarOut(!calendarOut)
+ }
    /** Router for Redirection **/
    const router = useRouter();
    useEffect(() => {
@@ -71,6 +80,12 @@ function Classic(args) {
             currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
          }
       }
+      const current = new Date();
+      let month = current.getMonth() + 1;
+      checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
+      checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate() + 1}`;
+      setD1(new Date(checkInDate).toString().slice(4, 10));
+      setD2(new Date(checkOutDate).toString().slice(4, 10));
       firstfun();
    }, [])
 
@@ -259,14 +274,18 @@ function Classic(args) {
                   <div className={visible === 0 ? 'block w-32 mb-2' : 'hidden'}><ImageLoader /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>
                      <div className="tour-hero">
-                        <Swiper spaceBetween={30}
-                           centeredSlides={true}
-                           autoplay={{
-                              delay: 2500,
-                              disableOnInteraction: false,
-                           }}
-                           modules={[Autoplay]}
-                           className="mySwiper">
+                     <Swiper
+                              centeredSlides={true}
+                              autoplay={{
+                                 delay: 1000,
+                                 disableOnInteraction: false,
+                              }}
+                              pagination={{
+                                 clickable: true,
+                              }}
+
+                              modules={[Autoplay, Pagination, Navigation]}
+                              className="mySwiper">
                            {args?.allHotelDetails?.images?.map((resource, index) => {
                               return (<SwiperSlide key={index}>
                                  <img
@@ -294,7 +313,34 @@ function Classic(args) {
                      <div className="relative overflow-hidden">
                         <div className={visible === 0 ? 'block  mb-2' : 'hidden'}><GallerySlider /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                           <Carousel cols={2} rows={1} gap={10} loop>
+                           <Carousel cols={2} rows={1} gap={10} autoPlay={1000} loop={true} 
+                             responsiveLayout={ [
+                              {
+                                breakpoint: 480,
+                                cols: 1,
+                                rows: 1,
+                                gap: 10,
+                                loop: true,
+                                autoplay: 1000
+                              },
+                              {
+                                 breakpoint: 810,
+                                 cols: 2,
+                                 rows: 1,
+                                 gap: 10,
+                                 loop: true,
+                                 autoplay: 1000
+                               },
+                               {
+                                 breakpoint: 1020,
+                                 cols: 2,
+                                 rows: 1,
+                                 gap: 10,
+                                 loop: true,
+                                 autoplay: 1000
+                               },
+                            ]}
+                            >
                               {args?.allHotelDetails?.images?.map((resource, index) => {
                                  return (
                                     <Carousel.Item key={index} >
@@ -367,7 +413,34 @@ function Classic(args) {
                                              <div className='tour-content-block1'>
                                                 <div className='pb-8'>
                                                    <div className="accordion-trigger mb-4">{language?.room} {language?.gallery}</div>
-                                                   <Carousel cols={3} rows={1} gap={10} loop>
+                                                   <Carousel cols={2} rows={1} gap={10} autoPlay={1000} loop={true} 
+                             responsiveLayout={ [
+                              {
+                                breakpoint: 480,
+                                cols: 1,
+                                rows: 1,
+                                gap: 10,
+                                loop: true,
+                                autoplay: 1000
+                              },
+                              {
+                                 breakpoint: 810,
+                                 cols: 2,
+                                 rows: 1,
+                                 gap: 10,
+                                 loop: true,
+                                 autoplay: 1000
+                               },
+                               {
+                                 breakpoint: 1020,
+                                 cols: 2,
+                                 rows: 1,
+                                 gap: 10,
+                                 loop: true,
+                                 autoplay: 1000
+                               },
+                            ]}
+                            >
                                                       {resource.room_images.map((resource, index) => {
                                                          return (
                                                             <Carousel.Item key={index} >
@@ -850,16 +923,21 @@ function Classic(args) {
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
                                  
-                                 <span className="material-icons-outlined"  onClick={() => setCalendarIn(!calendarIn)}>
+                                 <span className="material-icons-outlined">
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                                  {calendarIn === false ?
-                              <div className="tour-receipt-select-title">
+                              <div className="tour-receipt-select-title" onClick={() => setCalendarIn(!calendarIn)}>
                           <span > {d1}</span>
                         </div>:
                                  <input defaultValue={checkInDate}
+                                 onChange={
+                                    (e) => (
+                                      changeCheckIn(e.target.value)
+                                    )
+                                  }
                                  className="my-1 bg-gray-50  text-gray-800
                                  focus:ring-gray-900  border focus:border-gray-900 border-gray-400
                                  text-sm rounded-md block w-16 mr-1 py-0.5 lg:w-16 w-14"
@@ -870,17 +948,21 @@ function Classic(args) {
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" onClick={() => setCalendarOut(!calendarOut)}>
+                                 <span className="material-icons-outlined">
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
-                              <div className="tour-receipt-select-title">
+                              <div className="tour-receipt-select-title"  onClick={() => setCalendarOut(!calendarOut)}>
                          <span  >  {d2}</span>
                         </div>:
                                  <input 
-                                    type="date" defaultValue={checkOutDate}
+                                    type="date" defaultValue={checkOutDate} onChange={
+                                       (e) => (
+                                         changeCheckOut(e.target.value)
+                                       )
+                                     }
                                     className="my-1 bg-gray-50  text-gray-800
                                     focus:ring-gray-900  border focus:border-gray-900 border-gray-400
                                     text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />

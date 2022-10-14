@@ -1005,7 +1005,7 @@ function Classic(args) {
                               <div className="tour-receipt-select-content">
                               {children === false ?
                               <div className="tour-receipt-select-title">
-                         <span  >2 {language?.children}</span>
+                         <span  >2 Infants</span>
                         </div>:
                                 <input
                                 type="number" min={1} defaultValue={2}

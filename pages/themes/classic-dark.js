@@ -57,6 +57,8 @@ function ClassicDark(args) {
    const [singleRoom, setSingleRoom] = useState(false);
    const [d1, setD1] = useState();
    const [d2, setD2] = useState();
+   const [guest, setGuest] = useState(4);
+   const [child, setChild] = useState(2);
    const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
@@ -985,17 +987,17 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                         <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" onClick={() => setGuests(!guests)}>
+                                 <span className="material-icons-outlined" >
                                     person_outline
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {guests === false ?
                               <div className="tour-receipt-select-title">
-                          <span  className='text-white'>4 {language?.guests}</span>
+                          <span  className='text-white' onClick={() => setGuests(!guests)}>{guest} {language?.guests}</span>
                         </div>:
                                  <input
-                                    type="number" min={1} defaultValue="4"
+                                    type="number" min={1} defaultValue={guest} 
                                     className=" my-1 bg-gray-900  text-gray-50
                                     border focus:border-gray-50 px-0.5
                                     focus:ring-gray-50 focus:border-gray-50  
@@ -1014,9 +1016,9 @@ function ClassicDark(args) {
                               <div className="tour-receipt-select-content">
                               {children === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white'>2{language?.children}</span>
+                          <span className='text-white'>{child} Infants</span>
                         </div>:
-                                 <input defaultValue="2"
+                                 <input defaultValue={child}
                                     type="number" min={1} 
                                     className=" my-1 bg-gray-900  text-gray-50 px-0.5
                                     border focus:border-gray-50

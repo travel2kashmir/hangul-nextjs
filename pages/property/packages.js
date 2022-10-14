@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 import axios from "axios";
-import Button from '../../components/Button';
 import Table from "../../components/Table"
 import Link from "next/link";
 import english from "../../components/Languages/en"

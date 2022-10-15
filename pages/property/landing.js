@@ -111,7 +111,7 @@ const  Landing=() =>{
               router.push("/");
               localStorage.removeItem("property");
               localStorage.removeItem("Signin Details");   
-              localStorage.clear();
+              //localStorage.clear();
             }}
             type="button"
           >

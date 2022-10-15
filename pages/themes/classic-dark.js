@@ -37,7 +37,7 @@ var defaultRate = {
 function ClassicDark(args) {
    SwiperCore.use([Navigation, Pagination, Autoplay]);
    const [phone, setPhone] = useState({});
-   const [language, setLanguage] = useState(0);
+   const [language, setLanguage] = useState('en');
    const [calendarIn, setCalendarIn] = useState(false);
    const [children, setChildren] = useState(false);
    const [guests, setGuests] = useState(false);

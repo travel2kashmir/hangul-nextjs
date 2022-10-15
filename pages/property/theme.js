@@ -14,6 +14,7 @@ import Classic from "../themes/classic";
 import ClassicDark from '../themes/classic-dark'
 import "react-toastify/dist/ReactToastify.css";
 var language;
+
 var currentUser;
 var currentProperty;
 

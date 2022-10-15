@@ -30,7 +30,7 @@ function Theme() {
   const [themes, setThemes] = useState(false)
   const [phone, setPhone] = useState({});
   const [email, setEmail] = useState({});
-  const [themeName, setThemeName] = useState("Classic")
+  const [themeName, setThemeName] = useState('Classic')
   const [uri, setUri] = useState("")
   const [loc,setLoc]=useState()
   const [lang,setLang]=useState('en')
@@ -56,8 +56,11 @@ function Theme() {
         if (locale === "fr") {
           language = french;
         }
-        const themeName = localStorage.getItem("ThemeName");
-        setThemeName(themeName)
+        const themeN = localStorage.getItem("ThemeName");
+        if(themeN === "Classic-Dark"){
+          setThemeName('Classic-Dark')
+        }
+       
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import StarRatings from 'react-star-ratings';
 import english from '../../components/Languages/en'
 import french from '../../components/Languages/fr';
 import Marquee from "react-easy-marquee";
@@ -155,7 +156,7 @@ function Classic(args) {
                      className="header-menu-item"
                   >{language?.gallery}</a
                   >
-
+                 
                   <a
                      href="#rooms"
                      className="header-menu-item"
@@ -261,8 +262,15 @@ function Classic(args) {
                         </div>
                         <div className="tour-overview-item"><span>{args?.allHotelDetails?.star_rating} {language?.star}</span> {language?.accomodation}</div>
                         <div className="tour-overview-item">
-                           <span className="material-icons-outlined">star</span>
-                           <span>4.7</span> ({args?.allHotelDetails?.Reviews?.length})
+                      <span className='-mt-0.5 mr-1'> <StarRatings
+                  rating={4.5}
+                  starRatedColor="#FDCC0D"
+                  starDimension='14px'
+                     numberOfStars={6}
+                     starSpacing='1px'
+                      name='rating'
+                       /></span> 
+                        ({args?.allHotelDetails?.Reviews?.length})
                         </div>
                      </div></div>
                </div>
@@ -276,15 +284,14 @@ function Classic(args) {
                   <div className={visible === 1 ? 'block' : 'hidden'}>
                      <div className="tour-hero">
                      <Swiper
-                              centeredSlides={true}
-                              autoplay={{
-                                 delay: 1000,
-                                 disableOnInteraction: false,
+                          centeredSlides={true}
+                          autoplay={{
+                           delay: 1000,
+                           disableOnInteraction: false,
                               }}
                               pagination={{
                                  clickable: true,
                               }}
-
                               modules={[Autoplay, Pagination, Navigation]}
                               className="mySwiper">
                            {args?.allHotelDetails?.images?.map((resource, index) => {

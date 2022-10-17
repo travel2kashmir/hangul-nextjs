@@ -154,6 +154,38 @@ function Theme() {
         progress: undefined,
       }))
   }
+  const submitTheme = () => {
+    const final_data = {
+      "property_id": currentProperty?.property_id,
+      "theme": themeName
+    }
+    const url = '/api/basic'
+    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Theme updated successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+       
+      })
+      .catch((error) => {
+        
+        toast.error("Theme Set Error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
 
   const changeTheme = (item) => {
     localStorage.setItem("ThemeName", item);
@@ -262,8 +294,7 @@ function Theme() {
                 </div>
             <div>
               <button className="bg-cyan-600 text-sm text-center hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={() => {
-                // setUri(`${allHotelDetails?.property_name.replaceAll(' ', '-')}-${currentProperty?.address_city}`.toLowerCase());
-                // sendLink();
+              submitTheme();
               }}
               >Save</button>
             </div>
@@ -288,6 +319,7 @@ function Theme() {
           </div>
         </div>
         </div>
+        
         <div className="lg:ml-64">
         {/* Classic Theme */}
         { themeName === "Classic" ?
@@ -305,6 +337,16 @@ function Theme() {
 
        
         </div>
+         {/* Toast Container */}
+         <ToastContainer position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover />
     </>
    
   );

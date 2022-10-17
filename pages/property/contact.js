@@ -15,6 +15,7 @@ var language;
 var currentProperty;
 var propertyName;
 import Headloader from "../../components/loaders/headloader";
+import DarkModeLogic from "../../components/darkmodelogic";
 import Router from 'next/router'
 import LoaderTable from "./loaderTable";
 const logger = require("../../services/logger");
@@ -22,6 +23,8 @@ var currentLogged;
 
 function Contact() {
   const [gen, setGen] = useState([]) 
+  const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+  const [color, setColor] = useState({})
   const [spinner, setSpinner] = useState(0)
   const [spin, setSpin] = useState(0)
   const [visible,setVisible]=useState(0) 
@@ -35,6 +38,10 @@ function Contact() {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
         var locale = localStorage.getItem("Language");
+        const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+        const color = JSON.parse(localStorage.getItem("Color"));
+         setColor(color);
+         setDarkModeSwitcher(colorToggle)
         if (locale === "ar") {
           language = arabic;
         }
@@ -193,6 +200,10 @@ function Contact() {
 
   }, []);
 
+  useEffect(()=>{ 
+    setColor(DarkModeLogic(darkModeSwitcher))
+   },[darkModeSwitcher])
+
   const submitContactDelete = (props) => {
    const url = `/api/${props}`;
     axios
@@ -229,79 +240,51 @@ function Contact() {
   return (
     <>
 
-     <Header Primary={english?.Side} />
+     <Header  color={color} Primary={english?.Side} />
 
-      <Sidebar Primary={english?.Side} />
+      <Sidebar color={color} Primary={english?.Side} />
       <div
         id="main-content"
-        className="  bg-white pt-24 relative overflow-y-auto lg:ml-64"
+        className={`${color?.whitebackground} pt-24 relative overflow-y-auto lg:ml-64`}
       >
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-2">
-            <li className="inline-flex items-center">
-              <svg
-                className="w-5 h-5 mr-2.5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-              </svg>
-              <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg
-                  className="w-6 h-6 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2">
-                    <a>{propertyName}</a>
+            <ol className="inline-flex items-center space-x-1 md:space-x-2">
+              <li className="inline-flex items-center">
+              <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
+                <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} 
+                className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
+                </Link></div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.text} text-base font-medium capitalize  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                    <a>{currentProperty?.property_name}</a>
                   </Link>
-                  </div>
-              </div>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg
-                  className="w-6 h-6 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <span
-                  className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
-                  aria-current="page"
-                >
-                  {language?.contact}
-                </span>
-              </div>
-            </li>
-          </ol>
-        </nav>
+                  </div></div>
+
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.contact}</span>
+                </div>
+                </div>
+              </li>
+            </ol>
+          </nav>
         {/* Header */}
         <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
          <div className={visible === 1 ? 'block' : 'hidden'}>
         <Table  gen={gen} setGen={setGen} add={()=> setView(1)} edit={submitContactEdit} 
         delSpin={language?.SpinnerDelete} saveSpinner={language?.SpinnerSave} spinner={spinner}
-        setSpinner={setSpinner}
+        setSpinner={setSpinner} color={color}
         spin={spin} 
         delete={submitContactDelete} common={language?.common} cols={language?.ContactCols}
         name="Contact"/> 
@@ -313,7 +296,7 @@ function Contact() {
         <div className={view === 1 ? "block" : "hidden"}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-              <div className="bg-white rounded-lg shadow relative">
+              <div className={`bg-white rounded-lg shadow relative`}>
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                   <h3 className="text-xl font-semibold">{language?.add} {language?.new} {language?.contact}</h3>
                   <button
@@ -344,7 +327,7 @@ function Contact() {
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="first-name"
-                        className="text-sm font-medium text-gray-900 block mb-2"
+                        className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.contact} {language?.type}
                       </label>
@@ -355,7 +338,7 @@ function Contact() {
                             contact_type: e.target.value,
                           },setFlag(1))
                         }
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       >
                         <option selected>Select contact type</option>
                         <option value="phone">Phone</option>
@@ -370,7 +353,7 @@ function Contact() {
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="last-name"
-                        className="text-sm font-medium text-gray-900 block mb-2"
+                        className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.contact} {language?.value}
                       </label>
@@ -385,7 +368,7 @@ function Contact() {
                           },setFlag(1))
                         }
 
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         required
                       />
                     </div>

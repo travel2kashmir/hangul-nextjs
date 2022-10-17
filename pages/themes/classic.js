@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import english from '../../components/Languages/en'
 import french from '../../components/Languages/fr';
-import dateFormat from 'dateformat';
 import Marquee from "react-easy-marquee";
 import arabic from '../../components/Languages/ar'
 import Carousel from 'better-react-carousel';
@@ -58,12 +57,12 @@ function Classic(args) {
    const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
-   
-
   const changeCheckIn =  (d1) => {
     setD1(new Date(d1).toString().slice(4,10));
    setCalendarIn(!calendarIn)
+   
   }
+
   const changeCheckOut =  (d2) => {
    setD2(new Date(d2).toString().slice(4,10));
    setCalendarOut(!calendarOut)
@@ -113,6 +112,7 @@ function Classic(args) {
    }
    })
 
+   
    return (
       <div >
          <div className="header w-full">
@@ -138,6 +138,7 @@ function Classic(args) {
                      <option value="fr">French</option>
                      <option value="ar">Arabic</option>
                   </select>
+                  
                   <a
                      href="#home"
                      className="header-menu-item"

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import StarRatings from 'react-star-ratings';
 import english from '../../components/Languages/en'
 import DatePicker from "react-datepicker";  
 import french from '../../components/Languages/fr';
@@ -262,8 +263,16 @@ function ClassicDark(args) {
                            <p className='text-white pr-1'>{args?.allHotelDetails?.star_rating} {language?.star}</p>
                             {language?.accomodation}</div>
                         <div className="tour-overview-item ">
-                           <span className="material-icons-outlined mt-0.5">star</span>
-                          <p className='text-white'>4.7  ({args?.allHotelDetails?.Reviews?.length}) </p>
+                        <span className='-mt-0.5 mr-1'> 
+                        <StarRatings
+                  rating={4.5}
+                  starRatedColor="#FDCC0D"
+                  starDimension='14px'
+                     numberOfStars={7}
+                     starSpacing='1px'
+                      name='rating'
+                       /></span> 
+                          <p className='text-white'> ({args?.allHotelDetails?.Reviews?.length}) </p>
                         </div>
                      </div></div>
                </div>

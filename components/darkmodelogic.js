@@ -10,13 +10,15 @@ if((switcher===false) || (switcher==="") ||  (switcher===undefined)){
     color.error='text-red-500',
     color.textgray='text-gray-600',
     color.sidebar="hover:bg-gray-100",
+    color.deltext="text-gray-500",
     color.iconhover="group-hover:text-gray-900",
     color.footerhover="hover:text-gray-900"
 }
 if(switcher === true)
 {
     color.text= "text-white",
-    color.tableheader="bg-gray-700"
+    color.tableheader="bg-gray-700",
+    color.deltext="text-gray-200",
     color.greybackground= "bg-gray-900",
     color.whitebackground="bg-gray-800",
     color.hover='hover:bg-gray-900',

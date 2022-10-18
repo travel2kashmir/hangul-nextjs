@@ -35,8 +35,7 @@ var defaultRate = {
 
 function Classic(args) {
    SwiperCore.use([Navigation, Pagination, Autoplay]);
-   const [phone, setPhone] = useState({});
-   const [language, setLanguage] = useState('en');
+   const [language, setLanguage] = useState(english);
    const [calendarIn, setCalendarIn] = useState(false);
    const [children, setChildren] = useState(false);
    const [guests, setGuests] = useState(false);
@@ -69,25 +68,25 @@ function Classic(args) {
    setCalendarOut(!calendarOut)
  }
    /** Router for Redirection **/
-   const router = useRouter();
-   useEffect(() => {
-      const firstfun = () => {
-         if (typeof window !== 'undefined') {
-           setLanguage(args?.language)
-            currentUser = JSON.parse(localStorage.getItem("Signin Details"));
-            /** Current Property Details fetched from the local storage **/
-            currentProperty = JSON.parse(localStorage.getItem("property"));
-            currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-         }
+  /** Router for Redirection **/
+  const router = useRouter();
+  useEffect(() => {
+   const firstfun = () => {
+      if (typeof window !== 'undefined') {
+        setLanguage(args?.language)
       }
-      const current = new Date();
+   }
+   firstfun();
+     const current = new Date();
       let month = current.getMonth() + 1;
       checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
       checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate() + 1}`;
       setD1(new Date(checkInDate).toString().slice(4, 10));
       setD2(new Date(checkOutDate).toString().slice(4, 10));
-      firstfun();
-   }, [])
+     setVisible(1)
+  }, [])
+
+ 
 
    /* Function call to fetch Current Property Details when page loads */
    useEffect(() => {
@@ -262,14 +261,15 @@ function Classic(args) {
                         </div>
                         <div className="tour-overview-item"><span>{args?.allHotelDetails?.star_rating} {language?.star}</span> {language?.accomodation}</div>
                         <div className="tour-overview-item">
-                      <span className='-mt-0.5 mr-1'> <StarRatings
-                  rating={4.5}
-                  starRatedColor="#FDCC0D"
-                  starDimension='14px'
-                     numberOfStars={6}
-                     starSpacing='1px'
-                      name='rating'
-                       /></span> 
+                      <span className='-mt-0.5 mr-1'>
+                              <StarRatings
+                                 rating={4.5}
+                                 starRatedColor="#FDCC0D"
+                                 starDimension='16px'
+                                 numberOfStars={5}
+                                 starSpacing='1px'
+                                 name='rating'
+                              /></span> 
                         ({args?.allHotelDetails?.Reviews?.length})
                         </div>
                      </div></div>
@@ -1033,7 +1033,7 @@ function Classic(args) {
                      <div className="tour-receipt-detail">
                         <div className="tour-receipt-detail-item">
                            <div className="tour-receipt-detail-title">
-                           {language?.baserate}
+                           {language?.baserate} 
                            </div>
                            <div className="tour-receipt-detail-price">
                               <div className={visible === 0 ? 'block w-16' : 'hidden'}><SubHeading /></div>

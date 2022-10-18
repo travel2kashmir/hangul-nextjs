@@ -458,7 +458,7 @@ function Address() {
         pauseOnHover
       />
     </div>
-    <Footer/>
+    <Footer color={color} Primary={english.Side}/>
    
     </>
   );

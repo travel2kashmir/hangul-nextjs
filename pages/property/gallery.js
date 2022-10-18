@@ -1,5 +1,6 @@
 import React from 'react'
-import objChecker from "lodash"
+import objChecker from "lodash";
+import DarkModeLogic from "../../components/darkmodelogic";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import Sidebar  from "../../components/Sidebar";
@@ -13,19 +14,42 @@ import Footer from '../../components/Footer';
 import Loader from "../../components/loaders/imageloader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Headloader from '../../components/loaders/headloader';
+import Textboxloader from '../../components/loaders/textboxloader';
 const logger = require("../../services/logger");
 var language;
 var currentProperty;
 var currentLogged;
 import Router from 'next/router'
-import { getEmojiFlag } from 'countries-list';
+
 
 function Gallery() {
     const [visible,setVisible]=useState(0)
+    const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+    const [color, setColor] = useState({})
+    const [allHotelDetails, setAllHotelDetails] = useState([])
+    const [spinner, setSpinner] = useState(0)
+    const [spin, setSpin] = useState(0)
+    const [gallery, setGallery] = useState([])
+    const [image, setImage] = useState({})
+    const [editImage, setEditImage] = useState(0)
+    const [deleteImage, setdeleteImage] = useState(0)
+    const [actionImage, setActionImage] = useState({})
+    const [updateImage, setUpdateImage] = useState({})
+    const [flag, setFlag] = useState([])
+    const [addImage, setAddImage] = useState(0)
+    const [enlargeImage, setEnlargeImage] = useState(0)
+    const [actionEnlargeImage, setActionEnlargeImage] = useState({})
+
     useEffect(() => {
         const firstfun = () => {
             if (typeof window !== 'undefined') {
                 var locale = localStorage.getItem("Language");
+                const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+                const color = JSON.parse(localStorage.getItem("Color"));
+                setColor(color);
+                setDarkModeSwitcher(colorToggle)
+                
                 if (locale === "ar") {
                     language = arabic;
                 }
@@ -44,19 +68,6 @@ function Gallery() {
         firstfun();
         Router.push("./gallery");
     }, [])
-    const [allHotelDetails, setAllHotelDetails] = useState([])
-    const [spinner, setSpinner] = useState(0)
-    const [spin, setSpin] = useState(0)
-    const [gallery, setGallery] = useState([])
-    const [image, setImage] = useState({})
-    const [editImage, setEditImage] = useState(0)
-    const [deleteImage, setdeleteImage] = useState(0)
-    const [actionImage, setActionImage] = useState({})
-    const [updateImage, setUpdateImage] = useState({})
-    const [flag, setFlag] = useState([])
-    const [addImage, setAddImage] = useState(0)
-    const [enlargeImage, setEnlargeImage] = useState(0)
-    const [actionEnlargeImage, setActionEnlargeImage] = useState({})
 
     /* Function call to fetch Current Property Details when page loads */
     const fetchHotelDetails = async () => {
@@ -73,9 +84,14 @@ function Gallery() {
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
     }  
+
     useEffect(() => {
         fetchHotelDetails();
     }, []);
+
+    useEffect(()=>{ 
+        setColor(DarkModeLogic(darkModeSwitcher))
+       },[darkModeSwitcher])
 
     const onChangePhoto = (e, i) => {
         setImage({ ...image, imageFile: e.target.files[0] })
@@ -257,39 +273,46 @@ function Gallery() {
 
     return (
         <>   
-     <Header Primary={english?.Side}/>
-     <Sidebar  Primary={english?.Side}/>
+     <Header color={color} Primary={english.Side}/>
+     <Sidebar  color={color} Primary={english.Side}/>
         <div id="main-content"
-            className="  bg-gray-50 px-4 pt-24 py-2 relative overflow-y-auto lg:ml-64">
+            className={`${color?.greybackground} px-4 pt-24 py-2 relative overflow-y-auto lg:ml-64`}>
             {/* Navbar */}
             <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-                <ol className="inline-flex items-center space-x-1 md:space-x-2">
-                    <li className="inline-flex items-center">
-                        <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                        <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link>
-                    </li>
-                    <li>
-                        <div className="flex items-center">
-                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                            <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                                <Link href="./propertysummary" >
-                                    <a> {gallery?.property_name}</a></Link>
-                            </span>
-                        </div>
-                    </li>
-                    <li>
-                        <div className="flex items-center">
-                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                            <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.gallery}</span>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
+            <ol className="inline-flex items-center space-x-1 md:space-x-2">
+              <li className="inline-flex items-center">
+              <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
+                <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} 
+                className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
+                </Link></div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.text} capitalize text-base font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                    <a>{currentProperty?.property_name}</a>
+                  </Link>
+                  </div></div>
+
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.textgray} capitalize text-base font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.gallery}</span>
+                </div>
+                </div>
+              </li>
+            </ol>
+          </nav>
 
             {/* Header */}
-            <div className=" bg-white shadow rounded-lg  px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-                <h6 className="text-xl mb-2 flex leading-none pl-4 pt-2 font-bold text-gray-900 ">
+            <div className={`${color?.whitebackground} shadow rounded-lg  px-12 p-6  -mb-4 sm:p-6 xl:p-8  2xl:col-span-2`} >
+                <h6 className={`text-xl mb-2 flex leading-none pl-4 pt-2 font-bold ${color?.text}`}>
                     {language?.gallery}
                 </h6>
                 <div className="sm:flex">
@@ -297,59 +320,61 @@ function Gallery() {
                         <form className="lg:pr-3" action="#" method="GET">
                             <label htmlFor="users-search" className="sr-only">{language?.search}</label>
                             <div className="mt-1 relative lg:w-64 xl:w-96">
-                                <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.searchforimages}>
+                                <input type="text" name="email" id="users-search" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder={language?.searchforimages}>
                                 </input>
                             </div>
                         </form>
                         <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
-                            <a href="#" className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+                            <a href="#" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd"></path></svg>
                             </a>
-                            <a href="#" className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+                            <a href="#" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                             </a>
-                            <a href="#" className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+                            <a href="#" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                             </a>
-                            <a href="#" className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
+                            <a href="#" className={`${color?.textgray} hover:${color?.text} cursor-pointer p-1 ${color?.hover} rounded inline-flex justify-center`}>
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
                             </a>
                         </div>
                     </div>
                     <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                         <Button Primary={language?.Add} onClick={() => setAddImage(1)} />
-                        <a href="#" className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
+                        <a href="#" className={`w-1/2 ${color?.text} ${color?.whitebackground} border border-gray-300  ${color?.hover}  focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto`}>
                             <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
                             Import
                         </a>
                     </div>
                 </div>
                 {/* Gallery Form */}
-                <div className={visible===0?'block w-auto h-auto m-6 flex':'hidden'}><Loader/><Loader/><Loader/></div> 
+                <div className={visible===0?'block w-auto px-4 h-auto m-6 flex':'hidden'}>
+                    <Loader/><Loader/><Loader/></div> 
                <div className={visible===1?'block':'hidden'}>
-                <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
+                <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {gallery?.images?.map((item, idx) => {
                         return (
-                            <div className="block text-blueGray-600 text-xs mt-6 font-bold " key={idx} style={{ marginLeft: "35px" }}>
-                                <button onClick={() => { setEnlargeImage(1); setActionEnlargeImage(item) }}> <img src={item.image_link} alt='pic_room' style={{ height: "250px", width: "400px" }} />
+                            <div className="block text-blueGray-600 text-xs  mt-6 font-bold " key={idx} >
+                                <button onClick={() => { setEnlargeImage(1); setActionEnlargeImage(item) }}>
+                                     <img src={item.image_link} alt='pic_room' style={{ height: "250px", width: "450px" }} />
                                 </button>
                                 <table>
                                     <tr className="pt-1">
                                         <td >
-                                            <span className="pl-1  text-sm">{item?.image_title}</span>
+                                            <span className={`pl-1 ${color?.text} text-sm`}>{item?.image_title}</span>
 
                                         </td>
                                         <td className="flex justify-end">
                                             <button
                                                 onClick={() => { setEditImage(1); setActionImage(item);setUpdateImage(item) }}
-                                                className="text-gray-500   hover:text-gray-900 
-                                         cursor-pointer hover:bg-gray-100 rounded ">
+                                                className={`text-gray-500   hover:${color?.text}
+                                         cursor-pointer ${color?.hover} rounded`}>
                                                 <svg className=" h-5  w-5 font-semibold "
                                                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd"></path></svg>
                                             </button>
                                             <button
-                                                onClick={() => { setdeleteImage(1); setActionImage(item) }} className="text-gray-500  hover:text-gray-900
-                                         cursor-pointer  hover:bg-gray-100 rounded">
+                                                onClick={() => { setdeleteImage(1); setActionImage(item) }} className={`text-gray-500   hover:${color?.text}
+                                                cursor-pointer ${color?.hover} rounded`}>
                                                 <svg className="  w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                             </button>
                                         </td>
@@ -368,14 +393,15 @@ function Gallery() {
             <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-                        <div className="bg-gray-100 rounded-lg shadow relative">
+                        <div className={` ${color.tableheader} rounded-lg shadow relative`}>
                             <div className="flex justify-between p-5 border-b rounded-t">
-                                <h3 className="text-xl font-semibold">
+                                <h3 className={`text-xl ${color?.text} font-semibold`}>
                                     {actionEnlargeImage.image_title}
                                 </h3>
                                 <button type="button"
                                     onClick={() => setEnlargeImage(0)}
-                                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="user-modal">
+                                    className={`text-gray-400 bg-transparent  ${color.sidebar} hover:${color?.text} rounded-lg text-sm
+                                     p-1.5 ml-auto inline-flex items-center`} data-modal-toggle="user-modal">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button> </div>
                             <div> <img src={actionEnlargeImage.image_link} alt='pic_room' style={{ height: "350px", width: "650px" }} />
@@ -389,9 +415,9 @@ function Gallery() {
             <div className={editImage === 1 ? 'block' : 'hidden'}>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-                        <div className="bg-white rounded-lg shadow relative">
+                        <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
-                                <h3 className="text-xl font-semibold">
+                                <h3 className={`${color?.text} text-xl font-semibold`}>
                                     {language?.edit} {language?.image} 
                                   
                                 </h3>
@@ -411,14 +437,15 @@ function Gallery() {
                                         <img src={actionImage?.image_link} alt='property_image' height={"200"} width={"400"} />
                                     </div> <div className="col-span-6 sm:col-span-3">
                                         <label
-                                            className="text-sm font-medium text-gray-900 block mb-2"
+                                            className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.description}
                                         </label>
                                         <textarea rows="6" columns="60"
 
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                            focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                             onChange={
                                                 (e) => (
                                                     setActionImage({
@@ -431,7 +458,7 @@ function Gallery() {
                                         />
                                     </div> <div className="col-span-6 sm:col-span-3">
                                         <label
-                                            className="text-sm font-medium text-gray-900 block mb-2"
+                                            className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.titl}
@@ -447,7 +474,7 @@ function Gallery() {
                                                     },setFlag(1))
                                                 )
                                             }
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                             placeholder="Image Title" />
                                     </div>
 
@@ -474,9 +501,9 @@ function Gallery() {
             <div className={addImage === 1 ? 'block' : 'hidden'}>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-                        <div className="bg-white rounded-lg shadow relative">
+                        <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
-                                <h3 className="text-xl font-semibold">
+                                <h3 className={`${color?.text} text-xl font-semibold`}>
                                     {language?.addnewimage}
                                 </h3>
                                 <button type="button"
@@ -497,7 +524,7 @@ function Gallery() {
                                 <div className="grid grid-cols-6 gap-6">
                                     <div className="col-span-6 sm:col-span-3">
                                         <label
-                                            className="text-sm font-medium text-gray-900 block mb-2"
+                                            className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.imageupload}
@@ -509,8 +536,9 @@ function Gallery() {
                                                     onChangePhoto(e, 'imageFile');
 
                                                 }}
-                                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5"
-                                                defaultValue="" />
+                                                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                                focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                              defaultValue="" />
 
                                         </div>
                                         <div className="col-span-6 sm:col-span-3">
@@ -519,10 +547,10 @@ function Gallery() {
                                             <Button Primary={language?.SpinnerUpload} />
                                                     }</div>
                                     </div>
-                                    <img className="py-2" src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
+                                    <img className={`py-2 ${color?.text}`} src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                                     <div className="col-span-6 sm:col-span-3">
                                         <label
-                                            className="text-sm font-medium text-gray-900 block mb-2"
+                                            className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.titl}
@@ -530,19 +558,20 @@ function Gallery() {
                                         <input
                                             type="text"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value },setFlag(1)))}
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                                            placeholder="Image Title" />
+                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                            focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}placeholder="Image Title" />
                                     </div>
                                     <div className="col-span-6 sm:col-span-3">
                                         <label
-                                            className="text-sm font-medium text-gray-900 block mb-2"
+                                            className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.description}
                                         </label>
                                         <textarea rows="2" columns="60"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value },setFlag(1)))}
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                            focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                             defaultValue="" />
                                     </div>
 
@@ -569,7 +598,7 @@ function Gallery() {
             <div className={deleteImage === 1 ? 'block' : 'hidden'}>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                     <div className="relative w-full max-w-md px-4 h-full md:h-auto">
-                        <div className="bg-white rounded-lg shadow relative">
+                        <div className={`rounded-lg shadow relative ${color?.whitebackground}`}>
                             <div className="flex justify-end p-2">
                                 <button
                                     onClick={() => setdeleteImage(0)}
@@ -580,7 +609,7 @@ function Gallery() {
 
                             <div className="p-6 pt-0 text-center">
                                 <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <h3 className="text-base font-normal text-gray-500 mt-5 mb-6">
+                                <h3 className={`text-base font-normal ${color?.deltext} mt-5 mb-6`}>
                                     {language?.areyousureyouwanttodelete}
                                 </h3>
                                
@@ -609,7 +638,7 @@ function Gallery() {
                 draggable
                 pauseOnHover />
         </div>
-    <Footer/>  
+    <Footer  color={color} Primary={english.Side}/>  
      </>
     )
 }

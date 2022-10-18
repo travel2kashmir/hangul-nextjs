@@ -32,7 +32,7 @@ function PropertySummary() {
   useEffect(() => {
     firstfun();
     fetchHotelDetails();
-    router.push("./propertysummary");
+    // router.push("./propertysummary");
   }, [])
 
  useEffect(()=>{ 

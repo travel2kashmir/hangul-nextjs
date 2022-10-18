@@ -99,7 +99,7 @@ function Ari() {
                draggable: true,
                progress: undefined,
              });
-             
+             setViewTransaction(false);
            })
            .catch((error) => {
              toast.error("Transaction error", {

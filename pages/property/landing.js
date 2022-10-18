@@ -87,7 +87,9 @@ const  Landing=() =>{
 
   /**Function to save Current property to be viewed to Local Storage**/
   const LocalProperty = ({ item }) => {
+    
     localStorage.setItem("property", JSON.stringify(item));
+    router.push('./propertysummary');
   };
 
   return ( 
@@ -194,7 +196,7 @@ const  Landing=() =>{
                                            
                                <Button Primary={language?.View}  onClick={() => {
                                     LocalProperty({ item});
-                                    router.push("./propertysummary");
+                                    
                                   }} />
                       
                

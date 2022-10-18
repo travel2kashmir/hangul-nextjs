@@ -14,10 +14,8 @@ import Classic from "../themes/classic";
 import ClassicDark from '../themes/classic-dark'
 import "react-toastify/dist/ReactToastify.css";
 var language;
-
 var currentUser;
 var currentProperty;
-
 var currentLogged;
 
 function Theme() {
@@ -46,7 +44,7 @@ function Theme() {
          const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
          const color = JSON.parse(localStorage.getItem("Color"));
          setColor(color);
-          setDarkModeSwitcher(colorToggle)
+         setDarkModeSwitcher(colorToggle)
         if (locale === "ar") {
           language = arabic;
         }

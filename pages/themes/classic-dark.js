@@ -38,7 +38,7 @@ var defaultRate = {
 function ClassicDark(args) {
    SwiperCore.use([Navigation, Pagination, Autoplay]);
    const [phone, setPhone] = useState({});
-   const [language, setLanguage] = useState('en');
+   const [language, setLanguage] = useState(english);
    const [calendarIn, setCalendarIn] = useState(false);
    const [children, setChildren] = useState(false);
    const [guests, setGuests] = useState(false);
@@ -63,19 +63,12 @@ function ClassicDark(args) {
    const [smSidebar, setSmSidebar] = useState(false)
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
-   
-
-   /** Router for Redirection **/
   /** Router for Redirection **/
   const router = useRouter();
   useEffect(() => {
      const firstfun = () => {
         if (typeof window !== 'undefined') {
           setLanguage(args?.language)
-           currentUser = JSON.parse(localStorage.getItem("Signin Details"));
-           /** Current Property Details fetched from the local storage **/
-           currentProperty = JSON.parse(localStorage.getItem("property"));
-           currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         }
      }
      const current = new Date();
@@ -267,8 +260,8 @@ function ClassicDark(args) {
                         <StarRatings
                   rating={4.5}
                   starRatedColor="#FDCC0D"
-                  starDimension='14px'
-                     numberOfStars={7}
+                  starDimension='15px'
+                     numberOfStars={5}
                      starSpacing='1px'
                       name='rating'
                        /></span> 

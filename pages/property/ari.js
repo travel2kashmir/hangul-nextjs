@@ -8,6 +8,8 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
 import DarkModeLogic from "../../components/darkmodelogic";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Router from "next/router";
 var language;
 var currentProperty;
@@ -16,12 +18,15 @@ var currentLogged;
 
 function Ari() {
     const [allPackages, setAllPackages] = useState([])
+    const[propertyAction,setPropertyAction] =useState('delta')
+    const[partnerKey,setPartnerKey] =useState()
     const [darkModeSwitcher, setDarkModeSwitcher] = useState()
     const [color, setColor] = useState({})
     const [viewTransaction, setViewTransaction] = useState(false)
     useEffect(() => {
         setColor(DarkModeLogic(darkModeSwitcher))
     }, [darkModeSwitcher])
+
     useEffect(() => {
         const firstfun = () => {
             if (typeof window !== 'undefined') {
@@ -29,7 +34,7 @@ function Ari() {
                 const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
                 const color = JSON.parse(localStorage.getItem("Color"));
                 setColor(color);
-                setDarkModeSwitcher(colorToggle)
+                setDarkModeSwitcher(colorToggle);
                 if (locale === "ar") {
                     language = arabic;
                 }
@@ -51,6 +56,7 @@ function Ari() {
 
     useEffect(() => {
         fetchPackages();
+        fetchPartnerKey();
     }
         , [])
 
@@ -62,6 +68,52 @@ function Ari() {
             })
             .catch((error) => { logger.error("url to fetch package details, failed") });
     }
+
+    const fetchPartnerKey = async () => {
+        const url = `/api/ari/partner_property_key/${currentProperty?.property_id}`;
+        axios.get(url)
+            .then((response) => {
+                setPartnerKey(response.data.partner_id);
+            })
+            .catch((error) => { logger.error("url to fetch package details, failed") });
+    }
+    const submitTransaction = () => {
+        const current = new Date();
+        const currentDateTime= current.toISOString();
+        const final_data =  {"transaction": {
+           "property_id": currentProperty?.property_id,
+           "partner_key": partnerKey,
+           "property_action": propertyAction,
+           "datetime": currentDateTime 
+         }
+       }
+         const url = '/api/ari/transaction'
+         axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+           ((response) => {
+             toast.success("Transaction success", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             });
+             
+           })
+           .catch((error) => {
+             toast.error("Transaction error", {
+               position: "top-center",
+               autoClose: 5000,
+               hideProgressBar: false,
+               closeOnClick: true,
+               pauseOnHover: true,
+               draggable: true,
+               progress: undefined,
+             });
+           })
+     }
+     
     return (
         <>
             <Header color={color} Primary={english?.Side} />
@@ -142,8 +194,6 @@ function Ari() {
                                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                 </button>
 
-
-
                                 <span className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center">
                                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
                                 </span>
@@ -155,9 +205,7 @@ function Ari() {
 
                         <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                             <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
-            font-semibold
-           rounded-lg text-sm px-5 py-2 text-center 
-           items-center ease-linear transition-all duration-150"onClick={() => { setViewTransaction(!viewTransaction) }}>
+                           font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"onClick={() => { setViewTransaction(!viewTransaction) }}>
                                 Generate Transaction</button>
                             <span className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
                                 <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
@@ -185,11 +233,8 @@ function Ari() {
                                             <th scope="col"
                                                 className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Package Name</th>
 
-
                                             <th scope="col"
                                                 className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
-
-
 
                                             <th scope="col"
                                                 className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
@@ -259,7 +304,7 @@ function Ari() {
 
                                 <div className="p-6 space-y-6">
                                     <form id='editImage'>
-                                        <div className="grid grid-cols-6 gap-6">
+                                        <div className="grid grid-cols-4 gap-6">
                                             <div className="col-span-6 sm:col-span-3">
                                                 <label
                                                     className="text-sm  font-semibold text-gray-900 block mb-2"
@@ -267,20 +312,20 @@ function Ari() {
                                                 >
                                                     Action
                                                 </label>
-                                                <div className="flex items-center mb-4">
-                                                    <input disabled id="disabled-radio-1" type="radio" value="" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-1" className="ml-2 text-sm font-medium text-gray-800 dark:text-gray-500">Replace</label>
+                                                <div className="flex items-center mb-4" >
+                                                    <input  id="disabled-radio-1" checked={propertyAction==="overlay"} onChange={()=>{setPropertyAction("overlay")}} type="radio" value="overlay" name="disabled-radio"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                    <label htmlFor="disabled-radio-1"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Replace<span className='text-xs'>(Replaces all previously defined for the property).</span></label>
                                                 </div>
                                                 <div className="flex items-center">
-                                                    <input disabled checked id="disabled-radio-2" type="radio" value="" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2" className="ml-2 text-sm font-medium text-gray-800 dark:text-gray-500">Overwrite</label>
+                                                    <input  checked={propertyAction==="delta"}  onChange={()=>{setPropertyAction("delta")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                                    <label htmlFor="disabled-radio-2"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Modify<span className='text-xs'>(Adds previously undefined or modifies existing data for the property).</span></label>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                                    <button className="bg-gradient-to-r  sm:inline-flex  
+                                    <button  onClick={submitTransaction} className="bg-gradient-to-r  sm:inline-flex  
             focus:ring-4 focus:ring-cyan-200 font-semibold bg-cyan-600 hover:bg-cyan-700 text-white
              rounded-lg text-sm px-5 py-2 text-center 
              items-center  mb-1 ease-linear transition-all duration-150">
@@ -293,6 +338,17 @@ function Ari() {
 
                     </div>
                 </div>
+                 {/* Toast Container */}
+          <ToastContainer position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover />
+
             </div>
         </>
     )

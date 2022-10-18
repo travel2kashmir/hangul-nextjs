@@ -111,8 +111,7 @@ function Classic(args) {
       setLanguage(arabic)
    }
    })
-
-   
+  
    return (
       <div >
          <div className="header w-full">

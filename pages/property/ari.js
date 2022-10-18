@@ -87,7 +87,6 @@ function Ari() {
            "datetime": currentDateTime 
          }
        }
-         alert(JSON.stringify(final_data));
          const url = '/api/ari/transaction'
          axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
            ((response) => {
@@ -305,7 +304,7 @@ function Ari() {
 
                                 <div className="p-6 space-y-6">
                                     <form id='editImage'>
-                                        <div className="grid grid-cols-6 gap-6">
+                                        <div className="grid grid-cols-4 gap-6">
                                             <div className="col-span-6 sm:col-span-3">
                                                 <label
                                                     className="text-sm  font-semibold text-gray-900 block mb-2"
@@ -315,11 +314,11 @@ function Ari() {
                                                 </label>
                                                 <div className="flex items-center mb-4" >
                                                     <input  id="disabled-radio-1" checked={propertyAction==="overlay"} onChange={()=>{setPropertyAction("overlay")}} type="radio" value="overlay" name="disabled-radio"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-1"  className="ml-2 text-sm font-medium text-gray-800 dark:text-gray-500">Replace {propertyAction}</label>
+                                                    <label htmlFor="disabled-radio-1"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Replace<span className='text-xs'>(Replaces all previously defined for the property).</span></label>
                                                 </div>
                                                 <div className="flex items-center">
                                                     <input  checked={propertyAction==="delta"}  onChange={()=>{setPropertyAction("delta")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2"  className="ml-2 text-sm font-medium text-gray-800 dark:text-gray-500">Modify</label>
+                                                    <label htmlFor="disabled-radio-2"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Modify<span className='text-xs'>(Adds previously undefined or modifies existing data for the property).</span></label>
                                                 </div>
                                             </div>
                                         </div>

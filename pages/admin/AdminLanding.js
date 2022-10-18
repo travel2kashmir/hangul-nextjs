@@ -267,7 +267,11 @@ function AdminLanding() {
                                                                 className="text-white ml-4 bg-blue-600
                                                                 hover:bg-blue-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                                                text-sm inline-flex items-center px-2 py-1.5 text-center">
-                                                               <Link href={`${loc}/${item?.address_province.replace(/\s+/g,"-")}/${item?.address_city}/${item?.property_category}s/${item?.property_name?.replaceAll(' ', '-')}/bg-lime-50/${lang}`}>
+                                                               <Link href={ `${loc}/${lang}/${item?.address_province.replace(
+                    /\s+/g,
+                    "-"
+                  )}/${item?.address_city}/${item?.property_category
+                  }s/${item?.property_name?.replaceAll(' ', '-')}`}>
                                                                     <a target="_blank">Website</a>
                                                                     </Link></button>
                                                         </td>
@@ -367,7 +371,11 @@ function AdminLanding() {
                                                                 hover:bg-blue-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg
                                                                text-sm inline-flex items-center px-2 py-1.5 text-center">
                                                                 <Link  
-                                                                href={`${loc}/${item?.address_province.replace(/\s+/g,"-")}/${item?.address_city}/${item?.property_category}s/${item?.property_name?.replaceAll(' ', '-')}/bg-lime-50/${lang}`}>
+                                                                href={ `${loc}/${lang}/${item?.address_province.replace(
+                    /\s+/g,
+                    "-"
+                  )}/${item?.address_city}/${item?.property_category
+                  }s/${item?.property_name?.replaceAll(' ', '-')}`}>
                                                                     <a target="_blank">Website</a>
                                                                     </Link></button>
                                                         </td>

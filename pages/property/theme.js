@@ -24,15 +24,15 @@ function Theme() {
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [allRooms, setAllRooms] = useState({});
-   const [allPackages, setAllPackages] = useState({});
+  const [allPackages, setAllPackages] = useState({});
   const [themes, setThemes] = useState(false)
   const [phone, setPhone] = useState({});
   const [email, setEmail] = useState({});
   const [themeName, setThemeName] = useState('Classic')
   const [uri, setUri] = useState("")
-  const [loc,setLoc]=useState()
-  const [lang,setLang]=useState('en')
-  const [visible,setVisible]=useState(0) 
+  const [loc, setLoc] = useState()
+  const [lang, setLang] = useState('en')
+  const [visible, setVisible] = useState(0)
   var locale;
 
   /** Router for Redirection **/
@@ -40,11 +40,11 @@ function Theme() {
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
-         locale = localStorage.getItem("Language");
-         const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
-         const color = JSON.parse(localStorage.getItem("Color"));
-         setColor(color);
-         setDarkModeSwitcher(colorToggle)
+        locale = localStorage.getItem("Language");
+        const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+        const color = JSON.parse(localStorage.getItem("Color"));
+        setColor(color);
+        setDarkModeSwitcher(colorToggle)
         if (locale === "ar") {
           language = arabic;
         }
@@ -55,10 +55,10 @@ function Theme() {
           language = french;
         }
         const themeN = localStorage.getItem("ThemeName");
-        if(themeN === "Classic-Dark"){
+        if (themeN === "Classic-Dark") {
           setThemeName('Classic-Dark')
         }
-       
+
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
@@ -73,16 +73,16 @@ function Theme() {
     router.push("./theme");
   }, [])
 
-  useEffect(()=>{ 
+  useEffect(() => {
     setColor(DarkModeLogic(darkModeSwitcher))
-   },[darkModeSwitcher])
-  
+  }, [darkModeSwitcher])
+
   /* Function call to fetch Current Property Details when page loads */
   useEffect(() => {
     fetchHotelDetails();
     fetchRoomDetails();
     fetchPackageDetails();
-  
+
   }, []);
 
   const fetchHotelDetails = async () => {
@@ -103,22 +103,22 @@ function Theme() {
   const fetchRoomDetails = async () => {
     const url = `/api/all_rooms_details/${currentProperty.property_id}`;
     axios.get(url)
-       .then((response) => {
-          setAllRooms(response.data);
-          logger.info("url  to fetch room details hitted successfully")
-         })
-       .catch((error) => { logger.error("url to fetch property details, failed") });
- }
+      .then((response) => {
+        setAllRooms(response.data);
+        logger.info("url  to fetch room details hitted successfully")
+      })
+      .catch((error) => { logger.error("url to fetch property details, failed") });
+  }
 
- const fetchPackageDetails = async () => {
+  const fetchPackageDetails = async () => {
     const url = `/api/all_packages_details/${currentProperty.property_id}`;
     axios.get(url)
-       .then((response) => {
-         setAllPackages(response.data);
-          logger.info("url  to fetch package details hitted successfully")
-         })
-       .catch((error) => { logger.error("url to fetch package details, failed") });
- }
+      .then((response) => {
+        setAllPackages(response.data);
+        logger.info("url  to fetch package details hitted successfully")
+      })
+      .catch((error) => { logger.error("url to fetch package details, failed") });
+  }
 
   const sendLink = () => {
     const data = {
@@ -169,10 +169,10 @@ function Theme() {
           draggable: true,
           progress: undefined,
         });
-       
+
       })
       .catch((error) => {
-        
+
         toast.error("Theme Set Error!", {
           position: "top-center",
           autoClose: 5000,
@@ -191,7 +191,7 @@ function Theme() {
 
   return (
     <>
-   <Header color={color} Primary={english?.Side} />
+      <Header color={color} Primary={english?.Side} />
       <Sidebar color={color} Primary={english?.Side} />
       {/* Body */}
       <div id="main-content" className={`${color?.greybackground}  pt-24 relative overflow-y-auto lg:ml-64`}
@@ -210,7 +210,7 @@ function Theme() {
                   <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                 </svg>
 
-                <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
 
                 </Link>
               </div>
@@ -249,7 +249,7 @@ function Theme() {
                   ></path>
                 </svg>
                 <span className={`${color?.textgray} text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2`}>
-                 Themes
+                  Themes
                 </span>
               </div>
             </li>
@@ -257,11 +257,11 @@ function Theme() {
         </nav>
         <div>
         </div>
-       
+
         {/* Themes Selection*/}
         <div className="flex px-4" >
-          <h6 className={ `${color?.text} text-xl font-bold mt-2 mb-4`}>
-           Themes 
+          <h6 className={`${color?.text} text-xl font-bold mt-2 mb-4`}>
+            Themes
           </h6>
           {/* Header */}
           <div className="flex items-center justify-end space-x-1  sm:space-x-2 ml-auto">
@@ -269,91 +269,91 @@ function Theme() {
               <button onClick={() => { setThemes(!themes) }} className={`text-cyan-600 text-xs ${color?.whitebackground} hover:${color?.greybackground} 
                      border font-semibold rounded-lg  pr-2 py-2 
                          text-center inline-flex items-center`}
-                      type="button">
-                         <span className="flex items-center">
-              <span className="h-2.5 w-2.5 capitalize rounded-full mx-1 bg-green-400"></span>
+                type="button">
+                <span className="flex items-center">
+                  <span className="h-2.5 w-2.5 capitalize rounded-full mx-1 bg-green-400"></span>
                   <span className="mr-0.5">  {themeName}</span>
-                 <svg className=" w-4 h-4 px-0.5" aria-hidden="true" fill="none"
-                  stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  <svg className=" w-4 h-4 px-0.5" aria-hidden="true" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" stroke-Linejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
-             </span> </button>
-               <div className={themes === true ?'block': 'hidden'}>
-                <div className={`z-10 w-40 fixed rounded ${color?.greybackground} overflow-hidden divide-y divide-gray-100 shadow`}> 
+                </span> </button>
+              <div className={themes === true ? 'block' : 'hidden'}>
+                <div className={`z-10 w-40 fixed rounded ${color?.greybackground} overflow-hidden divide-y divide-gray-100 shadow`}>
                   <ul className={`py-1 text-sm ${color?.text}`} aria-labelledby="dropdownDefault">
                     <li className={`block py-2 px-4 ${color?.sidebar} `}>
-                      <button onClick={() => {setThemeName("Classic");setThemes(!themes);changeTheme("Classic") }} >Classic</button>
+                      <button onClick={() => { setThemeName("Classic"); setThemes(!themes); changeTheme("Classic") }} >Classic</button>
                     </li>
                     <li className={`block py-2 px-4 ${color?.sidebar} `}>
-                      <button onClick={() => {  setThemeName("Classic-Dark"); setThemes(!themes);changeTheme("Classic-Dark")}} >Classic-Dark</button>
+                      <button onClick={() => { setThemeName("Classic-Dark"); setThemes(!themes); changeTheme("Classic-Dark") }} >Classic-Dark</button>
                     </li>
                   </ul>
                 </div></div>
-                </div>
+            </div>
             <div>
               <button className="bg-cyan-600 text-sm text-center hover:bg-cyan-700 text-white  py-2 px-4 rounded" onClick={() => {
-              submitTheme();
+                submitTheme();
               }}
               >Save</button>
             </div>
 
             <div className="flex hover:underline py-2 hover:decoration-cyan-600">
-            <svg className="h-6 w-6 pt-1 flex-none stroke-sky-500" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M17.25 10c0 1-1.75 6.25-7.25 6.25S2.75 11 2.75 10 4.5 3.75 10 3.75 17.25 9 17.25 10Z"></path><circle cx="10" cy="10" r="2.25"></circle></svg>
+              <svg className="h-6 w-6 pt-1 flex-none stroke-sky-500" fill="none" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M17.25 10c0 1-1.75 6.25-7.25 6.25S2.75 11 2.75 10 4.5 3.75 10 3.75 17.25 9 17.25 10Z"></path><circle cx="10" cy="10" r="2.25"></circle></svg>
               <button className=" text-base text-center text-cyan-600 mr-2  rounded"
-              >  
-               {/* <Link href={
-                `${loc}/${currentProperty?.address_province.replace(
-        /\s+/g,
-        "-"
-      )}/${currentProperty?.address_city}/${currentProperty?.property_category
-        }s/${allHotelDetails?.property_name?.replaceAll(' ', '-')}/${theme}/${lang}`
-        }> */}
-               <a target="_blank">Preview </a>
-               {/* </Link> */}
-               </button>
+              >
+                <Link href={
+                  `${loc}/${lang}/${currentProperty?.address_province.replace(
+                    /\s+/g,
+                    "-"
+                  )}/${currentProperty?.address_city}/${currentProperty?.property_category
+                  }s/${allHotelDetails?.property_name?.replaceAll(' ', '-')}`
+                }>
+                  <a target="_blank">Preview </a>
+                </Link>
+              </button>
 
             </div>
 
           </div>
         </div>
-        </div>
-        
-        <div className="lg:ml-64">
-        {/* Classic Theme */}
-        { themeName === "Classic" ?
-        <div className="sticky">
-        <Classic language={language} allHotelDetails={allHotelDetails} 
-        allRooms={allRooms} allPackages={allPackages}
-        phone={phone} email={email}/></div>:<div className="sticky"></div>}
-     
-        {/* Classic Dark */}
-        { themeName === "Classic-Dark" ?
-        <div className="sticky">
-        <ClassicDark language={language} allHotelDetails={allHotelDetails} 
-        allRooms={allRooms} allPackages={allPackages}
-        phone={phone} email={email}/></div>:<div className="sticky"></div>}
+      </div>
 
-       
-        </div>
-         {/* Toast Container */}
-         <ToastContainer position="top-center"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover />
+      <div className="lg:ml-64">
+        {/* Classic Theme */}
+        {themeName === "Classic" ?
+          <div className="sticky">
+            <Classic language={language} allHotelDetails={allHotelDetails}
+              allRooms={allRooms} allPackages={allPackages}
+              phone={phone} email={email} /></div> : <div className="sticky"></div>}
+
+        {/* Classic Dark */}
+        {themeName === "Classic-Dark" ?
+          <div className="sticky">
+            <ClassicDark language={language} allHotelDetails={allHotelDetails}
+              allRooms={allRooms} allPackages={allPackages}
+              phone={phone} email={email} /></div> : <div className="sticky"></div>}
+
+
+      </div>
+      {/* Toast Container */}
+      <ToastContainer position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover />
     </>
-   
+
   );
 }
 export default Theme;
-Theme.getLayout = function PageLayout(page){
-  return(
+Theme.getLayout = function PageLayout(page) {
+  return (
     <>
-    {page}
+      {page}
     </>
   )
-  }
+}

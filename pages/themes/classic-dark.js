@@ -50,6 +50,8 @@ function ClassicDark(args) {
    const [allPackages, setAllPackages] = useState({});
    const [rate, setRate] = useState(defaultRate);
    const [amenity, setAmenity] = useState(false);
+   const[checkinDate,setCheckinDate] = useState();
+   const[checkoutDate,setCheckoutDate] = useState();
    const [packages, setPackages] = useState(false);
    const [open, setOpen] = useState({
       "view": false,
@@ -75,6 +77,8 @@ function ClassicDark(args) {
       let month = current.getMonth() + 1;
       checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
       checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate() + 1}`;
+      setCheckinDate(checkInDate);
+      setCheckoutDate(checkOutDate);
       setD1(new Date(checkInDate).toString().slice(4, 10));
       setD2(new Date(checkOutDate).toString().slice(4, 10));
      firstfun();
@@ -104,13 +108,13 @@ function ClassicDark(args) {
    })
    // Function for Check In
    const changeCheckIn =  (d1) => {
+      setCheckinDate(d1);
       setD1(new Date(d1).toString().slice(4,10));
-      setCalendarIn(!calendarIn)
     }
     // Function for Check Out
     const changeCheckOut =  (d2) => {
+      setCheckoutDate(d2)
      setD2(new Date(d2).toString().slice(4,10));
-     setCalendarOut(!calendarOut);
    }
    return ( 
      <>
@@ -363,15 +367,14 @@ function ClassicDark(args) {
                         <div className="accordion">
                            {/* Rooms */}
                        <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                             
-                              <div className='accordion-trigger'  onClick={() => setSingleRoom(!singleRoom)}>
+                        <div className='accordion-trigger'  onClick={() => setSingleRoom(!singleRoom)}>
                                  <button className='mb-6' >
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
                                        <p className='text-white'>{language?.roomstochoose} ({args?.allRooms?.rooms?.length})</p></div>
                                     </div></button></div>
-                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allRooms?.rooms?.map((resource, idx) => {
                                     return (
                                        <div className='group' key={idx}>
@@ -501,7 +504,7 @@ function ClassicDark(args) {
                                        </div>
                                     </div>
                                  </button></div>
-                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allPackages?.packages?.map((resource, idx) => {
                                     return (
                                        <div className='group'key={idx}>
@@ -838,21 +841,21 @@ function ClassicDark(args) {
                   {/*  Reviews */}
                   <div className="tour-content-block">
                      <div className="tour-content-title">
-                        <p className='text-white'>{language?.customer} {language?.reviews}</p></div>
+                        <span className='text-white'>{language?.customer} {language?.reviews}</span></div>
                      <div className="tour-reviews">
                         <div className="tour-reviews-feedback-dark">
-                        <Marquee duration={10000}  height="370px" axis="Y" reverse={true}>
+                        <Marquee duration={10000}  height="360px" className='rounded-lg' axis="Y" reverse={true}>
                            {args?.allHotelDetails?.Reviews?.map((item, idx) => {
                               return (
                                 
-                                 <div className="tour-reviews-feedback-item  bg-gray-900" key={idx}>
+                                 <div className="tour-reviews-feedback-item bg-gray-900" key={idx}>
                                     <div className="tour-reviews-feedback-content">
 
                                        <div className="tour-reviews-feedback-content-inner">
                                           <div className="tour-reviews-feedback-title">
                                              <div className={visible === 0 ? 'block w-24 mb-2' : 'hidden'}><LineLoader /></div>
                                              <div className={visible === 1 ? 'block' : 'hidden'}>
-                                               <p className='text-white'> {item?.review_author}</p></div>
+                                               <span className='text-white'> {item?.review_author}</span></div>
                                           </div>
                                           <div className="tour-reviews-feedback-text">
                                              <div className={visible === 0 ? 'block h-2 w-64 mb-6' : 'hidden'}><LineLoader /></div>
@@ -862,9 +865,7 @@ function ClassicDark(args) {
                                        </div>
                                     </div>
                                     <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
-                                   
                                  </div>
-                              
                                  )
                            })}
                            <hr className="border-white sm:mx-auto" />
@@ -932,18 +933,18 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" >
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarIn(!calendarIn)} >
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content text-white">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white'onClick={() => setCalendarIn(!calendarIn)} >
+                          <span className='text-white' >
                            {d1}
                            </span>
                         </div>:
-                                 <input defaultValue={checkInDate}
+                                 <input defaultValue={checkinDate} min={checkInDate}
                                  onChange={
                                     (e) => (
                                       changeCheckIn(e.target.value)
@@ -958,17 +959,17 @@ function ClassicDark(args) {
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">    
-                                 <span className="material-icons-outlined" onClick={() => setCalendarOut(!calendarOut)}>
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarOut(!calendarOut)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
                               <div className="tour-receipt-select-title">
-                           <span className='text-white'onClick={() => setCalendarOut(!calendarOut)}>{d2}</span>
+                           <span className='text-white'>{d2}</span>
                         </div>:
                                  <input
-                                    type="date" defaultValue={checkOutDate} 
+                                    type="date" defaultValue={checkoutDate} min={checkOutDate}
                                     onChange={
                                        (e) => (
                                          changeCheckOut(e.target.value)
@@ -989,14 +990,14 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                         <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" >
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setGuests(!guests)} >
                                     person_outline
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {guests === false ?
                               <div className="tour-receipt-select-title">
-                          <span  className='text-white' onClick={() => setGuests(!guests)}>{guest} {language?.guests}</span>
+                          <span  className='text-white' >{guest} {language?.guests}</span>
                         </div>:
                                  <input
                                     type="number" min={1} defaultValue={guest} 
@@ -1011,7 +1012,7 @@ function ClassicDark(args) {
                            </div>
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                              <span className="material-icons-outlined" onClick={() => setChildren(!children)}>
+                              <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setChildren(!children)}>
                                     person_outline
                                  </span>
                               </div>

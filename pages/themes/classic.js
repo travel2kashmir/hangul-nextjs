@@ -37,6 +37,8 @@ function Classic(args) {
    SwiperCore.use([Navigation, Pagination, Autoplay]);
    const [language, setLanguage] = useState(english);
    const [calendarIn, setCalendarIn] = useState(false);
+   const[checkinDate,setCheckinDate] = useState();
+   const[checkoutDate,setCheckoutDate] = useState();
    const [children, setChildren] = useState(false);
    const [guests, setGuests] = useState(false);
    const [calendarOut, setCalendarOut] = useState(false);
@@ -58,14 +60,16 @@ function Classic(args) {
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
   const changeCheckIn =  (d1) => {
+   setCheckinDate(d1);
     setD1(new Date(d1).toString().slice(4,10));
    setCalendarIn(!calendarIn)
    
   }
 
   const changeCheckOut =  (d2) => {
+   setCheckoutDate(d2)
    setD2(new Date(d2).toString().slice(4,10));
-   setCalendarOut(!calendarOut)
+   setCalendarOut(!calendarOut);
  }
    /** Router for Redirection **/
   /** Router for Redirection **/
@@ -81,6 +85,8 @@ function Classic(args) {
       let month = current.getMonth() + 1;
       checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
       checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate() + 1}`;
+      setCheckinDate(checkInDate);
+      setCheckoutDate(checkOutDate);
       setD1(new Date(checkInDate).toString().slice(4, 10));
       setD2(new Date(checkOutDate).toString().slice(4, 10));
      setVisible(1)
@@ -374,7 +380,7 @@ function Classic(args) {
                                           {language?.roomstochoose} ({args?.allRooms?.rooms?.length})
                                         </div>
                                     </div></button></div>
-                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allRooms?.rooms?.map((resource, idx) => {
                                     return (
                                        <div  className='group'   key={idx}>
@@ -511,7 +517,7 @@ function Classic(args) {
                                        </div>
                                     </div>
                                  </button></div>
-                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allPackages?.packages?.map((resource, idx) => {
                                     return (
                                        <div className='group'  key={idx}>
@@ -930,16 +936,16 @@ function Classic(args) {
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
                                  
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarIn(!calendarIn)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                                  {calendarIn === false ?
-                              <div className="tour-receipt-select-title" onClick={() => setCalendarIn(!calendarIn)}>
+                              <div className="tour-receipt-select-title" >
                           <span > {d1}</span>
                         </div>:
-                                 <input defaultValue={checkInDate}
+                                 <input defaultValue={checkInDate} min={checkInDate}
                                  onChange={
                                     (e) => (
                                       changeCheckIn(e.target.value)
@@ -955,17 +961,17 @@ function Classic(args) {
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarOut(!calendarOut)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
-                              <div className="tour-receipt-select-title"  onClick={() => setCalendarOut(!calendarOut)}>
+                              <div className="tour-receipt-select-title"  >
                          <span  >  {d2}</span>
                         </div>:
                                  <input 
-                                    type="date" defaultValue={checkOutDate} onChange={
+                                    type="date" defaultValue={checkOutDate} min={checkOutDate} onChange={
                                        (e) => (
                                          changeCheckOut(e.target.value)
                                        )
@@ -985,7 +991,7 @@ function Classic(args) {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                <span className="material-icons-outlined" onClick={() => setGuests(!guests)}>
+                                <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setGuests(!guests)}>
                                  person_outline
                                  </span>
                               </div>
@@ -1005,7 +1011,7 @@ function Classic(args) {
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" onClick={() => setChildren(!children)}>
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setChildren(!children)}>
                                  person_outline
                                  </span>
                               </div>

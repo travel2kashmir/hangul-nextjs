@@ -1029,7 +1029,7 @@ function ClassicDark(args) {
                                     text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
                                     }
                                  <div className="tour-receipt-select-text">
-                                 {language?.children}</div>
+                                 Infants</div>
                               </div>
                            </div>
                         </div>

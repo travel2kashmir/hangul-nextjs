@@ -1024,10 +1024,9 @@ function Classic(args) {
                                 type="number" min={1} defaultValue={2}
                                 className="my-1 bg-gray-50  text-gray-800 px-0.5
                                 focus:ring-gray-900  border focus:border-gray-900 border-gray-400
-                                text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
-}
+                                text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />}
                                  <div className="tour-receipt-select-text">
-                                 {language?.children}
+                                 Infants
                                  </div>
                               </div>
                            </div>

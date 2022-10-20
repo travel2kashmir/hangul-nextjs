@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import StarRatings from 'react-star-ratings';
+import icon from '../../components/GlobalData'
 import english from '../../components/Languages/en'
 import french from '../../components/Languages/fr';
 import Marquee from "react-easy-marquee";
@@ -416,6 +417,7 @@ function Classic(args) {
                                                       {resource.room_facilities.map((item, index) => {
                                                          return (
                                                             <span className='text-gray-700' key={index}>
+                                                             
                                                                <span>&#10004;
                                                                   {item?.service_name} </span></span>)
                                                       })}
@@ -491,17 +493,19 @@ function Classic(args) {
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                     {language?.property} {language?.amenities}</div>
+                                     {language?.property} {language?.amenities} </div>
                                     </div>
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
                                  <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
                                     {args?.allHotelDetails?.services?.map((item, idx) => {
                                        return (
-                                          <span className='text-gray-700 capitalize' key={idx}>
-                                             <span>&#10004;
-                                                {item?.local_service_name} </span>
-                                          </span>)
+                                          <span className='text-gray-700 flex capitalize' key={idx}>
+                                             
+                                                <span> {icon?.Icons?.[i]?.ac} </span>
+                                             
+                                               <span> {item?.local_service_name} </span></span>
+                                         )
                                     })}</div>
                               </div>
                            </div>
@@ -934,12 +938,12 @@ function Classic(args) {
                      <div className="tour-receipt-select">
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
-                              <div className="tour-receipt-select-icon">
-                                 
-                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarIn(!calendarIn)}>
+                              <div className="tour-receipt-select-icon">    
+                                 <span className="material-icons-outlined hover:cursor-pointer"
+                                  onClick={() => setCalendarIn(!calendarIn)}>
                                     calendar_month
                                  </span>
-                              </div>
+                                 </div>
                               <div className="tour-receipt-select-content">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title" >

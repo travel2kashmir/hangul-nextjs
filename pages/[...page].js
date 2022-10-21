@@ -26,6 +26,7 @@ function Page() {
   const [allPackages, setAllPackages] = useState({});
   const [phone, setPhone] = useState({});
   const [email, setEmail] = useState({});
+  const [services, setServices] = useState([]);
   const [disp,setDisp]=useState(0); 
   const [theme, setTheme] = useState("theme1")
   const [bgColor, setBgColor] = useState(theme)
@@ -60,6 +61,18 @@ function Page() {
         fetchPackageDetails(response.data.property_id);
         response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
         response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
+        var ser =[];
+        response.data.services.map(i => { 
+          if (i.service_value !== "no") 
+          if(i.service_value !== "Not available")
+          {{
+            ser.push(i)
+           } 
+          }
+           setServices(ser)
+          }
+           
+           );
         setDisp(1);
         logger.info("url  to fetch property details hitted successfully")
       })
@@ -123,14 +136,14 @@ function Page() {
     { theme === "Classic" ?
     <div className="sticky">
     <Classic language={language} allHotelDetails={allHotelDetails} 
-    allRooms={allRooms} allPackages={allPackages}
+    allRooms={allRooms} allPackages={allPackages} services={services}
     phone={phone} email={email}/></div>:<div className="sticky"></div>}
  
     {/* Classic Dark */}
     { theme === "Classic-Dark" ?
     <div className="sticky">
     <ClassicDark language={language} allHotelDetails={allHotelDetails} 
-    allRooms={allRooms} allPackages={allPackages}
+    allRooms={allRooms} allPackages={allPackages} services={services}
     phone={phone} email={email}/></div>:<div className="sticky"></div>}
 
    

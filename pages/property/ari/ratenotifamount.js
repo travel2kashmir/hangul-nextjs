@@ -114,7 +114,7 @@ function Ratenotifamount() {
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
               Rate Notif Amount
             </h6>
-            <div className="pt-6">
+            <div className="pt-6 pb-24">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
                 <div className="w-full lg:w-6/12 px-4">
@@ -128,7 +128,7 @@ function Ratenotifamount() {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect 
-                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-8 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                      className={` shadow-sm ${color?.greybackground} ${color?.text} relative mb-8 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
                       isObject={true}
                       options={lang?.DaysData}

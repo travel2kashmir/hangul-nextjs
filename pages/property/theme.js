@@ -27,6 +27,7 @@ function Theme() {
   const [allPackages, setAllPackages] = useState({});
   const [themes, setThemes] = useState(false)
   const [phone, setPhone] = useState({});
+  const [services, setServices] = useState([]);
   const [email, setEmail] = useState({});
   const [themeName, setThemeName] = useState('Classic')
   const [uri, setUri] = useState("")
@@ -95,6 +96,19 @@ function Theme() {
       .then((response) => {
         setAllHotelDetails(response.data);
         response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
+        var ser =[];
+        response.data.services.map(i => { 
+          if (i.service_value !== "no") 
+          if(i.service_value !== "Not available")
+          {{
+            ser.push(i)
+           } 
+          }
+           setServices(ser)
+          }
+           
+           );
+          
         response.data.contacts.map(i => { if (i.contact_type === 'Email') { setEmail(i) } });
         logger.info("url  to fetch property details hitted successfully")
       })
@@ -249,7 +263,7 @@ function Theme() {
                   ></path>
                 </svg>
                 <span className={`${color?.textgray} text-sm   font-medium hover:text-gray-900 ml-1 md:ml-2`}>
-                  Themes
+                  Themes 
                 </span>
               </div>
             </li>
@@ -323,14 +337,14 @@ function Theme() {
         {themeName === "Classic" ?
           <div className="sticky">
             <Classic language={language} allHotelDetails={allHotelDetails}
-              allRooms={allRooms} allPackages={allPackages}
+              allRooms={allRooms} allPackages={allPackages} services={services}
               phone={phone} email={email} /></div> : <div className="sticky"></div>}
 
         {/* Classic Dark */}
         {themeName === "Classic-Dark" ?
           <div className="sticky">
             <ClassicDark language={language} allHotelDetails={allHotelDetails}
-              allRooms={allRooms} allPackages={allPackages}
+              allRooms={allRooms} allPackages={allPackages} services={services}
               phone={phone} email={email} /></div> : <div className="sticky"></div>}
 
 

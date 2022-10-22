@@ -20,7 +20,8 @@ var currentProperty;
 var currentLogged;
 const logger = require("../../../../services/logger"); 
 var currentPackage;
-var days_data=[]
+var days_data=[];
+var selected = []
 var days_of_week;
 
 function PackageRates() {
@@ -61,7 +62,39 @@ const fetchDetails = async  () => {
      ((response) => {
      logger.info("package success");
      setCurrentPackageRates(response.data)
-     setVisible(1)
+     selected=[];
+      var days_of_week = response.data?.days_of_week
+        alert(days_of_week)
+       if (days_of_week[0] === 'm') {
+         selected.push({ day: 'mon' })
+       }
+
+       if (days_of_week[1] === 't') {
+         selected.push({ day: 'tues' })
+       }
+
+       if (days_of_week[2] === 'w') {
+         selected.push({ day: 'wed' })
+       }
+
+       if (days_of_week[3] === 't') {
+         selected.push({ day: 'thurs' })
+       }
+
+       if (days_of_week[4] === 'f') {
+         selected.push({ day: 'fri' })
+       }
+
+       if (days_of_week[5] === 's') {
+         selected.push({ day: 'sat' })
+       }
+
+       if (days_of_week[6] === 's') {
+         selected.push({ day: 'sun' })
+       }
+
+       console.log(selected)
+       setVisible(1)
      })
      .catch((error) => {
       logger.info("Delete error")
@@ -361,6 +394,7 @@ const fetchDetails = async  () => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={selected}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
                      displayValue="day"

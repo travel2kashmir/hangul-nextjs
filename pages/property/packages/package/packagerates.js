@@ -20,6 +20,8 @@ var currentProperty;
 var currentLogged;
 const logger = require("../../../../services/logger"); 
 var currentPackage;
+var days_data=[]
+var days_of_week;
 
 function PackageRates() {
   const [visible,setVisible]=useState(0) 
@@ -74,7 +76,6 @@ const fetchDetails = async  () => {
           headers: { accept: "application/json" },
         });
         setAllRooms(response.data);
-        console.log(JSON.stringify(allRooms));
       } catch (error) {
         if (error.response) {
         } else {
@@ -135,9 +136,11 @@ const fetchDetails = async  () => {
   }
   /* Edit Package Rate Function */
   const submitPackageRateEdit = () => {
-    if (allPackageRateDetails.length !== 0){ 
     const final_data = {
       "package_rate_id" : currentPackageRates?.package_rate_id,
+      "start_date": allPackageRateDetails?.start_date,
+      "end_date": allPackageRateDetails?.end_date,
+      "days_of_week": days_of_week,
       "base_rate_currency": allPackageRateDetails?.base_rate_currency,
       "base_rate_amount": allPackageRateDetails?.base_rate_amount,
       "tax_rate_currency": allPackageRateDetails?.tax_rate_currency,
@@ -171,8 +174,6 @@ const fetchDetails = async  () => {
           progress: undefined,
         });
       })
-    }
-  
   }
 
   const editRooms = () => {
@@ -214,6 +215,44 @@ const fetchDetails = async  () => {
       })
     }
   }
+  
+  const days = (days) => { 
+    var days_present=['-','-','-','-','-','-','-'];
+    days.map(day=>{
+    
+    if(day.day==='mon')
+    {
+    days_present[0]='m'
+    }
+    else if(day.day==='tue')
+    {
+    days_present[1]='t'
+    }
+    else if(day.day==='weds')
+    {
+    days_present[2]='w'
+    }
+    else if(day.day==='thur')
+    {
+    days_present[3]='t'
+    }
+    else if(day.day==='fri')
+    {
+    days_present[4]='f'
+    }
+    else if(day.day==='sat')
+    {
+    days_present[5]='s'
+    }
+    else if(day.day==='sun')
+    {
+    days_present[6]='s'
+    }
+    })
+     days_of_week = days_present.toString().replaceAll(',','');
+    
+  }
+
   return (
     <>
     <Header Primary={english?.Side2}/>
@@ -282,9 +321,10 @@ const fetchDetails = async  () => {
                   <input
                     type="date"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   onChange={
+                    defaultValue={currentPackageRates?.start_date}
+                    onChange={
                       (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, startdate: e.target.value })
+                        setAllPackageRateDetails({ ...allPackageRateDetails, start_date: e.target.value })
                       )
                     } />
                 </div>
@@ -300,9 +340,10 @@ const fetchDetails = async  () => {
                   <input
                     type="date"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                   onChange={
+                   defaultValue={currentPackageRates?.end_date}
+                    onChange={
                       (e) => (
-                        setAllPackageRateDetails({ ...allPackageRateDetails, enddate: e.target.value })
+                        setAllPackageRateDetails({ ...allPackageRateDetails, end_date: e.target.value })
                       )
                     } />
                 </div>
@@ -323,7 +364,7 @@ const fetchDetails = async  () => {
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
                      displayValue="day"
-                      />
+                  />
                 </div>
               </div>
               <div className="w-full lg:w-6/12 px-4">
@@ -332,7 +373,7 @@ const fetchDetails = async  () => {
                     className="text-sm font-medium text-gray-900 block mb-2"
                     htmlFor="grid-password"
                   >
-                    {language?.baserate} {language?.currency}
+                    {language?.baserate} {language?.currency} 
                   </label>
                   <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -484,7 +525,7 @@ const fetchDetails = async  () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
-    </div>
+       </div>
     <Footer/>
    
       </>

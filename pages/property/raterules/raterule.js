@@ -822,9 +822,7 @@ Router.push('./raterule')
           "charge_currency": "",
           "room_id": ""
         })
-    
       }
-
     }
        
         setConditions(response.data.user_rate_condition?.[i])

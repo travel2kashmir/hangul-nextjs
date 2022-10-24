@@ -533,6 +533,7 @@ function Addpackage() {
   }
   })
    days_of_week = days_present.toString().replaceAll(',','');
+   alert(days_of_week)
 }
   return (
     <>

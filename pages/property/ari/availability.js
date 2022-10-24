@@ -18,17 +18,16 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week;
-var currentPackage;
-var availabilityId;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
 
 function Availability() {
   const [visible, setVisible] = useState(0);
+
   const [availability, setAvailability] = useState([])
   const [disp, setDisp] = useState(0);
+
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
 
@@ -53,8 +52,7 @@ useEffect(() => {
       }
       /** Current Property Details fetched from the local storage **/
       currentProperty = JSON.parse(localStorage.getItem("property"));
-      currentPackage = localStorage.getItem('PackageId');
-      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+     currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       setVisible(1);
  }
   }
@@ -179,6 +177,7 @@ const days = (days) => {
    days_of_week = days_present.toString().replaceAll(',','');
 }
 
+
   return (
     <>
     <Header color={color} Primary={english.Side1} />
@@ -212,7 +211,7 @@ const days = (days) => {
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../ari" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
                     <a>ARI</a>
                   </Link>
                   </div></div>
@@ -231,9 +230,11 @@ const days = (days) => {
           </nav>
           <div id='0' className={disp===0?'block':'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Availability</div>
             </div>
           
@@ -267,14 +268,13 @@ const days = (days) => {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect 
-                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-8 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
                       isObject={true}
                       options={lang?.DaysData}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
                      displayValue="day"
-                    
                       />
                        </div>
                     </div>
@@ -292,11 +292,7 @@ const days = (days) => {
                         <input
                           type="date"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setAvailability({ ...availability, start_date: e.target.value })
-                            )
-                          }
+                         
                         /></div>
                     </div>
                   </div>
@@ -311,36 +307,68 @@ const days = (days) => {
                       <input
                           type="date"
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setAvailability({ ...availability, end_date: e.target.value })
-                            )
-                          }
+                         
                         />
                       </div>
                     </div>
                   </div>
 
                   <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-24">
-                      
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Length of Stay
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-24">
-                      
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Maximum Message Type
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         
+                        />
+                      </div>
                     </div>
                   </div>
-                  
-                 
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        LOS Pattern Status
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         
+                        />
+                      </div>
+                    </div>
+                  </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={submitAvailability} /> 
+                    <Button Primary={language?.Next} /> 
                 </div>
-                
                   </div>
                   </div>
                   </div>
             </div>
+
             </div>
            {/* Restriction */}
            <div id='1' className={disp===1?'block':'hidden'}>
@@ -626,6 +654,7 @@ const days = (days) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+
           </div>
      <Footer color={color} />
     </>
@@ -633,12 +662,3 @@ const days = (days) => {
 }
 
 export default Availability
-Availability.getLayout = function PageLayout(page){
-  return(
-    <>
-    {page}
-    </>
-  )
-
-
-}

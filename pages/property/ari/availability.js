@@ -4,6 +4,8 @@ import Lineloader from '../../../components/loaders/lineloader';
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
 import Multiselect from 'multiselect-react-dropdown';
+import validateAvailability from '../../../components/Validation/availability/availability';
+import validateRestriction from '../../../components/Validation/availability/restriction';
 import lang from '../../../components/GlobalData'
 import axios from 'axios';
 import Link from "next/link";
@@ -18,18 +20,20 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
+var days_of_week;
+var currentPackage;
+var availabilityId;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
 
 function Availability() {
   const [visible, setVisible] = useState(0);
-
   const [availability, setAvailability] = useState([])
   const [disp, setDisp] = useState(0);
-
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
+  const [error, setError] = useState({})
 
 /** Fetching language from the local storage **/
 useEffect(() => {
@@ -52,7 +56,8 @@ useEffect(() => {
       }
       /** Current Property Details fetched from the local storage **/
       currentProperty = JSON.parse(localStorage.getItem("property"));
-     currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+      currentPackage = localStorage.getItem('PackageId');
+      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       setVisible(1);
  }
   }
@@ -214,7 +219,30 @@ const days = (days) => {
   })
    days_of_week = days_present.toString().replaceAll(',','');
 }
-
+const validationAvailability = () => {
+var result = validateAvailability(availability,days_of_week)
+   console.log("Result" +JSON.stringify(result))
+   if(result===true)
+   {
+    submitAvailability();
+   }
+   else
+   {
+    setError(result)
+   }
+  }
+  const validationRestriction = () => {
+    var result = validateRestriction(availability)
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+        submitRestriction();
+       }
+       else
+       {
+        setError(result)
+       }
+      } 
 
   return (
     <>
@@ -249,7 +277,7 @@ const days = (days) => {
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../ari" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
                     <a>ARI</a>
                   </Link>
                   </div></div>
@@ -269,11 +297,9 @@ const days = (days) => {
           {/* Availability */}
           <div id='0' className={disp===0?'block':'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Availability</div>
             </div>
           
@@ -307,14 +333,17 @@ const days = (days) => {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <Multiselect 
-                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-8 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
                       isObject={true}
                       options={lang?.DaysData}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
                      displayValue="day"
+                    
                       />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.days}</p>
                        </div>
                     </div>
                   </div>
@@ -331,8 +360,14 @@ const days = (days) => {
                         <input
                           type="date"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         
-                        /></div>
+                          onChange={
+                            (e) => (
+                              setAvailability({ ...availability, start_date: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.start_date}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -346,68 +381,38 @@ const days = (days) => {
                       <input
                           type="date"
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         
+                          onChange={
+                            (e) => (
+                              setAvailability({ ...availability, end_date: e.target.value })
+                            )
+                          }
                         />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.end_date}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        Length of Stay
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         
-                        />
-                      </div>
+                    <div className="relative w-full mb-24">
+                      
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        Maximum Message Type
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         
-                        />
-                      </div>
+                    <div className="relative w-full mb-24">
+                      
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        LOS Pattern Status
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         
-                        />
-                      </div>
-                    </div>
-                  </div>
+                  
+                 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} /> 
+                    <Button Primary={language?.Next} onClick={validationAvailability} /> 
                 </div>
+                
                   </div>
                   </div>
                   </div>
             </div>
-
             </div>
            {/* Restriction */}
            <div id='1' className={disp===1?'block':'hidden'}>
@@ -455,6 +460,8 @@ const days = (days) => {
                     <option value={true}>Open</option>
                     <option value={false}>Close</option>
                    </select>
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_status}</p>
                        </div>
                     </div>
                   </div>
@@ -472,13 +479,14 @@ const days = (days) => {
                      onChange={
                       (e) => (
                           setAvailability({ ...availability, restriction_type: e.target.value })
-                      )
-                  }>
+                      )}>
                      <option selected >Select </option>
                     <option value="arrival" >Arrival</option>
                     <option value="departure">Departure</option>
                     <option value="master">Master</option>
                     </select>
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_type}</p>
                       </div>
                     </div>
                   </div>
@@ -499,6 +507,8 @@ const days = (days) => {
                             )
                           }
                         />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.min_advance_booking}</p>
                       </div>
                     </div>
                   </div>
@@ -519,6 +529,8 @@ const days = (days) => {
                             )
                           }
                         />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.max_advance_booking}</p>
                       </div>
                     </div>
                   </div>
@@ -536,7 +548,7 @@ const days = (days) => {
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={submitRestriction} /> 
+                    <Button Primary={language?.Next} onClick={validationRestriction} /> 
                 </div>
                 
                   </div>
@@ -669,7 +681,6 @@ const days = (days) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
-
           </div>
      <Footer color={color} />
     </>
@@ -677,3 +688,12 @@ const days = (days) => {
 }
 
 export default Availability
+Availability.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+
+
+}

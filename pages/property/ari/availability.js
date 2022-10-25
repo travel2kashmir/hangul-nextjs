@@ -114,7 +114,6 @@ const submitRestriction = () => {
      "max_advance_booking": availability?.max_advance_booking 
    }]
  }
-
  const url = '/api/ari/property_availability/property_availability_restrictions'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -142,7 +141,46 @@ const submitRestriction = () => {
      })
 }
 
-//Days
+// Restriction
+const submitLOS= () => {
+  const final_data =  {"availability_los": [{
+    "availability_id":availabilityId,
+     "unit_of_time": "Days",
+     "time":availability?.time ,
+     "min_max_msg": availability?.min_max_msg ,
+     "pattern": availability?.time,
+     "fixed_pattern": availability?.fixed_pattern 
+   }]
+ }
+ alert(JSON.stringify(final_data))
+ const url = '/api/ari/property_availability/property_availability_los'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("LOS success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     
+     })
+     .catch((error) => {
+       toast.error("LOS error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+// Days
 const days = (days) => { 
   var days_present=['-','-','-','-','-','-','-'];
   days.map(day=>{
@@ -229,6 +267,7 @@ const days = (days) => {
               </li>
             </ol>
           </nav>
+          {/* Availability */}
           <div id='0' className={disp===0?'block':'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -477,7 +516,7 @@ const days = (days) => {
                   </div>
             </div>
             </div>
-            {/* Restriction */}
+            {/* LOS */}
            <div id='2' className={disp===2?'block':'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -487,7 +526,7 @@ const days = (days) => {
             </div>
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"> 2</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Restriction</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -509,21 +548,19 @@ const days = (days) => {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        Min Max Message
+                        Min Max Message {availability?.min_max_msg}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                     onSelect={
+                     onChange={
                       (e) => (
-                          setAvailability({ ...availability, restriction_status: e.target.value })
+                          setAvailability({ ...availability, min_max_msg: e.target.value })
                       )
                   }>
-                    [SetMaxLOS|SetMinLOS|SetForwardMaxStay|
-                      SetForwardMinStay|FullPatternLOS]
-                     <option selected >Select </option>
-                    <option value="SetMaxLOS">Max Los</option>
-                    <option value="SetMinLOS">Min Los</option>
+                     <option selected  >Select </option>
+                    <option value="SetMaxLOS">Max LOS</option>
+                    <option value="SetMinLOS">Min LOS</option>
                     <option value="SetForwardMaxStay">Forward Max Stay</option>
                     <option value="SetForwardMinStay">Forward Min Stay</option>
                     <option value="FullPatternLOS">Full Pattern LOS</option>
@@ -533,33 +570,9 @@ const days = (days) => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                       Restriction Type
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                     onChange={
-                      (e) => (
-                          setAvailability({ ...availability, restriction_type: e.target.value })
-                      )
-                  }>
-                     <option selected >Select </option>
-                    <option value="arrival" >Arrival</option>
-                    <option value="departure">Departure</option>
-                    <option value="master">Master</option>
-                    </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        Minimum Advance Boooking
+                       Number of Days
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -568,48 +581,50 @@ const days = (days) => {
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, min_advance_booking: e.target.value })
+                              setAvailability({ ...availability,time: e.target.value })
                             )
                           }
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        Maximum Advance Booking 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setAvailability({ ...availability, max_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-4">
-                      
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-4">
-                      
-                    </div>
-                  </div>
-                  
+                  {availability?.min_max_msg =='FullPatternLOS'?
+                  <>
                  
+                  <div className="w-full lg:w-6/12 px-4" >
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                       Pattern
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text" 
+                          className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setAvailability({ ...availability,fixed_pattern: e.target.value }))}/>
+                           
+                      </div>
+                    </div>
+                  </div> 
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-4">   
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-4">
+                    <span className='text-orange-500 text-xs'>
+                    Pattern is a sequence of Y and N characters indicating whether each length of stay is allowed, from one night to the value in Number of Days.
+                     For example Number of days 4 and the pattern will be YYNY OR NYYN.</span>
+                     </div></div>
+                   
+                  </>:<></>}
+                  
+                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={submitRestriction} /> 
+                    <Button Primary={language?.Next} onClick={submitLOS} /> 
                 </div>
                 
                   </div>
@@ -617,7 +632,7 @@ const days = (days) => {
                   </div>
             </div>
             </div>
-            <ToastContainer position="top-center"
+       <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}

@@ -175,10 +175,7 @@ function Ari() {
 const addNotif = () =>{
     setViewNotif(true)
 }
-const currentPackage= (props) => {
-    localStorage.setItem("PackageId", (props.id));
-    Router.push("./ari/availability");
-  };    
+     
     return (
         <>
             <Header color={color} Primary={english?.Side} />
@@ -240,8 +237,8 @@ const currentPackage= (props) => {
                 </nav>
 
                
-             <Table  gen={gen} setGen={setGen}  addNotif={addNotif} edit={currentPackage}
-           common={language?.common} cols={language?.PackageCols} color={color} add={addRoom} name="ARI"/>
+             <Table  gen={gen} setGen={setGen}  addNotif={addNotif}
+       common={language?.common} cols={language?.PackageCols} color={color} add={addRoom} name="ARI"/>
 
 
                 <div className={viewTransaction === true ? 'block' : 'hidden'}>

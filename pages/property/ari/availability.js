@@ -6,6 +6,7 @@ import Header from "../../../components/Header";
 import Multiselect from 'multiselect-react-dropdown';
 import validateAvailability from '../../../components/Validation/availability/availability';
 import validateRestriction from '../../../components/Validation/availability/restriction';
+import validateLOS from '../../../components/Validation/availability/los';
 import lang from '../../../components/GlobalData'
 import axios from 'axios';
 import Link from "next/link";
@@ -21,6 +22,7 @@ var language;
 var currentProperty;
 var currentLogged;
 var days_of_week;
+var keys =[];
 var currentPackage;
 var availabilityId;
 import { ToastContainer, toast } from "react-toastify";
@@ -146,16 +148,18 @@ const submitRestriction = () => {
 
 // Restriction
 const submitLOS= () => {
-  const final_data =  {"availability_los": [{
+  
+  const data = LOSData?.map((i => {
+    return {
     "availability_id":availabilityId,
      "unit_of_time": "Days",
      "time":availability?.time ,
      "min_max_msg": availability?.min_max_msg ,
      "pattern": availability?.time,
      "fixed_pattern": availability?.fixed_pattern 
-   }]
- }
- alert(JSON.stringify(final_data))
+   }}))
+ const final_data = { "LOS": data }
+ 
  const url = '/api/ari/property_availability/property_availability_los'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -168,7 +172,8 @@ const submitLOS= () => {
          draggable: true,
          progress: undefined,
        });
-     
+     keys=[];
+     Router.push('../ari')
      })
      .catch((error) => {
        toast.error("LOS error", {
@@ -219,6 +224,7 @@ const days = (days) => {
   })
    days_of_week = days_present.toString().replaceAll(',','');
 }
+// Validate Availability
 const validationAvailability = () => {
 var result = validateAvailability(availability,days_of_week)
    console.log("Result" +JSON.stringify(result))
@@ -231,6 +237,7 @@ var result = validateAvailability(availability,days_of_week)
     setError(result)
    }
   }
+// Validate Restriction
   const validationRestriction = () => {
     var result = validateRestriction(availability)
        console.log("Result" +JSON.stringify(result))
@@ -242,8 +249,41 @@ var result = validateAvailability(availability,days_of_week)
        {
         setError(result)
        }
-      } 
+  } 
+// Validation LOS
+  const validationLOS = () => {
+    var result = validateLOS(availability)
+    console.log("Result" + JSON.stringify(result))
+    if (result === true) {
+      submitLOS();
+    }
+    else {
+      setError(result)
+    }
+  } 
+ /** Function to cancel package mile **/
+ const removeLOS = (index) => {
+  const filteredLOS = LOSData.filter((i, id) => i.index !== index)
+   setLOSData(filteredLOS)
+  }   
 
+  /** For Miles**/
+  const LOSTemplate = {
+    "availability_id":availabilityId,
+    "unit_of_time": "",
+    "time":"" ,
+    "min_max_msg": "" ,
+    "pattern": "",
+    "fixed_pattern":""
+  }  
+
+  /* Mapping Index of each mile*/
+    const [LOSData, setLOSData] = useState([LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
+  
+ /** Function to add mile **/
+ const addLOS = () => {
+  setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
+}
   return (
     <>
     <Header color={color} Primary={english.Side1} />
@@ -309,7 +349,7 @@ var result = validateAvailability(availability,days_of_week)
             </div>
 
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Length of Stay</div>
             </div>
           
@@ -339,6 +379,7 @@ var result = validateAvailability(availability,days_of_week)
                       options={lang?.DaysData}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
+                      selectedValues={lang?.DaysData}
                      displayValue="day"
                     
                       />
@@ -428,7 +469,7 @@ var result = validateAvailability(availability,days_of_week)
                 <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Restriction</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Length of Stay</div>
             </div>
           
@@ -457,8 +498,8 @@ var result = validateAvailability(availability,days_of_week)
                       )
                   }>
                      <option selected >Select </option>
-                    <option value={true}>Open</option>
-                    <option value={false}>Close</option>
+                    <option value={true}>Active</option>
+                    <option value={false}>Inactive</option>
                    </select>
                    <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_status}</p>
@@ -481,9 +522,9 @@ var result = validateAvailability(availability,days_of_week)
                           setAvailability({ ...availability, restriction_type: e.target.value })
                       )}>
                      <option selected >Select </option>
-                    <option value="arrival" >Arrival</option>
-                    <option value="departure">Departure</option>
-                    <option value="master">Master</option>
+                    <option value="arrival" >Arrival<span className='text-xs text-orange-500'> (It prevents itineraries with a check-in date during the Start and End date range).</span></option>
+                    <option value="departure">Departure<span className='text-xs text-orange-500'> (It prevents itineraries with a check-out date during the Start and End date range).</span></option>
+                    <option value="master">Master<span className='text-xs text-orange-500'> (It indicates whether the room rate is available for booking on the date).</span></option>
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_type}</p>
@@ -557,8 +598,8 @@ var result = validateAvailability(availability,days_of_week)
             </div>
             </div>
             {/* LOS */}
-           <div id='2' className={disp===2?'block':'hidden'}>
-            <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+        <div id='2' className={disp===2?'block':'hidden'}>
+          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -576,35 +617,62 @@ var result = validateAvailability(availability,days_of_week)
           
            
         </div>
+        <div className="mx-4">
+                <div className="sm:flex">
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
             Length of Stay
             </h6>
+          
+                  <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                  </div>
+                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                    
+                    <Button Primary={language?.AddLOS}  onClick={addLOS} />
+                  </div>
+                </div>
+              </div>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
-                <div className="flex flex-wrap">
+              {LOSData?.map((LOSData, index) => (
+              <>
+                <div className={LOSData?.index === 0 ? "hidden":"block"}>
+                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
+                          <button className="sm:inline-flex  text-gray-800  
+                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
+                     rounded-lg text-sm px-1 py-1 text-center 
+                     items-center mb-1 ml-16 ease-linear transition-all duration-150"
+                     onClick={() => removeLOS(LOSData?.index)} type="button" >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                            </button>
+                  </div>
+                  </div>
+                <div className="flex flex-wrap" key={index}>
                 <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        Min Max Message {availability?.min_max_msg}
+                        Min Max Message 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                      onChange={
-                      (e) => (
+                      (e) => {
                           setAvailability({ ...availability, min_max_msg: e.target.value })
-                      )
+                         e.target.value === 'FullPatternLOS' ? keys.push(index): "";
+                        }
                   }>
-                     <option selected  >Select </option>
+                     <option selected>Select </option>
                     <option value="SetMaxLOS">Max LOS</option>
                     <option value="SetMinLOS">Min LOS</option>
                     <option value="SetForwardMaxStay">Forward Max Stay</option>
                     <option value="SetForwardMinStay">Forward Min Stay</option>
                     <option value="FullPatternLOS">Full Pattern LOS</option>
                    </select>
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.min_max_msg}</p>
                        </div>
                     </div>
                   </div>
@@ -625,12 +693,13 @@ var result = validateAvailability(availability,days_of_week)
                             )
                           }
                         />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.time}</p>
                       </div>
                     </div>
                   </div>
-                  {availability?.min_max_msg =='FullPatternLOS'?
+                  { keys.includes(index)?
                   <>
-                 
                   <div className="w-full lg:w-6/12 px-4" >
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -645,7 +714,8 @@ var result = validateAvailability(availability,days_of_week)
                           onChange={
                             (e) => (
                               setAvailability({ ...availability,fixed_pattern: e.target.value }))}/>
-                           
+                       <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.fixed_pattern}</p>    
                       </div>
                     </div>
                   </div> 
@@ -657,19 +727,24 @@ var result = validateAvailability(availability,days_of_week)
                     <div className="relative w-full mb-4">
                     <span className='text-orange-500 text-xs'>
                     Pattern is a sequence of Y and N characters indicating whether each length of stay is allowed, from one night to the value in Number of Days.
-                     For example Number of days 4 and the pattern will be YYNY OR NYYN.</span>
+                    For example, with FixedPatternLength="4" and FullPatternLOS="YNYN", only lengths of stay 1 and 3 are allowed. </span>
                      </div></div>
                    
                   </>:<></>}
-                  
-                  
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={submitLOS} /> 
-                </div>
+                  </div>
                 
+                 
+                  </>))} 
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Submit} onClick={validationLOS} /> 
+                
+                  
+                    </div>
                   </div>
                   </div>
-                  </div>
+             
+
+
             </div>
             </div>
        <ToastContainer position="top-center"

@@ -524,7 +524,7 @@ var result = validateAvailability(availability,days_of_week)
                      <option selected >Select </option>
                     <option value="arrival" >Arrival<span className='text-xs text-orange-500'> (It prevents itineraries with a check-in date during the Start and End date range).</span></option>
                     <option value="departure">Departure<span className='text-xs text-orange-500'> (It prevents itineraries with a check-out date during the Start and End date range).</span></option>
-                    <option value="master">Master<span className='text-xs text-orange-500'> (It indicates whether the room rate is available for booking on the date).</span></option>
+                    <option value="master">Master<span className='text-xs text-orange-500 '> (It indicates whether the room rate is available for booking on the date).</span></option>
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_type}</p>
@@ -727,7 +727,7 @@ var result = validateAvailability(availability,days_of_week)
                     <div className="relative w-full mb-4">
                     <span className='text-orange-500 text-xs'>
                     Pattern is a sequence of Y and N characters indicating whether each length of stay is allowed, from one night to the value in Number of Days.
-                    For example, with FixedPatternLength="4" and FullPatternLOS="YNYN", only lengths of stay 1 and 3 are allowed. </span>
+                    For example, with FixedPatternLength is 4 and FullPatternLOS is YNYN, only lengths of stay 1 and 3 are allowed. </span>
                      </div></div>
                    
                   </>:<></>}

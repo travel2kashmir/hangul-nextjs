@@ -317,6 +317,7 @@ function Addpackage() {
        status:true
      }]
      const finalImage = { "package_miles": packagemiledata }
+     alert(JSON.stringify(finalImage))
     axios.post(`/api/package/package_miles`, finalImage).then(response => {
       toast.success("Package miles added successfully!", {
         position: "top-center",

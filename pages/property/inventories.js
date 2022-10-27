@@ -23,9 +23,7 @@ function Inventories() {
     const [gen, setGen] = useState([])
     const [color, setColor] = useState({})
 
-    useEffect(() => {
-        setColor(DarkModeLogic(darkModeSwitcher))
-    }, [darkModeSwitcher])
+  
 
     useEffect(() => {
         const firstfun = () => {
@@ -80,6 +78,10 @@ function Inventories() {
                 })
                 .catch((error) => { logger.error("url to fetch property details, failed") });
         }
+
+        useEffect(() => {
+            setColor(DarkModeLogic(darkModeSwitcher))
+        }, [darkModeSwitcher])
     const fetchPartnerKey = async () => {
         const url = `/api/ari/partner_property_key/${currentProperty?.property_id}`;
         axios.get(url)
@@ -101,13 +103,16 @@ function Inventories() {
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
+                    <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                         <li className="inline-flex items-center">
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                            <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                            <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"}  className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
                             </Link>
                         </li>
+                        </div>
                         <li>
                             <div className="flex items-center">
+                            <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                                 <svg
                                     className="w-6 h-6 text-gray-400"
                                     fill="currentColor"
@@ -124,11 +129,12 @@ function Inventories() {
 
                                     <Link href="./propertysummary" >
                                         <a> {currentProperty?.property_name} 
-                                        </a></Link></span>
+                                        </a></Link></span></div>
                             </div>
                         </li>
                         <li>
                             <div className="flex items-center">
+                            <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                                 <svg
                                     className="w-6 h-6 text-gray-400"
                                     fill="currentColor"
@@ -145,9 +151,9 @@ function Inventories() {
                                     className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
                                     aria-current="page"
                                 >
-                                    Inventory
+                                    {language?.inventories}
                                 </span>
-                            </div>
+                            </div></div>
                         </li>
                     </ol>
                 </nav>
@@ -220,7 +226,7 @@ function Inventories() {
                                                     currentRoom(item.room_id)
                                                     }} data-modal-toggle="edit-user-modal"
                                                      >
-                                                   View  Inventory
+                                                   {language?.view} {language?.inventory}
                                                     </button>
                                               </td>
                                         </tr>

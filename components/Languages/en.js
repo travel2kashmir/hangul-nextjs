@@ -1,4 +1,9 @@
 export default {
+  //Inventory ARI
+  inventories:"Inventories",
+  inventory:"Inventory",
+  available:"Available",
+  count:"Count",
   startdate:"Start Date",
   enddate:"End Date",
   days:"Days",

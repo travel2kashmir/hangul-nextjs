@@ -97,7 +97,7 @@ useEffect(()=>{
       setDisp(1);
      })
      .catch((error) => {
-       toast.error("Transaction error", {
+       toast.error("Availability error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -148,7 +148,6 @@ const submitRestriction = () => {
 
 // Restriction
 const submitLOS= () => {
-  
   const data = LOSData?.map((i => {
     return {
     "availability_id":availabilityId,

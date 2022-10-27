@@ -2,7 +2,7 @@ const validateAvailability = (data,props) =>{
    var error={};
     var flag=[]
     var final_flag=true;
-    alert(props)
+   
     if(data?.start_date==="" || data?.start_date===undefined)
     {
         flag.push(false)

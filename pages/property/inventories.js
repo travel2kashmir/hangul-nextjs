@@ -1,106 +1,159 @@
-import React, { useState, useEffect} from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import Button from '../../components/Button';
+import Table from '../../components/Table';
 import Link from "next/link";
-import Router from "next/router";
-import Sidebar  from "../../components/Sidebar";
-import Header  from "../../components/Header";
+import axios from "axios";
+import Header from '../../components/Header'
+import Sidebar from '../../components/Sidebar';
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar";
+import DarkModeLogic from "../../components/darkmodelogic";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../services/logger");
-import Footer from '../../components/Footer';
-import Loader from '../../components/loader';
+import Router from "next/router";
 var language;
 var currentProperty;
 var currentLogged;
-function Roomsxml() {
-    const [visible,setVisible]=useState(0) 
-  useEffect(()=>{
-    const firstfun=()=>{
-      if (typeof window !== 'undefined'){
-        var locale = localStorage.getItem("Language"); 
-        if (locale === "ar") {
-        language = arabic;
-        }
-        if (locale === "en") {
-        language=english;
-        }
-        if (locale === "fr") {
-          language = french;
-        }
-       
-       /** Current Property Details fetched from the local storage **/
-       currentProperty = JSON.parse(localStorage.getItem("property"));
-       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-      } 
-    }
-    firstfun();
-    Router.push("./roomsxml");
-  },[]) 
-  const [allrooms, setAllRooms] = useState([])
- /**Function to save Current property to be viewed to Local Storage**/
-  const RoomXML = ({ item }) => {
-    localStorage.setItem("roomxml", JSON.stringify(item));
-  };
-   
+
+function Inventories() {
+    const [allRooms, setAllRooms] = useState([])
+    const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+    const [gen, setGen] = useState([])
+    const [color, setColor] = useState({})
+
     useEffect(() => {
-      const fetchRooms = async () => {
-          try {
-             const url = `/api/rooms/${currentProperty.property_id}`
-              const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-            setAllRooms(response.data) 
-            setVisible(1)
-          } 
-          catch (error) {
-              if (error.response) {
-                 } 
-              else {
-              }
-          }
-      }
-      fetchRooms();
-  }
-      ,[])
+        setColor(DarkModeLogic(darkModeSwitcher))
+    }, [darkModeSwitcher])
+
+    useEffect(() => {
+        const firstfun = () => {
+            if (typeof window !== 'undefined') {
+                var locale = localStorage.getItem("Language");
+                const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+                const color = JSON.parse(localStorage.getItem("Color"));
+                setColor(color);
+                setDarkModeSwitcher(colorToggle);
+                if (locale === "ar") {
+                    language = arabic;
+                }
+                if (locale === "en") {
+                    language = english;
+                }
+                if (locale === "fr") {
+                    language = french;
+                }
+                /** Current Property Basic Details fetched from the local storage **/
+                currentProperty = JSON.parse(localStorage.getItem('property'))
+                currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+            }
+        }
+        firstfun();
+        Router.push("./inventories");
+    }, [])
     
+    useEffect(() => {
+        fetchRooms();
+        fetchPartnerKey();
+    }
+        , [])
+
+        const fetchRooms = async () => {
+            var genData = [];
+            const url = `/api/rooms/${currentProperty?.property_id}`;
+            axios.get(url)
+                .then((response) => {
+                    setAllRooms(response.data);
+                    {
+                        response.data?.map((item) => {
+                            var temp = {
+                                name: item.room_name,
+                                status: item.status,
+                                id: item.package_id
+                            }
+                            genData.push(temp)
+                        })
+                        setGen(genData);
+                     
+                    }
+                })
+                .catch((error) => { logger.error("url to fetch property details, failed") });
+        }
+    const fetchPartnerKey = async () => {
+        const url = `/api/ari/partner_property_key/${currentProperty?.property_id}`;
+        axios.get(url)
+            .then((response) => {
+                setPartnerKey(response.data.partner_id);
+            })
+            .catch((error) => { logger.error("url to fetch package details, failed") });
+    }
+    const currentRoom= (props) => {
+        localStorage.setItem("RoomId", (props));
+        Router.push("./inventories/inventory");
+      }; 
   return (
-    <><div className={visible===0?'block':'hidden'}><Loader/></div>
-    <div className={visible===1?'block':'hidden'}>
-     <Header Primary={english?.Side}/>
-    <Sidebar  Primary={english?.Side}/>
-    <div  id="main-content"
-    className="  bg-gray-50 px-4 pt-24 relative overflow-y-auto lg:ml-64">
-   {/* Navbar */}
-   <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-                <ol className="inline-flex items-center space-x-1 md:space-x-2">
-                    <li className="inline-flex items-center">
+    <>
+     <Header color={color} Primary={english?.Side} />
+    <Sidebar color={color} Primary={english?.Side} />
+    <div id="main-content"
+                className="  bg-white pt-24 relative overflow-y-auto lg:ml-64">
+                {/* Navbar */}
+                <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
+                    <ol className="inline-flex items-center space-x-1 md:space-x-2">
+                        <li className="inline-flex items-center">
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                            <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../admin/AdminLanding":"./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link></span>
-                    </li>
-                    <li>
-                        <div className="flex items-center">
-                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                            <span  className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-                            <Link href="./propertysummary">
-                            <a>{currentProperty?.property_name}</a>
-                        </Link></span>
-                        </div>
-                    </li>
-                    
-                    <li>
-                        <div className="flex items-center">
-                            <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                            <span className="text-gray-400 ml-1 md:ml-2
-                             font-medium text-sm  " aria-current="page">
-                                 {language?.property} {language?.rooms}</span>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
-            {/* Header */}
+                            <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
+                            </Link>
+                        </li>
+                        <li>
+                            <div className="flex items-center">
+                                <svg
+                                    className="w-6 h-6 text-gray-400"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clipRule="evenodd"
+                                    ></path>
+                                </svg>
+                                <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
+
+                                    <Link href="./propertysummary" >
+                                        <a> {currentProperty?.property_name} 
+                                        </a></Link></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div className="flex items-center">
+                                <svg
+                                    className="w-6 h-6 text-gray-400"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clipRule="evenodd"
+                                    ></path>
+                                </svg>
+                                <span
+                                    className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
+                                    aria-current="page"
+                                >
+                                    Inventory
+                                </span>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
+                 {/* Header */}
             <div className="mx-4">
-                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">{language?.property} {language?.rooms}</h1>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Inventories</h1>
                 <div className="sm:flex">
                     <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
                         <form className="lg:pr-3" action="#" method="GET">
@@ -125,13 +178,7 @@ function Roomsxml() {
                             </a>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                       
-                        <a href="#" className="w-1/2 text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                            <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                           {language?.export}
-                        </a>
-                    </div>
+                   
                 </div>
             </div>
             {/* Card Rooms Table */}
@@ -145,9 +192,7 @@ function Roomsxml() {
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
                                             {language?.room} {language?.name}
                                         </th>
-                                        <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                                           {language?.room} {language?.type}
-                                        </th>
+                                       
                                         <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
                                             {language?.Status}
                                         </th>
@@ -157,28 +202,25 @@ function Roomsxml() {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {allrooms?.map((item, index) => (
+                                    {allRooms?.map((item, index) => (
                                         <tr className="hover:bg-gray-100" key={index}>
                                             <td className="p-4 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
                                                 <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{item?.room_name} </td>
                                             </td>
-                                            <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">{item?.room_type_name} </td>
-                                            <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
+                                           <td className="p-4 whitespace-nowrap text-base font-normal text-gray-900">
                                                 <div className="flex items-center">
                                                     <div className="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>
                                                    {language?.active}
                                                 </div>
                                             </td>
                                             <td className="p-4 whitespace-nowrap space-x-2"> 
-                                          
-                                                    <button type="button"
+                                              <button type="button"
                                                      className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
                                                     onClick={() => {
-                                                     RoomXML({ item}),
-                                                    Router.push("./roomsxml/roomxml");
+                                                    currentRoom(item.room_id)
                                                     }} data-modal-toggle="edit-user-modal"
                                                      >
-                                                  {language?.view} XML
+                                                   View  Inventory
                                                     </button>
                                               </td>
                                         </tr>
@@ -190,18 +232,16 @@ function Roomsxml() {
                     </div>
                 </div>
             </div>
-        </div>
-       <Footer/>
-       </div> </>
-    )
-
+                </div>
+    </>
+  )
 }
 
-export default Roomsxml
-Roomsxml.getLayout = function PageLayout(page){
-    return(
+export default Inventories
+Inventories.getLayout = function PageLayout(page) {
+    return (
       <>
-      {page}
+        {page}
       </>
     )
-    }
+  }

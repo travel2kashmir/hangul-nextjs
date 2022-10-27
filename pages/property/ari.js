@@ -65,7 +65,7 @@ function Ari() {
     }
         , [])
 
-        const fetchPackages = async () => {
+    const fetchPackages = async () => {
             var genData = [];
             const url = `/api/package/${currentProperty?.property_id}`;
             axios.get(url)
@@ -171,7 +171,7 @@ function Ari() {
      }
      const addRoom = () =>{
        setViewTransaction(true)
-}
+     }
 const addNotif = () =>{
     setViewNotif(true)
 }
@@ -373,3 +373,10 @@ const currentPackage= (props) => {
 }
 
 export default Ari
+Ari.getLayout = function PageLayout(page) {
+    return (
+      <>
+        {page}
+      </>
+    )
+  }

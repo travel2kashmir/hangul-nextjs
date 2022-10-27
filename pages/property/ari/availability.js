@@ -732,9 +732,7 @@ var result = validateAvailability(availability,days_of_week)
                    
                   </>:<></>}
                   </div>
-                
-                 
-                  </>))} 
+</>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Submit} onClick={validationLOS} /> 
                 

@@ -1,4 +1,9 @@
 export default {
+  //Inventory ARI
+  inventories:"الاختبارات",
+  inventory:"المخزون",
+  available:"متوفرة",
+  count:"عدد",
   startdate:"تاريخ البدء",
   enddate:"نهاية تاريخ",
   days:"أيام",

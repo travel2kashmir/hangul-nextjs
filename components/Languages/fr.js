@@ -1,5 +1,10 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  //Inventory ARI
+  inventories:"Inventaires",
+  inventory:"Inventaire",
+  available:"Disponible",
+  count:"Compter",
   startdate:"Date de Début",
   enddate:"Fin Date",
   days:"Journées",

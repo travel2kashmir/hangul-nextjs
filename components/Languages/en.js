@@ -201,6 +201,11 @@ Cancel:"Cancel"
  col1 : "Room Name",
  col2 : "Room Type", 
 },
+"InventoryCols":{
+  name:"Rooms",
+ col1 : "Room Name",
+ 
+},
 "PackageCols":{
   name:"Packages",
  col1 : "Package Name",

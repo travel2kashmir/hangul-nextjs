@@ -28,9 +28,7 @@ function Ari() {
     const [color, setColor] = useState({})
     const [viewTransaction, setViewTransaction] = useState(false)
     const [viewNotif, setViewNotif] = useState(false)
-    useEffect(() => {
-        setColor(DarkModeLogic(darkModeSwitcher))
-    }, [darkModeSwitcher])
+   
 
     useEffect(() => {
         const firstfun = () => {
@@ -95,6 +93,11 @@ function Ari() {
             })
             .catch((error) => { logger.error("url to fetch package details, failed") });
     }
+
+    useEffect(() => {
+        setColor(DarkModeLogic(darkModeSwitcher))
+    }, [darkModeSwitcher])
+    
     const submitTransaction = () => {
         const current = new Date();
         const currentDateTime= current.toISOString();
@@ -184,15 +187,18 @@ const currentPackage= (props) => {
             <Header color={color} Primary={english?.Side} />
             <Sidebar color={color} Primary={english?.Side} />
             <div id="main-content"
-                className="  bg-white pt-24 relative overflow-y-auto lg:ml-64">
+                className={`${color?.greybackground}  pt-24 relative overflow-y-auto lg:ml-64`}>
                 {/* Navbar */}
                 <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
                     <ol className="inline-flex items-center space-x-1 md:space-x-2">
+                    <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                         <li className="inline-flex items-center">
                             <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                             <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
                             </Link>
-                        </li>
+                      </li>
+                      </div>
+                      <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                         <li>
                             <div className="flex items-center">
                                 <svg
@@ -207,13 +213,13 @@ const currentPackage= (props) => {
                                         clipRule="evenodd"
                                     ></path>
                                 </svg>
-                                <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-
+                               
                                     <Link href="./propertysummary" >
                                         <a> {currentProperty?.property_name} 
-                                        </a></Link></span>
+                                        </a></Link>
                             </div>
-                        </li>
+                        </li></div>
+                        <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
                         <li>
                             <div className="flex items-center">
                                 <svg
@@ -229,27 +235,26 @@ const currentPackage= (props) => {
                                     ></path>
                                 </svg>
                                 <span
-                                    className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  "
+                                    className=" ml-1 md:ml-2 font-medium text-sm  "
                                     aria-current="page"
                                 >
                                     ARI
                                 </span>
                             </div>
-                        </li>
+                        </li></div>
                     </ol>
                 </nav>
-
-               
+  
              <Table  gen={gen} setGen={setGen}  addNotif={addNotif} edit={currentPackage}
-           common={language?.common} cols={language?.PackageCols} color={color} add={addRoom} name="ARI"/>
+           common={language?.common} cols={language?.PackageCols} color={color} add={addRoom}  name="ARI"/>
 
 
                 <div className={viewTransaction === true ? 'block' : 'hidden'}>
                     <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                         <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-                            <div className="bg-white rounded-lg shadow relative">
+                            <div className={`${color?.whitebackground}  rounded-lg shadow relative`}>
                                 <div className="flex items-start justify-between p-5 border-b rounded-t">
-                                    <h3 className="text-xl font-semibold">
+                                            <h3 className={ `${color?.text} text-xl font-semibold`}>
                                         Generate Transaction
                                     </h3>
                                     <button type="button"
@@ -266,18 +271,18 @@ const currentPackage= (props) => {
                                         <div className="grid grid-cols-4 gap-6">
                                             <div className="col-span-6 sm:col-span-3 ">
                                                 <label
-                                                    className="text-sm mb-6  font-semibold text-gray-900 block mb-2"
+                                                    className={ `${color?.text} text-sm mb-6  font-semibold  block mb-2`}
                                                     htmlFor="grid-password"
                                                 >
                                                     Action
                                                 </label>
                                                 <div className="flex items-center mb-4" >
                                                     <input  id="disabled-radio-1" checked={propertyAction==="overlay"} onChange={()=>{setPropertyAction("overlay")}} type="radio" value="overlay" name="disabled-radio"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-1"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Replace<span className='text-xs'>(Replaces all previously defined for the property).</span></label>
+                                                    <label htmlFor="disabled-radio-1"  className={`${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>Replace<span className='text-xs text-orange-500 px-1'>(Replaces all previously defined for the property).</span></label>
                                                 </div>
                                                 <div className="flex items-center mb-4">
                                                     <input  checked={propertyAction==="delta"}  onChange={()=>{setPropertyAction("delta")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Modify<span className='text-xs'>(Adds previously undefined or modifies existing data for the property).</span></label>
+                                                    <label htmlFor="disabled-radio-2"  className={`${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>Modify<span className='text-xs text-orange-500 px-1'>(Adds previously undefined or modifies existing data for the property).</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -297,12 +302,13 @@ const currentPackage= (props) => {
 
                     </div>
                 </div>
+
                 <div className={viewNotif === true ? 'block' : 'hidden'}>
                     <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                         <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-                            <div className="bg-white rounded-lg shadow relative">
+                            <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
                                 <div className="flex items-start justify-between p-5 border-b rounded-t">
-                                    <h3 className="text-xl font-semibold">
+                                    <h3 className={ `${color?.text} text-xl font-semibold`}>
                                        Add Rate Amount Notif
 
                                     </h3>
@@ -320,22 +326,22 @@ const currentPackage= (props) => {
                                         <div className="grid grid-cols-4 gap-6">
                                             <div className="col-span-6 sm:col-span-8">
                                                 <label
-                                                    className="text-sm  font-semibold text-gray-900 block mb-6"
+                                                    className={ `${color?.text} text-sm  font-semibold block mb-6`}
                                                     htmlFor="grid-password"
                                                 >
                                                     Action
                                                 </label>
                                                 <div className="flex items-center mb-4" >
                                                     <input  id="disabled-radio-1" checked={notifType==="overlay"} onChange={()=>{setNotifType("overlay")}} type="radio" value="overlay" name="disabled-radio"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-1"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Replace<span className='text-xs'>( Replaces the existing per-occupancy rates for the room type, rate plan and dates with new rates).</span></label>
+                                                    <label htmlFor="disabled-radio-1"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>Replace<span className='text-xs'>( Replaces the existing per-occupancy rates for the room type, rate plan and dates with new rates).</span></label>
                                                 </div>
                                                 <div className="flex items-center mb-4">
                                                     <input  checked={notifType==="delta"}  onChange={()=>{setNotifType("delta")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Modify<span className='text-xs'>(Add or update the existing per-occupancy rates for the room type, rate plan and dates ).</span></label>
+                                                    <label htmlFor="disabled-radio-2"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium `}>Modify<span className='text-xs'>(Add or update the existing per-occupancy rates for the room type, rate plan and dates ).</span></label>
                                                 </div>
                                                 <div className="flex items-center mb-4">
                                                     <input  checked={notifType==="remove"}  onChange={()=>{setNotifType("remove")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2"  className="ml-1 -mt-0.5 text-sm font-medium text-gray-800 dark:text-gray-500">Delete<span className='text-xs'>(Delete all of the existing per-occupancy rates for the room type, rate plan and dates specified.).</span></label>
+                                                    <label htmlFor="disabled-radio-2"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium `}>Delete<span className='text-xs'>(Delete all of the existing per-occupancy rates for the room type, rate plan and dates specified.).</span></label>
                                                 </div>
                                             </div>
                                         </div>

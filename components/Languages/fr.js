@@ -1,5 +1,25 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  // ARI
+  addratenotif:"Notif D'ajout de Taux",
+  generatetransaction:'Générer une Transaction',
+  availability:'Disponibilité',
+  replace:'Remplacer',
+  replacesub:'(Remplace tout ce qui a été précédemment défini pour la propriété)',
+  modify:'Modifier',
+  generate:'Générer',
+  replacenotif:'(Remplace les tarifs par occupation existants pour le type de chambre, le plan tarifaire et les dates par de nouveaux tarifs).',
+  modifynotif:'(Ajoutez ou mettez à jour les tarifs par occupation existants pour le type de chambre, le plan tarifaire et les dates).',
+  modifysub:'(Ajoute des données précédemment indéfinies ou modifie des données existantes pour la propriété).',
+  deletenotif:'(Supprimez tous les tarifs par occupation existants pour le type de chambre, le plan tarifaire et les dates spécifiés).',
+  restriction:'Restriction',
+  lengthofstay:'Durée du séjour',
+  minadvbooking:"Réservation minimale à l'avance",
+  maxadvbooking:"Réservation à l'avance maximale",
+  minmaxmessage:'Message Min Max',
+  numberofdays:"Nombre de Jours",
+  pattern:"Motif",
+  patterndes:"Le modèle est une séquence de caractères Y et N indiquant si chaque durée de séjour est autorisée, d'une nuit à la valeur en nombre de jours. Par exemple, avec FixedPatternLength vaut 4 et FullPatternLOS vaut YNYN, seules les durées de séjour 1 et 3 sont autorisées.",
   //Inventory ARI
   inventories:"Inventaires",
   inventory:"Inventaire",

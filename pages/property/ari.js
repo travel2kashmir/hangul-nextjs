@@ -245,7 +245,7 @@ const currentPackage= (props) => {
                     </ol>
                 </nav>
   
-             <Table  gen={gen} setGen={setGen}  addNotif={addNotif} edit={currentPackage}
+             <Table  gen={gen} setGen={setGen}  addNotif={addNotif} edit={currentPackage} lang={language}
            common={language?.common} cols={language?.PackageCols} color={color} add={addRoom}  name="ARI"/>
 
 
@@ -255,7 +255,7 @@ const currentPackage= (props) => {
                             <div className={`${color?.whitebackground}  rounded-lg shadow relative`}>
                                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                                             <h3 className={ `${color?.text} text-xl font-semibold`}>
-                                        Generate Transaction
+                                        {language?.generatetransaction}
                                     </h3>
                                     <button type="button"
                                         onClick={() => {
@@ -274,15 +274,15 @@ const currentPackage= (props) => {
                                                     className={ `${color?.text} text-sm mb-6  font-semibold  block mb-2`}
                                                     htmlFor="grid-password"
                                                 >
-                                                    Action
+                                                    {language?.action}
                                                 </label>
                                                 <div className="flex items-center mb-4" >
                                                     <input  id="disabled-radio-1" checked={propertyAction==="overlay"} onChange={()=>{setPropertyAction("overlay")}} type="radio" value="overlay" name="disabled-radio"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-1"  className={`${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>Replace<span className='text-xs text-orange-500 px-1'>(Replaces all previously defined for the property).</span></label>
+                                                    <label htmlFor="disabled-radio-1"  className={`${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>{language?.replace}<span className='text-xs text-orange-500 px-1'>{language?.replacesub}</span></label>
                                                 </div>
                                                 <div className="flex items-center mb-4">
                                                     <input  checked={propertyAction==="delta"}  onChange={()=>{setPropertyAction("delta")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2"  className={`${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>Modify<span className='text-xs text-orange-500 px-1'>(Adds previously undefined or modifies existing data for the property).</span></label>
+                                                    <label htmlFor="disabled-radio-2"  className={`${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>{language?.modify}<span className='text-xs text-orange-500 px-1'>{language?.modifysub}</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -293,7 +293,7 @@ const currentPackage= (props) => {
             focus:ring-4 focus:ring-cyan-200 font-semibold bg-cyan-600 hover:bg-cyan-700 text-white
              rounded-lg text-sm px-5 py-2 text-center 
              items-center  mb-1 ease-linear transition-all duration-150">
-                                        Generate
+                                       {language?.generate}
                                     </button>
                                 </div>
 
@@ -309,7 +309,7 @@ const currentPackage= (props) => {
                             <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
                                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                                     <h3 className={ `${color?.text} text-xl font-semibold`}>
-                                       Add Rate Amount Notif
+                                       {language?.addratenotif}
 
                                     </h3>
                                     <button type="button"
@@ -329,19 +329,23 @@ const currentPackage= (props) => {
                                                     className={ `${color?.text} text-sm  font-semibold block mb-6`}
                                                     htmlFor="grid-password"
                                                 >
-                                                    Action
+                                                  {language?.action}
                                                 </label>
                                                 <div className="flex items-center mb-4" >
                                                     <input  id="disabled-radio-1" checked={notifType==="overlay"} onChange={()=>{setNotifType("overlay")}} type="radio" value="overlay" name="disabled-radio"  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-1"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>Replace<span className='text-xs'>( Replaces the existing per-occupancy rates for the room type, rate plan and dates with new rates).</span></label>
+                                                    <label htmlFor="disabled-radio-1"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium`}>{language?.replace}
+                                                    <span className='text-xs px-1 text-orange-500'>{language?.replacenotif}</span></label>
                                                 </div>
                                                 <div className="flex items-center mb-4">
                                                     <input  checked={notifType==="delta"}  onChange={()=>{setNotifType("delta")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium `}>Modify<span className='text-xs'>(Add or update the existing per-occupancy rates for the room type, rate plan and dates ).</span></label>
+                                                    <label htmlFor="disabled-radio-2"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium `}>{language?.modify}<span className='text-xs px-1 text-orange-500'>
+                                                       {language?.modifynotif}</span></label>
                                                 </div>
                                                 <div className="flex items-center mb-4">
                                                     <input  checked={notifType==="remove"}  onChange={()=>{setNotifType("remove")}}  id="disabled-radio-2" type="radio" value="delta" name="disabled-radio" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                    <label htmlFor="disabled-radio-2"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium `}>Delete<span className='text-xs'>(Delete all of the existing per-occupancy rates for the room type, rate plan and dates specified.).</span></label>
+                                                    <label htmlFor="disabled-radio-2"  className={ `${color?.text} ml-1 -mt-0.5 text-sm font-medium `}>
+                                                        {language?.delete}
+                                                        <span className='text-xs px-1 text-orange-500'>{language?.deletenotif}</span></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -352,7 +356,7 @@ const currentPackage= (props) => {
             focus:ring-4 focus:ring-cyan-200 font-semibold bg-cyan-600 hover:bg-cyan-700 text-white
              rounded-lg text-sm px-5 py-2 text-center 
              items-center  mb-1 ease-linear transition-all duration-150">
-                                        Add 
+                                        {language?.add}
                                     </button>
                                 </div>
 

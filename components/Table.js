@@ -128,9 +128,9 @@ const Table = (args) => {
                              font-semibold
                                 rounded-lg text-sm px-5 py-2 text-center 
                               items-center ease-linear transition-all duration-150" onClick={args?.addNotif} >
-                                Add Rate Notif</button>
+                                {args?.lang?.addratenotif}</button>
                                 <span onClick={args?.add} className={`w-1/2 ${args?.color?.text} ${args?.color?.whitebackground} border hover:cursor-pointer border-gray-300 ${args?.color?.hover}  focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto`}>
-                                Generate Transaction
+                                {args?.lang?.generatetransaction}
                             </span>  
                         </div> :
                         args?.name === "Inventory"  ?
@@ -423,7 +423,7 @@ const Table = (args) => {
                                                                                     args.edit(item)
                                                                                 }}>
                                                                                     {args?.name !== "ARI" && args?.name !== "Inventory" ?
-                                                                                    <>{args?.common?.Edit}</> : args?.name === "Inventory"?<>{args?.name}</>:<>Availability</>}
+                                                                                    <>{args?.common?.Edit}</> : args?.name === "Inventory"?<>{args?.name}</>:<>{args?.lang?.availability}</>}
                                                                                     </button>
                                                                  {args?.name !== "ARI" && args?.name !== "Inventory" ?
                                                                         <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"

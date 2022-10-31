@@ -268,12 +268,9 @@ var result = validateAvailability(availability,days_of_week)
 
   /** For Miles**/
   const LOSTemplate = {
-    "availability_id":availabilityId,
-    "unit_of_time": "",
-    "time":"" ,
-    "min_max_msg": "" ,
-    "pattern": "",
-    "fixed_pattern":""
+    "checkin_startdate":"",
+    "checkin_enddate": "",
+    "checkin_daysofweek":"" ,
   }  
 
   /* Mapping Index of each mile*/
@@ -661,7 +658,7 @@ var result = validateAvailability(availability,days_of_week)
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => {
-                          setAvailability({ ...availability, min_max_msg: e.target.value })
+                          setPromotion({ ...promotion, checkin_startdate: e.target.value })
                          e.target.value === 'FullPatternLOS' ? keys.push(index): "";
                         }
                   }>
@@ -690,7 +687,7 @@ var result = validateAvailability(availability,days_of_week)
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,time: e.target.value })
+                              setPromotion({ ...promotion,checkin_enddate: e.target.value })
                             )
                           }
                         />
@@ -699,39 +696,28 @@ var result = validateAvailability(availability,days_of_week)
                       </div>
                     </div>
                   </div>
-                  { keys.includes(index)?
-                  <>
-                  <div className="w-full lg:w-6/12 px-4" >
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                      {language?.pattern}
+                      {language?.numberofdays}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="text" 
-                          className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          type="number" min={1}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,fixed_pattern: e.target.value }))}/>
-                       <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.fixed_pattern}</p>    
+                              setPromotion({ ...promotion,checkin_enddate: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.time}</p>
                       </div>
                     </div>
-                  </div> 
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-4">   
-                    </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-4">
-                    <span className='text-orange-500 text-xs'>
-                   {language?.patterndes}
-                   </span>
-                     </div></div>
-                   
-                  </>:<></>}
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">

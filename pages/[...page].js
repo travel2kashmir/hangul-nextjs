@@ -1,23 +1,16 @@
 
 import React from "react";
-import Sidebar from "../components/Sidebar";
-import Website_head from "../components/Website_head";
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import Carousal from "./template/carousal";
 import en from "../components/Languages/en"
 import fr from "../components/Languages/fr"
 import ar from "../components/Languages/ar"
 import { useRouter } from "next/router";
-import Loader from "../components/loader";
 import Classic from "./themes/classic";
 import ClassicDark from './themes/classic-dark'
 const logger = require("../services/logger");
 
 var language;
-var currentUser;
-var currentProperty;
-var flag = false;
 
 function Page() {
  
@@ -28,11 +21,8 @@ function Page() {
   const [email, setEmail] = useState({});
   const [services, setServices] = useState([]);
   const [disp,setDisp]=useState(0); 
-  const [theme, setTheme] = useState("theme1")
-  const [bgColor, setBgColor] = useState(theme)
-  const [unique, setUnique] = useState(0)
-  const [uri, setUri] = useState("")
-  /** Router for Redirection **/
+  const [theme, setTheme] = useState("Classic")
+ /** Router for Redirection **/
   const router = useRouter();
   const fetchLanguage = (lang) => {
     console.log("fetched language is "+lang)
@@ -87,12 +77,12 @@ function Page() {
     if(router.query.page.length===4){
       var url;
       var language= router.locale || 'en';
-     // var theme= router?.query?.page[4];
       console.log("language is "+language)
       fetchLanguage(language)
      url=`/api/${router?.query?.page[0]}/${router?.query?.page[1]}/${router?.query?.page[2]}/${router?.query?.page[3]}`
       fetchProperty(url);
-    }else{
+    }
+    else{
       document.getElementById('datanotfound').innerHTML='Error 404 Page Not Found'
     }
       
@@ -130,7 +120,7 @@ function Page() {
   },[router.query.page]);
 
 
-  return (<>{disp === 0?<h1 id='datanotfound' className="text-blue-900 text-4xl mx-96 my-56">LOADING.....</h1>:
+  return (<>{disp === 0?<h1 id='datanotfound' className="text-blue-900 text-4xl  h-96 grid content-center mx-24">LOADING.....</h1>:
     <div>
     {/* Classic Theme */}
     { theme === "Classic" ?

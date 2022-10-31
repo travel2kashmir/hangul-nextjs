@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import StarRatings from 'react-star-ratings';
+import icon from '../../components/GlobalData'
 import english from '../../components/Languages/en'
 import french from '../../components/Languages/fr';
 import Marquee from "react-easy-marquee";
@@ -37,6 +38,8 @@ function Classic(args) {
    SwiperCore.use([Navigation, Pagination, Autoplay]);
    const [language, setLanguage] = useState(english);
    const [calendarIn, setCalendarIn] = useState(false);
+   const[checkinDate,setCheckinDate] = useState();
+   const[checkoutDate,setCheckoutDate] = useState();
    const [children, setChildren] = useState(false);
    const [guests, setGuests] = useState(false);
    const [calendarOut, setCalendarOut] = useState(false);
@@ -58,14 +61,16 @@ function Classic(args) {
    const [allHotelDetails, setAllHotelDetails] = useState([]);
 
   const changeCheckIn =  (d1) => {
+   setCheckinDate(d1);
     setD1(new Date(d1).toString().slice(4,10));
    setCalendarIn(!calendarIn)
    
   }
 
   const changeCheckOut =  (d2) => {
+   setCheckoutDate(d2)
    setD2(new Date(d2).toString().slice(4,10));
-   setCalendarOut(!calendarOut)
+   setCalendarOut(!calendarOut);
  }
    /** Router for Redirection **/
   /** Router for Redirection **/
@@ -81,6 +86,8 @@ function Classic(args) {
       let month = current.getMonth() + 1;
       checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
       checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate() + 1}`;
+      setCheckinDate(checkInDate);
+      setCheckoutDate(checkOutDate);
       setD1(new Date(checkInDate).toString().slice(4, 10));
       setD2(new Date(checkOutDate).toString().slice(4, 10));
      setVisible(1)
@@ -111,8 +118,7 @@ function Classic(args) {
       setLanguage(arabic)
    }
    })
-
-   
+  
    return (
       <div >
          <div className="header w-full">
@@ -375,7 +381,7 @@ function Classic(args) {
                                           {language?.roomstochoose} ({args?.allRooms?.rooms?.length})
                                         </div>
                                     </div></button></div>
-                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allRooms?.rooms?.map((resource, idx) => {
                                     return (
                                        <div  className='group'   key={idx}>
@@ -411,6 +417,7 @@ function Classic(args) {
                                                       {resource.room_facilities.map((item, index) => {
                                                          return (
                                                             <span className='text-gray-700' key={index}>
+                                                             
                                                                <span>&#10004;
                                                                   {item?.service_name} </span></span>)
                                                       })}
@@ -486,17 +493,156 @@ function Classic(args) {
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                                     {language?.property} {language?.amenities}</div>
+                                     {language?.property} {language?.amenities} </div>
                                     </div>
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
-                                 <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
-                                    {args?.allHotelDetails?.services?.map((item, idx) => {
+                                 <div className="grid ml-2 mb-8 grid-flow-row-dense lg:grid-cols-5 md:grid-cols-4 grid-cols-2  md:gap-3 gap-1 lg:gap-3">
+                                    {args?.services?.map((item, idx) => {
                                        return (
-                                          <span className='text-gray-700 capitalize' key={idx}>
-                                             <span>&#10004;
-                                                {item?.local_service_name} </span>
-                                          </span>)
+                                          <>
+                                          {(() => {
+                                             switch (item?.service_id) {
+                                               case 'ser001': return (<div>
+                                                 {/*AC*/}
+                                                    <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                      {icon?.Icons?.[i]?.ac}
+                                                      </span>
+                                              </div>)
+                                               case 'ser002': return (<div>
+                                                  {/*All Inclusive Available*/}
+                                                <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.inclusive}
+                                                   </span>
+                                               </div>)
+                                               case 'ser003': return (<div>
+                                                 {/*Child Friendly*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.childfriendly}
+                                                   </span>   
+                                               </div>)
+                                               case 'ser004': return (<div>
+                                                 {/*Golf Course*/}
+                                                  <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.golf}
+                                                   </span>
+                                               </div>)
+                                               case 'ser005': return (<div>
+                                                 {/*Airport Shuttle*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.airport}
+                                                   </span>
+                                               </div>)
+                                               case 'ser006': return (<div>
+                                                 {/*Bar Lounge*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.bar}
+                                                   </span>
+                                               </div>)
+                                               case 'ser007': return (<div>
+                                                 {/*Beach*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.beach}
+                                                   </span>
+                                               </div>)
+                                               case 'ser008': return (<div>
+                                                 {/*Business Center*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.bussinesscenter}
+                                                   </span>
+                                               </div>)
+                                               case 'ser009': return (<div>
+                                                 {/*Fitness Center*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.fitnesscenter}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0010': return (<div>
+                                                 {/*Free Breakfast*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.breakfast}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0011': return (<div>
+                                                 {/*Hot Tub*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.hottub}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0012': return (<div>
+                                                 {/*Laundary Service*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.laundary}
+                                                   </span>
+                                               </div>)
+                                     
+                                               case 'ser0013': return (<div>
+                                                 {/*Restaurant*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.restaurant}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0014': return (<div>
+                                                 {/*Room Service*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.roomservice}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0015': return (<div>
+                                                 {/*Spa*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.spa}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0016': return (<div>
+                                                 {/*Kitchen*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.kitchen}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0017': return (<div>
+                                                 {/*Parking*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.parking}
+                                                   </span>
+                                               </div>)
+                                     
+                                               case 'ser0018': return (<div>
+                                                 {/*Pets Allowed*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.pets}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0019': return (<div>
+                                                 {/*Smoke Free*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.smokefree}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0020': return (<div>
+                                                 {/*Swimming Pool*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.pool}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0021': return (<div>
+                                                 {/*Wheel Chair*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.wheelchair}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0022': return (<div>
+                                                 {/*Wifi Type*/}
+                                                 <span className="tooltip rounded-full hover:cursor-pointer hover:text-gray-900 text-gray-600 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.wifi}
+                                                   </span>
+                                               </div>)
+                                     
+                                               default: return (<div></div>)
+                                             }
+                                           })()}
+                                          </>
+                                         )
                                     })}</div>
                               </div>
                            </div>
@@ -512,7 +658,7 @@ function Classic(args) {
                                        </div>
                                     </div>
                                  </button></div>
-                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allPackages?.packages?.map((resource, idx) => {
                                     return (
                                        <div className='group'  key={idx}>
@@ -929,18 +1075,18 @@ function Classic(args) {
                      <div className="tour-receipt-select">
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
-                              <div className="tour-receipt-select-icon">
-                                 
-                                 <span className="material-icons-outlined">
+                              <div className="tour-receipt-select-icon">    
+                                 <span className="material-icons-outlined hover:cursor-pointer"
+                                  onClick={() => setCalendarIn(!calendarIn)}>
                                     calendar_month
                                  </span>
-                              </div>
+                                 </div>
                               <div className="tour-receipt-select-content">
                                  {calendarIn === false ?
-                              <div className="tour-receipt-select-title" onClick={() => setCalendarIn(!calendarIn)}>
+                              <div className="tour-receipt-select-title" >
                           <span > {d1}</span>
                         </div>:
-                                 <input defaultValue={checkInDate}
+                                 <input defaultValue={checkInDate} min={checkInDate}
                                  onChange={
                                     (e) => (
                                       changeCheckIn(e.target.value)
@@ -956,17 +1102,17 @@ function Classic(args) {
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined">
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarOut(!calendarOut)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
-                              <div className="tour-receipt-select-title"  onClick={() => setCalendarOut(!calendarOut)}>
+                              <div className="tour-receipt-select-title"  >
                          <span  >  {d2}</span>
                         </div>:
                                  <input 
-                                    type="date" defaultValue={checkOutDate} onChange={
+                                    type="date" defaultValue={checkOutDate} min={checkOutDate} onChange={
                                        (e) => (
                                          changeCheckOut(e.target.value)
                                        )
@@ -986,7 +1132,7 @@ function Classic(args) {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                <span className="material-icons-outlined" onClick={() => setGuests(!guests)}>
+                                <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setGuests(!guests)}>
                                  person_outline
                                  </span>
                               </div>
@@ -1006,7 +1152,7 @@ function Classic(args) {
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" onClick={() => setChildren(!children)}>
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setChildren(!children)}>
                                  person_outline
                                  </span>
                               </div>
@@ -1019,10 +1165,9 @@ function Classic(args) {
                                 type="number" min={1} defaultValue={2}
                                 className="my-1 bg-gray-50  text-gray-800 px-0.5
                                 focus:ring-gray-900  border focus:border-gray-900 border-gray-400
-                                text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
-}
+                                text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />}
                                  <div className="tour-receipt-select-text">
-                                 {language?.children}
+                                 Infants
                                  </div>
                               </div>
                            </div>

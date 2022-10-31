@@ -245,8 +245,7 @@ function Contact() {
       <Sidebar color={color} Primary={english?.Side} />
       <div
         id="main-content"
-        className={`${color?.whitebackground} pt-24 relative overflow-y-auto lg:ml-64`}
-      >
+        className={`${color?.whitebackground} pt-24 relative overflow-y-auto lg:ml-64`}>
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-2">

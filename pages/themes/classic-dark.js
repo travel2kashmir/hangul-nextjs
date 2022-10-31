@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import StarRatings from 'react-star-ratings';
-import english from '../../components/Languages/en'
+import english from '../../components/Languages/en';
+import icon from '../../components/GlobalData'
 import DatePicker from "react-datepicker";  
 import french from '../../components/Languages/fr';
 import Marquee from "react-easy-marquee";
@@ -50,6 +51,8 @@ function ClassicDark(args) {
    const [allPackages, setAllPackages] = useState({});
    const [rate, setRate] = useState(defaultRate);
    const [amenity, setAmenity] = useState(false);
+   const[checkinDate,setCheckinDate] = useState();
+   const[checkoutDate,setCheckoutDate] = useState();
    const [packages, setPackages] = useState(false);
    const [open, setOpen] = useState({
       "view": false,
@@ -75,6 +78,8 @@ function ClassicDark(args) {
       let month = current.getMonth() + 1;
       checkInDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate()}`;
       checkOutDate = `${current.getFullYear()}-${month < +10 ? `0${month}` : `${month + 1}`}-${current.getDate() + 1}`;
+      setCheckinDate(checkInDate);
+      setCheckoutDate(checkOutDate);
       setD1(new Date(checkInDate).toString().slice(4, 10));
       setD2(new Date(checkOutDate).toString().slice(4, 10));
      firstfun();
@@ -104,13 +109,13 @@ function ClassicDark(args) {
    })
    // Function for Check In
    const changeCheckIn =  (d1) => {
+      setCheckinDate(d1);
       setD1(new Date(d1).toString().slice(4,10));
-      setCalendarIn(!calendarIn)
     }
     // Function for Check Out
     const changeCheckOut =  (d2) => {
+      setCheckoutDate(d2)
      setD2(new Date(d2).toString().slice(4,10));
-     setCalendarOut(!calendarOut);
    }
    return ( 
      <>
@@ -363,15 +368,14 @@ function ClassicDark(args) {
                         <div className="accordion">
                            {/* Rooms */}
                        <div id="rooms" className={singleRoom === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
-                             
-                              <div className='accordion-trigger'  onClick={() => setSingleRoom(!singleRoom)}>
+                        <div className='accordion-trigger'  onClick={() => setSingleRoom(!singleRoom)}>
                                  <button className='mb-6' >
                                     <div className='accordion-trigger'>
                                        <div className={visible === 0 ? 'block  w-32 mb-6' : 'hidden'}><SubHeading /></div>
                                        <div className={visible === 1 ? 'block' : 'hidden'}>
                                        <p className='text-white'>{language?.roomstochoose} ({args?.allRooms?.rooms?.length})</p></div>
                                     </div></button></div>
-                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={singleRoom === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allRooms?.rooms?.map((resource, idx) => {
                                     return (
                                        <div className='group' key={idx}>
@@ -479,13 +483,152 @@ function ClassicDark(args) {
                                     </div>
                                  </button></div>
                               <div className={amenity === true ? 'tour-content-block1 ' : 'hidden'}>
-                                 <div className="grid mb-8 grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-3">
-                                    {args?.allHotelDetails?.services?.map((item, idx) => {
+                                 <div className="grid ml-2 mb-8 grid-flow-row-dense lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-3">
+                                    {args?.services?.map((item, idx) => {
                                        return (
-                                          <span className='text-gray-400 capitalize' key={idx}>
-                                             <span>&#10004;
-                                                {item?.local_service_name} </span>
-                                          </span>)
+                                          <>
+                                          {(() => {
+                                             switch (item?.service_id) {
+                                               case 'ser001': return (<div>
+                                                 {/*AC*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.ac}
+                                                   </span>
+                                               </div>)
+                                               case 'ser002': return (<div>
+                                                  {/*All Inclusive Available*/}
+                                                <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.inclusive}
+                                                   </span>
+                                               </div>)
+                                               case 'ser003': return (<div>
+                                                 {/*Child Friendly*/}
+                                                 <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.childfriendly}
+                                                   </span>   
+                                               </div>)
+                                               case 'ser004': return (<div>
+                                                 {/*Golf Course*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.golf}
+                                                   </span>
+                                               </div>)
+                                               case 'ser005': return (<div>
+                                                 {/*Airport Shuttle*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.airport}
+                                                   </span>
+                                               </div>)
+                                               case 'ser006': return (<div>
+                                                 {/*Bar Lounge*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.bar}
+                                                   </span>
+                                               </div>)
+                                               case 'ser007': return (<div>
+                                                 {/*Beach*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.beach}
+                                                   </span>
+                                               </div>)
+                                               case 'ser008': return (<div>
+                                                 {/*Business Center*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.bussinesscenter}
+                                                   </span>
+                                               </div>)
+                                               case 'ser009': return (<div>
+                                                 {/*Fitness Center*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.fitnesscenter}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0010': return (<div>
+                                                 {/*Free Breakfast*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.breakfast}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0011': return (<div>
+                                                 {/*Hot Tub*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.hottub}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0012': return (<div>
+                                                 {/*Laundary Service*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.laundary}
+                                                   </span>
+                                               </div>)
+                                     
+                                               case 'ser0013': return (<div>
+                                                 {/*Restaurant*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.restaurant}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0014': return (<div>
+                                                 {/*Room Service*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.roomservice}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0015': return (<div>
+                                                 {/*Spa*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.spa}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0016': return (<div>
+                                                 {/*Kitchen*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.kitchen}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0017': return (<div>
+                                                 {/*Parking*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.parking}
+                                                   </span>
+                                               </div>)
+                                     
+                                               case 'ser0018': return (<div>
+                                                 {/*Pets Allowed*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.pets}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0019': return (<div>
+                                                 {/*Smoke Free*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.smokefree}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0020': return (<div>
+                                                 {/*Swimming Pool*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.pool}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0021': return (<div>
+                                                 {/*Wheel Chair*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.wheelchair}
+                                                   </span>
+                                               </div>)
+                                               case 'ser0022': return (<div>
+                                                 {/*Wifi Type*/}
+                                                  <span  className="tooltip rounded-full hover:cursor-pointer hover:text-white text-gray-400 " title={item?.local_service_name}>
+                                                   {icon?.Icons?.[i]?.wifi}
+                                                   </span>
+                                               </div>)
+                                     
+                                               default: return (<div></div>)
+                                             }
+                                           })()}
+                                          </>
+                                          )
                                     })}</div>
                               </div>
                            </div>
@@ -501,7 +644,7 @@ function ClassicDark(args) {
                                        </div>
                                     </div>
                                  </button></div>
-                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4' : 'hidden'}>
+                              <div className={packages === true ? 'block -mt-4 mb-4 ml-4 hover:cursor-pointer' : 'hidden'}>
                                  {args?.allPackages?.packages?.map((resource, idx) => {
                                     return (
                                        <div className='group'key={idx}>
@@ -838,21 +981,21 @@ function ClassicDark(args) {
                   {/*  Reviews */}
                   <div className="tour-content-block">
                      <div className="tour-content-title">
-                        <p className='text-white'>{language?.customer} {language?.reviews}</p></div>
+                        <span className='text-white'>{language?.customer} {language?.reviews}</span></div>
                      <div className="tour-reviews">
                         <div className="tour-reviews-feedback-dark">
-                        <Marquee duration={10000}  height="370px" axis="Y" reverse={true}>
+                        <Marquee duration={10000}  height="360px" className='rounded-lg' axis="Y" reverse={true}>
                            {args?.allHotelDetails?.Reviews?.map((item, idx) => {
                               return (
                                 
-                                 <div className="tour-reviews-feedback-item  bg-gray-900" key={idx}>
+                                 <div className="tour-reviews-feedback-item bg-gray-900" key={idx}>
                                     <div className="tour-reviews-feedback-content">
 
                                        <div className="tour-reviews-feedback-content-inner">
                                           <div className="tour-reviews-feedback-title">
                                              <div className={visible === 0 ? 'block w-24 mb-2' : 'hidden'}><LineLoader /></div>
                                              <div className={visible === 1 ? 'block' : 'hidden'}>
-                                               <p className='text-white'> {item?.review_author}</p></div>
+                                               <span className='text-white'> {item?.review_author}</span></div>
                                           </div>
                                           <div className="tour-reviews-feedback-text">
                                              <div className={visible === 0 ? 'block h-2 w-64 mb-6' : 'hidden'}><LineLoader /></div>
@@ -862,9 +1005,7 @@ function ClassicDark(args) {
                                        </div>
                                     </div>
                                     <div className="tour-reviews-feedback-rating capitalize">{item?.review_rating}</div>
-                                   
                                  </div>
-                              
                                  )
                            })}
                            <hr className="border-white sm:mx-auto" />
@@ -932,18 +1073,18 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" >
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarIn(!calendarIn)} >
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content text-white">
                                  {calendarIn === false ?
                               <div className="tour-receipt-select-title">
-                          <span className='text-white'onClick={() => setCalendarIn(!calendarIn)} >
+                          <span className='text-white' >
                            {d1}
                            </span>
                         </div>:
-                                 <input defaultValue={checkInDate}
+                                 <input defaultValue={checkinDate} min={checkInDate}
                                  onChange={
                                     (e) => (
                                       changeCheckIn(e.target.value)
@@ -958,17 +1099,17 @@ function ClassicDark(args) {
                           </div></div>
                          <div className="tour-receipt-select-item">
                              <div className="tour-receipt-select-icon">    
-                                 <span className="material-icons-outlined" onClick={() => setCalendarOut(!calendarOut)}>
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setCalendarOut(!calendarOut)}>
                                     calendar_month
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {calendarOut === false ?
                               <div className="tour-receipt-select-title">
-                           <span className='text-white'onClick={() => setCalendarOut(!calendarOut)}>{d2}</span>
+                           <span className='text-white'>{d2}</span>
                         </div>:
                                  <input
-                                    type="date" defaultValue={checkOutDate} 
+                                    type="date" defaultValue={checkoutDate} min={checkOutDate}
                                     onChange={
                                        (e) => (
                                          changeCheckOut(e.target.value)
@@ -989,14 +1130,14 @@ function ClassicDark(args) {
                         <div className="tour-receipt-select-top">
                         <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                                 <span className="material-icons-outlined" >
+                                 <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setGuests(!guests)} >
                                     person_outline
                                  </span>
                               </div>
                               <div className="tour-receipt-select-content">
                               {guests === false ?
                               <div className="tour-receipt-select-title">
-                          <span  className='text-white' onClick={() => setGuests(!guests)}>{guest} {language?.guests}</span>
+                          <span  className='text-white' >{guest} {language?.guests}</span>
                         </div>:
                                  <input
                                     type="number" min={1} defaultValue={guest} 
@@ -1011,7 +1152,7 @@ function ClassicDark(args) {
                            </div>
                            <div className="tour-receipt-select-item">
                               <div className="tour-receipt-select-icon">
-                              <span className="material-icons-outlined" onClick={() => setChildren(!children)}>
+                              <span className="material-icons-outlined hover:cursor-pointer" onClick={() => setChildren(!children)}>
                                     person_outline
                                  </span>
                               </div>
@@ -1028,7 +1169,7 @@ function ClassicDark(args) {
                                     text-sm rounded-md block lg:w-16 w-14 mr-1 py-0.5" />
                                     }
                                  <div className="tour-receipt-select-text">
-                                 {language?.children}</div>
+                                 Infants</div>
                               </div>
                            </div>
                         </div>

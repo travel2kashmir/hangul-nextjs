@@ -117,7 +117,7 @@ const addSale = () =>{
 
 
   return (
-    <div>
+    <>
         <Header Primary={english?.Side}/>
       <Sidebar  Primary={english?.Side}/>
       <div id="main-content"
@@ -206,7 +206,7 @@ const addSale = () =>{
         draggable
         pauseOnHover
       />
-    </div>
+    </>
   )
 }
 

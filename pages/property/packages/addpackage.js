@@ -20,6 +20,7 @@ var currentPackageDetails;
 var max_age=[];
 var final=[];
 var currentLogged;
+var days_of_week;
 
 function Addpackage() {
   const [packageId, setPackageId] = useState()
@@ -152,6 +153,9 @@ function Addpackage() {
       "package_id": packageId,
       "base_rate_currency": allPackageDetails?.base_rate_currency,
       "base_rate_amount": allPackageDetails?.base_rate_amount,
+      "start_date": allPackageDetails?.start_date,
+      "end_date": allPackageDetails?.end_date,
+      "days_of_week": days_of_week,
       "tax_rate_currency":allPackageDetails?.tax_rate_currency,
       "tax_rate_amount":allPackageDetails?.tax_rate_amount,
       "other_charges_amount": allPackageDetails?.other_charges_amount,
@@ -313,6 +317,7 @@ function Addpackage() {
        status:true
      }]
      const finalImage = { "package_miles": packagemiledata }
+     alert(JSON.stringify(finalImage))
     axios.post(`/api/package/package_miles`, finalImage).then(response => {
       toast.success("Package miles added successfully!", {
         position: "top-center",
@@ -495,6 +500,41 @@ function Addpackage() {
 }
  }
 
+ const days = (days) => { 
+  var days_present=['-','-','-','-','-','-','-'];
+  days.map(day=>{
+  
+  if(day.day==='mon')
+  {
+  days_present[0]='m'
+  }
+  else if(day.day==='tue')
+  {
+  days_present[1]='t'
+  }
+  else if(day.day==='weds')
+  {
+  days_present[2]='w'
+  }
+  else if(day.day==='thur')
+  {
+  days_present[3]='t'
+  }
+  else if(day.day==='fri')
+  {
+  days_present[4]='f'
+  }
+  else if(day.day==='sat')
+  {
+  days_present[5]='s'
+  }
+  else if(day.day==='sun')
+  {
+  days_present[6]='s'
+  }
+  })
+   days_of_week = days_present.toString().replaceAll(',','');
+}
   return (
     <>
     <Header Primary={english?.Side1}/>
@@ -880,7 +920,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, startdate: e.target.value })
+                        setAllPackageDetails({ ...allPackageDetails, start_date: e.target.value })
                       )
                     } />
                 </div>
@@ -898,7 +938,7 @@ function Addpackage() {
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                    onChange={
                       (e) => (
-                        setAllPackageDetails({ ...allPackageDetails, enddate: e.target.value })
+                        setAllPackageDetails({ ...allPackageDetails, end_date: e.target.value })
                       )
                     } />
                 </div>

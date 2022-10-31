@@ -1,8 +1,32 @@
 export default {
+  addratenotif:"Add Rate Notif",
+  generatetransaction:'Generate Transaction',
+  availability:'Availability',
+  action:'Action',
+  replace:'Replace',
+  modify:'Modify',
+  replacesub:'(Replaces all previously defined for the property).',
+  modifysub:'(Adds previously undefined or modifies existing data for the property).',
+  generate:'Generate',
+  replacenotif:'(Replaces the existing per-occupancy rates for the room type, rate plan and dates with new rates).',
+  modifynotif:'(Add or update the existing per-occupancy rates for the room type, rate plan and dates ).',
+  deletenotif:'(Delete all of the existing per-occupancy rates for the room type, rate plan and dates specified).',
+  restriction:'Restriction',
+  lengthofstay:'Length of Stay',
+  minadvbooking:"Minimum Advance Booking",
+  maxadvbooking:'Maximum Advance Booking',
+  //Inventory ARI
+  inventories:"Inventories",
+  inventory:"Inventory",
+  available:"Available",
+  count:"Count",
   startdate:"Start Date",
   enddate:"End Date",
   days:"Days",
   title: "sign in",
+  numberofdays:"Number of Days",
+  pattern:'Pattern',
+  patterndes:"Pattern is a sequence of Y and N characters indicating whether each length of stay is allowed, from one night to the value in Number of Days. For example, with FixedPatternLength is 4 and FullPatternLOS is YNYN, only lengths of stay 1 and 3 are allowed.",
   // classic theme
    about:"About",
    amenities:"Amenities",
@@ -195,6 +219,11 @@ Cancel:"Cancel"
   name:"Rooms",
  col1 : "Room Name",
  col2 : "Room Type", 
+},
+"InventoryCols":{
+  name:"Rooms",
+ col1 : "Room Name",
+ 
 },
 "PackageCols":{
   name:"Packages",
@@ -506,6 +535,12 @@ roomsxml:'../../property/roomsxml'
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    
 },
+"AddLOS" :{
+  label: "Add LOS",
+   color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
+   icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
+   
+},
 "AddProgram" :{
   label: "Add Program",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
@@ -751,6 +786,7 @@ pointofsale:'../../pointofsales'
   ratecondition: 'Rate Condition',
   ratedescription: 'Rate Description',
   discounttype: 'Discount Type',
+  minmaxmessage:'Min Max Message',
   hotelamenity: 'Hotel Amenity(Free Wifi)',
   pricemultiplier: 'Price Multiplier',
   rateruledescription: 'Rate Rule Description',

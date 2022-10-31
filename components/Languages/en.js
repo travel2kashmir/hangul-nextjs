@@ -1,4 +1,23 @@
 export default {
+  promotions:"Promotions",
+  promotion:"Promotion",
+  devices:"Devices",
+  countrytype:"Country Type",
+  country:"Country",
+  stackingtype:"Stacking Type",
+  discount:"Discount",
+  promotionduration:"Promotion Duration",
+  fixedamount:"Fixed Amount",
+  night:"Night",
+  appliednights:"Applied Nights",
+  inventorycountmin:"Inventory Count Min",
+  inventorycountmax:"Inventory Count Max",
+  losmin:"LOS Min",
+  losmax:"LOS Max",
+  minamountbeforediscount:"Min Amount Before Discount",
+  occupancymin:"Occupancy Min",
+  occupancymax:"Occupancy Max",
+  duration:"Duration",
   addratenotif:"Add Rate Notif",
   generatetransaction:'Generate Transaction',
   availability:'Availability',
@@ -536,7 +555,7 @@ roomsxml:'../../property/roomsxml'
    
 },
 "AddLOS" :{
-  label: "Add LOS",
+  label: "Add",
    color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
    icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
    

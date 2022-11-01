@@ -21,6 +21,9 @@ var currentLogged;
 var days_of_week;
 var keys =[];
 var currentPackage;
+var resCou = []
+var i=0;
+var currentPromotion;
 var availabilityId;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -29,6 +32,9 @@ const logger = require("../../../services/logger");
 function Promotion() {
   const [visible, setVisible] = useState(0);
   const [promotion, setPromotion] = useState([])
+  const [allPackages, setAllPackages] = useState([])
+  const [country,setCountry]=useState([])
+  const [device,setDevice]=useState([])
   const [disp, setDisp] = useState(0);
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
@@ -51,11 +57,11 @@ useEffect(() => {
       }
       if (locale === "fr") {
         language = french;
-
       }
       /** Current Property Details fetched from the local storage **/
       currentProperty = JSON.parse(localStorage.getItem("property"));
       currentPackage = localStorage.getItem('PackageId');
+      currentPromotion = localStorage.getItem('promotionId');
       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       setVisible(1);
  }
@@ -74,6 +80,52 @@ const removecheckIn = (index) => {
    setCheckInData(filteredCheckIn)
   }
   
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+          const url = `/api/package/${currentProperty?.property_id}`
+          const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+         setAllPackages(response.data) 
+      }
+      catch (error) {
+          if (error.response) {
+             } 
+          else {
+             }
+      }
+
+  }
+  fetchPackages();
+  const fetchPromotion = async () => {
+    try {
+        const url = `/api//ari/promotions/${currentProperty?.property_id}/${currentPromotion}`
+        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+        setPromotion(response.data) 
+       
+          setCountry(
+            lang?.CountryData.filter(el => {
+            return response?.data?.countries?.find(element => {
+               return element.country_code === el.country_code;
+            });
+         }));
+        setDevice( lang?.DeviceData?.filter(el => {
+          return  response?.data?.devices?.find(element => {
+             return element.device === el.user_device;
+          });
+       })); 
+          
+    }
+    catch (error) {
+        if (error.response) {
+           } 
+        else {
+           }
+    }
+
+}
+fetchPromotion();
+filterByCountry();
+  },[])
    /** For Miles**/
    const checkInTemplate = {
     "availability_id":availabilityId,
@@ -95,14 +147,27 @@ const removecheckIn = (index) => {
  const addCheckIn = () => {
   setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
 }
-
+const filterByCountry = () => {
+  if(  promotion?.countries != undefined) {
+ resCou = lang?.CountryData.filter(el => {
+   return promotion?.countries?.find(element => {
+      return element.country_code === el.country_code;
+   });
+});
+setCountry(resCou)
+  }
+  else{
+  resCou= []
+  }
+Router.push('./promotion')
+}
 
   return (
     <div>
        <Header color={color} Primary={english.Side1} />
     <Sidebar color={color} Primary={english.Side1} />
     <div id="main-content"
-          className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
+          className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
          {/* Navbar */}
          <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -130,7 +195,7 @@ const removecheckIn = (index) => {
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../ari" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../promotions" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
                     <a>{language?.promotions}</a>
                   </Link>
                   </div></div>
@@ -176,12 +241,11 @@ const removecheckIn = (index) => {
            
         </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-            {language?.promotion}
+        {language?.promotion} 
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
-               
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -195,6 +259,7 @@ const removecheckIn = (index) => {
                         <input
                           type="text"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           defaultValue={promotion?.promotion_name}
                           onChange={
                             (e) => (
                               setPromotion({ ...promotion, promotion_name: e.target.value })
@@ -209,39 +274,12 @@ const removecheckIn = (index) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.action}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select
-                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                        onChange={(e) =>
-                          setPromotion({
-                            ...promotion,
-                            action: e.target.value,
-                          })
-                        }
-                      >
-                        <option disabled selected>{language?.select}</option>
-                        <option value="Baramulla">Baramulla</option>
-                        <option value="Pahalgam">Pahalgam</option>
-                        <option value="Gulmarg">Gulmarg</option>
-                      </select>
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
                         {language?.stackingtype}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select
-                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                        className={`shadow-sm ${color?.greybackground} border capitalize border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={(e) =>
                           setPromotion({
                             ...promotion,
@@ -249,10 +287,11 @@ const removecheckIn = (index) => {
                           })
                         }
                       >
-                        <option disabled selected>{language?.select}</option>
-                        <option value="Baramulla">Baramulla</option>
-                        <option value="Pahalgam">Pahalgam</option>
-                        <option value="Gulmarg">Gulmarg</option>
+                        <option disabled selected>{promotion?.stacking_type}</option>
+                        <option value="any">Any</option>
+                        <option value="base">Base</option>
+                        <option value="none">None</option>
+                        <option value="second">Second</option>
                       </select>
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.end_date}</p>
@@ -271,6 +310,7 @@ const removecheckIn = (index) => {
                       className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
                       isObject={true}
+                      selectedValues={device}
                       options={lang?.DeviceData}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
@@ -295,11 +335,11 @@ const removecheckIn = (index) => {
                       className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
                       isObject={true}
-                      options={lang?.DaysData}
+                      options={allPackages}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
-                      
-                     displayValue="day"
+                      selectedValues={promotion?.packages}
+                     displayValue="package_name"
                     
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
@@ -324,11 +364,11 @@ const removecheckIn = (index) => {
                           })
                         }
                       >
-                        <option disabled selected>{language?.select}</option>
-                        <option value="Baramulla">Baramulla</option>
-                        <option value="Pahalgam">Pahalgam</option>
-                        <option value="Gulmarg">Gulmarg</option>
-                      </select>
+                        <option disabled selected>{JSON.stringify(promotion?.countries?.[i]?.country_action) === "true"?
+                        "Include" : "Exclude"}</option>
+                        <option value="true">Include</option>
+                        <option value="false">Exclude</option>
+                        </select>
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.end_date}</p>
                       </div>
@@ -349,6 +389,7 @@ const removecheckIn = (index) => {
                        `}
                       isObject={true}
                       options={lang?.CountryData}
+                      selectedValues={country}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
                       displayValue="country_name"
@@ -412,7 +453,7 @@ const removecheckIn = (index) => {
            
         </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-           {language?.promotion} {language?.duration}
+           {language?.promotion} {language?.duration} 
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
@@ -423,20 +464,71 @@ const removecheckIn = (index) => {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.discount} {language?.percentage}
+                        {language?.discount} {language?.type}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                        onChange={
                       (e) => (
-                          setAvailability({ ...availability, restriction_status: e.target.value })
+                         setPromotion({ ...promotion, restriction_status: e.target.value })
                       )
                   }>
-                     <option selected >Select </option>
-                    <option value={true}>Active</option>
-                    <option value={false}>Inactive</option>
+                     <option selected >{promotion?.discount?.[i]?.discount_type} </option>
+                    <option value="discount_nights">Discount Percentage</option>
+                    <option value="fixed_amount_per_night">Fixed Amount per night</option>
+                    <option value="fixed_amount">Fixed Amount</option>
                    </select>
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_status}</p>
+                       </div>
+                    </div>
+                  </div>
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.discount} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           defaultValue={promotion?.discount?.[i]?.discount}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                            )
+                          }
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_status}</p>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.appliednights} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           defaultValue={promotion?.discount?.[i]?.applied_nights}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                            )
+                          }
+                        />
                    <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_status}</p>
                        </div>
@@ -448,22 +540,97 @@ const removecheckIn = (index) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       {language?.fixedamount} 
+                       Free Stay Nights
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           defaultValue={promotion?.free_nights?.[i]?.stay_nights}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                            )
+                          }
+                        />
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_type}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       Free Discount Nights
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           defaultValue={promotion?.free_nights?.[i]?.discount_nights}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                            )
+                          }
+                        />
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_type}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       Free Nights Discount Percentage
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           defaultValue={promotion?.free_nights?.[i]?.discount_percentage}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                            )
+                          }
+                        />
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_type}</p>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       Free Night Selection
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                          setAvailability({ ...availability, restriction_type: e.target.value })
+                         setPromotion({ ...promotion, restriction_type: e.target.value })
                       )}>
-                     <option selected >Select </option>
-                    <option value="arrival" >Arrival
+                     <option selected >{promotion?.free_nights?.[i]?.free_night_selection} </option>
+                    <option value="cheapest" >Cheapest
                    </option>
-                    <option value="departure">Departure
+                    <option value="last">Last
                     </option>
-                    <option value="master">Master
-                   </option>
+                  
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_type}</p>
@@ -472,45 +639,28 @@ const removecheckIn = (index) => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        {language?.fixedamount}/{language?.night}
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       Free Nights Repeat
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setAvailability({ ...availability, min_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_advance_booking}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        {language?.appliednights} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setAvailability({ ...availability, max_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.max_advance_booking}</p>
+                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                     onChange={
+                      (e) => (
+                         setPromotion({ ...promotion, restriction_type: e.target.value })
+                      )}>
+                     <option selected >{promotion?.free_nights?.[i]?.repeat} </option>
+                    <option value="true" >Yes
+                   </option>
+                    <option value="false">No
+                    </option>
+                  
+                    </select>
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_type}</p>
                       </div>
                     </div>
                   </div>
@@ -524,16 +674,16 @@ const removecheckIn = (index) => {
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                       onChange={
-                      (e) => (
-                          setAvailability({ ...availability, restriction_status: e.target.value })
-                      )
-                  }>
-                     <option selected >Select </option>
-                    <option value={true}>Active</option>
-                    <option value={false}>Inactive</option>
-                   </select>
+                      <input
+                          type="number" min={1}
+                          defaultValue={promotion?.inventory_min}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
+                            )
+                          }
+                        />
                    <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_status}</p>
                        </div>
@@ -549,16 +699,16 @@ const removecheckIn = (index) => {
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                     onChange={
-                      (e) => (
-                          setAvailability({ ...availability, restriction_type: e.target.value })
-                      )}>
-                     <option selected >Select </option>
-                    <option value="arrival" >Arrival<span className='text-xs text-orange-500'> (It prevents itineraries with a check-in date during the Start and End date range).</span></option>
-                    <option value="departure">Departure<span className='text-xs text-orange-500'> (It prevents itineraries with a check-out date during the Start and End date range).</span></option>
-                    <option value="master">Master<span className='text-xs text-orange-500 '> (It indicates whether the room rate is available for booking on the date).</span></option>
-                    </select>
+                      <input
+                          type="number" min={1}
+                          defaultValue={promotion?.inventory_max}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
+                            )
+                          }
+                        />
                     <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_type}</p>
                       </div>
@@ -575,9 +725,10 @@ const removecheckIn = (index) => {
                       <input
                           type="number" min={1}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          defaultValue={promotion?.length_of_stay_min}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, min_advance_booking: e.target.value })
+                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
                             )
                           }
                         />
@@ -596,10 +747,11 @@ const removecheckIn = (index) => {
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="number" min={1}
+                        defaultValue={promotion?.length_of_stay_max}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, max_advance_booking: e.target.value })
+                             setPromotion({ ...promotion, max_advance_booking: e.target.value })
                             )
                           }
                         />
@@ -621,12 +773,13 @@ const removecheckIn = (index) => {
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                          setAvailability({ ...availability, restriction_type: e.target.value })
+                         setPromotion({ ...promotion, restriction_type: e.target.value })
                       )}>
-                     <option selected >Select </option>
-                    <option value="arrival" >Arrival<span className='text-xs text-orange-500'> (It prevents itineraries with a check-in date during the Start and End date range).</span></option>
-                    <option value="departure">Departure<span className='text-xs text-orange-500'> (It prevents itineraries with a check-out date during the Start and End date range).</span></option>
-                    <option value="master">Master<span className='text-xs text-orange-500 '> (It indicates whether the room rate is available for booking on the date).</span></option>
+                     <option selected readOnly >{promotion?.min_amount_before_discount} </option>
+                    <option value="arrival" >Arrival</option>
+                    <option value="departure">Departure
+                   </option>
+                    <option value="master">Master</option>
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_type}</p>
@@ -643,10 +796,11 @@ const removecheckIn = (index) => {
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="number" min={1}
+                          defaultValue={promotion?.occupancy_min}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, min_advance_booking: e.target.value })
+                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
                             )
                           }
                         />
@@ -666,9 +820,10 @@ const removecheckIn = (index) => {
                       <input
                           type="number" min={1}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         defaultValue={promotion?.occupancy_max}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, max_advance_booking: e.target.value })
+                             setPromotion({ ...promotion, max_advance_booking: e.target.value })
                             )
                           }
                         />
@@ -772,7 +927,7 @@ const removecheckIn = (index) => {
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,time: e.target.value })
+                             setPromotion({ ...promotion,time: e.target.value })
                             )
                           }
                         />
@@ -794,7 +949,7 @@ const removecheckIn = (index) => {
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,time: e.target.value })
+                             setPromotion({ ...promotion,time: e.target.value })
                             )
                           }
                         />
@@ -914,7 +1069,7 @@ const removecheckIn = (index) => {
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,time: e.target.value })
+                             setPromotion({ ...promotion,time: e.target.value })
                             )
                           }
                         />
@@ -936,7 +1091,7 @@ const removecheckIn = (index) => {
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,time: e.target.value })
+                             setPromotion({ ...promotion,time: e.target.value })
                             )
                           }
                         />
@@ -1053,7 +1208,7 @@ const removecheckIn = (index) => {
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,time: e.target.value })
+                             setPromotion({ ...promotion,time: e.target.value })
                             )
                           }
                         />
@@ -1075,7 +1230,7 @@ const removecheckIn = (index) => {
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability,time: e.target.value })
+                             setPromotion({ ...promotion,time: e.target.value })
                             )
                           }
                         />

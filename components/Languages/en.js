@@ -1,5 +1,7 @@
 export default {
   promotions:"Promotions",
+  appliednights:"Applied Nights",
+  percentage:"Percentage",
   promotion:"Promotion",
   devices:"Devices",
   countrytype:"Country Type",
@@ -268,6 +270,11 @@ Cancel:"Cancel"
 },
 "RateRuleCols":{
   name:"Rate Rules",
+ col1 : "Name",
+  
+},
+"PromotionCols":{
+  name:"Promotion",
  col1 : "Name",
   
 },

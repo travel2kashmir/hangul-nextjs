@@ -48,9 +48,80 @@ function Promotions() {
         firstfun();
      }, [])
 
-     useEffect(()=>{ 
+     const fetchPromotions = async () => {
+       try {
+         var genData=[];
+           const url = `/api/ari/promotions/${currentProperty.property_id}`
+           const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+          setAllPromotions(response.data)
+        
+         response?.data?.map((item)=>{
+           var temp={
+             name:item.promotion_name,
+             status:item.status,
+             id:item.promotion_id
+           } 
+           genData.push(temp)
+         }
+         )
+         setGen(genData);
+         setVisible(1)
+       }
+       catch (error) {
+   
+           if (error.response) {
+               } 
+           else {
+           }
+       }
+   }
+
+   useEffect(() => {  
+    fetchPromotions();
+})
+
+  useEffect(()=>{ 
         setColor(DarkModeLogic(darkModeSwitcher))
-       },[darkModeSwitcher])
+  },[darkModeSwitcher])
+
+  /* Function Edit Contact*/
+ const submitPromotionEdit = (props) => { 
+  localStorage.setItem("promotionId", props?.id);
+  Router.push("./promotions/promotion")
+};
+
+const submitPromotionAdd = () => { 
+  Router.push('./promotions/addpromotion')
+};
+
+const submitPromotionDelete = (props) => {
+  const url = `/api/${props}`;
+   axios
+     .delete(url)
+     .then((response) => {
+       setSpin(0);
+       toast.success("API:Promotion delete success!", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+     .catch((error) => {
+       toast.error("API:Promotion delete error!", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     });
+ };
   return (
     <>
      <Header color={color} Primary={english?.Side}/>
@@ -90,6 +161,15 @@ function Promotions() {
               </li>
             </ol>
           </nav>
+         
+          <Table  gen={gen}
+           setGen={setGen}  
+           color={color} edit={submitPromotionEdit} 
+          add={submitPromotionAdd} delete={submitPromotionDelete}
+          common={language?.common} cols={language?.PromotionCols}
+          name="Packages"
+          /> 
+                          
       </div>
     </>
   )

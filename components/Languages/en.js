@@ -206,6 +206,13 @@ salename:'Point of Sale Name',
  search: "Search"
 },
   
+"CheckInCols":{
+  name:"Check In",
+ col1 : "Start Date",
+ col2 : "End Date", 
+ col3: "Days of Week",
+ search: "Search"
+},
 "common":{
 Status:"Status",
 Action: "Actions",
@@ -274,7 +281,7 @@ Cancel:"Cancel"
   
 },
 "PromotionCols":{
-  name:"Promotion",
+  name:"Promotions",
  col1 : "Name",
   
 },

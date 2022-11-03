@@ -486,6 +486,7 @@ function Classic(args) {
 
                               </div>
                            </div>
+                           
                            {/* Amenity */}
                            <div id="amenities"  className={amenity === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div onClick={() => setAmenity(!amenity)} className='accordion-trigger'>

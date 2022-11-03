@@ -1113,7 +1113,7 @@ Router.push('./promotion')
 
           </div>
           <div className={(disp === 0 || disp === 1)  ? 'block' :'hidden'}>
-          <Footer color={color}  Primary={english.Side}  delete={submitPromotionDelete}/>
+          <Footer color={color}  Primary={english.Side}  />
           </div>
     </div>
   )

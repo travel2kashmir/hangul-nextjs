@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import DatesTable from '../../../components/datestables';
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
 import Sidebar from "../../../components/Sidebar";
@@ -31,6 +32,8 @@ const logger = require("../../../services/logger");
 
 function Promotion() {
   const [visible, setVisible] = useState(0);
+  const [view, setView] = useState(0);
+  const [gen, setGen] = useState([])
   const [promotion, setPromotion] = useState([])
   const [allPackages, setAllPackages] = useState([])
   const [country,setCountry]=useState([])
@@ -101,8 +104,7 @@ const removecheckIn = (index) => {
         const url = `/api//ari/promotions/${currentProperty?.property_id}/${currentPromotion}`
         const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
         setPromotion(response.data) 
-       
-          setCountry(
+         setCountry(
             lang?.CountryData.filter(el => {
             return response?.data?.countries?.find(element => {
                return element.country_code === el.country_code;
@@ -126,6 +128,53 @@ const removecheckIn = (index) => {
 fetchPromotion();
 filterByCountry();
   },[])
+
+  const checkInGen = () => {
+    var genData = [];
+    promotion?.dates?.map((item) => {
+      if(item?.type === "check_in"){
+      var temp = {
+          name: item.start_date,
+          type: item.end_date,
+          status: item.days_of_week,
+          id: item.date_id
+      }
+    
+      genData.push(temp)}
+  })
+  setGen(genData);
+  }
+  const checkOutGen = () => {
+    var genData = [];
+    promotion?.dates?.map((item) => {
+      if(item?.type === "check_out"){
+      var temp = {
+          name: item.start_date,
+          type: item.end_date,
+          status: item.days_of_week,
+          id: item.date_id
+      }
+    
+      genData.push(temp)}
+  })
+  setGen(genData);
+  }
+  const BookingGen = () => {
+    var genData = [];
+    promotion?.dates?.map((item) => {
+      if(item?.type === "booking"){
+      var temp = {
+          name: item.start_date,
+          type: item.end_date,
+          status: item.days_of_week,
+          id: item.date_id
+      }
+    
+      genData.push(temp)}
+  })
+  setGen(genData);
+  }
+  
    /** For Miles**/
    const checkInTemplate = {
     "availability_id":availabilityId,
@@ -167,7 +216,10 @@ Router.push('./promotion')
        <Header color={color} Primary={english.Side1} />
     <Sidebar color={color} Primary={english.Side1} />
     <div id="main-content"
-          className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
+          
+          className={(disp === 2 || disp === 3 || disp === 4)  ? `${color?.whitebackground}  pt-24 relative overflow-y-auto lg:ml-64` :
+          ` ${color?.greybackground} pt-24 px-4 relative overflow-y-auto lg:ml-64` }
+        >
          {/* Navbar */}
          <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -845,7 +897,7 @@ Router.push('./promotion')
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(2)}} /> 
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(2);checkInGen()}} /> 
                 </div>
                 
                   </div>
@@ -856,7 +908,7 @@ Router.push('./promotion')
 
             {/* Check In */}
             <div id='2' className={disp===2?'block':'hidden'}>
-          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+        
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -882,123 +934,19 @@ Router.push('./promotion')
             </div>
            
         </div>
-        <div className="mx-4">
-                <div className="sm:flex">
-               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-                Check In
-               </h6>
-          
-                  <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
-                  </div>
-                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    
-                    <Button Primary={language?.AddLOS}  onClick={addCheckIn} />
-                  </div>
+     
+          {/* Card CheckIn Table */}
+          <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
+        name="Check In" add={()=> setView(1)}/> 
+            <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
-              </div>
-            <div className="pt-6">
-              <div className=" md:px-4 mx-auto w-full">
-              {checkInData?.map((checkInData, index) => (
-              <>
-                <div className={checkInData?.index === 0 ? "hidden":"block"}>
-                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                          <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
-                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
-                     rounded-lg text-sm px-1 py-1 text-center 
-                     items-center mb-1 ml-16 ease-linear transition-all duration-150`}
-                     onClick={() => removecheckIn(checkInData?.index)} type="button" >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            </button>
-                  </div>
-                  </div>
-                <div className="flex flex-wrap" key={index}>
-                <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                      Check in Start Date
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="date" 
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
-                        />
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                       Check in End Date
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="date" 
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                    Days Available
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion,checkin_daysofweek: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                 
-                  </div>
-</>))} 
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next}onClick={()=>{setDisp(3)}}  /> 
-                
-                  
-                    </div>
-                  </div>
-                  </div>
-             
-
-
             </div>
-            </div>
+           
           
            {/* Check Out*/}
            <div id='3' className={disp===3?'block':'hidden'}>
-          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+          
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -1024,123 +972,16 @@ Router.push('./promotion')
             </div>
            
         </div>
-        <div className="mx-4">
-                <div className="sm:flex">
-               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-               Check Out
-         </h6>
-          
-                  <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
-                  </div>
-                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    
-                    <Button Primary={language?.AddLOS}  onClick={addCheckIn} />
-                  </div>
+       {/* Card CheckOut Table */}
+       <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
+         add={()=> setView(1)} name="Check Out"/> 
+            <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(4);BookingGen()}} /> 
                 </div>
-              </div>
-            <div className="pt-6">
-              <div className=" md:px-4 mx-auto w-full">
-              {checkInData?.map((checkInData, index) => (
-              <>
-                <div className={checkInData?.index === 0 ? "hidden":"block"}>
-                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                          <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
-                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
-                     rounded-lg text-sm px-1 py-1 text-center 
-                     items-center mb-1 ml-16 ease-linear transition-all duration-150`}
-                     onClick={() => removecheckIn(checkInData?.index)} type="button" >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            </button>
-                  </div>
-                  </div>
-                <div className="flex flex-wrap" key={index}>
-                <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                      Check out Start Date
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="date" 
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
-                        />
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                     Check out End Date
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="date" 
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                    Days Available
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion,checkin_daysofweek: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                 
-                  </div>
-</>))} 
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(4)}} /> 
-                
-                  
-                    </div>
-                  </div>
-                  </div>
-             
-
-
-            </div>
-            </div>
+          </div>
             {/* Booking Date*/}
             <div id='4' className={disp===4?'block':'hidden'}>
-          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+         <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
@@ -1163,118 +1004,16 @@ Router.push('./promotion')
             </div>
            
         </div>
-        <div className="mx-4">
-                <div className="sm:flex">
-               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-               Booking Date
-         </h6>
-          
-                  <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
-                  </div>
-                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    
-                    <Button Primary={language?.AddLOS}  onClick={addCheckIn} />
-                  </div>
+       {/* Card Booking Table */}
+       <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
+        name="Booking"  add={()=> setView(1)}/> 
+            <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Submit} onClick={()=>{setDisp(4);BookingGen()}} /> 
                 </div>
-              </div>
-            <div className="pt-6">
-              <div className=" md:px-4 mx-auto w-full">
-              {checkInData?.map((checkInData, index) => (
-              <>
-                <div className={checkInData?.index === 0 ? "hidden":"block"}>
-                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                          <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
-                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
-                     rounded-lg text-sm px-1 py-1 text-center 
-                     items-center mb-1 ml-16 ease-linear transition-all duration-150`}
-                     onClick={() => removecheckIn(checkInData?.index)} type="button" >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            </button>
-                  </div>
-                  </div>
-                <div className="flex flex-wrap" key={index}>
-                <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                      Booking Start Date
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="date" 
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
-                        />
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                       Booking End Date
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="date" 
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                    Days Available
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion,checkin_daysofweek: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                 
-                  </div>
-</>))} 
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Submit}  /> 
-                
-                  
-                    </div>
-                  </div>
-                  </div>
              
 
 
-            </div>
+           
             </div> 
        <ToastContainer position="top-center"
         autoClose={5000}
@@ -1285,10 +1024,106 @@ Router.push('./promotion')
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+           {/* Modal Add */}
+        <div className={view === 1 ? "block" : "hidden"}>
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div className={`bg-white rounded-lg shadow relative`}>
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className="text-xl font-semibold">{language?.add} {language?.new}
+                  {disp===2 ? ' Check In' : disp===4 ? ' Check Out' : ' Booking'}</h3>
+                  <button
+                    type="button"
+                    onClick={() =>{
+                      setView(0);
+                    } }
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                  <form id='addcontactform'>
+                <div className="p-6 space-y-6" >
+                  <div className="grid grid-cols-6 gap-6">
+                    <div className="col-span-6 sm:col-span-3">
+                      <label
+                        htmlFor="first-name"
+                        className={`text-sm font-medium text-gray-900 block mb-2`}
+                      >
+                        {language?.startdate} 
+                      </label>
+                      <input type="text"
+                   className={`shadow-sm capitalize ${color?.whitebackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}></input>
+                    </div>
+                    <div className="col-span-6 sm:col-span-3">
+                      <label
+                        htmlFor="last-name"
+                        className={`text-sm font-medium text-gray-900 block mb-2`}
+                      >
+                        {language?.enddate} 
+                      </label>
+                      <input type="text"
+                      className={`shadow-sm capitalize ${color?.whitebackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}></input>
+                    </div>
+                    <div className="col-span-6 sm:col-span-3">
+                      <label
+                        htmlFor="last-name"
+                        className={`text-sm capitalize font-medium text-gray-900 block mb-2`}
+                      >
+                        {language?.days} 
+                      </label>
+                      <Multiselect 
+                      className={`fixed shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                       `}
+                      isObject={true}
+                      
+                      options={lang?.DaysData}
+                      onRemove={(event) => { days(event) }}
+                      onSelect={(event) => { days(event) }}
+                      
+                     displayValue="day"
+                    
+                      />
+                    </div>
+                  </div>
+                </div>
+                </form>
+
+                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                     
+                      <Button Primary={language?.Add} />
+                   
+                       
+                </div>
+              </div>
+            </div>
           </div>
-     <Footer color={color} />
+        </div>
+
+          </div>
+          <div className={(disp === 0 || disp === 1)  ? 'block' :'hidden'}>
+          <Footer color={color}  Primary={english.Side}  delete={submitPromotionDelete}/>
+          </div>
     </div>
   )
 }
 
 export default Promotion
+Promotion.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

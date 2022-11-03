@@ -89,38 +89,39 @@ function Promotions() {
   localStorage.setItem("promotionId", props?.id);
   Router.push("./promotions/promotion")
 };
-
+// Add Promotion
 const submitPromotionAdd = () => { 
   Router.push('./promotions/addpromotion')
 };
-
+//  Delete Promotion
 const submitPromotionDelete = (props) => {
-  const url = `/api/${props}`;
-   axios
-     .delete(url)
-     .then((response) => {
-       setSpin(0);
-       toast.success("API:Promotion delete success!", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-     .catch((error) => {
-       toast.error("API:Promotion delete error!", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     });
+  const url = `/api/ari/promotions/${props}`;
+  // axios
+  //    .delete(url)
+    //  .then((response) => {
+    //   toast.success("API: Promotion delete Success!", {
+    //      position: "top-center",
+    //      autoClose: 5000,
+    //      hideProgressBar: false,
+    //      closeOnClick: true,
+    //      pauseOnHover: true,
+    //      draggable: true,
+    //      progress: undefined,
+    //    });
+        //fetchPromotions();
+    //  })
+    //  .catch((error) => {
+    //    toast.error("API: Promotion delete error!", {
+    //      position: "top-center",
+    //      autoClose: 5000,
+    //      hideProgressBar: false,
+    //      closeOnClick: true,
+    //      pauseOnHover: true,
+    //      draggable: true,
+    //      progress: undefined,
+    //    });
+    //    setDeleteContact(0)
+    //  });
  };
   return (
     <>

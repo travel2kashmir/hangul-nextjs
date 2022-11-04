@@ -408,7 +408,7 @@ function ClassicDark(args) {
                                                    <p className='text-white'>{language?.room} {language?.facilities}</p></div>
 
                                                    <div className="grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 mt-2 gap-3">
-                                                      {resource.room_facilities.map((item, index) => {
+                                                      {resource?.room_facilities?.map((item, index) => {
                                                          return (
                                                             <span className='text-gray-400' key={index}>
                                                                <span>&#10004;
@@ -442,7 +442,7 @@ function ClassicDark(args) {
                                }
                             ]}
                             >
-                                                      {resource.room_images.map((resource, index) => {
+                                                      {resource?.room_images?.map((resource, index) => {
                                                          return (
                                                             <Carousel.Item key={index} >
                                                                <img width="100%" style={{ height: "160px", marginBottom: "10px" }} src={resource?.image_link} />
@@ -684,7 +684,7 @@ function ClassicDark(args) {
                                                       <p className='text-white'>{language?.package} {language?.services}</p></div>
 
                                                    <div className="grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 mt-2 gap-3">
-                                                      {resource.package_services.map((item, index) => {
+                                                      {resource?.package_services?.map((item, index) => {
                                                          return (
                                                             <>
                                                                {item?.value === true ? <><span className='capitalize text-gray-400' key={index}>
@@ -703,7 +703,7 @@ function ClassicDark(args) {
                                                    <div className="accordion-trigger -mt-8">
                                                       <p className='text-white'>{language?.package} {language?.rooms}</p></div>
 
-                                                   {resource.package_rooms.map((item, index) => {
+                                                   {resource?.package_rooms?.map((item, index) => {
                                                       return (
                                                          <span className='capitalize text-gray-400' key={index}>
                                                             {item?.room_name} </span>)
@@ -956,10 +956,10 @@ function ClassicDark(args) {
                                              <div className='flex pb-8'>
                                                 <div className='mr-2 ml-auto justify-end'>
                                                    <button onClick={()=>{  setRate({
-                                                         base_rate_amount: resource.base_rate_amount,
-                                                         tax_rate_amount: resource.tax_rate_amount,
-                                                         other_charges_amount: resource.other_charges_amount,
-                                                         base_rate_currency: resource.base_rate_currency
+                                                         base_rate_amount: resource?.base_rate_amount,
+                                                         tax_rate_amount: resource?.tax_rate_amount,
+                                                         other_charges_amount: resource?.other_charges_amount,
+                                                         base_rate_currency: resource?.base_rate_currency
                                                       })}} 
                                                    className='bg-green-600 sm:inline-flex text-white
             focus:ring-4 focus:ring-green-200 font-semibold text-white 

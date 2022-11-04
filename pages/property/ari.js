@@ -134,6 +134,8 @@ function Ari() {
              });
            })
      }
+
+    
      const submitNotif = () => {
         const current = new Date();
         const currentDateTime= current.toISOString();

@@ -74,6 +74,95 @@ useEffect(()=>{
   setColor(DarkModeLogic(darkModeSwitcher))
  },[darkModeSwitcher])
 
+ // Promotion
+ const submitPromotion = () => {
+  const current = new Date();
+  const currentDateTime= current.toISOString();
+  const final_data =  {"property_promotion": [{
+     "property_id": currentProperty?.property_id,
+     "stacking_type":promotion?.stacking_type,
+     "stay_dates_application": "all",
+     "timestamp": currentDateTime 
+   }]
+ }
+   const url = '/api/ari/promotions'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Promotion success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+      submitPromotionLink();
+     })
+     .catch((error) => {
+       toast.error("Promotion error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+//Promotion Link
+const submitPromotionLink = () => {
+  const current = new Date();
+  const currentDateTime= current.toISOString();
+  const final_data =  {"property_promotion_link": [{
+     "property_id": currentProperty?.property_id,
+     "promotion_message_id": "promo" +currentProperty?.property_id,
+     "action": "delta",
+     "timestamp": currentDateTime 
+   }]
+ }
+   const url = '/api/ari/promotions/property_promotion_link'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Property promotion success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+     .catch((error) => {
+       toast.error("Property promotion error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+//Devices
+const devices = (dev) => { 
+  setFinalDevice([]);
+  final_device_data=[]
+ dev.map(item => {
+    var temp = {
+      promotion_id: promotionId,
+      user_device_type: item?.user_device
+    }
+    final_device_data.push(temp) } );
+    alert(JSON.stringify(final_device_data))
+    setFinalDevice(final_device_data);
+    
+}
+
 /** Function to cancel package mile **/
 const removecheckIn = (index) => {
   const filteredCheckIn = checkInData.filter((i, id) => i.index !== index)
@@ -121,6 +210,7 @@ filterByCountry();
  const addCheckIn = () => {
   setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
 }
+
 const filterByCountry = () => {
   if(  promotion?.countries != undefined) {
  resCou = lang?.CountryData.filter(el => {
@@ -133,7 +223,7 @@ setCountry(resCou)
   else{
   resCou= []
   }
-Router.push('./promotion')
+Router.push('./addpromotion')
 }
 
   return (
@@ -257,7 +347,7 @@ Router.push('./promotion')
                         onChange={(e) =>
                           setPromotion({
                             ...promotion,
-                            action: e.target.value,
+                           stacking_type: e.target.value,
                           })
                         }
                       >
@@ -337,8 +427,7 @@ Router.push('./promotion')
                           })
                         }
                       >
-                        <option disabled selected>{JSON.stringify(promotion?.countries?.[i]?.country_action) === "true"?
-                        "Include" : "Exclude"}</option>
+                        <option disabled selected>{language?.select}</option>
                         <option value="true">Include</option>
                         <option value="false">Exclude</option>
                         </select>

@@ -52,7 +52,8 @@ function Addpackage() {
     firstfun();
     Router.push("./addpackage");
   },[]) 
-  const fetchPackageServices = async () => {
+
+const fetchPackageServices = async () => {
     const url = `/api/package/package_services`
     axios.get(url)
     .then((response)=>{response.data.map(i=>i.value=false);
@@ -60,10 +61,10 @@ function Addpackage() {
       logger.info("url  to fetch package services hitted successfully")})
       .catch((error)=>{logger.error("url to fetch package services, failed")}); 
       
-    }
+}
+
   useEffect(() => {
-    fetchPackageServices();
-   
+    fetchPackageServices(); 
   },[])
   
   useEffect(() => {
@@ -298,8 +299,8 @@ function Addpackage() {
     }  
   
     
-    /* Mapping Index of each mile*/
-      const [programData, setProgramData] = useState([programTemplate]?.map((i, id) => { return { ...i, index: id } }))
+/* Mapping Index of each mile*/
+const [programData, setProgramData] = useState([programTemplate]?.map((i, id) => { return { ...i, index: id } }))
     
    /** Function to add mile **/
    const addProgram = () => {

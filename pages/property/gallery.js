@@ -175,7 +175,6 @@ function Gallery() {
 
     /* Function to edit images*/
     const updateImageDetails = () => {
-
         if (flag === 1) {
             if(objChecker.isEqual(actionImage,updateImage)){
                 toast.warn('No change in Image Details detected. ', {

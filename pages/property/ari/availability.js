@@ -158,7 +158,7 @@ const submitLOS= () => {
      "fixed_pattern": availability?.fixed_pattern 
    }}))
  const final_data = { "LOS": data }
- 
+ alert(JSON.stringify(final_data))
  const url = '/api/ari/property_availability/property_availability_los'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -658,7 +658,7 @@ var result = validateAvailability(availability,days_of_week)
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => {
-                          setPromotion({ ...promotion, checkin_startdate: e.target.value })
+                          setAvailability({ ...availability, checkin_startdate: e.target.value })
                          e.target.value === 'FullPatternLOS' ? keys.push(index): "";
                         }
                   }>
@@ -687,7 +687,7 @@ var result = validateAvailability(availability,days_of_week)
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion,checkin_enddate: e.target.value })
+                              setavaiability({ ...avaiability,checkin_enddate: e.target.value })
                             )
                           }
                         />
@@ -709,7 +709,7 @@ var result = validateAvailability(availability,days_of_week)
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion,checkin_enddate: e.target.value })
+                              setavaiability({ ...avaiability,checkin_enddate: e.target.value })
                             )
                           }
                         />

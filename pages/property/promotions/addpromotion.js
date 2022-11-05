@@ -18,7 +18,7 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week;
+var days_of_week =[];
 var keys =[];
 var currentPackage;
 var resCou = []
@@ -33,6 +33,7 @@ function Addpromotion() {
   const [visible, setVisible] = useState(0);
   const [promotion, setPromotion] = useState([])
   const [allPackages, setAllPackages] = useState([])
+  const [promotionId, setPromotionId] = useState()
   const [country,setCountry]=useState([])
   const [device,setDevice]=useState([])
   const [disp, setDisp] = useState(0);
@@ -76,16 +77,33 @@ useEffect(()=>{
 
  // Promotion
  const submitPromotion = () => {
-  const current = new Date();
-  const currentDateTime= current.toISOString();
-  const final_data =  {"property_promotion": [{
+  var k =new Date()
+  var day=k.getDate();
+  var month=k.getMonth()+1  
+  k.getFullYear()
+  var year=k.getFullYear()
+  var hr=k.getHours()
+  var min=k.getMinutes()
+  var sec=k.getSeconds()
+ var msec=k.getMilliseconds()
+  var currentDateTime=`${year}-${month}-${day} ${hr}:${min}:${sec}.${msec}`;
+  const final_data = 
+ {"property_promotion": [{
      "property_id": currentProperty?.property_id,
+     "promotion_name":promotion?.promotion_name,
      "stacking_type":promotion?.stacking_type,
-     "stay_dates_application": "all",
-     "timestamp": currentDateTime 
+     "timestamp": currentDateTime,
+     "inventory_min":promotion?.inventory_min,
+     "inventory_max":promotion?.inventory_max,
+     "length_of_stay_min": promotion?.length_of_stay_min,
+     "length_of_stay_max": promotion?.length_of_stay_max,
+     "occupancy_min": promotion?.occupancy_min,
+     "occupancy_max":promotion?.occupancy_max,
+     "min_amount_before_discount":promotion?.min_amount_before_discount,
+     status:"true"
    }]
  }
-   const url = '/api/ari/promotions'
+  const url = '/api/ari/promotions'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("Promotion success", {
@@ -98,6 +116,10 @@ useEffect(()=>{
          progress: undefined,
        });
       submitPromotionLink();
+      setPromotionId(response?.data?.promotion_id)
+      devices(response.data.promotion_id)
+      countries(response.data.promotion_id)
+      packages(response.data.promotion_id)
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -111,21 +133,33 @@ useEffect(()=>{
        });
      })
 }
+
+//Devices
+const devices = (props) => { 
+ var final_device_data=[]
+  promotion?.devices.map(item => {
+    var temp = {
+      promotion_id:props,
+      device: item?.user_device
+    }
+    final_device_data.push(temp) } );
+    submitDevices(final_device_data);    
+}
 //Promotion Link
-const submitPromotionLink = () => {
+const submitPromotionLink = (props) => {
   const current = new Date();
   const currentDateTime= current.toISOString();
   const final_data =  {"property_promotion_link": [{
      "property_id": currentProperty?.property_id,
      "promotion_message_id": "promo" +currentProperty?.property_id,
-     "action": "delta",
+     "action": promotion?.stacking_type,
      "timestamp": currentDateTime 
    }]
  }
-   const url = '/api/ari/promotions/property_promotion_link'
+ const url = '/api/ari/promotions/property_promotion_link'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
-       toast.success("Property promotion success", {
+       toast.success("Property promotion  link success", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -136,7 +170,7 @@ const submitPromotionLink = () => {
        });
      })
      .catch((error) => {
-       toast.error("Property promotion error", {
+       toast.error("Property promotion link error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -148,19 +182,200 @@ const submitPromotionLink = () => {
      })
 }
 
-//Devices
-const devices = (dev) => { 
-  setFinalDevice([]);
-  final_device_data=[]
- dev.map(item => {
+
+// Promotion Discount
+const submitPromotionDiscount = () => {
+  const final_data = 
+ {"property_promotion_discount": [{
+     "promotion_id": promotionId,
+     "discount":promotion?.discount,
+     "discount_type":promotion?.discount_type,
+     "applied_nights":promotion?.applied_nights,
+   }]
+ }
+
+  const url = '/api/ari/promotions/property_promotion_discount'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Promotion discount success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+       submitPromotionFreeNights();
+     })
+     .catch((error) => {
+       toast.error("Promotion discount error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+//Promotion Free Nights
+const submitPromotionFreeNights = () => {
+  const final_data = 
+ {"property_promotion_discount": [{
+     "promotion_id": promotionId,
+     "stay_nights":promotion?.stay_nights,
+     "discount_nights":promotion?.discount_nights,
+     "discount_percentage":promotion?.discount_percentage,
+     "night_selection":promotion?.night_selection,
+     "repeat":promotion?.repeat,
+   }]
+ }
+ 
+  const url = '/api/ari/promotions/property_promotion_free_nights'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Promotion success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+     .catch((error) => {
+       toast.error("Promotion error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+// Package
+const packages = (props) => { 
+  var final_package_data=[]
+  promotion?.packages.map(item => {
     var temp = {
-      promotion_id: promotionId,
-      user_device_type: item?.user_device
+      promotion_id: props,
+      package_id: item?.package_id
     }
-    final_device_data.push(temp) } );
-    alert(JSON.stringify(final_device_data))
-    setFinalDevice(final_device_data);
+    final_package_data.push(temp) } );
+    submitPackages(final_package_data)
     
+}
+
+// Country
+const countries = (props) => { 
+  var final_country_data=[]
+  promotion?.country.map(item => {
+    var temp = {
+      promotion_id: props,
+      country_code: item?.country_code,
+      country_action: promotion?.country_type
+    }
+    final_country_data.push(temp) } );
+    submitCountries(final_country_data);   
+}
+
+// Devices
+const submitDevices = (props) => {
+  const final_data =  {"promotion_devices": props }
+   const url = '/api/ari/promotions/property_promotion_devices'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Devices success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+
+     
+     })
+     .catch((error) => {
+       toast.error("Devices error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+// Packages
+const submitPackages = (props) => {
+  const final_data =  {"promotion_packages": props }
+   const url = '/api/ari/promotions/property_promotion_packages'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Packages success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+      setDisp(1)
+     
+     })
+     .catch((error) => {
+       toast.error("Devices error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+// Packages
+const submitCountries = (props) => {
+  const final_data =  {"property_promotion_country": props}
+   const url = '/api/ari/promotions/property_promotion_country'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Country success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+
+     
+     })
+     .catch((error) => {
+       toast.error("Country error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
 }
 
 /** Function to cancel package mile **/
@@ -189,27 +404,73 @@ const removecheckIn = (index) => {
 filterByCountry();
   },[])
 
-   /** For Miles**/
+   /** For Dates**/
    const checkInTemplate = {
-    "availability_id":availabilityId,
-    "unit_of_time": "",
-    "time":"" ,
-    "min_max_msg": "" ,
-    "pattern": "",
-    "fixed_pattern":""
+    "promotion_id":promotionId,
+    "start_date": "",
+    "end_date":"" ,
+    "days_of_week": "" ,
+    "type":""
   }  
 
-  /* Mapping Index of each mile*/
+  /* Mapping Index of each dates*/
     const [checkInData, setCheckInData] = useState([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
-  
+
+    const onChange = (e, index, i) => {
+      setCheckInData(checkInData?.map((item, id) => {
+        if (item.index === index) {
+          item[i] = e.target.value
+        }
+        return item
+      }))
+    }
+// Dates
+const submitDates= (check_in) => {
+  const data = checkInData?.map((i => {
+    return {
+    "promotion_id":promotionId,
+     "start_date": i?.start_date,
+     "end_date":i?.end_date,
+     "days_of_week":days_of_week,
+     "type": check_in
+   }}))
+ const final_data = { "property_promotion_rates": data }
+
+ const url = '/api/ari/promotions/property_promotion_dates'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Dates success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     keys=[];
+     })
+     .catch((error) => {
+       toast.error("Dates error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+/** Function to add Dates**/
+ const addCheckIn = () => {
+  setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
+} 
+
   const addLOS = () => {
     setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
   }
- 
- /** Function to add mile **/
- const addCheckIn = () => {
-  setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
-}
 
 const filterByCountry = () => {
   if(  promotion?.countries != undefined) {
@@ -226,9 +487,47 @@ setCountry(resCou)
 Router.push('./addpromotion')
 }
 
+const days = (days) => { 
+  var days_present=['-','-','-','-','-','-','-'];
+  days.map(day=>{
+  
+  if(day.day==='mon')
+  {
+  days_present[0]='m'
+  }
+  else if(day.day==='tue')
+  {
+  days_present[1]='t'
+  }
+  else if(day.day==='weds')
+  {
+  days_present[2]='w'
+  }
+  else if(day.day==='thur')
+  {
+  days_present[3]='t'
+  }
+  else if(day.day==='fri')
+  {
+  days_present[4]='f'
+  }
+  else if(day.day==='sat')
+  {
+  days_present[5]='s'
+  }
+  else if(day.day==='sun')
+  {
+  days_present[6]='s'
+  }
+  })
+   days_of_week = days_present.toString().replaceAll(',','');
+   
+   setPromotion({...promotion, days_of_week:days_of_week})
+
+}
   return (
     <div>
-       <Header color={color} Primary={english.Side1} />
+    <Header color={color} Primary={english.Side1} />
     <Sidebar color={color} Primary={english.Side1} />
     <div id="main-content"
           className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
@@ -364,9 +663,169 @@ Router.push('./addpromotion')
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.inventorycountmin} {language?.percentage}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, inventory_min: e.target.value })
+                            )
+                          }
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_status}</p>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       {language?.inventorycountmax} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, inventory_max: e.target.value })
+                            )
+                          }
+                        />
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_type}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.devices}
+                        {language?.losmin}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         onChange={
+                            (e) => (
+                             setPromotion({ ...promotion,length_of_stay_min: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.min_advance_booking}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.losmax} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                        className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, length_of_stay_max: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.max_advance_booking}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       {language?.minamountbeforediscount} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                        className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, min_amount_before_discount: e.target.value })
+                            )
+                          }
+                        />
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_type}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.occupancymin}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, occupancy_min: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.min_advance_booking}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.occupancymax} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         onChange={
+                            (e) => (
+                             setPromotion({ ...promotion,occupancy_max: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.max_advance_booking}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.devices} 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -376,8 +835,16 @@ Router.push('./addpromotion')
                       isObject={true}
                       selectedValues={device}
                       options={lang?.DeviceData}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
+                      onRemove={(e)   =>
+                        setPromotion({
+                          ...promotion,
+                        devices: e,
+                        })}
+                      onSelect={(e)   =>
+                        setPromotion({
+                          ...promotion,
+                        devices: e,
+                        })}
                       
                      displayValue="user_device"
                     
@@ -400,8 +867,16 @@ Router.push('./addpromotion')
                        `}
                       isObject={true}
                       options={allPackages}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
+                      onRemove={(e)   =>
+                        setPromotion({
+                          ...promotion,
+                       packages: e,
+                        })}
+                      onSelect={(e)   =>
+                        setPromotion({
+                          ...promotion,
+                       packages: e,
+                        })}
                     displayValue="package_name"
                     
                       />
@@ -423,7 +898,7 @@ Router.push('./addpromotion')
                         onChange={(e) =>
                           setPromotion({
                             ...promotion,
-                            action: e.target.value,
+                           country_type: e.target.value,
                           })
                         }
                       >
@@ -442,7 +917,7 @@ Router.push('./addpromotion')
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.country}
+                        {language?.country} 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -452,8 +927,16 @@ Router.push('./addpromotion')
                       isObject={true}
                       options={lang?.CountryData}
                       selectedValues={country}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
+                      onRemove={(e)   =>
+                        setPromotion({
+                          ...promotion,
+                        country: e,
+                        })}
+                      onSelect={(e)   =>
+                        setPromotion({
+                          ...promotion,
+                       country: e,
+                        })}
                       displayValue="country_name"
                     
                       />
@@ -475,7 +958,7 @@ Router.push('./addpromotion')
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/> 
+                    <Button Primary={language?.Next} onClick={()=>{ submitPromotion()}}/> 
                 </div>
                 
                   </div>
@@ -533,7 +1016,7 @@ Router.push('./addpromotion')
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                        onChange={
                       (e) => (
-                         setPromotion({ ...promotion, restriction_status: e.target.value })
+                         setPromotion({ ...promotion, discount_type: e.target.value })
                       )
                   }>
                      <option selected disabled >{language?.select} </option>
@@ -561,7 +1044,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                              setPromotion({ ...promotion, discount: e.target.value })
                             )
                           }
                         />
@@ -585,7 +1068,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                              setPromotion({ ...promotion, applied_nights: e.target.value })
                             )
                           }
                         />
@@ -609,7 +1092,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                              setPromotion({ ...promotion, stay_nights: e.target.value })
                             )
                           }
                         />
@@ -633,7 +1116,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                          onChange={
                             (e) => (
-                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                              setPromotion({ ...promotion, discount_nights: e.target.value })
                             )
                           }
                         />
@@ -657,7 +1140,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, promotion_name: e.target.value })
+                              setPromotion({ ...promotion, discount_percentage: e.target.value })
                             )
                           }
                         />
@@ -680,7 +1163,7 @@ Router.push('./addpromotion')
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                         setPromotion({ ...promotion, restriction_type: e.target.value })
+                         setPromotion({ ...promotion, night_selection: e.target.value })
                       )}>
                      <option selected disabled >{language?.select} </option>
                     <option value="cheapest" >Cheapest
@@ -707,7 +1190,7 @@ Router.push('./addpromotion')
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                         setPromotion({ ...promotion, restriction_type: e.target.value })
+                         setPromotion({ ...promotion, repeat: e.target.value })
                       )}>
                      <option selected disabled >{language?.select} </option>
                     <option value="true" >Yes
@@ -721,168 +1204,7 @@ Router.push('./addpromotion')
                       </div>
                     </div>
                   </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                        {language?.inventorycountmin} {language?.percentage}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                       {language?.inventorycountmax} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        {language?.losmin}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         onChange={
-                            (e) => (
-                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_advance_booking}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        {language?.losmax} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                        className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion, max_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.max_advance_booking}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                       {language?.minamountbeforediscount} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                     onChange={
-                      (e) => (
-                         setPromotion({ ...promotion, restriction_type: e.target.value })
-                      )}>
-                     <option selected readOnly >{language?.select} </option>
-                    <option value="arrival" >Arrival</option>
-                    <option value="departure">Departure
-                   </option>
-                    <option value="master">Master</option>
-                    </select>
-                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        {language?.occupancymin}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion, min_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_advance_booking}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                        {language?.occupancymax} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         onChange={
-                            (e) => (
-                             setPromotion({ ...promotion, max_advance_booking: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.max_advance_booking}</p>
-                      </div>
-                    </div>
-                  </div>
+                 
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-4">
                       
@@ -896,7 +1218,7 @@ Router.push('./addpromotion')
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(2)}} /> 
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(2);submitPromotionDiscount();}} /> 
                 </div>
                 
                   </div>
@@ -911,7 +1233,7 @@ Router.push('./addpromotion')
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {checkInData?.days_of_week}</div>
             </div>
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
@@ -938,11 +1260,9 @@ Router.push('./addpromotion')
                <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
                 Check In
                </h6>
-          
-                  <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+               <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    
                     <Button Primary={language?.AddLOS}  onClick={addCheckIn} />
                   </div>
                 </div>
@@ -976,11 +1296,8 @@ Router.push('./addpromotion')
                       <input
                           type="date" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
+                          
+                          onChange={e => onChange(e, checkInData?.index, 'start_date')}
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
                       {error?.min_max_msg}</p>
@@ -998,11 +1315,7 @@ Router.push('./addpromotion')
                       <input
                           type="date" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
-                            )
-                          }
+                          onChange={e => onChange(e, checkInData?.index, 'end_date')}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.time}</p>
@@ -1017,15 +1330,14 @@ Router.push('./addpromotion')
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion,checkin_daysofweek: e.target.value })
-                            )
-                          }
-                        />
+                      <Multiselect
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={lang?.DaysData}
+                      onRemove={(event) => { days(event) }}
+                      onSelect={(event) => { days(event) }}
+                     displayValue="day"
+                      />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.time}</p>
                       </div>
@@ -1035,7 +1347,7 @@ Router.push('./addpromotion')
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next}onClick={()=>{setDisp(3)}}  /> 
+                    <Button Primary={language?.Next}onClick={()=>{ submitDates("check_in");setDisp(3)}}  /> 
                 
                   
                     </div>
@@ -1120,7 +1432,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
+                             setPromotion({ ...promotion,start_date: e.target.value })
                             )
                           }
                         />
@@ -1142,7 +1454,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
+                             setPromotion({ ...promotion,end_date: e.target.value })
                             )
                           }
                         />
@@ -1159,15 +1471,14 @@ Router.push('./addpromotion')
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion,checkin_daysofweek: e.target.value })
-                            )
-                          }
-                        />
+                      <Multiselect
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={lang?.DaysData}
+                      onRemove={(event) => { days(event) }}
+                      onSelect={(event) => { days(event) }}
+                     displayValue="day"
+                      />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.time}</p>
                       </div>
@@ -1177,7 +1488,7 @@ Router.push('./addpromotion')
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(4)}} /> 
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(4); submitDates("check_out")}} /> 
                 
                   
                     </div>
@@ -1188,6 +1499,7 @@ Router.push('./addpromotion')
 
             </div>
             </div>
+
             {/* Booking Date*/}
             <div id='4' className={disp===4?'block':'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
@@ -1259,7 +1571,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
+                             setPromotion({ ...promotion,start_date: e.target.value })
                             )
                           }
                         />
@@ -1281,7 +1593,7 @@ Router.push('./addpromotion')
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                             setPromotion({ ...promotion,time: e.target.value })
+                             setPromotion({ ...promotion,end_date: e.target.value })
                             )
                           }
                         />
@@ -1298,15 +1610,14 @@ Router.push('./addpromotion')
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion,checkin_daysofweek: e.target.value })
-                            )
-                          }
-                        />
+                      <Multiselect
+                      className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
+                      isObject={true}
+                      options={lang?.DaysData}
+                      onRemove={(event) => { days(event) }}
+                      onSelect={(event) => { days(event) }}
+                     displayValue="day"
+                      />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.time}</p>
                       </div>
@@ -1316,7 +1627,7 @@ Router.push('./addpromotion')
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Submit}  /> 
+                    <Button Primary={language?.Submit} onClick={()=>{submitDates("booking")} }/> 
                 
                   
                     </div>

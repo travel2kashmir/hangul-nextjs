@@ -95,34 +95,35 @@ const submitPromotionAdd = () => {
 };
 //  Delete Promotion
 const submitPromotionDelete = (props) => {
-  const url = `/api/ari/promotions/${props}`;
-  // axios
-  //    .delete(url)
-    //  .then((response) => {
-    //   toast.success("API: Promotion delete Success!", {
-    //      position: "top-center",
-    //      autoClose: 5000,
-    //      hideProgressBar: false,
-    //      closeOnClick: true,
-    //      pauseOnHover: true,
-    //      draggable: true,
-    //      progress: undefined,
-    //    });
-        //fetchPromotions();
-    //  })
-    //  .catch((error) => {
-    //    toast.error("API: Promotion delete error!", {
-    //      position: "top-center",
-    //      autoClose: 5000,
-    //      hideProgressBar: false,
-    //      closeOnClick: true,
-    //      pauseOnHover: true,
-    //      draggable: true,
-    //      progress: undefined,
-    //    });
-    //    setDeleteContact(0)
-    //  });
+ const url = `/api/ari/promotions/${props}`;
+  axios
+     .delete(url)
+     .then((response) => {
+      toast.success("API: Promotion delete Success!", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+        fetchPromotions();
+        Router.push('./promotions')
+     })
+     .catch((error) => {
+       toast.error("API: Promotion delete error!", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     });
  };
+ 
   return (
     <>
      <Header color={color} Primary={english?.Side}/>
@@ -170,7 +171,15 @@ const submitPromotionDelete = (props) => {
           common={language?.common} cols={language?.PromotionCols}
           name="Packages"
           /> 
-                          
+         <ToastContainer position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover />                   
       </div>
     </>
   )

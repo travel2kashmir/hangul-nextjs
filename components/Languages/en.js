@@ -1,5 +1,12 @@
 export default {
+  //Promotions
   promotions:"Promotions",
+  freestaynights:"Free Stay Nights",
+  freediscountnights:"Free Discount Nights",
+  freenightsdiscountpercentage:"Free Nights Discount Percentage",
+  freenightselection:"Free Night Selection",
+  freenightsrepeat:"Free Nights Repeat",
+  date:"Date",
   appliednights:"Applied Nights",
   percentage:"Percentage",
   promotion:"Promotion",
@@ -65,6 +72,7 @@ export default {
   needhelpbooking:"Need Help Booking?",
   bookingtitle:"Call our customer services team on the number below to speak to one of our advisors who will help you with all of your holiday needs.",
   checkin:"Check in",
+  booking:"Booking",
   checkout:"Check out",
   servicefee:"Service fee",
   excellent:"Excellent",
@@ -73,7 +81,7 @@ export default {
   facilities:"Facilities",
   itinerary:"Itinerary",
   customer:"Customer",
-  
+  booking:"Booking",
 
   addimages:"Add Images",
    addroom:"Add Room",

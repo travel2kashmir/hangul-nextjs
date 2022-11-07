@@ -120,6 +120,7 @@ useEffect(()=>{
       devices(response.data.promotion_id)
       countries(response.data.promotion_id)
       packages(response.data.promotion_id)
+      submitPromotionDiscount(response.data.promotion_id);
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -184,10 +185,10 @@ const submitPromotionLink = (props) => {
 
 
 // Promotion Discount
-const submitPromotionDiscount = () => {
+const submitPromotionDiscount = (props) => {
   const final_data = 
  {"property_promotion_discount": [{
-     "promotion_id": promotionId,
+     "promotion_id":props,
      "discount":promotion?.discount,
      "discount_type":promotion?.discount_type,
      "applied_nights":promotion?.applied_nights,
@@ -206,7 +207,7 @@ const submitPromotionDiscount = () => {
          draggable: true,
          progress: undefined,
        });
-       submitPromotionFreeNights();
+      
      })
      .catch((error) => {
        toast.error("Promotion discount error", {
@@ -403,7 +404,7 @@ const removecheckIn = (index) => {
  
 filterByCountry();
   },[])
-
+  
    /** For Dates**/
    const checkInTemplate = {
     "promotion_id":promotionId,
@@ -415,7 +416,7 @@ filterByCountry();
 
   /* Mapping Index of each dates*/
     const [checkInData, setCheckInData] = useState([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
-
+    
     const onChange = (e, index, i) => {
       setCheckInData(checkInData?.map((item, id) => {
         if (item.index === index) {
@@ -424,6 +425,16 @@ filterByCountry();
         return item
       }))
     }
+
+    const onChangeDay = (value, index) => {
+      setCheckInData(checkInData?.map((item, id) => {
+        if (item.index === index) {
+          item["days_of_week"] = value
+        }
+        return item
+      }))
+    }
+
 // Dates
 const submitDates= (check_in) => {
   const data = checkInData?.map((i => {
@@ -431,11 +442,11 @@ const submitDates= (check_in) => {
     "promotion_id":promotionId,
      "start_date": i?.start_date,
      "end_date":i?.end_date,
-     "days_of_week":days_of_week,
+     "days_of_week":i?.days_of_week,
      "type": check_in
    }}))
  const final_data = { "property_promotion_rates": data }
-
+alert(JSON.stringify(final_data))
  const url = '/api/ari/promotions/property_promotion_dates'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -448,7 +459,9 @@ const submitDates= (check_in) => {
          draggable: true,
          progress: undefined,
        });
-     keys=[];
+    alert(check_in)
+     days_of_week=[];
+     setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
      })
      .catch((error) => {
        toast.error("Dates error", {
@@ -487,42 +500,43 @@ setCountry(resCou)
 Router.push('./addpromotion')
 }
 
-const days = (days) => { 
+
+const days = (days,index) => { 
   var days_present=['-','-','-','-','-','-','-'];
   days.map(day=>{
   
   if(day.day==='mon')
   {
-  days_present[0]='m'
+  days_present[0]='M'
   }
   else if(day.day==='tue')
   {
-  days_present[1]='t'
+  days_present[1]='T'
   }
   else if(day.day==='weds')
   {
-  days_present[2]='w'
+  days_present[2]='W'
   }
   else if(day.day==='thur')
   {
-  days_present[3]='t'
+  days_present[3]='T'
   }
   else if(day.day==='fri')
   {
-  days_present[4]='f'
+  days_present[4]='F'
   }
   else if(day.day==='sat')
   {
-  days_present[5]='s'
+  days_present[5]='S'
   }
   else if(day.day==='sun')
   {
-  days_present[6]='s'
+  days_present[6]='U'
   }
   })
    days_of_week = days_present.toString().replaceAll(',','');
+   onChangeDay(days_of_week,index)
    
-   setPromotion({...promotion, days_of_week:days_of_week})
 
 }
   return (
@@ -559,7 +573,7 @@ const days = (days) => {
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
                   <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../promotions" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
-                    <a>{language?.promotions}</a>
+                    <a> {language?.promotions}</a>
                   </Link>
                   </div></div>
 
@@ -569,7 +583,7 @@ const days = (days) => {
                 <div className="flex items-center">
                 <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.promotion}</span>
+                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.add} {language?.promotion}</span>
                 </div>
                 </div>
               </li>
@@ -591,15 +605,15 @@ const days = (days) => {
           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkin}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
         </div>
@@ -667,7 +681,81 @@ const days = (days) => {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.inventorycountmin} {language?.percentage}
+                        {language?.discount} {language?.type}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                       onChange={
+                      (e) => (
+                         setPromotion({ ...promotion, discount_type: e.target.value })
+                      )
+                  }>
+                     <option selected disabled >{language?.select} </option>
+                    <option value="discount_nights">Discount Percentage</option>
+                    <option value="fixed_amount_per_night">Fixed Amount per night</option>
+                    <option value="fixed_amount">Fixed Amount</option>
+                   </select>
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_status}</p>
+                       </div>
+                    </div>
+                  </div>
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.discount} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, discount: e.target.value })
+                            )
+                          }
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_status}</p>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.appliednights} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, applied_nights: e.target.value })
+                            )
+                          }
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.restriction_status}</p>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.inventorycountmin} 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -984,15 +1072,15 @@ const days = (days) => {
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
            
@@ -1003,87 +1091,14 @@ const days = (days) => {
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                        {language?.discount} {language?.type}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                       onChange={
-                      (e) => (
-                         setPromotion({ ...promotion, discount_type: e.target.value })
-                      )
-                  }>
-                     <option selected disabled >{language?.select} </option>
-                    <option value="discount_nights">Discount Percentage</option>
-                    <option value="fixed_amount_per_night">Fixed Amount per night</option>
-                    <option value="fixed_amount">Fixed Amount</option>
-                   </select>
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
-                       </div>
-                    </div>
-                  </div>
-                <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                        {language?.discount} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion, discount: e.target.value })
-                            )
-                          }
-                        />
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                        {language?.appliednights} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setPromotion({ ...promotion, applied_nights: e.target.value })
-                            )
-                          }
-                        />
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
-                       </div>
-                    </div>
-                  </div>
+               
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Stay Nights
+                      {language?.freestaynights} 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1107,7 +1122,7 @@ const days = (days) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Discount Nights
+                      {language?.freediscountnights}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1131,7 +1146,7 @@ const days = (days) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Nights Discount Percentage
+                       {language?.freenightsdiscountpercentage}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1156,7 +1171,7 @@ const days = (days) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Night Selection
+                       {language?.freenightselection}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1183,7 +1198,7 @@ const days = (days) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Nights Repeat
+                      {language?.freenightsrepeat}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1218,7 +1233,7 @@ const days = (days) => {
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(2);submitPromotionDiscount();}} /> 
+                    <Button Primary={language?.Next} onClick={()=>{setDisp(2); submitPromotionFreeNights();}} /> 
                 </div>
                 
                   </div>
@@ -1243,22 +1258,22 @@ const days = (days) => {
            
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
         </div>
         <div className="mx-4">
                 <div className="sm:flex">
                <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-                Check In
+               {language?.checkin}
                </h6>
                <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
@@ -1289,7 +1304,7 @@ const days = (days) => {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                      Check in Start Date
+                     {language?.checkin} {language?.startdate}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1308,7 +1323,7 @@ const days = (days) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                       Check in End Date
+                       {language?.checkin} {language?.enddate}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1326,7 +1341,7 @@ const days = (days) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    Days Available
+                    {language?.days} {language?.avaialable}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1334,8 +1349,8 @@ const days = (days) => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
+                      onRemove={(event) => { days(event,index) }}
+                      onSelect={(event) => { days(event,index) }}
                      displayValue="day"
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
@@ -1353,10 +1368,7 @@ const days = (days) => {
                     </div>
                   </div>
                   </div>
-             
-
-
-            </div>
+        </div>
             </div>
           
            {/* Check Out*/}
@@ -1375,24 +1387,23 @@ const days = (days) => {
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   {language?.booking} {language?.date}</div>
             </div>
            
         </div>
         <div className="mx-4">
                 <div className="sm:flex">
                <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-               Check Out
-         </h6>
-          
+               {language?.checkout}
+              </h6>
                   <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
@@ -1423,18 +1434,14 @@ const days = (days) => {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                      Check out Start Date
+                      {language?.checkout} {language?.startdate}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="date" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,start_date: e.target.value })
-                            )
-                          }
+                          onChange={e => onChange(e, checkInData?.index, 'start_date')}
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
                       {error?.min_max_msg}</p>
@@ -1445,18 +1452,14 @@ const days = (days) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                     Check out End Date
+                     {language?.checkout} {language?.enddate}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="date" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,end_date: e.target.value })
-                            )
-                          }
+                          onChange={e => onChange(e, checkInData?.index, 'end_date')}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.time}</p>
@@ -1467,7 +1470,7 @@ const days = (days) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    Days Available
+                   {language?.days} {language?.avaialable}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1475,8 +1478,8 @@ const days = (days) => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
+                      onRemove={(event) => { days(event,index) }}
+                      onSelect={(event) => { days(event,index) }}
                      displayValue="day"
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
@@ -1488,7 +1491,7 @@ const days = (days) => {
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(4); submitDates("check_out")}} /> 
+                    <Button Primary={language?.Next} onClick={()=>{submitDates("check_out");setDisp(4)}} /> 
                 
                   
                     </div>
@@ -1514,22 +1517,22 @@ const days = (days) => {
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
         </div>
         <div className="mx-4">
                 <div className="sm:flex">
                <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-               Booking Date
+               {language?.booking} {language?.date}
          </h6>
           
                   <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
@@ -1562,18 +1565,14 @@ const days = (days) => {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                      Booking Start Date
+                     {language?.booking} {language?.startdate}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="date" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,start_date: e.target.value })
-                            )
-                          }
+                          onChange={e => onChange(e, checkInData?.index, 'start_date')}
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
                       {error?.min_max_msg}</p>
@@ -1584,18 +1583,14 @@ const days = (days) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                       Booking End Date
+                        {language?.booking} {language?.enddate}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="date" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setPromotion({ ...promotion,end_date: e.target.value })
-                            )
-                          }
+                          onChange={e => onChange(e, checkInData?.index, 'end_date')}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.time}</p>
@@ -1606,7 +1601,7 @@ const days = (days) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    Days Available
+                     {language?.days} {language?.available}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1614,8 +1609,8 @@ const days = (days) => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
+                      onRemove={(event) => { days(event,index) }}
+                      onSelect={(event) => { days(event,index) }}
                      displayValue="day"
                       />
                         <p className="text-sm text-sm text-red-700 font-light">

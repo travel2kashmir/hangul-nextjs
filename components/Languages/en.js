@@ -1,6 +1,7 @@
 export default {
   //Promotions
   promotions:"Promotions",
+  available:"Available",
   freestaynights:"Free Stay Nights",
   freediscountnights:"Free Discount Nights",
   freenightsdiscountpercentage:"Free Nights Discount Percentage",
@@ -307,11 +308,11 @@ Cancel:"Cancel"
 },
 "Upload" :{
   label:"Upload",
-   color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
+   color: "bg-gray-600 hover:bg-gray-700 ml-2  text-white ",
 },
 "Skip" :{
   label:"Skip",
-   color: "bg-gray-600 hover:bg-gray-700 ml-2 mt-2 text-white ",
+   color: "bg-gray-600 hover:bg-gray-700 ml-2 text-white ",
 },
 "Previous" :{
   label:"Previous",

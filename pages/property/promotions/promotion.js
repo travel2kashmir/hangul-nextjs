@@ -77,6 +77,66 @@ useEffect(()=>{
   setColor(DarkModeLogic(darkModeSwitcher))
  },[darkModeSwitcher])
 
+// Promotion
+const submitPromotion = () => {
+  var k =new Date()
+  var day=k.getDate();
+  var month=k.getMonth()+1  
+  k.getFullYear()
+  var year=k.getFullYear()
+  var hr=k.getHours()
+  var min=k.getMinutes()
+  var sec=k.getSeconds()
+ var msec=k.getMilliseconds()
+  var currentDateTime=`${year}-${month}-${day} ${hr}:${min}:${sec}.${msec}`;
+  const final_data = 
+ {"property_promotion": [{
+     "property_id": currentProperty?.property_id,
+     "promotion_id":currentPromotion,
+     "promotion_name":promotion?.promotion_name,
+     "stacking_type":promotion?.stacking_type,
+     "timestamp": currentDateTime,
+     "inventory_min":promotion?.inventory_min,
+     "inventory_max":promotion?.inventory_max,
+     "length_of_stay_min": promotion?.length_of_stay_min,
+     "length_of_stay_max": promotion?.length_of_stay_max,
+     "occupancy_min": promotion?.occupancy_min,
+     "occupancy_max":promotion?.occupancy_max,
+     "min_amount_before_discount":promotion?.min_amount_before_discount
+   }]
+ }
+  const url = '/api/ari/promotions'
+   axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Promotion success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+      submitPromotionLink();
+      setPromotionId(response?.data?.promotion_id)
+      devices(response.data.promotion_id)
+      countries(response.data.promotion_id)
+      packages(response.data.promotion_id)
+      submitPromotionDiscount(response.data.promotion_id);
+     })
+     .catch((error) => {
+       toast.error("Promotion error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
 /** Function to cancel package mile **/
 const removecheckIn = (index) => {
   const filteredCheckIn = checkInData.filter((i, id) => i.index !== index)
@@ -210,7 +270,18 @@ setCountry(resCou)
   }
 Router.push('./promotion')
 }
-
+const validationPromotion = () => {
+  var result = validatePromotions(promotion)
+     console.log("Result" +JSON.stringify(result))
+     if(result===true)
+     {
+      submitPromotion();
+     }
+     else
+     {
+      setError(result)
+     }
+    }
   return (
     <div>
        <Header color={color} Primary={english.Side1} />
@@ -354,6 +425,221 @@ Router.push('./promotion')
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
+                        {language?.stackingtype}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <select
+                        className={`shadow-sm ${color?.greybackground} border capitalize border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                        onChange={(e) =>
+                          setPromotion({
+                            ...promotion,
+                           stacking_type: e.target.value,
+                          })
+                        }
+                      >
+                        <option disabled selected>{language?.select}</option>
+                        <option value="any">Any</option>
+                        <option value="base">Base</option>
+                        <option value="none">None</option>
+                        <option value="second">Second</option>
+                      </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.stacking_type}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.discount} {language?.type}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                       onChange={
+                      (e) => (
+                         setPromotion({ ...promotion, discount_type: e.target.value })
+                      )
+                  }>
+                     <option selected disabled >{promotion?.discount?.[i]?.discount_type} </option>
+                    <option value="discount_nights">Discount Percentage</option>
+                    <option value="fixed_amount_per_night">Fixed Amount per night</option>
+                    <option value="fixed_amount">Fixed Amount</option>
+                   </select>
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.discount_type}</p>
+                       </div>
+                    </div>
+                  </div>
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.discount} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, discount: e.target.value })
+                            )
+                          }
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.discount}</p>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.appliednights} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setPromotion({ ...promotion, applied_nights: e.target.value })
+                            )
+                          }
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?. applied_nights}</p>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.losmin}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         onChange={
+                            (e) => (
+                             setPromotion({ ...promotion,length_of_stay_min: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.length_of_stay_min}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.losmax} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                        className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, length_of_stay_max: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.length_of_stay_max}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       {language?.minamountbeforediscount} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                        className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, min_amount_before_discount: e.target.value })
+                            )
+                          }
+                        />
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.min_amount_before_discount}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.occupancymin}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, occupancy_min: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.occupancy_min}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        {language?.occupancymax} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         onChange={
+                            (e) => (
+                             setPromotion({ ...promotion,occupancy_max: e.target.value })
+                            )
+                          }
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.occupancy_max}</p>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
                         {language?.devices}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -462,8 +748,6 @@ Router.push('./promotion')
                       
                     </div>
                   </div>
-                  
-                 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/> 
                 </div>

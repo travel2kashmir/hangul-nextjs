@@ -158,7 +158,6 @@ const submitLOS= () => {
      "fixed_pattern": availability?.fixed_pattern 
    }}))
  const final_data = { "LOS": data }
- alert(JSON.stringify(final_data))
  const url = '/api/ari/property_availability/property_availability_los'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {

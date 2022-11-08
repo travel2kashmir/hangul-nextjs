@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import validatePromotions from '../../../components/Validation/Promotions/promotions';
+import validateFreeNights from '../../../components/Validation/Promotions/promotionfreenights';
+import validateDates from '../../../components/Validation/Promotions/promotiondates';
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
 import Sidebar from "../../../components/Sidebar";
@@ -234,7 +237,6 @@ const submitPromotionFreeNights = () => {
      "repeat":promotion?.repeat,
    }]
  }
- 
   const url = '/api/ari/promotions/property_promotion_free_nights'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -247,6 +249,7 @@ const submitPromotionFreeNights = () => {
          draggable: true,
          progress: undefined,
        });
+       setDisp(2);
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -446,7 +449,6 @@ const submitDates= (check_in) => {
      "type": check_in
    }}))
  const final_data = { "property_promotion_rates": data }
-alert(JSON.stringify(final_data))
  const url = '/api/ari/promotions/property_promotion_dates'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -459,9 +461,15 @@ alert(JSON.stringify(final_data))
          draggable: true,
          progress: undefined,
        });
-    alert(check_in)
      days_of_week=[];
      setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
+     if(check_in === "check_in"){
+      setDisp(3)
+     }
+     if(check_in === "check_out"){
+      setDisp(4)
+     }
+    
      })
      .catch((error) => {
        toast.error("Dates error", {
@@ -499,7 +507,6 @@ setCountry(resCou)
   }
 Router.push('./addpromotion')
 }
-
 
 const days = (days,index) => { 
   var days_present=['-','-','-','-','-','-','-'];
@@ -539,6 +546,49 @@ const days = (days,index) => {
    
 
 }
+
+const validationPromotion = () => {
+  var result = validatePromotions(promotion)
+     console.log("Result" +JSON.stringify(result))
+     if(result===true)
+     {
+      submitPromotion();
+     }
+     else
+     {
+      setError(result)
+     }
+    }
+
+  const validateNights = () => {
+    var result = validateFreeNights(promotion)
+    console.log("Result" + JSON.stringify(result))
+    if (result === true) {
+      submitPromotionFreeNights();
+    }
+    else {
+      setError(result)
+    }
+  }
+  const validateDate = () => {
+    var result = validateDates(checkInData)
+    console.log("Result" + JSON.stringify(result))
+    if (result === true) {
+      if(disp=== 2){
+      submitDates("check_in");
+      }
+      if(disp=== 3){
+        submitDates("check_out");
+        }
+        if(disp=== 4){
+          submitDates("booking");
+          }
+    }
+    else {
+      setError(result)
+    }
+  }
+
   return (
     <div>
     <Header color={color} Primary={english.Side1} />
@@ -644,7 +694,7 @@ const days = (days,index) => {
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.start_date}</p></div>
+                      {error?.promotion_name}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -671,7 +721,7 @@ const days = (days,index) => {
                         <option value="second">Second</option>
                       </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                      {error?.stacking_type}</p>
                       </div>
                     </div>
                   </div>
@@ -697,7 +747,7 @@ const days = (days,index) => {
                     <option value="fixed_amount">Fixed Amount</option>
                    </select>
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
+                      {error?.discount_type}</p>
                        </div>
                     </div>
                   </div>
@@ -721,7 +771,7 @@ const days = (days,index) => {
                           }
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
+                      {error?.discount}</p>
                        </div>
                     </div>
                   </div>
@@ -745,7 +795,7 @@ const days = (days,index) => {
                           }
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
+                      {error?. applied_nights}</p>
                        </div>
                     </div>
                   </div>
@@ -769,7 +819,7 @@ const days = (days,index) => {
                           }
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
+                      {error?.inventory_min}</p>
                        </div>
                     </div>
                   </div>
@@ -793,7 +843,7 @@ const days = (days,index) => {
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.inventory_max}</p>
                       </div>
                     </div>
                   </div>
@@ -815,7 +865,7 @@ const days = (days,index) => {
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_advance_booking}</p>
+                      {error?.length_of_stay_min}</p>
                       </div>
                     </div>
                   </div>
@@ -837,7 +887,7 @@ const days = (days,index) => {
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.max_advance_booking}</p>
+                      {error?.length_of_stay_max}</p>
                       </div>
                     </div>
                   </div>
@@ -861,7 +911,7 @@ const days = (days,index) => {
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.min_amount_before_discount}</p>
                       </div>
                     </div>
                   </div>
@@ -883,7 +933,7 @@ const days = (days,index) => {
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_advance_booking}</p>
+                      {error?.occupancy_min}</p>
                       </div>
                     </div>
                   </div>
@@ -905,7 +955,7 @@ const days = (days,index) => {
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.max_advance_booking}</p>
+                      {error?.occupancy_max}</p>
                       </div>
                     </div>
                   </div>
@@ -937,8 +987,7 @@ const days = (days,index) => {
                      displayValue="user_device"
                     
                       />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                        
                       </div>
                     </div>
                   </div>
@@ -969,7 +1018,7 @@ const days = (days,index) => {
                     
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                      {error?.packages}</p>
                       </div>
                     </div>
                   </div>
@@ -995,7 +1044,7 @@ const days = (days,index) => {
                         <option value="false">Exclude</option>
                         </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                      {error?.country_type}</p>
                       </div>
                     </div>
                   </div>
@@ -1029,27 +1078,22 @@ const days = (days,index) => {
                     
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.days}</p>
+                      {error?.country}</p>
                        </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-24">
-                      
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-24">
-                      
-                    </div>
+                   </div>
                   </div>
-                  
-                 
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{ submitPromotion()}}/> 
+                 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Next} onClick={()=>{ validationPromotion()}}/> 
                 </div>
-                
-                  </div>
+                </div>
                   </div>
                   </div>
             </div>
@@ -1091,8 +1135,7 @@ const days = (days,index) => {
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
-               
-                  <div className="w-full lg:w-6/12 px-4">
+                <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -1112,7 +1155,7 @@ const days = (days,index) => {
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.stay_nights}</p>
                       </div>
                     </div>
                   </div>
@@ -1136,7 +1179,7 @@ const days = (days,index) => {
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.discount_nights}</p>
                       </div>
                     </div>
                   </div>
@@ -1160,7 +1203,7 @@ const days = (days,index) => {
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.discount_percentage}</p>
                       </div>
                     </div>
                   </div>
@@ -1188,7 +1231,7 @@ const days = (days,index) => {
                   
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.night_selection}</p>
                       </div>
                     </div>
                   </div>
@@ -1215,7 +1258,7 @@ const days = (days,index) => {
                   
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.repeat}</p>
                       </div>
                     </div>
                   </div>
@@ -1233,7 +1276,8 @@ const days = (days,index) => {
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(2); submitPromotionFreeNights();}} /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2)}} /> 
+                    <Button Primary={language?.Next} onClick={()=>{validateNights();}} /> 
                 </div>
                 
                   </div>
@@ -1315,7 +1359,7 @@ const days = (days,index) => {
                           onChange={e => onChange(e, checkInData?.index, 'start_date')}
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
+                      {error[index]?.start_date}</p>
                        </div>
                     </div>
                   </div>
@@ -1333,7 +1377,7 @@ const days = (days,index) => {
                           onChange={e => onChange(e, checkInData?.index, 'end_date')}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                      {error[index]?.end_date}</p>
                       </div>
                     </div>
                   </div>
@@ -1354,18 +1398,16 @@ const days = (days,index) => {
                      displayValue="day"
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                      {error[index]?.days_of_week}</p>
                       </div>
                     </div>
                   </div>
-                 
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next}onClick={()=>{ submitDates("check_in");setDisp(3)}}  /> 
-                
-                  
-                    </div>
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3)}} /> 
+                    <Button Primary={language?.Next}onClick={()=>{ validateDate()}}  /> 
+                 </div>
                   </div>
                   </div>
         </div>
@@ -1444,7 +1486,7 @@ const days = (days,index) => {
                           onChange={e => onChange(e, checkInData?.index, 'start_date')}
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
+                   {error[index]?.start_date}</p>
                        </div>
                     </div>
                   </div>
@@ -1462,7 +1504,7 @@ const days = (days,index) => {
                           onChange={e => onChange(e, checkInData?.index, 'end_date')}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                        {error[index]?.end_date}</p>
                       </div>
                     </div>
                   </div>
@@ -1483,23 +1525,18 @@ const days = (days,index) => {
                      displayValue="day"
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                        {error[index]?.days_of_week}</p>
                       </div>
                     </div>
                   </div>
-                 
-                  </div>
+                </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{submitDates("check_out");setDisp(4)}} /> 
-                
-                  
-                    </div>
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(4)}} /> 
+                    <Button Primary={language?.Next} onClick={()=>{validateDate()}} /> 
+                 </div>
                   </div>
                   </div>
-             
-
-
             </div>
             </div>
 
@@ -1575,7 +1612,7 @@ const days = (days,index) => {
                           onChange={e => onChange(e, checkInData?.index, 'start_date')}
                         />
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
+                      {error[index]?.start_date}</p>
                        </div>
                     </div>
                   </div>
@@ -1593,7 +1630,7 @@ const days = (days,index) => {
                           onChange={e => onChange(e, checkInData?.index, 'end_date')}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                      {error[index]?.end_date}</p>
                       </div>
                     </div>
                   </div>
@@ -1614,23 +1651,17 @@ const days = (days,index) => {
                      displayValue="day"
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                        {error[index]?.days_of_week}</p>
                       </div>
                     </div>
                   </div>
-                 
                   </div>
-</>))} 
+                 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Submit} onClick={()=>{submitDates("booking")} }/> 
-                
-                  
+                    <Button Primary={language?.Submit} onClick={()=>{validateDate()} }/> 
                     </div>
                   </div>
                   </div>
-             
-
-
             </div>
             </div> 
        <ToastContainer position="top-center"
@@ -1649,3 +1680,10 @@ const days = (days,index) => {
 }
 
 export default Addpromotion
+Addpromotion.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+}

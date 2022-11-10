@@ -55,10 +55,6 @@ function Theme() {
         if (locale === "fr") {
           language = french;
         }
-        const themeN = localStorage.getItem("ThemeName");
-        if (themeN === "Classic-Dark") {
-          setThemeName('Classic-Dark')
-        }
 
         currentUser = JSON.parse(localStorage.getItem("Signin Details"));
         /** Current Property Details fetched from the local storage **/
@@ -94,8 +90,10 @@ function Theme() {
       }s/${currentProperty?.property_id}`;
     axios.get(url)
       .then((response) => {
+        setThemeName(response.data.theme)
         setAllHotelDetails(response.data);
         response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
+        
         var ser =[];
         response.data.services.map(i => { 
           if (i.service_value !== "no") 

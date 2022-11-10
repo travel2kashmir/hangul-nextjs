@@ -552,6 +552,7 @@ const validationPromotion = () => {
      console.log("Result" +JSON.stringify(result))
      if(result===true)
      {
+      
       submitPromotion();
      }
      else

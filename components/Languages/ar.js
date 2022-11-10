@@ -82,6 +82,13 @@ export default {
   facilities:"مرافق",
   available:"متوفرة",
   itinerary:"مسار الرحلة",
+  "CheckInCols":{
+    name:"تحقق في",
+   col1 : "تاريخ البدء",
+   col2 : "تاريخ الانتهاء", 
+   col3: "ايام الاسبوع",
+   search: "بحث"
+  },
   "AddLOS" :{
     label: "يضيف",
      color: "bg-cyan-600 hover:bg-cyan-700 text-white ",

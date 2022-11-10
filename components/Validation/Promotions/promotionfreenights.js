@@ -2,7 +2,7 @@ const validateFreeNights = (data) =>{
     var error={};
      var flag=[]
      var final_flag=true;
-    
+     alert(JSON.stringify(data))
      if(data?.stay_nights==="" || data?.stay_nights===undefined)
      {
          flag.push(false)

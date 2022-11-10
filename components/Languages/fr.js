@@ -5,7 +5,7 @@ export default {
   freediscountnights:"Nuits gratuites à prix réduits",
   freenightsdiscountpercentage:"Pourcentage de remise sur les nuits gratuites",
   freenightselection:"Sélection de nuit gratuite",
-  freenightsrepeat:"Free Nights Repeat",
+  freenightsrepeat:"Les Muits se Répètent",
   appliednights:"Nuits Appliquées",
   percentage:"Pourcentage",
   promotion:"Promotion",
@@ -87,7 +87,13 @@ export default {
    col1 : "Type de Contact",
    col2 : "Détails du contact", 
   },
-    
+  "CheckInCols":{
+    name:"Enregistrement",
+   col1 : "Date de début",
+   col2 : "Date de Fin", 
+   col3: "Jours de la semaine",
+   search: "Chercher"
+  }, 
   "common":{
   Status:"Statut",
   Action: "Acte",

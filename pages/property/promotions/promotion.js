@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import validatePromotions from '../../../components/Validation/Promotions/promotions';
+import validateCountry from '../../../components/Validation/Promotions/editCountry';
+import validateFreeNights from '../../../components/Validation/Promotions/promotionfreenights';
+import validateDiscount from '../../../components/Validation/Promotions/editdiscount';
+import validatePromotions from '../../../components/Validation/Promotions/editpromotion';
+import validateDates from '../../../components/Validation/Promotions/addpromotiondates';
 import DatesTable from '../../../components/datestables';
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
@@ -29,13 +33,13 @@ var currentPromotion;
 var availabilityId;
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { final } from 'pino';
 const logger = require("../../../services/logger");
 
 function Promotion() {
   const [visible, setVisible] = useState(0);
   const [mainPromotion, setMainPromotion] = useState([]);
   const [discount, setDiscount] = useState([]);
+  const [freeNights, setFreeNights] = useState([]);
   const [pkg, setPkg] = useState([]);
   const [cou, setCou] = useState([]);
   const [dev, setDev] = useState([]);
@@ -91,14 +95,75 @@ useEffect(()=>{
      console.log("Result" +JSON.stringify(result))
      if(result===true)
      {
-      submitPromotion();
+      if(pkg === 1){
+        packages();
+      }
+      if(mainPromotion=== 1){
+    submitPromotion();}
      }
      else
      {
       setError(result)
      }
   }
-
+  const validationDiscount = () => {
+    var result = validateDiscount(pro?.discount?.[i])
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+      submitPromotionDiscount(pro?.discount?.[i]);
+       }
+       else
+       {
+        setError(result)
+       }
+    }
+    const validationCountries = () => {
+      var result = validateCountry(pro?.countries?.[i])
+         console.log("Result" +JSON.stringify(result))
+         if(result===true)
+         {
+        countries();
+         }
+         else
+         {
+          setError(result)
+         }
+      }
+      const validationFreeNights = () => {
+        var result = validateFreeNights(freeNights)
+           console.log("Result" +JSON.stringify(result))
+           if(result===true)
+           {
+            if(pro?.free_nights === undefined){
+              submitPromotionFreeNights()
+            }
+            if(pro?.free_nights !==undefined){
+              submitPromotionFreeNightsEdit();
+            }
+           }
+           else
+           {
+            setError(result)
+           }
+        }
+        const validationAddPromotionDates = () => {
+          var result = validateDates(promotion,days_of_week)
+             console.log("Result" +JSON.stringify(result))
+             if(result===true)
+             {
+              if(disp === 2){
+                submitDates("check_in")}
+                if(disp === 3){
+                  submitDates("check_out")} 
+                  if(disp === 4){
+                    submitDates("booking")} 
+             }
+             else
+             {
+              setError(result)
+             }
+      }
 // Promotion Discount
 const submitPromotionDiscount = () => {
   const final_data = 
@@ -122,7 +187,8 @@ const submitPromotionDiscount = () => {
          draggable: true,
          progress: undefined,
        });
-      
+       setDiscount([]);
+       setDisp(1);
      })
      .catch((error) => {
        toast.error("Promotion discount error", {
@@ -178,7 +244,8 @@ const submitPromotion = () => {
          draggable: true,
          progress: undefined,
        });
-     
+        setMainPromotion([]);
+        setDisp(1);
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -202,7 +269,7 @@ const packages = () => {
       package_id: item?.package_id
     }
     final_package_data.push(temp) } );
-    setPkg(1);
+    
     submitPackages(final_package_data)
     
 }
@@ -233,6 +300,7 @@ const devices = () => {
      setDev(1);
      submitDevices(final_device_data);    
  }
+
 // Devices
 const submitDevices = (props) => {
   const final_data =  {"promotion_devices": props }
@@ -249,8 +317,8 @@ const submitDevices = (props) => {
          draggable: true,
          progress: undefined,
        });
-
-     
+      setDev([])
+     setDisp(1);
      })
      .catch((error) => {
        toast.error("Devices error", {
@@ -281,11 +349,11 @@ const submitPackages = (props) => {
          draggable: true,
          progress: undefined,
        });
-     
-     
+        setPkg([])
+        setDisp(1);
      })
      .catch((error) => {
-       toast.error("Devices error", {
+       toast.error("Packages error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -313,8 +381,8 @@ const submitCountries = (props) => {
          draggable: true,
          progress: undefined,
        });
-
-     
+       setCou([])
+       setDisp(1);
      })
      .catch((error) => {
        toast.error("Country error", {
@@ -335,11 +403,11 @@ const submitPromotionFreeNightsEdit = () => {
  {"property_promotion_discount": [{
   
      "free_nights_id": pro?.free_nights?.[i]?.free_nights_id,
-     "stay_nights":promotion?.stay_nights,
-     "discount_nights":promotion?.discount_nights,
-     "discount_percentage":promotion?.discount_percentage,
-     "night_selection":promotion?.free_night_selection,
-     "repeat":promotion?.repeat,
+     "stay_nights":freeNights?.stay_nights,
+     "discount_nights":freeNights?.discount_nights,
+     "discount_percentage":freeNights?.discount_percentage,
+     "night_selection":freeNights?.free_night_selection,
+     "repeat":freeNights?.repeat,
    }]
  }
  alert(JSON.stringify(final_data))
@@ -373,11 +441,11 @@ const submitPromotionFreeNights = () => {
   const final_data = 
  {"property_promotion_discount": [{
   "promotion_id": pro?.promotion_id,
-     "stay_nights":promotion?.stay_nights,
-     "discount_nights":promotion?.discount_nights,
-     "discount_percentage":promotion?.discount_percentage,
-     "night_selection":promotion?.free_night_selection,
-     "repeat":promotion?.repeat,
+     "stay_nights":freeNights?.stay_nights,
+     "discount_nights":freeNights?.discount_nights,
+     "discount_percentage":freeNights?.discount_percentage,
+     "night_selection":freeNights?.free_night_selection,
+     "repeat":freeNights?.repeat,
    }]
  }
  alert(JSON.stringify(final_data))
@@ -435,6 +503,7 @@ const removecheckIn = (index) => {
 fetchPromotion();
 filterByCountry();
   },[])
+
   const fetchPromotion = async () => {
     try {
         const url = `/api//ari/promotions/${currentProperty?.property_id}/${currentPromotion}`
@@ -452,7 +521,7 @@ filterByCountry();
              return element.device === el.user_device;
           });
        })); 
-          
+       setFreeNights(response.data.free_nights?.[i])   
     }
     catch (error) {
         if (error.response) {
@@ -476,6 +545,7 @@ filterByCountry();
       genData.push(temp)}
   })
   setGen(genData);
+  setDisp(2);
   }
   const checkOutGen = () => {
     var genData = [];
@@ -491,7 +561,9 @@ filterByCountry();
       genData.push(temp)}
   })
   setGen(genData);
+  setDisp(3);
   }
+
   const BookingGen = () => {
     var genData = [];
     promotion?.dates?.map((item) => {
@@ -502,10 +574,10 @@ filterByCountry();
           status: item.days_of_week,
           id: item.date_id
       }
-    
       genData.push(temp)}
   })
   setGen(genData);
+  setDisp(4);
   }
   
    /** For Miles**/
@@ -596,37 +668,37 @@ const days = (days) => {
   
   if(day.day==='mon')
   {
-  days_present[0]='m'
+  days_present[0]='M'
   }
   else if(day.day==='tue')
   {
-  days_present[1]='t'
+  days_present[1]='T'
   }
   else if(day.day==='weds')
   {
-  days_present[2]='w'
+  days_present[2]='W'
   }
   else if(day.day==='thur')
   {
-  days_present[3]='t'
+  days_present[3]='T'
   }
   else if(day.day==='fri')
   {
-  days_present[4]='f'
+  days_present[4]='F'
   }
   else if(day.day==='sat')
   {
-  days_present[5]='s'
+  days_present[5]='S'
   }
   else if(day.day==='sun')
   {
-  days_present[6]='s'
+  days_present[6]='U'
   }
   })
    days_of_week = days_present.toString().replaceAll(',','');
    
 }
-
+//Submit Date Delete
 const submitPromotionDelete = (props) => {
   const url = `/api/ari/promotions/property_promotion_dates/${props}`;
   alert(JSON.stringify(url))
@@ -672,11 +744,11 @@ const submitPromotionDelete = (props) => {
   return (
     <div>
        <Header color={color} Primary={english.Side1} />
-    <Sidebar color={color} Primary={english.Side1} />
+       <Sidebar color={color} Primary={english.Side1} />
+
     <div id="main-content"
           className={(disp === 2 || disp === 3 || disp === 4)  ? `${color?.whitebackground}  pt-24 relative overflow-y-auto lg:ml-64` :
-          ` ${color?.greybackground} pt-24 px-4 relative overflow-y-auto lg:ml-64` }
-        >
+          ` ${color?.greybackground} pt-24 px-4 relative overflow-y-auto lg:ml-64`}>
          {/* Navbar */}
          <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -737,21 +809,21 @@ const submitPromotionDelete = (props) => {
           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkin}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
         </div>
-            <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
+        <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
              {language?.promotion} 
-            </h6>
+        </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
@@ -776,7 +848,7 @@ const submitPromotionDelete = (props) => {
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.start_date}</p></div>
+                      {error?.promotion_name}</p></div>
                     </div>
                   </div>
 
@@ -806,7 +878,7 @@ const submitPromotionDelete = (props) => {
                         <option value="second">Second</option>
                       </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                      {error?.stacking_type}</p>
                       </div>
                     </div>
                   </div>
@@ -1028,12 +1100,12 @@ const submitPromotionDelete = (props) => {
                         setPromotion({
                           ...promotion,
                         devices: e,
-                        })}
+                        },setDev(1))}
                       onSelect={(e)   =>
                         setPromotion({
                           ...promotion,
                         devices: e,
-                        })}
+                        },setDev(1))}
                       
                      displayValue="user_device"
                     
@@ -1061,12 +1133,12 @@ const submitPromotionDelete = (props) => {
                         setPromotion({
                           ...promotion,
                        packages: e,
-                        })}
+                        }, setPkg(1))}
                       onSelect={(e)   =>
                         setPromotion({
                           ...promotion,
                        packages: e,
-                        })}
+                        }, setPkg(1))}
                       selectedValues={promotion?.packages}
                      displayValue="package_name"
                     
@@ -1090,7 +1162,7 @@ const submitPromotionDelete = (props) => {
                         onChange={(e) =>
                           setPromotion({
                             ...promotion,
-                            action: e.target.value,
+                           country_action: e.target.value,
                           },setCou(1))
                         }
                       >
@@ -1100,7 +1172,7 @@ const submitPromotionDelete = (props) => {
                         <option value="false">Exclude</option>
                         </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                      {error?.country_type}</p>
                       </div>
                     </div>
                   </div>
@@ -1125,17 +1197,17 @@ const submitPromotionDelete = (props) => {
                         setPromotion({
                           ...promotion,
                         country: e,
-                        })}
+                        },setCou(1))}
                       onSelect={(e)   =>
                         setPromotion({
                           ...promotion,
                        country: e,
-                        })}
+                        },setCou(1))}
                       displayValue="country_name"
                     
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.days}</p>
+                      {error?.country}</p>
                        </div>
                     </div>
                   </div>
@@ -1153,19 +1225,38 @@ const submitPromotionDelete = (props) => {
                   </div>
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(1)}}/> 
+                    <Button Primary={language?.Next} onClick={()=>{
+                     
+                      if(mainPromotion === 1 || pkg === 1){
+                        alert("hey promotion");
+                         validationPromotion();
+                         
+                      }
+                      if(dev === 1)  {
+                      devices();
+                      }
+                      if(cou === 1)  {
+                        validationCountries();
+                      }
+                      if(discount === 1){
+                        validationDiscount();
+                      }
+                      if(mainPromotion != 1 && pkg != 1 && dev != 1 && cou != 1  && discount != 1){
+                        setDisp(1);
+                      }
+                    }}/> 
                 </div>
                 
                   </div>
                   </div>
-                  </div>
+           </div>
             </div>
             </div>
 
            {/* Discount */}
            <div id='1' className={disp===1?'block':'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
@@ -1179,15 +1270,15 @@ const submitPromotionDelete = (props) => {
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
            
@@ -1198,71 +1289,73 @@ const submitPromotionDelete = (props) => {
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
-               
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Stay Nights
+                         {language?.freestaynights} 
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="text"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                           defaultValue={pro?.free_nights?.[i]?.stay_nights}
+                           defaultValue={freeNights?.stay_nights}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, stay_nights: e.target.value })
+                              setFreeNights({ ...freeNights, stay_nights: e.target.value })
                             )
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.stay_nights}</p>
                       </div>
                     </div>
                   </div>
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Discount Nights
+                       {language?.freediscountnights}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="text"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                           defaultValue={promotion?.free_nights?.[i]?.discount_nights}
+                           defaultValue={freeNights?.discount_nights}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, discount_nights: e.target.value })
+                              setFreeNights({ ...freeNights, discount_nights: e.target.value })
                             )
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.discount_nights}</p>
                       </div>
                     </div>
                   </div>
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Nights Discount Percentage
+                       {language?.freenightsdiscountpercentage}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="text"
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                           defaultValue={pro?.free_nights?.[i]?.discount_percentage}
+                           defaultValue={freeNights?.discount_percentage}
                           onChange={
                             (e) => (
                               setPromotion({ ...promotion, discount_percentage: e.target.value })
@@ -1281,7 +1374,7 @@ const submitPromotionDelete = (props) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Night Selection
+                      {language?.freenightselection}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1310,18 +1403,18 @@ const submitPromotionDelete = (props) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       Free Nights Repeat
+                       {language?.freenightsrepeat}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                         setPromotion({ ...promotion, repeat: e.target.value })
+                         setFreeNights({ ...freeNights, repeat: e.target.value })
                       )}>
                      <option selected >
                      {pro?.free_nights !== undefined ?
-                       JSON.stringify(pro?.free_nights?.[i]?.repeat) === "true" ? "Yes" :"No"  :
+                       JSON.stringify(freeNights?.repeat) === "true" ? "Yes" :"No"  :
                       language?.select} </option>
                     <option value="true" >Yes
                    </option>
@@ -1349,13 +1442,10 @@ const submitPromotionDelete = (props) => {
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Next} onClick={()=>{
-                      if(pro?.free_nights === undefined){
-                        submitPromotionFreeNights()
-                      }
-                      if(pro?.free_nights !==undefined){
-                        submitPromotionFreeNightsEdit();
-                      }
-                      checkInGen()}} /> 
+                      validationFreeNights();
+                      
+                      checkInGen()
+                      }} /> 
                 </div>
                 
                   </div>
@@ -1366,10 +1456,10 @@ const submitPromotionDelete = (props) => {
 
             {/* Check In */}
             <div id='2' className={disp===2?'block':'hidden'}>
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {checkInData?.days_of_week}</div>
             </div>
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
@@ -1379,21 +1469,21 @@ const submitPromotionDelete = (props) => {
            
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
         </div>
           {/* Card CheckIn Table */}
           <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name="Check In" delete={submitPromotionDelete} add={()=> setView(1)}/> 
+        name={language?.checkin} delete={submitPromotionDelete} add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Next} onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
@@ -1402,7 +1492,7 @@ const submitPromotionDelete = (props) => {
           
            {/* Check Out*/}
            <div id='3' className={disp===3?'block':'hidden'}>
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+           <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
@@ -1415,29 +1505,30 @@ const submitPromotionDelete = (props) => {
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   {language?.booking} {language?.date}</div>
             </div>
            
         </div>
-        
+
        {/* Card CheckOut Table */}
        <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-         add={()=> setView(1)} delete={submitPromotionDelete} name="Check Out"/> 
+         add={()=> setView(1)} delete={submitPromotionDelete} name={language?.checkout}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Next} onClick={()=>{setDisp(4);BookingGen()}} /> 
                 </div>
           </div>
+
             {/* Booking Date*/}
             <div id='4' className={disp===4?'block':'hidden'}>
-         <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
@@ -1448,28 +1539,24 @@ const submitPromotionDelete = (props) => {
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   Check In </div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Check Out</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
             <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">5</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Booking Date</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
         </div>
        {/* Card Booking Table */}
        <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name="Booking"  add={()=> setView(1)}/> 
+        name={language?.booking}  add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Submit} onClick={()=>{setDisp(4);BookingGen()}} /> 
                 </div>
-             
-
-
-           
             </div> 
        
            {/* Modal Add */}
@@ -1479,7 +1566,7 @@ const submitPromotionDelete = (props) => {
               <div className={`bg-white rounded-lg shadow relative`}>
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
                   <h3 className="text-xl font-semibold">{language?.add} {language?.new}
-                  {disp===2 ? ' Check In' : disp===3 ? ' Check Out' : ' Booking'}</h3>
+                  {disp===2 ?  language?.checkin : disp===3 ?  language?.checkout : language?.booking}</h3>
                   <button
                     type="button"
                     onClick={() =>{
@@ -1517,12 +1604,14 @@ const submitPromotionDelete = (props) => {
                           setPromotion({ ...promotion, start_date: e.target.value })
                         )
                       }
-                   className={`shadow-sm capitalize ${color?.whitebackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}></input>
+                   className={`shadow-sm  ${color?.whitebackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}></input>
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.start_date}</p>
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="last-name"
-                        className={`text-sm font-medium text-gray-900 block mb-2`}
+                        className={`text-sm capitalize font-medium text-gray-900 block mb-2`}
                       >
                         {language?.enddate} 
                       </label>
@@ -1532,14 +1621,16 @@ const submitPromotionDelete = (props) => {
                           setPromotion({ ...promotion, end_date: e.target.value })
                         )
                       }
-                      className={`shadow-sm capitalize ${color?.whitebackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}></input>
-                    </div>
+                      className={`shadow-sm ${color?.whitebackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}></input>
+                   
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.end_date}</p> </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="last-name"
                         className={`text-sm capitalize font-medium text-gray-900 block mb-2`}
                       >
-                        {language?.days} 
+                        {language?.days} {days_of_week}
                       </label>
                       <Multiselect 
                       className={`fixed shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
@@ -1552,6 +1643,8 @@ const submitPromotionDelete = (props) => {
                      displayValue="day"
                     
                       />
+                       <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.days_of_week}</p>
                     </div>
                   </div>
                 </div>
@@ -1559,14 +1652,8 @@ const submitPromotionDelete = (props) => {
 
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
                      
-                      <Button Primary={language?.Add} onClick={()=>{
-                        if(disp === 2){
-                          submitDates("check_in")}
-                          if(disp === 3){
-                            submitDates("check_out")} 
-                            if(disp === 4){
-                              submitDates("booking")} 
-                        }} />
+                      <Button Primary={language?.Add} onClick={()=>{validationAddPromotionDates()
+                      }} />
                    
                        
                 </div>

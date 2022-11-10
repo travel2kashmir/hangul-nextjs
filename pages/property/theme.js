@@ -29,7 +29,7 @@ function Theme() {
   const [phone, setPhone] = useState({});
   const [services, setServices] = useState([]);
   const [email, setEmail] = useState({});
-  const [themeName, setThemeName] = useState('Classic')
+  const [themeName, setThemeName] = useState("")
   const [uri, setUri] = useState("")
   const [loc, setLoc] = useState()
   const [lang, setLang] = useState('en')
@@ -92,8 +92,7 @@ function Theme() {
       .then((response) => {
         setThemeName(response.data.theme)
         setAllHotelDetails(response.data);
-        response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });
-        
+        response.data.contacts.map(i => { if (i.contact_type === 'Phone') { setPhone(i) } });   
         var ser =[];
         response.data.services.map(i => { 
           if (i.service_value !== "no") 

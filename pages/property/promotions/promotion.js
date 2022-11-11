@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import validateCountry from '../../../components/Validation/Promotions/editCountry';
 import validateFreeNights from '../../../components/Validation/Promotions/promotionfreenights';
 import validateDiscount from '../../../components/Validation/Promotions/editdiscount';
-import validatePromotions from '../../../components/Validation/Promotions/editpromotion';
+import validatePromotionsEdit from '../../../components/Validation/Promotions/editpromotion';
 import validateDates from '../../../components/Validation/Promotions/addpromotiondates';
 import DatesTable from '../../../components/datestables';
 import DarkModeLogic from "../../../components/darkmodelogic";
@@ -91,15 +91,16 @@ useEffect(()=>{
 
 // Promotion Validation
  const validationPromotion = () => {
-  var result = validatePromotions(promotion)
+ 
+  var result = validatePromotionsEdit(promotion)
      console.log("Result" +JSON.stringify(result))
      if(result===true)
      {
       if(pkg === 1){
         packages();
       }
-      if(mainPromotion=== 1){
-    submitPromotion();}
+      if(mainPromotion === 1){
+       submitPromotion();}
      }
      else
      {
@@ -119,7 +120,7 @@ useEffect(()=>{
        }
     }
     const validationCountries = () => {
-      var result = validateCountry(pro?.countries?.[i])
+      var result = validateCountry(promotion?.country?.[i])
          console.log("Result" +JSON.stringify(result))
          if(result===true)
          {
@@ -188,7 +189,7 @@ const submitPromotionDiscount = () => {
          progress: undefined,
        });
        setDiscount([]);
-       setDisp(1);
+      
      })
      .catch((error) => {
        toast.error("Promotion discount error", {
@@ -231,7 +232,7 @@ const submitPromotion = () => {
      "min_amount_before_discount":promotion?.min_amount_before_discount
    }]
  }
- alert(JSON.stringify(final_data))
+ 
   const url = '/api/ari/promotions'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -245,7 +246,7 @@ const submitPromotion = () => {
          progress: undefined,
        });
         setMainPromotion([]);
-        setDisp(1);
+       
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -318,7 +319,7 @@ const submitDevices = (props) => {
          progress: undefined,
        });
       setDev([])
-     setDisp(1);
+   
      })
      .catch((error) => {
        toast.error("Devices error", {
@@ -350,7 +351,7 @@ const submitPackages = (props) => {
          progress: undefined,
        });
         setPkg([])
-        setDisp(1);
+      
      })
      .catch((error) => {
        toast.error("Packages error", {
@@ -382,7 +383,7 @@ const submitCountries = (props) => {
          progress: undefined,
        });
        setCou([])
-       setDisp(1);
+    
      })
      .catch((error) => {
        toast.error("Country error", {
@@ -1007,6 +1008,58 @@ const submitPromotionDelete = (props) => {
                       </div>
                     </div>
                   </div>
+                  
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.inventorycountmin} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                          defaultValue={pro?.inventory_min}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, inventory_min: e.target.value })
+                            )
+                          }
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.inventory_min}</p>
+                       </div>
+                    </div>
+                  </div>
+
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       {language?.inventorycountmax} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="number" min={1}
+                          defaultValue={pro?.inventory_max}
+                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                             setPromotion({ ...promotion, inventory_max: e.target.value })
+                            )
+                          }
+                        />
+                    <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.inventory_max}</p>
+                      </div>
+                    </div>
+                  </div>
 
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
@@ -1050,7 +1103,7 @@ const submitPromotionDelete = (props) => {
                              setPromotion({ ...promotion, occupancy_min: e.target.value },setMainPromotion(1))
                             )
                           }
-                          defaultValue={pro?.occupancy_min}
+                          defaultValue={promotion?.occupancy_min}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.occupancy_min}</p>
@@ -1144,7 +1197,7 @@ const submitPromotionDelete = (props) => {
                     
                       />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                      {error?.packages}</p>
                       </div>
                     </div>
                   </div>
@@ -1225,25 +1278,23 @@ const submitPromotionDelete = (props) => {
                   </div>
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                  <Button Primary={language?.Update} onClick={()=>{
+                    if(mainPromotion === 1 || pkg===1) {
+                      validationPromotion();
+                    }
+                    if(discount === 1){
+                      validationDiscount();
+                    }
+                    if(cou === 1){
+                      validationCountries();
+                    }
+                    if(dev=== 1){
+                      devices();
+                    }
+                    }}/>
                     <Button Primary={language?.Next} onClick={()=>{
                      
-                      if(mainPromotion === 1 || pkg === 1){
-                        alert("hey promotion");
-                         validationPromotion();
-                         
-                      }
-                      if(dev === 1)  {
-                      devices();
-                      }
-                      if(cou === 1)  {
-                        validationCountries();
-                      }
-                      if(discount === 1){
-                        validationDiscount();
-                      }
-                      if(mainPromotion != 1 && pkg != 1 && dev != 1 && cou != 1  && discount != 1){
-                        setDisp(1);
-                      }
+                     setDisp(1)
                     }}/> 
                 </div>
                 

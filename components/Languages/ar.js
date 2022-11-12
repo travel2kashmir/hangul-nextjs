@@ -94,6 +94,22 @@ export default {
      color: "bg-cyan-600 hover:bg-cyan-700 text-white ",
      icon:<svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
   },
+  "PromotionCols":{
+    name:"الترقيات",
+   col1 : "اسم",
+    
+  },
+  "ModificationCols":{
+    name:"تعديلات معدل",
+   col1 : "اسم",
+    
+  },
+  ratemodifications:"تعديلات معدل",
+  ratemodification:"تعديل المعدل",
+  raterule:"معدل القاعدة",
+  bookingwindowmin:"الحد الأدنى لفترة الحجز",
+  bookingwindowmax:"نافذة الحجز كحد أقصى",
+  modification:"تعديل",
   addbasicdetails:"ضف التفاصيل الأساسية",
   addimages:"إضافة الصور",
   addservices:"أضف خدمات",

@@ -138,6 +138,19 @@ export default {
    col1 : "Nom",
     
   },
+  "PromotionCols":{
+    name:"Promotions",
+   col1 : "Nom",
+    
+  },
+  "ModificationCols":{
+    name:"Modifications tarifaires",
+   col1 : "Nom",
+    
+  },
+  ratemodifications:"Modifications tarifaires",
+  ratemodification:"Modification du tarif",
+  modification:"Modification",
   "MilesCols":{
     name:"Paquets Miles",
    col1 : "Nombre de Milles",
@@ -168,6 +181,9 @@ export default {
   },
   addimages:"Ajouter des images",
   editraterules:"Modifier les règles de taux",
+  raterule:"Règle de Taux",
+  bookingwindowmin:"Période de réservation minimum",
+  bookingwindowmax:"Fenêtre de réservation maximale",
   addservices:"Ajouter des services",
   addroom:"Ajouter une salle",
   addnewroom:"Ajouter une nouvelle pièce",

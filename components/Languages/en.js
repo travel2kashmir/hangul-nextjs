@@ -28,6 +28,11 @@ export default {
   occupancymin:"Occupancy Min",
   occupancymax:"Occupancy Max",
   duration:"Duration",
+  //Rate Modifications
+  ratemodifications:"Rate Modifications",
+  ratemodification:"Rate Modification",
+  modification:"Modification",
+
   addratenotif:"Add Rate Notif",
   generatetransaction:'Generate Transaction',
   availability:'Availability',
@@ -291,6 +296,11 @@ Cancel:"Cancel"
 },
 "PromotionCols":{
   name:"Promotions",
+ col1 : "Name",
+  
+},
+"ModificationCols":{
+  name:"Rate Modifications",
  col1 : "Name",
   
 },
@@ -825,6 +835,9 @@ pointofsale:'../../pointofsales'
 
   //Rate Rules
   programname:'Program Name',
+  raterule:"Rate Rule",
+  bookingwindowmin:"Booking window min",
+  bookingwindowmax:"Booking window max",
   ratecondition: 'Rate Condition',
   ratedescription: 'Rate Description',
   discounttype: 'Discount Type',

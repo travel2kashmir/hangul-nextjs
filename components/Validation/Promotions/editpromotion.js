@@ -86,6 +86,7 @@ const validatePromotionsEdit = (data) =>{
        {
            error.inventory_min="The inventory count min accepts only numbers." 
        }
+       
        if((data?.inventory_max != undefined && data?.inventory_max != "") && (data?.inventory_min != undefined && data?.inventory_min != "") && !(/^[0-9]*$/.test(data.inventory_max)))
        {
            error.inventory_max="The inventory count max accepts only numbers." 
@@ -99,8 +100,7 @@ const validatePromotionsEdit = (data) =>{
        {
            error.occupation_max="The occupation max accepts only numbers." 
        }
-       alert((data?.length_of_stay_min != undefined && data?.length_of_stay_min != "") && (data?.length_of_stay_max != undefined && data?.length_of_stay_max != "") && !(/^[0-9]*$/.test(data.length_of_stay_min)))
-       if((data?.length_of_stay_min != undefined && data?.length_of_stay_min != "") && (data?.length_of_stay_max != undefined && data?.length_of_stay_max != "") && !(/^[0-9]*$/.test(data.length_of_stay_min)))
+     if((data?.length_of_stay_min != undefined && data?.length_of_stay_min != "") && (data?.length_of_stay_max != undefined && data?.length_of_stay_max != "") && !(/^[0-9]*$/.test(data.length_of_stay_min)))
        {
            error.length_of_stay_min="The length of stay min accepts only numbers." 
        }

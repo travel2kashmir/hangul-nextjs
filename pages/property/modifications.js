@@ -78,7 +78,7 @@ function Modifications() {
 
    useEffect(() => {  
     fetchModifications();
-})
+},[])
 
   useEffect(()=>{ 
         setColor(DarkModeLogic(darkModeSwitcher))
@@ -124,6 +124,8 @@ const submitModificationDelete = (props) => {
        });
      });
  };
+ 
+
  
   return (
     <>

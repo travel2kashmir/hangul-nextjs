@@ -29,7 +29,7 @@ import validateModifications from '../../../components/Validation/modification';
 const logger = require("../../../services/logger");
 
 function Addmodification() {
-    const [visible, setVisible] = useState(0);
+  const [visible, setVisible] = useState(0);
   const [modification, setModification] = useState([])
   const [allPackages, setAllPackages] = useState([])
   const [rateRules, setRateRules] = useState([])
@@ -71,8 +71,8 @@ useEffect(() => {
     setColor(DarkModeLogic(darkModeSwitcher))
    },[darkModeSwitcher])
 
-   // Promotion
- const submitPromotion = () => {
+   // Modification
+ const submitModifications = () => {
     var k =new Date()
     var day=k.getDate();
     var month=k.getMonth()+1  
@@ -97,8 +97,8 @@ useEffect(() => {
        "occupancy_min": modification?.occupancy_min,
        "occupancy_max":modification?.occupancy_max,
        "amount_before_discount":modification?.min_amount_before_discount,
-       availability:modification?.min_amount_before_discount,
-       status:"true"
+       "availability":modification?.min_amount_before_discount,
+       "status":"true"
      }]
    }
    alert(JSON.stringify(final_data))
@@ -133,7 +133,7 @@ useEffect(() => {
        })
   }
 
-//Promotion Link
+//Modification Link
 const submitModificationLink = () => {
     const current = new Date();
     const currentDateTime= current.toISOString();
@@ -394,13 +394,14 @@ const submitDates= (check_in) => {
        if(result===true)
        {
         
-        submitModification();
+        submitModifications();
        }
        else
        {
         setError(result)
        }
       }
+      
   return (
     <>
       <Header color={color} Primary={english.Side1} />
@@ -1120,7 +1121,7 @@ const submitDates= (check_in) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
-          </div>
+   </div>
      <Footer color={color} />
    
     </>

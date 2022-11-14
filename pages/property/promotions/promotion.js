@@ -701,8 +701,8 @@ const days = (days) => {
 }
 //Submit Date Delete
 const submitPromotionDelete = (props) => {
+
   const url = `/api/ari/promotions/property_promotion_dates/${props}`;
-  alert(JSON.stringify(url))
    axios
      .delete(url)
      .then((response) => {
@@ -1603,7 +1603,7 @@ const submitPromotionDelete = (props) => {
            
         </div>
        {/* Card Booking Table */}
-       <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
+       <DatesTable gen={gen} setGen={setGen} delete={submitPromotionDelete} color={color}  common={language?.common} cols={language?.CheckInCols}
         name={language?.booking}  add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Submit} onClick={()=>{setDisp(4);BookingGen()}} /> 

@@ -42,7 +42,7 @@ function Modifications() {
             /** Current Property Basic Details fetched from the local storage **/
             currentProperty = JSON.parse(localStorage.getItem('property'))
             currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-            setVisible(1)
+          
           }
         }
         firstfun();

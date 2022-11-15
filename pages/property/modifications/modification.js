@@ -67,7 +67,6 @@ useEffect(() => {
       /** Current Property Details fetched from the local storage **/
       currentProperty = JSON.parse(localStorage.getItem("property"));
       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-     
       currentModification = localStorage.getItem('modificationId');
       setVisible(1);
  }
@@ -81,6 +80,7 @@ useEffect(()=>{
  },[darkModeSwitcher])
 
  useEffect(() => {
+// Packages
   const fetchPackages = async () => {
     try {
         const url = `/api/package/${currentProperty?.property_id}`
@@ -95,6 +95,8 @@ useEffect(()=>{
     }
 
 }
+
+// Fetch Rate Rules
 const fetchRateRules = async () => {
   try {
     var genData=[];
@@ -118,7 +120,7 @@ fetchRateRules();
 // Modification fetch details
 const fetchModification = async (props) => {
   try {
-      const url = `/api//ari/property_rate_modifications/${currentProperty?.property_id}/${currentModification}`
+      const url = `/api/ari/property_rate_modifications/${currentProperty?.property_id}/${currentModification}`
       const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
       setModification(response.data) 
      props.map(i => { if (i.rate_rule_id === response.data.rate_rule_id) { setRateRuleName(i) } }); 
@@ -133,10 +135,8 @@ const fetchModification = async (props) => {
 
 }
 
-useEffect(()=>{     
-fetchModification();
-},[])
- /** For Miles**/
+
+ /** For Miles **/
  const checkInTemplate = {
   "modification_id":modificationId,
   "unit_of_time": "",
@@ -148,10 +148,6 @@ fetchModification();
 
 /* Mapping Index of each mile*/
   const [checkInData, setCheckInData] = useState([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
-
-const addLOS = () => {
-  setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
-}
 
 /** Function to add mile **/
 const addCheckIn = () => {
@@ -185,8 +181,7 @@ setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i
      "availability":modification?.min_amount_before_discount
    }]
  }
- alert(JSON.stringify(final_data))
-  const url = '/api/ari/property_rate_modifications'
+ const url = '/api/ari/property_rate_modifications'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("Modification success", {
@@ -230,8 +225,7 @@ const packages = () => {
 // Packages
 const submitPackages = (props) => {
   const final_data =  {"property_rate_modification_packages": props }
-  alert(JSON.stringify(final_data));
-   const url = '/api/ari/property_rate_modifications/property_rate_modifications_packages'
+  const url = '/api/ari/property_rate_modifications/property_rate_modifications_packages'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("Packages success", {
@@ -263,7 +257,9 @@ const submitPackages = (props) => {
 // Validation Modification
 const validationModification = () => {
   var result = validateModificationsEdit(modification)
+
      console.log("Result" +JSON.stringify(result))
+     alert(JSON.stringify(result))
      if(result===true)
      {
       if(mod === 1){
@@ -281,24 +277,26 @@ const validationModification = () => {
      }
  }
 
-
-
+//  Generate Check in Date
    const checkInGen = () => {
     var genData = [];
     modification?.dates?.map((item) => {
       if(item?.type === "check_in"){
+        
       var temp = {
           name: item.start_date,
           type: item.end_date,
           status: item.days_of_week,
           id: item.mod_date_id
       }
-    
+      
       genData.push(temp)}
   })
   setGen(genData);
   setDisp(1);
   }
+
+//  Generate Check out Date
   const checkOutGen = () => {
     var genData = [];
     modification?.dates?.map((item) => {
@@ -316,6 +314,7 @@ const validationModification = () => {
   setDisp(2);
   }
 
+  //  Generate Booking Date
   const BookingGen = () => {
     var genData = [];
     modification?.dates?.map((item) => {
@@ -332,7 +331,7 @@ const validationModification = () => {
   setDisp(3);
   }
 
-
+// Days of week
  const days = (days) => { 
   var days_present=['-','-','-','-','-','-','-'];
   days.map(day=>{
@@ -370,6 +369,7 @@ const validationModification = () => {
    
 }
 
+// Validation Add Modification Dates
 const validationAddmodificationDates = () => {
   var result = validateDates(modification,days_of_week)
      console.log("Result" +JSON.stringify(result))
@@ -388,6 +388,7 @@ const validationAddmodificationDates = () => {
      }
 }
 
+// Dates 
 const submitDates= (check_in) => {
   const data =
    [{"modification_id":currentModification,
@@ -397,8 +398,7 @@ const submitDates= (check_in) => {
      "type": check_in
    }]
  const final_data = { "property_modifications_rates": data }
-
- const url = '/api/ari/property_rate_modifications/property_rate_modifications_dates'
+const url = '/api/ari/property_rate_modifications/property_rate_modifications_dates'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("Dates success", {
@@ -435,10 +435,8 @@ const submitDates= (check_in) => {
      })
 }
 
-//Submit Date Delete
+// Submit Date Delete
 const submitmodificationDelete = (props) => {
- alert(JSON.stringify(gen))
-  alert(props)
   const url = `/api/ari/property_rate_modifications/property_rate_modifications_dates/${props}`;
    axios
      .delete(url)
@@ -478,6 +476,47 @@ const submitmodificationDelete = (props) => {
       
      });
  };
+// Edit Modification
+/* Function Edit Contact*/
+const submitDateEdit = (props,noChange,days_data) => {
+ 
+  const final_data ={ 
+    "property_rate_modification_dates":[{
+   "mod_date_id": props.id,
+    "start_date": props.name,
+   "end_date": props.type,
+   "days_of_week":days_data
+  }
+]};
+
+  const url = "/api/ari/property_rate_modifications/property_rate_modifications_dates";
+  axios
+    .put(url, final_data, { header: { "content-type": "application/json" } })
+    .then((response) => {
+    toast.success("API: DatesUpdated Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      
+    })
+    .catch((error) => {
+      toast.error("API: Dates Update Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+  
+};
   return (
     <>
      <Header color={color} Primary={english.Side1} />
@@ -811,8 +850,7 @@ const submitmodificationDelete = (props) => {
                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                  <Button Primary={language?.Skip} onClick={()=>{
                      checkInGen()}}/> 
-                    <Button Primary={language?.Update} onClick={()=>{ validationModification();
-                     }}/> 
+                    <Button Primary={language?.Update} onClick={()=>{ validationModification(); }}/> 
                 </div>
 
                 </div>
@@ -823,7 +861,7 @@ const submitmodificationDelete = (props) => {
 
            {/* Check In  */}
            <div id='1' className={disp===1?'block':'hidden'}>
-           <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+           <div className="relative before:hidden  before:lg:block before:absolute before:w-[62%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.modification} {checkInData?.days_of_week}</div>
@@ -846,7 +884,7 @@ const submitmodificationDelete = (props) => {
         </div>
           {/* Card CheckIn Table */}
           <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name={language?.checkin} delete={submitmodificationDelete} add={()=> setView(1)}/> 
+        name={language?.checkin} delete={submitmodificationDelete} edit={submitDateEdit} add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                   <Button Primary={language?.Next} onClick={()=>{setDisp(2);checkOutGen()}} /> 
                 </div>
@@ -854,14 +892,12 @@ const submitmodificationDelete = (props) => {
 
             {/* Check Out */}
             <div id='2' className={disp===2?'block':'hidden'}>
-            <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[62%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.modification}</div>
             </div>
-          
-             
-            
+   
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
@@ -875,11 +911,10 @@ const submitmodificationDelete = (props) => {
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   {language?.booking} {language?.date}</div>
             </div>
            
-        </div>
-
-       {/* Card CheckOut Table */}
-       <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-         add={()=> setView(1)} delete={submitmodificationDelete} name={language?.checkout}/> 
+            </div>
+         {/* Card CheckOut Table */}
+        <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
+         add={()=> setView(1)} delete={submitmodificationDelete} name={language?.checkout} edit={submitDateEdit}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Next} onClick={()=>{setDisp(3);BookingGen()}} /> 
                 </div>
@@ -887,7 +922,7 @@ const submitmodificationDelete = (props) => {
           
            {/* Booking */}
            <div id='3' className={disp===3?'block':'hidden'}>
-           <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+           <div className="relative before:hidden  before:lg:block before:absolute before:w-[62%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.modification}</div>
@@ -909,9 +944,8 @@ const submitmodificationDelete = (props) => {
         </div>
        {/* Card Booking Table */}
        <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name={language?.booking}  add={()=> setView(1)}/> 
-            
-            </div>
+        name={language?.booking} edit={submitDateEdit} add={()=> setView(1)}/>    
+       </div>
 
          {/* Modal Add */}
          <div className={view === 1 ? "block" : "hidden"}>
@@ -1025,6 +1059,7 @@ const submitmodificationDelete = (props) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+  
    </div>
    <div className={(disp === 0)  ? 'block' :'hidden'}>
           <Footer color={color}  Primary={english.Side}  />

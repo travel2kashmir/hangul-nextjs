@@ -1,24 +1,27 @@
-import React, { useState, useMemo } from "react";
-import Router from 'next/router';
+import React, {useEffect, useState, useMemo } from "react";
 import Multiselect from "multiselect-react-dropdown";
 import lang from './GlobalData'
+var days_of_date;
+var selected = []
 
-const DatesTable= (args) => {
-   const [itemsPerPage, setItemsPerPage] = useState(5);
+
+const DatesTable = (args) => {
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [page, setPage] = useState(1);
     const [viewDel, setViewDel] = useState(0);
     const [flag, setFlag] = useState([]);
+
 
     const [update, setUpdate] = useState({
         "edit": 0,
         "id": ''
     });
-    
+
     const [del, setDel] = useState({
         "delete": 0,
         "id": ''
     });
-    
+
     function myFunction() {
         // Declare variables
         var input, filter, table, tr, td, i, txtValue;
@@ -44,11 +47,12 @@ const DatesTable= (args) => {
     const displayData = useMemo(() => {
         const start = (page - 1) * itemsPerPage;
         return args?.gen.slice(start, start + itemsPerPage);
-    }, [page, args?.gen,itemsPerPage]);
+    }, [page, args?.gen, itemsPerPage]);
 
     function ItemShow(event) {
-    setItemsPerPage(event.target.value) ;
+        setItemsPerPage(event.target.value);
     }
+
     const handlecheckbox = (e) => {
         const { name, checked } = e.target;
         setViewDel(1);
@@ -72,12 +76,116 @@ const DatesTable= (args) => {
         console.log(args?.gen)
         const checked = args?.gen.filter(i => i.isChecked === true).map(j => { return (j.id) })
     }
+
+    const days_of_week = (props) => {
+    selected=[];
+      var days_of_week = props?.status
+       if (days_of_week[0] === 'M') {
+         selected.push({ day: 'mon' })
+       }
+
+       if (days_of_week[1] === 'T') {
+         selected.push({ day: 'tue' })
+       }
+
+       if (days_of_week[2] === 'W') {
+         selected.push({ day: 'weds' })
+       }
+
+       if (days_of_week[3] === 'T') {
+         selected.push({ day: 'thur' })
+       }
+
+       if (days_of_week[4] === 'F') {
+         selected.push({ day: 'fri' })
+       }
+
+       if (days_of_week[5] === 'S') {
+         selected.push({ day: 'sat' })
+       }
+
+       if (days_of_week[6] === 'U') {
+         selected.push({ day: 'sun' })
+       }
+    }
+
+    useEffect(()=>{
+        selected=[];
+        var days_of_week = args?.status
+         if (days_of_week?.[0] === 'M') {
+           selected.push({ day: 'mon' })
+         }
+  
+         if (days_of_week?.[1] === 't') {
+           selected.push({ day: 'tue' })
+         }
+  
+         if (days_of_week?.[2] === 'w') {
+           selected.push({ day: 'weds' })
+         }
+  
+         if (days_of_week?.[3] === 't') {
+           selected.push({ day: 'thur' })
+         }
+  
+         if (days_of_week?.[4] === 'F') {
+           selected.push({ day: 'fri' })
+         }
+  
+         if (days_of_week?.[5] === 'S') {
+           selected.push({ day: 'sat' })
+         }
+  
+         if (days_of_week?.[6] === 'U') {
+           selected.push({ day: 'sun' })
+         }
+  
+         console.log(selected)
+         
+       },[])
     const [editContact, setEditContact] = useState({});
     const [updateContact, setUpdateContact] = useState({});
     const [deleteContact, setDeleteContact] = useState({});
-   
-    return (
 
+    // Days of week
+ const days = (days) => { 
+    setFlag(1)
+    var days_present=['-','-','-','-','-','-','-'];
+    days.map(day=>{
+    
+    if(day.day==='mon')
+    {
+    days_present[0]='M'
+    }
+    else if(day.day==='tue')
+    {
+    days_present[1]='T'
+    }
+    else if(day.day==='weds')
+    {
+    days_present[2]='W'
+    }
+    else if(day.day==='thur')
+    {
+    days_present[3]='T'
+    }
+    else if(day.day==='fri')
+    {
+    days_present[4]='F'
+    }
+    else if(day.day==='sat')
+    {
+    days_present[5]='S'
+    }
+    else if(day.day==='sun')
+    {
+    days_present[6]='U'
+    }
+    })
+     days_of_date = days_present.toString().replaceAll(',','');
+     
+  }
+    return (
         <>
             {/* TableHeader */}
             <div className="mx-4">
@@ -111,19 +219,19 @@ const DatesTable= (args) => {
                             </span>
                         </div>
                     </div>
-                
-                        <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                            <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
+
+                    <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                        <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex  
             font-semibold
            rounded-lg text-sm px-5 py-2 text-center 
            items-center ease-linear transition-all duration-150" onClick={args?.add} >
-                                {args?.common?.Add}</button>
-                            <span className={`w-1/2 ${args?.color?.text} ${args?.color?.whitebackground} border border-gray-300 ${args?.color?.hover} focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto`}>
-                                <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
-                                {args?.common?.Import}
-                            </span>
-                        </div>
-                           
+                            {args?.common?.Add}</button>
+                        <span className={`w-1/2 ${args?.color?.text} ${args?.color?.whitebackground} border border-gray-300 ${args?.color?.hover} focus:ring-4 focus:ring-cyan-200 font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto`}>
+                            <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd"></path></svg>
+                            {args?.common?.Import}
+                        </span>
+                    </div>
+
                 </div>
             </div>
             {/* Table */}
@@ -134,37 +242,37 @@ const DatesTable= (args) => {
                             <table className="table data table-fixed min-w-full divide-y divide-gray-200" id="myTable">
                                 <thead className={` ${args?.color?.tableheader} `}>
                                     <tr>
-                                         <th scope="col" className="p-4">
-                                                <div className="flex items-center">
-                                                    <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
-                                                        name="allSelect" checked={args?.gen?.filter(item => item?.isChecked !== true).length < 1}
-                                                        onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
-                                                        className={`${args?.color?.greybackground} border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
-                                                      rounded`}/>
-                                                    <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
-                                                </div>
-                                            </th>
+                                        <th scope="col" className="p-4">
+                                            <div className="flex items-center">
+                                                <input id="checkbox-all" aria-describedby="checkbox-1" type="checkbox"
+                                                    name="allSelect" checked={args?.gen?.filter(item => item?.isChecked !== true).length < 1}
+                                                    onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
+                                                    className={`${args?.color?.greybackground} border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4
+                                                      rounded`} />
+                                                <label htmlFor="checkbox-all" className="sr-only">checkbox</label>
+                                            </div>
+                                        </th>
                                         <th scope="col"
                                             className={`p-4 text-left text-xs font-semibold ${args?.color?.textgray} uppercase`}>{args?.cols?.col1}</th>
 
-                                      
-                                            <th scope="col"
-                                                className={`p-4 text-left text-xs font-semibold ${args?.color?.textgray} uppercase`}>{args?.cols?.col2}</th>
-                                           
-                                          
+
+                                        <th scope="col"
+                                            className={`p-4 text-left text-xs font-semibold ${args?.color?.textgray} uppercase`}>{args?.cols?.col2}</th>
+
+
                                         <th scope="col"
                                             className={`p-4 text-left text-xs font-semibold ${args?.color?.textgray} uppercase`}>{args?.cols?.col3}</th>
-                                            
-                                            <th scope="col"
+
+                                        <th scope="col"
                                             className={`p-4 text-left text-xs font-semibold ${args?.color?.textgray} uppercase`}>{args?.common?.Action}
-                                        </th> 
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className={` ${args?.color?.whitebackground} divide-y divide-gray-200`} id="TableList" >
                                     {displayData?.map((item, idx) => (
                                         <>
-                                            {update?.edit === 1 && update?.id === idx? 
-                                             //After Edit
+                                            {update?.edit === 1 && update?.id === idx ?
+                                                //After Edit
                                                 <>
                                                     <tr className={`${args?.color?.hover}`}>
                                                         {args?.name != "Services" ?
@@ -174,136 +282,107 @@ const DatesTable= (args) => {
                                                                     <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
                                                                 </span>
                                                             </td> : <></>}
-                                                        {(args?.name != "Additional Services" && args?.name != "Package Miles" && args?.name != "Elite Rewards" )?
-                                                              <td className={`p-4 whitespace-nowrap capitalize text-base font-normal ${args?.color?.text}`}>
-                                                                {item?.name}</td> 
-                                                                :
+                                                       
                                                             <td className={`p-4 whitespace-nowrap capitalize text-base font-normal ${args?.color?.text}`}>
+                                                                <input type="date"
+                                                                    onChange={(e) => setEditContact({ ...editContact, name: e.target.value }, setFlag(1))} className={`shadow-sm capitalize ${args?.color?.whitebackground} border border-gray-300 ${args?.colodate} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}
+                                                                    defaultValue={item?.name}></input> </td>
 
+                                                        <td className="data text-left text-sm font-semibold  ">
 
-                                                                <input type="text"
-                                                                    onChange={(e) => setEditContact({ ...editContact, name: e.target.value },  setFlag(1))} className={`shadow-sm capitalize ${args?.color?.whitebackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}
-                                                                    defaultValue={item?.name}></input> </td>}
+                                                            <input type="date"
+                                                                onChange={(e) => setEditContact({ ...editContact, type: e.target.value }, setFlag(1))} className={`shadow-sm capitalize ${args?.color?.whitebackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}
+                                                                defaultValue={item?.type}></input> </td>
 
-                                                      
-
-
-                                                            <td className="data text-left text-sm font-semibold  ">
-
-                                                                <input type="text"
-                                                                    onChange={(e) => setEditContact({ ...editContact, type: e.target.value }, setFlag(1))} className={`shadow-sm capitalize ${args?.color?.whitebackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}
-                                                                    defaultValue={item?.type}></input> </td>
-                                                         
 
                                                         <td className={`p-4 whitespace-nowrap capitalize text-base font-normal ${args?.color?.text}`}>
-                                                        <Multiselect 
-                      className={`fixed shadow-sm ${args?.color?.greybackground} ${args?.color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
-                       `}
-                      isObject={true}
-                      
-                      options={lang?.DaysData}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
-                      
-                     displayValue="day"
-                    
-                      />
+                                                            <Multiselect
+                                                                className={`fixed shadow-sm ${args?.color?.greybackground} ${args?.color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full`}
+                                                                isObject={true}
+                                                                 selectedValues={selected}
+                                                                options={lang?.DaysData}
+                                                                onRemove={(event) => { days(event) }}
+                                                                onSelect={(event) => { days(event) }}
+                                                                displayValue="day" />
                                                         </td>
 
                                                         <td className="p-4 whitespace-nowrap space-x-2">
-                                                        {
-                                                        (flag.length === 0) ?
+                                                            {
+                                                                (flag.length === 0) ?
 
-                                                           <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
+                                                                    <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
                                                            font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
-                                                            duration-150 cursor-not-allowed opacity-60 " 
-                                                        >{args?.common?.Save} </button>
-                                                        
-                                                          :
-                                                          <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
+                                                            duration-150 cursor-not-allowed opacity-60 "
+                                                                    >{args?.common?.Save} </button>
+
+                                                                    :
+                                                                    <button className="bg-gradient-to-r bg-green-600 hover:bg-green-700 text-white  sm:inline-flex 
                                                           font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all
                                                            duration-150"
-                                                             onClick={() =>
-                                                                 {  if(flag.length != 0){{ setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact,updateContact);  setFlag([])}}}
-                                                         >{args?.common?.Save}</button>  
-                                                          
-                                                      
-                                                        }
-                                                         
+                                                                        onClick={() => { if (flag.length != 0) { { setUpdate({ ...update, edit: 0, id: '' }) }; args.edit(editContact, updateContact, days_of_date); setFlag([]) } }}
+                                                                    >{args?.common?.Save}</button>
+
+
+                                                            }
+
                                                             <button className="bg-gradient-to-r bg-gray-400 hover:${args?.color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                 onClick={() => { setUpdate({ ...update, edit: 0, id: '' }) }}>{args?.common?.Cancel}</button>
                                                         </td>
                                                     </tr>
-                                                </> 
-                                                
-                                                
-                                                :
-                                              //Before Edit
+                                                </>
+                                                  :
+                                                //Before Edit
                                                 <>
-                                                    <tr>
-                                                      
-                                                            <td className="p-4 w-4">
-                                                                <span className="flex items-center">
-                                                                    <input id="checkbox-1" name={args?.item?.id} checked={args?.item?.isChecked || false}
-                                                                        onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
-                                                                        aria-describedby="checkbox-1" type="checkbox"
-                                                                        className={`${args?.color?.greybackground} border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4
+                                                  <tr>
+
+                                                        <td className="p-4 w-4">
+                                                            <span className="flex items-center">
+                                                                <input id="checkbox-1" name={args?.item?.id} checked={args?.item?.isChecked || false}
+                                                                    onChange={(e) => { handlecheckbox(e); setViewDel(1); }}
+                                                                    aria-describedby="checkbox-1" type="checkbox"
+                                                                    className={`${args?.color?.greybackground} border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4
                                                                      w-4 rounded`} />
-                                                                    <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                                                </span>
-                                                            </td>
-                                                            <td className={`p-4 whitespace-nowrap capitalize text-base font-normal ${args?.color?.text}`}>
+                                                                <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
+                                                            </span>
+                                                        </td>
+                                                        <td className={`p-4 whitespace-nowrap capitalize text-base font-normal ${args?.color?.text}`}>
                                                             {item?.name}
                                                         </td>
-                                                        {args?.name === "Packages"  ? <></> :
+                                                        {args?.name === "Packages" ? <></> :
 
-                                                           <td className={`p-4 whitespace-nowrap text-base font-normal ${args?.color?.text}`}>
+                                                            <td className={`p-4 whitespace-nowrap text-base font-normal ${args?.color?.text}`}>
 
                                                                 {item?.type}
                                                             </td>}
-                                                           
+                                                     <td className={`p-4 whitespace-nowrap text-base font-normal ${args?.color?.text}`}>
 
-<td className={`p-4 whitespace-nowrap text-base font-normal ${args?.color?.text}`}>
-
-     {item?.status}
- </td>
+                                                            {item?.status}
+                                                        </td>
 
                                                         {del?.delete === 1 && del?.id === idx ?
-
-                                                            <td className="p-4 whitespace-nowrap  space-x-2">
-
+                                                             <td className="p-4 whitespace-nowrap  space-x-2">
                                                                 <button className="bg-gradient-to-r bg-red-600 hover:bg-red-700 text-white  sm:inline-flex  
                                                                  font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                 
-                                                                    onClick={() => { { setDel({ ...del, delete: 0, id: '' }) }; args.delete(item?.id) }} >{args?.common?.yesdelete}</button>
+                                                                   onClick={() => { { setDel({ ...del, delete: 0, id: '' }) }; args.delete(item?.id) }} >{args?.common?.yesdelete}</button>
                                                                 <button className="bg-gradient-to-r bg-gray-400 hover:${args?.color?.greybackground}0 text-white sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
                                                                     onClick={() => { setDel({ ...del, delete: 0, id: '' }) }} >{args?.common?.Cancel}</button>
                                                             </td>
                                                             :
                                                             <td className="p-4 whitespace-nowrap capitalize space-x-2">
-                               
-                                                              
-                                                         
-                                                             
-                                                                 <div>
-                                                             
-                                                          
-                                                                        <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
-                                                                            setEditContact(item);
-                                                                            setUpdateContact(item);
-                                                                            setUpdate({ ...update, edit: 1, id: idx })
-                                                                        }}>{args?.common?.Edit}</button>
-                                                                        {args?.name != "Services" ?
-                                                                            <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
-                                                                                onClick={() => {
-                                                                                    setDeleteContact(item);
-                                                                                    setDel({ ...del, delete: 1, id: idx })
-                                                                                }} >{args?.common?.Delete}</button> : <></>}
-                                            </div>
-                                                                
-                                                                   
-                                                                  
-                                                            </td>}
+                                                             <div>
+                                                              <button className="bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150" onClick={() => {
+                                                                        setEditContact(item);
+                                                                        setUpdateContact(item); days_of_week(item)
+                                                                        setUpdate({ ...update, edit: 1, id: idx })
+                                                                    }}>{args?.common?.Edit}</button>
+                                                                    {args?.name != "Services" ?
+                                                                        <button className="bg-gradient-to-r mx-2 bg-red-600 hover:bg-red-700 text-white  sm:inline-flex font-semibold rounded-lg text-sm px-5 py-2 text-center items-center ease-linear transition-all duration-150"
+                                                                            onClick={() => {
+                                                                                setDeleteContact(item);
+                                                                                setDel({ ...del, delete: 1, id: idx })
+                                                                            }} >{args?.common?.Delete}</button> : <></>}
+                                                                </div>
+                                                          </td>}
                                                     </tr>
                                                 </>}
                                         </>
@@ -312,10 +391,11 @@ const DatesTable= (args) => {
                                 </tbody>
                             </table>
                         </div>
-                    </div></div></div>
-            
-       {/* Pagination */}
-       <div className={`${args?.color?.whitebackground} sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4`}>
+                    </div>
+                    </div>
+                    </div>
+            {/* Pagination */}
+            <div className={`${args?.color?.whitebackground} sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t border-gray-200 p-4`}>
                 <div className="flex items-center w-64 mb-4 sm:mb-0">
                     <button onClick={() => {
                         if (page > 1) {
@@ -334,28 +414,26 @@ const DatesTable= (args) => {
                     }} className={`${args?.color?.textgray} hover:${args?.color?.text} cursor-pointer p-1 ${args?.color?.hover} rounded inline-flex justify-center mr-2`}>
                         <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                     </ button>
-                    
+
                     <span className={`text-sm font-normal ${args?.color?.textgray}`}>{args?.common?.Showing}
-                   
                         <span className={`${args?.color?.text} font-semibold ml-1`}>{page}</span> {args?.common?.Of} <span className={`${args?.color?.text} font-semibold`}>{Math.ceil(args?.gen?.length / itemsPerPage)}</span></span>
-                       
-                </div>
-              
+                    </div>
+
                 <div className="flex items-center w-44 space-x-3">
-                <span className={`text-sm font-normal ${args?.color?.textgray}`}>Entries per page</span>
-              
-                <select
-                         onChange={(e) =>
+                    <span className={`text-sm font-normal ${args?.color?.textgray}`}>Entries per page</span>
+
+                    <select
+                        onChange={(e) =>
                             ItemShow(e)
-                          }
+                        }
                         className={`shadow-sm ${args?.color?.greybackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block mr-2 w-12  py-1`}>
-                         <option selected disabled>{itemsPerPage}</option>
+                        <option selected disabled>{itemsPerPage}</option>
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
                         <option value="20">20</option>
-                      </select>
-                  
+                    </select>
+
                 </div>
             </div>
         </>

@@ -742,6 +742,45 @@ const submitPromotionDelete = (props) => {
      });
  };
 
+ const submitDateEdit = (props,noChange,days_data) => {
+ 
+  const final_data ={ 
+    "property_rate_modification_dates":[{
+   "date_id": props.id,
+    "start_date": props.name,
+   "end_date": props.type,
+   "days_of_week":days_data
+  }
+]};
+
+  const url = "/api/ari/promotions/property_promotion_dates";
+  axios
+    .put(url, final_data, { header: { "content-type": "application/json" } })
+    .then((response) => {
+    toast.success("API: Dates updated Successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      
+    })
+    .catch((error) => {
+      toast.error("API: Dates Update Error!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+  
+};
   return (
     <div>
        <Header color={color} Primary={english.Side1} />
@@ -1534,7 +1573,7 @@ const submitPromotionDelete = (props) => {
         </div>
           {/* Card CheckIn Table */}
           <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name={language?.checkin} delete={submitPromotionDelete} add={()=> setView(1)}/> 
+        name={language?.checkin} delete={submitPromotionDelete}  edit={submitDateEdit} add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Next} onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
@@ -1573,7 +1612,7 @@ const submitPromotionDelete = (props) => {
        <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
          add={()=> setView(1)} delete={submitPromotionDelete} name={language?.checkout}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{setDisp(4);BookingGen()}} /> 
+                    <Button Primary={language?.Next}  edit={submitDateEdit} onClick={()=>{setDisp(4);BookingGen()}} /> 
                 </div>
           </div>
 
@@ -1606,7 +1645,7 @@ const submitPromotionDelete = (props) => {
        <DatesTable gen={gen} setGen={setGen} delete={submitPromotionDelete} color={color}  common={language?.common} cols={language?.CheckInCols}
         name={language?.booking}  add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Submit} onClick={()=>{setDisp(4);BookingGen()}} /> 
+                    <Button Primary={language?.Submit}  edit={submitDateEdit} onClick={()=>{setDisp(4);BookingGen()}} /> 
                 </div>
             </div> 
        

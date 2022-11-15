@@ -64,31 +64,31 @@ const fetchDetails = async  () => {
      setCurrentPackageRates(response.data)
      selected=[];
       var days_of_week = response.data?.days_of_week
-       if (days_of_week[0] === 'm') {
+       if (days_of_week[0] === 'M') {
          selected.push({ day: 'mon' })
        }
 
-       if (days_of_week[1] === 't') {
+       if (days_of_week[1] === 'T') {
          selected.push({ day: 'tue' })
        }
 
-       if (days_of_week[2] === 'w') {
+       if (days_of_week[2] === 'W') {
          selected.push({ day: 'weds' })
        }
 
-       if (days_of_week[3] === 't') {
+       if (days_of_week[3] === 'T') {
          selected.push({ day: 'thur' })
        }
 
-       if (days_of_week[4] === 'f') {
+       if (days_of_week[4] === 'F') {
          selected.push({ day: 'fri' })
        }
 
-       if (days_of_week[5] === 's') {
+       if (days_of_week[5] === 'S') {
          selected.push({ day: 'sat' })
        }
 
-       if (days_of_week[6] === 's') {
+       if (days_of_week[6] === 'U') {
          selected.push({ day: 'sun' })
        }
 

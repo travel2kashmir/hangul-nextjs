@@ -54,7 +54,8 @@ useEffect(() => {
       }
       /** Current Property Details fetched from the local storage **/
       currentProperty = JSON.parse(localStorage.getItem("property"));
-      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+      currentPackage = localStorage.getItem("packageId");
+      
       setVisible(1);
  }
   }
@@ -121,9 +122,8 @@ const url = '/api/ari/extra_guest_charges'
          progress: undefined,
        });
        submitExtraChargesLink(currentDateTime);
-      
-     
-    
+       submitPackagesLink(response.data.extra_guest_id)
+ 
      })
      .catch((error) => {
        toast.error("Adult Charges error", {
@@ -160,6 +160,38 @@ const submitExtraChargesLink = (currentDateTime) => {
      })
      .catch((error) => {
        toast.error("Extra Guest  link error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+const submitPackagesLink = (props) => {
+  const final_data =  {"extra_guest_link": [{
+     "extra_guest_id": props,
+     "package_id": currentPackage 
+   }]
+ }
+ const url = '/api/ari/extra_guest_charges/extra_guest_package_link'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Extra Guest  package link success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+     .catch((error) => {
+       toast.error("Extra Guest package link error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,

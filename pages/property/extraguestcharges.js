@@ -68,6 +68,7 @@ function ExtraGuestCharges() {
                         var temp = {
                             name: item.package_name,
                             id: item.extra_guest_id,
+                            package_id:item?.package_id,
                             status:true
                            
                         }
@@ -121,7 +122,7 @@ function ExtraGuestCharges() {
 
     /**Function to save Current property to be viewed to Local Storage**/
     const currentExtraGuest = (props) => {
-        localStorage.setItem("packageId", props?.id);
+        localStorage.setItem("packageId", props?.package_id);
         Router.push("./extraguestcharges/extraguestcharge")
     };
   return (

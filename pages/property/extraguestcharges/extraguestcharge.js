@@ -28,6 +28,37 @@ import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
 
 function ExtraGuestCharge() {
+  useEffect(() => {
+    const firstfun = () => {
+      if (typeof window !== 'undefined') {
+        var locale = localStorage.getItem("Language");
+        const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+        const color = JSON.parse(localStorage.getItem("Color"));
+         setColor(color);
+         setDarkModeSwitcher(colorToggle)
+        if (locale === "ar") {
+          language = arabic;
+        }
+        if (locale === "en") {
+          language = english;
+        }
+        if (locale === "fr") {
+          language = french;
+        }
+        /** Current Property Details fetched from the local storage **/
+        currentProperty = JSON.parse(localStorage.getItem("property"));
+        
+        setVisible(1);
+   }
+    }
+    firstfun();
+    Router.push("./addextraguestcharge");
+  }, [])
+  
+    useEffect(()=>{ 
+      setColor(DarkModeLogic(darkModeSwitcher))
+     },[darkModeSwitcher])
+  
   return (
     <>
      <Header color={color} Primary={english.Side1} />

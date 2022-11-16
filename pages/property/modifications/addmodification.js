@@ -101,8 +101,7 @@ useEffect(() => {
        "status":"true"
      }]
    }
-   alert(JSON.stringify(final_data))
-    const url = '/api/ari/property_rate_modifications'
+  const url = '/api/ari/property_rate_modifications'
      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
        ((response) => {
          toast.success("Modification success", {
@@ -143,7 +142,6 @@ const submitModificationLink = () => {
        "timestamp": currentDateTime 
      }]
    }
-   alert(JSON.stringify(final_data))
    const url = '/api/ari/property_rate_modifications/property_rate_modifications_link'
      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
        ((response) => {

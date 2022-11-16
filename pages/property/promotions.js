@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Link from "next/link";
 import axios from "axios";
 import Table from '../../components/Table';
-import Button from "../../components/Button";
 import Sidebar  from "../../components/Sidebar";
-import LoaderTable from "./loaderTable";
 import Headloader from "../../components/loaders/headloader";
 import Header  from "../../components/Header";
 import { ToastContainer, toast } from 'react-toastify';

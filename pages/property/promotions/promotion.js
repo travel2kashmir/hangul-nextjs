@@ -43,6 +43,7 @@ function Promotion() {
   const [pkg, setPkg] = useState([]);
   const [cou, setCou] = useState([]);
   const [dev, setDev] = useState([]);
+  const [dis,                                                                  ] = useState([]);
   const [view, setView] = useState(0);
   const [gen, setGen] = useState([])
   const [promotion, setPromotion] = useState([])
@@ -175,7 +176,6 @@ const submitPromotionDiscount = () => {
      "applied_nights":promotion?.applied_nights
    }]
  }
- alert(JSON.stringify(final_data))
   const url = '/api/ari/promotions/property_promotion_discount'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -305,7 +305,6 @@ const devices = () => {
 // Devices
 const submitDevices = (props) => {
   const final_data =  {"promotion_devices": props }
-  alert(JSON.stringify(final_data))
    const url = '/api/ari/promotions/property_promotion_devices'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -337,7 +336,6 @@ const submitDevices = (props) => {
 // Packages
 const submitPackages = (props) => {
   const final_data =  {"promotion_packages": props }
-  alert(JSON.stringify(final_data))
    const url = '/api/ari/promotions/property_promotion_packages'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -369,8 +367,7 @@ const submitPackages = (props) => {
 // Packages
 const submitCountries = (props) => {
   const final_data =  {"property_promotion_country": props}
-  alert(JSON.stringify(final_data))
-   const url = '/api/ari/promotions/property_promotion_country'
+ const url = '/api/ari/promotions/property_promotion_country'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("Country success", {
@@ -411,8 +408,7 @@ const submitPromotionFreeNightsEdit = () => {
      "repeat":freeNights?.repeat,
    }]
  }
- alert(JSON.stringify(final_data))
-  const url = '/api/ari/promotions/property_promotion_free_nights'
+ const url = '/api/ari/promotions/property_promotion_free_nights'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("Promotion success", {
@@ -449,7 +445,7 @@ const submitPromotionFreeNights = () => {
      "repeat":freeNights?.repeat,
    }]
  }
- alert(JSON.stringify(final_data))
+ 
   const url = '/api/ari/promotions/property_promotion_free_nights'
   
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -463,7 +459,8 @@ const submitPromotionFreeNights = () => {
          draggable: true,
          progress: undefined,
        });
-      setDisp(2)
+       setDis([])
+      
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -701,8 +698,7 @@ const days = (days) => {
 }
 //Submit Date Delete
 const submitPromotionDelete = (props) => {
-
-  const url = `/api/ari/promotions/property_promotion_dates/${props}`;
+const url = `/api/ari/promotions/property_promotion_dates/${props}`;
    axios
      .delete(url)
      .then((response) => {
@@ -1317,6 +1313,10 @@ const submitPromotionDelete = (props) => {
                   </div>
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                  <Button Primary={language?.Skip} onClick={()=>{
+                     
+                     setDisp(1)
+                    }}/>
                   <Button Primary={language?.Update} onClick={()=>{
                     if(mainPromotion === 1 || pkg===1) {
                       validationPromotion();
@@ -1331,10 +1331,7 @@ const submitPromotionDelete = (props) => {
                       devices();
                     }
                     }}/>
-                    <Button Primary={language?.Next} onClick={()=>{
-                     
-                     setDisp(1)
-                    }}/> 
+                 
                 </div>
                 
                   </div>
@@ -1396,7 +1393,7 @@ const submitPromotionDelete = (props) => {
                            defaultValue={freeNights?.stay_nights}
                           onChange={
                             (e) => (
-                              setFreeNights({ ...freeNights, stay_nights: e.target.value })
+                              setFreeNights({ ...freeNights, stay_nights: e.target.value },setDis(1))
                             )
                           }
                         />
@@ -1422,7 +1419,7 @@ const submitPromotionDelete = (props) => {
                            defaultValue={freeNights?.discount_nights}
                           onChange={
                             (e) => (
-                              setFreeNights({ ...freeNights, discount_nights: e.target.value })
+                              setFreeNights({ ...freeNights, discount_nights: e.target.value },setDis(1))
                             )
                           }
                         />
@@ -1448,7 +1445,7 @@ const submitPromotionDelete = (props) => {
                            defaultValue={freeNights?.discount_percentage}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, discount_percentage: e.target.value })
+                              setPromotion({ ...promotion, discount_percentage: e.target.value },setDis(1))
                             )
                           }
                         />
@@ -1471,7 +1468,7 @@ const submitPromotionDelete = (props) => {
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                         setPromotion({ ...promotion, free_night_selection: e.target.value })
+                         setPromotion({ ...promotion, free_night_selection: e.target.value },setDis(1))
                       )}>
                      <option selected >
                      {pro?.free_nights !== undefined ?
@@ -1500,7 +1497,7 @@ const submitPromotionDelete = (props) => {
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                         setFreeNights({ ...freeNights, repeat: e.target.value })
+                         setFreeNights({ ...freeNights, repeat: e.target.value },setDis(1))
                       )}>
                      <option selected >
                      {pro?.free_nights !== undefined ?
@@ -1531,7 +1528,10 @@ const submitPromotionDelete = (props) => {
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{
+                    <Button Primary={language?.Skip} onClick={()=>{
+                      checkInGen()
+                      }} /> 
+                      <Button Primary={language?.Update} onClick={()=>{
                       validationFreeNights();
                       
                       checkInGen()

@@ -1,4 +1,5 @@
 export default {
+  extraguestcharge:"Frais d'invité supplémentaire",
   promotions:"Promotions",
   name:"Nom",
   freestaynights:"Nuits gratuites",
@@ -146,6 +147,11 @@ export default {
   "ModificationCols":{
     name:"Modifications tarifaires",
    col1 : "Nom",
+    
+  },
+  "ExtraGuestCols":{
+    name:"Frais supplémentaires pour les invités",
+   col1 : "Nom du Paquet",
     
   },
   ratemodifications:"Modifications tarifaires",

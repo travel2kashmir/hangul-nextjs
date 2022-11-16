@@ -246,7 +246,7 @@ const validationInventory = () => {
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.start_date}</p></div>
+                      {error?.start_date}{JSON.stringify(currentRoom)}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">

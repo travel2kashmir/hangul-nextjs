@@ -66,7 +66,7 @@ function Inventories() {
                         var temp = {
                             name: item.room_name,
                             status: item.status,
-                            id: item.package_id
+                            id: item.room_id
                         }
                         genData.push(temp)
                     })
@@ -91,7 +91,7 @@ function Inventories() {
     }
 
     const currentRoom = (props) => {
-        localStorage.setItem("RoomId", (props));
+        localStorage.setItem("RoomId", props.id);
         Router.push("./inventories/inventory");
     };
     return (
@@ -147,6 +147,7 @@ function Inventories() {
                                         ></path>
                                     </svg>
                                     {language?.inventories}
+                                    
 
                                 </div></div>
                         </li>

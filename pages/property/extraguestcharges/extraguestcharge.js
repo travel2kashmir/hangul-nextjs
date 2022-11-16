@@ -4,7 +4,6 @@ import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
-import Multiselect from 'multiselect-react-dropdown';
 import lang from '../../../components/GlobalData'
 import axios from 'axios';
 import Link from "next/link";
@@ -28,6 +27,12 @@ import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
 
 function ExtraGuestCharge() {
+  const [visible, setVisible] = useState(0);
+  const [extraGuestCharges, setExtraGuestCharges] = useState([])
+  const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+  const [color, setColor] = useState({})
+  const [error, setError] = useState({})
+
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
@@ -52,7 +57,7 @@ function ExtraGuestCharge() {
    }
     }
     firstfun();
-    Router.push("./addextraguestcharge");
+    Router.push("./extraguestcharge");
   }, [])
   
     useEffect(()=>{ 

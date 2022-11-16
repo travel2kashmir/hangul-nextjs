@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import validateDates from '../../../components/Validation/Promotions/promotiondates';
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
 import Sidebar from "../../../components/Sidebar";
 import Header from "../../../components/Header";
-import Multiselect from 'multiselect-react-dropdown';
 import lang from '../../../components/GlobalData'
 import axios from 'axios';
 import Link from "next/link";
@@ -90,7 +88,7 @@ useEffect(() => {
   setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
 }
 
-const submitModifications = () => {
+const submitExtraGuestCharges = () => {
   var k =new Date()
   var day=k.getDate();
   var month=k.getMonth()+1  

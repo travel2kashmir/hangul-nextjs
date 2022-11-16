@@ -29,6 +29,7 @@ const validateModifications= (data) =>{
          flag.push(false)
          error.min_amount_before_discount="The min amount before discount is required."
      }
+    
      //Accepts only possitive and decimal values
      if(data?.min_amount_before_discount !="" || data?.min_amount_before_discount != undefined){
       if(!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.min_amount_before_discount))){
@@ -118,21 +119,7 @@ if((/^([1-9]+[0-9]*)$/.test(data.booking_window_min)) && (/^([1-9]+[0-9]*)$/.tes
  }
 }
 
-   
-     
- 
-   
-
-
-    if((data?.booking_window_min !== "" && data?.booking_window_min !== undefined )&& (data?.booking_window_max !== "" && data?.booking_window_max !== undefined)){
-    if(data?.booking_window_min < data?.booking_window_max)
-      {
-          if(!(/^([1-9]+[0-9]*)$/.test(data.booking_window_max))){
-          flag.push(false);
-          error.booking_window_min="The booking window maximum accepts only numbers."
-         }
-      }
-     }
+  
       
      for (let value in flag) {
      

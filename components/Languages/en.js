@@ -1,4 +1,5 @@
 export default {
+  extraguestcharge:"Extra Guest Charge",
   //Promotions
   promotions:"Promotions",
   available:"Available",
@@ -270,6 +271,11 @@ Cancel:"Cancel"
 "PackageCols":{
   name:"Packages",
  col1 : "Package Name",
+  
+},
+"ExtraGuestCols":{
+  name:"Extra Guest Charges",
+  col1 : "Package Name",
   
 },
 "RoomBundleCols":{

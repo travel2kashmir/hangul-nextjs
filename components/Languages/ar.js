@@ -1,4 +1,5 @@
 export default {
+  extraguestcharge:"رسوم ضيف إضافية",
   name:"اسم",
  //Promotions
  promotions:"الترقيات",
@@ -97,6 +98,11 @@ export default {
   "PromotionCols":{
     name:"الترقيات",
    col1 : "اسم",
+    
+  },
+  "ExtraGuestCols":{
+    name:"رسوم النزيل الإضافية",
+   col1 : "اسم الحزمة",
     
   },
   "ModificationCols":{

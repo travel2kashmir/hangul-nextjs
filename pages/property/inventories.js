@@ -66,7 +66,7 @@ function Inventories() {
                         var temp = {
                             name: item.room_name,
                             status: item.status,
-                            id: item.package_id
+                            id: item.room_id
                         }
                         genData.push(temp)
                     })

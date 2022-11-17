@@ -24,7 +24,7 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week;
+var days_of_week=['M','T','W','T','F','S','U'];
 var keys =[];
 var currentPackage;
 var resCou = []
@@ -43,7 +43,7 @@ function Promotion() {
   const [pkg, setPkg] = useState([]);
   const [cou, setCou] = useState([]);
   const [dev, setDev] = useState([]);
-  const [dis,                                                                  ] = useState([]);
+  const [dis,setDis] = useState([]);
   const [view, setView] = useState(0);
   const [gen, setGen] = useState([])
   const [promotion, setPromotion] = useState([])
@@ -364,7 +364,7 @@ const submitPackages = (props) => {
      })
 }
 
-// Packages
+// countries
 const submitCountries = (props) => {
   const final_data =  {"property_promotion_country": props}
  const url = '/api/ari/promotions/property_promotion_country'
@@ -614,13 +614,13 @@ setCountry(resCou)
 Router.push('./promotion')
 }
 
-const submitDates= (check_in) => {
+const submitDates= (type) => {
   const data =
    [{"promotion_id":pro?.promotion_id,
      "start_date": promotion?.start_date,
      "end_date": promotion?.end_date,
-     "days_of_week": days_of_week,
-     "type": check_in
+     "days_of_week": days_of_week.toString().replaceAll(',',''),
+     "type": type
    }]
  const final_data = { "property_promotion_rates": data }
 
@@ -636,18 +636,17 @@ const submitDates= (check_in) => {
          draggable: true,
          progress: undefined,
        });
-     days_of_week=[];
+       const temp=[{
+        name: data[0]?.start_date,
+        type: data[0]?.end_date,
+        status: data[0]?.days_of_week,
+        id: response.data.date_id
+        }]
+      setGen( gen.concat(temp))
+      setError([])
+     document.getElementById('addPromotionDateForm').reset()
     setView(0);
-    if(disp === 2){
-      checkInGen();
-    }
-    if(disp === 3){
-      checkOutGen();
-    }
-    if(disp === 4){
-      BookingGen();
-    }
-     })
+    })
      .catch((error) => {
        toast.error("Dates error", {
          position: "top-center",
@@ -711,18 +710,8 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
          draggable: true,
          progress: undefined,
        });
-       fetchPromotion();
-       if(disp === 2){
-        checkInGen();
-        setDisp(2);
-        Router.push('./promotion')
-       }
-       if(disp === 3){
-        checkOutGen();
-       }
-       if(disp === 4){
-        BookingGen();
-       }
+     setGen(gen.filter(i=>i.id!=props))
+     
      })
      .catch((error) => {
        toast.error("API:Date Delete Error!", {
@@ -737,7 +726,9 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
       
      });
  };
-
+useEffect(()=>{
+  console.log("USEEFFECT"+JSON.stringify(gen))
+},[gen])
  const submitDateEdit = (props,noChange,days_data) => {
  
   const final_data ={ 
@@ -1660,6 +1651,8 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
                   <button
                     type="button"
                     onClick={() =>{
+                      setError([])
+                   document.getElementById('addPromotionDateForm').reset();
                       setView(0);
                     } }
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -1678,7 +1671,7 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
                     </svg>
                   </button>
                 </div>
-                  <form id='addcontactform'>
+                  <form id='addPromotionDateForm'>
                 <div className="p-6 space-y-6" >
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
@@ -1722,17 +1715,16 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
                       >
                         {language?.days} {days_of_week}
                       </label>
-                      <Multiselect 
+                      <Multiselect id='multidays'
                       className={`fixed shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
                       isObject={true}
-                      
                       options={lang?.DaysData}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
-                     displayValue="day"
-                    
-                      />
+                      selectedValues={lang?.DaysData}
+                      displayValue="day"
+                    />
                        <p className="text-sm text-sm text-red-700 font-light">
                       {error?.days_of_week}</p>
                     </div>

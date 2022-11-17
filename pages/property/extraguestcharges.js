@@ -102,7 +102,7 @@ function ExtraGuestCharges() {
     const addExtraGuest = () =>{
         resCou = allPackages.filter(el => {
             return allExtraGuestCharges?.find(element => {
-               return element.package_id === el.package_id;
+               return element.package_id !== el.package_id;
             });
          });
          localStorage.setItem("packages",  JSON.stringify(resCou));

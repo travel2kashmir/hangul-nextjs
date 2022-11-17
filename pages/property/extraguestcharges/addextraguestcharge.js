@@ -28,6 +28,7 @@ const logger = require("../../../services/logger");
 function AddExtraGuestCharge() {
   const [visible, setVisible] = useState(0);
   const [extraGuestCharges, setExtraGuestCharges] = useState([])
+  const [packages, setPackages] = useState([])
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [error, setError] = useState({})
@@ -53,7 +54,7 @@ useEffect(() => {
       /** Current Property Details fetched from the local storage **/
       currentProperty = JSON.parse(localStorage.getItem("property"));
       currentPackage = localStorage.getItem("packageId");
-      
+      setPackages( JSON.parse(localStorage.getItem("packages")));
       setVisible(1);
  }
   }
@@ -87,7 +88,14 @@ useEffect(() => {
  const addLOS = () => {
   setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
 }
-
+const onChange = (e, index, i) => {
+  setLOSData(LOSData?.map((item, id) => {
+    if (item.index === index) {
+      item[i] = e.target.value
+    }
+    return item
+  }))
+}
 const submitExtraGuestCharges = () => {
   var k =new Date()
   var day=k.getDate();
@@ -119,8 +127,10 @@ const url = '/api/ari/extra_guest_charges'
          draggable: true,
          progress: undefined,
        });
+       alert(response.data.extra_guest_id)
        submitExtraChargesLink(currentDateTime);
-       submitPackagesLink(response.data.extra_guest_id)
+       submitPackagesLink(response.data.Extra_guest_id)
+       extraGuestChild(response.data.Extra_guest_id)
  
      })
      .catch((error) => {
@@ -172,7 +182,7 @@ const submitExtraChargesLink = (currentDateTime) => {
 const submitPackagesLink = (props) => {
   const final_data =  {"extra_guest_link": [{
      "extra_guest_id": props,
-     "package_id": currentPackage 
+     "package_id":extraGuestCharges?.package_id 
    }]
  }
  const url = '/api/ari/extra_guest_charges/extra_guest_package_link'
@@ -190,6 +200,43 @@ const submitPackagesLink = (props) => {
      })
      .catch((error) => {
        toast.error("Extra Guest package link error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
+const extraGuestChild= (props) => {
+  const data = LOSData?.map((i => {
+    return {
+    "extra_guest_id":props,
+     "max_age": i?.max_age,
+     "exclude_from_capacity":i?.end_date,
+     "count_as_base_occupant":i?.count_as_base_occupant,
+   }}))
+ const final_data = { "extra_guest_child_link": data }
+ const url = '/api/ari/extra_guest_charges/extra_guest_link'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Extra guest child link success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+    keys=[];
+    
+     })
+     .catch((error) => {
+       toast.error("Extra guest child link error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -269,7 +316,7 @@ const submitPackagesLink = (props) => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.adult}  {language?.charges}
+                        {language?.adult}  {language?.charges} {JSON.stringify(extraGuestCharges)}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -278,10 +325,41 @@ const submitPackagesLink = (props) => {
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                          onChange={
                             (e) => (
-                              setExtraGuestCharges({ ...extraGuestCharges, adult_charges: e.target.value },setFlag(1))
+                              setExtraGuestCharges({ ...extraGuestCharges, adult_charges: e.target.value })
                             )
                           }
-                        /></div>
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.adultcharges}</p></div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.package} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <select
+                    onClick={(e) =>
+                      setExtraGuestCharges({ ...extraGuestCharges, package_id: e.target.value })
+                    }
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  >
+                     <option selected>Select package</option>
+                    {packages?.map((i) => {
+                      return (
+                        <option key={i} value={i.package_id}>
+                          {i.package_name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.package}</p></div>
                     </div>
                   </div>
                   </div>
@@ -292,10 +370,6 @@ const submitPackagesLink = (props) => {
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   <Button Primary={language?.AddLOS}  onClick={addLOS} />
                   </div>
-                
-              
-
-             
                   <div className="pt-2">
               <div className=" md:px-4 mx-auto w-full">
               {LOSData?.map((LOSData, index) => (
@@ -322,22 +396,13 @@ const submitPackagesLink = (props) => {
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                     onChange={
-                      (e) => {
-                          setExtraGuestCharges({ ...extraGuestCharges, max_age: e.target.value })
-                         e.target.value === 'FullPatternLOS' ? keys.push(index): "";
-                        }
-                  }>
-                     <option selected>Select </option>
-                    <option value="SetMaxLOS">Max LOS</option>
-                    <option value="SetMinLOS">Min LOS</option>
-                    <option value="SetForwardMaxStay">Forward Max Stay</option>
-                    <option value="SetForwardMinStay">Forward Min Stay</option>
-                    <option value="FullPatternLOS">Full Pattern LOS</option>
-                   </select>
+                        <input
+                          type="number" min={1}
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={e => onChange(e, LOSData?.index, 'max_age')}
+                        />
                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
+                      {error?.max_age}</p>
                        </div>
                     </div>
                   </div>
@@ -349,17 +414,15 @@ const submitPackagesLink = (props) => {
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setExtraGuestCharges({ ...extraGuestCharges,exclude_from_capacity: e.target.value })
-                            )
-                          }
-                        />
+                      <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                     onChange={e => onChange(e, LOSData?.index, 'exclude_from_capacity')}>
+                     <option selected>{language?.select}</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                   
+                   </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                      {error?.exclude_from_capacity}</p>
                       </div>
                     </div>
                   </div>
@@ -371,17 +434,17 @@ const submitPackagesLink = (props) => {
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setExtraGuestCharges({ ...extraGuestCharges,charge_type: e.target.value })
-                            )
-                          }
-                        />
+                      <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                     onChange={(e) => {onChange(e, LOSData?.index, 'charge_type')
+                     e.target.value !== 'flat' ? keys.push(index): ""}}>
+                     <option selected>{language?.select}</option>
+                    <option value="flat">Flat</option>
+                    <option value="discount">Discount</option>
+                    <option value="percentage">Percentage</option>
+                   
+                   </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                      {error?.charge_type}</p>
                       </div>
                     </div>
                   </div>
@@ -396,43 +459,40 @@ const submitPackagesLink = (props) => {
                       <input
                           type="text" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setExtraGuestCharges({ ...extraGuestCharges,checkin_enddate: e.target.value })
-                            )
-                          }
+                          onChange={e => onChange(e, LOSData?.index, 'amount')}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                      {error?.amount}</p>
                       </div>
                     </div>
                   </div>
+                  { keys.includes(index)?
+                 
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                     Count Base Component
+                     Count Base Component {JSON.stringify(LOSData)}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                             setExtraGuestCharges({ ...extraGuestCharges,count_as_base_component: e.target.value })
-                            )
-                          }
-                        />
+                      <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                     onChange={e => onChange(e, LOSData?.index, 'count_as_base_component')}>
+                     <option selected>{language?.select}</option>
+                    <option value="never">Never</option>
+                    <option value="preferred">Preferred</option>
+                    <option value="always">Always</option>
+                   
+                   </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                      {error?.count_as_base_component}</p>
                       </div>
                     </div>
-                  </div>
+                  </div>:<></>}
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Submit}  /> 
+                    <Button Primary={language?.Submit} onClick={submitExtraGuestCharges} /> 
                 
                   
                     </div>

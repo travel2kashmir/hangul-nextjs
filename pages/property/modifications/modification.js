@@ -20,7 +20,7 @@ import Headloader from '../../../components/loaders/headloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week =[];
+var days_of_week=['M','T','W','T','F','S','U'];
 var keys =[];
 var currentPackage;
 var i=0;
@@ -389,13 +389,13 @@ const validationAddmodificationDates = () => {
 }
 
 // Dates 
-const submitDates= (check_in) => {
+const submitDates= (type) => {
   const data =
    [{"modification_id":currentModification,
      "start_date": modification?.start_date,
      "end_date": modification?.end_date,
-     "days_of_week": days_of_week,
-     "type": check_in
+     "days_of_week": days_of_week.toString().replaceAll(',',''),
+     "type": type
    }]
  const final_data = { "property_modifications_rates": data }
 const url = '/api/ari/property_rate_modifications/property_rate_modifications_dates'
@@ -410,18 +410,19 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
          draggable: true,
          progress: undefined,
        });
-     days_of_week=[];
-    setView(0);
-    if(disp === 1){
-      checkInGen();
-    }
-    if(disp === 1){
-      checkOutGen();
-    }
-    if(disp === 3){
-      BookingGen();
-    }
-     })
+       alert("1")
+       const temp=[{
+        name: data[0]?.start_date,
+        type: data[0]?.end_date,
+        status: data[0]?.days_of_week,
+        id: response.data.date_id
+        }]
+      setGen( gen.concat(temp))
+      setError([])
+     document.getElementById('addmodificationform').reset();
+     setError([])
+     setView(0)
+    })
      .catch((error) => {
        toast.error("Dates error", {
          position: "top-center",
@@ -450,18 +451,7 @@ const submitmodificationDelete = (props) => {
          draggable: true,
          progress: undefined,
        });
-       fetchModification();
-       if(disp === 1){
-        checkInGen();
-        setDisp(1);
-        Router.push('./modification')
-       }
-       if(disp === 2){
-        checkOutGen();
-       }
-       if(disp === 3){
-        BookingGen();
-       }
+       setGen(gen.filter(i=>i.id!=props))
      })
      .catch((error) => {
        toast.error("API:Date Delete Error!", {
@@ -958,6 +948,8 @@ const submitDateEdit = (props,noChange,days_data) => {
                   <button
                     type="button"
                     onClick={() =>{
+                      setError([])
+                      document.getElementById('addmodificationform').reset();
                       setView(0);
                     } }
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -976,7 +968,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                     </svg>
                   </button>
                 </div>
-                  <form id='addcontactform'>
+                  <form id='addmodificationform'>
                 <div className="p-6 space-y-6" >
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">

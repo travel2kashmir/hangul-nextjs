@@ -1,5 +1,9 @@
 export default {
+  excludefromcapacity:"Exclude from Capacity",
+  chargetype:"Charge Type",
   extraguestcharge:"Extra Guest Charge",
+  countbasecomponent:"Count Base Component",
+  charges:"Charges",
   //Promotions
   promotions:"Promotions",
   available:"Available",

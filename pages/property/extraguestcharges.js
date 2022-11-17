@@ -100,23 +100,23 @@ function ExtraGuestCharges() {
   },[darkModeSwitcher])
 
     const addExtraGuest = () =>{
+        
         resCou = allPackages.filter(el => {
-            return allExtraGuestCharges?.find(element => {
-               return element.package_id !== el.package_id;
+            return !allExtraGuestCharges?.find(element => {
+               return el.package_id === element.package_id;
             });
          });
+      
          localStorage.setItem("packages",  JSON.stringify(resCou));
         
-           
-          
         Router.push("./extraguestcharges/addextraguestcharge")
       }
 
     /* Delete Package Function*/
     const deleteExtraGuests = (props) => {
-        const url = `/api/package/${props}`
+        const url = `/api/ari/extra_guest_charges/${props}`
         axios.delete(url).then((response) => {
-            toast.success(("Package Deleted Successfully!"), {
+            toast.success(("Extra guest charge Deleted Successfully!"), {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -126,10 +126,11 @@ function ExtraGuestCharges() {
                 progress: undefined,
             });
             fetchPackages();
-            Router.push("./packages");
+            fetchExtraGuestCharges();
+            Router.push("./extraguestcharges");
         })
             .catch((error) => {
-                toast.error(("Package Delete Error!"), {
+                toast.error(("Extra guest charges Delete Error!"), {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,

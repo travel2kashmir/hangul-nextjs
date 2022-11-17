@@ -118,12 +118,13 @@ useEffect(()=>{
          draggable: true,
          progress: undefined,
        });
-      submitPromotionLink();
-      setPromotionId(response?.data?.promotion_id)
-      devices(response.data.promotion_id)
-      countries(response.data.promotion_id)
-      packages(response.data.promotion_id)
+      
+      setPromotionId(response?.data?.promotion_id);
+      if(promotion?.devices!=undefined){devices(response.data.promotion_id)}
+      if(promotion?.country!=undefined){countries(response.data.promotion_id)}
+      packages(response.data.promotion_id);
       submitPromotionDiscount(response.data.promotion_id);
+      setDisp(1);
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -210,7 +211,7 @@ const submitPromotionDiscount = (props) => {
          draggable: true,
          progress: undefined,
        });
-      
+    
      })
      .catch((error) => {
        toast.error("Promotion discount error", {

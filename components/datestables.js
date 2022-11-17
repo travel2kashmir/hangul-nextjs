@@ -46,7 +46,7 @@ const DatesTable = (args) => {
 
     const displayData = useMemo(() => {
         const start = (page - 1) * itemsPerPage;
-        return args?.gen.slice(start, start + itemsPerPage);
+        return args?.gen?.slice(start, start + itemsPerPage);
     }, [page, args?.gen, itemsPerPage]);
 
     function ItemShow(event) {
@@ -385,7 +385,7 @@ const DatesTable = (args) => {
                                                           </td>}
                                                     </tr>
                                                 </>}
-                                        </>
+                                                 </>
                                     ))
                                     }
                                 </tbody>

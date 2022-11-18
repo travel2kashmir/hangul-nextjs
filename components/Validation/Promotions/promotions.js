@@ -132,7 +132,7 @@ const validatePromotions = (data) =>{
   if(data?.occupancy_min !== "" && data?.occupancy_min !== undefined ){
     if(data?.occupancy_max === "" || data?.occupancy_max === undefined) {
      flag.push(false);
-     error.occupancy_max="The inventory maximum is required."
+     error.occupancy_max="The occupancy maximum is required."
     }
 }
 if(data?.occupancy_max !== "" && data?.occupancy_max !== undefined ){
@@ -165,8 +165,6 @@ else{
 }
 }
 
- 
-  
     if(data?.country === undefined && (data?.country_type !== undefined || ""))
      {
          flag.push(false)

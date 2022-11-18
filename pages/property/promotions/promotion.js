@@ -92,8 +92,7 @@ useEffect(()=>{
 
 // Promotion Validation
  const validationPromotion = () => {
- 
-  var result = validatePromotionsEdit(promotion)
+ var result = validatePromotionsEdit(promotion)
      console.log("Result" +JSON.stringify(result))
      if(result===true)
      {
@@ -140,7 +139,7 @@ useEffect(()=>{
             if(pro?.free_nights === undefined){
               submitPromotionFreeNights()
             }
-            if(pro?.free_nights !==undefined){
+            if(pro?.free_nights !== undefined){
               submitPromotionFreeNightsEdit();
             }
            }
@@ -270,7 +269,6 @@ const packages = () => {
       package_id: item?.package_id
     }
     final_package_data.push(temp) } );
-    
     submitPackages(final_package_data)
     
 }
@@ -404,7 +402,7 @@ const submitPromotionFreeNightsEdit = () => {
      "stay_nights":freeNights?.stay_nights,
      "discount_nights":freeNights?.discount_nights,
      "discount_percentage":freeNights?.discount_percentage,
-     "night_selection":freeNights?.free_night_selection,
+     "night_selection":freeNights?.night_selection,
      "repeat":freeNights?.repeat,
    }]
  }
@@ -441,13 +439,11 @@ const submitPromotionFreeNights = () => {
      "stay_nights":freeNights?.stay_nights,
      "discount_nights":freeNights?.discount_nights,
      "discount_percentage":freeNights?.discount_percentage,
-     "night_selection":freeNights?.free_night_selection,
+     "night_selection":freeNights?.night_selection,
      "repeat":freeNights?.repeat,
    }]
  }
- 
   const url = '/api/ari/promotions/property_promotion_free_nights'
-  
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("Promotion success", {
@@ -861,6 +857,7 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                        {language?.promotion} {language?.name}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -884,6 +881,7 @@ useEffect(()=>{
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.stackingtype}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -917,6 +915,7 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                         {language?.discount} {language?.type}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -943,6 +942,7 @@ useEffect(()=>{
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.discount} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -968,6 +968,7 @@ useEffect(()=>{
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.appliednights} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1094,6 +1095,7 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                        {language?.minamountbeforediscount} 
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1200,6 +1202,7 @@ useEffect(()=>{
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.packages}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1304,11 +1307,7 @@ useEffect(()=>{
                   </div>
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{
-                     
-                     setDisp(1)
-                    }}/>
-                  <Button Primary={language?.Update} onClick={()=>{
+                 <Button Primary={language?.Update} onClick={()=>{
                     if(mainPromotion === 1 || pkg===1) {
                       validationPromotion();
                     }
@@ -1322,16 +1321,17 @@ useEffect(()=>{
                       devices();
                     }
                     }}/>
-                 
+                   <Button Primary={language?.Next} onClick={()=>{
+                    setDisp(1)
+                    }}/>
                 </div>
-                
-                  </div>
+                </div>
                   </div>
            </div>
             </div>
             </div>
 
-           {/* Discount */}
+           {/* Free Nights */}
            <div id='1' className={disp===1?'block':'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -1375,6 +1375,7 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                          {language?.freestaynights} 
+                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1401,6 +1402,7 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                        {language?.freediscountnights}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1427,6 +1429,7 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                        {language?.freenightsdiscountpercentage}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1436,12 +1439,12 @@ useEffect(()=>{
                            defaultValue={freeNights?.discount_percentage}
                           onChange={
                             (e) => (
-                              setPromotion({ ...promotion, discount_percentage: e.target.value },setDis(1))
+                              setFreeNights({ ...freeNights, discount_percentage: e.target.value },setDis(1))
                             )
                           }
                         />
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.discount_percentage}</p>
                       </div>
                     </div>
                   </div>
@@ -1453,13 +1456,14 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                       {language?.freenightselection}
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
-                         setPromotion({ ...promotion, free_night_selection: e.target.value },setDis(1))
+                         setFreeNights({ ...freeNights, night_selection: e.target.value },setDis(1))
                       )}>
                      <option selected >
                      {pro?.free_nights !== undefined ?
@@ -1471,10 +1475,11 @@ useEffect(()=>{
                   
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.night_selection}</p>
                       </div>
                     </div>
                   </div>
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1482,6 +1487,7 @@ useEffect(()=>{
                         htmlFor="grid-password"
                       >
                        {language?.freenightsrepeat}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1501,7 +1507,7 @@ useEffect(()=>{
                   
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                      {error?.repeat}</p>
                       </div>
                     </div>
                   </div>
@@ -1511,6 +1517,7 @@ useEffect(()=>{
                       
                     </div>
                   </div>
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-4">
                       
@@ -1519,14 +1526,18 @@ useEffect(()=>{
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Skip} onClick={()=>{
-                      checkInGen()
-                      }} /> 
+                  <Button Primary={language?.Previous} onClick={()=>{
+                      setDisp(0);
+                      }} />
                       <Button Primary={language?.Update} onClick={()=>{
                       validationFreeNights();
-                      
                       checkInGen()
                       }} /> 
+                      <Button Primary={language?.Next} onClick={()=>{
+                        setDisp(2)
+                        checkInGen()
+                      }} />
+                      
                 </div>
                 
                   </div>
@@ -1566,6 +1577,7 @@ useEffect(()=>{
           <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
         name={language?.checkin} delete={submitPromotionDelete}  edit={submitDateEdit} add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+            <Button Primary={language?.Previous} onClick={()=>{setDisp(1);}} /> 
                     <Button Primary={language?.Next} onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
             </div>
@@ -1600,9 +1612,10 @@ useEffect(()=>{
         </div>
 
        {/* Card CheckOut Table */}
-       <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
+       <DatesTable gen={gen} setGen={setGen} color={color}  edit={submitDateEdit} common={language?.common} cols={language?.CheckInCols}
          add={()=> setView(1)} delete={submitPromotionDelete} name={language?.checkout}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+            <Button Primary={language?.Previous}  onClick={()=>{setDisp(3);checkInGen()}} /> 
                     <Button Primary={language?.Next}  edit={submitDateEdit} onClick={()=>{setDisp(4);BookingGen()}} /> 
                 </div>
           </div>
@@ -1633,10 +1646,10 @@ useEffect(()=>{
            
         </div>
        {/* Card Booking Table */}
-       <DatesTable gen={gen} setGen={setGen} delete={submitPromotionDelete} color={color}  common={language?.common} cols={language?.CheckInCols}
+       <DatesTable gen={gen} setGen={setGen} delete={submitPromotionDelete}  edit={submitDateEdit} color={color}  common={language?.common} cols={language?.CheckInCols}
         name={language?.booking}  add={()=> setView(1)}/> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Submit}  edit={submitDateEdit} onClick={()=>{setDisp(4);BookingGen()}} /> 
+                    <Button Primary={language?.Previous}  onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
             </div> 
        
@@ -1646,7 +1659,7 @@ useEffect(()=>{
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
               <div className={`bg-white rounded-lg shadow relative`}>
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
-                  <h3 className="text-xl font-semibold">{language?.add} {language?.new}
+                  <h3 className="text-xl font-semibold">{language?.add} {language?.new} {" "}
                   {disp===2 ?  language?.checkin : disp===3 ?  language?.checkout : language?.booking}</h3>
                   <button
                     type="button"

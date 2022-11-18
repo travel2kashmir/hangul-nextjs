@@ -310,6 +310,10 @@ Cancel:"Cancel"
  col1 : "Name",
   
 },
+"AvailabilityCols":{
+  name:"Property Availability",
+ col1 : "Name",
+},
 "MilesCols":{
   name:"Package Miles",
  col1 : "Number of Miles",

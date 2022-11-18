@@ -316,8 +316,13 @@ Cancel:"Cancel"
 },
 "AvailabilityCols":{
   name:"Property Availability",
- col1 : "Name",
+ col1 : "Name"
 },
+"InvCols":{
+  name:"Inventory",
+ col1 : "Name"
+},
+
 "MilesCols":{
   name:"Package Miles",
  col1 : "Number of Miles",

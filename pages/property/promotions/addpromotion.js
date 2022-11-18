@@ -490,9 +490,7 @@ const submitDates= (check_in) => {
   setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
 } 
 
-  const addLOS = () => {
-    setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
-  }
+ 
 
 const filterByCountry = () => {
   if(  promotion?.countries != undefined) {

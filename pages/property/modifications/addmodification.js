@@ -185,7 +185,6 @@ const packages = (props) => {
 // Packages
 const submitPackages = (props) => {
     const final_data =  {"property_rate_modification_packages": props }
-    alert(JSON.stringify(final_data));
      const url = '/api/ari/property_rate_modifications/property_rate_modifications_packages'
      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
        ((response) => {

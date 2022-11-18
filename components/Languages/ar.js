@@ -1,4 +1,9 @@
 export default {
+  excludefromcapacity:"استثناء من السعة",
+  chargetype:"نوع التهمة",
+  extraguestcharge:"رسوم ضيف إضافية",
+  countbasecomponent:"عد مكون القاعدة",
+  charges:"شحنة",
   extraguestcharge:"رسوم ضيف إضافية",
   name:"اسم",
  //Promotions

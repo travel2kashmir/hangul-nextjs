@@ -16,10 +16,18 @@ import Router from "next/router";
 var language;
 var currentProperty;
 var currentLogged;
+var resCou =[];
 const logger = require("../../services/logger");
 
 function ExtraGuestCharges() {
     const [visible,setVisible]=useState(0) 
+    const [gen, setGen] = useState([])
+    const [darkModeSwitcher,setDarkModeSwitcher] = useState()
+    const [color, setColor] = useState({})
+    const [deleteExtraGuest, setDeleteExtraGuest] = useState(0)
+    const [actionExtraGuest, setActionExtraGuest] = useState({});
+    const [allExtraGuestCharges, setAllExtraGuestCharges] = useState([])
+    const [allPackages, setAllPackages] = useState([])
     
     useEffect(() => {
         const firstfun = () => {
@@ -44,15 +52,11 @@ function ExtraGuestCharges() {
     }, [])
     useEffect(() => {
         fetchExtraGuestCharges();
+        fetchPackages();
     }
  , [])
 
-    const [gen, setGen] = useState([])
-    const [darkModeSwitcher,setDarkModeSwitcher] = useState()
-    const [color, setColor] = useState({})
-    const [deleteExtraGuest, setDeleteExtraGuest] = useState(0)
-    const [actionExtraGuest, setActionExtraGuest] = useState({});
-    const [allExtraGuestCharges, setAllExtraGuestCharges] = useState([])
+  
 
 
     const fetchExtraGuestCharges = async () => {
@@ -81,21 +85,38 @@ function ExtraGuestCharges() {
             })
             .catch((error) => { logger.error("url to fetch extra charge  details, failed") });
     }
+
+    const fetchPackages = async () => {
+        var genData = [];
+        const url = `/api/package/${currentProperty?.property_id}`;
+        axios.get(url)
+            .then((response) => {
+               setAllPackages(response.data);
+            })
+            .catch((error) => { logger.error("url to fetch property details, failed") });
+    }
     useEffect(()=>{ 
         setColor(DarkModeLogic(darkModeSwitcher))
   },[darkModeSwitcher])
 
     const addExtraGuest = () =>{
+        
+        resCou = allPackages.filter(el => {
+            return !allExtraGuestCharges?.find(element => {
+               return el.package_id === element.package_id;
+            });
+         });
+      
+         localStorage.setItem("packages",  JSON.stringify(resCou));
+        
         Router.push("./extraguestcharges/addextraguestcharge")
       }
 
-
- 
     /* Delete Package Function*/
     const deleteExtraGuests = (props) => {
-        const url = `/api/package/${props}`
+        const url = `/api/ari/extra_guest_charges/${props}`
         axios.delete(url).then((response) => {
-            toast.success(("Package Deleted Successfully!"), {
+            toast.success(("Extra guest charge Deleted Successfully!"), {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -105,10 +126,11 @@ function ExtraGuestCharges() {
                 progress: undefined,
             });
             fetchPackages();
-            Router.push("./packages");
+            fetchExtraGuestCharges();
+            Router.push("./extraguestcharges");
         })
             .catch((error) => {
-                toast.error(("Package Delete Error!"), {
+                toast.error(("Extra guest charges Delete Error!"), {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -125,6 +147,7 @@ function ExtraGuestCharges() {
         localStorage.setItem("packageId", props?.package_id);
         Router.push("./extraguestcharges/extraguestcharge")
     };
+
   return (
     <>
      <Header Primary={english?.Side}  color={color} />

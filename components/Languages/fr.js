@@ -1,4 +1,9 @@
 export default {
+  excludefromcapacity:"Exclure de la capacité",
+  chargetype:"Type de frais",
+  extraguestcharge:"Frais d'invité supplémentaire",
+  countbasecomponent:"Compter le composant de base",
+  charges:"Des charges",
   extraguestcharge:"Frais d'invité supplémentaire",
   promotions:"Promotions",
   name:"Nom",

@@ -151,8 +151,11 @@ export default {
   },
   "ModificationCols":{
     name:"Modifications tarifaires",
+   col1 : "Nom"
+  },
+  "AvailabilityCols":{
+    name:"Disponibilité de la propriété",
    col1 : "Nom",
-    
   },
   "ExtraGuestCols":{
     name:"Frais supplémentaires pour les invités",

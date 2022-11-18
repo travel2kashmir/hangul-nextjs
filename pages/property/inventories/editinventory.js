@@ -23,6 +23,7 @@ var language;
 var currentProperty;
 var currentRoom;
 var currentLogged;
+var currentRoomName;
 var days_of_week=['M','T','W','T','F','S','U'];
 const logger = require("../../../services/logger");
 
@@ -33,46 +34,16 @@ function Inventory() {
     const [visible, setVisible] = useState(0);
     const [error, setError] = useState({})
     const [color, setColor] = useState({})
-    const [allRooms,setAllRooms]=useState([])
-   
-
-//fetch rooms with inventory
-    const fetchInventoryRooms = async () => {
-      const url = `/api/ari/inventory/${currentProperty?.property_id}`;
-      axios.get(url)
-          .then((response) => {
-         fetchRooms(response.data);    
-          })
-          .catch((error) => { logger.error("url to fetch property details, failed") });
-  }
-
-  //fetch all rooms and filter rooms without inv  
-  const fetchRooms = async (args) => {
-   
-     const url = `/api/rooms/${currentProperty?.property_id}`;
-      axios.get(url)
-          .then((response) => {
-            var result = response?.data.filter(el => {
-              return !args?.find(element => {
-                 return el.room_id === element.room_id;
-              });
-           });
-           
-          setAllRooms(result);
-          if(result.length===0){
-            toast.warn("Inventory for all rooms registered ", {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-          })
-          .catch((error) => { logger.error("url to fetch property details, failed") });
-  }
+    const [room,setRoom]=useState([])
+    const fetchInventoryRoom = async () => {
+        const url = `/api/ari/inventory/${currentProperty?.property_id}/${currentRoom}`;
+        axios.get(url)
+            .then((response) => {
+                    setRoom(response.data)
+        
+            })
+            .catch((error) => { logger.error("url to fetch property details, failed") });
+    }
   
     useEffect(() => {
         const firstfun = () => {
@@ -95,13 +66,13 @@ function Inventory() {
                 currentProperty = JSON.parse(localStorage.getItem('property'))
                 currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 currentRoom = localStorage.getItem('RoomId');
-                fetchInventoryRooms()
-                
+                currentRoomName = localStorage.getItem('RoomName');
+                fetchInventoryRoom();
                 setVisible(1);
             }
         }
         firstfun();
-        Router.push("./inventory");
+        Router.push("./editinventory");
     }, [])
      
    
@@ -118,15 +89,15 @@ function Inventory() {
        "start_date":inventory?.start_date,
        "end_date": inventory?.end_date,
        "days_of_week":days_of_week.toString().replaceAll(',',''),
-       "room_id":inventory?.room_id,
+       "room_id":currentRoom,
        "inventory_count":inventory?.inventory_count,
        "inventory_type": 2
      }]
    }
    const url = '/api/ari/inventory'
-     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
        ((response) => {
-        toast.success("Inventory success", {
+        toast.success("API: Inventory Updated successfully", {
            position: "top-center",
            autoClose: 5000,
            hideProgressBar: false,
@@ -135,10 +106,10 @@ function Inventory() {
            draggable: true,
            progress: undefined,
          });
-       Router.push('../inventories')
+       
        })
        .catch((error) => {
-         toast.error("Inventory  error", {
+         toast.error("API: Inventory Update error", {
            position: "top-center",
            autoClose: 5000,
            hideProgressBar: false,
@@ -186,16 +157,17 @@ const days = (days) => {
   }
   // Validate Inventory
 const validationInventory = () => {
-    var result = validateInventory(inventory,days_of_week)
-       console.log("Result" +JSON.stringify(result))
-       if(result===true)
-       {
-        submitInventory();
-       }
-       else
-       {
-        setError(result)
-       }
+    // var result = validateInventory(inventory,days_of_week)
+    //    console.log("Result" +JSON.stringify(result))
+    //    if(result===true)
+    //    {
+    //     submitInventory();
+    //    }
+    //    else
+    //    {
+    //     setError(result)
+    //    }
+    submitInventory();
       }
   return (
     <>
@@ -249,7 +221,7 @@ const validationInventory = () => {
           </nav>
          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-            {language?.inventory}
+            {language?.inventory} {currentRoomName}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
@@ -267,6 +239,7 @@ const validationInventory = () => {
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="date"
+                          defaultValue={room[0]?.start_date}
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -288,6 +261,7 @@ const validationInventory = () => {
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="date"
+                          defaultValue={room[0]?.end_date}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -332,6 +306,7 @@ const validationInventory = () => {
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
                           type="number" min={1}
+                          defaultValue={room[0]?.inventory_count}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -346,32 +321,8 @@ const validationInventory = () => {
                   </div>
                  
                   <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                       {language?.rooms}  
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select
-                    onClick={(e) => (
-                      setInventory({ ...inventory, room_id: e.target.value })
-                  )
-                    }
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  >
-                     <option selected>Select rooms</option>
-                    {allRooms?.map((i) => {
-                      return (
-                        <option key={i} value={i.room_id}>
-                          {i.room_name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.inventory_count}</p>
-                      </div>
+                    <div className="relative w-full mb-24">
+                      
                     </div>
                   </div>
                   

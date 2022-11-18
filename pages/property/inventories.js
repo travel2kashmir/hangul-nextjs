@@ -184,7 +184,7 @@ function Inventories() {
                     color={color} edit={currentRoom}
                     add={() => Router.push('./inventories/inventory')}
                     delete={submitInventoryDelete}
-                    common={language?.common} cols={language?.AvailabilityCols}
+                    common={language?.common} cols={language?.InvCols}
                     name="Packages"
                 />
 

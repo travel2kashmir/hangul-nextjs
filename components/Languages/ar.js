@@ -114,6 +114,11 @@ export default {
     name:"تعديلات معدل",
    col1 : "اسم"
   },
+  "InvCols":{
+    name:"جرد",
+    col1 : "اسم"
+  },
+  
   "AvailabilityCols":{
     name:"توفر الملكية",
    col1 : "اسم",

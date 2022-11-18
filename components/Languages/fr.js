@@ -149,6 +149,11 @@ export default {
    col1 : "Nom",
     
   },
+  "InvCols":{
+    name:"Inventaire",
+   col1 : "Nom"
+  },
+  
   "ModificationCols":{
     name:"Modifications tarifaires",
    col1 : "Nom"

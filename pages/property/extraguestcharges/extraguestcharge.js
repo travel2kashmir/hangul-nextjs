@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import validateEditExtraChildGuest from '../../../components/Validation/ExtraGuestCharges/editextraguestchild';
+import LoaderTable from '../loaderTable'
 import validateExtraGuestEdit from '../../../components/Validation/ExtraGuestCharges/editextraguest';
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
@@ -35,6 +37,7 @@ function ExtraGuestCharge() {
   const [viewEdit, setViewEdit] = useState(0);
   const [extraGuestCharges, setExtraGuestCharges] = useState([])
   const [extraGuestChild, setExtraGuestChild] = useState([])
+  const [extraChild, setExtraChild] = useState([])
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [error, setError] = useState({})
@@ -73,66 +76,72 @@ function ExtraGuestCharge() {
 
 
   useEffect(() => {
-    const fetchExtraGuestCharge = async () => {
-      var genData = [];
-      try {
-        const url = `/api/ari/extra_guest_charges/${currentProperty?.property_id}/${currentExtraGuest}`
-        const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
-        setExtraGuestCharges(response.data)
+    fetchExtraGuestCharge();
+  }, [])
 
-        {
-          response.data?.children_charges?.map((item) => {
-            if((item?.amount !== undefined) || (item?.amount !== "")){
+  const fetchExtraGuestCharge = async () => {
+    var genData = [];
+    try {
+      const url = `/api/ari/extra_guest_charges/${currentProperty?.property_id}/${currentExtraGuest}`
+      const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
+      setExtraGuestCharges(response.data)
+      {
+        response.data?.children_charges?.map((item) => {
+          if(item?.amount !== null){
+          var temp = {
+            name: item.max_age,
+            max_age: item.max_age,
+            id: item.child_age_id,
+            charge_type: "flat",
+            amount: item?.amount,
+            exclude_from_capacity:item?.exclude_from_capacity,
+            status: item?.exclude_from_capacity,
+          } 
+
+          }
+          if( item?.discount_amount !== null){
             var temp = {
               name: item.max_age,
-              id: item.extra_guest_id,
-              charge_type: "flat",
-              amount: item?.amount,
+              max_age: item.max_age,
+              id: item.child_age_id,
+              charge_type: "discount",
+              amount: item?.discount_amount,
+              count_as_base_occupant:item?.count_as_base_occupant,
+              exclude_from_capacity:item?.exclude_from_capacity,
               status: item?.exclude_from_capacity,
             } 
 
             }
-            if((item?.discount_amount !== undefined) || (item?.discount_amount !== "")){
+            if((item?.percentage !== null)){
               var temp = {
                 name: item.max_age,
-                id: item.extra_guest_id,
-                charge_type: "discount",
-                amount: item?.discount_amount,
+                max_age: item.max_age,
+                id: item.child_age_id,
+                charge_type: "percentage",
+                amount: item?.percentage,
                 count_as_base_occupant:item?.count_as_base_occupant,
                 status: item?.exclude_from_capacity,
+                exclude_from_capacity:item?.exclude_from_capacity
               } 
   
               }
-              if((item?.percentage !== undefined) || (item?.percentage !== "")){
-                var temp = {
-                  name: item.max_age,
-                  id: item.extra_guest_id,
-                  charge_type: "percentage",
-                  amount: item?.percentage,
-                  count_as_base_occupant:item?.count_as_base_occupant,
-                  status: item?.exclude_from_capacity,
-                } 
-    
-                }
-            genData.push(temp)
-          })
-          setGen(genData);
-          setVisible(1);
+          genData.push(temp)
+        })
+        setGen(genData);
+       
+        setExtraChild(gen)
+        setVisible(1);
 
-        }
       }
-      catch (error) {
-        if (error.response) {
-        }
-        else {
-        }
+    }
+    catch (error) {
+      if (error.response) {
       }
-
+      else {
+      }
     }
 
-
-    fetchExtraGuestCharge();
-  }, [])
+  }
 
   const submitAdultCharges = () => {
     const final_data =
@@ -143,7 +152,6 @@ function ExtraGuestCharge() {
         "status": extraGuestCharges?.status,
       }]
     }
-    alert(JSON.stringify(final_data))
     const url = '/api/ari/extra_guest_charges'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -189,7 +197,7 @@ function ExtraGuestCharge() {
 
   /* Delete Package Function*/
   const deleteChildGuests = (props) => {
-    const url = `/api/ari/extra_guest_charges/${props}`
+    const url = `/api/ari/extra_guest_charges/extra_guest_child_link/${props}`
     axios.delete(url).then((response) => {
       toast.success(("Extra guest charge Deleted Successfully!"), {
         position: "top-center",
@@ -200,9 +208,9 @@ function ExtraGuestCharge() {
         draggable: true,
         progress: undefined,
       });
-      fetchPackages();
-      fetchExtraGuestCharges();
-      Router.push("./extraguestcharges");
+      fetchExtraGuestCharge();
+      setGen(gen.filter(i=>i.id!=props))
+     
     })
       .catch((error) => {
         toast.error(("Extra guest charges Delete Error!"), {
@@ -219,9 +227,9 @@ function ExtraGuestCharge() {
 
   /**Function to save Current property to be viewed to Local Storage**/
   const currentChildGuest = (props) => {
-    alert(JSON.stringify(props))
-    setExtraGuestChild(props)
     setViewEdit(1);
+    setExtraChild(props)
+   
   };
 
   // Add Extra Guest Child
@@ -259,7 +267,7 @@ function ExtraGuestCharge() {
     const url = '/api/ari/extra_guest_charges/extra_guest_child_link'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Extra guest child link success", {
+        toast.success("API: Extra guest child add success", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -269,10 +277,13 @@ function ExtraGuestCharge() {
           progress: undefined,
         });
         setView(0);
+        setError({})
         setExtraGuestChild([]);
+        document.getElementById('addExtraChildGuestform').reset();
+        fetchExtraGuestCharge();
       })
       .catch((error) => {
-        toast.error("Extra guest child link error", {
+        toast.error("Extra guest child add error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -283,10 +294,103 @@ function ExtraGuestCharge() {
         });
       })
   }
+
+  // Add Extra Guest Child
+  const submitExtraGuestChildEdit = () => {
+    let data = [];
+    alert(extraChild.charge_type)
+    if (extraChild.charge_type === 'flat') {
+      data = {
+        "child_age_id": extraChild?.id,
+        "max_age": extraChild?.max_age,
+        "amount": extraChild?.amount,
+        "exclude_from_capacity": extraChild?.exclude_from_capacity
+
+      }
+    }
+    else if (extraChild.charge_type === 'discount') {
+      data = {
+        "child_age_id": extraChild?.id,
+        "max_age": extraChild?.max_age,
+        "discount_amount": extraChild?.amount,
+        "exclude_from_capacity": extraChild?.exclude_from_capacity,
+        "count_as_base_occupant": extraChild?.count_as_base_occupant
+      }
+
+    }
+    else if (extraChild.charge_type === 'percentage') {
+      data = {
+        "child_age_id": extraChild?.id,
+        "max_age": extraChild?.max_age,
+        "percentage": extraChild?.amount,
+        "exclude_from_capacity": extraChild?.exclude_from_capacity,
+        "count_as_base_occupant": extraChild?.count_as_base_occupant
+      }
+    }
+    const final_data = { "extra_guest_child_link": [data] }
+    alert(JSON.stringify(final_data))
+    const url = '/api/ari/extra_guest_charges/extra_guest_child_link'
+    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("API: Extra guest child update success", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setViewEdit(0);
+        setExtraChild([]);
+        setError({})
+        document.getElementById('editExtraChildGuestform').reset();
+        fetchExtraGuestCharge();
+      })
+      .catch((error) => {
+        toast.error("API: Extra guest child link error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
+// Add Validation Extra Guest Child
+  const validationExtraChildGuest = () => {
+    var result = validateEditExtraChildGuest(extraGuestChild)
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+       
+        submitExtraGuestChildAdd();
+       }
+       else
+       {
+        setError(result)
+       }
+}
+// Edit Extra Guest Child
+const validationEditExtraChildGuest = () => {
+  var result = validateEditExtraChildGuest(extraChild)
+  alert(result)
+     console.log("Result" +JSON.stringify(result))
+     if(result===true)
+     {
+     
+      submitExtraGuestChildEdit();
+     }
+     else
+     {
+      setError(result)
+     }
+}
   return (
     <>
       <Header color={color} Primary={english.Side1} />
-
       <Sidebar color={color} Primary={english.Side1} />
       <div id="main-content"
         className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
@@ -435,9 +539,9 @@ function ExtraGuestCharge() {
                 <div className={`${color?.widget} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.childguestcharge}</div>
               </div>
             </div>
-            <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-               {language?.childguestcharge}
-            </h6>
+           
+            <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
             <Table
               gen={gen}
               setGen={setGen}
@@ -446,23 +550,26 @@ function ExtraGuestCharge() {
               delete={deleteChildGuests}
               common={language?.common}
               color={color}
-              cols={language?.ExtraGuestCols}
-              name="Packages" />
+              cols={language?.ExtraChildGuestCols}
+              name="Packages"
+              mark="ExtraChild" />
+         </div>
           </div>
         </div>
+ </div>
 
-      </div>
       {/* Modal Add */}
       <div className={view === 1 ? "block" : "hidden"}>
         <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
           <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
             <div className={`bg-white rounded-lg shadow relative`}>
               <div className="flex items-start justify-between p-5 border-b rounded-t">
-                <h3 className="text-xl font-semibold">{language?.add} {language?.extrachildguest}</h3>
+                <h3 className="text-xl font-semibold">{language?.addchildguestcharges}</h3>
                 <button
                   type="button"
                   onClick={() => {
-                    document.getElementById('addcontactform').reset();
+                    document.getElementById('addExtraChildGuestform').reset();
+                    setError({});
                     setView(0);
                   }}
                   className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -481,7 +588,7 @@ function ExtraGuestCharge() {
                   </svg>
                 </button>
               </div>
-              <form id='addcontactform'>
+              <form id='addExtraChildGuestform'>
                 <div className="p-6 space-y-6" >
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
@@ -490,6 +597,7 @@ function ExtraGuestCharge() {
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.child}  {language?.age}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input
                         type="number" min={1}
@@ -509,6 +617,7 @@ function ExtraGuestCharge() {
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.excludefromcapacity}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={
@@ -531,6 +640,7 @@ function ExtraGuestCharge() {
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.chargetype}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={
@@ -552,7 +662,8 @@ function ExtraGuestCharge() {
                         htmlFor="last-name"
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
-                        {language?.charges} {JSON.stringify(extraGuestChild)}
+                        {language?.charges} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input
                         type="text"
@@ -573,17 +684,22 @@ function ExtraGuestCharge() {
                           htmlFor="last-name"
                           className={`text-sm font-medium text-gray-900 block mb-2`}
                         >
-                          {language?.countbasecomponent}
+                          {language?.countbaseoccupant}
+                          <span style={{ color: "#ff0000" }}>*</span>
                         </label>
-                        <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-
-                          onChange={
-                            (e) => (
-                              setExtraGuestChild({ ...extraGuestChild, count_as_base_occupant: e.target.value }, setFlag(1))
-                            )
-                          } />
+                        <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                     onChange={
+                      (e) => (
+                        setExtraGuestChild({ ...extraGuestChild, count_as_base_occupant: e.target.value }, setFlag(1))
+                      )
+                    } >
+                     <option disabled selected>{language?.select}</option>
+                    <option value="never">Never</option>
+                    <option value="preferred">Preferred</option>
+                    <option value="always">Always</option>
+                   
+                   </select>
+                       
                         <p className="text-sm text-sm text-red-700 font-light">
                           {error?.count_as_base_occupant}</p>
 
@@ -593,7 +709,7 @@ function ExtraGuestCharge() {
               </form>
 
               <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                <Button Primary={language?.Add} onClick={submitExtraGuestChildAdd} />
+                <Button Primary={language?.Add} onClick={validationExtraChildGuest} />
 
 
               </div>
@@ -601,17 +717,21 @@ function ExtraGuestCharge() {
           </div>
         </div>
       </div>
+
       {/* Modal Edit */}
          <div className={viewEdit === 1 ? "block" : "hidden"}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
               <div className={`bg-white rounded-lg shadow relative`}>
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
-                  <h3 className="text-xl font-semibold">{language?.Edit} {language?.new} {language?.extrachildcharge}</h3>
+                  <h3 className="text-xl font-semibold">{language?.editchildguestcharges}</h3>
                   <button
                     type="button"
                     onClick={() =>{
-                      setViewEdit(0)
+                      setError({});
+                      document.getElementById('editExtraChildGuestform').reset();
+                      setViewEdit(0);
+                     
                     } }
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
                   >
@@ -629,7 +749,7 @@ function ExtraGuestCharge() {
                     </svg>
                   </button>
                 </div>
-                  <form id='addcontactform'>
+                  <form id='editExtraChildGuestform'>
                   <div className="p-6 space-y-6" >
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
@@ -638,14 +758,15 @@ function ExtraGuestCharge() {
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.child}  {language?.age}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input
                         type="number" min={1}
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                        defaultValue={extraGuestChild?.max_age}
+                        defaultValue={extraChild?.max_age}
                         onChange={
                           (e) => (
-                            setExtraGuestChild({ ...extraGuestChild, max_age: e.target.value }, setFlag(1))
+                            setExtraChild({ ...extraChild, max_age: e.target.value }, setFlag(1))
                           )
                         }
                       />
@@ -658,102 +779,80 @@ function ExtraGuestCharge() {
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.excludefromcapacity}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={
                           (e) => (
-                            setExtraGuestChild({ ...extraGuestChild, exclude_from_capacity: e.target.value }, setFlag(1))
+                            setExtraChild({ ...extraChild, exclude_from_capacity: e.target.value }, setFlag(1))
                           )
                         } >
-                        <option selected disabled> {extraGuestChild?.exclude_from_capacity}</option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option selected disabled> {JSON.stringify(extraChild?.exclude_from_capacity) === "true"? "Yes" : "No"}</option>
+                        <option value={true}>Yes</option>
+                        <option value={false}>No</option>
 
                       </select>
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.exclude_from_capacity}</p>
                     </div>
 
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="first-name"
-                        className={`text-sm font-medium text-gray-900 block mb-2`}
-                      >
-                        {language?.chargetype}
-                      </label>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                        onChange={
-                          (e) => (
-                            setExtraGuestChild({ ...extraGuestChild, charge_type: e.target.value }, setFlag(1))
-                          )
-                        }
-                      >
-                        <option selected disabled >{language?.select}</option>
-                        <option value="amount">Flat</option>
-                        <option value="discount_amount">Discount</option>
-                        <option value="percentage">Percentage</option>
-                      </select>
-                      <p className="text-sm text-sm text-red-700 font-light">
-                        {error?.charge_type}</p>
-                    </div>
+                    
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         htmlFor="last-name"
-                        className={`text-sm font-medium text-gray-900 block mb-2`}
-                      >
-                        {language?.charges} {JSON.stringify(extraGuestChild)}
+                        className={`text-sm font-medium text-gray-900 block mb-2`}>
+                        {language?.charges}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input
                         type="text"
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                       
-                       defaultValue={extraGuestCharges?.amount}
+                         defaultValue={extraChild?.amount}
                         onChange={
                           (e) => (
-                            setExtraGuestChild({ ...extraGuestChild, amount: e.target.value }, setFlag(1))
+                            setExtraChild({ ...extraChild, amount: e.target.value }, setFlag(1))
                           )
                         }
                       />
                       <p className="text-sm text-sm text-red-700 font-light">
                         {error?.amount}</p>
-
-                    </div>
-                    {extraGuestChild?.charge_type !== "amount" ?
+                     </div>
+                    {extraChild?.charge_type !== "flat" ?
                       <div className="col-span-6 sm:col-span-3">
                         <label
                           htmlFor="last-name"
                           className={`text-sm font-medium text-gray-900 block mb-2`}
                         >
-                          {language?.countbasecomponent}
+                          {language?.countbaseoccupant}
+                          <span style={{ color: "#ff0000" }}>*</span>
                         </label>
-                        <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                             defaultValue={extraGuestChild?.count_as_base_occupant}
-                          onChange={
-                            (e) => (
-                              setExtraGuestChild({ ...extraGuestChild, count_as_base_occupant: e.target.value }, setFlag(1))
-                            )
-                          } />
+                        <select className={`shadow-sm ${color?.greybackground} ${color?.text} capitalize  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                      onChange={
+                        (e) => (
+                          setExtraChild({ ...extraChild, count_as_base_occupant: e.target.value }, setFlag(1))
+                        )
+                      } >
+                     <option disabled selected>{extraChild?.count_as_base_occupant}</option>
+                    <option value="never">Never</option>
+                    <option value="preferred">Preferred</option>
+                    <option value="always">Always</option>
+                   
+                   </select>
+                       
                         <p className="text-sm text-sm text-red-700 font-light">
                           {error?.count_as_base_occupant}</p>
-
-                      </div> : <></>}
+                     </div> : <></>}
                   </div>
                 </div>
                 </form>
-
-                <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                     
-                   
-                      <Button Primary={language?.Edit}  />
-                   
-                    
+             <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                    <Button Primary={language?.Update}  onClick={ validationEditExtraChildGuest}/>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}
@@ -769,3 +868,10 @@ function ExtraGuestCharge() {
 }
 
 export default ExtraGuestCharge
+ExtraGuestCharge.getLayout = function PageLayout(page){
+  return(
+    <>
+    {page}
+    </>
+  )
+  }

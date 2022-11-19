@@ -1,4 +1,6 @@
 export default {
+  editchildguestcharges:"تحرير رسوم ضيف الأطفال",
+  addchildguestcharges:"إضافة رسوم ضيف الأطفال",
   excludefromcapacity:"استثناء من السعة",
   chargetype:"نوع التهمة",
   extraguestcharge:"رسوم ضيف إضافية",

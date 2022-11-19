@@ -269,6 +269,7 @@ const validationExtraChildGuest = () => {
           setError(result)
          }
   }
+  
   return (
     <>
      <Header color={color} Primary={english.Side1} />
@@ -495,7 +496,7 @@ const validationExtraChildGuest = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                       {language?.countbasecomponent}
+                       {language?.countbaseoccupant}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>

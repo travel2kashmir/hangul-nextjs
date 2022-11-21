@@ -727,7 +727,12 @@ roomsxml:'./roomsxml',
 raterules:'./raterules',
 additionalservices:'./additionalservices',
 theme:'./theme',
-pointofsale:'./pointofsales'
+pointofsale:'./pointofsales',
+availability:'./availability',
+inventory:'./inventories',
+promotion:'./promotions',
+modification:'./modifications',
+extraguestcharge:'./extraguestcharges'
 },
 
 
@@ -749,7 +754,12 @@ roomsxml:'../roomsxml',
 raterules:'../raterules',
 additionalservices:'../additionalservices',
 theme:'../theme',
-pointofsale:'../pointofsales'
+pointofsale:'../pointofsales',
+availability:'../availability',
+inventory:'../inventories',
+promotion:'../promotions',
+modification:'../modifications',
+extraguestcharge:'../extraguestcharges'
  },
  
  "Side2":{
@@ -770,7 +780,12 @@ roomsxml:'../../roomsxml',
 raterules:'../../raterules',
 additionalservices:'../../additionalservices',
 theme:'../../theme',
-pointofsale:'../../pointofsales'
+pointofsale:'../../pointofsales',
+availability:'../../availability',
+inventory:'../../inventories',
+promotion:'../../promotions',
+modification:'../../modifications',
+extraguestcharge:'../../extraguestcharges'
  },
   descriptiondate: "Description Date",
   update:'Update',

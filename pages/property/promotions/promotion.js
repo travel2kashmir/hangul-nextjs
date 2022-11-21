@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import LoaderTable from '../loaderTable'
 import validateCountry from '../../../components/Validation/Promotions/editCountry';
 import validateFreeNights from '../../../components/Validation/Promotions/promotionfreenights';
 import validateDiscount from '../../../components/Validation/Promotions/editdiscount';
@@ -79,7 +80,7 @@ useEffect(() => {
       currentPackage = localStorage.getItem('PackageId');
       currentPromotion = localStorage.getItem('promotionId');
       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-      setVisible(1);
+     
  }
   }
   firstfun();
@@ -188,7 +189,7 @@ const submitPromotionDiscount = () => {
          progress: undefined,
        });
        setDiscount([]);
-      
+       setError({});
      })
      .catch((error) => {
        toast.error("Promotion discount error", {
@@ -245,7 +246,7 @@ const submitPromotion = () => {
          progress: undefined,
        });
         setMainPromotion([]);
-       
+       setError({})
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -395,8 +396,7 @@ const submitCountries = (props) => {
 
 //Promotion Free Nights
 const submitPromotionFreeNightsEdit = () => {
-  const final_data = 
- {"property_promotion_discount": [{
+  const data =  [{
   
      "free_nights_id": pro?.free_nights?.[i]?.free_nights_id,
      "stay_nights":freeNights?.stay_nights,
@@ -404,8 +404,9 @@ const submitPromotionFreeNightsEdit = () => {
      "discount_percentage":freeNights?.discount_percentage,
      "night_selection":freeNights?.night_selection,
      "repeat":freeNights?.repeat,
-   }]
- }
+   }];
+ 
+ const final_data = { "property_promotion_dates": data }
  const url = '/api/ari/promotions/property_promotion_free_nights'
    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -418,7 +419,7 @@ const submitPromotionFreeNightsEdit = () => {
          draggable: true,
          progress: undefined,
        });
-       setDisp(2);
+      setError({});
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -456,6 +457,7 @@ const submitPromotionFreeNights = () => {
          progress: undefined,
        });
        setDis([])
+       setError({})
       
      })
      .catch((error) => {
@@ -516,6 +518,7 @@ filterByCountry();
           });
        })); 
        setFreeNights(response.data.free_nights?.[i])   
+       setVisible(1);
     }
     catch (error) {
         if (error.response) {
@@ -639,7 +642,8 @@ const submitDates= (type) => {
         id: response.data.date_id
         }]
       setGen( gen.concat(temp))
-      setError([])
+      setError({});
+      days_of_week =['M','T','W','T','F','S','U'];
      document.getElementById('addPromotionDateForm').reset()
     setView(0);
     })
@@ -727,15 +731,14 @@ useEffect(()=>{
 },[gen])
  const submitDateEdit = (props,noChange,days_data) => {
  
-  const final_data ={ 
-    "property_rate_modification_dates":[{
+  const data = [{
    "date_id": props.id,
     "start_date": props.name,
    "end_date": props.type,
    "days_of_week":days_data
   }
-]};
-
+];
+const final_data = { "property_modifications_dates": data }
   const url = "/api/ari/promotions/property_promotion_dates";
   axios
     .put(url, final_data, { header: { "content-type": "application/json" } })
@@ -749,7 +752,14 @@ useEffect(()=>{
         draggable: true,
         progress: undefined,
       });
-      
+      const temp=[{
+        name: data[0]?.start_date,
+        type: data[0]?.end_date,
+        status: days_data,
+        id: data[0]?.date_id
+        }]
+       var filtered_data = gen.filter((i) => i.id != data[0]?.date_id)
+       setGen(filtered_data.concat(temp));  
     })
     .catch((error) => {
       toast.error("API: Dates Update Error!", {
@@ -1052,7 +1062,7 @@ useEffect(()=>{
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                             setPromotion({ ...promotion, inventory_min: e.target.value })
+                             setPromotion({ ...promotion, inventory_min: e.target.value },setMainPromotion(1))
                             )
                           }
                         />
@@ -1078,7 +1088,7 @@ useEffect(()=>{
                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                             setPromotion({ ...promotion, inventory_max: e.target.value })
+                             setPromotion({ ...promotion, inventory_max: e.target.value },setMainPromotion(1))
                             )
                           }
                         />
@@ -1529,9 +1539,9 @@ useEffect(()=>{
                   <Button Primary={language?.Previous} onClick={()=>{
                       setDisp(0);
                       }} />
-                      <Button Primary={language?.Update} onClick={()=>{
+                      <Button   Primary={pro?.free_nights === undefined ?language?.Submit : language?.Update}  onClick={()=>{
                       validationFreeNights();
-                      checkInGen()
+                     
                       }} /> 
                       <Button Primary={language?.Next} onClick={()=>{
                         setDisp(2)
@@ -1574,8 +1584,11 @@ useEffect(()=>{
            
         </div>
           {/* Card CheckIn Table */}
+          <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
           <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
         name={language?.checkin} delete={submitPromotionDelete}  edit={submitDateEdit} add={()=> setView(1)}/> 
+           </div>
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
             <Button Primary={language?.Previous} onClick={()=>{setDisp(1);}} /> 
                     <Button Primary={language?.Next} onClick={()=>{setDisp(3);checkOutGen()}} /> 
@@ -1612,8 +1625,10 @@ useEffect(()=>{
         </div>
 
        {/* Card CheckOut Table */}
+       <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
        <DatesTable gen={gen} setGen={setGen} color={color}  edit={submitDateEdit} common={language?.common} cols={language?.CheckInCols}
-         add={()=> setView(1)} delete={submitPromotionDelete} name={language?.checkout}/> 
+         add={()=> setView(1)} delete={submitPromotionDelete} name={language?.checkout}/> </div>
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
             <Button Primary={language?.Previous}  onClick={()=>{setDisp(3);checkInGen()}} /> 
                     <Button Primary={language?.Next}  edit={submitDateEdit} onClick={()=>{setDisp(4);BookingGen()}} /> 
@@ -1646,8 +1661,10 @@ useEffect(()=>{
            
         </div>
        {/* Card Booking Table */}
+       <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
        <DatesTable gen={gen} setGen={setGen} delete={submitPromotionDelete}  edit={submitDateEdit} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name={language?.booking}  add={()=> setView(1)}/> 
+        name={language?.booking}  add={()=> setView(1)}/></div> 
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Previous}  onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
@@ -1664,7 +1681,7 @@ useEffect(()=>{
                   <button
                     type="button"
                     onClick={() =>{
-                      setError([])
+                      setError({})
                    document.getElementById('addPromotionDateForm').reset();
                       setView(0);
                     } }
@@ -1693,6 +1710,7 @@ useEffect(()=>{
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.startdate} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input type="date"
                       onChange={
@@ -1710,6 +1728,7 @@ useEffect(()=>{
                         className={`text-sm capitalize font-medium text-gray-900 block mb-2`}
                       >
                         {language?.enddate} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input type="date"
                        onChange={
@@ -1726,7 +1745,8 @@ useEffect(()=>{
                         htmlFor="last-name"
                         className={`text-sm capitalize font-medium text-gray-900 block mb-2`}
                       >
-                        {language?.days} {days_of_week}
+                         {language?.available} {language?.days}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <Multiselect id='multidays'
                       className={`fixed shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full

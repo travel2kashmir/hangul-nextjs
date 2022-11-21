@@ -392,6 +392,7 @@ const validationEditExtraChildGuest = () => {
     <>
       <Header color={color} Primary={english.Side1} />
       <Sidebar color={color} Primary={english.Side1} />
+      
       <div id="main-content"
         className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
         {/* Navbar */}

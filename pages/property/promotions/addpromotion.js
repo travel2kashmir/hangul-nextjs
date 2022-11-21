@@ -21,7 +21,7 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week =[];
+var days_of_week =['M','T','W','T','F','S','U'];
 var keys =[];
 var currentPackage;
 var resCou = []
@@ -67,7 +67,7 @@ useEffect(() => {
       currentPackage = localStorage.getItem('PackageId');
       currentPromotion = localStorage.getItem('promotionId');
       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-      setVisible(1);
+    
  }
   }
   firstfun();
@@ -127,11 +127,13 @@ useEffect(()=>{
       {
       devices(response?.data?.promotion_id)
       }
+      
       if(promotion?.country?.length !== 0)
       {
       countries(response?.data?.promotion_id)
       }
       
+     
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -402,6 +404,7 @@ const removecheckIn = (index) => {
           const url = `/api/package/${currentProperty?.property_id}`
           const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
          setAllPackages(response.data) 
+         setVisible(1);
       }
       catch (error) {
           if (error.response) {
@@ -469,7 +472,7 @@ const submitDates= (check_in) => {
          draggable: true,
          progress: undefined,
        });
-     days_of_week=[];
+     days_of_week =['M','T','W','T','F','S','U'];
      setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
      if(check_in === "check_in"){
       setError([])
@@ -1412,9 +1415,9 @@ const validationPromotion = () => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    {language?.days} {language?.avaialable}
+                    {language?.days} {language?.available}
                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1423,6 +1426,7 @@ const validationPromotion = () => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"
@@ -1435,7 +1439,9 @@ const validationPromotion = () => {
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Next} onClick={()=>{setDisp(3)}} /> 
+                  <Button Primary={language?.Next} onClick={()=>{setDisp(3);
+                   days_of_week =['M','T','W','T','F','S','U'];
+                   setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
                     <Button Primary={language?.Submit}onClick={()=>{ validateDate()}}  /> 
                  </div>
                   </div>
@@ -1542,9 +1548,9 @@ const validationPromotion = () => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                   {language?.days} {language?.avaialable}
+                   {language?.days} {language?.available}
                    <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1553,6 +1559,7 @@ const validationPromotion = () => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"
@@ -1565,7 +1572,9 @@ const validationPromotion = () => {
                 </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(4)}} /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(4);
+                   days_of_week =['M','T','W','T','F','S','U'];
+                   setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
                     <Button Primary={language?.Submit} onClick={()=>{validateDate()}} /> 
                  </div>
                   </div>
@@ -1671,7 +1680,7 @@ const validationPromotion = () => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                      {language?.days} {language?.available}
                      <span style={{ color: "#ff0000" }}>*</span>
@@ -1682,6 +1691,7 @@ const validationPromotion = () => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"

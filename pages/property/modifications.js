@@ -166,14 +166,15 @@ const submitModificationDelete = (props) => {
               </li>
             </ol>
           </nav>
-         
+          <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
           <Table  gen={gen}
            setGen={setGen}  
            color={color} edit={submitModificationEdit} 
           add={submitModificationAdd} delete={submitModificationDelete}
           common={language?.common} cols={language?.ModificationCols}
           name="Packages"
-          /> 
+          /> </div>
          <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}

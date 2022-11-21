@@ -118,6 +118,7 @@ useEffect(()=>{
          draggable: true,
          progress: undefined,
        });
+
       setPromotionId(response.data.promotion_id);
       submitPromotionLink();
       packages(response.data.promotion_id);
@@ -217,7 +218,7 @@ const submitPromotionDiscount = (props) => {
          draggable: true,
          progress: undefined,
        });
-      
+    
      })
      .catch((error) => {
        toast.error("Promotion discount error", {

@@ -50,14 +50,14 @@ function Inventories() {
     }, [])
 
     useEffect(() => {
-        fetchRooms();
-        fetchPartnerKey();
+        fetchInventoryRooms();
+        
     }
         , [])
 
-    const fetchRooms = async () => {
+    const fetchInventoryRooms = async () => {
         var genData = [];
-        const url = `/api/rooms/${currentProperty?.property_id}`;
+        const url = `/api/ari/inventory/${currentProperty?.property_id}`;
         axios.get(url)
             .then((response) => {
                 setAllRooms(response.data);
@@ -65,7 +65,7 @@ function Inventories() {
                     response.data?.map((item) => {
                         var temp = {
                             name: item.room_name,
-                            status: item.status,
+                            status: true,
                             id: item.room_id
                         }
                         genData.push(temp)
@@ -81,19 +81,44 @@ function Inventories() {
         setColor(DarkModeLogic(darkModeSwitcher))
     }, [darkModeSwitcher])
 
-    const fetchPartnerKey = async () => {
-        const url = `/api/ari/partner_property_key/${currentProperty?.property_id}`;
-        axios.get(url)
-            .then((response) => {
-                setPartnerKey(response.data.partner_id);
-            })
-            .catch((error) => { logger.error("url to fetch package details, failed") });
-    }
-
     const currentRoom = (props) => {
         localStorage.setItem("RoomId", props.id);
-        Router.push("./inventories/inventory");
+        localStorage.setItem("RoomName",props.name);
+        Router.push("./inventories/editinventory");
     };
+
+    const submitInventoryDelete = (props) => {
+        const url = `/api/ari/inventory/${props}`;
+        axios
+            .delete(url)
+            .then((response) => {
+                toast.success("API: Property Availability delete Success!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                fetchInventoryRooms();
+                Router.push('./inventories')
+            })
+            .catch((error) => {
+                toast.error("API: Availability delete error!", {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            });
+    };
+
+
+
     return (
         <>
             <Header color={color} Primary={english?.Side} />
@@ -154,9 +179,14 @@ function Inventories() {
                     </ol>
                 </nav>
 
-                <Table gen={gen} setGen={setGen} edit={currentRoom}
-                    common={language?.common} cols={language?.InventoryCols} color={color} name="Inventory" />
-
+                <Table gen={gen}
+                    setGen={setGen}
+                    color={color} edit={currentRoom}
+                    add={() => Router.push('./inventories/inventory')}
+                    delete={submitInventoryDelete}
+                    common={language?.common} cols={language?.InvCols}
+                    name="Packages"
+                />
 
             </div>
         </>

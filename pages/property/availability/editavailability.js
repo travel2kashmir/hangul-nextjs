@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import objChecker from "lodash";
+import Table from '../../../components/Table';
+import LoaderTable from '../loaderTable'
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Lineloader from '../../../components/loaders/lineloader';
 import Sidebar from "../../../components/Sidebar";
@@ -22,7 +25,7 @@ var language;
 var currentProperty;
 var currentLogged;
 var days_of_week;
-var keys =[];
+var keys = [];
 var currentPackage;
 var availabilityId;
 import { ToastContainer, toast } from "react-toastify";
@@ -32,232 +35,342 @@ const logger = require("../../../services/logger");
 function AddAvailability() {
   const [visible, setVisible] = useState(0);
   const [availability, setAvailability] = useState([])
-  const [editavl,setEditavl]=useState([])
-  const [editlos,setEditlos]=useState([])
-  const [editres,setEditres]=useState([])
+  const [avl, setAvl] = useState([])
+  const [orgAvl, setOrgAvl] = useState([])
+  const [los, setLos] = useState([])
+  const [orgLos,setOrgLos]=useState([])
+  const [losLen,setLosLen]=useState(0);
+  const [res, setRes] = useState([])
+  const [resLen, setResLen] = useState(0)
+  const [orgRes, setOrgRes] = useState([]);
   const [disp, setDisp] = useState(0);
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [error, setError] = useState({})
+  const [selecteddays, setSelectedDays] = useState([])
 
-/** Fetching language from the local storage **/
-useEffect(() => {
-  const firstfun = () => {
-    if (typeof window !== 'undefined') {
-      var locale = localStorage.getItem("Language");
-      const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
-      const color = JSON.parse(localStorage.getItem("Color"));
-       setColor(color);
-       setDarkModeSwitcher(colorToggle)
-      if (locale === "ar") {
-        language = arabic;
-      }
-      if (locale === "en") {
-        language = english;
-      }
-      if (locale === "fr") {
-        language = french;
+  /** Fetching language from the local storage **/
+  useEffect(() => {
+    const firstfun = () => {
+      if (typeof window !== 'undefined') {
+        var locale = localStorage.getItem("Language");
+        const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+        const color = JSON.parse(localStorage.getItem("Color"));
+        setColor(color);
+        setDarkModeSwitcher(colorToggle)
+        if (locale === "ar") {
+          language = arabic;
+        }
+        if (locale === "en") {
+          language = english;
+        }
+        if (locale === "fr") {
+          language = french;
+
+        }
+        /** Current Property Details fetched from the local storage **/
+        currentProperty = JSON.parse(localStorage.getItem("property"));
+        availabilityId = localStorage.getItem('availabilityId');
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+        fetchAvailability();
 
       }
-      /** Current Property Details fetched from the local storage **/
-      currentProperty = JSON.parse(localStorage.getItem("property"));
-      availabilityId = localStorage.getItem('availabilityId');
-      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-      fetchAvailability();
+    }
+    firstfun();
+    Router.push("./editavailability");
+  }, [])
+  const createDays = (days) => {
+    var day = [];
+    for (let item in days) {
+      if (days[item] !== '-') {
+        switch (item) {
+          case '0': day.push({ day: "mon" });
+            break;
+          case '1': day.push({ day: "tue" })
+            break;
+          case '2': day.push({ day: "weds" })
+            break;
+          case '3': day.push({ day: "thurs" })
+            break;
+          case '4': day.push({ day: "fri" })
+            break;
+          case '5': day.push({ day: "sat" })
+            break;
+          case '6': day.push({ day: "sun" })
+            break;
+          default:
+        }
+      }
+
+    }
+    alert(JSON.stringify(day))
+    setSelectedDays(day)
+
+
+  }
+  function fetchAvailability() {
+    const url = `/api/ari/property_availability/${currentProperty?.property_id}/${availabilityId}`;
+    axios.get(url).then((response) => {
+      setAvailability(response.data)
+      var temp = {
+        "start_date": response.data.start_date,
+        "end_date": response.data.end_date,
+        "days_of_week": response.data.days_of_week,
+        "room_id": response.data.room_id
+      }
+      setAvl(temp);
+      setOrgAvl(temp);
+      createDays(response.data.days_of_week);
+      setLos(response?.data?.length_of_stay);
+      setOrgLos(response?.data?.length_of_stay);
+      setLosLen(response?.data?.length_of_stay?.length)
+      alert("res" + JSON.stringify(response?.data?.restrictions?.length));
+      setRes(response?.data?.restrictions?.[0]);
+      setResLen(response?.data?.restrictions?.length)
+      setOrgRes(response?.data?.restrictions?.[0])
       setVisible(1);
- }
-  }
-  firstfun();
-  Router.push("./editavailability");
-}, [])
-function fetchAvailability(){
-    const url=`/api/ari/property_availability/${currentProperty?.property_id}/${availabilityId}`;
-    axios.get(url).then((response)=>{
-        setAvailability(response.data)
     })
-}
-useEffect(()=>{ 
-  setColor(DarkModeLogic(darkModeSwitcher))
- },[darkModeSwitcher])
+  }
+  useEffect(() => {
+    setColor(DarkModeLogic(darkModeSwitcher))
+  }, [darkModeSwitcher])
 
-// Availability
- const submitAvailability = () => {
-  const final_data =  {"availability": {
-    "property_id":currentProperty?.property_id,
-     "package_id": currentPackage,
-     "start_date": availability?.start_date ,
-     "end_date": availability?.start_date ,
-     "days_of_week": days_of_week
-   }
- }
- const url = '/api/ari/property_availability/property_availability'
-   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-     ((response) => {
-      availabilityId=response?.data?.availability_id;
-       toast.success("Availability success", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-      setDisp(1);
-     })
-     .catch((error) => {
-       toast.error("Availability error", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-}
+  // Availability
+  const submitAvailability = () => {
+    const final_data = {
+      "availability": {
+        "property_id": currentProperty?.property_id,
+        "availability_id": availability.availability_id,
+        "package_id": currentPackage,
+        "start_date": avl?.start_date,
+        "end_date": avl?.end_date,
+        "days_of_week": days_of_week
+      }
+    }
+    const url = '/api/ari/property_availability/property_availability';
+    alert(JSON.stringify(final_data))
+    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Availability Edit success", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setError([])
+        setOrgAvl(avl)
+      })
+      .catch((error) => {
+        toast.error("Availability error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
 
-// Restriction
-const submitRestriction = () => {
-  const final_data =  {"availability_res": [{
-    "availability_id":availabilityId,
-     "restriction_status":availability?.restriction_status ,
-     "restriction_type": availability?.restriction_type ,
-     "min_advance_booking": availability?.min_advance_booking ,
-     "max_advance_booking": availability?.max_advance_booking 
-   }]
- }
- const url = '/api/ari/property_availability/property_availability_restrictions'
-   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-     ((response) => {
-       toast.success("Restriction success", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-      setDisp(2);
-     })
-     .catch((error) => {
-       toast.error("Restriction error", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-}
+  // Restriction
+  const data = () => {
+    const final_data = {
+      "availability_res": [{
+        "availability_id": availabilityId,
+        "restriction_status": res?.restriction_status,
+        "restriction_type": res?.restriction_type,
+        "min_advance_booking": res?.min_advance_booking,
+        "max_advance_booking": res?.max_advance_booking,
+        "avl_res_id": res?.avl_res_id
+      }]
+    }
+   if (resLen === 1) {
+      const url = '/api/ari/property_availability/property_availability_restrictions'
+      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          toast.success("Restriction Update success", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setOrgRes(res);
+          setError([]);
+        })
+        .catch((error) => {
+          toast.error("Restriction error", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        })
+    }
+    else {
+      const url = '/api/ari/property_availability/property_availability_restrictions'
+      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          toast.success("Restriction Added success", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setOrgRes(res);
+          setError([]); 
+        })
+        .catch((error) => {
+          toast.error("Restriction error", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        })
+    }
 
-// Restriction
-const submitLOS= () => {
-  const data = LOSData?.map((i => {
-    return {
-    "availability_id":availabilityId,
-     "unit_of_time": "Days",
-     "time":availability?.time ,
-     "min_max_msg": availability?.min_max_msg ,
-     "pattern": availability?.time,
-     "fixed_pattern": availability?.fixed_pattern 
-   }}))
- const final_data = { "LOS": data }
- const url = '/api/ari/property_availability/property_availability_los'
-   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-     ((response) => {
-       toast.success("LOS success", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     keys=[];
-     Router.push('../ari')
-     })
-     .catch((error) => {
-       toast.error("LOS error", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-}
+  }
 
-// Days
-const days = (days) => { 
-  var days_present=['-','-','-','-','-','-','-'];
-  days.map(day=>{
-  
-  if(day.day==='mon')
-  {
-  days_present[0]='m'
+  // Restriction
+  const submitLOS = () => {
+    const data = LOSData?.map((i => {
+      return {
+        "availability_id": availabilityId,
+        "unit_of_time": "Days",
+        "time": availability?.time,
+        "min_max_msg": availability?.min_max_msg,
+        "pattern": availability?.time,
+        "fixed_pattern": availability?.fixed_pattern
+      }
+    }))
+    const final_data = { "LOS": data }
+    const url = '/api/ari/property_availability/property_availability_los'
+    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("LOS success", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        keys = [];
+        Router.push('../ari')
+      })
+      .catch((error) => {
+        toast.error("LOS error", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
   }
-  else if(day.day==='tue')
-  {
-  days_present[1]='t'
+
+  // Days
+  const days = (days) => {
+    var days_present = ['-', '-', '-', '-', '-', '-', '-'];
+    days.map(day => {
+
+      if (day.day === 'mon') {
+        days_present[0] = 'm'
+      }
+      else if (day.day === 'tue') {
+        days_present[1] = 't'
+      }
+      else if (day.day === 'weds') {
+        days_present[2] = 'w'
+      }
+      else if (day.day === 'thur') {
+        days_present[3] = 't'
+      }
+      else if (day.day === 'fri') {
+        days_present[4] = 'f'
+      }
+      else if (day.day === 'sat') {
+        days_present[5] = 's'
+      }
+      else if (day.day === 'sun') {
+        days_present[6] = 's'
+      }
+    })
+    days_of_week = days_present.toString().replaceAll(',', '');
   }
-  else if(day.day==='weds')
-  {
-  days_present[2]='w'
-  }
-  else if(day.day==='thur')
-  {
-  days_present[3]='t'
-  }
-  else if(day.day==='fri')
-  {
-  days_present[4]='f'
-  }
-  else if(day.day==='sat')
-  {
-  days_present[5]='s'
-  }
-  else if(day.day==='sun')
-  {
-  days_present[6]='s'
-  }
-  })
-   days_of_week = days_present.toString().replaceAll(',','');
-}
-// Validate Availability
-const validationAvailability = () => {
-var result = validateAvailability(availability,days_of_week)
-   console.log("Result" +JSON.stringify(result))
-   if(result===true)
-   {
-    submitAvailability();
-   }
-   else
-   {
-    setError(result)
-   }
-  }
-// Validate Restriction
-  const validationRestriction = () => {
-    var result = validateRestriction(availability)
-       console.log("Result" +JSON.stringify(result))
-       if(result===true)
-       {
-        submitRestriction();
-       }
-       else
-       {
+  // Validate Availability
+  const validationAvailability = () => {
+    if (objChecker.isEqual(avl, orgAvl)) {
+
+      toast.warn('APP: No change in Availability. ', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+
+      });
+    }
+    else{
+      var result = validateAvailability(avl, days_of_week)
+      console.log("Result" + JSON.stringify(result))
+      if (result === true) {
+        submitAvailability();
+      }
+      else {
         setError(result)
-       }
-  } 
-// Validation LOS
+      }
+    }
+   
+  }
+  // Validate Restriction
+  const validationRestriction = () => {
+    if (objChecker.isEqual(res, orgRes)) {
+      toast.warn('APP: No change in Restrictions. ', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+
+      });
+    }
+    else {
+      var result = validateRestriction(res)
+      console.log("Result" + JSON.stringify(result))
+      if (result === true) {
+        data();
+      }
+      else {
+        setError(result)
+      }
+    }
+
+  }
+  // Validation LOS
   const validationLOS = () => {
     var result = validateLOS(availability)
     console.log("Result" + JSON.stringify(result))
@@ -267,45 +380,45 @@ var result = validateAvailability(availability,days_of_week)
     else {
       setError(result)
     }
-  } 
- /** Function to cancel package mile **/
- const removeLOS = (index) => {
-  const filteredLOS = LOSData.filter((i, id) => i.index !== index)
-   setLOSData(filteredLOS)
-  }   
+  }
+  /** Function to cancel package mile **/
+  const removeLOS = (index) => {
+    const filteredLOS = LOSData.filter((i, id) => i.index !== index)
+    setLOSData(filteredLOS)
+  }
 
   /** For Miles**/
   const LOSTemplate = {
-    "checkin_startdate":"",
+    "checkin_startdate": "",
     "checkin_enddate": "",
-    "checkin_daysofweek":"" ,
-  }  
+    "checkin_daysofweek": "",
+  }
 
   /* Mapping Index of each mile*/
-    const [LOSData, setLOSData] = useState([LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
-  
- /** Function to add mile **/
- const addLOS = () => {
-  setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
-}
+  const [LOSData, setLOSData] = useState([LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
+
+  /** Function to add mile **/
+  const addLOS = () => {
+    setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
+  }
   return (
     <>
-    <Header color={color} Primary={english.Side1} />
-    <Sidebar color={color} Primary={english.Side1} />
-    <div id="main-content"
-          className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
-         {/* Navbar */}
-         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-            <ol className="inline-flex items-center space-x-1 md:space-x-2">
-              <li className="inline-flex items-center">
+      <Header color={color} Primary={english.Side1} />
+      <Sidebar color={color} Primary={english.Side1} />
+      <div id="main-content"
+        className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64`}>
+        {/* Navbar */}
+        <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
+          <ol className="inline-flex items-center space-x-1 md:space-x-2">
+            <li className="inline-flex items-center">
               <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                 <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} 
-                className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"}
+                  className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
                 </Link></div>
-              </li>
-              <li>
-                <div className="flex items-center">
+            </li>
+            <li>
+              <div className="flex items-center">
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
@@ -314,10 +427,10 @@ var result = validateAvailability(availability,days_of_week)
                   </Link>
                   </div></div>
 
-                </div>
-              </li>
-              <li>
-                <div className="flex items-center">
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center">
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
@@ -326,47 +439,47 @@ var result = validateAvailability(availability,days_of_week)
                   </Link>
                   </div></div>
 
-                </div>
-              </li>
-              <li>
-                <div className="flex items-center">
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center">
                 <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.edit} {language?.availability}</span>
                 </div>
-                </div>
-              </li>
-            </ol>
-          </nav>
-          {/* Availability */}
-          <div id='0' className={disp===0?'block':'hidden'}>
+              </div>
+            </li>
+          </ol>
+        </nav>
+        {/* Availability */}
+        <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`} >{language?.availability}</div>
-            </div>
-          
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+              </div>
+
+              <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                 <div className={`${color?.widget} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.restriction}</div>
-            </div>
+              </div>
 
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.lengthofstay}</div>
+              </div>
+
+
+
             </div>
-          
-          
-           
-        </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-            {language?.availability} {JSON.stringify(availability)}
+              {language?.availability} {JSON.stringify(avl)}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 px-4">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
@@ -376,20 +489,20 @@ var result = validateAvailability(availability,days_of_week)
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <Multiselect 
-                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                        <Multiselect
+                          className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
                        `}
-                      isObject={true}
-                      options={lang?.DaysData}
-                      onRemove={(event) => { days(event) }}
-                      onSelect={(event) => { days(event) }}
-                      selectedValues={lang?.DaysData}
-                     displayValue="day"
-                    
-                      />
+                          isObject={true}
+                          options={lang?.DaysData}
+                          onRemove={(event) => { days(event) }}
+                          onSelect={(event) => { days(event) }}
+                          selectedValues={selecteddays}
+                          displayValue="day"
+
+                        />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.days}</p>
-                       </div>
+                          {error?.days}</p>
+                      </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -398,22 +511,22 @@ var result = validateAvailability(availability,days_of_week)
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       {language?.startdate}
+                        {language?.startdate}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
                           type="date"
-                          defaultValue={availability?.start_date}
+                          defaultValue={avl?.start_date}
                           className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, start_date: e.target.value })
+                              setAvl({ ...avl, start_date: e.target.value })
                             )
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.start_date}</p></div>
+                          {error?.start_date}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -424,71 +537,73 @@ var result = validateAvailability(availability,days_of_week)
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
+                        <input
                           type="date"
-                          defaultValue={availability?.end_date}
+                          defaultValue={avl?.end_date}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, end_date: e.target.value })
+                              setAvl({ ...avl, end_date: e.target.value })
                             )
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.end_date}</p>
+                          {error?.end_date}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-24">
-                      
+
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-24">
-                      
+
                     </div>
                   </div>
-                  
-                 
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={validationAvailability} /> 
-                </div>
-                
-                  </div>
-                  </div>
-                  </div>
-            </div>
-            </div>
 
-           {/* Restriction */}
-           <div id='1' className={disp===1?'block':'hidden'}>
-            <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Update} onClick={validationAvailability} />
+                    <Button Primary={language?.Next} onClick={() => setDisp(1)} />
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Restriction */}
+        <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
+          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.availability}</div>
-            </div>
-          
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+              </div>
+
+              <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.restriction}</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+              </div>
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.lengthofstay}</div>
+              </div>
+
+
             </div>
-          
-           
-        </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-           {language?.restriction}
+              {language?.restriction} {JSON.stringify(res)}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
                 <div className="flex flex-wrap">
-                <div className="w-full lg:w-6/12 px-4">
+                  <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
@@ -498,19 +613,19 @@ var result = validateAvailability(availability,days_of_week)
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                       onChange={
-                      (e) => (
-                          setAvailability({ ...availability, restriction_status: e.target.value })
-                      )
-                  }>
-                     <option selected >Select </option>
-                    <option value={true}>Active</option>
-                    <option value={false}>Inactive</option>
-                   </select>
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_status}</p>
-                       </div>
+                        <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setRes({ ...res, restriction_status: e.target.value })
+                            )
+                          }>
+                          <option selected >{res?.restriction_status === true ? "Active" : "Inactive"} </option>
+                          <option value={true}>Active</option>
+                          <option value={false}>Inactive</option>
+                        </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.restriction_status}</p>
+                      </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -519,22 +634,22 @@ var result = validateAvailability(availability,days_of_week)
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       {language?.restriction} {language?.type}
+                        {language?.restriction} {language?.type}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                     onChange={
-                      (e) => (
-                          setAvailability({ ...availability, restriction_type: e.target.value })
-                      )}>
-                     <option selected >Select </option>
-                    <option value="arrival" >Arrival<span className='text-xs text-orange-500'> (It prevents itineraries with a check-in date during the Start and End date range).</span></option>
-                    <option value="departure">Departure<span className='text-xs text-orange-500'> (It prevents itineraries with a check-out date during the Start and End date range).</span></option>
-                    <option value="master">Master<span className='text-xs text-orange-500 '> (It indicates whether the room rate is available for booking on the date).</span></option>
-                    </select>
-                    <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.restriction_type}</p>
+                        <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setRes({ ...res, restriction_type: e.target.value })
+                            )}>
+                          <option selected >{res?.restriction_type} </option>
+                          <option value="arrival" >Arrival- (It prevents itineraries with a check-in date during the Start and End date range).</option>
+                          <option value="departure">Departure-  (It prevents itineraries with a check-out date during the Start and End date range).</option>
+                          <option value="master">Master- (It indicates whether the room rate is available for booking on the date).</option>
+                        </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.restriction_type}</p>
                       </div>
                     </div>
                   </div>
@@ -546,17 +661,18 @@ var result = validateAvailability(availability,days_of_week)
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
+                        <input
                           type="number" min={1}
+                          defaultValue={res?.min_advance_booking}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, min_advance_booking: e.target.value })
+                              setRes({ ...res, min_advance_booking: e.target.value })
                             )
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_advance_booking}</p>
+                          {error?.min_advance_booking}</p>
                       </div>
                     </div>
                   </div>
@@ -564,205 +680,177 @@ var result = validateAvailability(availability,days_of_week)
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.maxadvbooking} 
+                        {language?.maxadvbooking}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
+                        <input
                           type="number" min={1}
+                          defaultValue={res?.max_advance_booking}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
-                              setAvailability({ ...availability, max_advance_booking: e.target.value })
+                              setRes({ ...res, max_advance_booking: e.target.value })
                             )
                           }
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.max_advance_booking}</p>
+                          {error?.max_advance_booking}</p>
                       </div>
                     </div>
                   </div>
-                
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-4">
-                      
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-4">
-                      
-                    </div>
-                  </div>
-                  
-                 
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={validationRestriction} /> 
-                </div>
-                
-                  </div>
-                  </div>
-                  </div>
-            </div>
-            </div>
 
-            {/* LOS */}
-            <div id='2' className={disp===2?'block':'hidden'}>
-          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-          <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.availability}</div>
-            </div>
-          
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.restriction}</div>
-            </div>
-            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.lengthofstay}</div>
-            </div>
-          
-           
-        </div>
-        <div className="mx-4">
-                <div className="sm:flex">
-            <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-            {language?.lengthofstay}
-            </h6>
-          
-                  <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-4">
+
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    
-                    <Button Primary={language?.AddLOS}  onClick={addLOS} />
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-4">
+
+                    </div>
                   </div>
+
+
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Previous} onClick={() => setDisp(0)} />
+                    <Button Primary={language?.Update} onClick={validationRestriction} />
+                    <Button Primary={language?.Next} onClick={() => setDisp(2)} />
+                  </div>
+
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* LOS */}
+        <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
+          <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[55%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.availability}</div>
+              </div>
+
+              <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.restriction}</div>
+              </div>
+              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.lengthofstay}</div>
+              </div>
+
+
+            </div>
+            <div className="mx-4">
+              <div className="sm:flex">
+                <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
+                  {language?.lengthofstay} {JSON.stringify(los)}
+                </h6>
+
+                <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                </div>
+                <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+
+                  <Button Primary={language?.AddLOS} onClick={addLOS} />
+                </div>
+              </div>
+            </div>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
-              {LOSData?.map((LOSData, index) => (
-              <>
-                <div className={LOSData?.index === 0 ? "hidden":"block"}>
-                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                          <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
-                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
-                     rounded-lg text-sm px-1 py-1 text-center 
-                     items-center mb-1 ml-16 ease-linear transition-all duration-150`}
-                     onClick={() => removeLOS(LOSData?.index)} type="button" >
-                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            </button>
-                  </div>
-                  </div>
-                <div className="flex flex-wrap" key={index}>
-                <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                       {language?.minmaxmessage}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                     onChange={
-                      (e) => {
-                          setAvailability({ ...availability, checkin_startdate: e.target.value })
-                         e.target.value === 'FullPatternLOS' ? keys.push(index): "";
-                        }
-                  }>
-                     <option selected>Select </option>
-                    <option value="SetMaxLOS">Max LOS</option>
-                    <option value="SetMinLOS">Min LOS</option>
-                    <option value="SetForwardMaxStay">Forward Max Stay</option>
-                    <option value="SetForwardMinStay">Forward Min Stay</option>
-                    <option value="FullPatternLOS">Full Pattern LOS</option>
-                   </select>
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                      {language?.numberofdays}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setavaiability({ ...avaiability,checkin_enddate: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                      {language?.numberofdays}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setavaiability({ ...avaiability,checkin_enddate: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-</>))} 
-                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Submit} onClick={validationLOS} /> 
-                
-                  
-                    </div>
-                  </div>
-                  </div>
-             
+               {/*In line table */}
+
+              
+            <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
+            <Table
+              gen={los}
+              setGen={setLos}
+              add={()=>alert("add")}
+              edit={()=>alert("edit")}
+              delete={()=>alert("del")}
+              common={language?.common}
+              color={color}
+              cols={language?.ExtraChildGuestCols}
+              name="Packages"
+              mark="ExtraChild" />
+         </div>
+          
 
 
-            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               {/* */}
+                <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                  <Button Primary={language?.Previous} onClick={() => setDisp(1)} />
+                  <Button Primary={language?.Update} onClick={validationLOS} />
+                </div>
+              </div>
             </div>
 
-       <ToastContainer position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover />
+
+
           </div>
-     <Footer color={color} />
+        </div>
+
+        <ToastContainer position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover />
+
+          
+      </div>
+      <Footer color={color} />
     </>
   )
 }
 
 export default AddAvailability
-AddAvailability.getLayout = function PageLayout(page){
-  return(
+AddAvailability.getLayout = function PageLayout(page) {
+  return (
     <>
-    {page}
+      {page}
     </>
   )
 

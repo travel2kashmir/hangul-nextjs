@@ -95,7 +95,7 @@ export default function BasicDetails() {
 
     if(flag === 1){
     if(objChecker.isEqual(allHotelDetails,basicDetails)){
-      toast.warn('No change in Basic Details detected. ', {
+      toast.warn('APP: No change in Basic Details detected. ', {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -125,7 +125,7 @@ export default function BasicDetails() {
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
           setSpinner(0);
-          toast.success("Basic Details Updated Successfully!", {
+          toast.success("API: Basic Details Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -141,7 +141,7 @@ export default function BasicDetails() {
         })
         .catch((error) => {
           setSpinner(0)
-          toast.error("Basic Details Update Error!", {
+          toast.error("API: Basic Details Update Error!", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -154,7 +154,7 @@ export default function BasicDetails() {
     }
   }
   else{
-    toast.warn('No change in Basic Details detected. ', {
+    toast.warn('APP: No change in Basic Details detected. ', {
       position: "top-center",
       autoClose: 5000,
       hideProgressBar: false,

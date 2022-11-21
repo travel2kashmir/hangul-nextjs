@@ -2,7 +2,11 @@ const validateAvailability = (data,props) =>{
    var error={};
     var flag=[]
     var final_flag=true;
-   
+    if(data?.room_id==="" || data?.start_date===undefined)
+    {
+        flag.push(false)
+        error.room="The Room required."
+    }
     if(data?.start_date==="" || data?.start_date===undefined)
     {
         flag.push(false)

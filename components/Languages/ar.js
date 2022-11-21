@@ -114,6 +114,10 @@ export default {
     name:"تعديلات معدل",
    col1 : "اسم"
   },
+  "ResCols":{
+    name:"مدة الأقامة",
+   col1 : "مين ماكس رسالة"
+  },
   "InvCols":{
     name:"جرد",
     col1 : "اسم"
@@ -136,6 +140,7 @@ export default {
   addnewroom:"أضف غرفة جديدة",
   addnewservices:"أضف خدمات جديدة",
   addcontacts:"ضف جهات اتصال",
+  length_of_stay:"مدة الأقامة",
   editraterules:"تحرير قواعد السعر",
   Update :{
     label:' أَجَدّ',

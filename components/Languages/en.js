@@ -64,6 +64,7 @@ export default {
   days:"Days",
   title: "sign in",
   numberofdays:"Number of Days",
+  length_of_stay:"Length of Stay",
   pattern:'Pattern',
   patterndes:"Pattern is a sequence of Y and N characters indicating whether each length of stay is allowed, from one night to the value in Number of Days. For example, with FixedPatternLength is 4 and FullPatternLOS is YNYN, only lengths of stay 1 and 3 are allowed.",
   // classic theme
@@ -317,6 +318,10 @@ Cancel:"Cancel"
 "AvailabilityCols":{
   name:"Property Availability",
  col1 : "Name"
+},
+"ResCols":{
+  name:"Length of Stay",
+ col1 : "Min Max Message"
 },
 "InvCols":{
   name:"Inventory",

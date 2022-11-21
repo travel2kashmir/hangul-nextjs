@@ -28,6 +28,7 @@ var days_of_week;
 var keys = [];
 var currentPackage;
 var availabilityId;
+var genData = [];
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const logger = require("../../../services/logger");
@@ -38,8 +39,8 @@ function AddAvailability() {
   const [avl, setAvl] = useState([])
   const [orgAvl, setOrgAvl] = useState([])
   const [los, setLos] = useState([])
-  const [orgLos,setOrgLos]=useState([])
-  const [losLen,setLosLen]=useState(0);
+  const [orgLos, setOrgLos] = useState([])
+  const [losLen, setLosLen] = useState(0);
   const [res, setRes] = useState([])
   const [resLen, setResLen] = useState(0)
   const [orgRes, setOrgRes] = useState([]);
@@ -48,6 +49,9 @@ function AddAvailability() {
   const [color, setColor] = useState({})
   const [error, setError] = useState({})
   const [selecteddays, setSelectedDays] = useState([])
+  const [gen, setGen] = useState([])
+  const [viewEdit, setViewEdit] = useState(0)
+  const [view, setView] = useState(0)
 
   /** Fetching language from the local storage **/
   useEffect(() => {
@@ -103,10 +107,7 @@ function AddAvailability() {
       }
 
     }
-    alert(JSON.stringify(day))
     setSelectedDays(day)
-
-
   }
   function fetchAvailability() {
     const url = `/api/ari/property_availability/${currentProperty?.property_id}/${availabilityId}`;
@@ -121,15 +122,25 @@ function AddAvailability() {
       setAvl(temp);
       setOrgAvl(temp);
       createDays(response.data.days_of_week);
-      setLos(response?.data?.length_of_stay);
-      setOrgLos(response?.data?.length_of_stay);
+      console.log(response?.data?.length_of_stay)
       setLosLen(response?.data?.length_of_stay?.length)
-      alert("res" + JSON.stringify(response?.data?.restrictions?.length));
       setRes(response?.data?.restrictions?.[0]);
       setResLen(response?.data?.restrictions?.length)
       setOrgRes(response?.data?.restrictions?.[0])
+      response?.data?.length_of_stay?.map((item) => {
+        var temp = {
+          name: item.min_max_msg,
+          max_age: item.min_max_msg,
+          id: item.avl_los_id,
+          status: true
+        }
+        genData.push(temp)
+      })
+      setGen(genData);
       setVisible(1);
     })
+
+
   }
   useEffect(() => {
     setColor(DarkModeLogic(darkModeSwitcher))
@@ -148,7 +159,6 @@ function AddAvailability() {
       }
     }
     const url = '/api/ari/property_availability/property_availability';
-    alert(JSON.stringify(final_data))
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
         toast.success("Availability Edit success", {
@@ -188,7 +198,7 @@ function AddAvailability() {
         "avl_res_id": res?.avl_res_id
       }]
     }
-   if (resLen === 1) {
+    if (resLen === 1) {
       const url = '/api/ari/property_availability/property_availability_restrictions'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
@@ -230,7 +240,7 @@ function AddAvailability() {
             progress: undefined,
           });
           setOrgRes(res);
-          setError([]); 
+          setError([]);
         })
         .catch((error) => {
           toast.error("Restriction error", {
@@ -247,23 +257,113 @@ function AddAvailability() {
 
   }
 
-  // Restriction
+  //Edit los
+  const submitEditLOS = () => {
+    const data =
+    {
+      "availability_id": availability?.availability_id,
+      "unit_of_time": "Days",
+      "time": los?.time,
+      "min_max_msg": los?.min_max_msg,
+      "pattern": los?.time,
+      "fixed_pattern": los?.fixed_pattern,
+      "avl_los_id": los?.avl_los_id
+    }
+    const final_data = { "LOS": data }
+    const url = '/api/ari/property_availability/property_availability_los'
+    if (losLen != 0 && losLen != undefined) {
+      axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          toast.success("LOS Edit success", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          var temp = [{
+            name: los.min_max_msg,
+            max_age: los.min_max_msg,
+            id: los.avl_los_id,
+            status: true
+          }]
+          var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
+          setGen(filtered_data.concat(temp));
+          setError({});
+          document.getElementById('editLOSform').reset();
+          setViewEdit(0);
+        })
+        .catch((error) => {
+          toast.error("LOS error", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        })
+    }
+    else {
+      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+        ((response) => {
+          toast.success("LOS Edit success", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          var temp = [{
+            name: los.min_max_msg,
+            max_age: los.min_max_msg,
+            id: los.avl_los_id,
+            status: true
+          }]
+          var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
+          setGen(filtered_data.concat(temp));
+          keys = [];
+          setError({});
+          document.getElementById('editLOSform').reset();
+          setViewEdit(0);
+        })
+        .catch((error) => {
+          toast.error("LOS error", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        })
+    }
+  }
+
+  //los
   const submitLOS = () => {
-    const data = LOSData?.map((i => {
-      return {
-        "availability_id": availabilityId,
-        "unit_of_time": "Days",
-        "time": availability?.time,
-        "min_max_msg": availability?.min_max_msg,
-        "pattern": availability?.time,
-        "fixed_pattern": availability?.fixed_pattern
-      }
-    }))
+    const data =
+    {
+      "availability_id": availability?.availability_id,
+      "unit_of_time": "Days",
+      "time": los?.time,
+      "min_max_msg": los?.min_max_msg,
+      "pattern": los?.time,
+      "fixed_pattern": los?.fixed_pattern,
+
+    }
     const final_data = { "LOS": data }
     const url = '/api/ari/property_availability/property_availability_los'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("LOS success", {
+        console.log(JSON.stringify(response?.data))
+        toast.success("LOS Add success", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -272,8 +372,32 @@ function AddAvailability() {
           draggable: true,
           progress: undefined,
         });
-        keys = [];
-        Router.push('../ari')
+        var temp = [{
+          name: los.min_max_msg,
+          max_age: los.min_max_msg,
+          id: response?.data?.los_avl_id,
+          status: true
+        }]
+        //create object to be put in avlablity
+        var for_avl = [{
+          "availability": availability?.availability_id,
+          "avl_los_id": response?.data?.los_avl_id,
+          "time": los.time,
+          "unit_of_time": "Days",
+          "min_max_msg": los.min_max_msg,
+          "pattern": los.pattern,
+          "fixed_pattern": los.fixed_pattern
+        }]
+        //make length of stay a single object
+        var avl_los = availability.length_of_stay.concat(for_avl);
+        //put object in state
+        setAvailability({ ...availability, length_of_stay: avl_los })
+        var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
+        setGen(filtered_data.concat(temp));
+        setError({});
+        setLos([]);
+        document.getElementById('addlosform').reset();
+        setView(0);
       })
       .catch((error) => {
         toast.error("LOS error", {
@@ -288,6 +412,38 @@ function AddAvailability() {
       })
   }
 
+
+  //delete los
+  const losDelete = (props) => {
+    const url = `/api/ari/property_availability/property_availability_los/${props}`;
+    axios
+      .delete(url)
+      .then((response) => {
+        toast.success("API: Property Availability Los delete Success!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        const temp = gen.filter(i => i.id != props)
+        setGen(temp);
+
+      })
+      .catch((error) => {
+        toast.error("API: Availability LOS delete error!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      });
+  };
   // Days
   const days = (days) => {
     var days_present = ['-', '-', '-', '-', '-', '-', '-'];
@@ -332,9 +488,8 @@ function AddAvailability() {
 
       });
     }
-    else{
+    else {
       var result = validateAvailability(avl, days_of_week)
-      console.log("Result" + JSON.stringify(result))
       if (result === true) {
         submitAvailability();
       }
@@ -342,7 +497,7 @@ function AddAvailability() {
         setError(result)
       }
     }
-   
+
   }
   // Validate Restriction
   const validationRestriction = () => {
@@ -360,7 +515,6 @@ function AddAvailability() {
     }
     else {
       var result = validateRestriction(res)
-      console.log("Result" + JSON.stringify(result))
       if (result === true) {
         data();
       }
@@ -372,34 +526,38 @@ function AddAvailability() {
   }
   // Validation LOS
   const validationLOS = () => {
-    var result = validateLOS(availability)
-    console.log("Result" + JSON.stringify(result))
+    if (objChecker.isEqual(los, orgLos)) {
+      toast.warn('APP: No change in Length of stay. ', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+
+      });
+    }
+    else {
+      var result = validateLOS(los)
+      if (result === true) {
+        submitEditLOS();
+      }
+      else {
+        setError(result)
+      }
+    }
+  }
+
+  //validation post los
+  const validationPostLOS = () => {
+    var result = validateLOS(los)
     if (result === true) {
       submitLOS();
     }
     else {
       setError(result)
     }
-  }
-  /** Function to cancel package mile **/
-  const removeLOS = (index) => {
-    const filteredLOS = LOSData.filter((i, id) => i.index !== index)
-    setLOSData(filteredLOS)
-  }
-
-  /** For Miles**/
-  const LOSTemplate = {
-    "checkin_startdate": "",
-    "checkin_enddate": "",
-    "checkin_daysofweek": "",
-  }
-
-  /* Mapping Index of each mile*/
-  const [LOSData, setLOSData] = useState([LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
-
-  /** Function to add mile **/
-  const addLOS = () => {
-    setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
   }
   return (
     <>
@@ -474,7 +632,7 @@ function AddAvailability() {
 
             </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-              {language?.availability} {JSON.stringify(avl)}
+              {language?.availability}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
@@ -485,7 +643,7 @@ function AddAvailability() {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.days}
+                        {language?.days}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -511,7 +669,7 @@ function AddAvailability() {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.startdate}
+                        {language?.startdate}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -533,7 +691,7 @@ function AddAvailability() {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.enddate}
+                        {language?.enddate}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -598,7 +756,7 @@ function AddAvailability() {
 
             </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-              {language?.restriction} {JSON.stringify(res)}
+              {language?.restriction}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
@@ -609,7 +767,7 @@ function AddAvailability() {
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.restriction} {language?.Status}
+                        {language?.restriction} {language?.Status}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -634,7 +792,7 @@ function AddAvailability() {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.restriction} {language?.type}
+                        {language?.restriction} {language?.type} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -657,7 +815,7 @@ function AddAvailability() {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.minadvbooking}
+                        {language?.minadvbooking} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -680,7 +838,7 @@ function AddAvailability() {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.maxadvbooking}
+                        {language?.maxadvbooking} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -741,94 +899,292 @@ function AddAvailability() {
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.lengthofstay}</div>
               </div>
-
-
-            </div>
-            <div className="mx-4">
-              <div className="sm:flex">
-                <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-                  {language?.lengthofstay} {JSON.stringify(los)}
-                </h6>
-
-                <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
-                </div>
-                <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-
-                  <Button Primary={language?.AddLOS} onClick={addLOS} />
-                </div>
-              </div>
             </div>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
-               {/*In line table */}
+               <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+                <div className={visible === 1 ? 'block' : 'hidden'}>
+                  <Table
+                    gen={gen}
+                    setGen={setGen}
+                    add={() => setView(1)}
+                    edit={(props) => {
+                      var temp = availability?.length_of_stay.filter(i => i.avl_los_id === props.id)
+                      setLos(temp[0])
+                      setOrgLos(temp[0])
+                      setViewEdit(1);
+                    }}
+                    delete={losDelete}
+                    common={language?.common}
+                    color={color}
+                    cols={language?.ResCols}
+                    name="Packages"
+                    mark="ExtraChild" />
+                </div>
 
-              
-            <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
-         <div className={visible === 1 ? 'block' : 'hidden'}>
-            <Table
-              gen={los}
-              setGen={setLos}
-              add={()=>alert("add")}
-              edit={()=>alert("edit")}
-              delete={()=>alert("del")}
-              common={language?.common}
-              color={color}
-              cols={language?.ExtraChildGuestCols}
-              name="Packages"
-              mark="ExtraChild" />
-         </div>
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-               {/* */}
                 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   <Button Primary={language?.Previous} onClick={() => setDisp(1)} />
-                  <Button Primary={language?.Update} onClick={validationLOS} />
                 </div>
               </div>
             </div>
-
-
-
           </div>
         </div>
 
+        {/* Modal Edit */}
+        <div className={viewEdit === 1 ? "block" : "hidden"}>
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div className={`bg-white rounded-lg shadow relative`}>
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className="text-xl font-semibold"> {language?.length_of_stay}</h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setError({});
+                      document.getElementById('editLOSform').reset();
+                      setViewEdit(0);
+
+                    }}
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                <form id='editLOSform'>
+                  <>
+
+                    <div className="flex flex-wrap" key={0}>
+                      <div className="w-full lg:w-6/12 px-4">
+                        <div className="relative w-full mb-3">
+                          <label
+                            className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password"
+                          >
+                            {language?.minmaxmessage}<span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              onChange={
+                                (e) => {
+                                  setLos({ ...los, min_max_msg: e.target.value })
+                                  // e.target.value === 'FullPatternLOS' ? keys.push(index) : "";
+                                }
+                              }>
+                              <option selected>{los?.min_max_msg} </option>
+                              <option value="SetMaxLOS">Max LOS</option>
+                              <option value="SetMinLOS">Min LOS</option>
+                              <option value="SetForwardMaxStay">Forward Max Stay</option>
+                              <option value="SetForwardMinStay">Forward Min Stay</option>
+                              <option value="FullPatternLOS">Full Pattern LOS</option>
+                            </select>
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error?.min_max_msg}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-6/12 px-4">
+                        <div className="relative w-full mb-3">
+                          <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            {language?.numberofdays}<span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <input
+                              type="number" min={1}
+                              defaultValue={los?.time}
+                              className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              onChange={
+                                (e) => {
+                                  setLos({ ...los, time: e.target.value });
+                                  setLos({ ...los, pattern: e.target.value });
+                                }
+                              }
+                            />
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error?.time}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-6/12 px-4">
+                        {los?.min_max_msg === "FullPatternLOS" ?
+                          <div className="relative w-full mb-3">
+                            <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              {language?.pattern}<span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <input
+                                type="text"
+                                defaultValue={los?.fixed_pattern}
+                                className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                onChange={
+                                  (e) => (
+                                    setLos({ ...los, fixed_pattern: e.target.value })
+                                  )
+                                }
+                              />
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.fixed_pattern}</p>
+                              <span className='text-orange-500 text-xs'>
+                                {language?.patterndes}</span>
+
+                            </div>
+
+                          </div> : <></>}
+
+
+
+                      </div>
+                    </div>
+                  </>
+                </form>
+                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                  <Button Primary={language?.Update} onClick={() => validationLOS()} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Modal Add */}
+        <div className={view === 1 ? "block" : "hidden"}>
+          <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+            <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+              <div className={`bg-white rounded-lg shadow relative`}>
+                <div className="flex items-start justify-between p-5 border-b rounded-t">
+                  <h3 className="text-xl font-semibold">{language?.addchildguestcharges}</h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document.getElementById('addlosform').reset();
+                      setError({});
+                      setView(0);
+                    }}
+                    className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+                <form id='addlosform'>
+                  <>
+                    <div className="flex flex-wrap" key={0}>
+                      <div className="w-full lg:w-6/12 px-4">
+                        <div className="relative w-full mb-3">
+                          <label
+                            className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password"
+                          >
+                            {language?.minmaxmessage}<span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              onChange={
+                                (e) => {
+                                  setLos({ ...los, min_max_msg: e.target.value })
+                                  // e.target.value === 'FullPatternLOS' ? keys.push(index) : "";
+                                }
+                              }>
+                              <option selected>Select </option>
+                              <option value="SetMaxLOS">Max LOS</option>
+                              <option value="SetMinLOS">Min LOS</option>
+                              <option value="SetForwardMaxStay">Forward Max Stay</option>
+                              <option value="SetForwardMinStay">Forward Min Stay</option>
+                              <option value="FullPatternLOS">Full Pattern LOS</option>
+                            </select>
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error?.min_max_msg}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-6/12 px-4">
+                        <div className="relative w-full mb-3">
+                          <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            {language?.numberofdays}<span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <input
+                              type="number" min={1}
+                              placeholder="Enter number of days"
+                              className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              onChange={
+                                (e) => {
+                                  setLos({ ...los, time: e.target.value });
+
+                                }
+                              }
+                            />
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error?.time}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-6/12 px-4">
+                        {los?.min_max_msg === "FullPatternLOS" ?
+                          <div className="relative w-full mb-3">
+                            <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              {language?.pattern}<span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <input
+                                type="text"
+                                placeholder="Enter pattern"
+                                className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                onChange={
+                                  (e) => {
+                                    setLos({ ...los, fixed_pattern: e.target.value, pattern: los?.time })
+
+                                  }
+                                }
+                              />
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.fixed_pattern}</p>
+                              <span className='text-orange-500 text-xs'>
+                                {language?.patterndes}</span>
+
+                            </div>
+
+                          </div> : <></>}
+                      </div>
+                    </div>
+                  </>
+                </form>
+
+                <div className="items-center p-6 border-t border-gray-200 rounded-b">
+                  <Button Primary={language?.Add} onClick={validationPostLOS} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <ToastContainer position="top-center"
           autoClose={5000}
           hideProgressBar={false}
@@ -839,7 +1195,7 @@ function AddAvailability() {
           draggable
           pauseOnHover />
 
-          
+
       </div>
       <Footer color={color} />
     </>

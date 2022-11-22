@@ -59,7 +59,7 @@ function Inventory() {
            
           setAllRooms(result);
           if(result.length===0){
-            toast.warn("Inventory for all rooms registered ", {
+            toast.warn("Inventory for all rooms is registered ", {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -260,7 +260,7 @@ const validationInventory = () => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.startdate}
+                        {language?.startdate} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -281,7 +281,7 @@ const validationInventory = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                         {language?.enddate}
+                         {language?.enddate} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -304,7 +304,7 @@ const validationInventory = () => {
                       <label
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                       {language?.available} {language?.days}
+                       {language?.available} {language?.days} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -325,7 +325,7 @@ const validationInventory = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                       {language?.rooms}  {language?.count}
+                       {language?.rooms}  {language?.count} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -348,7 +348,7 @@ const validationInventory = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                       {language?.rooms}  
+                       {language?.rooms}  <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>

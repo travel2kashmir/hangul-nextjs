@@ -1,5 +1,4 @@
 const validateFreeNights = (data) =>{
-    alert(JSON.stringify(data))
     var error={};
      var flag=[]
      var final_flag=true;

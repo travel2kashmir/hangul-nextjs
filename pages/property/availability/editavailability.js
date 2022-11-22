@@ -1070,7 +1070,7 @@ function AddAvailability() {
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
               <div className={`bg-white rounded-lg shadow relative`}>
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
-                  <h3 className="text-xl font-semibold">{language?.addchildguestcharges}</h3>
+                  <h3 className="text-xl font-semibold"> {language?.length_of_stay}</h3>
                   <button
                     type="button"
                     onClick={() => {
@@ -1094,7 +1094,7 @@ function AddAvailability() {
                     </svg>
                   </button>
                 </div>
-                <form id='addlosform'>
+                <form id='addlosform' className='mt-2'>
                   <>
                     <div className="flex flex-wrap" key={0}>
                       <div className="w-full lg:w-6/12 px-4">

@@ -211,7 +211,7 @@ const extraGuestChild= (props) => {
     
      }))
  const final_data = { "extra_guest_child_link": data }
- alert(JSON.stringify(final_data))
+
 
  const url = '/api/ari/extra_guest_charges/extra_guest_child_link'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -328,65 +328,7 @@ const validationExtraChildGuest = () => {
             </div>
             </div>
                   
-            <div className="pt-6">
-              <div className=" md:px-4 mx-auto w-full">
-                <div className="flex flex-wrap">
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                        {language?.adult}  {language?.charges}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                        <input
-                          type="text"
-                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                         onChange={
-                            (e) => (
-                              setExtraGuestCharges({ ...extraGuestCharges, adult_charges: e.target.value })
-                            )
-                          }
-                        />
-                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.adult_charges}</p></div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                        {language?.package} 
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select
-                    onClick={(e) =>
-                      setExtraGuestCharges({ ...extraGuestCharges, package_id: e.target.value })
-                    }
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                  >
-                     <option selected>{language?.select}</option>
-                    {packages?.map((i) => {
-                      return (
-                        <option key={i} value={i.package_id}>
-                          {i.package_name}
-                        </option>
-                      );
-                    })}
-                  </select>
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.package}</p></div>
-                    </div>
-                  </div>
-                  </div>
-                  </div>
-                  </div>
-
+          
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   <Button Primary={language?.AddLOS}  onClick={addLOS} />
@@ -432,7 +374,7 @@ const validationExtraChildGuest = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    {language?.excludefromcapacity}
+                    {language?.excludefromcapacity}{JSON.stringify(error)}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -513,11 +455,72 @@ const validationExtraChildGuest = () => {
                   </div>:<></>}
                   </div>
                    </>))} 
+                 
+                  </div>
+                  </div>
+
+                  <div className="pt-6">
+              <div className=" md:px-4 mx-auto w-full">
+                <div className="flex flex-wrap">
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.adult}  {language?.charges}
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text"
+                          className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                         onChange={
+                            (e) => (
+                              setExtraGuestCharges({ ...extraGuestCharges, adult_charges: e.target.value })
+                            )
+                          }
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.adult_charges}</p></div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                        {language?.package} 
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <select
+                    onClick={(e) =>
+                      setExtraGuestCharges({ ...extraGuestCharges, package_id: e.target.value })
+                    }
+                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  >
+                     <option selected>{language?.select}</option>
+                    {packages?.map((i) => {
+                      return (
+                        <option key={i} value={i.package_id}>
+                          {i.package_name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.package}</p></div>
+                    </div>
+                  </div>
+                  </div>
+                  </div>
+                  </div>
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Submit} onClick={validationExtraGuestCharges} /> 
                 </div>
-                  </div>
-                  </div>
+
             </div>
             <ToastContainer position="top-center"
         autoClose={5000}

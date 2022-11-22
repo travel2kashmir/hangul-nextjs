@@ -548,7 +548,7 @@ useEffect(()=>{
 // Check In Generation
   const checkInGen = () => {
     var genData = [];
-    promotion?.dates?.map((item) => {
+    pro?.dates?.map((item) => {
       if(item?.type === "check_in"){
       var temp = {
           name: item.start_date,
@@ -566,7 +566,7 @@ useEffect(()=>{
 // Check Out Generation
   const checkOutGen = () => {
     var genData = [];
-    promotion?.dates?.map((item) => {
+    pro?.dates?.map((item) => {
       if(item?.type === "check_out"){
       var temp = {
           name: item.start_date,
@@ -584,7 +584,7 @@ useEffect(()=>{
   // Booking Data Generation
   const BookingGen = () => {
     var genData = [];
-    promotion?.dates?.map((item) => {
+    pro?.dates?.map((item) => {
       if(item?.type === "booking"){
       var temp = {
           name: item.start_date,

@@ -18,7 +18,7 @@ import Headloader from '../../../components/loaders/headloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week =[];
+var days_of_week =['M','T','W','T','F','S','U'];
 var keys =[];
 var currentPackage;
 var i=0;
@@ -60,7 +60,7 @@ useEffect(() => {
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
         currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-        setVisible(1);
+       
    }
     }
     firstfun();
@@ -218,7 +218,7 @@ const submitPackages = (props) => {
     "promotion_id":modificationId,
     "start_date": "",
     "end_date":"" ,
-    "days_of_week": "" ,
+    "days_of_week":  "MTWTFSU"  ,
     "type":""
   }  
 
@@ -244,14 +244,14 @@ const submitPackages = (props) => {
     }
 
 // Dates
-const submitDates= (check_in) => {
+const submitDates= (type) => {
   const data = checkInData?.map((i => {
     return {
     "modification_id":modificationId,
      "start_date": i?.start_date,
      "end_date":i?.end_date,
      "days_of_week":i?.days_of_week,
-     "type": check_in
+     "type": type
    }}))
  const final_data = { "property_promotion_rates": data }
  const url = '/api/ari/property_rate_modifications/property_rate_modifications_dates'
@@ -266,15 +266,17 @@ const submitDates= (check_in) => {
          draggable: true,
          progress: undefined,
        });
-     days_of_week=[];
+     days_of_week =['M','T','W','T','F','S','U'];
      setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
-     if(check_in === "check_in"){
+     if(type === "check_in"){
       setDisp(2)
      }
-     if(check_in === "check_out"){
+     if(type === "check_out"){
       setDisp(3)
      }
-    
+     if(type === "booking"){
+      Router.push('../modifications')
+     }
      })
      .catch((error) => {
        toast.error("Dates error", {
@@ -372,6 +374,7 @@ const submitDates= (check_in) => {
         const url = `/api/rate_rule/${currentProperty.property_id}`
         const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
        setRateRules(response.data)
+       setVisible(1);
     }
     catch (error) {
 
@@ -449,7 +452,8 @@ const submitDates= (check_in) => {
               </li>
             </ol>
           </nav>
-          {/* Promotion */}
+          
+          {/* Modification */}
           <div id='0' className={disp===0?'block':'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -487,6 +491,7 @@ const submitDates= (check_in) => {
                         htmlFor="grid-password"
                       >
                        {language?.modification} {language?.name}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -510,6 +515,7 @@ const submitDates= (check_in) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.raterule}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -542,6 +548,7 @@ const submitDates= (check_in) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.packages}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -668,6 +675,7 @@ const submitDates= (check_in) => {
                         htmlFor="grid-password"
                       >
                        {language?.minamountbeforediscount} 
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -692,6 +700,7 @@ const submitDates= (check_in) => {
                         htmlFor="grid-password"
                       >
                        {language?.availability} 
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -720,7 +729,7 @@ const submitDates= (check_in) => {
                   </div>
 
                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{ validationModification();}}/> 
+                    <Button Primary={language?.Submit} onClick={()=>{ validationModification();}}/> 
                 </div>
               
                </div>
@@ -729,30 +738,25 @@ const submitDates= (check_in) => {
             </div>
             </div>
 
-           {/* Discount */}
+           {/* Check In */}
            <div id='1' className={disp===1?'block':'hidden'}>
            <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {checkInData?.days_of_week}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.modification}</div>
             </div>
           
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.duration}</div>
-            </div>
-           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
@@ -792,6 +796,7 @@ const submitDates= (check_in) => {
                         htmlFor="grid-password"
                       >
                      {language?.checkin} {language?.startdate}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -811,6 +816,7 @@ const submitDates= (check_in) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                        {language?.checkin} {language?.enddate}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -826,9 +832,10 @@ const submitDates= (check_in) => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    {language?.days} {language?.avaialable}
+                    {language?.days} {language?.available}
+                    <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -836,6 +843,7 @@ const submitDates= (check_in) => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"
@@ -848,15 +856,16 @@ const submitDates= (check_in) => {
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2)}} /> 
-                    <Button Primary={language?.Next}onClick={()=>{ validateDate()}}  /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2);setError({})
+                         setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
+                    <Button Primary={language?.Submit}onClick={()=>{ validateDate()}}  /> 
                  </div>
                   </div>
                   </div>
         </div>
             </div>
 
-            {/* Check In */}
+            {/* Check Out */}
             <div id='2' className={disp===2?'block':'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -865,21 +874,16 @@ const submitDates= (check_in) => {
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
             </div>
           
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.duration}</div>
-            </div>
-            
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>   {language?.booking} {language?.date}</div>
             </div>
            
@@ -920,6 +924,7 @@ const submitDates= (check_in) => {
                         htmlFor="grid-password"
                       >
                       {language?.checkout} {language?.startdate}
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -938,6 +943,7 @@ const submitDates= (check_in) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                      {language?.checkout} {language?.enddate}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -953,9 +959,10 @@ const submitDates= (check_in) => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm  capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                   {language?.days} {language?.avaialable}
+                   {language?.days} {language?.available}
+                   <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -964,6 +971,7 @@ const submitDates= (check_in) => {
                       isObject={true}
                       options={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
+                      selectedValues={lang?.DaysData}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"
                       />
@@ -975,36 +983,34 @@ const submitDates= (check_in) => {
                 </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3)}} /> 
-                    <Button Primary={language?.Next} onClick={()=>{validateDate()}} /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3); setError({})
+                   setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
+                    <Button Primary={language?.Submit} onClick={()=>{validateDate()}} /> 
                  </div>
                   </div>
                   </div>
             </div>
             </div>
           
-           {/* Check Out*/}
+           {/* Booking */}
            <div id='3' className={disp===3?'block':'hidden'}>
            <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
           <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.modification}</div>
             </div>
-           <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.duration}</div>
-            </div>
+          
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.checkin} </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.checkout}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">5</button>
+            <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">4</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.booking} {language?.date}</div>
             </div>
            
@@ -1046,6 +1052,7 @@ const submitDates= (check_in) => {
                         htmlFor="grid-password"
                       >
                      {language?.booking} {language?.startdate}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1064,6 +1071,7 @@ const submitDates= (check_in) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.booking} {language?.enddate}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1079,9 +1087,10 @@ const submitDates= (check_in) => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                      {language?.days} {language?.available}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1091,6 +1100,7 @@ const submitDates= (check_in) => {
                       options={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
+                      selectedValues={lang?.DaysData}
                      displayValue="day"
                       />
                         <p className="text-sm text-sm text-red-700 font-light">

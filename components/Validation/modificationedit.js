@@ -2,8 +2,7 @@ const validateModificationsEdit= (data) =>{
     var error={};
      var flag=[]
      var final_flag=true;
-     console.log(data)
-    alert(JSON.stringify(data))
+    
      if(data?.modification_name==="" || data?.modification_name===undefined)
      {
          flag.push(false)

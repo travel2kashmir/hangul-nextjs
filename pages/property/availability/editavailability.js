@@ -52,6 +52,7 @@ function AddAvailability() {
   const [gen, setGen] = useState([])
   const [viewEdit, setViewEdit] = useState(0)
   const [view, setView] = useState(0)
+  const [spinner,setSpinner]=useState(0)
 
   /** Fetching language from the local storage **/
   useEffect(() => {
@@ -117,7 +118,8 @@ function AddAvailability() {
         "start_date": response.data.start_date,
         "end_date": response.data.end_date,
         "days_of_week": response.data.days_of_week,
-        "room_id": response.data.room_id
+        "room_id": response.data.room_id,
+        "package_id": response.data.package_id
       }
       setAvl(temp);
       setOrgAvl(temp);
@@ -172,6 +174,7 @@ function AddAvailability() {
         });
         setError([])
         setOrgAvl(avl)
+        setSpinner(0);
       })
       .catch((error) => {
         toast.error("Availability error", {
@@ -213,7 +216,7 @@ function AddAvailability() {
           });
           setOrgRes(res);
           setError([]);
-          setDisp(2);
+          setSpinner(0)
         })
         .catch((error) => {
           toast.error("Restriction error", {
@@ -242,6 +245,7 @@ function AddAvailability() {
           });
           setOrgRes(res);
           setError([]);
+          setSpinner(0);
           setDisp(2);
         })
         .catch((error) => {
@@ -332,6 +336,7 @@ function AddAvailability() {
           keys = [];
           setError({});
           document.getElementById('editLOSform').reset();
+          setSpinner(0);
           setViewEdit(0);
         })
         .catch((error) => {
@@ -399,6 +404,7 @@ function AddAvailability() {
       setError({});
       setLos([]);
       document.getElementById('addlosform').reset();
+      setSpinner(0);
         setView(0);
       })
       .catch((error) => {
@@ -489,14 +495,16 @@ function AddAvailability() {
         progress: undefined,
 
       });
+      setSpinner(0);
     }
     else {
       var result = validateAvailability(avl, days_of_week)
-      if (result === true) {
+     if (result === true) {
         submitAvailability();
       }
       else {
         setError(result)
+        setSpinner(0);
       }
     }
 
@@ -514,6 +522,7 @@ function AddAvailability() {
         progress: undefined,
 
       });
+      setSpinner(0);
     }
     else {
       var result = validateRestriction(res)
@@ -522,6 +531,7 @@ function AddAvailability() {
       }
       else {
         setError(result)
+        setSpinner(0);
       }
     }
 
@@ -539,6 +549,7 @@ function AddAvailability() {
         progress: undefined,
 
       });
+      setSpinner(0);
     }
     else {
       var data=[los]
@@ -548,6 +559,7 @@ function AddAvailability() {
       }
       else {
         setError(result[0])
+        setSpinner(0);
       }
     }
   }
@@ -561,6 +573,7 @@ function AddAvailability() {
     }
     else {
       setError(result[0])
+      setSpinner(0);
     }
   }
   return (
@@ -728,7 +741,12 @@ function AddAvailability() {
 
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Update} onClick={validationAvailability} />
+                  <div className={spinner === 1 ? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerUpdate} />
+                  </div>
+                  <div className={spinner === 0 ? 'block' : 'hidden'}>
+                    <Button Primary={language?.Update} onClick={()=>{setSpinner(1); validationAvailability();}} />
+                  </div>
                     <Button Primary={language?.Next} onClick={() => setDisp(1)} />
                   </div>
 
@@ -876,9 +894,14 @@ function AddAvailability() {
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Previous} onClick={() => setDisp(0)} />
-                    <Button Primary={resLen === 1 ? language?.Update : language?.Submit } onClick={validationRestriction} />
-                   
-                    <Button Primary={language?.Next} onClick={() => setDisp(2)} />
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                   <Button Primary={language?.SpinnerUpdate} />
+                  </div>
+                  <div className={spinner === 0 ? 'block' : 'hidden'}>
+                  <Button Primary={resLen === 1 ? language?.Update : language?.Submit } onClick={()=>{setSpinner(1); validationRestriction()}} />
+                  </div>
+                    
+                   <Button Primary={language?.Next} onClick={() => setDisp(2)} />
                   </div>
 
                 </div>

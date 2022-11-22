@@ -21,7 +21,7 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week =[];
+var days_of_week =['M','T','W','T','F','S','U'];
 var keys =[];
 var currentPackage;
 var resCou = []
@@ -67,7 +67,7 @@ useEffect(() => {
       currentPackage = localStorage.getItem('PackageId');
       currentPromotion = localStorage.getItem('promotionId');
       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-      setVisible(1);
+    
  }
   }
   firstfun();
@@ -78,13 +78,13 @@ useEffect(()=>{
   setColor(DarkModeLogic(darkModeSwitcher))
  },[darkModeSwitcher])
 
- // Promotion
+ // Promotions
  const submitPromotion = () => {
   var k =new Date()
   var day=k.getDate();
   var month=k.getMonth()+1  
-  k.getFullYear()
-  var year=k.getFullYear()
+  k.getFullYear();
+  var year=k.getFullYear();
   var hr=k.getHours()
   var min=k.getMinutes()
   var sec=k.getSeconds()
@@ -118,13 +118,10 @@ useEffect(()=>{
          draggable: true,
          progress: undefined,
        });
-      
-      setPromotionId(response?.data?.promotion_id);
-      if(promotion?.devices!=undefined){devices(response.data.promotion_id)}
-      if(promotion?.country!=undefined){countries(response.data.promotion_id)}
-      packages(response.data.promotion_id);
-      submitPromotionDiscount(response.data.promotion_id);
-      setDisp(1);
+     try {
+      otherFunction(response?.data?.promotion_id);
+     } catch (error) {
+     }    
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -138,7 +135,21 @@ useEffect(()=>{
        });
      })
 }
-
+// Function call after promotion being added
+const otherFunction = (props) => {
+  packages(props);
+  submitPromotionDiscount(props);
+  if(promotion?.devices?.length !== 0 && promotion?.devices?.length !== undefined )
+  {
+    devices(props)
+  }
+  
+  if(promotion?.country?.length !== 0 && promotion?.country?.length !== undefined )
+  {
+     countries(props)
+  }
+  setPromotionId(props);
+}
 //Devices
 const devices = (props) => { 
  var final_device_data=[]
@@ -149,42 +160,6 @@ const devices = (props) => {
     }
     final_device_data.push(temp) } );
     submitDevices(final_device_data);    
-}
-//Promotion Link
-const submitPromotionLink = (props) => {
-  const current = new Date();
-  const currentDateTime= current.toISOString();
-  const final_data =  {"property_promotion_link": [{
-     "property_id": currentProperty?.property_id,
-     "promotion_message_id": "promo" +currentProperty?.property_id,
-     "action": promotion?.stacking_type,
-     "timestamp": currentDateTime 
-   }]
- }
- const url = '/api/ari/promotions/property_promotion_link'
-   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-     ((response) => {
-       toast.success("Property promotion  link success", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-     .catch((error) => {
-       toast.error("Property promotion link error", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
 }
 
 
@@ -241,7 +216,7 @@ const submitPromotionFreeNights = () => {
   const url = '/api/ari/promotions/property_promotion_free_nights'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
-       toast.success("Promotion success", {
+       toast.success("Promotion Free Nights success", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -253,7 +228,7 @@ const submitPromotionFreeNights = () => {
        setDisp(2);
      })
      .catch((error) => {
-       toast.error("Promotion error", {
+       toast.error("Promotion Free Nights error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -340,7 +315,7 @@ const submitPackages = (props) => {
      
      })
      .catch((error) => {
-       toast.error("Devices error", {
+       toast.error("Packages error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -395,6 +370,7 @@ const removecheckIn = (index) => {
           const url = `/api/package/${currentProperty?.property_id}`
           const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
          setAllPackages(response.data) 
+         setVisible(1);
       }
       catch (error) {
           if (error.response) {
@@ -414,7 +390,7 @@ filterByCountry();
     "promotion_id":promotionId,
     "start_date": "",
     "end_date":"" ,
-    "days_of_week": "" ,
+    "days_of_week": "MTWTFSU"  ,
     "type":""
   }  
 
@@ -462,13 +438,19 @@ const submitDates= (check_in) => {
          draggable: true,
          progress: undefined,
        });
-     days_of_week=[];
+     days_of_week =['M','T','W','T','F','S','U'];
      setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
      if(check_in === "check_in"){
-      setDisp(3)
+      setError([])
+      setDisp(3);
      }
      if(check_in === "check_out"){
+      setError([])
       setDisp(4)
+     }
+     if(check_in === "booking"){
+      setError([])
+      Router.push('../promotions')
      }
     
      })
@@ -546,20 +528,19 @@ const days = (days,index) => {
 
 }
 
+// Validation Promotion
 const validationPromotion = () => {
   var result = validatePromotions(promotion)
-     console.log("Result" +JSON.stringify(result))
-     if(result===true)
+   if(result===true)
      {
-      
       submitPromotion();
      }
      else
      {
       setError(result)
      }
-    }
-
+}
+//  Validate Nights
   const validateNights = () => {
     var result = validateFreeNights(promotion)
     console.log("Result" + JSON.stringify(result))
@@ -570,6 +551,8 @@ const validationPromotion = () => {
       setError(result)
     }
   }
+
+  // Validate Date
   const validateDate = () => {
     var result = validateDates(checkInData)
     console.log("Result" + JSON.stringify(result))
@@ -601,7 +584,7 @@ const validationPromotion = () => {
               <li className="inline-flex items-center">
               <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                 <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} 
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "../landing"} 
                 className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
                 </Link></div>
               </li>
@@ -610,7 +593,7 @@ const validationPromotion = () => {
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
                     <a>{currentProperty?.property_name}</a>
                   </Link>
                   </div></div>
@@ -680,6 +663,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                        {language?.promotion} {language?.name}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -702,6 +686,7 @@ const validationPromotion = () => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.stackingtype}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -732,6 +717,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                         {language?.discount} {language?.type}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -758,6 +744,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                         {language?.discount} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -782,6 +769,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                         {language?.appliednights} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -898,11 +886,12 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                        {language?.minamountbeforediscount} 
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text"
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -996,6 +985,7 @@ const validationPromotion = () => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.packages}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1091,7 +1081,7 @@ const validationPromotion = () => {
                    </div>
                   </div>
                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.Next} onClick={()=>{ validationPromotion()}}/> 
+                    <Button Primary={language?.Submit} onClick={()=>{ validationPromotion()}}/> 
                 </div>
                 </div>
                   </div>
@@ -1141,8 +1131,9 @@ const validationPromotion = () => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                      {language?.freestaynights} 
-                      </label>
+                      {language?.freestaynights}  
+                       <span style={{ color: "#ff0000" }}>*</span>
+                  </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
@@ -1159,6 +1150,7 @@ const validationPromotion = () => {
                       </div>
                     </div>
                   </div>
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1166,6 +1158,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                       {language?.freediscountnights}
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1183,6 +1176,7 @@ const validationPromotion = () => {
                       </div>
                     </div>
                   </div>
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1190,6 +1184,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                        {language?.freenightsdiscountpercentage}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1215,6 +1210,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                        {language?.freenightselection}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1235,6 +1231,7 @@ const validationPromotion = () => {
                       </div>
                     </div>
                   </div>
+
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
@@ -1242,6 +1239,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                       {language?.freenightsrepeat}
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1276,8 +1274,8 @@ const validationPromotion = () => {
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2)}} /> 
-                    <Button Primary={language?.Next} onClick={()=>{validateNights();}} /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2);setError({})}} /> 
+                    <Button Primary={language?.Submit} onClick={()=>{validateNights();}} /> 
                 </div>
                 
                   </div>
@@ -1349,6 +1347,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                      {language?.checkin} {language?.startdate}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1368,6 +1367,7 @@ const validationPromotion = () => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                        {language?.checkin} {language?.enddate}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1383,9 +1383,10 @@ const validationPromotion = () => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    {language?.days} {language?.avaialable}
+                    {language?.days} {language?.available}
+                    <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1393,6 +1394,7 @@ const validationPromotion = () => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"
@@ -1405,8 +1407,10 @@ const validationPromotion = () => {
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3)}} /> 
-                    <Button Primary={language?.Next}onClick={()=>{ validateDate()}}  /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3);
+                   setError({})
+                   setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
+                    <Button Primary={language?.Submit}onClick={()=>{ validateDate()}}  /> 
                  </div>
                   </div>
                   </div>
@@ -1477,6 +1481,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                       {language?.checkout} {language?.startdate}
+                      <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1495,6 +1500,7 @@ const validationPromotion = () => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                      {language?.checkout} {language?.enddate}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1510,9 +1516,10 @@ const validationPromotion = () => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                   {language?.days} {language?.avaialable}
+                   {language?.days} {language?.available}
+                   <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1520,6 +1527,7 @@ const validationPromotion = () => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"
@@ -1532,8 +1540,10 @@ const validationPromotion = () => {
                 </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(4)}} /> 
-                    <Button Primary={language?.Next} onClick={()=>{validateDate()}} /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(4);
+                  setError({});
+                   setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
+                    <Button Primary={language?.Submit} onClick={()=>{validateDate()}} /> 
                  </div>
                   </div>
                   </div>
@@ -1603,6 +1613,7 @@ const validationPromotion = () => {
                         htmlFor="grid-password"
                       >
                      {language?.booking} {language?.startdate}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1621,6 +1632,7 @@ const validationPromotion = () => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.booking} {language?.enddate}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1636,9 +1648,10 @@ const validationPromotion = () => {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                      <label className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                      {language?.days} {language?.available}
+                     <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1646,6 +1659,7 @@ const validationPromotion = () => {
                       className="shadow-sm bg-gray-50 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full "
                       isObject={true}
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event,index) }}
                       onSelect={(event) => { days(event,index) }}
                      displayValue="day"
@@ -1664,6 +1678,7 @@ const validationPromotion = () => {
                   </div>
             </div>
             </div> 
+
        <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}

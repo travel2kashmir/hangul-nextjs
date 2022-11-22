@@ -1,8 +1,11 @@
 export default {
+  editchildguestcharges:"Edit Child Guest Charges",
+ addchildguestcharges:"Add Child Guest Charges",
   excludefromcapacity:"Exclude from Capacity",
   chargetype:"Charge Type",
   extraguestcharge:"Extra Guest Charge",
-  countbasecomponent:"Count Base Component",
+ childguestcharge:"Child Guest Charge",
+  countbaseoccupant:"Count Base Occupant",
   charges:"Charges",
   //Promotions
   promotions:"Promotions",
@@ -273,6 +276,7 @@ Cancel:"Cancel"
  col1 : "Room Name",
  
 },
+
 "PackageCols":{
   name:"Packages",
  col1 : "Package Name",
@@ -280,7 +284,12 @@ Cancel:"Cancel"
 },
 "ExtraGuestCols":{
   name:"Extra Guest Charges",
-  col1 : "Package Name",
+  col1 : "Name",
+  
+},
+"ExtraChildGuestCols":{
+  name:"Child Guest Charges",
+  col1 : "Child Age",
   
 },
 "RoomBundleCols":{
@@ -718,7 +727,12 @@ roomsxml:'./roomsxml',
 raterules:'./raterules',
 additionalservices:'./additionalservices',
 theme:'./theme',
-pointofsale:'./pointofsales'
+pointofsale:'./pointofsales',
+availability:'./availability',
+inventory:'./inventories',
+promotion:'./promotions',
+modification:'./modifications',
+extraguestcharge:'./extraguestcharges'
 },
 
 
@@ -740,7 +754,12 @@ roomsxml:'../roomsxml',
 raterules:'../raterules',
 additionalservices:'../additionalservices',
 theme:'../theme',
-pointofsale:'../pointofsales'
+pointofsale:'../pointofsales',
+availability:'../availability',
+inventory:'../inventories',
+promotion:'../promotions',
+modification:'../modifications',
+extraguestcharge:'../extraguestcharges'
  },
  
  "Side2":{
@@ -761,7 +780,12 @@ roomsxml:'../../roomsxml',
 raterules:'../../raterules',
 additionalservices:'../../additionalservices',
 theme:'../../theme',
-pointofsale:'../../pointofsales'
+pointofsale:'../../pointofsales',
+availability:'../../availability',
+inventory:'../../inventories',
+promotion:'../../promotions',
+modification:'../../modifications',
+extraguestcharge:'../../extraguestcharges'
  },
   descriptiondate: "Description Date",
   update:'Update',

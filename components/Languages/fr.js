@@ -1,4 +1,6 @@
 export default {
+  editchildguestcharges:"Modifier les frais d'invité enfant",
+  addchildguestcharges:"Ajouter des frais d'invité enfant",
   excludefromcapacity:"Exclure de la capacité",
   chargetype:"Type de frais",
   extraguestcharge:"Frais d'invité supplémentaire",

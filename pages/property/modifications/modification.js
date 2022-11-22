@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import validateModificationsEdit from '../../../components/Validation/modificationedit';
+import LoaderTable from '../loaderTable'
 import validateDates from '../../../components/Validation/Promotions/addpromotiondates';
 import DatesTable from '../../../components/datestables';
 import DarkModeLogic from "../../../components/darkmodelogic";
@@ -68,7 +69,7 @@ useEffect(() => {
       currentProperty = JSON.parse(localStorage.getItem("property"));
       currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       currentModification = localStorage.getItem('modificationId');
-      setVisible(1);
+    
  }
   }
   firstfun();
@@ -124,7 +125,7 @@ const fetchModification = async (props) => {
       const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
       setModification(response.data) 
      props.map(i => { if (i.rate_rule_id === response.data.rate_rule_id) { setRateRuleName(i) } }); 
-
+     setVisible(1);
   }
   catch (error) {
       if (error.response) {
@@ -134,7 +135,6 @@ const fetchModification = async (props) => {
   }
 
 }
-
 
  /** For Miles **/
  const checkInTemplate = {
@@ -257,9 +257,7 @@ const submitPackages = (props) => {
 // Validation Modification
 const validationModification = () => {
   var result = validateModificationsEdit(modification)
-
      console.log("Result" +JSON.stringify(result))
-     alert(JSON.stringify(result))
      if(result===true)
      {
       if(mod === 1){
@@ -397,7 +395,7 @@ const submitDates= (type) => {
      "days_of_week": days_of_week.toString().replaceAll(',',''),
      "type": type
    }]
- const final_data = { "property_modifications_rates": data }
+ const final_data = { "property_modifications_dates": data }
 const url = '/api/ari/property_rate_modifications/property_rate_modifications_dates'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -410,7 +408,7 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
          draggable: true,
          progress: undefined,
        });
-       alert("1")
+       fetchModification();
        const temp=[{
         name: data[0]?.start_date,
         type: data[0]?.end_date,
@@ -418,7 +416,7 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
         id: response.data.date_id
         }]
       setGen( gen.concat(temp))
-      setError([])
+      days_of_week =['M','T','W','T','F','S','U'];
      document.getElementById('addmodificationform').reset();
      setError([])
      setView(0)
@@ -434,7 +432,7 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
          progress: undefined,
        });
      })
-}
+};
 
 // Submit Date Delete
 const submitmodificationDelete = (props) => {
@@ -451,6 +449,7 @@ const submitmodificationDelete = (props) => {
          draggable: true,
          progress: undefined,
        });
+       fetchModification();
        setGen(gen.filter(i=>i.id!=props))
      })
      .catch((error) => {
@@ -466,24 +465,22 @@ const submitmodificationDelete = (props) => {
       
      });
  };
+
 // Edit Modification
-/* Function Edit Contact*/
 const submitDateEdit = (props,noChange,days_data) => {
- 
-  const final_data ={ 
-    "property_rate_modification_dates":[{
+ const data =[{
    "mod_date_id": props.id,
     "start_date": props.name,
    "end_date": props.type,
    "days_of_week":days_data
   }
-]};
-
+];
+const final_data = { "property_modifications_dates": data }
   const url = "/api/ari/property_rate_modifications/property_rate_modifications_dates";
   axios
     .put(url, final_data, { header: { "content-type": "application/json" } })
     .then((response) => {
-    toast.success("API: DatesUpdated Successfully!", {
+    toast.success("API: Dates Updated Successfully!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -492,7 +489,15 @@ const submitDateEdit = (props,noChange,days_data) => {
         draggable: true,
         progress: undefined,
       });
-      
+      fetchModification();
+        const temp=[{
+          name: data[0]?.start_date,
+          type: data[0]?.end_date,
+          status: days_data,
+          id: data[0]?.mod?.date_id
+          }]
+         var filtered_data = gen.filter((i) => i.id != data[0]?.mod_date_id)
+         setGen(filtered_data.concat(temp));  
     })
     .catch((error) => {
       toast.error("API: Dates Update Error!", {
@@ -598,6 +603,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                         htmlFor="grid-password"
                       >
                        {language?.modification} {language?.name}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -621,6 +627,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.raterule}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -653,6 +660,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.packages}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -784,6 +792,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                         htmlFor="grid-password"
                       >
                        {language?.minamountbeforediscount} 
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -810,6 +819,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                         htmlFor="grid-password"
                       >
                        {language?.availability} 
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -838,9 +848,10 @@ const submitDateEdit = (props,noChange,days_data) => {
                   </div>
 
                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                 <Button Primary={language?.Skip} onClick={()=>{
-                     checkInGen()}}/> 
+                
                     <Button Primary={language?.Update} onClick={()=>{ validationModification(); }}/> 
+                    <Button Primary={language?.Next} onClick={()=>{
+                     checkInGen()}}/> 
                 </div>
 
                 </div>
@@ -854,7 +865,7 @@ const submitDateEdit = (props,noChange,days_data) => {
            <div className="relative before:hidden  before:lg:block before:absolute before:w-[62%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.modification} {checkInData?.days_of_week}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.modification}</div>
             </div>
           
               
@@ -873,9 +884,14 @@ const submitDateEdit = (props,noChange,days_data) => {
            
         </div>
           {/* Card CheckIn Table */}
+          <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
           <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name={language?.checkin} delete={submitmodificationDelete} edit={submitDateEdit} add={()=> setView(1)}/> 
+        name={language?.checkin} delete={submitmodificationDelete} edit={submitDateEdit}
+         add={()=> setView(1)}/> </div>
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+            <Button Primary={language?.Previous} onClick={()=>{
+                     setDisp(0)}}/> 
                   <Button Primary={language?.Next} onClick={()=>{setDisp(2);checkOutGen()}} /> 
                 </div>
             </div>
@@ -903,9 +919,15 @@ const submitDateEdit = (props,noChange,days_data) => {
            
             </div>
          {/* Card CheckOut Table */}
+         <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
         <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-         add={()=> setView(1)} delete={submitmodificationDelete} name={language?.checkout} edit={submitDateEdit}/> 
+         add={()=> setView(1)} delete={submitmodificationDelete} name={language?.checkout} 
+         edit={submitDateEdit}/> 
+           </div>
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+            <Button Primary={language?.Previous} onClick={()=>{
+                     checkInGen()}}/> 
                     <Button Primary={language?.Next} onClick={()=>{setDisp(3);BookingGen()}} /> 
                 </div>
             </div>
@@ -933,8 +955,13 @@ const submitDateEdit = (props,noChange,days_data) => {
            
         </div>
        {/* Card Booking Table */}
+       <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
        <DatesTable gen={gen} setGen={setGen} color={color}  common={language?.common} cols={language?.CheckInCols}
-        name={language?.booking} edit={submitDateEdit} add={()=> setView(1)}/>    
+        name={language?.booking} edit={submitDateEdit} add={()=> setView(1)}/></div>   
+          <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
+         <Button Primary={language?.Previous} onClick={()=>{
+                     setDisp(2)}}/> </div> 
        </div>
 
          {/* Modal Add */}
@@ -977,6 +1004,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                         className={`text-sm font-medium text-gray-900 block mb-2`}
                       >
                         {language?.startdate} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input type="date"
                       onChange={
@@ -994,6 +1022,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                         className={`text-sm capitalize font-medium text-gray-900 block mb-2`}
                       >
                         {language?.enddate} 
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input type="date"
                        onChange={
@@ -1010,7 +1039,8 @@ const submitDateEdit = (props,noChange,days_data) => {
                         htmlFor="last-name"
                         className={`text-sm capitalize font-medium text-gray-900 block mb-2`}
                       >
-                        {language?.days} {days_of_week}
+                        {language?.days}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <Multiselect 
                       className={`fixed shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
@@ -1018,6 +1048,7 @@ const submitDateEdit = (props,noChange,days_data) => {
                       isObject={true}
                       
                       options={lang?.DaysData}
+                      selectedValues={lang?.DaysData}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
                      displayValue="day"

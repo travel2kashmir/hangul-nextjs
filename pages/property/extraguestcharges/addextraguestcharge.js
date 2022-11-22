@@ -78,7 +78,7 @@ useEffect(() => {
     "amount": "",
     "charge_type":"",
     "exclude_from_capacity":"" ,
-    "count_as_base_occupant":"" ,
+    "count_as_base_occupant":"" 
   }  
 
   /* Mapping Index of each mile*/
@@ -115,7 +115,6 @@ const submitExtraGuestCharges = () => {
      "status":"true"
    }]
  }
- alert(JSON.stringify(final_data))
 const url = '/api/ari/extra_guest_charges'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -128,6 +127,7 @@ const url = '/api/ari/extra_guest_charges'
          draggable: true,
          progress: undefined,
        });
+       alert(response.data)
        submitPackagesLink(response.data.extra_guest_id)
        extraGuestChild(response.data.extra_guest_id)
  
@@ -152,7 +152,7 @@ const submitPackagesLink = (props) => {
      "package_id":extraGuestCharges?.package_id 
    }]
  }
- alert(JSON.stringify(final_data))
+alert(JSON.stringify(final_data))
  const url = '/api/ari/extra_guest_charges/extra_guest_package_link'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -181,15 +181,40 @@ const submitPackagesLink = (props) => {
 
 const extraGuestChild= (props) => {
   const data = LOSData?.map((i => {
-    return {
-    "extra_guest_id":props,
-     "max_age": i?.max_age,
-     "amount":i?.amount,
-     "exclude_from_capacity":i?.exclude_from_capacity,
-     "count_as_base_occupant":i?.count_as_base_occupant,
-   }}))
+      if(i.charge_type==='amount'){
+        return {
+          "extra_guest_id":props,
+           "max_age":i?.max_age,
+          "amount":i?.amount,
+           "exclude_from_capacity":i?.exclude_from_capacity
+        
+         }
+      }
+      else if(i.charge_type==='discount_amount'){
+        return {
+          "extra_guest_id":props,
+          "max_age":i?.max_age,
+          "discount_amount": i?.amount,
+          "exclude_from_capacity":i?.exclude_from_capacity,
+           "count_as_base_occupant":i?.count_as_base_occupant,
+         }
+
+      }
+      else if(i.charge_type==='percentage'){
+        return {
+          "extra_guest_id":props,
+          "max_age":i?.max_age,
+          "percentage": i?.amount,
+          "exclude_from_capacity":i?.exclude_from_capacity,
+           "count_as_base_occupant":i?.count_as_base_occupant,
+         }
+
+      }
+    
+     }))
  const final_data = { "extra_guest_child_link": data }
  alert(JSON.stringify(final_data))
+
  const url = '/api/ari/extra_guest_charges/extra_guest_child_link'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -223,7 +248,6 @@ const validationExtraGuestCharges = () => {
      console.log("Result" +JSON.stringify(result))
      if(result===true)
      {
-      alert("ist")
       validationExtraChildGuest();
      }
      else
@@ -237,7 +261,7 @@ const validationExtraChildGuest = () => {
          console.log("Result" +JSON.stringify(result))
          if(result===true)
          {
-          alert("2nd")
+         
        submitExtraGuestCharges();
          }
          else
@@ -245,6 +269,7 @@ const validationExtraChildGuest = () => {
           setError(result)
          }
   }
+  
   return (
     <>
      <Header color={color} Primary={english.Side1} />
@@ -289,7 +314,7 @@ const validationExtraChildGuest = () => {
                 <div className="flex items-center">
                 <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.extraguestcharge}</span>
+                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.add} {language?.extraguestcharge}</span>
                 </div>
                 </div>
               </li>
@@ -435,10 +460,10 @@ const validationExtraChildGuest = () => {
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={(e) => {onChange(e, LOSData?.index, 'charge_type')
-                     e.target.value !== 'flat' ? keys.push(index): ""}}>
+                     e.target.value !== 'amount' ? keys.push(index): ""}}>
                      <option selected>{language?.select}</option>
-                    <option value="flat">Flat</option>
-                    <option value="discount">Discount</option>
+                    <option value="amount">Flat</option>
+                    <option value="discount_amount">Discount</option>
                     <option value="percentage">Percentage</option>
                    
                    </select>
@@ -471,12 +496,12 @@ const validationExtraChildGuest = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                       {language?.countbasecomponent}
+                       {language?.countbaseoccupant}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                     onChange={e => onChange(e, LOSData?.index, 'count_as_base_component')}>
+                     onChange={e => onChange(e, LOSData?.index, 'count_as_base_occupant')}>
                      <option selected>{language?.select}</option>
                     <option value="never">Never</option>
                     <option value="preferred">Preferred</option>

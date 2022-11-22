@@ -14,7 +14,7 @@ const validatePromotionsEdit = (data) =>{
          flag.push(false)
          error.stacking_type="The stacking type is required."
      } 
-     alert(data?.packages?.length)
+    
      if(data?.packages?.length === 0 )
      {
          flag.push(false)

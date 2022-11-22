@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import LoaderTable from "./loaderTable";
 import Link from "next/link";
 import axios from "axios";
 import Table from '../../components/Table';
@@ -40,7 +41,7 @@ function Promotions() {
             /** Current Property Basic Details fetched from the local storage **/
             currentProperty = JSON.parse(localStorage.getItem('property'))
             currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
-            setVisible(1)
+          
           }
         }
         firstfun();
@@ -161,14 +162,15 @@ const submitPromotionDelete = (props) => {
               </li>
             </ol>
           </nav>
-         
+          <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+         <div className={visible === 1 ? 'block' : 'hidden'}>
           <Table  gen={gen}
            setGen={setGen}  
            color={color} edit={submitPromotionEdit} 
           add={submitPromotionAdd} delete={submitPromotionDelete}
           common={language?.common} cols={language?.PromotionCols}
           name="Packages"
-          /> 
+          /> </div>
          <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}

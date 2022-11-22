@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Button from '../../components/Button';
 import DarkModeLogic from "../../components/darkmodelogic";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
@@ -50,14 +51,12 @@ function ExtraGuestCharges() {
         firstfun();
         Router.push("./extraguestcharges");
     }, [])
+
     useEffect(() => {
         fetchExtraGuestCharges();
         fetchPackages();
     }
  , [])
-
-  
-
 
     const fetchExtraGuestCharges = async () => {
         var genData = [];
@@ -95,19 +94,18 @@ function ExtraGuestCharges() {
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
     }
+
     useEffect(()=>{ 
         setColor(DarkModeLogic(darkModeSwitcher))
   },[darkModeSwitcher])
 
     const addExtraGuest = () =>{
-        
-        resCou = allPackages.filter(el => {
+      resCou = allPackages.filter(el => {
             return !allExtraGuestCharges?.find(element => {
                return el.package_id === element.package_id;
             });
          });
-      
-         localStorage.setItem("packages",  JSON.stringify(resCou));
+        localStorage.setItem("packages",  JSON.stringify(resCou));
         
         Router.push("./extraguestcharges/addextraguestcharge")
       }
@@ -144,7 +142,7 @@ function ExtraGuestCharges() {
 
     /**Function to save Current property to be viewed to Local Storage**/
     const currentExtraGuest = (props) => {
-        localStorage.setItem("packageId", props?.package_id);
+        localStorage.setItem("extraGuestId", props?.id);
         Router.push("./extraguestcharges/extraguestcharge")
     };
 
@@ -207,6 +205,7 @@ function ExtraGuestCharges() {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover />
+           
             </div>
     </>
   )

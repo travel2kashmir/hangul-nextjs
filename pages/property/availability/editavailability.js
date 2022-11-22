@@ -213,6 +213,7 @@ function AddAvailability() {
           });
           setOrgRes(res);
           setError([]);
+          setDisp(2);
         })
         .catch((error) => {
           toast.error("Restriction error", {
@@ -241,6 +242,7 @@ function AddAvailability() {
           });
           setOrgRes(res);
           setError([]);
+          setDisp(2);
         })
         .catch((error) => {
           toast.error("Restriction error", {
@@ -388,19 +390,19 @@ function AddAvailability() {
           "pattern": los.pattern,
           "fixed_pattern": los.fixed_pattern
         }]
-        //make length of stay a single object
+       //make length of stay a single object
         var avl_los = availability.length_of_stay.concat(for_avl);
         //put object in state
         setAvailability({ ...availability, length_of_stay: avl_los })
-        var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
-        setGen(filtered_data.concat(temp));
-        setError({});
-        setLos([]);
-        document.getElementById('addlosform').reset();
+       var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
+      setGen(filtered_data.concat(temp));
+      setError({});
+      setLos([]);
+      document.getElementById('addlosform').reset();
         setView(0);
       })
       .catch((error) => {
-        toast.error("LOS error", {
+        toast.error("LOS Add error", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -539,24 +541,26 @@ function AddAvailability() {
       });
     }
     else {
-      var result = validateLOS(los)
+      var data=[los]
+      var result = validateLOS(data)
       if (result === true) {
         submitEditLOS();
       }
       else {
-        setError(result)
+        setError(result[0])
       }
     }
   }
 
   //validation post los
   const validationPostLOS = () => {
-    var result = validateLOS(los)
+    var data=[los]
+    var result = validateLOS(data)
     if (result === true) {
       submitLOS();
     }
     else {
-      setError(result)
+      setError(result[0])
     }
   }
   return (
@@ -872,7 +876,8 @@ function AddAvailability() {
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Previous} onClick={() => setDisp(0)} />
-                    <Button Primary={language?.Update} onClick={validationRestriction} />
+                    <Button Primary={resLen === 1 ? language?.Update : language?.Submit } onClick={validationRestriction} />
+                   
                     <Button Primary={language?.Next} onClick={() => setDisp(2)} />
                   </div>
 

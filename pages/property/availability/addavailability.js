@@ -117,7 +117,8 @@ useEffect(()=>{
      "package_id": availability?.package_id,
      "start_date": availability?.start_date ,
      "end_date": availability?.start_date ,
-     "days_of_week": days_of_week.toString().replaceAll(',','')
+     "days_of_week": days_of_week.toString().replaceAll(',',''),
+     "status": true
    }
  }
  const url = '/api/ari/property_availability/property_availability'
@@ -191,13 +192,14 @@ const submitLOS= () => {
     return {
     "availability_id":availabilityId,
      "unit_of_time": "Days",
-     "time":availability?.time ,
-     "min_max_msg": availability?.min_max_msg ,
-     "pattern": availability?.time,
-     "fixed_pattern": availability?.fixed_pattern 
+     "time":i?.time ,
+     "min_max_msg": i?.min_max_msg ,
+     "pattern": i?.time,
+     "fixed_pattern": i?.fixed_pattern 
    }}))
  const final_data = { "LOS": data }
  const url = '/api/ari/property_availability/property_availability_los'
+ console.log(final_data)
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("LOS success", {
@@ -289,7 +291,7 @@ var result = validateAvailability(availability,days_of_week)
   } 
 // Validation LOS
   const validationLOS = () => {
-    var result = validateLOS(availability)
+  var result = validateLOS(LOSData)
     console.log("Result" + JSON.stringify(result))
     if (result === true) {
       submitLOS();
@@ -306,9 +308,10 @@ var result = validateAvailability(availability,days_of_week)
 
   /** For Miles**/
   const LOSTemplate = {
-    "checkin_startdate":"",
-    "checkin_enddate": "",
-    "checkin_daysofweek":"" ,
+    "time":"",
+    "min_max_msg":"",
+    "pattern": "",
+    "fixed_pattern": ""
   }  
 
   /* Mapping Index of each mile*/
@@ -317,6 +320,16 @@ var result = validateAvailability(availability,days_of_week)
  /** Function to add mile **/
  const addLOS = () => {
   setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
+}
+
+const onChange = (e, index, i) => {
+  console.log(index, 'index')
+  setLOSData(LOSData?.map((item, id) => {
+    if (item.index === index) {
+      item[i] = e.target.value;
+    }
+    return item
+  }))
 }
   return (
     <>
@@ -387,8 +400,6 @@ var result = validateAvailability(availability,days_of_week)
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.lengthofstay}</div>
             </div>
           
-          
-           
         </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
             {language?.availability}
@@ -695,15 +706,15 @@ var result = validateAvailability(availability,days_of_week)
               </div>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
-              {LOSData?.map((LOSData, index) => (
+              {LOSData?.map((item, index) => (
               <>
-                <div className={LOSData?.index === 0 ? "hidden":"block"}>
+                <div className={item?.index === 0 ? "hidden":"block"}>
                         <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
                           <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
                      font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
                      rounded-lg text-sm px-1 py-1 text-center 
                      items-center mb-1 ml-16 ease-linear transition-all duration-150`}
-                     onClick={() => removeLOS(LOSData?.index)} type="button" >
+                     onClick={() => removeLOS(item?.index)} type="button" >
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                             </button>
                   </div>
@@ -722,8 +733,8 @@ var result = validateAvailability(availability,days_of_week)
                             <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                               onChange={
                                 (e) => {
-                                  setAvailability({ ...availability,min_max_msg: e.target.value })
-                                  e.target.value === 'FullPatternLOS' ? keys.push(index) : "";
+                                  onChange(e, item?.index, 'min_max_msg');
+                                e.target.value === 'FullPatternLOS' ? keys.push(index) : "";
                                 }
                               }>
                               <option selected>Select </option>
@@ -734,7 +745,7 @@ var result = validateAvailability(availability,days_of_week)
                               <option value="FullPatternLOS">Full Pattern LOS</option>
                             </select>
                             <p className="text-sm text-sm text-red-700 font-light">
-                              {error?.min_max_msg}</p>
+                              {error[index]?.min_max_msg}</p>
                           </div>
                         </div>
                       </div>
@@ -752,18 +763,17 @@ var result = validateAvailability(availability,days_of_week)
                               className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                               onChange={
                                 (e) => {
-                                  setAvailability({ ...availability, time: e.target.value });
-
+                                  onChange(e, item?.index, 'time');
                                 }
                               }
                             />
                             <p className="text-sm text-sm text-red-700 font-light">
-                              {error?.time}</p>
+                              {error[index]?.time}</p>
                           </div>
                         </div>
                       </div>
                       <div className="w-full lg:w-6/12 px-4">
-                        { LOSData?.min_max_msg === "FullPatternLOS" ?
+                        {LOSData[index]?.min_max_msg === "FullPatternLOS" ?
                           <div className="relative w-full mb-3">
                             <label className={`text-sm font-medium ${color?.text} block mb-2`}
                               htmlFor="grid-password">
@@ -777,13 +787,12 @@ var result = validateAvailability(availability,days_of_week)
                                 className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                 onChange={
                                   (e) => {
-                                    setAvailability({ ...availability,  fixed_pattern: e.target.value})
-
+                                    onChange(e, item?.index, 'fixed_pattern');
                                   }
                                 }
                               />
                               <p className="text-sm text-sm text-red-700 font-light">
-                                {error?.fixed_pattern}</p>
+                                {error[index]?.fixed_pattern}</p>
                               <span className='text-orange-500 text-xs'>
                                 {language?.patterndes}</span>
 

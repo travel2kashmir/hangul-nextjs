@@ -151,6 +151,10 @@ export default {
    col1 : "Nom",
     
   },
+  "ResCols":{
+    name:"Durée du séjour",
+   col1 : "Message Min Max"
+  },
   "InvCols":{
     name:"Inventaire",
    col1 : "Nom"
@@ -207,6 +211,7 @@ export default {
   bookingwindowmax:"Fenêtre de réservation maximale",
   addservices:"Ajouter des services",
   addroom:"Ajouter une salle",
+  length_of_stay:"Durée du séjour",
   addnewroom:"Ajouter une nouvelle pièce",
   addnewservices:"Ajouter de nouveaux services",
   addcontacts:"Ajouter des contacts",

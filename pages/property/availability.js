@@ -96,7 +96,6 @@ function Availability() {
     };
     //  Delete Promotion
     const submitAvailabilityDelete = (props) => {
-        alert('Props is ' + props)
         const url = `/api/ari/property_availability/property_availability/${props}`;
         axios
             .delete(url)

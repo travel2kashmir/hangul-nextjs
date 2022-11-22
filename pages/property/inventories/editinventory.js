@@ -35,11 +35,41 @@ function Inventory() {
     const [error, setError] = useState({})
     const [color, setColor] = useState({})
     const [room,setRoom]=useState([])
+    const [selecteddays,setSelectedDays]=useState([])
+
+    const createDays = (days) => {
+      var day = [];
+      for (let item in days) {
+        if (days[item] !== '-') {
+          switch (item) {
+            case '0': day.push({ day: "mon" });
+              break;
+            case '1': day.push({ day: "tue" })
+              break;
+            case '2': day.push({ day: "weds" })
+              break;
+            case '3': day.push({ day: "thurs" })
+              break;
+            case '4': day.push({ day: "fri" })
+              break;
+            case '5': day.push({ day: "sat" })
+              break;
+            case '6': day.push({ day: "sun" })
+              break;
+            default:
+          }
+        }
+  
+      }
+      setSelectedDays(day)
+    }
+
     const fetchInventoryRoom = async () => {
         const url = `/api/ari/inventory/${currentProperty?.property_id}/${currentRoom}`;
         axios.get(url)
             .then((response) => {
                     setRoom(response.data)
+                    createDays(response.data[0].days_of_week);
         
             })
             .catch((error) => { logger.error("url to fetch property details, failed") });
@@ -289,7 +319,7 @@ const validationInventory = () => {
                       options={lang?.DaysData}
                       onRemove={(event) => { days(event) }}
                       onSelect={(event) => { days(event) }}
-                      selectedValues={lang?.DaysData}
+                      selectedValues={selecteddays}
                      displayValue="day" />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.days}</p>

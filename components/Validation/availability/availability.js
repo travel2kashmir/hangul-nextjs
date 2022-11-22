@@ -2,7 +2,11 @@ const validateAvailability = (data,props) =>{
    var error={};
     var flag=[]
     var final_flag=true;
-   
+    if(data?.package_id==="" || data?.package_id===undefined)
+    {
+        flag.push(false)
+        error.package="The Package is required."
+    }
     if(data?.start_date==="" || data?.start_date===undefined)
     {
         flag.push(false)

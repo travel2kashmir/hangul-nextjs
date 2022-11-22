@@ -21,7 +21,7 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week=['M','T','W','T','F','S','U'];
+var days_of_week=['M', 'T','W','T','F','S','U'];
 var keys =[];
 var currentPackage;
 var availabilityId;
@@ -117,7 +117,8 @@ useEffect(()=>{
      "package_id": availability?.package_id,
      "start_date": availability?.start_date ,
      "end_date": availability?.start_date ,
-     "days_of_week": days_of_week.toString().replaceAll(',','')
+     "days_of_week": days_of_week.toString().replaceAll(',',''),
+     "status": true
    }
  }
  const url = '/api/ari/property_availability/property_availability'
@@ -191,13 +192,14 @@ const submitLOS= () => {
     return {
     "availability_id":availabilityId,
      "unit_of_time": "Days",
-     "time":availability?.time ,
-     "min_max_msg": availability?.min_max_msg ,
-     "pattern": availability?.time,
-     "fixed_pattern": availability?.fixed_pattern 
+     "time":i?.time ,
+     "min_max_msg": i?.min_max_msg ,
+     "pattern": i?.time,
+     "fixed_pattern": i?.fixed_pattern 
    }}))
  const final_data = { "LOS": data }
  const url = '/api/ari/property_availability/property_availability_los'
+ console.log(final_data)
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
        toast.success("LOS success", {
@@ -210,7 +212,7 @@ const submitLOS= () => {
          progress: undefined,
        });
      keys=[];
-     Router.push('../ari')
+     Router.push('../availability')
      })
      .catch((error) => {
        toast.error("LOS error", {
@@ -289,7 +291,7 @@ var result = validateAvailability(availability,days_of_week)
   } 
 // Validation LOS
   const validationLOS = () => {
-    var result = validateLOS(availability)
+  var result = validateLOS(LOSData)
     console.log("Result" + JSON.stringify(result))
     if (result === true) {
       submitLOS();
@@ -306,9 +308,10 @@ var result = validateAvailability(availability,days_of_week)
 
   /** For Miles**/
   const LOSTemplate = {
-    "checkin_startdate":"",
-    "checkin_enddate": "",
-    "checkin_daysofweek":"" ,
+    "time":"",
+    "min_max_msg":"",
+    "pattern": "",
+    "fixed_pattern": ""
   }  
 
   /* Mapping Index of each mile*/
@@ -317,6 +320,16 @@ var result = validateAvailability(availability,days_of_week)
  /** Function to add mile **/
  const addLOS = () => {
   setLOSData([...LOSData, LOSTemplate]?.map((i, id) => { return { ...i, index: id } }))
+}
+
+const onChange = (e, index, i) => {
+  console.log(index, 'index')
+  setLOSData(LOSData?.map((item, id) => {
+    if (item.index === index) {
+      item[i] = e.target.value;
+    }
+    return item
+  }))
 }
   return (
     <>
@@ -387,8 +400,6 @@ var result = validateAvailability(availability,days_of_week)
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.lengthofstay}</div>
             </div>
           
-          
-           
         </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
             {language?.availability}
@@ -402,7 +413,7 @@ var result = validateAvailability(availability,days_of_week)
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.days}
+                        {language?.days}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -428,7 +439,7 @@ var result = validateAvailability(availability,days_of_week)
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       {language?.startdate}
+                       {language?.startdate}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -449,7 +460,7 @@ var result = validateAvailability(availability,days_of_week)
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.enddate}
+                        {language?.enddate}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -476,7 +487,7 @@ var result = validateAvailability(availability,days_of_week)
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.packages}
+                        {language?.packages}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
 
                     <select
@@ -494,6 +505,8 @@ var result = validateAvailability(availability,days_of_week)
                       );
                     })}
                   </select>
+                  <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.package}</p>
                   </div>
                     </div>
                   </div>
@@ -546,7 +559,7 @@ var result = validateAvailability(availability,days_of_week)
                         className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.restriction} {language?.Status}
+                        {language?.restriction} {language?.Status}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -571,7 +584,7 @@ var result = validateAvailability(availability,days_of_week)
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       {language?.restriction} {language?.type}
+                       {language?.restriction} {language?.type}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -581,9 +594,9 @@ var result = validateAvailability(availability,days_of_week)
                           setAvailability({ ...availability, restriction_type: e.target.value })
                       )}>
                      <option selected >Select </option>
-                    <option value="arrival" >Arrival<span className='text-xs text-orange-500'> (It prevents itineraries with a check-in date during the Start and End date range).</span></option>
-                    <option value="departure">Departure<span className='text-xs text-orange-500'> (It prevents itineraries with a check-out date during the Start and End date range).</span></option>
-                    <option value="master">Master<span className='text-xs text-orange-500 '> (It indicates whether the room rate is available for booking on the date).</span></option>
+                    <option value="arrival" >Arrival- (It prevents itineraries with a check-in date during the Start and End date range).</option>
+                    <option value="departure">Departure- (It prevents itineraries with a check-out date during the Start and End date range).</option>
+                    <option value="master">Master- (It indicates whether the room rate is available for booking on the date).</option>
                     </select>
                     <p className="text-sm text-sm text-red-700 font-light">
                       {error?.restriction_type}</p>
@@ -594,7 +607,7 @@ var result = validateAvailability(availability,days_of_week)
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.minadvbooking}
+                        {language?.minadvbooking}<span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -616,7 +629,7 @@ var result = validateAvailability(availability,days_of_week)
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        {language?.maxadvbooking} 
+                        {language?.maxadvbooking} <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -693,94 +706,101 @@ var result = validateAvailability(availability,days_of_week)
               </div>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
-              {LOSData?.map((LOSData, index) => (
+              {LOSData?.map((item, index) => (
               <>
-                <div className={LOSData?.index === 0 ? "hidden":"block"}>
+                <div className={item?.index === 0 ? "hidden":"block"}>
                         <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
                           <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
                      font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
                      rounded-lg text-sm px-1 py-1 text-center 
                      items-center mb-1 ml-16 ease-linear transition-all duration-150`}
-                     onClick={() => removeLOS(LOSData?.index)} type="button" >
+                     onClick={() => removeLOS(item?.index)} type="button" >
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                             </button>
                   </div>
                   </div>
-                <div className="flex flex-wrap" key={index}>
-                <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label
-                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password"
-                      >
-                       {language?.minmaxmessage}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                     onChange={
-                      (e) => {
-                          setAvailability({ ...availability, checkin_startdate: e.target.value })
-                         e.target.value === 'FullPatternLOS' ? keys.push(index): "";
-                        }
-                  }>
-                     <option selected>Select </option>
-                    <option value="SetMaxLOS">Max LOS</option>
-                    <option value="SetMinLOS">Min LOS</option>
-                    <option value="SetForwardMaxStay">Forward Max Stay</option>
-                    <option value="SetForwardMinStay">Forward Min Stay</option>
-                    <option value="FullPatternLOS">Full Pattern LOS</option>
-                   </select>
-                   <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.min_max_msg}</p>
-                       </div>
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                      {language?.numberofdays}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setavaiability({ ...avaiability,checkin_enddate: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
+                  <div className="flex flex-wrap" key={index}>
+                      <div className="w-full lg:w-6/12 px-4">
+                        <div className="relative w-full mb-3">
+                          <label
+                            className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password"
+                          >
+                            {language?.minmaxmessage}<span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <select className={`shadow-sm ${color?.greybackground} ${color?.text} uppercase border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              onChange={
+                                (e) => {
+                                  onChange(e, item?.index, 'min_max_msg');
+                                e.target.value === 'FullPatternLOS' ? keys.push(index) : "";
+                                }
+                              }>
+                              <option selected>Select </option>
+                              <option value="SetMaxLOS">Max LOS</option>
+                              <option value="SetMinLOS">Min LOS</option>
+                              <option value="SetForwardMaxStay">Forward Max Stay</option>
+                              <option value="SetForwardMinStay">Forward Min Stay</option>
+                              <option value="FullPatternLOS">Full Pattern LOS</option>
+                            </select>
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error[index]?.min_max_msg}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-6/12 px-4">
+                        <div className="relative w-full mb-3">
+                          <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                            htmlFor="grid-password">
+                            {language?.numberofdays}<span style={{ color: "#ff0000" }}>*</span>
+                          </label>
+                          <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                          <div className={visible === 1 ? 'block' : 'hidden'}>
+                            <input
+                              type="number" min={1}
+                              placeholder="Enter number of days"
+                              className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                              onChange={
+                                (e) => {
+                                  onChange(e, item?.index, 'time');
+                                }
+                              }
+                            />
+                            <p className="text-sm text-sm text-red-700 font-light">
+                              {error[index]?.time}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full lg:w-6/12 px-4">
+                        {LOSData[index]?.min_max_msg === "FullPatternLOS" ?
+                          <div className="relative w-full mb-3">
+                            <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                              htmlFor="grid-password">
+                              {language?.pattern}<span style={{ color: "#ff0000" }}>*</span>
+                            </label>
+                            <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                            <div className={visible === 1 ? 'block' : 'hidden'}>
+                              <input
+                                type="text"
+                                placeholder="Enter pattern"
+                                className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                                onChange={
+                                  (e) => {
+                                    onChange(e, item?.index, 'fixed_pattern');
+                                  }
+                                }
+                              />
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error[index]?.fixed_pattern}</p>
+                              <span className='text-orange-500 text-xs'>
+                                {language?.patterndes}</span>
+
+                            </div>
+
+                          </div> : <></>}
                       </div>
                     </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
-                        htmlFor="grid-password">
-                      {language?.numberofdays}
-                      </label>
-                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                      <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <input
-                          type="number" min={1}
-                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          onChange={
-                            (e) => (
-                              setavaiability({ ...avaiability,checkin_enddate: e.target.value })
-                            )
-                          }
-                        />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Submit} onClick={validationLOS} /> 

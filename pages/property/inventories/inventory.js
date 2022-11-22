@@ -48,8 +48,7 @@ function Inventory() {
 
   //fetch all rooms and filter rooms without inv  
   const fetchRooms = async (args) => {
-   
-     const url = `/api/rooms/${currentProperty?.property_id}`;
+   const url = `/api/rooms/${currentProperty?.property_id}`;
       axios.get(url)
           .then((response) => {
             var result = response?.data.filter(el => {

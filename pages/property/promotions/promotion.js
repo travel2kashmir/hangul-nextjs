@@ -108,7 +108,9 @@ useEffect(()=>{
       setError(result)
      }
   }
-  const validationDiscount = () => {
+  
+// Validation Discount
+const validationDiscount = () => {
     var result = validateDiscount(pro?.discount?.[i])
        console.log("Result" +JSON.stringify(result))
        if(result===true)
@@ -119,8 +121,10 @@ useEffect(()=>{
        {
         setError(result)
        }
-    }
-    const validationCountries = () => {
+ }
+
+// Validation Countries
+const validationCountries = () => {
       var result = validateCountry(promotion?.country?.[i],promotion?.country_action)
          console.log("Result" +JSON.stringify(result))
          if(result===true)
@@ -131,8 +135,10 @@ useEffect(()=>{
          {
           setError(result)
          }
-      }
-      const validationFreeNights = () => {
+}
+
+// Valiadtion Free Nights
+const validationFreeNights = () => {
         var result = validateFreeNights(freeNights)
            console.log("Result" +JSON.stringify(result))
            if(result===true)
@@ -148,8 +154,10 @@ useEffect(()=>{
            {
             setError(result)
            }
-        }
-        const validationAddPromotionDates = () => {
+ }
+
+// Validation Add Promotions  
+ const validationAddPromotionDates = () => {
           var result = validateDates(promotion,days_of_week)
              console.log("Result" +JSON.stringify(result))
              if(result===true)
@@ -165,7 +173,8 @@ useEffect(()=>{
              {
               setError(result)
              }
-      }
+}
+
 // Promotion Discount
 const submitPromotionDiscount = () => {
   const final_data = 
@@ -261,7 +270,7 @@ const submitPromotion = () => {
      })
 }
 
-// Package
+// Packages
 const packages = () => { 
   var final_package_data=[]
   promotion?.packages.map(item => {
@@ -288,7 +297,7 @@ const countries = () => {
     submitCountries(final_country_data);   
 }
 
-//Devices
+// Devices
 const devices = () => { 
   var final_device_data=[]
    promotion?.devices.map(item => {
@@ -317,7 +326,7 @@ const submitDevices = (props) => {
          progress: undefined,
        });
       setDev([])
-   
+      setError({})
      })
      .catch((error) => {
        toast.error("Devices error", {
@@ -348,7 +357,8 @@ const submitPackages = (props) => {
          progress: undefined,
        });
         setPkg([])
-      
+      setError({});
+        
      })
      .catch((error) => {
        toast.error("Packages error", {
@@ -363,7 +373,7 @@ const submitPackages = (props) => {
      })
 }
 
-// countries
+// Countries
 const submitCountries = (props) => {
   const final_data =  {"property_promotion_country": props}
  const url = '/api/ari/promotions/property_promotion_country'
@@ -379,7 +389,7 @@ const submitCountries = (props) => {
          progress: undefined,
        });
        setCou([])
-    
+       setError({});
      })
      .catch((error) => {
        toast.error("Country error", {
@@ -394,10 +404,9 @@ const submitCountries = (props) => {
      })
 }
 
-//Promotion Free Nights
+//Promotion Free Nights Edit
 const submitPromotionFreeNightsEdit = () => {
   const data =  [{
-  
      "free_nights_id": pro?.free_nights?.[i]?.free_nights_id,
      "stay_nights":freeNights?.stay_nights,
      "discount_nights":freeNights?.discount_nights,
@@ -433,6 +442,7 @@ const submitPromotionFreeNightsEdit = () => {
        });
      })
 }
+//Promotion Free Nights Submit
 const submitPromotionFreeNights = () => {
   const final_data = 
  {"property_promotion_discount": [{
@@ -472,6 +482,7 @@ const submitPromotionFreeNights = () => {
        });
      })
 }
+
 /** Function to cancel package mile **/
 const removecheckIn = (index) => {
   const filteredCheckIn = checkInData.filter((i, id) => i.index !== index)
@@ -494,18 +505,19 @@ const removecheckIn = (index) => {
 
   }
   fetchPackages();
-
-
 fetchPromotion();
 filterByCountry();
   },[])
 
+//  Fetch Promotion 
   const fetchPromotion = async () => {
     try {
         const url = `/api//ari/promotions/${currentProperty?.property_id}/${currentPromotion}`
         const response = await axios.get(url, { headers: { 'accept': 'application/json' } });
         setPromotion(response.data) 
         setPro(response.data)
+        setPromotion({...promotion, country_action:response.data.countries?.[i]?.country_action})
+      
          setCountry(
             lang?.CountryData.filter(el => {
             return response?.data?.countries?.find(element => {
@@ -528,6 +540,12 @@ filterByCountry();
     }
 
 }
+
+useEffect(()=>{
+  console.log("USEEFFECT"+JSON.stringify(gen))
+},[gen])
+
+// Check In Generation
   const checkInGen = () => {
     var genData = [];
     promotion?.dates?.map((item) => {
@@ -544,6 +562,8 @@ filterByCountry();
   setGen(genData);
   setDisp(2);
   }
+
+// Check Out Generation
   const checkOutGen = () => {
     var genData = [];
     promotion?.dates?.map((item) => {
@@ -561,6 +581,7 @@ filterByCountry();
   setDisp(3);
   }
 
+  // Booking Data Generation
   const BookingGen = () => {
     var genData = [];
     promotion?.dates?.map((item) => {
@@ -577,7 +598,7 @@ filterByCountry();
   setDisp(4);
   }
   
-   /** For Miles**/
+   /** For Dates**/
    const checkInTemplate = {
     "availability_id":availabilityId,
     "unit_of_time": "",
@@ -587,9 +608,10 @@ filterByCountry();
     "fixed_pattern":""
   }  
 
-  /* Mapping Index of each mile*/
+  /* Mapping Index of each date*/
     const [checkInData, setCheckInData] = useState([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
   
+/* Template of each date*/
   const addLOS = () => {
     setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
   }
@@ -598,6 +620,8 @@ filterByCountry();
  const addCheckIn = () => {
   setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))
 }
+
+// Filter Country
 const filterByCountry = () => {
   if(  promotion?.countries != undefined) {
  resCou = lang?.CountryData.filter(el => {
@@ -613,54 +637,7 @@ setCountry(resCou)
 Router.push('./promotion')
 }
 
-const submitDates= (type) => {
-  const data =
-   [{"promotion_id":pro?.promotion_id,
-     "start_date": promotion?.start_date,
-     "end_date": promotion?.end_date,
-     "days_of_week": days_of_week.toString().replaceAll(',',''),
-     "type": type
-   }]
- const final_data = { "property_promotion_rates": data }
-
- const url = '/api/ari/promotions/property_promotion_dates'
-   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-     ((response) => {
-       toast.success("Dates success", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-       
-       const temp=[{
-        name: data[0]?.start_date,
-        type: data[0]?.end_date,
-        status: data[0]?.days_of_week,
-        id: response.data.date_id
-        }]
-      setGen( gen.concat(temp))
-      setError({});
-      days_of_week =['M','T','W','T','F','S','U'];
-     document.getElementById('addPromotionDateForm').reset()
-     fetchPromotion();
-    setView(0);
-    })
-     .catch((error) => {
-       toast.error("Dates error", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-}
+// Days data generation
 const days = (days) => { 
   var days_present=['-','-','-','-','-','-','-'];
   days.map(day=>{
@@ -697,6 +674,7 @@ const days = (days) => {
    days_of_week = days_present.toString().replaceAll(',','');
    
 }
+
 //Submit Date Delete
 const submitPromotionDelete = (props) => {
 const url = `/api/ari/promotions/property_promotion_dates/${props}`;
@@ -729,11 +707,11 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
       
      });
  };
-useEffect(()=>{
-  console.log("USEEFFECT"+JSON.stringify(gen))
-},[gen])
+
+
+
+// Date Edit
  const submitDateEdit = (props,noChange,days_data) => {
- 
   const data = [{
    "date_id": props.id,
     "start_date": props.name,
@@ -764,6 +742,7 @@ const final_data = { "property_modifications_dates": data }
         }]
        var filtered_data = gen.filter((i) => i.id != data[0]?.date_id)
        setGen(filtered_data.concat(temp));  
+       setError({});
     })
     .catch((error) => {
       toast.error("API: Dates Update Error!", {
@@ -778,6 +757,57 @@ const final_data = { "property_modifications_dates": data }
     });
   
 };
+
+// Dates Add
+const submitDates= (type) => {
+  const data =
+   [{"promotion_id":pro?.promotion_id,
+     "start_date": promotion?.start_date,
+     "end_date": promotion?.end_date,
+     "days_of_week": days_of_week.toString().replaceAll(',',''),
+     "type": type
+   }]
+ const final_data = { "property_promotion_rates": data }
+ const url = '/api/ari/promotions/property_promotion_dates'
+   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+     ((response) => {
+       toast.success("Dates success", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+       
+       const temp=[{
+        name: data[0]?.start_date,
+        type: data[0]?.end_date,
+        status: data[0]?.days_of_week,
+        id: response.data.date_id
+        }]
+      setGen( gen.concat(temp))
+      setError({});
+      days_of_week =['M','T','W','T','F','S','U'];
+     document.getElementById('addPromotionDateForm').reset()
+     fetchPromotion();
+    setView(0);
+    setError({});
+    })
+     .catch((error) => {
+       toast.error("Dates error", {
+         position: "top-center",
+         autoClose: 5000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         pauseOnHover: true,
+         draggable: true,
+         progress: undefined,
+       });
+     })
+}
+
   return (
     <div>
        <Header color={color} Primary={english.Side1} />
@@ -830,6 +860,7 @@ const final_data = { "property_modifications_dates": data }
               </li>
             </ol>
           </nav>
+
           {/* Promotion */}
           <div id='0' className={disp===0?'block':'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
@@ -863,6 +894,7 @@ const final_data = { "property_modifications_dates": data }
         </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
+                
                 <div className="flex flex-wrap">
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
@@ -1011,7 +1043,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                          onChange={
                             (e) => (
@@ -1035,7 +1067,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -1061,7 +1093,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                           defaultValue={pro?.inventory_min}
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
@@ -1087,7 +1119,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                           defaultValue={pro?.inventory_max}
                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
@@ -1114,7 +1146,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -1138,7 +1170,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -1162,7 +1194,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                          onChange={
                             (e) => (
@@ -1300,8 +1332,7 @@ const final_data = { "property_modifications_dates": data }
                        country: e,
                         },setCou(1))}
                       displayValue="country_name"
-                    
-                      />
+                    />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.country}</p>
                        </div>
@@ -1339,6 +1370,7 @@ const final_data = { "property_modifications_dates": data }
                     setDisp(1)
                     }}/>
                 </div>
+
                 </div>
                   </div>
            </div>
@@ -1558,8 +1590,8 @@ const final_data = { "property_modifications_dates": data }
             </div>
             </div>
 
-            {/* Check In */}
-            <div id='2' className={disp===2?'block':'hidden'}>
+           {/* Check In */}
+          <div id='2' className={disp===2?'block':'hidden'}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -1595,11 +1627,10 @@ const final_data = { "property_modifications_dates": data }
             <Button Primary={language?.Previous} onClick={()=>{setDisp(1);}} /> 
                     <Button Primary={language?.Next} onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
-            </div>
-           
+          </div>
           
-           {/* Check Out*/}
-           <div id='3' className={disp===3?'block':'hidden'}>
+         {/* Check Out*/}
+          <div id='3' className={disp===3?'block':'hidden'}>
            <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -1637,8 +1668,8 @@ const final_data = { "property_modifications_dates": data }
                 </div>
           </div>
 
-            {/* Booking Date*/}
-            <div id='4' className={disp===4?'block':'hidden'}>
+        {/* Booking Date*/}
+          <div id='4' className={disp===4?'block':'hidden'}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[70%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
@@ -1670,7 +1701,7 @@ const final_data = { "property_modifications_dates": data }
             <div className="flex items-center justify-end space-x-2 mr-4 mb-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Previous}  onClick={()=>{setDisp(3);checkOutGen()}} /> 
                 </div>
-            </div> 
+         </div> 
        
            {/* Modal Add */}
         <div className={view === 1 ? "block" : "hidden"}>

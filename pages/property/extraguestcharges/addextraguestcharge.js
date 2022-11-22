@@ -127,7 +127,6 @@ const url = '/api/ari/extra_guest_charges'
          draggable: true,
          progress: undefined,
        });
-       alert(response.data)
        submitPackagesLink(response.data.extra_guest_id)
        extraGuestChild(response.data.extra_guest_id)
  
@@ -152,7 +151,6 @@ const submitPackagesLink = (props) => {
      "package_id":extraGuestCharges?.package_id 
    }]
  }
-alert(JSON.stringify(final_data))
  const url = '/api/ari/extra_guest_charges/extra_guest_package_link'
    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
      ((response) => {
@@ -421,7 +419,7 @@ const validationExtraChildGuest = () => {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                         <input
-                          type="number" min={1}
+                          type="text" 
                           className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={e => onChange(e, LOSData?.index, 'max_age')}
                         />

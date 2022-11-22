@@ -264,7 +264,7 @@ function Inventory() {
           </ol>
         </nav>
         <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-          <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
+          <h6 className={`${color?.text} text-xl flex capitalize leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
             {language?.inventory} {currentRoomName}
           </h6>
           <div className="pt-6">

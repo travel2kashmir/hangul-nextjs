@@ -23,7 +23,7 @@ const validateAvailability = (data,props) =>{
         error.start_date="The start date should be less than the end date."
         error.end_date="The end date should be greater than the end date."
     }
-    if(props==="" || data?.start_date===undefined)
+    if(props==="" || props===undefined)
     {
         flag.push(false)
         error.days="The days is required."

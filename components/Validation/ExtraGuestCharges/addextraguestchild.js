@@ -6,8 +6,10 @@ const validateExtraChildGuest = (dates) =>{
     var len = dates?.length;
     // Creates empty objects in error array for single or multiple dates
     for (let i = 0; i < len; i++) {
-        error[i] = {};
+       error.push({})
+       
     }
+     
      dates.map((data,index)=>{ 
      if(data?.max_age==="" || data?.max_age===undefined)
      {

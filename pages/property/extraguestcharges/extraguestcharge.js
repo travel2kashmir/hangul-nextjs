@@ -374,7 +374,7 @@ function ExtraGuestCharge() {
 // Edit Extra Guest Child
 const validationEditExtraChildGuest = () => {
   var result = validateEditExtraChildGuest(extraChild)
-  alert(result)
+ 
      console.log("Result" +JSON.stringify(result))
      if(result===true)
      {

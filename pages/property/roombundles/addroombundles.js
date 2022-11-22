@@ -76,7 +76,7 @@ function Addroombundles() {
           setAllPackages(response.data);
         console.log("response "+JSON.stringify(response.data));
         }).catch((error)=>{
-          alert(JSON.stringify(error))
+        
         })
     };
     fetchPackages();

@@ -106,8 +106,20 @@ function ExtraGuestCharges() {
             });
          });
         localStorage.setItem("packages",  JSON.stringify(resCou));
-        
-        Router.push("./extraguestcharges/addextraguestcharge")
+        if(resCou.length !== 0){
+        Router.push("./extraguestcharges/addextraguestcharge");
+        }
+        else{
+            toast.warn('Extra Guest Charges set for all packages. ', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                });
+        }
       }
 
     /* Delete Package Function*/

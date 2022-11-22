@@ -17,6 +17,16 @@ const validateEditExtraChildGuest = (data) =>{
      }  
     }
     }
+    if(data?.max_age !== "" && data?.max_age !== undefined){
+        if((/^([1-9]+[0-9]*)$/.test(data.max_age))){
+            if(data?.max_age > 18){
+        {
+           flag.push(false)
+           error.max_age="The max age should be less than 18." 
+        }  
+    }
+}
+       }
      if(data?.amount==="" || data?.amount===undefined)
      {
          flag.push(false)
@@ -58,7 +68,3 @@ const validateEditExtraChildGuest = (data) =>{
      }
  export default  validateEditExtraChildGuest
  
-
-
-
-  

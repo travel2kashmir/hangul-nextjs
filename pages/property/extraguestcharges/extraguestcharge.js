@@ -298,8 +298,7 @@ function ExtraGuestCharge() {
   // Add Extra Guest Child
   const submitExtraGuestChildEdit = () => {
     let data = [];
-    alert(extraChild.charge_type)
-    if (extraChild.charge_type === 'flat') {
+   if (extraChild.charge_type === 'flat') {
       data = {
         "child_age_id": extraChild?.id,
         "max_age": extraChild?.max_age,
@@ -328,7 +327,6 @@ function ExtraGuestCharge() {
       }
     }
     const final_data = { "extra_guest_child_link": [data] }
-    alert(JSON.stringify(final_data))
     const url = '/api/ari/extra_guest_charges/extra_guest_child_link'
     axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
@@ -601,7 +599,7 @@ const validationEditExtraChildGuest = () => {
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input
-                        type="number" min={1}
+                        type="text" 
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={
                           (e) => (
@@ -762,7 +760,7 @@ const validationEditExtraChildGuest = () => {
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input
-                        type="number" min={1}
+                        type="text" 
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={extraChild?.max_age}
                         onChange={

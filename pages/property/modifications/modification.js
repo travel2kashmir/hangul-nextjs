@@ -797,7 +797,7 @@ const final_data = { "property_modifications_dates": data }
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text" 
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue={modification?.amount_before_discount} 
                         onChange={

@@ -1,6 +1,4 @@
 const validateCountry = (data, props) =>{
-  alert(JSON.stringify("Country" +data));
-  alert(JSON.stringify("Type"+props))
     var error={};
      var flag=[]
      var final_flag=true;

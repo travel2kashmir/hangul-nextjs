@@ -121,7 +121,7 @@ useEffect(()=>{
        }
     }
     const validationCountries = () => {
-      var result = validateCountry(promotion?.country?.[i])
+      var result = validateCountry(promotion?.country?.[i],promotion?.country_action)
          console.log("Result" +JSON.stringify(result))
          if(result===true)
          {
@@ -281,7 +281,7 @@ const countries = () => {
     var temp = {
       promotion_id: pro?.promotion_id,
       country_code: item?.country_code,
-      country_action: promotion?.country_type === undefined ? pro?.countries?.[0]?.country_action : promotion?.country_type
+      country_action: promotion?.country_action
     }
     final_country_data.push(temp) } );
     setCou(1)
@@ -635,6 +635,7 @@ const submitDates= (type) => {
          draggable: true,
          progress: undefined,
        });
+       
        const temp=[{
         name: data[0]?.start_date,
         type: data[0]?.end_date,
@@ -645,6 +646,7 @@ const submitDates= (type) => {
       setError({});
       days_of_week =['M','T','W','T','F','S','U'];
      document.getElementById('addPromotionDateForm').reset()
+     fetchPromotion();
     setView(0);
     })
      .catch((error) => {
@@ -710,6 +712,7 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
          draggable: true,
          progress: undefined,
        });
+       fetchPromotion();
      setGen(gen.filter(i=>i.id!=props))
      
      })
@@ -752,6 +755,7 @@ const final_data = { "property_modifications_dates": data }
         draggable: true,
         progress: undefined,
       });
+      fetchPromotion();
       const temp=[{
         name: data[0]?.start_date,
         type: data[0]?.end_date,
@@ -779,7 +783,7 @@ const final_data = { "property_modifications_dates": data }
        <Header color={color} Primary={english.Side1} />
        <Sidebar color={color} Primary={english.Side1} />
 
-    <div id="main-content"
+           <div id="main-content"
           className={(disp === 2 || disp === 3 || disp === 4)  ? `${color?.whitebackground}  pt-24 relative overflow-y-auto lg:ml-64` :
           ` ${color?.greybackground} pt-24 px-4 relative overflow-y-auto lg:ml-64`}>
          {/* Navbar */}
@@ -788,7 +792,7 @@ const final_data = { "property_modifications_dates": data }
               <li className="inline-flex items-center">
               <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                 <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} 
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "../landing"} 
                 className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
                 </Link></div>
               </li>
@@ -797,7 +801,7 @@ const final_data = { "property_modifications_dates": data }
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
                     <a>{currentProperty?.property_name}</a>
                   </Link>
                   </div></div>
@@ -1259,7 +1263,7 @@ const final_data = { "property_modifications_dates": data }
                         }
                       >
                         <option disabled selected>{JSON.stringify(promotion?.countries?.[i]?.country_action) === "true"?
-                        "Include" : "Exclude"}</option>
+                        "Include" : JSON.stringify(promotion?.countries?.[i]?.country_action) === "false" ? "Exclude" : language?.select}</option>
                         <option value="true">Include</option>
                         <option value="false">Exclude</option>
                         </select>
@@ -1533,7 +1537,6 @@ const final_data = { "property_modifications_dates": data }
                       
                     </div>
                   </div>
-                  
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   <Button Primary={language?.Previous} onClick={()=>{
@@ -1541,8 +1544,7 @@ const final_data = { "property_modifications_dates": data }
                       }} />
                       <Button   Primary={pro?.free_nights === undefined ?language?.Submit : language?.Update}  onClick={()=>{
                       validationFreeNights();
-                     
-                      }} /> 
+                     }} /> 
                       <Button Primary={language?.Next} onClick={()=>{
                         setDisp(2)
                         checkInGen()
@@ -1778,6 +1780,7 @@ const final_data = { "property_modifications_dates": data }
         </div>
 
           </div>
+
           <div className={(disp === 0 || disp === 1)  ? 'block' :'hidden'}>
           <Footer color={color}  Primary={english.Side}  />
           </div>

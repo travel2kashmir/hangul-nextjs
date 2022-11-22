@@ -118,22 +118,10 @@ useEffect(()=>{
          draggable: true,
          progress: undefined,
        });
-
-      setPromotionId(response.data.promotion_id);
-      submitPromotionLink();
-      packages(response.data.promotion_id);
-      submitPromotionDiscount(response.data.promotion_id);
-      if(promotion?.devices?.length !== 0)
-      {
-      devices(response?.data?.promotion_id)
-      }
-      
-      if(promotion?.country?.length !== 0)
-      {
-      countries(response?.data?.promotion_id)
-      }
-      
-     
+     try {
+      otherFunction(response?.data?.promotion_id);
+     } catch (error) {
+     }    
      })
      .catch((error) => {
        toast.error("Promotion error", {
@@ -147,7 +135,21 @@ useEffect(()=>{
        });
      })
 }
-
+// Function call after promotion being added
+const otherFunction = (props) => {
+  packages(props);
+  submitPromotionDiscount(props);
+  if(promotion?.devices?.length !== 0 && promotion?.devices?.length !== undefined )
+  {
+    devices(props)
+  }
+  
+  if(promotion?.country?.length !== 0 && promotion?.country?.length !== undefined )
+  {
+     countries(props)
+  }
+  setPromotionId(props);
+}
 //Devices
 const devices = (props) => { 
  var final_device_data=[]
@@ -160,42 +162,6 @@ const devices = (props) => {
     submitDevices(final_device_data);    
 }
 
-//Promotion Link
-const submitPromotionLink = (props) => {
-  const current = new Date();
-  const currentDateTime= current.toISOString();
-  const final_data =  {"property_promotion_link": [{
-     "property_id": currentProperty?.property_id,
-     "promotion_message_id": "promo" +currentProperty?.property_id,
-     "action": promotion?.stacking_type,
-     "timestamp": currentDateTime 
-   }]
- }
- const url = '/api/ari/promotions/property_promotion_link'
-   axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-     ((response) => {
-       toast.success("Property promotion  link success", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-     .catch((error) => {
-       toast.error("Property promotion link error", {
-         position: "top-center",
-         autoClose: 5000,
-         hideProgressBar: false,
-         closeOnClick: true,
-         pauseOnHover: true,
-         draggable: true,
-         progress: undefined,
-       });
-     })
-}
 
 // Promotion Discount
 const submitPromotionDiscount = (props) => {
@@ -349,7 +315,7 @@ const submitPackages = (props) => {
      
      })
      .catch((error) => {
-       toast.error("Devices error", {
+       toast.error("Packages error", {
          position: "top-center",
          autoClose: 5000,
          hideProgressBar: false,
@@ -424,7 +390,7 @@ filterByCountry();
     "promotion_id":promotionId,
     "start_date": "",
     "end_date":"" ,
-    "days_of_week": "" ,
+    "days_of_week": "MTWTFSU"  ,
     "type":""
   }  
 
@@ -574,7 +540,7 @@ const validationPromotion = () => {
       setError(result)
      }
 }
-
+//  Validate Nights
   const validateNights = () => {
     var result = validateFreeNights(promotion)
     console.log("Result" + JSON.stringify(result))
@@ -585,6 +551,8 @@ const validationPromotion = () => {
       setError(result)
     }
   }
+
+  // Validate Date
   const validateDate = () => {
     var result = validateDates(checkInData)
     console.log("Result" + JSON.stringify(result))
@@ -616,7 +584,7 @@ const validationPromotion = () => {
               <li className="inline-flex items-center">
               <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                 <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "./landing"} 
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../admin/AdminLanding" : "../landing"} 
                 className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
                 </Link></div>
               </li>
@@ -625,7 +593,7 @@ const validationPromotion = () => {
                 <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
                   <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="./propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../propertysummary" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
                     <a>{currentProperty?.property_name}</a>
                   </Link>
                   </div></div>
@@ -923,7 +891,7 @@ const validationPromotion = () => {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <input
-                          type="number" min={1}
+                          type="text"
                         className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           onChange={
                             (e) => (
@@ -1306,7 +1274,7 @@ const validationPromotion = () => {
                   
                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2)}} /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2);setError({})}} /> 
                     <Button Primary={language?.Submit} onClick={()=>{validateNights();}} /> 
                 </div>
                 
@@ -1439,8 +1407,8 @@ const validationPromotion = () => {
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Next} onClick={()=>{setDisp(3);
-                   days_of_week =['M','T','W','T','F','S','U'];
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3);
+                   setError({})
                    setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
                     <Button Primary={language?.Submit}onClick={()=>{ validateDate()}}  /> 
                  </div>
@@ -1573,7 +1541,7 @@ const validationPromotion = () => {
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                   <Button Primary={language?.Skip} onClick={()=>{setDisp(4);
-                   days_of_week =['M','T','W','T','F','S','U'];
+                  setError({});
                    setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
                     <Button Primary={language?.Submit} onClick={()=>{validateDate()}} /> 
                  </div>

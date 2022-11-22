@@ -218,7 +218,7 @@ const submitPackages = (props) => {
     "promotion_id":modificationId,
     "start_date": "",
     "end_date":"" ,
-    "days_of_week": "" ,
+    "days_of_week":  "MTWTFSU"  ,
     "type":""
   }  
 
@@ -452,6 +452,7 @@ const submitDates= (type) => {
               </li>
             </ol>
           </nav>
+          
           {/* Modification */}
           <div id='0' className={disp===0?'block':'hidden'}>
           <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
@@ -855,7 +856,7 @@ const submitDates= (type) => {
                   </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2); days_of_week =['M','T','W','T','F','S','U'];
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(2);setError({})
                          setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
                     <Button Primary={language?.Submit}onClick={()=>{ validateDate()}}  /> 
                  </div>
@@ -982,8 +983,8 @@ const submitDates= (type) => {
                 </div>
 </>))} 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3); days_of_week =['M','T','W','T','F','S','U'];
-     setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
+                  <Button Primary={language?.Skip} onClick={()=>{setDisp(3); setError({})
+                   setCheckInData([checkInTemplate]?.map((i, id) => { return { ...i, index: id } }))}} /> 
                     <Button Primary={language?.Submit} onClick={()=>{validateDate()}} /> 
                  </div>
                   </div>

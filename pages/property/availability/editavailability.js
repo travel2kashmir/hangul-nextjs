@@ -52,7 +52,7 @@ function AddAvailability() {
   const [gen, setGen] = useState([])
   const [viewEdit, setViewEdit] = useState(0)
   const [view, setView] = useState(0)
-  const [spinner,setSpinner]=useState(0)
+  const [spinner, setSpinner] = useState(0)
 
   /** Fetching language from the local storage **/
   useEffect(() => {
@@ -289,17 +289,26 @@ function AddAvailability() {
             draggable: true,
             progress: undefined,
           });
-          var temp = [{
-            name: los.min_max_msg,
-            max_age: los.min_max_msg,
-            id: los.avl_los_id,
-            status: true
-          }]
-          var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
-          setGen(filtered_data.concat(temp));
-          setError({});
-          document.getElementById('editLOSform').reset();
-          setViewEdit(0);
+          try {
+            var temp = [{
+              name: los.min_max_msg,
+              max_age: los.min_max_msg,
+              id: los.avl_los_id,
+              status: true
+            }]
+            var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
+            var fitered_los = availability?.length_of_stay.filter(i => i.avl_los_id != los.avl_los_id)
+            var filtered_los_final = fitered_los.concat([los])
+            console.log('final los' + JSON.stringify(filtered_los_final));
+            setGen(filtered_data.concat(temp));
+            setAvailability({ ...availability, length_of_stay: filtered_los_final })
+            setError({});
+            document.getElementById('editLOSform').reset();
+            fetchAvailability();
+            setViewEdit(0);
+          } catch (error) {
+
+          }
         })
         .catch((error) => {
           toast.error("LOS error", {
@@ -379,9 +388,9 @@ function AddAvailability() {
           draggable: true,
           progress: undefined,
         });
-        
+
         try {
-          
+
           var temp = [{
             name: los.min_max_msg,
             max_age: los.min_max_msg,
@@ -398,21 +407,21 @@ function AddAvailability() {
             "pattern": los.pattern,
             "fixed_pattern": los.fixed_pattern
           }]
-         //make length of stay a single object
+          //make length of stay a single object
           var avl_los = availability.length_of_stay.concat(for_avl);
           //put object in state
           setAvailability({ ...availability, length_of_stay: avl_los })
-         var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
-        setGen(filtered_data.concat(temp));
-        setError({});
-        setLos([]);
-        document.getElementById('addlosform').reset();
-        setSpinner(0);
+          var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
+          setGen(filtered_data.concat(temp));
+          setError({});
+          setLos([]);
+          document.getElementById('addlosform').reset();
+          setSpinner(0);
           setView(0);
         } catch (error) {
           console.log(error)
         }
-        
+
       })
       .catch((error) => {
         toast.error("LOS Add error", {
@@ -506,7 +515,7 @@ function AddAvailability() {
     }
     else {
       var result = validateAvailability(avl, days_of_week)
-     if (result === true) {
+      if (result === true) {
         submitAvailability();
       }
       else {
@@ -559,7 +568,7 @@ function AddAvailability() {
       setSpinner(0);
     }
     else {
-      var data=[los]
+      var data = [los]
       var result = validateLOS(data)
       if (result === true) {
         submitEditLOS();
@@ -573,7 +582,7 @@ function AddAvailability() {
 
   //validation post los
   const validationPostLOS = () => {
-    var data=[los]
+    var data = [los]
     var result = validateLOS(data)
     if (result === true) {
       submitLOS();
@@ -748,12 +757,12 @@ function AddAvailability() {
 
 
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <div className={spinner === 1 ? 'block' : 'hidden'}>
-                   <Button Primary={language?.SpinnerUpdate} />
-                  </div>
-                  <div className={spinner === 0 ? 'block' : 'hidden'}>
-                    <Button Primary={language?.Update} onClick={()=>{setSpinner(1); validationAvailability();}} />
-                  </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                    </div>
+                    <div className={spinner === 0 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.Update} onClick={() => { setSpinner(1); validationAvailability(); }} />
+                    </div>
                     <Button Primary={language?.Next} onClick={() => setDisp(1)} />
                   </div>
 
@@ -902,13 +911,13 @@ function AddAvailability() {
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Previous} onClick={() => setDisp(0)} />
                     <div className={spinner === 1 ? 'block' : 'hidden'}>
-                   <Button Primary={language?.SpinnerUpdate} />
-                  </div>
-                  <div className={spinner === 0 ? 'block' : 'hidden'}>
-                  <Button Primary={resLen === 1 ? language?.Update : language?.Submit } onClick={()=>{setSpinner(1); validationRestriction()}} />
-                  </div>
-                    
-                   <Button Primary={language?.Next} onClick={() => setDisp(2)} />
+                      <Button Primary={language?.SpinnerUpdate} />
+                    </div>
+                    <div className={spinner === 0 ? 'block' : 'hidden'}>
+                      <Button Primary={resLen === 1 ? language?.Update : language?.Submit} onClick={() => { setSpinner(1); validationRestriction() }} />
+                    </div>
+
+                    <Button Primary={language?.Next} onClick={() => setDisp(2)} />
                   </div>
 
                 </div>
@@ -937,7 +946,7 @@ function AddAvailability() {
             </div>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
-               <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+                <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
                 <div className={visible === 1 ? 'block' : 'hidden'}>
                   <Table
                     gen={gen}
@@ -1038,13 +1047,13 @@ function AddAvailability() {
                           <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                           <div className={visible === 1 ? 'block' : 'hidden'}>
                             <input
-                              type="number" min={1}
+                              type="text"
                               defaultValue={los?.time}
                               className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                               onChange={
                                 (e) => {
-                                  setLos({ ...los, time: e.target.value });
-                                  setLos({ ...los, pattern: e.target.value });
+                                  setLos({ ...los, time: e.target.value, pattern: e.target.value });
+                                  //setLos({ ...los, pattern: e.target.value });
                                 }
                               }
                             />
@@ -1165,7 +1174,7 @@ function AddAvailability() {
                           <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                           <div className={visible === 1 ? 'block' : 'hidden'}>
                             <input
-                              type="number" min={1}
+                              type="text"
                               placeholder="Enter number of days"
                               className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                               onChange={

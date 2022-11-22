@@ -15,7 +15,10 @@ const validateLOS = (all_data) => {
       flag.push(false)
       error[index].time = "The number of days is required."
     }
-
+    if (data?.time < 0) {
+      flag.push(false)
+      error[index].time = "The number of days must be positive."
+    }
     if (data?.min_max_msg === "FullPatternLOS" && (data?.fixed_pattern === "" || data?.fixed_pattern === undefined)) {
       flag.push(false)
       error[index].fixed_pattern = "The fixed pattern field is required."

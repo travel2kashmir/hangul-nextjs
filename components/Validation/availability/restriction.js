@@ -28,6 +28,17 @@ const validateRestriction = (data) =>{
          error.min_advance_booking="The minimum advance booking should be less than maximum advance booking."
          error.max_advance_booking="The maximum advance booking should be more than minimum advance booking."
      }
+     if(data?.min_advance_booking<0)
+     {
+        flag.push(false)
+        error.min_advance_booking="The minimum advance booking cannot be negative."
+    
+     }
+     if(data?.max_advance_booking<0)
+     {
+        flag.push(false)
+        error.max_advance_booking="The maximum advance booking cannot be negative."
+    }
      for (let value in flag) {
      
          if(flag[value]=== false)

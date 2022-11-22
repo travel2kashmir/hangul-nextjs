@@ -23,7 +23,7 @@ var language;
 var currentProperty;
 var currentRoom;
 var currentLogged;
-var days_of_week=['M','T','W','T','F','S','U'];
+var days_of_week='mtwtfsu';
 const logger = require("../../../services/logger");
 
 function Inventory() {
@@ -369,7 +369,7 @@ const validationInventory = () => {
                     })}
                   </select>
                         <p className="text-sm text-sm text-red-700 font-light">
-                      {error?.inventory_count}</p>
+                      {error?.room}</p>
                       </div>
                     </div>
                   </div>

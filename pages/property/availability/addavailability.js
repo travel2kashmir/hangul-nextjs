@@ -21,7 +21,7 @@ import Textboxloader from '../../../components/loaders/textboxloader';
 var language;
 var currentProperty;
 var currentLogged;
-var days_of_week=['M', 'T','W','T','F','S','U'];
+var days_of_week='mtwtfsu';
 var keys =[];
 var currentPackage;
 var availabilityId;

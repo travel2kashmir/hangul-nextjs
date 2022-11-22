@@ -2,7 +2,12 @@ const validateInventory = (data,props) =>{
     var error={};
      var flag=[]
      var final_flag=true;
-   
+   alert(JSON.stringify(data))
+   if(data?.room_id==="" || data?.room_id===undefined)
+   {
+       flag.push(false)
+       error.room="The Room is required."
+   }
      if(data?.start_date==="" || data?.start_date===undefined)
      {
          flag.push(false)
@@ -29,7 +34,7 @@ const validateInventory = (data,props) =>{
          flag.push(false)
          error.inventory_count ="The room count Should be positive number."
      }
-     if(props==="" || data?.start_date===undefined)
+     if(props==="" || props===undefined)
      {
          flag.push(false)
          error.days="The days is required."

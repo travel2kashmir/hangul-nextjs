@@ -370,7 +370,7 @@ function AddAvailability() {
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
         console.log(JSON.stringify(response?.data))
-        toast.success("LOS Add success", {
+        toast.success("LOS Add successful", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -379,33 +379,40 @@ function AddAvailability() {
           draggable: true,
           progress: undefined,
         });
-        var temp = [{
-          name: los.min_max_msg,
-          max_age: los.min_max_msg,
-          id: response?.data?.los_avl_id,
-          status: true
-        }]
-        //create object to be put in avlablity
-        var for_avl = [{
-          "availability": availability?.availability_id,
-          "avl_los_id": response?.data?.los_avl_id,
-          "time": los.time,
-          "unit_of_time": "Days",
-          "min_max_msg": los.min_max_msg,
-          "pattern": los.pattern,
-          "fixed_pattern": los.fixed_pattern
-        }]
-       //make length of stay a single object
-        var avl_los = availability.length_of_stay.concat(for_avl);
-        //put object in state
-        setAvailability({ ...availability, length_of_stay: avl_los })
-       var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
-      setGen(filtered_data.concat(temp));
-      setError({});
-      setLos([]);
-      document.getElementById('addlosform').reset();
-      setSpinner(0);
-        setView(0);
+        
+        try {
+          
+          var temp = [{
+            name: los.min_max_msg,
+            max_age: los.min_max_msg,
+            id: response?.data?.los_avl_id,
+            status: true
+          }]
+          //create object to be put in avlablity
+          var for_avl = [{
+            "availability": availability?.availability_id,
+            "avl_los_id": response?.data?.los_avl_id,
+            "time": los.time,
+            "unit_of_time": "Days",
+            "min_max_msg": los.min_max_msg,
+            "pattern": los.pattern,
+            "fixed_pattern": los.fixed_pattern
+          }]
+         //make length of stay a single object
+          var avl_los = availability.length_of_stay.concat(for_avl);
+          //put object in state
+          setAvailability({ ...availability, length_of_stay: avl_los })
+         var filtered_data = gen.filter((i) => i.id != los.avl_los_id)
+        setGen(filtered_data.concat(temp));
+        setError({});
+        setLos([]);
+        document.getElementById('addlosform').reset();
+        setSpinner(0);
+          setView(0);
+        } catch (error) {
+          console.log(error)
+        }
+        
       })
       .catch((error) => {
         toast.error("LOS Add error", {

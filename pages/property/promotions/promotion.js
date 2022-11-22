@@ -1177,7 +1177,7 @@ const submitDates= (type) => {
                              setPromotion({ ...promotion, occupancy_min: e.target.value },setMainPromotion(1))
                             )
                           }
-                          defaultValue={promotion?.occupancy_min}
+                          defaultValue={pro?.occupancy_min}
                         />
                         <p className="text-sm text-sm text-red-700 font-light">
                       {error?.occupancy_min}</p>
@@ -1267,7 +1267,7 @@ const submitDates= (type) => {
                           ...promotion,
                        packages: e,
                         }, setPkg(1))}
-                      selectedValues={promotion?.packages}
+                      selectedValues={pro?.packages}
                      displayValue="package_name"
                     
                       />

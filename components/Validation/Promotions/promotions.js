@@ -127,8 +127,8 @@ const validatePromotions = (data) =>{
    }
   }
   
-   // Occupancy
-  //Mandatory
+// Occupancy
+ //Mandatory
   if(data?.occupancy_min !== "" && data?.occupancy_min !== undefined ){
     if(data?.occupancy_max === "" || data?.occupancy_max === undefined) {
      flag.push(false);

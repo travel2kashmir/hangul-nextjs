@@ -243,6 +243,7 @@ const Sidebar = (args) => {
                     <a>{language?.pointofsale}</a></Link>
                       </span>
                 </li>
+                
                 {/* ARI */}
                 <li>
 					<button type="button" onClick={()=>{setAri(!ari)} }
@@ -266,36 +267,36 @@ const Sidebar = (args) => {
 					<ul  className="py-2 space-y-2">
 						<li className= {`${args?.color?.text}  text-base font-normal rounded-lg flex items-center p-2 pl-11`}
      >
-							<Link  href={{pathname:args?.Primary?.services, query: { id: 1 }}}>
+							<Link  href={{pathname:args?.Primary?.availability, query: { id: 1 }}}>
             	<a>{language?.availability}</a></Link>
 						</li>
 						<li 	className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2 pl-11`}>
-						<Link  href={{pathname:args?.Primary?.additionalservices, query: { id: 1 }}}>
+						<Link  href={{pathname:args?.Primary?.inventory, query: { id: 1 }}}>
               <a 
 							>
                   {language?.inventory}</a>
 						</Link></li>
             <li 	className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2 pl-11`}>
-						<Link  href={{pathname:args?.Primary?.additionalservices, query: { id: 1 }}}>
+						<Link  href={{pathname:args?.Primary?.promotion, query: { id: 1 }}}>
               <a 
 							>
                   {language?.promotions}</a>
 						</Link></li>
             <li 	className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2 pl-11`}>
-						<Link  href={{pathname:args?.Primary?.additionalservices, query: { id: 1 }}}>
+						<Link  href={{pathname:args?.Primary?.modification, query: { id: 1 }}}>
               <a 
 							>
                   {language?.ModificationCols?.name}</a>
 						</Link></li>
             <li 	className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2 pl-11`}>
-						<Link  href={{pathname:args?.Primary?.additionalservices, query: { id: 1 }}}>
+						<Link  href={{pathname:args?.Primary?.extraguestcharge, query: { id: 1 }}}>
               <a 
 							>
                   {language?.ExtraGuestCols?.name}</a>
 						</Link></li>
 					
 					</ul></div>
-				</li>
+				        </li>
 
               </ul>
               <div className="space-y-2 pt-2">

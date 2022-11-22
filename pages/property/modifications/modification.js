@@ -408,7 +408,7 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
          draggable: true,
          progress: undefined,
        });
-       
+       fetchModification();
        const temp=[{
         name: data[0]?.start_date,
         type: data[0]?.end_date,
@@ -432,7 +432,7 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
          progress: undefined,
        });
      })
-}
+};
 
 // Submit Date Delete
 const submitmodificationDelete = (props) => {
@@ -449,6 +449,7 @@ const submitmodificationDelete = (props) => {
          draggable: true,
          progress: undefined,
        });
+       fetchModification();
        setGen(gen.filter(i=>i.id!=props))
      })
      .catch((error) => {
@@ -464,10 +465,10 @@ const submitmodificationDelete = (props) => {
       
      });
  };
+
 // Edit Modification
 const submitDateEdit = (props,noChange,days_data) => {
- 
-  const data =[{
+ const data =[{
    "mod_date_id": props.id,
     "start_date": props.name,
    "end_date": props.type,
@@ -488,6 +489,7 @@ const final_data = { "property_modifications_dates": data }
         draggable: true,
         progress: undefined,
       });
+      fetchModification();
         const temp=[{
           name: data[0]?.start_date,
           type: data[0]?.end_date,

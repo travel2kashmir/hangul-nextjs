@@ -23,11 +23,25 @@ const validatePromotions = (data) =>{
          flag.push(false)
          error.discount="The discount is required."
      }
+     if(data?.discount!=="" && data?.discount !== undefined)
+     {
+        if(!(/^([1-9]+[0-9]*)$/.test(data.discount))){
+         flag.push(false)
+         error.discount="The discount accepts only numbers and decimal values."
+        }
+     }
      if(data?.applied_nights==="" || data?.applied_nights===undefined)
      {
          flag.push(false)
          error.applied_nights="The applied nights is required."
      }
+     if(data?.applied_nights!=="" && data?.applied_nights!==undefined)
+     {
+        if(!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data.discount_percentage))){
+         flag.push(false)
+         error.applied_nights="The applied nights accepts only numbers and decimal values."
+     }
+    }
      if(data?.packages==="" || data?.packages===undefined)
      {
          flag.push(false)
@@ -39,7 +53,7 @@ const validatePromotions = (data) =>{
          error.min_amount_before_discount="The min amount before discount is required."
      }
      //Accepts only possitive and decimal values
-     if(data?.min_amount_before_discount !="" || data?.min_amount_before_discount != undefined){
+     if(data?.min_amount_before_discount !="" && data?.min_amount_before_discount != undefined){
         if(!(/^([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(data?.min_amount_before_discount))){
        {
            flag.push(false)

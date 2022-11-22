@@ -116,7 +116,7 @@ useEffect(() => {
          submitModificationLink();
          packages(response.data.modification_id)
        setModificationId(response.data.modification_id);
-       
+       setError({});
       
        })
        .catch((error) => {
@@ -198,7 +198,7 @@ const submitPackages = (props) => {
            progress: undefined,
          });
         setDisp(1)
-       
+       setError({})
        })
        .catch((error) => {
          toast.error("Packages error", {
@@ -277,6 +277,7 @@ const submitDates= (type) => {
      if(type === "booking"){
       Router.push('../modifications')
      }
+     setError({})
      })
      .catch((error) => {
        toast.error("Dates error", {

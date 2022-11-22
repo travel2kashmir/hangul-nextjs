@@ -194,6 +194,7 @@ setCheckInData([...checkInData, checkInTemplate]?.map((i, id) => { return { ...i
          progress: undefined,
        });
        setMod([])
+       setError({})
        setDisp(1)
      })
      .catch((error) => {
@@ -238,7 +239,8 @@ const submitPackages = (props) => {
          progress: undefined,
        });
     setPkg([]);
-    setDisp(1)
+    setDisp(1);
+    setError({});
      })
      .catch((error) => {
        toast.error("Packages error", {
@@ -408,7 +410,7 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
          draggable: true,
          progress: undefined,
        });
-       fetchModification();
+      
        const temp=[{
         name: data[0]?.start_date,
         type: data[0]?.end_date,
@@ -416,6 +418,7 @@ const url = '/api/ari/property_rate_modifications/property_rate_modifications_da
         id: response.data.date_id
         }]
       setGen( gen.concat(temp))
+      fetchModification();
       days_of_week =['M','T','W','T','F','S','U'];
      document.getElementById('addmodificationform').reset();
      setError([])
@@ -449,8 +452,9 @@ const submitmodificationDelete = (props) => {
          draggable: true,
          progress: undefined,
        });
-       fetchModification();
+      
        setGen(gen.filter(i=>i.id!=props))
+       fetchModification();
      })
      .catch((error) => {
        toast.error("API:Date Delete Error!", {

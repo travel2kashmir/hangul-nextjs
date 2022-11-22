@@ -690,9 +690,9 @@ const url = `/api/ari/promotions/property_promotion_dates/${props}`;
          draggable: true,
          progress: undefined,
        });
-       fetchPromotion();
+       
      setGen(gen.filter(i=>i.id!=props))
-     
+     fetchPromotion();
      })
      .catch((error) => {
        toast.error("API:Date Delete Error!", {
@@ -733,7 +733,7 @@ const final_data = { "property_modifications_dates": data }
         draggable: true,
         progress: undefined,
       });
-      fetchPromotion();
+     
       const temp=[{
         name: data[0]?.start_date,
         type: data[0]?.end_date,
@@ -742,6 +742,7 @@ const final_data = { "property_modifications_dates": data }
         }]
        var filtered_data = gen.filter((i) => i.id != data[0]?.date_id)
        setGen(filtered_data.concat(temp));  
+       fetchPromotion();
        setError({});
     })
     .catch((error) => {
@@ -872,7 +873,7 @@ const submitDates= (type) => {
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className={`${color?.widget} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotionduration}</div>
+                <div className={`${color?.widget} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.freenights}</div>
             </div>
           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1389,7 +1390,7 @@ const submitDates= (type) => {
              <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
                 <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
-                   {language?.promotion} {language?.discount}
+                {language?.promotion} {language?.freenights}
                 </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1408,7 +1409,7 @@ const submitDates= (type) => {
            
         </div>
             <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
-           {language?.promotion} {language?.duration} 
+            {language?.promotion} {language?.freenights}
             </h6>
             <div className="pt-6">
               <div className=" md:px-4 mx-auto w-full">
@@ -1600,7 +1601,7 @@ const submitDates= (type) => {
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.duration}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.freenights}</div>
             </div>
            
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1639,7 +1640,7 @@ const submitDates= (type) => {
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.duration}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.freenights}</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1677,7 +1678,7 @@ const submitDates= (type) => {
             </div>
            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400"> 2</button>
-                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.duration}</div>
+                <div className={`${color?.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.promotion} {language?.freenights}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">3</button>

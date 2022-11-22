@@ -226,6 +226,7 @@ const extraGuestChild= (props) => {
          progress: undefined,
        });
     keys=[];
+    setError({});
     Router.push('../extraguestcharges')
      })
      .catch((error) => {
@@ -374,7 +375,7 @@ const validationExtraChildGuest = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                    {language?.excludefromcapacity}{JSON.stringify(error)}
+                    {language?.excludefromcapacity}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>

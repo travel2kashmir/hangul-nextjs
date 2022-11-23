@@ -4,6 +4,7 @@ import DarkModeLogic from "../../components/darkmodelogic";
 import objChecker from "lodash"
 import Sidebar  from "../../components/Sidebar";
 import Headloader from '../../components/loaders/headloader';
+import validateAddress from "../../components/Validation/address";
 import Lineloader from '../../components/loaders/lineloader';
 import Header  from "../../components/Header";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,6 +28,9 @@ function Address() {
   const [flag, setFlag] = useState([]);
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
+  const [error, setError] = useState({})
+  const [allHotelDetails, setAllHotelDetails] = useState([]);
+  const [address, setAddress] = useState([]);
 
   useEffect(()=>{  
     const firstfun=()=>{  
@@ -55,8 +59,7 @@ function Address() {
    Router.push("./address");
   },[])
 
-  const [allHotelDetails, setAllHotelDetails] = useState([]);
-  const [address, setAddress] = useState([]);
+
   /* Function call to fetch Current Property Details when page loads */
   const fetchHotelDetails = async () => { 
     const url = `/api/${currentProperty.address_province.replace(
@@ -77,9 +80,11 @@ function Address() {
   useEffect(() => {
     fetchHotelDetails(); 
   },[]);
+
   useEffect(()=>{ 
     setColor(DarkModeLogic(darkModeSwitcher))
    },[darkModeSwitcher])
+
   /* Edit Address Function */
   const submitAddressEdit = () => {
     if(flag === 1){
@@ -145,6 +150,21 @@ function Address() {
     }
   };
 
+   // Add Validation Address
+   const validationAddress = () => {
+    setError({})
+    var result = validateAddress(allHotelDetails)
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+       
+        submitAddressEdit();
+       }
+       else
+       {
+        setError(result)
+       }
+}
   return (
     <>
    
@@ -215,6 +235,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.streetaddress}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -228,7 +249,9 @@ function Address() {
                             address_street_address: e.target.value,
                           },setFlag(1))
                         }
-                      /></div>
+                      />
+                       <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_street_address}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -238,6 +261,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.landmark}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -251,7 +275,9 @@ function Address() {
                             address_landmark: e.target.value,
                           },setFlag(1))
                         }
-                      /></div>
+                      />
+                       <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_landmark}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -261,6 +287,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.city}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -278,6 +305,8 @@ function Address() {
                         <option value="Pahalgam">Pahalgam</option>
                         <option value="Gulmarg">Gulmarg</option>
                       </select>
+                      <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_city}</p>
                       </div>
                     </div>
                   </div>
@@ -288,6 +317,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                        {language?.province}
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -305,7 +335,9 @@ function Address() {
                         <option value="Kargil">Kargil</option>
                         <option value="Delhi">Delhi</option>
                         <option value="Maharastra">Maharastra</option>
-                      </select></div>
+                      </select>
+                      <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_province}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -315,6 +347,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.latitude}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -328,7 +361,9 @@ function Address() {
                             address_latitude: Number(e.target.value),
                           },setFlag(1))
                         }
-                      /></div>
+                      />
+                       <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_latitude}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -338,6 +373,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.longitude}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -351,7 +387,9 @@ function Address() {
                             address_longitude: Number(e.target.value),
                           },setFlag(1))
                         }
-                      /></div>
+                      />
+                       <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_longitude}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -361,6 +399,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.postalcode}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -374,7 +413,9 @@ function Address() {
                             address_zipcode: Number(e.target.value),
                           },setFlag(1))
                         }
-                      /></div>
+                      />
+                       <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_zipcode}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -384,6 +425,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.precision}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -397,7 +439,9 @@ function Address() {
                             address_precision: Number(e.target.value)
                           },setFlag(1))
                         }
-                      /></div>
+                      />
+                       <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_precision}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -407,6 +451,7 @@ function Address() {
                         htmlFor="grid-password"
                       >
                         {language?.country}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -422,7 +467,9 @@ function Address() {
                         <option value="PK">Pakistan</option>
                         <option value="UN">United States of America</option>
                         <option value="UK">United Kingdom</option>
-                      </select></div>
+                      </select>
+                      <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.address_country}</p></div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -432,7 +479,7 @@ function Address() {
                    <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.UpdateDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Update} onClick={submitAddressEdit} />
+                      <Button Primary={language?.Update} onClick={validationAddress} />
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />
@@ -458,6 +505,7 @@ function Address() {
         pauseOnHover
       />
     </div>
+    
     <Footer color={color} Primary={english.Side}/>
    
     </>

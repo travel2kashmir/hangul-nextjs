@@ -14,6 +14,7 @@ import Button from "../../components/Button";
 import Footer from '../../components/Footer';
 import Headloader from '../../components/loaders/headloader';
 import Textboxloader from '../../components/loaders/textboxloader';
+import validatebasicDetails from '../../components/Validation/basicDetails';
 var language;
 var currentProperty;
 var currentLogged;
@@ -29,6 +30,7 @@ export default function BasicDetails() {
   const [flag, setFlag] = useState([]);
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
+  const [error, setError] = useState({})
 
  
   /** Fetching language from the local storage **/
@@ -92,7 +94,6 @@ export default function BasicDetails() {
 
   /* Edit Basic Details Function */
   const submitBasicEdit = () => {
-
     if(flag === 1){
     if(objChecker.isEqual(allHotelDetails,basicDetails)){
       toast.warn('APP: No change in Basic Details detected. ', {
@@ -167,6 +168,21 @@ export default function BasicDetails() {
   }
   }
 
+  // Add Validation Basic Details
+  const validationBasicDetails = () => {
+    setError({})
+    var result = validatebasicDetails(allHotelDetails)
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+       
+        submitBasicEdit();
+       }
+       else
+       {
+        setError(result)
+       }
+}
   return (
     <>
       <div>
@@ -224,6 +240,7 @@ export default function BasicDetails() {
                         htmlFor="grid-password"
                       >
                         {language?.propertyname}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -236,7 +253,10 @@ export default function BasicDetails() {
                               setAllHotelDetails({ ...allHotelDetails, property_name: e.target.value },setFlag(1))
                             )
                           }
-                        /></div>
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_name}</p>
+                        </div>
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
@@ -244,21 +264,25 @@ export default function BasicDetails() {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         {language?.propertycategory}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                        <select className={`shadow-sm ${color?.greybackground}  border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          defaultValue={basicDetails?.property_category}
+                        <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+
                           onChange={
                             (e) => (
                               setAllHotelDetails({ ...allHotelDetails, property_category: e.target.value },setFlag(1))
                             )
                           }
                         >
-                          <option defaultValue="hotel" >Hotel</option>
-                          <option defaultValue="resort">Resort</option>
-                          <option defaultValue="motel">Motel</option>
+                           <option selected disabled >{basicDetails?.property_category}</option>
+                          <option value="hotel" >Hotel</option>
+                          <option value="resort">Resort</option>
+                          <option value="motel">Motel</option>
                         </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
                       </div>
                     </div>
                   </div>
@@ -269,6 +293,7 @@ export default function BasicDetails() {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
+                         <span style={{ color: "#ff0000" }}>*</span>
                         {language?.propertybrand}
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -282,7 +307,10 @@ export default function BasicDetails() {
                               setAllHotelDetails({ ...allHotelDetails, property_brand: e.target.value },setFlag(1))
                             )
                           }
-                        /></div>
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                        </div>
                     </div>
                   </div>
 
@@ -293,6 +321,7 @@ export default function BasicDetails() {
                         htmlFor="grid-password"
                       >
                         {language?.establisheddate}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -305,7 +334,9 @@ export default function BasicDetails() {
                               setAllHotelDetails({ ...allHotelDetails, established_year: e.target.value },setFlag(1))
                             )
                           }
-                        /></div>
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.established_year}</p></div>
                     </div>
                   </div>
 
@@ -316,6 +347,7 @@ export default function BasicDetails() {
                         htmlFor="grid-password"
                       >
                         {language?.starrating}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -328,7 +360,9 @@ export default function BasicDetails() {
                               setAllHotelDetails({ ...allHotelDetails, star_rating: Number(e.target.value) },setFlag(1))
                             )
                           }
-                        /></div>
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.star_rating}</p></div>
                     </div>
                   </div>
 
@@ -338,7 +372,8 @@ export default function BasicDetails() {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        {language?.descriptiontitle}
+                      {language?.descriptiontitle}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -351,7 +386,9 @@ export default function BasicDetails() {
                               setAllHotelDetails({ ...allHotelDetails, description_title: e.target.value },setFlag(1))
                             )
                           }
-                        /></div>
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.description_title}</p></div>
                     </div>
                   </div>
 
@@ -362,6 +399,7 @@ export default function BasicDetails() {
                         htmlFor="grid-password"
                       >
                         {language?.description}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block w-auto' : 'hidden'}><Textboxloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -373,7 +411,9 @@ export default function BasicDetails() {
                             )
                           }
                           defaultValue={basicDetails?.description_body}
-                        /></div>
+                        />
+                         <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.description_body}</p></div>
                     </div>
                   </div>
 
@@ -384,11 +424,12 @@ export default function BasicDetails() {
                         htmlFor="grid-password"
                       >
                         {language?.descriptiondate}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
 
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                        <input type="text"
+                        <input type="text" readOnly
                           className={`shadow-sm ${color?.greybackground}  border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           defaultValue={descriptionDate}
                         /></div>
@@ -399,7 +440,7 @@ export default function BasicDetails() {
                   <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.UpdateDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Update} onClick={submitBasicEdit} />
+                      <Button Primary={language?.Update} onClick={validationBasicDetails} />
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />

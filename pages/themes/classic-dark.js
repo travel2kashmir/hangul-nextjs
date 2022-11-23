@@ -634,6 +634,7 @@ function ClassicDark(args) {
                            </div>
 
                            {/* Packages */}
+                           {args?.allPackages?.length != 0 ?
                            <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger' onClick={() => { setPackages(!packages) }}>
                                  <button className="mb-6" >
@@ -972,7 +973,7 @@ function ClassicDark(args) {
                                  })}
 
                               </div>
-                           </div>
+                           </div>:<div></div>}
 
                         </div>
                      </div>

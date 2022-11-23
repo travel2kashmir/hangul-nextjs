@@ -933,7 +933,7 @@ const submitDates= (type) => {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                       <select
-                        className={`shadow-sm ${color?.greybackground} border capitalize border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                        className={`shadow-sm ${color?.greybackground}  border capitalize border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={(e) =>
                           setPromotion({
                             ...promotion,
@@ -966,14 +966,14 @@ const submitDates= (type) => {
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                      <select className={`shadow-sm capitalize ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                        onChange={
                       (e) => (
                          setPromotion({ ...promotion, discount_type: e.target.value },setDiscount(1))
                       )
                   }>
-                     <option selected disabled >{pro?.discount?.[i]?.discount_type} </option>
-                    <option value="discount_nights">Discount Percentage</option>
+                     <option selected disabled >{pro?.discount?.[i]?.discount_type.toString().replaceAll("_"," ") }</option>
+                    <option value="discount_nights">Discount Nights</option>
                     <option value="fixed_amount_per_night">Fixed Amount per night</option>
                     <option value="fixed_amount">Fixed Amount</option>
                    </select>
@@ -1499,7 +1499,7 @@ const submitDates= (type) => {
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
                       <label
-                        className={`text-sm font-medium ${color?.text} block mb-2`}
+                        className={`text-sm capitalize font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
                       {language?.freenightselection}
@@ -1507,7 +1507,7 @@ const submitDates= (type) => {
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
-                      <select className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                      <select className={`shadow-sm capitalize ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                      onChange={
                       (e) => (
                          setFreeNights({ ...freeNights, night_selection: e.target.value },setDis(1))
@@ -1816,6 +1816,7 @@ const submitDates= (type) => {
           <div className={(disp === 0 || disp === 1)  ? 'block' :'hidden'}>
           <Footer color={color}  Primary={english.Side}  />
           </div>
+
           <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}

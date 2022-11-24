@@ -22,7 +22,8 @@ function Adduser() {
   const [user, setUser] = useState({
     "user_name": "",
     "user_email": "",
-    "user_password": ""
+    "user_password": "",
+    "user_type":""
   })
 
   const registerUser = (e) => {
@@ -37,6 +38,7 @@ function Adduser() {
         "user_email": user?.user_email,
         "user_password": encryptedPassword,
         "salt": salt,
+        "user_type": user?.user_type,
         "status": true
       }
       axios.post('/api/signup/user', data,
@@ -57,7 +59,8 @@ function Adduser() {
           setUser({
             "user_name": "",
             "user_email": "",
-            "user_password": ""
+            "user_password": "",
+            "user_type":""
           })
           setError({})
           setSpinner(0)
@@ -101,8 +104,8 @@ function Adduser() {
           language = french;
 
         }
-        /** Current Property Details fetched from the local storage **/
-      currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
+        /* Current Property Details fetched from the local storage */
+        currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
       }
     }
@@ -110,12 +113,12 @@ function Adduser() {
     Router.push("./adduser");
   }, [])
   return (<>
-    {/*privacy policy*/}
-    <Header admin={english?.Sideadminlanding}/>
-    <Sidebar admin={english?.Sideadminlanding}/>
+    {/privacy policy/}
+    <Header admin={english?.Sideadminlanding} />
+    <Sidebar admin={english?.Sideadminlanding} />
     <div id="main-content"
       className="  bg-gray-50 px-4 min-h-screen pt-24 relative overflow-y-auto lg:ml-64" >
-      {/*Nav Bar*/}
+      {/Nav Bar/}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
@@ -143,7 +146,7 @@ function Adduser() {
                   block mb-2 "
               htmlFor="grid-password"
             >
-               {language?.username}
+              {language?.username}
             </label>
             <input
               type="text"
@@ -206,6 +209,28 @@ function Adduser() {
               {error?.password}
             </p>
           </div>
+
+          <div className="relative w-full mb-3">
+            <label
+              className="text-base font-semibold
+                   text-gray-700 
+                  block mb-2"
+              htmlFor="grid-password"
+            >
+              {language?.usertype}
+            </label>
+            <select  className="bg-gray-50 border border-gray-300 
+                  text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
+                   focus:border-cyan-600 block w-full p-2.5"
+              onChange={(e) => { setUser({ ...user, user_type: e.target.value }) }}
+            >
+              <option value="1" >Test User</option>
+              <option value="2">Production User</option>
+            </select>
+            <p className="text-red-700 font-light">
+              {error?.user_type}
+            </p>
+          </div>
           <div className="flex justify-start text-center mt-6">
             <button
               className={` bg-gradient-to-r bg-cyan-600 hover:bg-cyan-700 text-white sm:inline-flex  
@@ -231,7 +256,7 @@ function Adduser() {
     <div>
 
     </div>
-    {/** Toast Container **/}
+    {/* Toast Container */}
     <ToastContainer
       position="top-center"
       autoClose={5000}

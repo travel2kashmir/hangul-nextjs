@@ -203,6 +203,10 @@ const Sidebar = (args) => {
                     {language?.rooms}</a>
                     </Link></span>
                 </li>
+
+                {JSON.stringify(args?.Type) === "2"?<></>:
+                <>
+                {JSON.stringify(args?.Type)}
                 <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2  group`}>
                   <svg
                     className={`w-6 h-6 ${args?.color?.textgray} flex-shrink-0  ${args?.color?.iconhover} transition duration-75`}
@@ -297,8 +301,9 @@ const Sidebar = (args) => {
 					
 					</ul></div>
 				        </li>
-
+                </>}
               </ul>
+            
               <div className="space-y-2 pt-2">
                 <ul>
                   <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2  group`}>
@@ -335,6 +340,8 @@ const Sidebar = (args) => {
                     <Link  href={{pathname:args?.Primary?.theme, query: { id: 1 }}}><a>{language?.theme}</a></Link>
                     </span>
                   </li>
+                  {JSON.stringify(args?.Type) === "2"?<></>:
+                <>
                   <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2  group`}>
                     <svg
                       className={`w-6 h-6 ${args?.color?.textgray} flex-shrink-0  ${args?.color?.iconhover} transition duration-75`}
@@ -373,6 +380,7 @@ const Sidebar = (args) => {
                     <a>{language?.roomxml}</a></Link>
                     </span>
                   </li>
+                  </>}
                 </ul>
               </div>
             </div>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import lang from '../../components/GlobalData'
 import axios from "axios";
 import DarkModeLogic from "../../components/darkmodelogic";
-import objChecker from "lodash"
+import objChecker, { filter } from "lodash"
 import Sidebar  from "../../components/Sidebar";
 import Headloader from '../../components/loaders/headloader';
 import validateAddress from "../../components/Validation/address";
@@ -21,6 +22,7 @@ import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
 import arabic from "../../components/Languages/ar"
 var i=0;
+var country;
 var currentLogged;
 function Address() {
   const [visible,setVisible]=useState(0) 
@@ -70,9 +72,13 @@ function Address() {
     }s/${currentProperty.property_id}`;  
     axios.get(url)
     .then((response)=>{setAddress(response.data.address?.[i]);
+      filterCountry(response.data.address?.[i])
       setAllHotelDetails(response.data.address?.[i])
+    
     logger.info("url  to fetch property details hitted successfully")
-     setVisible(1)})
+     setVisible(1);
+   
+    })
     .catch((error)=>{logger.error("url to fetch property details, failed")});  
 }
 
@@ -150,6 +156,12 @@ function Address() {
     }
   };
 
+  const filterCountry = (props)=>{
+  country =  lang?.CountryData.filter(el => {
+       return props.address_country.toUpperCase() === el.country_code;
+    });
+  }
+
    // Add Validation Address
    const validationAddress = () => {
     setError({})
@@ -210,7 +222,7 @@ function Address() {
       {/* Update Address Form */}
       <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
         <h6 className={`${color?.text} text-xl  flex leading-none pl-6 pt-2 font-bold`}>
-          {language?.address}
+          {language?.address} 
           <svg
             className="ml-2 h-6 mb-2 w-6 font-semibold"
             fill="currentColor"
@@ -462,11 +474,13 @@ function Address() {
                             address_country: e.target.value
                           },setFlag(1))
                         }
-                        <option selected disabled>{address?.address_country}</option>
-                        <option value="IN">India</option>
-                        <option value="PK">Pakistan</option>
-                        <option value="UN">United States of America</option>
-                        <option value="UK">United Kingdom</option>
+                        <>
+                       <option  disabled selected value={country?.[i]?.country_code}>{country?.[i]?.country_name}</option>
+                       {lang?.CountryData?.map(i => {
+                        return (
+                          <option key={i.country_code} value={i.country_code}>{i?.country_name}</option>)
+                      }
+                      )}</>
                       </select>
                       <p className="text-sm text-sm text-red-700 font-light">
                           {error?.address_country}</p></div>

@@ -131,7 +131,6 @@ function Signin(args) {
           if (EncryptedPass === response.data.password) {
             /** Toast emitter Sign in Successfull **/
             logger.info("Login Successful!");
-            alert(JSON.stringify(response.data))
             const whoIsLogged = {
               id: response.data.id,
               name: response.data.name,
@@ -149,8 +148,6 @@ function Signin(args) {
               LocalSignin(whoIsLogged);
               router.push("./property/landing");
             }
-
-
 
           } else {
             setSpinner(0)

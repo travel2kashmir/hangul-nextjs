@@ -31,7 +31,6 @@ function Adduser() {
     const result = validateUserData(user)
     if (result === true) {
       const salt = bcrypt.genSaltSync(10);
-      alert("plain pass" + user.user_password)
       const encryptedPassword = bcrypt.hashSync(user.user_password, salt)
       const data = {
         "user_name": user?.user_name,

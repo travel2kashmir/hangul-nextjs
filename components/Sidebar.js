@@ -206,7 +206,6 @@ const Sidebar = (args) => {
 
                 {JSON.stringify(args?.Type) === "2"?<></>:
                 <>
-                {JSON.stringify(args?.Type)}
                 <li className={`${args?.color?.text} ${args?.color?.sidebar} group text-base font-normal rounded-lg flex items-center p-2  group`}>
                   <svg
                     className={`w-6 h-6 ${args?.color?.textgray} flex-shrink-0  ${args?.color?.iconhover} transition duration-75`}

@@ -350,14 +350,13 @@ function Gallery() {
                
                   
               
-             
-                <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className={visible===0?'block w-auto  h-auto m-6 flex':'hidden'}>
               <div className='mr-4'>  <Loader/></div>
                   <div className='mx-4'>  <Loader/></div>
                   <div >  <Loader/></div>
                     </div>
                     <div className={visible===1?'block':'hidden'}>
+                <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {gallery?.images?.map((item, idx) => {
                         return (
                             <div className="block text-blueGray-600 text-xs  mt-6 font-bold " key={idx} >

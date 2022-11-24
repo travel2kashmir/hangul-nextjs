@@ -93,18 +93,20 @@ function Gallery() {
         setColor(DarkModeLogic(darkModeSwitcher))
        },[darkModeSwitcher])
 
-    const onChangePhoto = (e, i) => {
+    const onChangePhoto = (e, imageFile) => {
         setImage({ ...image, imageFile: e.target.files[0] })
     }
     
     /* Function to upload image*/
     const uploadImage = () => {
         setSpin(1);
+        alert("1"+image.imageFile);
         const imageDetails = image.imageFile
         const formData = new FormData();
         formData.append("file", imageDetails);
         formData.append("upload_preset", "Travel2Kashmir")
-
+        formData.append("enctype", "multipart/form-data")
+        alert("1");
         axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
             .then(response => {
                 setImage({ ...image, image_link: response?.data?.secure_url })
@@ -112,7 +114,7 @@ function Gallery() {
             })
             .catch(error => {
                 setSpin(0)
-                toast.error("Image Upload Error! ", {
+                toast.error("Image upload error! ", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -121,7 +123,7 @@ function Gallery() {
                     draggable: true,
                     progress: undefined,
                 });
-                console.error('There was an error!', error);
+                console.error('Image upload error!', error);
 
             });
 
@@ -540,7 +542,7 @@ function Gallery() {
                                               defaultValue="" />
 
                                         </div>
-                                        <div className="col-span-6 sm:col-span-3">
+                                        <div className="col-span-6 sm:col-span-3 mt-2">
                                             {spin === 0 ?
                                             <Button Primary={language?.Upload} onClick={uploadImage} />:
                                             <Button Primary={language?.SpinnerUpload} />

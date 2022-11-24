@@ -54,7 +54,6 @@ export default function BasicDetails() {
         }
         /** Current Property Details fetched from the local storage **/
         currentProperty = JSON.parse(localStorage.getItem("property"));
-
         currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
       }
@@ -187,7 +186,7 @@ export default function BasicDetails() {
     <>
       <div>
         <Header color={color} Primary={english.Side} />
-        <Sidebar color={color} Primary={english.Side} />
+        <Sidebar color={color} Primary={english.Side} Type={currentLogged?.user_type} />
 
         <div id="main-content"
           className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>

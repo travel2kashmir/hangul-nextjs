@@ -131,12 +131,14 @@ function Signin(args) {
           if (EncryptedPass === response.data.password) {
             /** Toast emitter Sign in Successfull **/
             logger.info("Login Successful!");
+            alert(JSON.stringify(response.data))
             const whoIsLogged = {
               id: response.data.id,
               name: response.data.name,
               email: signinDetails?.email,
               password: response.data?.password,
-              admin_type: response.data?.admin_type
+              admin_type: response.data?.admin_type,
+              user_type: response.data?.user_type
             };
             {/*To re-direct to required module*/ }
             if (response.data.id.match(/admin00.[0-9]*/g)) {

@@ -398,7 +398,7 @@ function Room() {
   return (
     <>
 <Header  Primary={english?.Side1}/>
-    <Sidebar Primary={english?.Side1}/>
+    <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type}/>
     <div id="main-content"
     className="  bg-gray-50 px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64">
 

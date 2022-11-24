@@ -113,12 +113,12 @@ function Adduser() {
     Router.push("./adduser");
   }, [])
   return (<>
-    {/privacy policy/}
+   
     <Header admin={english?.Sideadminlanding} />
     <Sidebar admin={english?.Sideadminlanding} />
     <div id="main-content"
       className="  bg-gray-50 px-4 min-h-screen pt-24 relative overflow-y-auto lg:ml-64" >
-      {/Nav Bar/}
+      {/* Nav Bar */}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
         <ol className="inline-flex items-center space-x-1 md:space-x-2">
           <li className="inline-flex items-center">
@@ -193,8 +193,7 @@ function Adduser() {
               {language?.userPassword}
             </label>
             <input
-              type="password"
-              className="bg-gray-50 border border-gray-300 
+              type="password" className="bg-gray-50 border border-gray-300 
                   text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600
                    focus:border-cyan-600 block w-full p-2.5"
               placeholder="Password"

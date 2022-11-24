@@ -100,13 +100,11 @@ function Gallery() {
     /* Function to upload image*/
     const uploadImage = () => {
         setSpin(1);
-        alert("1"+image.imageFile);
-        const imageDetails = image.imageFile
+       const imageDetails = image.imageFile
         const formData = new FormData();
         formData.append("file", imageDetails);
         formData.append("upload_preset", "Travel2Kashmir")
         formData.append("enctype", "multipart/form-data")
-        alert("1");
         axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
             .then(response => {
                 setImage({ ...image, image_link: response?.data?.secure_url })
@@ -275,7 +273,7 @@ function Gallery() {
     return (
         <>   
      <Header color={color} Primary={english.Side}/>
-     <Sidebar  color={color} Primary={english.Side}/>
+     <Sidebar  color={color} Primary={english.Side} Type={currentLogged?.user_type}/>
         <div id="main-content"
             className={`${color?.greybackground} px-4 pt-24 py-2 relative overflow-y-auto lg:ml-64`}>
             {/* Navbar */}
@@ -350,7 +348,9 @@ function Gallery() {
                 </div>
                 {/* Gallery Form */}
                 <div className={visible===0?'block w-auto px-4 h-auto m-6 flex':'hidden'}>
+                    <div className='flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4"'>
                     <Loader/><Loader/><Loader/></div> 
+                    </div>
                <div className={visible===1?'block':'hidden'}>
                 <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {gallery?.images?.map((item, idx) => {

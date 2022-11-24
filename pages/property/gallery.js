@@ -562,8 +562,10 @@ function Gallery() {
                                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                                             focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}placeholder="Image Title" />
                                     </div>
-                                    <div className="col-span-6 sm:col-span-3">
+                                    <div
+                                     className="col-span-6 sm:col-span-3">
                                         <label
+
                                             className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >

@@ -347,11 +347,15 @@ function Gallery() {
                     </div>
                 </div>
                 {/* Gallery Form */}
-                <div className={visible===0?'block w-auto px-4 h-auto m-6 flex':'hidden'}>
-                    <div className='flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4"'>
-                    <Loader/><Loader/><Loader/></div> 
+               
+                  
+              
+                <div className={visible===0?'block w-auto  h-auto m-6 flex':'hidden'}>
+              <div className='mr-4'>  <Loader/></div>
+                  <div className='mx-4'>  <Loader/></div>
+                  <div >  <Loader/></div>
                     </div>
-               <div className={visible===1?'block':'hidden'}>
+                    <div className={visible===1?'block':'hidden'}>
                 <div className="flex-wrap container grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {gallery?.images?.map((item, idx) => {
                         return (

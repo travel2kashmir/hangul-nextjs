@@ -5,82 +5,82 @@ const validateAddress = (data) =>{
     
     if(data.street_address==="")
     {
-        error.street_address="The street address is required"
+        error.street_address="App: The street address is required"
     }
+
     if(data.address_landmark==="")
     {
-        error.address_landmark="The address landmark is required"
+        error.address_landmark="App: The address landmark is required"
     }
+
     if(data.address_city==="")
     {
-        error.address_city="The address city is required"
+        error.address_city="App: The address city is required"
     }
+
     if(data.address_province==="")
     {
-        error.address_province="The address province is required"
+        error.address_province="App: The address province is required"
     }
   
     if(data.address_latitude==="")
     {
-        error.address_latitude="The address latitude is required"
+        error.address_latitude="App: The address latitude is required"
     }
 
-    // if(data?.address_latitude !="" || data?.address_latitude != undefined){
-    //     if(!(/ ^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(data?.address_latitude))){
-    //    {
-    //        flag.push(false)
-    //        error.address_latitude="Invalid address latitude format."
-    //    }
-    //   }
-    //   }
 
     if(data.address_longitude==='')
     {
-        error.address_longitude="The address longitude is required"
+        error.address_longitude="App: The address longitude is required"
     }
 
-    // if(data?.address_longitude !="" || data?.address_longitude != undefined){
-    //     if(!(/ ^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(data?.address_longitude))){
-    //    {
-    //        flag.push(false)
-    //        error.address_longitude="Invalid address longitude format."
-    //    }
-    //   }
-    // }
 
     if(data.address_zipcode==='')
     {
-        error.address_zipcode="The address zipcode is required"
+        error.address_zipcode="App: The address zipcode is required"
     }
 
-    // if(data?.address_zipcode !="" || data?.address_zipcode != undefined){
-    //     if(!(/ ^[0-9]{5}(?:-[0-9]{4})?$/.test(data?.address_zipcode))){
-    //    {
-    //        flag.push(false)
-    //        error.address_zipcode="Invalid address zipcode format."
-    //    }
-    //   }
-    //   }
 
     if(data.address_precision==='')
     {
-        error.address_precision="The address precision is required"
+        error.address_precision="App: The address precision is required"
     }
   
     if(data?.address_precision !="" || data?.address_precision != undefined){
         if(!(/^(?=(\D*\d\D*){0,5}$)-?\d*(\.\d{0,2})?$/.test(data?.address_precision))){
        {
            flag.push(false)
-           error.address_precision="Invalid address precision format."
+           error.address_precision="App: Invalid address precision format."
        }
       }
       }
 
-    if(data.address_country==='')
-    {
-        error.address_country="The address country is required"
-    }
+   
 
+     //check latitudes 
+     if(data.address_latitude !==""){
+  if ((data?.address_latitude < -90) || (data?.address_latitude > 90)) {
+    return 'APP: The value of latitude should be between -90 to +90'
+  }
+}
+  //check longitude 
+  if(data.address_longitude !==''){
+if ((data?.address_longitude < -180) || (data?.address_longitude > 180)) {
+    return 'APP: The value of latitude should be between -180 to +180'
+  }
+}
+  //check zip code
+  if(data.address_zipcode !==''){
+  if ((!data.address_zipcode.match('^[1-9][0-9]{5}$'))) {
+    return 'APP: Please Enter Valid Indian Zip code'
+  }
+}
+  //check precision
+  if(data.address_precision!==''){
+  if (data.address_precision < 0 || data.address_precision > 1000) {
+    return 'APP: Precision should be between 0-1000'
+  }
+}
     return Object.keys(error).length===0 ? true : error;
     }
 export default  validateAddress

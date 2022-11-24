@@ -82,7 +82,7 @@ function PropertySummary() {
   return (
     <div>
       <Header color={color} Primary={english?.Side} />
-      <Sidebar color={color} Primary={english?.Side} />
+      <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type}/>
       {/* Body */}
       <div id="main-content"
          className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }

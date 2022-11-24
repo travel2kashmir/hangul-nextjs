@@ -501,7 +501,7 @@ function Room() {
                             defaultValue={roomDetails?.room_type}
                             onClick={(e) => setAllRoomDetails({ ...allRoomDetails, room_type_id: e.target.value })}
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
-                            <option value={roomDetails?.room_type}>{roomDetails?.room_type}</option>
+                            <option  disabled selected value={roomDetails?.room_type}>{roomDetails?.room_type}</option>
                             {roomtypes?.map(i => {
                               return (
                                 <option key={i} value={i.room_type_id}>{i.room_type_name}</option>)

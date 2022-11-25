@@ -973,7 +973,7 @@ const submitDates= (type) => {
                       )
                   }>
                      <option selected disabled >{pro?.discount?.[i]?.discount_type.toString().replaceAll("_"," ") }</option>
-                    <option value="discount_nights">Discount Nights</option>
+                    <option value="percentage">Percentage</option>
                     <option value="fixed_amount_per_night">Fixed Amount per night</option>
                     <option value="fixed_amount">Fixed Amount</option>
                    </select>

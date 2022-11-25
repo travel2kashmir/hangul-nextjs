@@ -60,7 +60,7 @@ function Room() {
   }
 
   const [allRoomDetails, setAllRoomDetails] = useState([])
-  const [disp, setDisp] = useState(0);
+  const [disp, setDisp] = useState(1);
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomimages, setRoomimages] = useState({})
@@ -404,68 +404,77 @@ function Room() {
 
   return (
     <>
-<Header  Primary={english?.Side1}/>
-    <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type}/>
+    <Header  Primary={english?.Side1}  color={color}/>
+    <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type}  color={color}/>
     <div id="main-content"
     className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
 
         {/* Header */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-          <ol className="inline-flex items-center space-x-1 md:space-x-2">
-            <li className="inline-flex items-center">
-              <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-              <span className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../../admin/AdminLanding" : "../../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link></span>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
+            <ol className="inline-flex items-center space-x-1 md:space-x-2">
+              <li className="inline-flex items-center">
+              <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
+                <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} 
+                className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
+                </Link></div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
                   <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                  <div className={visible === 1 ? 'block' : 'hidden'}>
-                    <Link href="../propertysummary" ><a>{currentProperty?.property_name}</a></Link></div></span>
-              </div>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                <span className="text-gray-700 text-sm capitalize font-medium hover:text-gray-900 ml-1 md:ml-2">
-                  <Link href="../rooms"><a>{language?.propertyrooms}</a></Link></span>
-              </div>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-                <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.edit} {language?.room}</span>
-              </div>
-            </li>
-          </ol>
-        </nav>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../propertysummary" className={`text-gray-700 text-sm ml-1 md:ml-2  font-medium hover:${color?.text} `}>
+                    <a>{currentProperty?.property_name}</a>
+                  </Link>
+                  </div></div>
+
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../rooms" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                    <a>{language?.rooms}</a>
+                  </Link>
+                  </div></div>
+
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.edit} {language?.room}</span>
+                </div>
+                </div>
+              </li>
+            </ol>
+          </nav>
         {/* Title */}
         <div className=" pt-2">
-          <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
+          <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6 pb-2  font-bold`}>
             {language?.edit} {language?.room}
           </h6>
 
-
           {/* Room Description */}
-
           <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                  <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Description</div>
+                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
                 </div>
 
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Gallery</div>
+                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Gallery</div>
                 </div>
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Rates</div>
+                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
                 </div>
               </div>
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
@@ -735,34 +744,32 @@ function Room() {
           </div>
 
           {/* Room Gallery */}
-
           <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
-            <div className="bg-white shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3">
+            <div className={`${color?.whitebackground} shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}>
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                  <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Description</div>
+                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
                 </div>
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                  <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Room Gallery </div>
+                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Gallery </div>
                 </div>
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Rates</div>
+                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400`}> Room Rates</div>
                 </div>
 
               </div>
-              <h6 className="text-base  flex leading-none mb-2 mx-2 pt-2 font-semibold text-gray-800 ">
+              <h6 className={`${color?.text} text-base  flex leading-none mb-2 mx-2 pt-2 font-semibold`}>
                 {language?.room}  {language?.gallery}
               </h6>
-
               <div className="sm:flex py-2 ">
                 <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 ml-5 sm:mb-0">
                   <form className="lg:pr-3" action="#" method="GET">
                     <label htmlFor="users-search" className="sr-only">{language?.search}</label>
                     <div className="mt-1 relative lg:w-64 xl:w-96">
-                      <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.searchforimages}>
+                      <input type="text" name="email" id="users-search" className={`${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} placeholder={language?.searchforimages}>
                       </input>
                     </div>
                   </form>
@@ -826,7 +833,7 @@ function Room() {
           </div>
 
           {/* Room Services Table */}
-          <div className="bg-white hidden shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3">
+          <div className={`${color?.whitebackground} hidden shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3`}>
             <div className="mx-0 my-6">
               <h4 className="text-xl sm:text-2xl font-semibold text-gray-900">
                 {language?.room} {language?.services} </h4>
@@ -912,27 +919,26 @@ function Room() {
 
           {/* Room Rates*/}
           <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
-            <div className="bg-white shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2 ">
+            <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                  <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Description</div>
-
+                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Description</div>
                 </div>
 
                 <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
                     Room Gallery</div>
                 </div>
 
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                  <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Rates</div>
+                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
                 </div>
 
               </div>
-              <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+              <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
                 {language?.room} {language?.rates}
               </h6>
               <div className="pt-6">
@@ -1093,9 +1099,9 @@ function Room() {
         <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-              <div className="bg-gray-100 rounded-lg shadow relative">
+              <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
                 <div className="flex justify-between p-5 border-b rounded-t">
-                  <h3 className="text-xl font-semibold">
+                  <h3 className={`${color?.text} text-xl font-semibold`}>
                     {actionEnlargeImage.image_title}
                   </h3>
                   <button type="button"
@@ -1109,13 +1115,14 @@ function Room() {
             </div>
           </div>
         </div>
+
         {/* Modal Add */}
         <div className={addImage === 1 ? 'block' : 'hidden'}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-              <div className="bg-white rounded-lg shadow relative">
+              <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
-                  <h3 className="text-xl font-semibold">
+                  <h3 className={`${color?.text} text-xl font-semibold`}>
                     Add new image
                   </h3>
                   <button type="button"
@@ -1144,7 +1151,7 @@ function Room() {
                             onChangePhoto(e, 'imageFile');
 
                           }}
-                          className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5"
+                          className={`${color?.greybackground} ${color?.text} shadow-sm  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5`}
                           defaultValue="" />
 
                       </div>
@@ -1163,7 +1170,7 @@ function Room() {
                       <input
                         type="text"
                         onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value }))}
-                        className="shadow-sm py-2 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full px-2.5"
+                        className={`${color?.greybackground} ${color?.text} shadow-sm py-2  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full px-2.5`}
                         placeholder="Image Title" />
                     </div>
                     <div className="col-span-6 sm:col-span-3">
@@ -1191,13 +1198,14 @@ function Room() {
             </div>
           </div>
         </div>
+
         {/* Modal edit */}
         <div className={editImage === 1 ? 'block' : 'hidden'}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-              <div className="bg-white rounded-lg shadow relative">
+              <div className= {`${color?.whitebackground} rounded-lg shadow relative`}>
                 <div className="flex items-start justify-between p-5 border-b rounded-t">
-                  <h3 className="text-xl font-semibold">
+                  <h3 className={`${color?.text} text-xl font-semibold`}>
                     Edit image
                   </h3>
                   <button type="button"
@@ -1266,7 +1274,7 @@ function Room() {
         <div className={deleteImage === 1 ? 'block' : 'hidden'}>
           <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
             <div className="relative w-full max-w-md px-4 h-full md:h-auto">
-              <div className="bg-white rounded-lg shadow relative">
+              <div className={`${color?.whitebackground}  rounded-lg shadow relative`}>
                 <div className="flex justify-end p-2">
                   <button
                     onClick={() => setdeleteImage(0)}
@@ -1277,7 +1285,7 @@ function Room() {
 
                 <div className="p-6 pt-0 text-center">
                   <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
+                  <h3 className={`text-xl font-normal ${ color.deltext} mt-5 mb-6`}>
                     Are you sure you want to delete {actionImage?.image_title} image?
                   </h3>
                   <Button Primary={language?.Delete} onClick={() => submitDelete()} />
@@ -1300,7 +1308,7 @@ function Room() {
           pauseOnHover />
 
       </div>
-      <Footer />
+      <Footer Primary={english?.Side1} color={color}/>
     </>
   )
 }

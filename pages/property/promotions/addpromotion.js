@@ -728,7 +728,7 @@ const validationPromotion = () => {
                       )
                   }>
                      <option selected disabled >{language?.select} </option>
-                    <option value="discount_nights">Discount Percentage</option>
+                    <option value="percentage">Percentage</option>
                     <option value="fixed_amount_per_night">Fixed Amount per night</option>
                     <option value="fixed_amount">Fixed Amount</option>
                    </select>

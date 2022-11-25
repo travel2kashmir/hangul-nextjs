@@ -57,7 +57,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
   const [services, setServices] = useState([]) 
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
-  const [disp, setDisp] = useState(1);
+  const [disp, setDisp] = useState(0);
   const [modified, setModified] = useState({})
   const [allRoomRates, setAllRoomRates] = useState([])
 
@@ -476,16 +476,16 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Description</div>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
             </div>
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Gallery</div>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Gallery</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Rates</div>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
             </div>
         </div>
           <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
@@ -661,27 +661,27 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Description</div>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}>Room Description</div>
             </div>
           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Room Gallery </div>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Gallery </div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Rates</div>
+                <div className={` ${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Rates</div>
             </div>
            
         </div>
               <div className="mx-4">
                 <div className="sm:flex">
-                  <h6 className={`${color?.text}text-base  flex leading-none  pt-2 font-semibold `}>
+                  <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold `}>
                     Room Gallery
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.add}  onClick={addPhotos}  />
+                    <Button Primary={language?.Add}  onClick={addPhotos}  />
                   </div>
                 </div>
               </div>
@@ -692,10 +692,10 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                     {imageData?.map((imageData, index) => (<>
                        <div className={imageData?.index === 0 ? "hidden":"block"}>
                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                         <button className="sm:inline-flex  text-gray-800  
+                         <button className={`sm:inline-flex  ${color?.text} 
                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
                     rounded-lg text-sm px-1 py-1 text-center 
-                    items-center mb-1 ml-16 ease-linear transition-all duration-150"
+                    items-center mb-1 ml-16 ease-linear transition-all duration-150`}
                            onClick={() => removeImage(imageData?.index)} type="button" >
                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                            </button>
@@ -717,7 +717,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                                                 onChangePhoto(e, 'imageFile');
                                               
                                             }}
-                                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block py-2 w-full px-2.5"
+                                            className={`${color?.greybackground} ${color?.text} shadow-sm  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block py-2 w-full px-2.5`}
                                             defaultValue="" />
                                    </div>
                                    <div className="col-span-6 sm:col-span-3">
@@ -857,26 +857,26 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             </div> */}
            {/* Room Rates*/}
            <div id='2' className={disp===2?'block':'hidden'}>
-            <div className="bg-white mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <div className={`${color?.whitebackground} mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> Room Description</div>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> Room Description</div>
             </div>
           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
                Room Gallery</div>
             </div>
            
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto">Room Rates</div>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
             </div>
             
-        </div>
-            <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+           </div>
+            <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
               {language?.room} {language?.rates} 
             </h6>
             <div className="pt-6">
@@ -1088,7 +1088,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         </div>
       </div>
 
-      {/* Modal Add Room Service*/}
+      {/* Modal Add Room Service
       <div className={add === 1 ? 'block' : 'hidden'}>
             <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
                 <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
@@ -1129,9 +1129,9 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                     </div>
                 </div>
             </div>
-        </div>
+        </div> */}
 
-      {/* Modal Delete Room Service */}
+      {/* Modal Delete Room Service
       <div className="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="delete-user-modal">
         <div className="relative w-full max-w-md px-4 h-full md:h-auto">
           <div className="bg-white rounded-lg shadow relative">
@@ -1153,7 +1153,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Toast Container */}
       <ToastContainer position="top-center"

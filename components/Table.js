@@ -237,7 +237,7 @@ const Table = (args) => {
                                                                                     {/*Kitchen Availability*/}
                                                                                     <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))}
 
-                                                                                        className={`shadow-sm bg-white border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}>
+                                                                                        className={`shadow-sm ${args?.color?.greybackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}>
 
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="Available in all rooms">Available in all rooms</option>
@@ -248,7 +248,7 @@ const Table = (args) => {
                                                                                 case 'ser0017': return (<div>
                                                                                     {/*Parking Type*/}
 
-                                                                                    <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))} className={`shadow-sm bg-white border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`} >
+                                                                                    <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))} className={`shadow-sm ${args?.color?.greybackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`} >
 
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="No payment required">No Payment Required</option>
@@ -260,7 +260,7 @@ const Table = (args) => {
                                                                                     {/*Swimming Pool*/}
 
                                                                                     <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))}
-                                                                                     className={`shadow-sm bg-white border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`} >
+                                                                                     className={`shadow-sm ${args?.color?.greybackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`} >
 
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="Indoors">Indoors</option>
@@ -273,7 +273,7 @@ const Table = (args) => {
                                                                                     {/*Wifi Type*/}
 
                                                                                     <select onClick={(e) => (setEditContact({ ...editContact, type: e.target.value },setFlag(1)))} 
-                                                                                    className={`shadow-sm bg-white border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}>
+                                                                                    className={`shadow-sm ${args?.color?.greybackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}>
 
                                                                                         <option select>{item?.type}</option>
                                                                                         <option value="No payment required">No Payment Required</option>

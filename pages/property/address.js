@@ -74,8 +74,7 @@ function Address() {
     .then((response)=>{setAddress(response.data.address?.[i]);
       filterCountry(response.data.address?.[i])
       setAllHotelDetails(response.data.address?.[i])
-    
-    logger.info("url  to fetch property details hitted successfully")
+      logger.info("url  to fetch property details hitted successfully")
      setVisible(1);
    
     })
@@ -164,9 +163,11 @@ function Address() {
 
    // Add Validation Address
    const validationAddress = () => {
+    alert("1")
     setError({})
     var result = validateAddress(allHotelDetails)
        console.log("Result" +JSON.stringify(result))
+       alert(JSON.stringify(result))
        if(result===true)
        {
        
@@ -493,7 +494,7 @@ function Address() {
                    <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.UpdateDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Update} onClick={validationAddress} />
+                      <Button Primary={language?.Update} onClick={()=>{validationAddress();}}/>
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />

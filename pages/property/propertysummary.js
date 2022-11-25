@@ -1,5 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/Sidebar";
+import lang from '../../components/GlobalData'
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 import axios from 'axios';
@@ -7,7 +8,14 @@ import Link from "next/link";
 import DarkModeLogic from "../../components/darkmodelogic";
 import english from "../../components/Languages/en"
 import french from "../../components/Languages/fr"
-import arabic from "../../components/Languages/ar"
+import arabic from "../../components/Languages/ar";
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+// import required modules
+import SwiperCore, { Autoplay, Pagination, Navigation } from "swiper";
 import Router, { useRouter } from "next/router";
 const logger = require("../../services/logger");
 import { ToastContainer, toast } from "react-toastify";
@@ -18,8 +26,10 @@ import Loader from "../../components/loader";
 import Carousal from "../template/carousal";
 var language;
 var currentUser;
+var country;
 var currentProperty;
 var currentLogged;
+var i = 0;
 
 function PropertySummary() {
   /** State to store Current Property Details **/
@@ -73,20 +83,24 @@ function PropertySummary() {
       axios.get(url)
         .then((response) => {
           setAllHotelDetails(response.data);
-
+         filterCountry(response.data.address?.[i]);
           logger.info("url  to fetch property details hitted successfully")
         })
         .catch((error) => { logger.error("url to fetch property details, failed") });
     }
 
+    const filterCountry = (props)=>{
+      country =  lang?.CountryData.filter(el => {
+           return props.address_country.toUpperCase() === el.country_code;
+        });
+      }
   return (
     <div>
       <Header color={color} Primary={english?.Side} />
       <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type}/>
       {/* Body */}
       <div id="main-content"
-         className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }
- >
+         className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
         {/* Navbar */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2">
@@ -253,7 +267,7 @@ function PropertySummary() {
                             </td>
                           </td>
                           <td className=  {`${color?.textgray} p-1 whitespace-wrap text-sm my-2`}>
-                          {item.address_country}{" "}
+                          {country?.[i]?.country_name}
                           </td>
                         </tr>
                         <tr key={idx}>
@@ -338,9 +352,10 @@ function PropertySummary() {
             </div>
           </div>
         </div>
+
     {/* Gallery */}
     <div className="mt-2 grid  grid-flow-row-dense pb-2 md:grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-3">
-          <div className= {`${color?.whitebackground} shadow rounded-lg p-4 xl:p-8`}>
+          <div className= {`${color?.whitebackground} shadow rounded-lg p-2 xl:p-4`}>
             <div className="flex items-center justify-between ">
               <div className="flex-shrink-0">
                 <h3 className={`${color?.text} text-base font-bold  mb-4`}>
@@ -357,30 +372,36 @@ function PropertySummary() {
                 </span>
               </div>
             </div>
-            <div className=" flex-wrap container ">
-              {/*grid md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 {allHotelDetails?.images?.map((item, idx) => {
-                return (
-                  <div
-                    className="block text-blueGray-600 text-xs font-bold "
-                    key={idx}
-                  >
-                    <img
-                      src={item?.image_link}
-                      alt="property_image"
-                      style={{ width: "450px", height: "180px" }}
-                    />
-                  </div>
-                );
-              })} */}
-              <Carousal images={allHotelDetails?.images}/>
+            <div className="flex-wrap container ">
+              <Swiper
+                centeredSlides={true}
+                          autoplay={{
+                           delay: 1000,
+                           disableOnInteraction: false,
+                              }}
+                              pagination={{
+                                 clickable: true,
+                              }}
+                              modules={[Autoplay, Pagination, Navigation]}
+                              className="mySwiper">
+                           {allHotelDetails?.images?.map((resource, index) => {
+                              return (<SwiperSlide key={index}>
+                                 <img
+                                    className="object-fill w-full h-96"
+                                    src={resource?.image_link}
+                                    alt="image slide 1" 
+                                 />
+
+                              </SwiperSlide>
+                              )
+
+                           })}
+                        </Swiper>
             </div>
           </div>
         </div>
 
-
-
-
-          <div className=" grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1  sm:grid-cols-1 gap-3">
+      <div className=" grid grid-flow-row-dense lg:grid-cols-3 md:grid-cols-1  sm:grid-cols-1 gap-3">
           {/* Services */}
           <div className={`${color?.whitebackground} shadow rounded-lg  p-4 sm:p-6 xl:p-8`}>
             <div className="flex items-center justify-between mb-4">
@@ -528,11 +549,8 @@ function PropertySummary() {
               </div>
             ))}
           </div>
-          </div>
+      </div>
 
-       
-
-      
       {/* Toast Container */}
       <ToastContainer position="top-center"
         autoClose={5000}

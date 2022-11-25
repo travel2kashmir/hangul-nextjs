@@ -307,12 +307,12 @@ useEffect(()=>{
                  {/* Modal Add */}
                  <div className={view === 1 ? 'block' : 'hidden'}>
 
-<div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-    <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+            <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+          <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
         <form id='asform'>
-        <div className="bg-white rounded-lg shadow relative">
+        <div className={`${color?.whitebackground} rounded-lg shadow relative`}>
             <div className="flex items-start justify-between p-5 border-b rounded-t">
-                <h3 className="text-xl font-semibold">
+                <h3 className={`${color?.text} text-xl font-semibold`}>
                     {language?.add} {language?.new} {language?.service} 
                 </h3>
                 <button type="button" onClick={() =>{
@@ -325,17 +325,19 @@ useEffect(()=>{
             <div className="p-6 space-y-6">
                 <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
-                        <label htmlFor="first-name" className="text-sm font-medium text-gray-900 block mb-2">{language?.service} {language?.name}</label>
+                        <label htmlFor="first-name" className={`text-sm ${color?.text} font-medium  block mb-2`}>{language?.service} {language?.name}</label>
                         <input type="text" name="first-name"
                             onChange={(e) => { setModified({ ...modified, add_service_name: e.target.value },setFlag(1)) }}
                             id="first-name"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                            focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
                     </div>
                     <div className="col-span-6 sm:col-span-3">
-                        <label htmlFor="last-name" className="text-sm font-medium text-gray-900 block mb-2">{language?.service} {language?.description}</label>
+                        <label htmlFor="last-name" className={`text-sm ${color?.text} font-medium  block mb-2`}>{language?.service} {language?.description}</label>
                         <textarea rows="2" columns="50" name="last-name"
                             onChange={(e) => { setModified({ ...modified, add_service_comment: e.target.value },setFlag(1)) }}
-                            id="last-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                            id="last-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                            focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
                     </div>
                 </div>
             </div>

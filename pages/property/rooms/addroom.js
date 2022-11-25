@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import DarkModeLogic from "../../../components/darkmodelogic";
 import axios from "axios";
 import Headloader from '../../../components/loaders/headloader';
 import Lineloader from '../../../components/loaders/lineloader';
@@ -26,6 +27,10 @@ function Addroom() {
   const firstfun=()=>{
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language");
+        const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+        const color = JSON.parse(localStorage.getItem("Color"));
+         setColor(color);
+         setDarkModeSwitcher(colorToggle)
         if (locale === "ar") {
         language = arabic;
         }
@@ -43,6 +48,8 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
          Router.push("./addroom")   
 },[])
   const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+  const [color, setColor] = useState({})
   const [visible,setVisible]=useState(0) 
   const [roomtypes, setRoomtypes] = useState({})
   const [image, setImage] = useState({})
@@ -50,7 +57,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
   const [services, setServices] = useState([]) 
   const [roomId, setRoomId] = useState([])
   const [add, setAdd] = useState(0)
-  const [disp, setDisp] = useState(0);
+  const [disp, setDisp] = useState(1);
   const [modified, setModified] = useState({})
   const [allRoomRates, setAllRoomRates] = useState([])
 
@@ -78,6 +85,10 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
     
       /*For Room Description*/
       const [allRoomDes, setAllRoomDes] = useState([]);
+
+      useEffect(()=>{ 
+        setColor(DarkModeLogic(darkModeSwitcher))
+       },[darkModeSwitcher])
     
       /**  Submit Function for Room Description **/
       function submitRoomDescription(e) {  
@@ -405,53 +416,63 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 }
   return (
     <>
-    <Header  Primary={english?.Side1}/>
-    <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type}/>
+    <Header  Primary={english?.Side1}  color={color}/>
+    <Sidebar Primary={english?.Side1}  color={color} Type={currentLogged?.user_type}/>
     <div id="main-content"
-    className="  bg-gray-50 py-2 px-4 pt-24 relative overflow-y-auto lg:ml-64">
+    className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
       {/* Header */}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
-        <ol className="inline-flex items-center space-x-1 md:space-x-2">
-          <li className="inline-flex items-center">
-           <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-          <span  className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center">
-          <Link href={currentLogged?.id.match(/admin.[0-9]*/)?"../../../admin/AdminLanding":"../../landing"} className="text-gray-700 text-base font-medium hover:text-gray-900 inline-flex items-center"><a>{language?.home}</a>
-                </Link></span>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
-                                <div className={visible === 1 ? 'block' : 'hidden'}>
-              <Link href="../propertysummary"><a>{currentProperty?.property_name}</a></Link></div>
-              </span>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-             <span className= "text-gray-700 text-sm capitalize  font-medium hover:text-gray-900 ml-1 md:ml-2">
-              <Link href="../rooms"><a>{language?.propertyrooms}</a></Link></span>
-            </div>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
-              <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.addnewroom}</span>
-            </div>
-          </li>
-        </ol>
-      </nav>
+            <ol className="inline-flex items-center space-x-1 md:space-x-2">
+              <li className="inline-flex items-center">
+              <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
+                <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} 
+                className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
+                </Link></div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.text} text-base capitalize font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../propertysummary" className={`text-gray-700 text-sm ml-1 md:ml-2  font-medium hover:${color?.text} `}>
+                    <a>{currentProperty?.property_name}</a>
+                  </Link>
+                  </div></div>
+
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <div className={visible === 0 ? 'block w-16' : 'hidden'}><Headloader /></div>
+                  <div className={visible === 1 ? 'block' : 'hidden'}>   <Link href="../rooms" className="text-gray-700 text-sm   font-medium hover:{`${color?.text} ml-1 md:ml-2">
+                    <a>{language?.rooms}</a>
+                  </Link>
+                  </div></div>
+
+                </div>
+              </li>
+              <li>
+                <div className="flex items-center">
+                <div className={`${color?.textgray} text-base font-medium  inline-flex items-center`}>
+                  <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
+                  <span className="text-gray-400 ml-1 md:ml-2 font-medium text-sm  " aria-current="page">{language?.addroom}</span>
+                </div>
+                </div>
+              </li>
+            </ol>
+          </nav>
       {/* Title */}
       <div className=" pt-2 ">
-        <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
+        <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6 pb-2 font-bold`}>
           {language?.add} {language?.room}
         </h6>
         {/* Room Forms */}
         {/* Room Description */}
         <div id='0' className={disp===0?'block':'hidden'}>
-        <div className="bg-white shadow rounded-lg mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+        <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
         <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
@@ -467,7 +488,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Rates</div>
             </div>
         </div>
-          <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+          <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
            {language?.room} {language?.description}
           </h6>
           <div className="pt-6">
@@ -476,21 +497,21 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.name}
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, room_name: e.target.value ,property_id:currentProperty?.property_id})}
                     />
                   </div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
-                    <label className="text-sm font-medium text-gray-900 block mb-2"
+                    <label className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password">
                       {language?.room} {language?.type}
                     </label>
@@ -498,7 +519,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                     <select
                       onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
                       {roomtypes.length === undefined ? <option value="loading">Loading values</option> :
                        <>{roomtypes?.map(i => {
                         return (
@@ -511,13 +532,13 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.description}
                     </label>
                     <textarea rows="2" columns="50"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={(e) =>{ setAllRoomDes({ ...allRoomDes, room_description: e.target.value }); } }
                     />
                   </div>
@@ -525,13 +546,13 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.capacity}
                     </label>
                     <input
-                      type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      type="text" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, room_capacity: e.target.value })}
                     />
                   </div>
@@ -539,14 +560,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                      {language?.maximum} {language?.number} {language?.of} {language?.occupants}
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, maximum_number_of_occupants: e.target.value })}
                     />
                   </div>
@@ -554,14 +575,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                      {language?.minimum} {language?.number} {language?.of} {language?.occupants}
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, minimum_number_of_occupants: e.target.value })}
                     />
                   </div>
@@ -569,14 +590,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                      {language?.minimum} {language?.age} {language?.of} {language?.occupants}
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, minimum_age_of_occupants: e.target.value })}
                     />
                   </div>
@@ -584,28 +605,28 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                      {language?.room} {language?.length}
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, room_length: e.target.value })}
                     /></div>
                 </div>
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.breadth}
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, room_width: e.target.value })}
                     />
                   </div>
@@ -613,14 +634,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                 <div className="w-full lg:w-6/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      className="text-sm font-medium text-gray-900 block mb-2"
+                      className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password"
                     >
                      {language?.room} {language?.height}
                     </label>
                     <input
                       type="text"
-                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                      className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       onChange={e => setAllRoomDes({ ...allRoomDes, room_height: e.target.value })}
                     />
                   </div>
@@ -636,9 +657,9 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
        </div>
         {/* Room Gallery*/}
         <div id='1' className={disp===1?'block':'hidden'}>
-            <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
+            <div className={`${color?.whitebackground} shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-     <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+           <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
                 <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Description</div>
             </div>
@@ -655,12 +676,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         </div>
               <div className="mx-4">
                 <div className="sm:flex">
-                  <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+                  <h6 className={`${color?.text}text-base  flex leading-none  pt-2 font-semibold `}>
                     Room Gallery
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <Button Primary={language?.AddImage}  onClick={addPhotos}  />
+                    <Button Primary={language?.add}  onClick={addPhotos}  />
                   </div>
                 </div>
               </div>
@@ -684,7 +705,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                         <div className="w-full lg:w-6/12 px-4">
                           <div className="relative w-full mb-3">
                             <label
-                              className="text-sm font-medium text-gray-900 block mb-2"
+                              className={`text-sm font-medium ${color?.text} block mb-2`}
                               htmlFor="grid-password"
                             >
                               Image Upload 
@@ -711,11 +732,11 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                                                </div></div>
                         <div className="w-full lg:w-6/12 px-4">
                           <div className="relative w-full mb-3">
-                            <label className="text-sm font-medium text-gray-900 block mb-2"
+                            <label className={`text-sm font-medium ${color?.text} block mb-2`}
                               htmlFor="grid-password">
                               Image Title
                             </label>
-                            <input type="text" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            <input type="text" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                               onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value }))}
                             />
                           </div>
@@ -723,13 +744,13 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                         <div className="w-full lg:w-6/12 px-4 pb-4">
                           <div className="relative w-full mb-3">
                             <label
-                              className="text-sm font-medium text-gray-900 block mb-2"
+                              className={`text-sm font-medium ${color?.text} block mb-2`}
                               htmlFor="grid-password"
                             >
                               Image Description
                             </label>
                             <textarea rows="2" columns="50"
-                              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                              className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                               onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value }))}
                             />
                           </div>
@@ -864,12 +885,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
+                    className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
                     {language?.baserate} {language?.currency}
                   </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                     onChange={
                       (e) => (
                         setAllRoomRates({...allRoomRates, base_rate_currency: e.target.value })
@@ -885,14 +906,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
+                    className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
                     {language?.baserate} {language?.amount}
                   </label>
                   <input
                     type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                     onChange={
                       (e) => (
                         setAllRoomRates({...allRoomRates, baserate_amount: e.target.value })
@@ -905,12 +926,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
+                    className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
                     {language?.taxrate} {language?.currency}
                   </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                     onChange={
                       (e) => (
                         setAllRoomRates({...allRoomRates, tax_rate_currency: e.target.value })
@@ -927,14 +948,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
+                    className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
                     {language?.taxrate} {language?.amount}
                   </label>
                   <input
                     type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                    onChange={
                       (e) => (
                         setAllRoomRates({...allRoomRates, tax_amount: e.target.value,un_rate_id:allRoomDetails?.unconditional_rates?.[0]?.un_rate_id })
@@ -946,12 +967,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
+                    className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
                     {language?.other} {language?.capacity} {language?.currency}
                   </label>
-                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                     onChange={
                       (e) => (
                         setAllRoomRates({...allRoomRates,otherfees_currency: e.target.value })
@@ -968,14 +989,14 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label
-                    className="text-sm font-medium text-gray-900 block mb-2"
+                    className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
                     {language?.other} {language?.charges} {language?.amount}
                   </label>
                   <input
                     type="text"
-                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                    onChange={
                       (e) => (
                         setAllRoomRates({...allRoomRates, otherfees_amount: e.target.value })
@@ -1012,12 +1033,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-6 gap-6">
                 <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="first-name" className="text-sm font-medium text-gray-900 block mb-2">Service Name</label>
-                  <input type="text" name="first-name" id="first-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                  <label htmlFor="first-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Name</label>
+                  <input type="text" name="first-name" id="first-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
                 </div>
                 <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="last-name" className="text-sm font-medium text-gray-900 block mb-2">Service Description</label>
-                  <textarea rows="2" columns="50" name="last-name" id="last-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                  <label htmlFor="last-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Description</label>
+                  <textarea rows="2" columns="50" name="last-name" id="last-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
                 </div>
                 <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="name" className="text-base pr-2 font-semibold text-gray-900 block mb-2">Status</label>
@@ -1083,17 +1104,17 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                         <div className="p-6 space-y-6">
                             <div className="grid grid-cols-6 gap-6">
                                 <div className="col-span-6 sm:col-span-3">
-                                    <label htmlFor="first-name" className="text-sm font-medium text-gray-900 block mb-2">Service Name</label>
+                                    <label htmlFor="first-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Name</label>
                                     <input type="text" name="first-name" 
                                     onChange={(e)=>{setModified({...modified,add_service_name:e.target.value})}}
                                     id="first-name" 
-                                    className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
                                 </div>
                                 <div className="col-span-6 sm:col-span-3">
-                                    <label htmlFor="last-name" className="text-sm font-medium text-gray-900 block mb-2">Service Description</label>
+                                    <label htmlFor="last-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Description</label>
                                     <textarea rows="2" columns="50" name="last-name" 
                                     onChange={(e)=>{setModified({...modified,add_service_comment:e.target.value})}}
-                                    id="last-name" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required />
+                                    id="last-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
                                 </div>
                             </div>
                         </div>
@@ -1145,7 +1166,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
         draggable
         pauseOnHover />
     </div>
-   <Footer/>
+   <Footer Primary={english?.Side1} color={color}/>
    </>
   )
 }

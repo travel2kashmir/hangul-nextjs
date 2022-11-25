@@ -2,7 +2,7 @@ const validateAddress = (data) =>{
     var error={};
     var flag=[]
     var final_flag=true;
-    
+    alert(JSON.stringify(data))
     if(data.street_address==="")
     {
         error.street_address="App: The street address is required"
@@ -60,25 +60,29 @@ const validateAddress = (data) =>{
      //check latitudes 
      if(data.address_latitude !==""){
   if ((data?.address_latitude < -90) || (data?.address_latitude > 90)) {
-    return 'APP: The value of latitude should be between -90 to +90'
+    flag.push(false)
+    error.address_latitude= 'APP: The value of latitude should be between -90 to +90'
   }
 }
   //check longitude 
   if(data.address_longitude !==''){
 if ((data?.address_longitude < -180) || (data?.address_longitude > 180)) {
-    return 'APP: The value of latitude should be between -180 to +180'
+  flag.push(false)
+  error.address_longitude= 'APP: The value of latitude should be between -180 to +180'
   }
 }
   //check zip code
   if(data.address_zipcode !==''){
-  if ((!data.address_zipcode.match('^[1-9][0-9]{5}$'))) {
-    return 'APP: Please Enter Valid Indian Zip code'
+  if (!(/^[1-9][0-9]{5}$/).test(data.address_zipcode)) {
+    flag.push(false)
+    error.address_zipcode='APP: Please Enter Valid Indian Zip code'
   }
 }
   //check precision
   if(data.address_precision!==''){
   if (data.address_precision < 0 || data.address_precision > 1000) {
-    return 'APP: Precision should be between 0-1000'
+    flag.push(false)
+    error.address_precision= 'APP: Precision should be between 0-1000'
   }
 }
     return Object.keys(error).length===0 ? true : error;

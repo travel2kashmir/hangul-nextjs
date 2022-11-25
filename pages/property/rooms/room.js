@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import DarkModeLogic from "../../../components/darkmodelogic";
 import axios from "axios";
 import Link from "next/link";
 import Button from '../../../components/Button';
@@ -23,11 +24,17 @@ var currentLogged;
 
 function Room() {
   const [visible, setVisible] = useState(0)
+  const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+  const [color, setColor] = useState({})
   /** Use Effect to fetch details from the Local Storage **/
   useEffect(() => {
     const firstfun = () => {
       if (typeof window !== 'undefined') {
         var locale = localStorage.getItem("Language");
+        const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+        const color = JSON.parse(localStorage.getItem("Color"));
+         setColor(color);
+         setDarkModeSwitcher(colorToggle)
         if (locale === "ar") {
           language = arabic;
         }
@@ -400,7 +407,7 @@ function Room() {
 <Header  Primary={english?.Side1}/>
     <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type}/>
     <div id="main-content"
-    className="  bg-gray-50 px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64">
+    className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
 
         {/* Header */}
         <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
@@ -437,7 +444,7 @@ function Room() {
         </nav>
         {/* Title */}
         <div className=" pt-2">
-          <h6 className="text-xl pb-4 flex mr-4 leading-none  pt-2 font-bold text-gray-800 ">
+          <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
             {language?.edit} {language?.room}
           </h6>
 
@@ -445,7 +452,7 @@ function Room() {
           {/* Room Description */}
 
           <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
-            <div className="bg-white shadow-xl rounded-lg  my-2 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+            <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
               <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                   <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
@@ -461,7 +468,7 @@ function Room() {
                   <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Room Rates</div>
                 </div>
               </div>
-              <h6 className="text-base  flex leading-none  pt-2 font-semibold text-gray-800 ">
+              <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
               </h6>
               <div className="pt-6">
@@ -470,7 +477,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.name}
@@ -485,13 +492,13 @@ function Room() {
                                 setAllRoomDetails({ ...allRoomDetails, room_name: e.target.value })
                               )
                             }
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                           /></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
-                        <label className="text-sm font-medium text-gray-900 block mb-2"
+                        <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
                           {language?.room} {language?.type}
                         </label>
@@ -500,7 +507,7 @@ function Room() {
                           <select
                             defaultValue={roomDetails?.room_type}
                             onClick={(e) => setAllRoomDetails({ ...allRoomDetails, room_type_id: e.target.value })}
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" >
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
                             <option  disabled selected value={roomDetails?.room_type}>{roomDetails?.room_type}</option>
                             {roomtypes?.map(i => {
                               return (
@@ -513,7 +520,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.description}
@@ -521,7 +528,7 @@ function Room() {
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <textarea rows="2" columns="50"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             onChange={
                               (e) => (
                                 setAllRoomDetails({ ...allRoomDetails, room_description: e.target.value })
@@ -535,7 +542,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.capacity}
@@ -544,7 +551,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.room_capacity}
                             onChange={
                               (e) => (
@@ -557,7 +564,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.maximum} {language?.number} {language?.of} {language?.occupants}
@@ -566,7 +573,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.maximum_number_of_occupants}
                             onChange={
                               (e) => (
@@ -579,7 +586,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.minimum} {language?.number} {language?.of} {language?.occupants}
@@ -588,7 +595,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.minimum_number_of_occupants}
                             onChange={
                               (e) => (
@@ -601,7 +608,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.maximum} {language?.age} {language?.of} {language?.occupants}
@@ -610,7 +617,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.minimum_age_of_occupants}
                             onChange={
                               (e) => (
@@ -623,7 +630,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.length}
@@ -632,7 +639,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text" defaultValue={roomDetails?.room_length}
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             onChange={
                               (e) => (
                                 setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value })
@@ -644,7 +651,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.breadth}
@@ -653,7 +660,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.room_width}
                             onChange={
                               (e) => (
@@ -666,7 +673,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.height}
@@ -675,7 +682,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             onChange={
                               (e) => (
                                 setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value })
@@ -687,7 +694,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.area}
@@ -696,7 +703,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.carpet_area} readOnly="readonly"
                           /></div>
                       </div>
@@ -704,7 +711,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.room} {language?.volume}
@@ -713,7 +720,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.room_volume} readOnly="readonly" />
                         </div></div>
                     </div>
@@ -934,14 +941,14 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.baserate} {language?.currency}
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             onChange={
                               (e) => (
                                 setAllRoomRates({ ...allRoomRates, base_rate_currency: e.target.value })
@@ -956,7 +963,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.baserate} {language?.amount}
@@ -965,7 +972,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.unconditional_rates?.[0]?.baserate_amount}
                             onChange={
                               (e) => (
@@ -979,14 +986,14 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.taxrate} {language?.currency}
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             onChange={
                               (e) => (
                                 setAllRoomRates({ ...allRoomRates, tax_rate_currency: e.target.value })
@@ -1002,7 +1009,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.taxrate} {language?.amount}
@@ -1011,7 +1018,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.unconditional_rates?.[0]?.tax_amount}
                             onChange={
                               (e) => (
@@ -1024,14 +1031,14 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.other} {language?.capacity} {language?.currency}
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                          <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             onChange={
                               (e) => (
                                 setAllRoomRates({ ...allRoomRates, other_fees_currency: e.target.value })
@@ -1046,7 +1053,7 @@ function Room() {
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
-                          className="text-sm font-medium text-gray-900 block mb-2"
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
                           {language?.other} {language?.charges} {language?.amount}
@@ -1055,7 +1062,7 @@ function Room() {
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <input
                             type="text"
-                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             defaultValue={roomDetails?.unconditional_rates?.[0]?.otherfees_amount}
                             onChange={
                               (e) => (
@@ -1125,7 +1132,7 @@ function Room() {
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
                       <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
                         Image Upload
@@ -1148,7 +1155,7 @@ function Room() {
                     <img className="py-2" src={image?.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                     <div className="col-span-6 sm:col-span-3">
                       <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
                         Image Title
@@ -1161,14 +1168,14 @@ function Room() {
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
                         Image Description
                       </label>
                       <textarea rows="2" columns="60"
                         onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value }))}
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue="" />
                     </div>
 
@@ -1205,14 +1212,14 @@ function Room() {
                       <img src={actionImage?.image_link} alt='pic_room' style={{ height: "200px", width: "400px" }} />
                     </div> <div className="col-span-6 sm:col-span-3">
                       <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
                         Image description
                       </label>
                       <textarea rows="6" columns="60"
 
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={
                           (e) => (
                             setAllRoomDetails({
@@ -1225,7 +1232,7 @@ function Room() {
                       />
                     </div> <div className="col-span-6 sm:col-span-3">
                       <label
-                        className="text-sm font-medium text-gray-900 block mb-2"
+                        className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
                         Image title
@@ -1241,7 +1248,7 @@ function Room() {
                             })
                           )
                         }
-                        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         placeholder="Image Title" />
                     </div>
 

@@ -108,6 +108,7 @@ function Services() {
     useEffect(()=>{ 
         setColor(DarkModeLogic(darkModeSwitcher))
        },[darkModeSwitcher])
+       
     /* Function to edit services*/
     const updateServices = (props,noChange) => {
         if(objChecker.isEqual(props,noChange)){
@@ -121,7 +122,7 @@ function Services() {
               progress: undefined,
               });
           }
- else{
+     else{
         const final_data = {
             "service_id": props.id,
             "property_id": currentProperty.property_id,

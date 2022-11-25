@@ -649,7 +649,7 @@ function Classic(args) {
                            </div>
                                  
                            {/* Packages */}
-                           {args?.allPackages?.length !== 0 ?
+                           {args?.allPackages?.packages  !== undefined?
                            <div id="packages" className={packages === false ? 'accordion-start accordion-panel' : 'accordion-start accordion-panel active'}>
                               <div className='accordion-trigger' onClick={() => { setPackages(!packages) }}>
                                  <button className="mb-6" >

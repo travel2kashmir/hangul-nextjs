@@ -1,5 +1,7 @@
 import React from 'react'
 import objChecker from "lodash";
+import validateGallery from '../../components/Validation/gallery';
+import validateEditGallery from '../../components/Validation/editGallery';
 import DarkModeLogic from "../../components/darkmodelogic";
 import { useState, useEffect } from "react";
 import axios from 'axios';
@@ -39,6 +41,7 @@ function Gallery() {
     const [flag, setFlag] = useState([])
     const [addImage, setAddImage] = useState(0)
     const [enlargeImage, setEnlargeImage] = useState(0)
+    const [error, setError] = useState({})
     const [actionEnlargeImage, setActionEnlargeImage] = useState({})
 
     useEffect(() => {
@@ -154,6 +157,8 @@ function Gallery() {
                 );
                
                 fetchHotelDetails();
+                setImage({});
+                setActionImage({})
                 document.getElementById('addgallery').reset()
                 Router.push("./gallery");
                 setAddImage(0)
@@ -214,7 +219,8 @@ function Gallery() {
                     document.getElementById('editImage').reset();
                     fetchHotelDetails();
                     setAllHotelDetails([])
-                    setActionImage({})
+                    setActionImage({});
+                    setError({});
                     Router.push("./gallery");
                 })
                 .catch((error) => {
@@ -270,6 +276,38 @@ function Gallery() {
             })
     }
 
+ // Add Validation Gallery
+  const validationGallery = () => {
+    setError({});
+    var result = validateGallery(actionImage,image.image_link)
+    alert(JSON.stringify(result));
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+       
+       submitAddImage();
+       }
+       else
+       {
+        setError(result)
+       }
+}
+
+// Edit Validation Gallery 
+const validationGalleryEdit = () => {
+    setError({});
+    var result = validateEditGallery(actionImage)
+    alert(JSON.stringify(result));
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+        updateImageDetails();
+       }
+       else
+       {
+        setError(result)
+       }
+}
     return (
         <>   
      <Header color={color} Primary={english.Side}/>
@@ -424,12 +462,13 @@ function Gallery() {
                             <div className="flex items-start justify-between p-5 border-b rounded-t">
                                 <h3 className={`${color?.text} text-xl font-semibold`}>
                                     {language?.edit} {language?.image} 
-                                  
                                 </h3>
                                 <button type="button"
                                     onClick={() => {
+                                        setActionImage({});
+                                        setError({});
                                         document.getElementById('editImage').reset();
-                                        setEditImage(0);}}
+                                        setEditImage(0); }}
                                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="user-modal">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 </button>
@@ -440,16 +479,17 @@ function Gallery() {
                                   <div className="grid grid-cols-6 gap-6">
                                     <div className="col-span-6 sm:col-span-3">
                                         <img src={actionImage?.image_link} alt='property_image' height={"200"} width={"400"} />
-                                    </div> <div className="col-span-6 sm:col-span-3">
+                                    </div>
+                                     <div className="col-span-6 sm:col-span-3">
                                         <label
                                             className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.description}
+                                            <span style={{ color: "#ff0000" }}>*</span>
                                         </label>
                                         <textarea rows="6" columns="60"
-
-                                            className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                                        className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                                             focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                             onChange={
                                                 (e) => (
@@ -461,12 +501,16 @@ function Gallery() {
                                             }
                                             defaultValue={actionImage?.image_description}
                                         />
-                                    </div> <div className="col-span-6 sm:col-span-3">
+                                         <p className="text-sm text-sm text-red-700 font-light">
+                                          {error?.image_descripiton}</p>
+                                    </div>
+                                     <div className="col-span-6 sm:col-span-3">
                                         <label
                                             className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.titl}
+                                            <span style={{ color: "#ff0000" }}>*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -490,7 +534,7 @@ function Gallery() {
                             <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.UpdateDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Update} onClick={updateImageDetails} />
+                      <Button Primary={language?.Update} onClick={validateEditGallery} />
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />
@@ -513,8 +557,11 @@ function Gallery() {
                                 </h3>
                                 <button type="button"
                                     onClick={() =>{
-                                        document.getElementById('addgallery').reset()
+                                        setImage({})
+                                        document.getElementById('addgallery').reset();
                                         setAddImage(0);
+                                        setActionImage({})
+                                       
                                     } }
                                     className="text-gray-400 bg-transparent
                                  hover:bg-gray-200 
@@ -533,38 +580,46 @@ function Gallery() {
                                             htmlFor="grid-password"
                                         >
                                             {language?.imageupload}
+                                            <span style={{ color: "#ff0000" }}>*</span>
                                         </label>
                                         <div className="flex">
                                             <input
                                                 type="file" name="myImage" accept="image/png, image/gif, image/jpeg, image/jpg"
                                                 onChange={e => {
-                                                    onChangePhoto(e, 'imageFile');
-
-                                                }}
+                                                    onChangePhoto(e, 'imageFile'); }}
                                                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                                                 focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                               defaultValue="" />
+                                              
 
                                         </div>
                                         <div className="col-span-6 sm:col-span-3 mt-2">
+                                        <p className="text-sm text-sm text-red-700 font-light">
+                                                 {error?.image_link}</p>
                                             {spin === 0 ?
                                             <Button Primary={language?.Upload} onClick={uploadImage} />:
                                             <Button Primary={language?.SpinnerUpload} />
                                                     }</div>
                                     </div>
-                                    <img className={`py-2 ${color?.text}`} src={image.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
-                                    <div className="col-span-6 sm:col-span-3">
+                                    <div className="col-span-6 sm:col-span-3 mt-2">
+                                    <img className={`py-2 ${color?.text}`} src={image?.image_link} alt='ImagePreview' style={{ height: "150px", width: "250px" }} />
+                                   </div>
+                                   <div className="col-span-6 sm:col-span-3">
                                         <label
                                             className={`text-sm ${color?.text} font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.titl}
+                                            <span style={{ color: "#ff0000" }}>*</span>
                                         </label>
                                         <input
                                             type="text"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value },setFlag(1)))}
                                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                                             focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}placeholder="Image Title" />
+                                     <p className="text-sm text-sm text-red-700 font-light">
+                                    {error?.image_title}</p>
+                                   
                                     </div>
                                     <div
                                      className="col-span-6 sm:col-span-3">
@@ -574,12 +629,15 @@ function Gallery() {
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.description}
+                                            <span style={{ color: "#ff0000" }}>*</span>
                                         </label>
                                         <textarea rows="2" columns="60"
                                             onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value },setFlag(1)))}
                                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                                             focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                             defaultValue="" />
+                                             <p className="text-sm text-sm text-red-700 font-light">
+                                            {error?.image_descripiton}</p>
                                     </div>
 
                                 </div>
@@ -589,7 +647,7 @@ function Gallery() {
                      <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.AddDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Add} onClick={() => { submitAddImage();}} />
+                      <Button Primary={language?.Add} onClick={() => {validationGallery();}} />
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerAdd} />

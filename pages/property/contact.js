@@ -330,6 +330,7 @@ function Contact() {
                         className={`text-sm ${color?.text} font-medium  block mb-2`}
                       >
                         {language?.contact} {language?.type}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <select
                         onChange={(e) =>
@@ -352,11 +353,10 @@ function Contact() {
                       </select>
                     </div>
                     <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="last-name"
-                        className={`text-sm ${color?.text} font-medium  block mb-2`}
-                      >
+                      <label htmlFor="last-name"
+                        className={`text-sm ${color?.text} font-medium  block mb-2`}>
                         {language?.contact} {language?.value}
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <input
                         type="text"

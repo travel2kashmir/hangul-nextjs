@@ -60,7 +60,7 @@ function Room() {
   }
 
   const [allRoomDetails, setAllRoomDetails] = useState([])
-  const [disp, setDisp] = useState(1);
+  const [disp, setDisp] = useState(0);
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomimages, setRoomimages] = useState({})
@@ -637,6 +637,39 @@ function Room() {
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Views from Room
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <Multiselect 
+                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                       `}
+                      isObject={true}
+                      options={lang?.Views}
+                      onRemove={(e)   =>
+                        setAllRoomDes({
+                          ...allRoomDes,
+                       views: e,
+                        })}
+                      onSelect={(e)   =>
+                        setAllRoomDes({
+                          ...allRoomDes,
+                        views: e,
+                        })}
+                      
+                     displayValue="view"
+                    
+                      />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
+                    <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -733,6 +766,85 @@ function Room() {
                             defaultValue={roomDetails?.room_volume} readOnly="readonly" />
                         </div></div>
                     </div>
+                    <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Room Style
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+
+                               onChange={
+                                   (e) => (
+                              setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value })
+                                   )
+                                  }
+                        >
+                           <option selected disabled >{language?.select}</option>
+                          <option value="western">Western</option>
+                          <option value="japanese">Japanese</option>
+                          <option value="japanese_western">Japanese Western</option>
+                     </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Is Room Shared?
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           
+                          onChange={
+                            (e) => (
+                              setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value },setFlag(1))
+                            )
+                          }
+                        >
+                           <option selected disabled >{language?.select}</option>
+                          <option value="shared" >Yes</option>
+                          <option value="private">No</option>
+                     </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Is Room?
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+
+                          onChange={
+                            (e) => (
+                              setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value },setFlag(1))
+                            )
+                          }
+                        >
+                           <option selected disabled >{language?.select}</option>
+                          <option value="outdoor" >Indoor</option>
+                          <option value="indoor">Outdoor</option>
+                     </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <Button Primary={language?.Next} onClick={() => { setDisp(1) }} />
                       <Button Primary={language?.Update} onClick={() => { submitRoomDescriptionEdit(); }} />

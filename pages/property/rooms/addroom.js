@@ -58,6 +58,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
   const [actionImage, setActionImage] = useState([])
   const [services, setServices] = useState([]) 
   const [roomId, setRoomId] = useState([])
+  const [finalView,setFinalView]=useState([])
   const [add, setAdd] = useState(0)
   const [disp, setDisp] = useState(0);
   const [modified, setModified] = useState({})
@@ -98,10 +99,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       if (allRoomDes.length !== 0){  
       e.preventDefault()
       const finalData = { ...allRoomDes, status:true }  
-     axios.post('/api/room', JSON.stringify(finalData),
-          {
-            headers: { 'content-type': 'application/json' }
-          })
+      axios.post('/api/room', JSON.stringify(finalData), {headers: { 'content-type': 'application/json'}})
           .then(response => {
            toast.success("Room created successfully", {
               position: "top-center",
@@ -113,8 +111,10 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               progress: undefined,
             });
             setRoomId(response.data.room_id)
+           
+            submitBed(response.data.room_id)
+            submitView(response.data.room_id)
             setAllRoomDes([]);
-            setDisp(1);
           })
           .catch(error => {
            toast.error("Room Description Error! ", {
@@ -167,9 +167,117 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       const onChangePhoto = (e, i) => {
         setImage({ ...image, imageFile: e.target.files[0] })
       }
-    
-      /** Function to upload room images**/
-      const uploadImage = () => {
+
+  /** For Bed**/
+  const BedTemplate = {
+    "length":"",
+    "width": ""
+  }  
+
+  /* Mapping Index of each Bed*/
+    const [BedData, setBedData] = useState([BedTemplate]?.map((i, id) => { return { ...i, index: id } }))
+  
+ /** Function to add Bed **/
+ const addBed = () => {
+  setBedData([...BedData, BedTemplate]?.map((i, id) => { return { ...i, index: id } }))
+}
+
+/** Function to on change for Bed **/
+const onChange = (e, index, i) => {
+  setBedData(BedData?.map((item, id) => {
+    if (item.index === index) {
+      item[i] = e.target.value
+    }
+    return item
+  }))
+}
+  /** Function to cancel package mile **/
+  const removeBed = (index) => {
+    const filteredBed = BedData.filter((i, id) => i.index !== index)
+     setBedData(filteredBed)
+    }
+  // Bed Data Submit
+    const submitBed= (props) => {
+      const current = new Date();
+      const currentDateTime= current.toISOString();
+      const data = BedData?.map((i => {
+            return {
+              "room_id":props,
+               "length":i?.length,
+                "width":i?.width,
+                "unit":"cm",
+                "timestamp": currentDateTime 
+            
+            }
+         }))
+     const final_data = { "beds": data }
+     alert(JSON.stringify(finalView))
+     const url = '/api/bed_details'
+       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+         ((response) => {
+           toast.success("Bed add success", {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+           });
+        
+         })
+         .catch((error) => {
+           toast.error("Bed add error", {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+           });
+         })
+    }
+   
+    const submitView= (props) => {
+      const data = finalView?.map((i => {
+            return {
+              "room_id":props,
+               "view":i?.view 
+            
+            }
+         }))
+     const final_data = { "room_views": data }
+     alert(JSON.stringify(final_data))
+     const url = '/api/room_views'
+       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+         ((response) => {
+           toast.success("View add success", {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+           });
+      
+       
+         })
+         .catch((error) => {
+           toast.error("View add error", {
+             position: "top-center",
+             autoClose: 5000,
+             hideProgressBar: false,
+             closeOnClick: true,
+             pauseOnHover: true,
+             draggable: true,
+             progress: undefined,
+           });
+         })
+    }
+  /** Function to upload room images**/
+  const uploadImage = () => {
         const imageDetails = image.imageFile
         const formData = new FormData();
         formData.append("file", imageDetails);
@@ -191,7 +299,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             console.error('There was an error!', error);
           });
     
-      }
+  }
     
       /** Function to submit room images **/
       const submitRoomImages = () => {
@@ -366,8 +474,8 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
        
        }
 
-  /* Function for Room Rates*/
-   const submitRoomRates= () => {
+         /* Function for Room Rates*/
+            const submitRoomRates= () => {
     if (allRoomRates.length !== 0){  
     const final_data = {
       "room_id": roomId,
@@ -416,7 +524,20 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       progress: undefined,
     }); 
   }
-}
+           }
+
+           //Views
+             const views = (viewData) => { 
+  setFinalView([]);
+  var final_view_data=[]
+ viewData.map(item => {
+    var temp = {
+      view: item?.view
+    }
+    final_view_data.push(temp) } );
+    setFinalView(final_view_data);
+    
+                }
   return (
     <>
     <Header  Primary={english?.Side1}  color={color}/>
@@ -516,7 +637,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                   <div className="relative w-full mb-3">
                     <label className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password">
-                      {language?.room} {language?.type}
+                      {language?.room} {language?.type} 
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -524,9 +645,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                       onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
                       className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
                       {roomtypes.length === undefined ? <option value="loading">Loading values</option> :
-                       <>{roomtypes?.map(i => {
+                       <>
+                       <option selected disabled>{language?.select}</option>
+                       {roomtypes?.map(i => {
                         return (
-                          <option key={i.room_type_id} value={i.room_type_id}>{i?.room_type_name}</option>)
+                          
+                          <option key={i.room_type_id} value={i.room_type_id}>{i?.room_type_name.replaceAll("_"," ")}</option>)
                       }
                       )}</>}
                     </select></div>
@@ -619,22 +743,12 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                        `}
                       isObject={true}
                       options={lang?.Views}
-                      onRemove={(e)   =>
-                        setAllRoomDes({
-                          ...allRoomDes,
-                       views: e,
-                        })}
-                      onSelect={(e)   =>
-                        setAllRoomDes({
-                          ...allRoomDes,
-                        views: e,
-                        })}
-                      
-                     displayValue="view"
-                    
-                      />
+                      onRemove={(event) => {views(event)}}
+                      onSelect={(event) => {views(event) }} 
+                    displayValue="view"
+                     />
                         <p className="text-sm text-sm text-red-700 font-light">
-                          {error?.property_brand}</p>
+                          {error?.view}</p>
                       </div>
                     </div>
                   </div>
@@ -695,7 +809,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
                           onChange={
                             (e) => (
-                              setAllRoomDes({ ...allRoomDes, room_style: e.target.value },setFlag(1))
+                              setAllRoomDes({ ...allRoomDes, room_style: e.target.value })
                             )
                           }
                         >
@@ -722,7 +836,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
                           onChange={
                             (e) => (
-                              setAllRoomDes({ ...allRoomDes, is_room_sharing: e.target.value },setFlag(1))
+                              setAllRoomDes({ ...allRoomDes, is_room_sharing: e.target.value })
                             )
                           }
                         >
@@ -748,7 +862,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
 
                           onChange={
                             (e) => (
-                              setAllRoomDes({ ...allRoomDes, is_room: e.target.value },setFlag(1))
+                              setAllRoomDes({ ...allRoomDes, is_room: e.target.value })
                             )
                           }
                         >
@@ -761,14 +875,89 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
                       </div>
                     </div>
                   </div>
-                
-                <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <Button Primary={language?.Submit}    onClick={(e)=>{
-                       submitRoomDescription(e)}}/>
-                </div>
+
               </div>
             </div>
           </div>
+
+        {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
+           || allRoomDes?.room_type_id === 'rt005' ?
+           <>
+           {allRoomDes?.room_type_id !== 'rt001' ?
+          <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                  <Button Primary={language?.AddLOS}  onClick={addBed} />
+                  </div>:<></>}
+                  
+           <div className="pt-2">
+              <div className=" md:px-4 mx-auto w-full">
+              {BedData?.map((BedData, index) => (
+              <>
+                <div className={BedData?.index === 0 ? "hidden":"block"}>
+                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
+                          <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
+                     font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
+                     rounded-lg text-sm px-1 py-1 text-center 
+                     items-center mb-1 ml-16 ease-linear transition-all duration-150`}
+                     onClick={() => removeBed(BedData?.index)} type="button" >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                            </button>
+                  </div>
+                  </div>
+                <div className="flex flex-wrap" key={index}>
+
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label
+                        className={`text-sm  font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password"
+                      >
+                       {language?.Length}(in cm)
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <input
+                          type="text" 
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={e => onChange(e, BedData?.index, 'length')}
+                        />
+                   <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.[index]?.length}</p>
+                       </div>
+                    </div>
+                  </div>
+                 
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Width(in cm)
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <input
+                          type="text" 
+                          className={`shadow-sm ${color?.greybackground} ${color?.text}  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={e => onChange(e, BedData?.index, 'width')}
+                        />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.[index]?.width}</p>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  </div>
+                   </>))} 
+                 
+                  </div>
+           </div>
+           </> :<>
+           </>
+           }
+
+         <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
+                <Button Primary={language?.Submit}    onClick={(e)=>{
+                       submitRoomDescription(e)}}/>      
+         </div>
         </div>
        </div>
         {/* Room Gallery*/}

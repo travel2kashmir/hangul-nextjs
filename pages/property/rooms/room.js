@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DarkModeLogic from "../../../components/darkmodelogic";
+import Multiselect from 'multiselect-react-dropdown';
+import lang from '../../../components/GlobalData'
 import axios from "axios";
 import Link from "next/link";
 import Button from '../../../components/Button';
@@ -61,6 +63,7 @@ function Room() {
 
   const [allRoomDetails, setAllRoomDetails] = useState([])
   const [disp, setDisp] = useState(0);
+  const [error, setError] = useState({})
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomimages, setRoomimages] = useState({})

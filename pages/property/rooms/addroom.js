@@ -65,6 +65,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
   const [error, setError] = useState({})
   const [allRoomRates, setAllRoomRates] = useState([])
 
+  // Room Types
   const fetchRoomtypes = async () => {
     const url = `/api/room-types`
     axios.get(url)
@@ -73,15 +74,17 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
     setVisible(1)})
       .catch((error)=>{logger.error("url to fetch roomtypes, failed")});  
     }
+
+    // Room Services
     const fetchServices = async () => {
-      const url = `/api/${currentProperty.property_id}`
+      const url = `/api/all_room_services`
       axios.get(url)
       .then((response)=>{setServices(response.data);
         logger.info("url  to fetch roomtypes hitted successfully")})
         .catch((error)=>{logger.error("url to fetch roomtypes, failed")});  
       }
 
-    /** To fetch room types **/
+    /** To fetch room types and room services **/
     useEffect(() => {
       fetchRoomtypes();
         fetchServices();
@@ -111,10 +114,10 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
               progress: undefined,
             });
             setRoomId(response.data.room_id)
-           
             submitBed(response.data.room_id)
             submitView(response.data.room_id)
             setAllRoomDes([]);
+          setDisp(1)
           })
           .catch(error => {
            toast.error("Room Description Error! ", {
@@ -191,11 +194,13 @@ const onChange = (e, index, i) => {
     return item
   }))
 }
+
   /** Function to cancel package mile **/
   const removeBed = (index) => {
     const filteredBed = BedData.filter((i, id) => i.index !== index)
      setBedData(filteredBed)
     }
+
   // Bed Data Submit
     const submitBed= (props) => {
       const current = new Date();
@@ -211,7 +216,7 @@ const onChange = (e, index, i) => {
             }
          }))
      const final_data = { "beds": data }
-     alert(JSON.stringify(finalView))
+    
      const url = '/api/bed_details'
        axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
          ((response) => {
@@ -239,6 +244,7 @@ const onChange = (e, index, i) => {
          })
     }
    
+     // View Submit
     const submitView= (props) => {
       const data = finalView?.map((i => {
             return {
@@ -248,7 +254,6 @@ const onChange = (e, index, i) => {
             }
          }))
      const final_data = { "room_views": data }
-     alert(JSON.stringify(final_data))
      const url = '/api/room_views'
        axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
          ((response) => {
@@ -276,6 +281,7 @@ const onChange = (e, index, i) => {
            });
          })
     }
+
   /** Function to upload room images**/
   const uploadImage = () => {
         const imageDetails = image.imageFile
@@ -301,10 +307,10 @@ const onChange = (e, index, i) => {
     
   }
     
-      /** Function to submit room images **/
-      const submitRoomImages = () => {
-        if (actionImage.length !== 0){  
-       const imagedata = [{
+  /** Function to submit room images **/
+ const submitRoomImages = () => {
+ if (actionImage.length !== 0){  
+  const imagedata = [{
           /* To be fetched from context */
           property_id: currentProperty?.property_id,
           image_link: image.image_link,
@@ -330,7 +336,7 @@ const onChange = (e, index, i) => {
               progress: undefined,
             });
             setActionImage([]);
-            setDisp(2);
+            setDisp(3);
           })
             .catch(error => {
              toast.error("Gallery error", {
@@ -367,115 +373,56 @@ const onChange = (e, index, i) => {
         progress: undefined,
       });
     }
-      }
+    }
     
-     /* Add Existing Services*/
-      const submitServices = (e) => {
-      e.preventDefault()
-      const datas = services.filter(i => i.check === true)
-      const post = datas.map(i => i.add_service_id)
-     const serviceData = post.map((i) => {
-          return { "room_id": roomId, add_service_id: i }
-        })
-       const final = { "additional_services_link": serviceData }
-       axios.post('/api/additional_services_link', final, {
-          headers: { 'content-type': 'application/json' }
-        }).then(response => {
-         toast.success(JSON.stringify(response.data.message), {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
     
-        })
-          .catch(error => {
-           toast.error("Services error! " , {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
     
-          });
-    
-      }
-    
-       /*Function to add new additional room service*/
-       const newAdditionalService = ()=>
-       {
-           const final_data ={
-               "additional_service": [ {         
-               "property_id": currentProperty?.property_id,
-               "add_service_name": modified.add_service_name,
-               "add_service_comment": modified.add_service_comment,
-               "status": true
-           }]}
-          const url = '/api/additional_services'
-           axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
-               ((response) => {
-                  toast.success("Room Services Updated Successfully!", {
-                       position: "top-center",
-                       autoClose: 5000,
-                       hideProgressBar: false,
-                       closeOnClick: true,
-                       pauseOnHover: true,
-                       draggable: true,
-                       progress: undefined,
-                   });
-                 const url2 = '/api/additional_services_link'
-                 const final_data2 = {
-                   "additional_service_link": [{
-                     "room_id": roomId,
-                     "add_service_id": response.data.add_service_id
-                   }]
-                 }
-                 axios.post(url2, final_data2, { header: { "content-type": "application/json" } }).then
-                   ((response) => {
-                    toast.success("Link Updated Successfully!", {
-                       position: "top-center",
-                       autoClose: 5000,
-                       hideProgressBar: false,
-                       closeOnClick: true,
-                       pauseOnHover: true,
-                       draggable: true,
-                       progress: undefined,
-                     });
-                   })
-                   .catch((error) => {
-                   toast.error("Some thing went wrong in Additional Services\n " + JSON.stringify(error.response.data), {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                })
-               })
-               .catch((error) => {
-                  toast.error("Some thing went wrong in Contacts\n " + JSON.stringify(error.response.data), {
-                       position: "top-center",
-                       autoClose: 5000,
-                       hideProgressBar: false,
-                       closeOnClick: true,
-                       pauseOnHover: true,
-                       draggable: true,
-                       progress: undefined,
-                   });
-               })
-       
-       }
+   /*Function to add room service*/
+  const submitServices = () => {
+   services.map(
+      (i)=>(i.room_id=roomId,i.status=i.service_value)
+    )
+      services.map(
+        (i)=>{
+          if(JSON.stringify(i.service_value) !== "true"){
+          return (
+          
+          i.service_value=false,
+          i.status=false
+            )}
+        }
+    )
+   var total = { "room_services": services }
+    const url = '/api/room_facilities'
+    axios.post(url, total, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("Room services added successfully!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setDisp(2);
+      })
+      .catch((error) => {
+        toast.error("Room Services Add Error! ", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
 
-         /* Function for Room Rates*/
-            const submitRoomRates= () => {
+  }
+
+    /* Function for Room Rates*/
+    const submitRoomRates= () => {
     if (allRoomRates.length !== 0){  
     const final_data = {
       "room_id": roomId,
@@ -524,10 +471,10 @@ const onChange = (e, index, i) => {
       progress: undefined,
     }); 
   }
-           }
+    }
 
-           //Views
-             const views = (viewData) => { 
+    //Views
+   const views = (viewData) => { 
   setFinalView([]);
   var final_view_data=[]
  viewData.map(item => {
@@ -537,14 +484,17 @@ const onChange = (e, index, i) => {
     final_view_data.push(temp) } );
     setFinalView(final_view_data);
     
-                }
+    }
+
   return (
     <>
     <Header  Primary={english?.Side1}  color={color}/>
     <Sidebar Primary={english?.Side1}  color={color} Type={currentLogged?.user_type}/>
+
     <div id="main-content"
     className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
-      {/* Header */}
+
+      {/* Navbar */}
       <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-2">
               <li className="inline-flex items-center">
@@ -587,17 +537,20 @@ const onChange = (e, index, i) => {
                 </div>
               </li>
             </ol>
-          </nav>
+      </nav>
+      
       {/* Title */}
-      <div className=" pt-2 ">
+       <div className=" pt-2 ">
+        
         <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6 pb-2 font-bold`}>
           {language?.add} {language?.room}
         </h6>
+
         {/* Room Forms */}
         {/* Room Description */}
         <div id='0' className={disp===0?'block':'hidden'}>
         <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-        <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+        <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
             <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
                 <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
@@ -605,11 +558,15 @@ const onChange = (e, index, i) => {
             
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Gallery</div>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
             </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
             </div>
         </div>
           <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  font-bold`}>
@@ -625,6 +582,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.name}
+                      <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -638,6 +596,7 @@ const onChange = (e, index, i) => {
                     <label className={`text-sm font-medium ${color?.text} block mb-2`}
                       htmlFor="grid-password">
                       {language?.room} {language?.type} 
+                      <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -663,6 +622,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.description}
+                      <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <textarea rows="2" columns="50"
                       className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
@@ -677,6 +637,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.capacity}
+                      <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
@@ -691,6 +652,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                      {language?.maximum} {language?.number} {language?.of} {language?.occupants}
+                     <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -706,6 +668,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                      {language?.minimum} {language?.number} {language?.of} {language?.occupants}
+                     <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -721,6 +684,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                      {language?.minimum} {language?.age} {language?.of} {language?.occupants}
+                     <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -759,6 +723,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                      {language?.room} {language?.length}(in feet)
+                     <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -773,6 +738,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                       {language?.room} {language?.breadth}(in feet)
+                      <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -788,6 +754,7 @@ const onChange = (e, index, i) => {
                       htmlFor="grid-password"
                     >
                      {language?.room} {language?.height}(in feet)
+                     <span style={{ color: "#ff0000" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -912,6 +879,7 @@ const onChange = (e, index, i) => {
                         htmlFor="grid-password"
                       >
                        {language?.Length}(in cm)
+                       <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -931,6 +899,7 @@ const onChange = (e, index, i) => {
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
                         Width(in cm)
+                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -960,26 +929,140 @@ const onChange = (e, index, i) => {
          </div>
         </div>
        </div>
-        {/* Room Gallery*/}
-        <div id='1' className={disp===1?'block':'hidden'}>
-            <div className={`${color?.whitebackground} shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4`}>
-            <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-           <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+       
+       {/* Room Services */}
+       <div id='1' className={disp===1?'block':'hidden'}>
+       <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}>Room Description</div>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
             </div>
           
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Gallery </div>
-            </div>
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                <div className={` ${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Rates</div>
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
+             >2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
+                {language?.room} {language?.services}</div>
             </div>
            
-        </div>
-              <div className="mx-4">
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
+            </div>
+            
+           </div>
+      <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
+         {language?.room} {language?.services}
+         </h6>
+         <div className="flex flex-col my-4"> 
+            <div className="overflow-x-auto">
+              <div className="align-middle inline-block min-w-full">
+                <div className="shadow overflow-hidden">
+                  <table className="table-fixed min-w-full divide-y mx-8 divide-gray-200">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                        >
+                          {language?.service} {language?.name}
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                        >
+                          {language?.service} {language?.edit}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {services?.map((item, idx) => (
+                        <tr className="hover:bg-gray-100" key={idx}>
+                          <td className="py-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
+                            <span className="py-4 px-2 whitespace-nowrap text-base font-medium capitalize text-gray-900">
+                              {"  " +
+                                item?.service_name?.replace(/_+/g, " ")}
+                            </span>
+                          </td>
+
+                          <td className="px-2 py-4 whitespace-nowrap text-base font-normal text-gray-900">
+                            <div className="flex">
+                              <div className="form-check ml-4 form-check-inline">
+
+                                <label htmlFor={"default-toggle" + idx} className="inline-flex relative items-center cursor-pointer">
+                                    {item?.service_value}
+                                  <input type="checkbox" value={item?.service_value}
+                                    onChange={() => {
+                                      setServices(services?.map((i) => {
+
+                                        if (i?.service_id === item?.service_id) {
+                                          i.service_value = !i.service_value
+     
+                                        }
+                                        return i
+                                      }))
+                                    }}
+                                    id={"default-toggle" + idx} className="sr-only peer" />
+                                  <div
+                                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                                 peer-checked:after:translate-x-full 
+                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+
+                                </label>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto"></div>
+                </div>
+              </div>
+            </div>
+          </div>  
+              <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
+                   <Button Primary={language?.Submit}  onClick={() => { submitServices()}}       /> 
+                </div>
+         </div>
+         </div>
+
+        {/* Room Gallery */}
+        <div id='2' className={disp===2?'block':'hidden'}>
+            <div className={`${color?.whitebackground} shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
+            </div>
+          
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className= "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"
+             >2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
+                {language?.room} {language?.services}</div>
+            </div>
+           
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className= "w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
+                 >3</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
+            </div>
+            
+           </div>
+          <div className="mx-4">
                 <div className="sm:flex">
                   <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold `}>
                     Room Gallery
@@ -1072,112 +1155,31 @@ const onChange = (e, index, i) => {
               </div>
             </div>
         </div>
-            {/* Room Services */}
-            {/* <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4">
-              {/* <div className="mx-0 my-6">
-                <h4 className="text-xl sm:text-2xl font-semibold text-gray-900">
-                  Room Services</h4>
-                <div className="sm:flex">
-                  <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
-                    <form className="lg:pr-3" action="#" method="GET">
-                      <label htmlFor="users-search" className="sr-only">Search</label>
-                      <div className="mt-1 relative lg:w-64 xl:w-96">
-                        <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder="Search for services">
-                        </input>
-                      </div>
-                    </form>
-                  </div>
-                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                    <button type="button" onClick={() => setAdd(1)} className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                      <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                      Add service
-                    </button>
-                  </div>
-                </div>
-              </div> */}
 
-              {/* Room Services Table */}
-              {/* <div className="flex flex-col my-4">
-                <div className="overflow-x-auto">
-                  <div className="align-middle inline-block min-w-full">
-                    <div className="shadow overflow-hidden">
-                      <table className="table-fixed min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-100">
-                          <tr>
-                            <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                            </th>
-                            <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                              Service Name
-                            </th>
-                            <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                              Service Description
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {services?.map(i,index => {
-                            return (
-                              <tr className="hover:bg-gray-100" key={index}>
-                                <td className="p-4 w-4">
-                                  <div className="flex items-center">
-                                    <input id="checkbox-1"
-                                      onClick={() => {
-                                        setServices(services.map((item) => {
-                                          if (item.add_service_id === i.add_service_id) {
-                                            item.check = !item.check
-                                          }
-                                          return item
-                                        }))
-                                      }}
-                                      aria-describedby="checkbox-1" type="checkbox" className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-cyan-200 h-4 w-4 rounded" />
-                                    <label htmlFor="checkbox-1" className="sr-only">checkbox</label>
-                                  </div>
-                                </td>
-                                <td className="p-4 flex items-center whitespace-nowrap space-x-6
-                                                     mr-12 lg:mr-0">
-                                  <td className="p-4 whitespace-nowrap text-base font-medium
-                          text-gray-900">{i?.add_service_name}</td>
-                                </td>
-                                <td className="p-4 capitalize whitespace-wrap text-xs font-medium text-gray-900">
-                                  {i?.add_service_comment}
-                                </td>
-                              </tr>
-                            )
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                <button className="sm:inline-flex  text-white bg-cyan-600 hover:bg-cyan-700 
-                    focus:ring-4 focus:ring-cyan-200 font-semibold
-                     rounded-lg text-sm px-5 py-2 text-center
-                     items-center mb-1 ease-linear transition-all duration-150"
-                  onClick={submitServices} type="button" >
-                  Submit</button>
-              </div> 
-
-            </div> */}
-           {/* Room Rates*/}
-           <div id='2' className={disp===2?'block':'hidden'}>
+      {/* Room Rates */}
+      <div id='3' className={disp===3?'block':'hidden'}>
             <div className={`${color?.whitebackground} mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8`}>
-            <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
                 <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> Room Description</div>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
             </div>
           
             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <button className=  "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"
+             >2</button>
                 <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
-               Room Gallery</div>
+                {language?.room} {language?.services}</div>
             </div>
            
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className=  "w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
+               >4</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
             </div>
             
            </div>
@@ -1322,143 +1324,8 @@ const onChange = (e, index, i) => {
             </div>
           </div>
       </div>
+   
      </div>
-      {/* Modal Edit Room Service */}
-      <div className="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="add-user-modal">
-        <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-          <div className="bg-white rounded-lg shadow relative">
-            <div className="flex items-start justify-between p-5 border-b rounded-t">
-              <h3 className="text-xl font-semibold">
-                Edit Service
-              </h3>
-              <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="add-user-modal">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-              </button>
-            </div>
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="first-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Name</label>
-                  <input type="text" name="first-name" id="first-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="last-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Description</label>
-                  <textarea rows="2" columns="50" name="last-name" id="last-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
-                </div>
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="name" className="text-base pr-2 font-semibold text-gray-900 block mb-2">Status</label>
-                  <div className="flex">
-                    <div className="form-check form-check-inline">
-                      <input type="radio"
-                        className="form-check-input form-check-input 
-                                                         appearance-none rounded-full h-4 w-4 border 
-                                                         border-gray-300 
-                                                         bg-white checked:bg-blue-600 
-                                                         checked:border-blue-600 focus:outline-none
-                                                          transition duration-200 mt-2  align-top
-                                                           bg-no-repeat bg-center bg-contain float-left
-                                                            mr-2 cursor-pointer"
-                        value="Active"
-                        name="status" id='st' />
-                      <label
-                        className="form-check-label inline-block 
-                                                         text-gray-700 text-base pr-2 "
-                        htmlFor="st">
-                        Active
-                      </label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                      <input type="radio" id='st2' value="Inactive"
-                        className="form-check-input form-check-input appearance-none 
-                                                   rounded-full h-4 w-4 border border-gray-300
-                                                    bg-white checked:bg-blue-600 checked:border-blue-600
-                                                     focus:outline-none transition duration-200 mt-2 
-                                                      align-top bg-no-repeat bg-center bg-contain float-left mb-2
-                                                       mr-1 ml-2 cursor-pointer" name="status" />
-                      <label
-                        className="form-check-label inline-block text-gray-700 text-base  "
-                        htmlFor="st2"
-                      >
-                        Inactive</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="items-center p-6 border-t border-gray-200 rounded-b">
-              <button className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center" type="submit">Update</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Modal Add Room Service
-      <div className={add === 1 ? 'block' : 'hidden'}>
-            <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
-                <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
-                    <div className="bg-white rounded-lg shadow relative">
-                        <div className="flex items-start justify-between p-5 border-b rounded-t">
-                            <h3 className="text-xl font-semibold">
-                                Add new service
-                            </h3>
-                            <button type="button" onClick={()=>setAdd(0)} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="add-user-modal">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                            </button>
-                        </div>
-                        <div className="p-6 space-y-6">
-                            <div className="grid grid-cols-6 gap-6">
-                                <div className="col-span-6 sm:col-span-3">
-                                    <label htmlFor="first-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Name</label>
-                                    <input type="text" name="first-name" 
-                                    onChange={(e)=>{setModified({...modified,add_service_name:e.target.value})}}
-                                    id="first-name" 
-                                    className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
-                                </div>
-                                <div className="col-span-6 sm:col-span-3">
-                                    <label htmlFor="last-name" className={`text-sm font-medium ${color?.text} block mb-2`}>Service Description</label>
-                                    <textarea rows="2" columns="50" name="last-name" 
-                                    onChange={(e)=>{setModified({...modified,add_service_comment:e.target.value})}}
-                                    id="last-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                        <Button Primary={language?.Submit}     onClick={submitRoomImages} />
-                 
-                            <button 
-                            onClick={()=>{newAdditionalService(); setAdd(0);}}
-                            className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-semibold rounded-lg text-sm px-5 py-2.5 text-center" type="submit">
-                                Add service</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> */}
-
-      {/* Modal Delete Room Service
-      <div className="hidden overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 md:inset-0 z-50 justify-center items-center h-modal sm:h-full" id="delete-user-modal">
-        <div className="relative w-full max-w-md px-4 h-full md:h-auto">
-          <div className="bg-white rounded-lg shadow relative">
-            <div className="flex justify-end p-2">
-              <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="delete-user-modal">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-              </button>
-            </div>
-
-            <div className="p-6 pt-0 text-center">
-              <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">Are you sure you want to delete this service?</h3>
-              <a href="#" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                Yes, I`m sure
-              </a>
-              <a href="#" className="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-cyan-200 border border-gray-200 font-medium inline-flex items-center rounded-lg text-base px-3 py-2.5 text-center" data-modal-toggle="delete-user-modal">
-                No, cancel
-              </a>
-            </div>
-          </div>
-        </div>
-      </div> */}
 
       {/* Toast Container */}
       <ToastContainer position="top-center"
@@ -1470,8 +1337,10 @@ const onChange = (e, index, i) => {
         pauseOnFocusLoss
         draggable
         pauseOnHover />
+    
     </div>
    <Footer Primary={english?.Side1} color={color}/>
+   
    </>
   )
 }

@@ -64,8 +64,7 @@ function Packageservices() {
       .then((response) => {
         setPackageServices(response.data);
         logger.info("url  to fetch package services hitted successfully")
-        
-      }
+     }
       )
       .catch((error) => { logger.error("url to fetch package services, failed") });
   }
@@ -109,6 +108,7 @@ function Packageservices() {
      })
 
  }
+ 
   useEffect(() => {
     fetchAdditionalPackageServices();
     fetchPackageServices();

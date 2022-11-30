@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DarkModeLogic from "../../../components/darkmodelogic";
+import Multiselect from 'multiselect-react-dropdown';
+import lang from '../../../components/GlobalData'
 import axios from "axios";
 import Link from "next/link";
 import Button from '../../../components/Button';
@@ -26,6 +28,23 @@ function Room() {
   const [visible, setVisible] = useState(0)
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
+  const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [disp, setDisp] = useState(0);
+  const [error, setError] = useState({})
+  const [roomDetails, setRoomDetails] = useState([])
+  const [allRoomRates, setAllRoomRates] = useState([])
+  const [roomimages, setRoomimages] = useState({})
+  const [addImage, setAddImage] = useState(0)
+  const [roomtypes, setRoomtypes] = useState([])
+  const [actionImage, setActionImage] = useState({})
+  const [deleteImage, setdeleteImage] = useState(0)
+  const [editImage, setEditImage] = useState(0)
+  const [image, setImage] = useState({})
+  const [services, setServices] = useState([])
+  const [add, setAdd] = useState(0)
+  const [enlargeImage, setEnlargeImage] = useState(0)
+  const [actionEnlargeImage, setActionEnlargeImage] = useState({})
+
   /** Use Effect to fetch details from the Local Storage **/
   useEffect(() => {
     const firstfun = () => {
@@ -58,22 +77,6 @@ function Room() {
   const onChangePhoto = (e, i) => {
     setImage({ ...image, imageFile: e.target.files[0] })
   }
-
-  const [allRoomDetails, setAllRoomDetails] = useState([])
-  const [disp, setDisp] = useState(1);
-  const [roomDetails, setRoomDetails] = useState([])
-  const [allRoomRates, setAllRoomRates] = useState([])
-  const [roomimages, setRoomimages] = useState({})
-  const [addImage, setAddImage] = useState(0)
-  const [roomtypes, setRoomtypes] = useState([])
-  const [actionImage, setActionImage] = useState({})
-  const [deleteImage, setdeleteImage] = useState(0)
-  const [editImage, setEditImage] = useState(0)
-  const [image, setImage] = useState({})
-  const [services, setServices] = useState([])
-  const [add, setAdd] = useState(0)
-  const [enlargeImage, setEnlargeImage] = useState(0)
-  const [actionEnlargeImage, setActionEnlargeImage] = useState({})
 
   /* Function for Edit Room Images*/
   const updateImageDetails = () => {
@@ -153,10 +156,10 @@ function Room() {
 
   const fetchDetails = async () => {
     const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
-    console.log("url " + url)
     axios.get(url)
       .then((response) => {
         setRoomDetails(response.data);
+        setServices(response.data.room_facilities);
         logger.info("url  to fetch room hitted successfully");
         setVisible(1);
       })
@@ -187,25 +190,16 @@ function Room() {
       .catch((error) => { logger.error("url to fetch roomtypes, failed") });
   }
 
-  const fetchServices = async () => {
-    const url = `/additional_services/${currentProperty?.property_id}`
-    axios.get(url)
-      .then((response) => {
-        setServices(response.data);
-        logger.info("url  to fetch room types hitted successfully")
-      })
-      .catch((error) => { logger.error("url to fetch roomtypes, failed") });
-  }
+ 
 
-  /* Function to load Room Details when page loads*/
+  /* Function to load Room Details when page loads */
   useEffect(() => {
-    fetchServices();
     fetchRoomtypes();
     fetchImages();
     fetchDetails();
   }, [])
 
-  /* Function to upload image*/
+  /* Function to upload image */
   const uploadImage = () => {
     const imageDetails = image.imageFile
     const formData = new FormData();
@@ -402,10 +396,55 @@ function Room() {
     }
   }
 
+  /*Function to add room service*/
+  const submitServices = () => {
+    services.map(
+       (i)=>(i.room_id=currentroom,i.status=i.service_value)
+     )
+       services.map(
+         (i)=>{
+           if(JSON.stringify(i.service_value) !== "true"){
+           return (
+           
+           i.service_value=false,
+           i.status=false
+             )}
+         }
+     )
+    var total = { "room_services": services }
+     const url = '/api/room_facilities'
+     axios.post(url, total, { header: { "content-type": "application/json" } }).then
+       ((response) => {
+         toast.success("Room services added successfully!", {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+         });
+         setDisp(2);
+       })
+       .catch((error) => {
+         toast.error("Room Services Add Error! ", {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+         });
+       })
+ 
+   }
+
   return (
     <>
     <Header  Primary={english?.Side1}  color={color}/>
     <Sidebar Primary={english?.Side1} Type={currentLogged?.user_type}  color={color}/>
+
     <div id="main-content"
     className={`${color?.greybackground} px-4 pt-24 relative overflow-y-auto lg:ml-64` }>
 
@@ -453,6 +492,7 @@ function Room() {
               </li>
             </ol>
           </nav>
+
         {/* Title */}
         <div className=" pt-2">
           <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6 pb-2  font-bold`}>
@@ -462,27 +502,32 @@ function Room() {
           {/* Room Description */}
           <div id='0' className={disp === 0 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Gallery</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
-                </div>
-              </div>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
+            </div>
+           </div>
               <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
                 {language?.room} {language?.description}
               </h6>
               <div className="pt-6">
                 <div className=" md:px-2 mx-auto w-full">
                   <div className="flex flex-wrap">
+
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -637,6 +682,39 @@ function Room() {
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Views from Room
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                      <Multiselect 
+                      className={` shadow-sm ${color?.greybackground} ${color?.text} mb-3 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full
+                       `}
+                      isObject={true}
+                      options={lang?.Views}
+                      onRemove={(e)   =>
+                        setAllRoomDes({
+                          ...allRoomDes,
+                       views: e,
+                        })}
+                      onSelect={(e)   =>
+                        setAllRoomDes({
+                          ...allRoomDes,
+                        views: e,
+                        })}
+                      
+                     displayValue="view"
+                    
+                      />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
+                    <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
                           className={`text-sm font-medium ${color?.text} block mb-2`}
@@ -733,6 +811,85 @@ function Room() {
                             defaultValue={roomDetails?.room_volume} readOnly="readonly" />
                         </div></div>
                     </div>
+                    <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Room Style
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+
+                               onChange={
+                                   (e) => (
+                              setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value })
+                                   )
+                                  }
+                        >
+                           <option selected disabled >{language?.select}</option>
+                          <option value="western">Western</option>
+                          <option value="japanese">Japanese</option>
+                          <option value="japanese_western">Japanese Western</option>
+                     </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
+                <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Is Room Shared?
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                           
+                          onChange={
+                            (e) => (
+                              setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value },setFlag(1))
+                            )
+                          }
+                        >
+                           <option selected disabled >{language?.select}</option>
+                          <option value="shared" >Yes</option>
+                          <option value="private">No</option>
+                     </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className={`text-sm font-medium ${color?.text} block mb-2`}
+                        htmlFor="grid-password">
+                        Is Room?
+                        <span style={{ color: "#ff0000" }}>*</span>
+                      </label>
+                      <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
+                      <div className={visible === 1 ? 'block' : 'hidden'}>
+                        <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+
+                          onChange={
+                            (e) => (
+                              setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value },setFlag(1))
+                            )
+                          }
+                        >
+                           <option selected disabled >{language?.select}</option>
+                          <option value="outdoor" >Indoor</option>
+                          <option value="indoor">Outdoor</option>
+                     </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.property_brand}</p>
+                      </div>
+                    </div>
+                  </div>
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <Button Primary={language?.Next} onClick={() => { setDisp(1) }} />
                       <Button Primary={language?.Update} onClick={() => { submitRoomDescriptionEdit(); }} />
@@ -743,24 +900,139 @@ function Room() {
             </div>
           </div>
 
-          {/* Room Gallery */}
-          <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
-            <div className={`${color?.whitebackground} shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}>
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
-                </div>
+          {/* Room Services */}
+         <div id='1' className={disp===1?'block':'hidden'}>
+       <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
+            </div>
+          
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
+             >2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
+                {language?.room} {language?.services}</div>
+            </div>
+           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">2</button>
-                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Gallery </div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400`}> Room Rates</div>
-                </div>
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
+            </div>
+            
+           </div>
+      <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-8">
+         {language?.room} {language?.services}
+         </h6>
+         <div className="flex flex-col my-4"> 
+            <div className="overflow-x-auto">
+              <div className="align-middle inline-block min-w-full">
+                <div className="shadow overflow-hidden">
+                  <table className="table-fixed min-w-full divide-y mx-8 divide-gray-200">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                        >
+                          {language?.service} {language?.name}
+                        </th>
+                        <th
+                          scope="col"
+                          className="py-4 px-2 text-left text-xs font-semibold text-gray-500 uppercase"
+                        >
+                          {language?.service} {language?.edit}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+            
+                      {services?.map((item, idx) => (
+                        <tr className="hover:bg-gray-100" key={idx}>
+                          <td className="py-4 py-2 flex items-center whitespace-nowrap space-x-6 mr-12 lg:mr-0">
+                            <span className="py-4 px-2 whitespace-nowrap text-base font-medium capitalize text-gray-900">
+                              {"  " +
+                                item?.service_name?.replace(/_+/g, " ")}
+                            </span>
+                          </td>
 
+                          <td className="px-2 py-4 whitespace-nowrap text-base font-normal text-gray-900">
+                            <div className="flex">
+                              <div className="form-check ml-4 form-check-inline">
+
+                                <label htmlFor={"default-toggle" + idx} className="inline-flex relative items-center cursor-pointer">
+                                    
+                                  <input type="checkbox" value={item?.service_value}  checked={item?.service_value == true}
+                                    onChange={() => {
+                                      setServices(services?.map((i) => {
+
+                                        if (i?.service_id === item?.service_id) {
+                                          i.service_value = !i.service_value
+     
+                                        }
+                                        return i
+                                      }))
+                                    }}
+                                    id={"default-toggle" + idx} className="sr-only peer" />
+                                  <div
+                                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
+                                 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 
+                                 peer-checked:after:translate-x-full 
+                                 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                                 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
+                                  after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+
+                                </label>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto"></div>
+                </div>
               </div>
+            </div>
+          </div>  
+         <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
+                   <Button Primary={language?.Submit}  onClick={() => { submitServices()}}       /> 
+          </div>
+         </div>
+         </div>
+
+          {/* Room Gallery */}
+          <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
+            <div className={`${color?.whitebackground} shadow-xl rounded-lg sm:p-6 xl:p-8  2xl:col-span-2 my-3`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
+            </div>
+          
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className= "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"
+             >2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
+                {language?.room} {language?.services}</div>
+            </div>
+           
+                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className= "w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
+                 >3</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
+            </div>
+            
+           </div>
               <h6 className={`${color?.text} text-base  flex leading-none mb-2 mx-2 pt-2 font-semibold`}>
                 {language?.room}  {language?.gallery}
               </h6>
@@ -826,118 +1098,40 @@ function Room() {
                   })}</div>
               </div>
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-              <Button Primary={language?.Previous} onClick={()=>{setDisp(0)}}/>
-                <Button Primary={language?.Next} onClick={() => { setDisp(2) }} />
+              <Button Primary={language?.Previous} onClick={()=>{setDisp(1)}}/>
+                <Button Primary={language?.Next} onClick={() => { setDisp(3) }} />
               </div>
             </div>
           </div>
 
-          {/* Room Services Table */}
-          <div className={`${color?.whitebackground} hidden shadow rounded-lg p-4 sm:p-6 xl:p-8 my-3`}>
-            <div className="mx-0 my-6">
-              <h4 className="text-xl sm:text-2xl font-semibold text-gray-900">
-                {language?.room} {language?.services} </h4>
-              <div className="sm:flex">
-                <div className="hidden sm:flex items-center sm:divide-x sm:divide-gray-100 mb-3 sm:mb-0">
-                  <form className="lg:pr-3" action="#" method="GET">
-                    <label htmlFor="users-search" className="sr-only">{language?.search}</label>
-                    <div className="mt-1 relative lg:w-64 xl:w-96">
-                      <input type="text" name="email" id="users-search" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" placeholder={language?.searchforservices}>
-                      </input>
-                    </div>
-                  </form>
-                </div>
-                <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
-                  <button type="button" onClick={() => setAdd(1)} className="w-1/2 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200  font-semibold inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center sm:w-auto">
-                    <svg className="-ml-1 mr-2 h-6 w-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd"></path></svg>
-                    {language?.add} {language?.service}
-                  </button>
-                </div>
-              </div>
-            </div>
 
-            {/* Room Services Table */}
-            {/* <div className="flex flex-col my-4">
-            <div className="overflow-x-auto">
-              <div className="align-middle inline-block min-w-full">
-                <div className="shadow overflow-hidden">
-                  <table className="table-fixed min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-100">
-                    <tr>
-                      <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {language?.service} {language?.name}
-                      </th>
-                      <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {language?.service} {language?.description}
-                      </th>
-                      <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {language?.status}
-                      </th>
-                      <th scope="col" className="p-4 text-left text-xs font-semibold text-gray-500 uppercase">
-                        {language?.action}
-                      </th>
-                    </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                    {services?.map(i => {
-                      return (
-                        <tr className="hover:bg-gray-100" key={i}>
-                          <td className="p-4 flex items-center whitespace-nowrap space-x-6
-                                                     mr-12 lg:mr-0">
-                            <td className="p-4 whitespace-nowrap text-base font-medium
-                          text-gray-900">{i?.add_service_name}</td>
-                          </td>
-                          <td className="p-4 capitalize whitespace-wrap text-xs font-medium text-gray-900">
-                            {i?.add_service_comment}
-                          </td>
-                          <td className="p-4 whitespace-nowrap text-base font-normal 
-                                                    text-gray-900">
-                                                        <div className="flex items-center">
-                                                            <div className="h-2.5 w-2.5 rounded-full bg-green-400 
-                                                            mr-2"></div>
-                                                            {language?.active}
-                                                        </div>
-                                                    </td>
-                                                    <td className="p-4 whitespace-nowrap space-x-2">
-                                                        <button type="button" 
-                                                      className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font- font-semibold rounded-lg text-sm inline-flex items-center px-3 py-2 text-center">
-                                                            <svg className="mr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd"></path></svg>
-                                                            {language?.delete} {language?.service}
-                                                        </button>
-                                                    </td>
-                        </tr>
-                      )
-                    })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div> */}
-          </div>
-
-
-          {/* Room Rates*/}
-          <div id='2' className={disp === 2 ? 'block' : 'hidden'}>
+          {/* Room Rates */}
+          <div id='3' className={disp === 3 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow-xl rounded-lg  sm:p-6 xl:p-8  2xl:col-span-2`}>
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[59%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}> Room Description</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
-                    Room Gallery</div>
-                </div>
-
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className={`lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto ${color.widget}`}> {language?.room} {language?.description}</div>
+            </div>
+          
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className=  "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400"
+             >2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>
+                {language?.room} {language?.services}</div>
+            </div>
+           
                 <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">3</button>
-                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Rates</div>
-                </div>
-
-              </div>
+                <button className=   "w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className=  "w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary"
+               >4</button>
+                <div className={`lg:w-32 font-medium ${color.crossbg} text-base lg:mt-3 ml-3 lg:mx-auto`}> {language?.room} {language?.rates}</div>
+            </div>
+            
+           </div>
               <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
                 {language?.room} {language?.rates}
               </h6>
@@ -1083,7 +1277,7 @@ function Room() {
                     </div>
 
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <Button Primary={language?.Previous} onClick={()=>{setDisp(1)}}/>
+                      <Button Primary={language?.Previous} onClick={()=>{setDisp(2)}}/>
                       <Button Primary={language?.Update} onClick={() => {
                         submitRoomRatesEdit();}} />
                     </div>

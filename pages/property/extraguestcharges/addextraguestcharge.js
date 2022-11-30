@@ -183,7 +183,7 @@ const extraGuestChild= (props) => {
         return {
           "extra_guest_id":props,
            "max_age":i?.max_age,
-          "amount":i?.amount,
+            "amount":i?.amount,
            "exclude_from_capacity":i?.exclude_from_capacity
         
          }
@@ -518,6 +518,7 @@ const validationExtraChildGuest = () => {
                   </div>
                   </div>
                   </div>
+                  
                   <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Submit} onClick={validationExtraGuestCharges} /> 
                 </div>

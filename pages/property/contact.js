@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
-
+import validateContact from "../../components/Validation/contact";
 import Sidebar from "../../components/Sidebar";
 import Button from "../../components/Button";
 import Table from "../../components/Table";
@@ -25,6 +25,7 @@ var currentLogged;
 function Contact() {
   const [gen, setGen] = useState([]) 
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+  const [error, setError] = useState({})
   const [color, setColor] = useState({})
   const [spinner, setSpinner] = useState(0)
   const [spin, setSpin] = useState(0)
@@ -63,7 +64,7 @@ function Contact() {
   }, [])
 
   /* Function Add Contact*/
-  function submitContactAdd(e) {
+  function submitContactAdd() {
     if(flag === 1){
     setSpinner(1)
     e.preventDefault();
@@ -95,6 +96,7 @@ function Contact() {
           fetchHotelDetails();
           Router.push("./contact");
           setContact([]);
+          setError({});
           setFlag([]);
         })
         .catch((error) => {
@@ -205,6 +207,8 @@ function Contact() {
     setColor(DarkModeLogic(darkModeSwitcher))
    },[darkModeSwitcher])
 
+
+   // Add Validation Contact Delete
   const submitContactDelete = (props) => {
    const url = `/api/${props}`;
     axios
@@ -238,12 +242,27 @@ function Contact() {
       });
   };
 
+   // Add Validation Contact
+   const validationContact = () => {
+    setError({})
+    var result = validateContact(contact)
+    console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+        submitContactAdd();
+       }
+       else
+       {
+        setError(result)
+       }
+}
+
   return (
     <>
 
      <Header  color={color} Primary={english?.Side} />
-
-      <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type}/>
+     <Sidebar color={color} Primary={english?.Side} Type={currentLogged?.user_type}/>
+     
       <div
         id="main-content"
         className={`${color?.whitebackground} pt-24 relative overflow-y-auto lg:ml-64`}>
@@ -303,6 +322,8 @@ function Contact() {
                     type="button"
                     onClick={() =>{
                       document.getElementById('addcontactform').reset();
+                      setContact([]);
+                      setError({});
                       setView(0);
                     } }
                     className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -342,7 +363,7 @@ function Contact() {
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                         focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                       >
-                        <option selected>Select contact type</option>
+                        <option selected disabled>Select contact type</option>
                         <option value="phone">Phone</option>
                         <option value="email">Email</option>
                         <option value="website">Website</option>
@@ -351,6 +372,8 @@ function Contact() {
                         </option>
                         <option value="tdd number">TDD number</option>
                       </select>
+                      <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.contact_type}</p>
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label htmlFor="last-name"
@@ -373,6 +396,8 @@ function Contact() {
                         focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         required
                       />
+                      <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.contact_data}</p>
                     </div>
                   </div>
                 </div>
@@ -382,7 +407,7 @@ function Contact() {
                       <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.AddDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Add} onClick={(e) => { submitContactAdd(e) }} />
+                      <Button Primary={language?.Add} onClick={() => { validationContact(contact) }} />
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerAdd} />
@@ -392,8 +417,6 @@ function Contact() {
             </div>
           </div>
         </div>
-
-      
 
         {/* Toast Container */}
         <ToastContainer
@@ -407,6 +430,7 @@ function Contact() {
           draggable
           pauseOnHover
         />
+
       </div>
 
     </>

@@ -97,7 +97,6 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
     
      /* Delete Room Function*/
      const deleteRooms = (props) =>{
-      alert(JSON.stringify(props))
     const url=`/api/${props}`
     axios.delete(url).then((response)=>{
        toast.success(("Room Deleted Successfully!"), {

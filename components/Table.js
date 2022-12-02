@@ -166,7 +166,7 @@ const Table = (args) => {
                                                 className={`p-4 text-left text-xs font-semibold ${args?.color?.textgray} uppercase`}>{args?.cols?.col2}</th>
                                             :
                                             <></>}
-                                         {args?.status != "matchstatus"?    
+                                         {args?.status != "matchstatus" && args?.mark != "beds"?    
                                         <th scope="col"
                                             className={`p-4 text-left text-xs font-semibold ${args?.color?.textgray} uppercase`}>{args?.common?.Status}</th>
                                             : <></>}
@@ -291,7 +291,7 @@ const Table = (args) => {
                                                             </td>
 
                                                         }
-
+                                                         {args?.mark !== "beds"?
                                                         <td className={`p-4 whitespace-nowrap capitalize text-base font-normal ${args?.color?.text}`}>
                                                             <div className="flex">
                                                                 <div className="form-check mx-2 form-check-inline">
@@ -310,7 +310,7 @@ const Table = (args) => {
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                        </td>
+                                                        </td>:<></>}
 
                                                         <td className="p-4 whitespace-nowrap space-x-2">
                                                         {
@@ -363,6 +363,8 @@ const Table = (args) => {
 
                                                                 {item?.type}
                                                             </td>}
+                                                            {args?.mark !== "beds"?
+                                                            <>
                                                         {item?.status == true ?
                                                             <td className={`p-4 whitespace-nowrap capitalize text-base font-normal ${args?.color?.text}`}>
                                                                 <span className="flex items-center">
@@ -378,7 +380,7 @@ const Table = (args) => {
                                                                     <span className="h-2.5 w-2.5 rounded-full bg-red-600 mr-2"></span>
                                                                     {args?.common?.Inactive}
                                                                 </span>
-                                                            </td>}
+                                                            </td>}</> :<></>}
 
                                                         {del?.delete === 1 && del?.id === idx ?
 
@@ -493,3 +495,5 @@ const Table = (args) => {
     )
 }
 export default Table
+
+

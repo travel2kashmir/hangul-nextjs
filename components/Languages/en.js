@@ -262,6 +262,12 @@ Cancel:"Cancel"
  col2 : "Service Details", 
 },
 
+"BedsCols":{
+  
+ col1 : "Bed Length",
+ col2 : "Bed Width", 
+},
+
 "ServicesCols":{
   name:"Services",
  col1 : "Service Name",
@@ -978,3 +984,4 @@ extraguestcharge:'../../extraguestcharges'
   
 
 };
+

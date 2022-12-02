@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import LoaderTable from '../loaderTable';
+import Table from '../../../components/Table';
 import DarkModeLogic from "../../../components/darkmodelogic";
 import Multiselect from 'multiselect-react-dropdown';
 import lang from '../../../components/GlobalData'
@@ -29,7 +31,9 @@ function Room() {
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [allRoomDetails, setAllRoomDetails] = useState([])
-  const [disp, setDisp] = useState(0);
+  const [modified, setModified] = useState([])
+  const [flag, setFlag] = useState([])
+  const [disp, setDisp] = useState(4);
   const [error, setError] = useState({})
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
@@ -38,10 +42,12 @@ function Room() {
   const [roomtypes, setRoomtypes] = useState([])
   const [actionImage, setActionImage] = useState({})
   const [deleteImage, setdeleteImage] = useState(0)
-  const [editImage, setEditImage] = useState(0)
+  const [editImage, setEditImage] = useState(0);
+  const [view, setView] = useState(0);
   const [image, setImage] = useState({})
   const [services, setServices] = useState([])
   const [add, setAdd] = useState(0)
+  const [gen, setGen] = useState([])
   const [enlargeImage, setEnlargeImage] = useState(0)
   const [actionEnlargeImage, setActionEnlargeImage] = useState({})
 
@@ -159,13 +165,41 @@ function Room() {
     axios.get(url)
       .then((response) => {
         setRoomDetails(response.data);
+        if(response.data.room_facilities !== undefined){
         setServices(response.data.room_facilities);
+        }
+        setRoomDetails(response.data);
+        if(response.data.room_facilities == undefined){
+        fetchServices();
+        }
+        var genData = [];
+        {
+          response.data?.beds?.map((item) => {
+              var temp = {
+                  name: item.length,
+                  type: item.width,
+                
+                  id: item.bed_id
+              }
+              genData.push(temp)
+          })
+          setGen(genData);
+      }
         logger.info("url  to fetch room hitted successfully");
         setVisible(1);
       })
       .catch((error) => { logger.error("url to fetch room, failed") });
   }
 
+  // Room Services
+  const fetchServices = async () => {
+    const url = `/api/all_room_services`
+    axios.get(url)
+    .then((response)=>{setServices(response.data);
+      logger.info("url  to fetch roomtypes hitted successfully")})
+      .catch((error)=>{logger.error("url to fetch roomtypes, failed")});  
+    }
+// Room Images
   const fetchImages = async () => {
     const url = `/api/images/${currentProperty?.property_id}`
     console.log("url " + url)
@@ -179,6 +213,7 @@ function Room() {
       .catch((error) => { logger.error("url to fetch room images, failed") });
   }
 
+// Room Types
   const fetchRoomtypes = async () => {
     const url = `/api/room-types`
     console.log("url " + url)
@@ -190,6 +225,9 @@ function Room() {
       .catch((error) => { logger.error("url to fetch roomtypes, failed") });
   }
 
+  useEffect(()=>{ 
+    setColor(DarkModeLogic(darkModeSwitcher))
+   },[darkModeSwitcher])
  
 
   /* Function to load Room Details when page loads */
@@ -313,6 +351,9 @@ function Room() {
         "room_name": allRoomDetails.room_name,
         "room_type_id": allRoomDetails.room_type_id,
         "room_description": allRoomDetails.room_description,
+        "is_room": allRoomDetails.is_room,
+        "is_room_sharing":allRoomDetails.is_room_sharing,
+        "room_style":allRoomDetails.room_style,
         "room_capacity": allRoomDetails.room_capacity,
         "maximum_number_of_occupants": allRoomDetails.maximum_number_of_occupants,
         "minimum_number_of_occupants": allRoomDetails.minimum_number_of_occupants,
@@ -321,7 +362,7 @@ function Room() {
         "room_width": allRoomDetails.room_width,
         "room_height": allRoomDetails.room_height
       }
-      const url = '/api/room'
+     const url = '/api/room'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
           toast.success("Room Details Updated Successfully!", {
@@ -333,7 +374,6 @@ function Room() {
             draggable: true,
             progress: undefined,
           });
-          setDisp(1);
           fetchDetails();
           setAllRoomDetails([])
         })
@@ -356,11 +396,11 @@ function Room() {
     if (allRoomRates.length !== 0) {
       const final_data = {
         "room_id": currentroom,
-        "baserate_currency": allRoomRates?.base_rate_currency,
+        "baserate_currency": allRoomRates?.currency,
         "baserate_amount": allRoomRates?.baserate_amount,
-        "tax_currency": allRoomRates?.tax_rate_currency,
+        "tax_currency": allRoomRates?.currency,
         "tax_amount": allRoomRates?.tax_amount,
-        "otherfees_currency": allRoomRates?.other_fees_currency,
+        "otherfees_currency": allRoomRates?.currency,
         "otherfees_amount": allRoomRates?.otherfees_amount,
         "un_rate_id": roomDetails?.unconditional_rates?.[0]?.un_rate_id
       }
@@ -439,6 +479,184 @@ function Room() {
        })
  
    }
+
+  /*Function to edit room service*/
+  const editServices = () => {
+    services.map(
+       (i)=>(i.room_id=currentroom,i.status=i.service_value)
+     )
+       services.map(
+         (i)=>{
+           if(JSON.stringify(i.service_value) !== "true"){
+           return (
+           
+           i.service_value=false,
+           i.status=false
+             )}
+         }
+     )
+    var total = { "room_services": services }
+     const url = '/api/room_facilities'
+     axios.put(url, total, { header: { "content-type": "application/json" } }).then
+       ((response) => {
+         toast.success("Room services update successfully!", {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+         });
+         
+       })
+       .catch((error) => {
+         toast.error("Room Services update error! ", {
+           position: "top-center",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+         });
+       })
+ 
+   }
+
+
+/* Function to edit additional services */
+const editBed = (props,noChange) => { 
+  if(objChecker.isEqual(props,noChange)){
+      toast.warn('No change in  Additional Services detected. ', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+    }
+else{
+  const final_data = {
+      "timestamp": props.id,
+      "add_service_name": props.name,
+      "add_service_comment": props?.type,
+      "unit":"cm"
+  }
+  const url = '/api/bed_details'
+  axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+          toast.success("Additional Services Updated Successfully!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+          });
+          fetchAdditionalServices();
+          Router.push("./additionalservices");
+          setModified([])
+      })
+      .catch((error) => {
+          toast.error("Additional Services Update Error!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+          });
+      })
+  }
+}
+
+/* Function to delete additional services */
+const deleteBed = (props) => {
+const url = `/api/bed_details/${props}`
+  axios.delete(url).then((response) => {
+      toast.success(("Bed deleted Successfully!"), {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
+      fetchDetails();
+      Router.push('./room')
+      setDisp(4)
+  })
+      .catch((error) => {
+          toast.error(("Bed delete Error!"), {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+          });
+      })
+}
+
+/* Function to add additional services */
+const addBed= () => {
+  if (modified.length !== 0) {
+    const current = new Date();
+      const currentDateTime= current.toISOString();
+      const final_data = {
+          "beds": [{
+              "timestamp": currentDateTime,
+              "room_id":currentroom,
+              "length": modified.length,
+              "width": modified.width,
+              "unit":"cm"
+          }]
+      }
+      const url = '/api/bed_details'
+      axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+          ((response) => {
+              document.getElementById('asform').reset();
+              toast.success("Bed Added Successfully!", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+              });
+
+              fetchDetails();
+              Router.push("./room");
+              setModified([])
+              setFlag([])
+              setView(0)
+              setDisp(4)
+          })
+          .catch((error) => {
+              toast.error("Bed Add Error! ", {
+                  position: "top-center",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+              });
+              setFlag([]);
+            
+          })
+  }
+
+}
+
 
   return (
     <>
@@ -696,16 +914,16 @@ function Room() {
                       isObject={true}
                       options={lang?.Views}
                       onRemove={(e)   =>
-                        setAllRoomDes({
-                          ...allRoomDes,
+                        setAllRoomDetails({
+                          ...allRoomDetails,
                        views: e,
                         })}
                       onSelect={(e)   =>
-                        setAllRoomDes({
-                          ...allRoomDes,
+                        setAllRoomDetails({
+                          ...allRoomDetails,
                         views: e,
                         })}
-                      
+                      selectedValues={roomDetails?.views}
                      displayValue="view"
                     
                       />
@@ -821,14 +1039,13 @@ function Room() {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                         <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-
                                onChange={
                                    (e) => (
                               setAllRoomDetails({ ...allRoomDetails, room_style: e.target.value })
                                    )
                                   }
                         >
-                           <option selected disabled >{language?.select}</option>
+                           <option selected disabled >{roomDetails?.room_style?.replaceAll("_"," ")}</option>
                           <option value="western">Western</option>
                           <option value="japanese">Japanese</option>
                           <option value="japanese_western">Japanese Western</option>
@@ -851,11 +1068,11 @@ function Room() {
                            
                           onChange={
                             (e) => (
-                              setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value },setFlag(1))
+                              setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value })
                             )
                           }
                         >
-                           <option selected disabled >{language?.select}</option>
+                           <option selected disabled >{roomDetails?.is_room_sharing === "shared" ? "Yes" : "No"}</option>
                           <option value="shared" >Yes</option>
                           <option value="private">No</option>
                      </select>
@@ -877,11 +1094,11 @@ function Room() {
 
                           onChange={
                             (e) => (
-                              setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value },setFlag(1))
+                              setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value })
                             )
                           }
                         >
-                           <option selected disabled >{language?.select}</option>
+                           <option selected disabled >{roomDetails?.is_room}</option>
                           <option value="outdoor" >Indoor</option>
                           <option value="indoor">Outdoor</option>
                      </select>
@@ -897,8 +1114,42 @@ function Room() {
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
+
+          <div id='4' className={disp === 4 ? 'block' : 'hidden'}>
+            <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
+            </div>
+           </div>
+              <h6 className={`${color?.text} text-xl flex leading-none pl-6 lg:pt-2 pt-6  pb-2 font-bold`}>
+                {language?.room} {language?.description}
+              </h6>
+              <div className={visible === 0 ? 'block' : 'hidden'}><LoaderTable /></div>
+                 <div className={visible === 1 ? 'block' : 'hidden'}>
+                <Table  gen={gen} setGen={setGen} add={()=> setView(1)} name="Additional Services"
+               color={color}
+               mark="beds"
+               edit={editBed} delete={deleteBed}
+                common={language?.common} cols={language?.BedsCols}  /> </div>
+              </div></div>
 
           {/* Room Services */}
          <div id='1' className={disp===1?'block':'hidden'}>
@@ -1001,7 +1252,10 @@ function Room() {
             </div>
           </div>  
          <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
-                   <Button Primary={language?.Submit}  onClick={() => { submitServices()}}       /> 
+         <Button Primary={language?.Previous}  onClick={() => {setDisp(0)}}/> 
+                   <Button Primary={roomDetails?.room_facilities !== undefined ? language?.Update : language?.Submit}  
+                   onClick={() => {roomDetails?.room_facilities !== undefined ? editServices() : submitServices()}}/> 
+                   <Button Primary={language?.Next}  onClick={() => {setDisp(2)}}/> 
           </div>
          </div>
          </div>
@@ -1098,7 +1352,7 @@ function Room() {
                   })}</div>
               </div>
               <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-              <Button Primary={language?.Previous} onClick={()=>{setDisp(1)}}/>
+              <Button Primary={language?.Previous} onClick={()=>{setDisp(1)}}/> 
                 <Button Primary={language?.Next} onClick={() => { setDisp(3) }} />
               </div>
             </div>
@@ -1144,14 +1398,14 @@ function Room() {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.baserate} {language?.currency}
+                         {language?.currency}
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                             onChange={
                               (e) => (
-                                setAllRoomRates({ ...allRoomRates, base_rate_currency: e.target.value })
+                                setAllRoomRates({ ...allRoomRates, currency: e.target.value })
                               )
                             }>
                             <option value="USD" >USD</option>
@@ -1189,29 +1443,6 @@ function Room() {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.taxrate} {language?.currency}
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            onChange={
-                              (e) => (
-                                setAllRoomRates({ ...allRoomRates, tax_rate_currency: e.target.value })
-                              )
-                            }>
-                            <option value="USD" >USD</option>
-                            <option value="INR">INR</option>
-                            <option value="Euro">Euro</option>
-                          </select></div>
-                      </div>
-                    </div>
-
-                    <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
                           {language?.taxrate} {language?.amount}
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1228,28 +1459,6 @@ function Room() {
                       </div>
                     </div>
 
-                    <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className={`text-sm font-medium ${color?.text} block mb-2`}
-                          htmlFor="grid-password"
-                        >
-                          {language?.other} {language?.capacity} {language?.currency}
-                        </label>
-                        <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
-                        <div className={visible === 1 ? 'block' : 'hidden'}>
-                          <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                            onChange={
-                              (e) => (
-                                setAllRoomRates({ ...allRoomRates, other_fees_currency: e.target.value })
-                              )
-                            }>
-                            <option value="USD" >USD</option>
-                            <option value="INR">INR</option>
-                            <option value="Euro">Euro</option>
-                          </select></div>
-                      </div>
-                    </div>
                     <div className="w-full lg:w-6/12 px-4">
                       <div className="relative w-full mb-3">
                         <label
@@ -1346,7 +1555,7 @@ function Room() {
 
                           }}
                           className={`${color?.greybackground} ${color?.text} shadow-sm  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5`}
-                          defaultValue="" />
+                          />
 
                       </div>
                       <div className="col-span-6 sm:col-span-3">
@@ -1489,6 +1698,56 @@ function Room() {
             </div>
           </div>
         </div>
+
+        {/* Modal Add Bed */}
+  <div className={view === 1 ? 'block' : 'hidden'}>
+<div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
+<div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
+<form id='asform'>
+<div className={`${color?.whitebackground} rounded-lg shadow relative`}>
+<div className="flex items-start justify-between p-5 border-b rounded-t">
+    <h3 className={`${color?.text} text-xl font-semibold`}>
+        Add New Bed
+    </h3>
+    <button type="button" onClick={() =>{
+        document.getElementById('asform').reset();
+        setView(0);
+    } } className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="add-user-modal">
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+    </button>
+</div>
+<div className="p-6 space-y-6">
+    <div className="grid grid-cols-6 gap-6">
+        <div className="col-span-6 sm:col-span-3">
+            <label htmlFor="first-name" className={`text-sm ${color?.text} font-medium  block mb-2`}>Bed {language?.length}</label>
+            <input type="text" name="first-name"
+                onChange={(e) => { setModified({ ...modified, length: e.target.value },setFlag(1)) }}
+                id="first-name"
+                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
+        </div>
+        <div className="col-span-6 sm:col-span-3">
+            <label htmlFor="last-name" className={`text-sm ${color?.text} font-medium  block mb-2`}>Bed Width</label>
+            <input type="text" name="first-name"
+                onChange={(e) => { setModified({ ...modified, width: e.target.value },setFlag(1)) }}
+                id="first-name"
+                className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
+                focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
+        </div>
+    </div>
+</div>
+
+<div className="items-center p-6 border-t border-gray-200 rounded-b">
+
+        
+          <Button Primary={language?.Add} onClick={() => {addBed();  }} />
+         
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
 
         {/* Toast Container */}
         <ToastContainer position="top-center"

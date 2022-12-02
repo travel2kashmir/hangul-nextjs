@@ -53,7 +53,8 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [visible,setVisible]=useState(0) 
-  const [roomtypes, setRoomtypes] = useState({})
+  const [roomtypes, setRoomtypes] = useState({});
+  
   const [image, setImage] = useState({})
   const [actionImage, setActionImage] = useState([])
   const [services, setServices] = useState([]) 
@@ -102,6 +103,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       if (allRoomDes.length !== 0){  
       e.preventDefault()
       const finalData = { ...allRoomDes, status:true }  
+      alert(JSON.stringify(finalData))
       axios.post('/api/room', JSON.stringify(finalData), {headers: { 'content-type': 'application/json'}})
           .then(response => {
            toast.success("Room created successfully", {
@@ -117,7 +119,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             submitBed(response.data.room_id)
             submitView(response.data.room_id)
             setAllRoomDes([]);
-          setDisp(1)
+          setDisp(2)
           })
           .catch(error => {
            toast.error("Room Description Error! ", {
@@ -336,7 +338,7 @@ const onChange = (e, index, i) => {
               progress: undefined,
             });
             setActionImage([]);
-            setDisp(3);
+            setDisp(4);
           })
             .catch(error => {
              toast.error("Gallery error", {
@@ -405,7 +407,7 @@ const onChange = (e, index, i) => {
           draggable: true,
           progress: undefined,
         });
-        setDisp(2);
+        setDisp(3);
       })
       .catch((error) => {
         toast.error("Room Services Add Error! ", {
@@ -426,18 +428,17 @@ const onChange = (e, index, i) => {
     if (allRoomRates.length !== 0){  
     const final_data = {
       "room_id": roomId,
-      "baserate_currency": allRoomRates?.base_rate_currency,
+      "baserate_currency": allRoomRates?.currency,
       "baserate_amount": allRoomRates?.baserate_amount,
-      "tax_currency":allRoomRates?.tax_rate_currency,
+      "tax_currency":allRoomRates?.currency,
       "tax_amount": allRoomRates?.tax_amount,
       "otherfees_amount": allRoomRates?.otherfees_amount,
-      "otherfees_currency": allRoomRates?.otherfees_currency,
-      "un_rate_id": allRoomRates?.un_rate_id
+      "otherfees_currency": allRoomRates?.currency,
     }
     const url = '/api/room_unconditional_rates'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
-        toast.success("Room Rates Added Successfully!", {
+        toast.success("Room rates added successfully!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -447,9 +448,10 @@ const onChange = (e, index, i) => {
           progress: undefined,
         });
         setAllRoomRates([])
+        Router.push("../rooms")
       })
       .catch((error) => {
-       toast.error("Room Rates  Error! " , {
+       toast.error("Room rates  error! " , {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -846,8 +848,43 @@ const onChange = (e, index, i) => {
               </div>
             </div>
           </div>
-
-        {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
+        <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
+         {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
+           || allRoomDes?.room_type_id === 'rt005' ?
+                <Button Primary={language?.Next}    onClick={(e)=>{
+                       setDisp(1)}}/>   :   
+                       <Button Primary={language?.Submit} onClick={(e)=>{
+                        submitRoomDescription(e)}}/>}
+         </div>
+        </div>
+       </div>
+       
+       {/* Room Beds */}
+       <div id='1' className={disp===1?'block':'hidden'}>
+       <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
+            </div>
+        </div>
+      <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-4">
+         {language?.room}  {language?.description} 
+         </h6>
+         {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
            || allRoomDes?.room_type_id === 'rt005' ?
            <>
            {allRoomDes?.room_type_id !== 'rt001' ?
@@ -878,7 +915,7 @@ const onChange = (e, index, i) => {
                         className={`text-sm  font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                       {language?.Length}(in cm)
+                      Bed {language?.Length}(in cm)
                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -898,7 +935,7 @@ const onChange = (e, index, i) => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        Width(in cm)
+                        Bed Width(in cm)
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -916,22 +953,21 @@ const onChange = (e, index, i) => {
                  
                   </div>
                    </>))} 
+                   <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
+                <Button Primary={language?.Submit}    onClick={(e)=>{
+                       submitRoomDescription(e)}}/>      
+         </div>
                  
                   </div>
            </div>
            </> :<>
            </>
            }
-
-         <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
-                <Button Primary={language?.Submit}    onClick={(e)=>{
-                       submitRoomDescription(e)}}/>      
          </div>
-        </div>
-       </div>
-       
+         </div>
+        
        {/* Room Services */}
-       <div id='1' className={disp===1?'block':'hidden'}>
+       <div id='2' className={disp===2?'block':'hidden'}>
        <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
        <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1033,10 +1069,11 @@ const onChange = (e, index, i) => {
                    <Button Primary={language?.Submit}  onClick={() => { submitServices()}}       /> 
                 </div>
          </div>
+       
          </div>
 
         {/* Room Gallery */}
-        <div id='2' className={disp===2?'block':'hidden'}>
+        <div id='3' className={disp===3?'block':'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1157,7 +1194,7 @@ const onChange = (e, index, i) => {
         </div>
 
       {/* Room Rates */}
-      <div id='3' className={disp===3?'block':'hidden'}>
+      <div id='4' className={disp===4?'block':'hidden'}>
             <div className={`${color?.whitebackground} mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
              <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
@@ -1195,18 +1232,21 @@ const onChange = (e, index, i) => {
                     className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
-                    {language?.baserate} {language?.currency}
+                    {language?.currency}
                   </label>
                   <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                     onChange={
                       (e) => (
-                        setAllRoomRates({...allRoomRates, base_rate_currency: e.target.value })
+                        setAllRoomRates({...allRoomRates, currency: e.target.value })
                       )
                     }>
-                       <option selected >Select</option>
-                    <option value="USD" >USD</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
+                      <option selected disabled>{language?.select}</option>
+                       {lang?.CurrencyData?.map(i => {
+                        return (
+                          
+                          <option key={i.room_type_id} value={i.currency_code}>{i?.currency_name}</option>)
+                      }
+                      )}
                   </select>
                 </div>
               </div>
@@ -1236,28 +1276,6 @@ const onChange = (e, index, i) => {
                     className={`text-sm font-medium ${color?.text} block mb-2`}
                     htmlFor="grid-password"
                   >
-                    {language?.taxrate} {language?.currency}
-                  </label>
-                  <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                    onChange={
-                      (e) => (
-                        setAllRoomRates({...allRoomRates, tax_rate_currency: e.target.value })
-                      )
-                    }>
-                    <option selected >Select</option>
-                    <option value="USD" >USD</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                    htmlFor="grid-password"
-                  >
                     {language?.taxrate} {language?.amount}
                   </label>
                   <input
@@ -1271,28 +1289,6 @@ const onChange = (e, index, i) => {
                 </div>
               </div>
 
-              <div className="w-full lg:w-6/12 px-4">
-                <div className="relative w-full mb-3">
-                  <label
-                    className={`text-sm font-medium ${color?.text} block mb-2`}
-                    htmlFor="grid-password"
-                  >
-                    {language?.other} {language?.capacity} {language?.currency}
-                  </label>
-                  <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                    onChange={
-                      (e) => (
-                        setAllRoomRates({...allRoomRates,otherfees_currency: e.target.value })
-                      )
-                    }>
-                     <option selected >Select</option>
-                    <option value="USD" >USD</option>
-                    <option value="INR">INR</option>
-                    <option value="Euro">Euro</option>
-                  </select>
-                   
-                </div>
-              </div>
               <div className="w-full lg:w-6/12 px-4">
                 <div className="relative w-full mb-3">
                   <label

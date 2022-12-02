@@ -95,6 +95,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
           setColor(DarkModeLogic(darkModeSwitcher))
          },[darkModeSwitcher])
     
+
     /* Delete Room Function*/
     const deleteRooms = (props) =>{
     const url=`/api/${props}`

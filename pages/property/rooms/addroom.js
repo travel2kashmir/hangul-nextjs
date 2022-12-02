@@ -104,6 +104,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
       if (allRoomDes.length !== 0){  
       e.preventDefault()
       const finalData = { ...allRoomDes, status:true }  
+      alert(JSON.stringify(finalData))
       axios.post('/api/room', JSON.stringify(finalData), {headers: { 'content-type': 'application/json'}})
           .then(response => {
            toast.success("Room created successfully", {
@@ -121,6 +122,7 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             setAllRoomDes([]);
           setDisp(2);
           setError({});
+
           })
           .catch(error => {
            toast.error("Room Description Error! ", {
@@ -877,6 +879,7 @@ const validationRoomDescription = () => {
                      validationRoomDescription()}}/>   :   
                        <Button Primary={language?.Submit} onClick={(e)=>{
                        validationRoomDescription}}/>}
+
          </div>
         </div>
        </div>

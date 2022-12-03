@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import validateRoom from '../../../components/Validation/room';
 import Multiselect from 'multiselect-react-dropdown';
 import lang from '../../../components/GlobalData'
 import DarkModeLogic from "../../../components/darkmodelogic";
@@ -119,7 +120,9 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
             submitBed(response.data.room_id)
             submitView(response.data.room_id)
             setAllRoomDes([]);
-          setDisp(2)
+          setDisp(2);
+          setError({});
+
           })
           .catch(error => {
            toast.error("Room Description Error! ", {
@@ -488,6 +491,27 @@ const onChange = (e, index, i) => {
     
     }
 
+    // Validate Availability
+const validationRoomDescription = () => {
+  var result = validateRoom(allRoomDes)
+     console.log("Result" +JSON.stringify(result))
+     if(result===true)
+     {
+      if(allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
+      || allRoomDes?.room_type_id === 'rt005' )
+        {
+               setDisp(1); 
+               setError({});  
+        }
+         else{
+           submitRoomDescription();
+        }
+      }
+     else
+     {
+      setError(result)
+     }
+    }
   return (
     <>
     <Header  Primary={english?.Side1}  color={color}/>
@@ -852,9 +876,10 @@ const onChange = (e, index, i) => {
          {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
            || allRoomDes?.room_type_id === 'rt005' ?
                 <Button Primary={language?.Next}    onClick={(e)=>{
-                       setDisp(1)}}/>   :   
+                     validationRoomDescription()}}/>   :   
                        <Button Primary={language?.Submit} onClick={(e)=>{
-                        submitRoomDescription(e)}}/>}
+                       validationRoomDescription}}/>}
+
          </div>
         </div>
        </div>
@@ -1351,3 +1376,4 @@ Addroom.getLayout = function PageLayout(page){
 
 
 }
+

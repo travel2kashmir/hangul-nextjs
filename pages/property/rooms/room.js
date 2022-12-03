@@ -529,7 +529,10 @@ function Room() {
 /* Function to edit additional services */
 const editBed = (props,noChange) => { 
   if(objChecker.isEqual(props,noChange)){
+
       toast.warn('No change in  Bed detected. ', {
+
+   
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -540,6 +543,7 @@ const editBed = (props,noChange) => {
         });
     }
 else{
+
   const current = new Date();
   const currentDateTime= current.toISOString();
   const final_data ={"beds": [{
@@ -592,6 +596,7 @@ const submitBedUpdate = () => {
   axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
           toast.success("Bed update success.", {
+
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -606,6 +611,7 @@ const submitBedUpdate = () => {
       })
       .catch((error) => {
           toast.error("Bed update error!", {
+
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -615,9 +621,10 @@ const submitBedUpdate = () => {
               progress: undefined,
           });
       })
+
 }
 
-/* Function to delete bed*/
+
 const deleteBed = (props) => {
 const url = `/api/bed_details/${props}`
   axios.delete(url).then((response) => {
@@ -647,7 +654,9 @@ const url = `/api/bed_details/${props}`
       })
 }
 
+
 /* Function to add bed */
+
 const addBed= () => {
   if (modified.length !== 0) {
     const current = new Date();
@@ -661,7 +670,9 @@ const addBed= () => {
               "unit":"cm"
           }]
       }
+
      const url = '/api/bed_details'
+
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
               document.getElementById('asform').reset();
@@ -698,6 +709,7 @@ const addBed= () => {
   }
 
 }
+
 
   return (
     <>
@@ -1162,7 +1174,9 @@ const addBed= () => {
             </div>
           </div>
 
+
             {/* Multiple Bed */}
+
           <div id='4' className={disp === 4 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -1286,6 +1300,7 @@ const addBed= () => {
          </div>
               </div>
               </div>
+
 
           {/* Room Services */}
          <div id='1' className={disp===1?'block':'hidden'}>

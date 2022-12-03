@@ -195,9 +195,22 @@ function Addroom() {
           setAllRoomDes([]);
           setDisp(2);
           setError({});
-        })
-        .catch(error => {
-          toast.error("Room description error.", {
+          })
+          .catch(error => {
+           toast.error("Room Description Error! ", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          }
+          )
+        }
+        else{
+          toast.error("Please fill the room details ", {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -207,20 +220,12 @@ function Addroom() {
             progress: undefined,
           });
         }
-        )
-    }
-    else {
-      toast.error("Please fill the room details.", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-  }
+      }
+    
+    
+    
+     
+    
 
   /** For Bed**/
   const BedTemplate = {
@@ -935,62 +940,60 @@ function Addroom() {
                       </div>
                     </div>
 
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
-                {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003' || allRoomDes?.room_type_id === 'rt004'
-                  || allRoomDes?.room_type_id === 'rt005' ?
-                  <Button Primary={language?.Next} onClick={() => {
-                    validationRoomDescription()
-                  }} /> :
-                  <Button Primary={language?.Submit} onClick={() => {
-                    validationRoomDescription()
-                  }} />}
               </div>
             </div>
           </div>
-
-          {/* Room Beds */}
-          <div id='1' className={disp === 1 ? 'block' : 'hidden'}>
-            <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
-              <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
-                <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
-                  <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
-                </div>
-
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
-                </div>
-                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                  <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
-                  <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
-                </div>
-              </div>
-              <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-4">
-                {language?.room}  {language?.description}
-              </h6>
-              {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003' || allRoomDes?.room_type_id === 'rt004'
-                || allRoomDes?.room_type_id === 'rt005' ?
-                <>
-                  {allRoomDes?.room_type_id !== 'rt001' ?
-                    <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <Button Primary={language?.AddLOS} onClick={addBed} />
-                    </div> : <></>}
-
-                  <div className="pt-2">
-                    <div className=" md:px-4 mx-auto w-full">
-                      {BedData?.map((BedData, index) => (
-                        <>
-                          <div className={BedData?.index === 0 ? "hidden" : "block"}>
-                            <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
-                              <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
+        <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
+         {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
+           || allRoomDes?.room_type_id === 'rt005' ?
+                <Button Primary={language?.Next}    onClick={(e)=>{
+                     validationRoomDescription()}}/>   :   
+                       <Button Primary={language?.Submit} onClick={(e)=>{
+                       validationRoomDescription}}/>}
+         </div>
+        </div>
+       </div>
+       
+       {/* Room Beds */}
+       <div id='1' className={disp===1?'block':'hidden'}>
+       <div className="bg-white shadow rounded-lg mt-2 mx-1 px-12 sm:p-6 xl:p-8  2xl:col-span-2">
+       <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">1</button>
+                <div className={`${color.crossbg} lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto`}>Room Description</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.services}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.gallery}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className={`${color.widget} lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto`}>{language?.room} {language?.rates}</div>
+            </div>
+        </div>
+      <h6 className="text-xl flex leading-none pl-6 pt-2 font-bold text-gray-900 mb-4">
+         {language?.room}  {language?.description} 
+         </h6>
+         {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
+           || allRoomDes?.room_type_id === 'rt005' ?
+           <>
+           {allRoomDes?.room_type_id !== 'rt001' ?
+          <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                  <Button Primary={language?.AddLOS}  onClick={addBed} />
+                  </div>:<></>}
+                  
+           <div className="pt-2">
+              <div className=" md:px-4 mx-auto w-full">
+              {BedData?.map((BedData, index) => (
+              <>
+                <div className={BedData?.index === 0 ? "hidden":"block"}>
+                        <div className="flex items-center justify-end space-x-2 sm:space-x-1 ml-auto">
+                          <button className={`${color?.cross} sm:inline-flex  ${color?.crossbg}
                      font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold 
                      rounded-lg text-sm px-1 py-1 text-center 
                      items-center mb-1 ml-16 ease-linear transition-all duration-150`}

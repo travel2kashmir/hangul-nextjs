@@ -222,8 +222,7 @@ const fetchPackageServices = async () => {
           "check_out":allPackageDetails?.check_out,
           "status":true
         }  
-        alert("max age is "+max_age)
-        const result=packageDescripitonValidation(final_data,max_age)
+       const result=packageDescripitonValidation(final_data,max_age)
         if(result === true){
           const url = '/api/package/package_description'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -257,7 +256,6 @@ const fetchPackageServices = async () => {
         }
         else{
           setErrorDescription(result)
-          alert("after error max age is"+max_age)
         }
      
         }
@@ -345,8 +343,7 @@ const [programData, setProgramData] = useState([programTemplate]?.map((i, id) =>
        status:true
      }]
      const finalImage = { "package_miles": packagemiledata }
-     alert(JSON.stringify(finalImage))
-    axios.post(`/api/package/package_miles`, finalImage).then(response => {
+   axios.post(`/api/package/package_miles`, finalImage).then(response => {
       toast.success("Package miles added successfully!", {
         position: "top-center",
         autoClose: 5000,

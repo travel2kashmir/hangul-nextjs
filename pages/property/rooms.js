@@ -95,8 +95,9 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
           setColor(DarkModeLogic(darkModeSwitcher))
          },[darkModeSwitcher])
     
-     /* Delete Room Function*/
-     const deleteRooms = (props) =>{
+
+    /* Delete Room Function*/
+    const deleteRooms = (props) =>{
     const url=`/api/${props}`
     axios.delete(url).then((response)=>{
        toast.success(("Room Deleted Successfully!"), {
@@ -123,9 +124,10 @@ currentLogged = JSON.parse(localStorage.getItem("Signin Details"));
            });
         })
        }
-       
+   
+     /* Add Room */
     const addRoom = () =>{
-              Router.push("./rooms/addroom")
+    Router.push("./rooms/addroom")
     }
     
   return (

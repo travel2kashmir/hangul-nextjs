@@ -2,7 +2,6 @@ const validateInventory = (data,props) =>{
     var error={};
      var flag=[]
      var final_flag=true;
-   alert(JSON.stringify(data))
    if(data?.room_id==="" || data?.room_id===undefined)
    {
        flag.push(false)

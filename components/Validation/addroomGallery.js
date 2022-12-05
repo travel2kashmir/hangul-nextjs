@@ -25,7 +25,7 @@ const validateRoomGallery = (all_data) => {
         error[index].image_description= "The image description is required."
       }
    
-      if (data?.image_link === "" || data?.image_link === undefined) {
+      if (data?.image_link != "" && data?.image_link != undefined) {
       if((!data?.image_link?.match(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/) )){
         error[index].image_link = "The image link has invalid format."
       } 
@@ -38,7 +38,7 @@ const validateRoomGallery = (all_data) => {
     }
     }
 
-    if (data?.image_description !== "" && data?.image_description !== undefined) {
+    if (data?.image_description != "" && data?.image_description != undefined) {
       if(data.image_description.length>1000){
       flag.push(false)
       error[index].image_description= "Image description should be upto 1000 characters only."

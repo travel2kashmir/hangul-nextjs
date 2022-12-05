@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import validateRoom from '../../../components/Validation/addroomdescription';
+import validateBedData from '../../../components/Validation/addroomBedData'
+import validateRoomRates from '../../../components/Validation/addroomRates';
+import validateRoomGallery from '../../../components/Validation/addroomGallery';
+import validateBedAdd from '../../../components/Validation/AddBedData';
 import LoaderTable from '../loaderTable';
 import objChecker from "lodash"
 import Table from '../../../components/Table';
@@ -36,7 +41,8 @@ function Room() {
   const [modified, setModified] = useState([])
   const [flag, setFlag] = useState([])
   const [disp, setDisp] = useState(0);
-  const [error, setError] = useState({})
+  const [error, setError] = useState({});
+  const [finalView, setFinalView] = useState([])
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomimages, setRoomimages] = useState({})
@@ -46,6 +52,7 @@ function Room() {
   const [deleteImage, setdeleteImage] = useState(0)
   const [editImage, setEditImage] = useState(0);
   const [view, setView] = useState(0);
+  const [roomView, setRoomView] = useState([]);
   const [image, setImage] = useState({})
   const [services, setServices] = useState([])
   const [add, setAdd] = useState(0)
@@ -167,6 +174,9 @@ function Room() {
     axios.get(url)
       .then((response) => {
         setRoomDetails(response.data);
+        setAllRoomDetails(response.data);
+        setFinalView(response?.data?.views);
+        setAllRoomRates(response.data?.unconditional_rates?.[i])
         if(response.data.room_facilities !== undefined){
         setServices(response.data.room_facilities);
         }
@@ -208,7 +218,7 @@ function Room() {
       .then((response) => {
         setRoomimages(response.data);
         logger.info("url  to fetch room images hitted successfully")
-        setVisibleImage(1);
+       
       })
 
       .catch((error) => { logger.error("url to fetch room images, failed") });
@@ -525,7 +535,56 @@ function Room() {
  
    }
 
+  // View Submit
+  const submitView = (props) => {
+    const data = finalView?.map((i => {
+      return {
+        "room_id": currentroom,
+        "view": i?.view
+      }
+    }))
+    const final_data = { "room_views": data }
+    const url = '/api/room_views'
+    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+      ((response) => {
+        toast.success("View add success.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setRoomView([]);
+        setError({});
+      })
+      .catch((error) => {
+        toast.error("View add error.", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      })
+  }
 
+ //Views
+ const views = (viewData) => {
+  setFinalView([]);
+  var final_view_data = []
+  viewData.map(item => {
+    var temp = {
+      view: item?.view.replaceAll(" ","")
+    }
+    final_view_data.push(temp)
+  });
+  setFinalView(final_view_data);
+  setRoomView(1);
+}
 /* Function to edit additional services */
 const editBed = (props,noChange) => { 
   if(objChecker.isEqual(props,noChange)){
@@ -596,7 +655,6 @@ const submitBedUpdate = () => {
   axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
           toast.success("Bed update success.", {
-
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -654,9 +712,21 @@ const url = `/api/bed_details/${props}`
       })
 }
 
+ // Validate Room Description
+ const validationRoomDescription = () => {
+  var result = validateRoom(allRoomDetails,finalView)
+  alert(JSON.stringify(result))
+  console.log("Result" + JSON.stringify(result))
+  if (result === true) {
+    submitRoomDescriptionEdit();
+    submitView();
+  }
+  else {
+    setError(result)
+  }
+}
 
 /* Function to add bed */
-
 const addBed= () => {
   if (modified.length !== 0) {
     const current = new Date();
@@ -710,7 +780,54 @@ const addBed= () => {
 
 }
 
+// Validate Beds Data
+const validationBedData = () => {
+  var result = validateBedAdd(roomDetails)
+  console.log("Result" + JSON.stringify(result))
+  if (result === true) {
+    submitBedUpdate();
+  }
+  else {
+    setError(result)
+  }
+}
 
+// Validate Beds Data
+const validationBedDataAdd = () => {
+  var result = validateBedAdd(modified)
+  console.log("Result" + JSON.stringify(result))
+  if (result === true) {
+      addBed();
+       
+    }
+  else {
+    setError(result)
+  }
+}
+
+// Validate Beds Data
+const validationImage = () => {
+  var result = validateRoomGallery(actionImage)
+  console.log("Result" + JSON.stringify(result))
+  if (result === true) {
+    submitAddImage();
+  }
+  else {
+    setError(result)
+  }
+}
+
+ // Validate Rates
+ const validationRates = () => {
+  var result = validateRoomRates(allRoomRates)
+  alert("Result" + JSON.stringify(result))
+  if (result === true) {
+   submitRoomRatesEdit
+  }
+  else {
+    setError(result)
+  }
+}
   return (
     <>
     <Header  Primary={english?.Side1}  color={color}/>
@@ -818,7 +935,9 @@ const addBed= () => {
                               )
                             }
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                          /></div>
+                          />
+                           <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.room_name}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -834,8 +953,9 @@ const addBed= () => {
                             onClick={(e) => setAllRoomDetails({ ...allRoomDetails, room_type_id: e.target.value })}
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
                             <option  disabled selected value={roomDetails?.room_type}>{roomDetails?.room_type}</option>
-                           
-                          </select></div>
+                          </select>
+                          <p className="text-sm text-sm text-red-700 font-light">
+                            {error?.room_type}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -856,7 +976,9 @@ const addBed= () => {
                               )
                             }
                             defaultValue={roomDetails?.room_description}
-                          /></div>
+                          />
+                          <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.room_description}</p></div>
                       </div>
                     </div>
 
@@ -879,7 +1001,9 @@ const addBed= () => {
                                 setAllRoomDetails({ ...allRoomDetails, room_capacity: e.target.value })
                               )
                             }
-                          /></div>
+                          />
+                          <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.room_capacity}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -901,7 +1025,9 @@ const addBed= () => {
                                 setAllRoomDetails({ ...allRoomDetails, maximum_number_of_occupants: e.target.value })
                               )
                             }
-                          /></div>
+                          />
+                           <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.maximum_number_of_occupants}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -923,7 +1049,9 @@ const addBed= () => {
                                 setAllRoomDetails({ ...allRoomDetails, minimum_number_of_occupants: e.target.value })
                               )
                             }
-                          /></div>
+                          />
+                           <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.minimum_number_of_occupants}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -945,7 +1073,9 @@ const addBed= () => {
                                 setAllRoomDetails({ ...allRoomDetails, minimum_age_of_occupants: e.target.value })
                               )
                             }
-                          /></div>
+                          />
+                           <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.minimum_age_of_occupants}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -962,22 +1092,14 @@ const addBed= () => {
                        `}
                       isObject={true}
                       options={lang?.Views}
-                      onRemove={(e)   =>
-                        setAllRoomDetails({
-                          ...allRoomDetails,
-                       views: e,
-                        })}
-                      onSelect={(e)   =>
-                        setAllRoomDetails({
-                          ...allRoomDetails,
-                        views: e,
-                        })}
+                      onRemove={(event) => { views(event) }}
+                            onSelect={(event) => { views(event) }}
                       selectedValues={roomDetails?.views}
                      displayValue="view"
                     
                       />
-                        <p className="text-sm text-sm text-red-700 font-light">
-                          {error?.property_brand}</p>
+                       <p className="text-sm text-sm text-red-700 font-light">
+                            {error?.view}</p>
                       </div>
                     </div>
                   </div>
@@ -987,7 +1109,7 @@ const addBed= () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.length}
+                          {language?.room} {language?.length}(in feet)
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -999,7 +1121,9 @@ const addBed= () => {
                                 setAllRoomDetails({ ...allRoomDetails, room_length: e.target.value })
                               )
                             }
-                          /></div></div>
+                          />
+                          <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.room_length}</p></div></div>
                     </div>
 
                     <div className="w-full lg:w-6/12 px-4">
@@ -1008,7 +1132,7 @@ const addBed= () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.breadth}
+                          {language?.room} {language?.breadth}(in feet)
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1021,7 +1145,9 @@ const addBed= () => {
                                 setAllRoomDetails({ ...allRoomDetails, room_width: e.target.value })
                               )
                             }
-                          /></div>
+                          />
+                           <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.room_width}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -1030,7 +1156,7 @@ const addBed= () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.height}
+                          {language?.room} {language?.height}(in feet)
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1042,7 +1168,9 @@ const addBed= () => {
                                 setAllRoomDetails({ ...allRoomDetails, room_height: e.target.value })
                               )
                             }
-                            defaultValue={roomDetails?.room_height} /></div>
+                            defaultValue={roomDetails?.room_height} />
+                            <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.room_height}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -1099,8 +1227,8 @@ const addBed= () => {
                           <option value="japanese">Japanese</option>
                           <option value="japanese_western">Japanese Western</option>
                      </select>
-                        <p className="text-sm text-sm text-red-700 font-light">
-                          {error?.property_brand}</p>
+                     <p className="text-sm text-sm text-red-700 font-light">
+                            {error?.room_style}</p>
                       </div>
                     </div>
                   </div>
@@ -1114,8 +1242,7 @@ const addBed= () => {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                         <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-                           
-                          onChange={
+                         onChange={
                             (e) => (
                               setAllRoomDetails({ ...allRoomDetails, is_room_sharing: e.target.value })
                             )
@@ -1125,8 +1252,8 @@ const addBed= () => {
                           <option value="shared" >Yes</option>
                           <option value="private">No</option>
                      </select>
-                        <p className="text-sm text-sm text-red-700 font-light">
-                          {error?.property_brand}</p>
+                     <p className="text-sm text-sm text-red-700 font-light">
+                            {error?.is_room_sharing}</p>
                       </div>
                     </div>
                   </div>
@@ -1140,8 +1267,7 @@ const addBed= () => {
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                       <div className={visible === 1 ? 'block' : 'hidden'}>
                         <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-
-                          onChange={
+                            onChange={
                             (e) => (
                               setAllRoomDetails({ ...allRoomDetails, is_room: e.target.value })
                             )
@@ -1151,8 +1277,8 @@ const addBed= () => {
                           <option value="outdoor" >Indoor</option>
                           <option value="indoor">Outdoor</option>
                      </select>
-                        <p className="text-sm text-sm text-red-700 font-light">
-                          {error?.property_brand}</p>
+                     <p className="text-sm text-sm text-red-700 font-light">
+                            {error?.is_room}</p>
                       </div>
                     </div>
                   </div>
@@ -1165,7 +1291,7 @@ const addBed= () => {
                         setDisp(5):
                       setDisp(1) }
                     }} />
-                      <Button Primary={language?.Update} onClick={() => { submitRoomDescriptionEdit(); }} />
+                      <Button Primary={language?.Update} onClick={() => {validationRoomDescription() }} />
                     </div>
                   </div>
                 </div>
@@ -1175,8 +1301,7 @@ const addBed= () => {
           </div>
 
 
-            {/* Multiple Bed */}
-
+            {/* Multiple Bed */}   
           <div id='4' className={disp === 4 ? 'block' : 'hidden'}>
             <div className={`${color?.whitebackground} shadow rounded-lg px-12 sm:p-6 xl:p-8  2xl:col-span-2`}>
             <div className="relative before:hidden  before:lg:block before:absolute before:w-[64%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
@@ -1294,10 +1419,10 @@ const addBed= () => {
                 <Button Primary={language?.Previous}    onClick={()=>{
                        setDisp(0)}}/> 
                   <Button Primary={language?.Update}    onClick={()=>{
-                      submitBedUpdate()}}/>   
+                     validationBedData()}}/>   
                    <Button Primary={language?.Next}    onClick={()=>{
                        setDisp(1)}}/>         
-         </div>
+                 </div>
               </div>
               </div>
 
@@ -1559,10 +1684,16 @@ const addBed= () => {
                                 setAllRoomRates({ ...allRoomRates, currency: e.target.value })
                               )
                             }>
-                            <option value="USD" >USD</option>
-                            <option value="INR">INR</option>
-                            <option value="Euro">Euro</option>
-                          </select></div>
+                            {lang?.CurrencyData?.map(i => {
+                            return (
+
+                              <option key={i.currency_code} value={i.currency_code}>{i?.currency_name}</option>)
+                          }
+                          )}
+                          </select>
+                          <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.currency}</p>
+                          </div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -1584,7 +1715,10 @@ const addBed= () => {
                                 setAllRoomRates({ ...allRoomRates, baserate_amount: e.target.value })
                               )
                             }
-                          /></div>
+                          />
+                            <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.baserate_amount}</p>
+                          </div>
                       </div>
                     </div>
 
@@ -1606,7 +1740,9 @@ const addBed= () => {
                               (e) => (
                                 setAllRoomRates({ ...allRoomRates, tax_amount: e.target.value, un_rate_id: allRoomDetails?.unconditional_rates?.[0]?.un_rate_id })
                               )
-                            } /></div>
+                            } />
+                             <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.tax_amount}</p></div>
                       </div>
                     </div>
 
@@ -1628,7 +1764,9 @@ const addBed= () => {
                               (e) => (
                                 setAllRoomRates({ ...allRoomRates, otherfees_amount: e.target.value })
                               )
-                            } /></div>
+                            } />
+                            <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.otherfees_amount}</p></div>
                       </div>
                     </div>
                     <div className="w-full lg:w-6/12 px-4">
@@ -1639,7 +1777,7 @@ const addBed= () => {
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <Button Primary={language?.Previous} onClick={()=>{setDisp(2)}}/>
                       <Button Primary={language?.Update} onClick={() => {
-                        submitRoomRatesEdit();}} />
+                        validationRates();}} />
                     </div>
                   </div>
                 </div>
@@ -1744,7 +1882,7 @@ const addBed= () => {
                 </div>
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
                   <button
-                    onClick={() => { submitAddImage(); setAddImage(0) }}
+                    onClick={() => { validationImage(); }}
                     className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                     type="submit">Add image</button>
                 </div>
@@ -1850,7 +1988,7 @@ const addBed= () => {
           </div>
         </div>
 
-        {/* Modal Add Bed */}
+  {/* Modal Add Bed */}
   <div className={view === 1 ? 'block' : 'hidden'}>
 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
 <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
@@ -1876,6 +2014,8 @@ const addBed= () => {
                 id="first-name"
                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                 focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
+                <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.length}</p>
         </div>
         <div className="col-span-6 sm:col-span-3">
             <label htmlFor="last-name" className={`text-sm ${color?.text} font-medium  block mb-2`}>Bed Width</label>
@@ -1884,6 +2024,8 @@ const addBed= () => {
                 id="first-name"
                 className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                 focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
+                <p className="text-sm text-sm text-red-700 font-light">
+                      {error?.width}</p>
         </div>
     </div>
 </div>
@@ -1891,14 +2033,14 @@ const addBed= () => {
 <div className="items-center p-6 border-t border-gray-200 rounded-b">
 
         
-          <Button Primary={language?.Add} onClick={() => {addBed();  }} />
+          <Button Primary={language?.Add} onClick={() => {validationBedDataAdd();  }} />
          
 </div>
 </div>
 </form>
 </div>
 </div>
-</div>
+   </div>
 
         {/* Toast Container */}
         <ToastContainer position="top-center"

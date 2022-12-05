@@ -221,10 +221,7 @@ function Addroom() {
           });
         }
       }
-    
-    
-    
-     
+  
     
 
   /** For Bed**/
@@ -350,21 +347,17 @@ function Addroom() {
         image_category: "outside"
       }
     }))
-    const report = validateRoomGallery(imagedata);
-    alert(JSON.stringify(report))
-    if (report === true) {
+   var result = validateRoomGallery(imagedata);
+   if (result === true) {
       const finalImage = { "images": imagedata }
       axios.post(`/api/gallery`, finalImage).then(response => {
-
-        const imagedata = imageData?.map((i => {
+        const images = imageData?.map((i => {
           return {
             "image_id": response.data.image_id,
             "room_id": roomId
-
           }
         }))
-
-        const final = { "room_images": [imagedata] }
+        const final = { "room_images": images }
         axios.post('/api/room-images', final, {
           headers: { 'content-type': 'application/json' }
         }).then(response => {
@@ -393,7 +386,7 @@ function Addroom() {
             });
           });
       }).catch(error => {
-        toast.error("Gallery error.", {
+        toast.error("Gallery link error.", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -405,7 +398,9 @@ function Addroom() {
       });
     }
 
-
+    else {
+      setError(result)
+    }
   }
 
   /*Function to add room service*/
@@ -512,12 +507,11 @@ function Addroom() {
     var final_view_data = []
     viewData.map(item => {
       var temp = {
-        view: item?.view
+        view: item?.view.replaceAll(" ","")
       }
       final_view_data.push(temp)
     });
     setFinalView(final_view_data);
-
   }
 
   // Validate Room Description
@@ -554,7 +548,6 @@ function Addroom() {
   // Validate Rates
   const validationRates = () => {
     var result = validateRoomRates(allRoomRates)
-    alert(result)
     console.log("Result" + JSON.stringify(result))
     if (result === true) {
       submitRoomRates();
@@ -681,7 +674,7 @@ function Addroom() {
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <select
-                            onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value })}
+                            onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type: e.target.value })}
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
                             {roomtypes.length === undefined ? <option value="loading">Loading values</option> :
                               <>
@@ -897,8 +890,7 @@ function Addroom() {
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <select className={`shadow-sm ${color?.greybackground} capitalize border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
-
-                            onChange={
+                               onChange={
                               (e) => (
                                 setAllRoomDes({ ...allRoomDes, is_room_sharing: e.target.value })
                               )
@@ -949,7 +941,7 @@ function Addroom() {
                 <Button Primary={language?.Next}    onClick={(e)=>{
                      validationRoomDescription()}}/>   :   
                        <Button Primary={language?.Submit} onClick={(e)=>{
-                       validationRoomDescription}}/>}
+                       validationRoomDescription()}}/>}
          </div>
         </div>
        </div>
@@ -1201,9 +1193,9 @@ function Addroom() {
                     Room Gallery
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
-                  <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                  {/* <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
                     <Button Primary={language?.Add} onClick={addPhotos} />
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -1211,7 +1203,8 @@ function Addroom() {
                 <div className=" md:px-2 mx-auto w-full">
                   <div>
                     {imageData?.map((imageData, index) => (
-                      <> <button
+                      <> 
+                      {/* <button
                         className="float-right my-8 sm:inline-flex  text-gray-800  
         font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
         rounded-lg text-sm px-1 py-1 text-center 
@@ -1220,7 +1213,7 @@ function Addroom() {
                         onClick={() => removeImage(imageData?.index)}>
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd">
                         </path></svg>
-                      </button>
+                      </button> */}
                         <div className="p-6 space-y-6">
                           <div className="grid grid-cols-6 gap-6">
                             <div className="col-span-6 sm:col-span-3">
@@ -1238,9 +1231,11 @@ function Addroom() {
                                   }}
                                   className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5"
                                   defaultValue="" />
-
+                                 
                               </div>
                               <div className="col-span-6 mt-2 sm:col-span-3">
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.[index]?.image_link}</p>
                                 <Button Primary={language?.Upload} onClick={() => uploadImage(imageData?.index)} /></div>
                             </div>
                             <img className="py-2" src={imageData?.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
@@ -1270,9 +1265,9 @@ function Addroom() {
                                 onChange={e => onChangeImage(e, imageData?.index, 'image_description')}
                                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                 defaultValue="" />
-                              <p className="text-sm text-sm text-red-700 font-light">
-                                {error?.[index]?.image_descripiton}
-                              </p>
+                               <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.[index]?.image_description}</p>
+                            
                             </div>
 
                           </div>

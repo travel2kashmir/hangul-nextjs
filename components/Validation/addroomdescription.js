@@ -1,8 +1,10 @@
 const validateRoom = (data,props) =>{
+    alert(JSON.stringify(props))
     var error={};
      var flag=[]
      var final_flag=true;
-     if(props.length === 0)
+
+     if(props?.length === 0)
      {
          flag.push(false)
          error.view="The views are required."
@@ -12,7 +14,7 @@ const validateRoom = (data,props) =>{
        flag.push(false)
        error.room_name="The room name is required."
    }
-     if(data?.room_type_id==="" || data?.room_type_id===undefined)
+     if(data?.room_type==="" || data?.room_type===undefined)
      {
          flag.push(false)
          error.room_type="The room type is required."

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import validateRoomGallery from '../../../components/Validation/addroomGallery';
 import Link from "next/link";
 import axios from "axios";
-import lang from '../../../components/GlobalData';
-import DarkModeLogic from "../../../components/darkmodelogic";
+import packageDescripitonValidation from '../../../components/Validation/packages/packageDescriptionValidation';
+import lang from '../../../components/GlobalData'
 import Multiselect from 'multiselect-react-dropdown';
 import Button from '../../../components/Button';
 import Sidebar from '../../../components/Sidebar'
@@ -25,6 +25,7 @@ var currentLogged;
 var days_of_week;
 
 function Addpackage() {
+  const [errorDescription,setErrorDescription]=useState([])
   const [packageId, setPackageId] = useState()
  const [service, setService] = useState([])
  const [image, setImage] = useState({})
@@ -32,8 +33,23 @@ function Addpackage() {
  const [color, setColor] = useState({})
   const [actionImage, setActionImage] = useState({})
  const [allRooms, setAllRooms] = useState([])
-  const [allPackageDetails, setAllPackageDetails] = useState([])
+ 
   const [meals, setMeals] = useState({})
+
+  const [allPackageDetails, setAllPackageDetails] = useState( {
+    "property_id": '',
+  "package_name": '',
+  "package_description":'',
+  "charge_currency":'',
+  "refundable": '',
+  "refundable_until_days": '',
+  "refundable_until_time": '',
+  "max_number_of_intended_occupants": '',
+  "max_number_of_adult_guest":'',
+  "check_in":'',
+  "check_out":'',
+  "status":''})
+
   const [disp, setDisp] = useState(0);
   const [error, setError] = useState({})
   const[packageServices,setPackageServices]= useState([])
@@ -221,9 +237,13 @@ const fetchPackageServices = async () => {
           "refundable_until_time": allPackageDetails?.refundable_until_time,
           "max_number_of_intended_occupants": allPackageDetails?.max_number_of_intended_occupants,
           "max_number_of_adult_guest":allPackageDetails?.max_number_of_adult_guest,
+          "check_in":allPackageDetails?.check_in,
+          "check_out":allPackageDetails?.check_out,
           "status":true
         }  
-     const url = '/api/package/package_description'
+       const result=packageDescripitonValidation(final_data,max_age)
+        if(result === true){
+          const url = '/api/package/package_description'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
           ((response) => {
             logger.info("Package description success");
@@ -233,9 +253,11 @@ const fetchPackageServices = async () => {
                  { 
                   submitAge(response.data.package_id);
                   setDisp(2);
+                  setErrorDescription({});
                 }
                 else{
                   setDisp(2);
+                  setErrorDescription({});
                 }    
           }  
           )
@@ -250,6 +272,11 @@ const fetchPackageServices = async () => {
               progress: undefined,
             });
           })
+        }
+        else{
+          setErrorDescription(result)
+        }
+     
         }
         else{
           toast.error("Please fill the package description", {
@@ -335,8 +362,8 @@ const [programData, setProgramData] = useState([programTemplate]?.map((i, id) =>
        status:true
      }]
      const finalImage = { "package_miles": packagemiledata }
-    
-    axios.post(`/api/package/package_miles`, finalImage).then(response => {
+
+   axios.post(`/api/package/package_miles`, finalImage).then(response => {
       toast.success("Package miles added successfully!", {
         position: "top-center",
         autoClose: 5000,
@@ -827,6 +854,9 @@ const submitPackageMeals= () => {
                 }
                />
                 </div>
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.package_name}</p>
+                
               </div>
               
               <div className="w-full lg:w-6/12 px-4">
@@ -846,6 +876,9 @@ const submitPackageMeals= () => {
                   }
                     />
                 </div>
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.package_description}</p>
+                
               </div>
 
               <div className="w-full lg:w-6/12 px-4">  
@@ -867,6 +900,9 @@ const submitPackageMeals= () => {
                     <option value="deposit">Deposit</option>
                   </select>
                 </div>
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.charge_currency}</p>
+                
               </div>
 
               <div className="w-full lg:w-6/12 px-4">
@@ -888,6 +924,9 @@ const submitPackageMeals= () => {
                     <option value= {false}>No</option>
                   </select>
                 </div>
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.refundable}</p>
+                
               </div>
                {allPackageDetails?.refundable==='true'?
                <>
@@ -909,6 +948,9 @@ const submitPackageMeals= () => {
                   }/>
                      
                 </div>
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.refundable_until_days}</p>
+                
               </div>
 
               <div className="w-full lg:w-6/12 px-4">
@@ -930,6 +972,9 @@ const submitPackageMeals= () => {
                   }
                   />
                 </div>   
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.refundable_until_time}</p>
+                
               </div>
               </>:<></>}
 
@@ -952,6 +997,9 @@ const submitPackageMeals= () => {
                   }
                    />
                 </div>
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.max_number_of_intended_occupants}</p>
+                
               </div>
               
               <div className="w-full lg:w-6/12 px-4">
@@ -971,6 +1019,9 @@ const submitPackageMeals= () => {
                       }
                   }/>
                 </div>
+                <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.max_number_of_adult_guest}</p>
+                
               </div>
               
              
@@ -979,7 +1030,9 @@ const submitPackageMeals= () => {
        {allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest >= 1 ? 
               <> 
-                  {final=[]} {max_age=[]}
+                  {final=[]} 
+                  { errorDescription?.max_age==='' || undefined?
+                  max_age=[]:''}
               {[...Array(allPackageDetails?.max_number_of_intended_occupants-
                             allPackageDetails?.max_number_of_adult_guest)]
                             ?.map((item, index) => ( 
@@ -993,10 +1046,11 @@ const submitPackageMeals= () => {
                  Maximum Age Of Child
                  </label>
                  <select className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                     onChange={(e)=>
-                      max_age[index]=e.target.value
+                     onChange={(e)=>{
+                     max_age[index]=e.target.value
+                     }
                   }>
-                     <option selected >Select </option>
+                     <option selected disabled>Select </option>
                     <option value="1" >1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -1010,12 +1064,55 @@ const submitPackageMeals= () => {
                     <option value="11">11</option>
                     <option value="12">12</option>
                   </select>
-              </div>
-            
+              </div><p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.max_age}</p>
             </div>
              ))}
             </>
             :<></>}
+
+            {/*Check in */}
+            <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block  mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.checkin}  {language?.time}
+                  </label>
+                  <input type="time" name="time" step="2"
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  onChange={
+                    (e) => (
+                        setAllPackageDetails({ ...allPackageDetails, check_in: e.target.value })
+                    )
+                } />
+                 </div>
+                 <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.check_in}</p>
+              </div>
+
+               {/*Check out */}
+            <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block  mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.checkout} {language?.time}
+                  </label>
+                  <input type="time" name="time" step="2"
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  onChange={
+                    (e) => {
+                      
+                        setAllPackageDetails({ ...allPackageDetails, check_out: e.target.value })
+                    }
+                } />
+                 </div>
+                 <p className="text-sm text-sm text-red-700 font-light">
+                {errorDescription?.check_out}</p>
+              </div>
 
 
 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">

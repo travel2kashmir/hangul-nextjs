@@ -87,7 +87,9 @@ function Packagedescription() {
         "refundable_until_days": allPackageDetails?.refundable_until_days,
         "refundable_until_time":  time.getTime() ,
         "max_number_of_intended_occupants": allPackageDetails?.max_number_of_intended_occupants,
-        "max_number_of_adult_guest": allPackageDetails?.max_number_of_adult_guest
+        "max_number_of_adult_guest": allPackageDetails?.max_number_of_adult_guest,
+        "check_in":allPackageDetails?.check_in,
+        "check_out":allPackageDetails?.check_out
       }
       const url = '/api/package/package_description'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -596,8 +598,49 @@ function Packagedescription() {
                   })}
                 </> : <></>}
 
+                {/*Check in */}
+            <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block  mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.checkin}  {language?.time}
+                  </label>
+                  <input type="time" name="time" defaultValue={allPackageDetails?.check_in}
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  onChange={
+                    (e) => (
+                        setAllPackageDetails({ ...allPackageDetails, check_in: e.target.value })
+                    )
+                } />
+                 </div>
+              </div>
+
+               {/*Check out */}
+            <div className="w-full lg:w-6/12 px-4">
+                <div className="relative w-full mb-3">
+                  <label
+                    className="text-sm font-medium text-gray-900 block  mb-2"
+                    htmlFor="grid-password"
+                  >
+                    {language?.checkout} {language?.time}
+                  </label>
+                  <input type="time" name="time" 
+                  defaultValue={allPackageDetails?.check_out}
+                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                  onChange={
+                    (e) => {
+                      
+                        setAllPackageDetails({ ...allPackageDetails, check_out: e.target.value })
+                    }
+                } />
+                 </div>
+              </div>
+
+
                 <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                  <Button Primary={language?.Update}  onClick={() => { submitPackageEdit(); submitAge(); }} />
+                  <Button Primary={language?.Update}  onClick={() => { alert(JSON.stringify(allPackageDetails));submitPackageEdit(); submitAge(); }} />
                 </div>
               </div>
             </div>

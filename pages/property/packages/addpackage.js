@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import validateRoomGallery from '../../../components/Validation/addroomGallery';
 import Link from "next/link";
 import axios from "axios";
-import lang from '../../../components/GlobalData'
+import lang from '../../../components/GlobalData';
+import DarkModeLogic from "../../../components/darkmodelogic";
 import Multiselect from 'multiselect-react-dropdown';
 import Button from '../../../components/Button';
 import Sidebar from '../../../components/Sidebar'
@@ -25,15 +27,25 @@ var days_of_week;
 function Addpackage() {
   const [packageId, setPackageId] = useState()
  const [service, setService] = useState([])
+ const [image, setImage] = useState({})
+ const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+ const [color, setColor] = useState({})
+  const [actionImage, setActionImage] = useState({})
  const [allRooms, setAllRooms] = useState([])
   const [allPackageDetails, setAllPackageDetails] = useState([])
+  const [meals, setMeals] = useState({})
   const [disp, setDisp] = useState(0);
+  const [error, setError] = useState({})
   const[packageServices,setPackageServices]= useState([])
 
   useEffect(()=>{
     const firstfun=()=>{
       if (typeof window !== 'undefined'){
         var locale = localStorage.getItem("Language"); 
+        var locale = localStorage.getItem("Language");
+        const colorToggle = JSON.parse(localStorage.getItem("ColorToggle"));
+        const color = JSON.parse(localStorage.getItem("Color"));
+        setColor(color);
         if (locale === "ar") {
         language = arabic;
         }
@@ -53,6 +65,7 @@ function Addpackage() {
     Router.push("./addpackage");
   },[]) 
 
+  // Package Services
 const fetchPackageServices = async () => {
     const url = `/api/package/package_services`
     axios.get(url)
@@ -87,6 +100,10 @@ const fetchPackageServices = async () => {
 }
     ,[])
  
+    useEffect(() => {
+      setColor(DarkModeLogic(darkModeSwitcher))
+    }, [darkModeSwitcher])
+
    /** Function submit max age **/
   const submitAge = (props) =>{
     if (max_age.length !== 0){ 
@@ -318,7 +335,7 @@ const [programData, setProgramData] = useState([programTemplate]?.map((i, id) =>
        status:true
      }]
      const finalImage = { "package_miles": packagemiledata }
-     alert(JSON.stringify(finalImage))
+    
     axios.post(`/api/package/package_miles`, finalImage).then(response => {
       toast.success("Package miles added successfully!", {
         position: "top-center",
@@ -536,6 +553,182 @@ const [programData, setProgramData] = useState([programTemplate]?.map((i, id) =>
   })
    days_of_week = days_present.toString().replaceAll(',','');
 }
+
+// Image Template
+const imageTemplate = {
+  property_id: currentProperty?.property_id,
+  image_link: '',
+  image_title: '',
+  image_description: '',
+  image_category: '',
+  imageFile: ''
+}
+// Images Mapping
+const [imageData, setImageData] = useState([imageTemplate]?.map((i, id) => { return { ...i, index: id } }))
+
+const addPhotos = () => {
+  setImageData([...imageData, imageTemplate]?.map((i, id) => { return { ...i, index: id } }))
+}
+
+const removeImage = (index) => {
+  const filteredImages = imageData.filter((i, id) => i.index !== index)
+  setImageData(filteredImages)
+}
+
+const onChangePhoto = (e, index, i) => {
+  setImageData(imageData?.map((item, id) => {
+    if (item.index === index) {
+      item[i] = e.target.files[0]
+    }
+    return item
+  }))
+}
+
+const onChangeImage = (e, index, i) => {
+  setImageData(imageData?.map((item, id) => {
+    if (item.index === index) {
+      item[i] = e.target.value
+    }
+    return item
+  }))
+}
+
+const uploadImage = (index) => {
+  const imageDetails = imageData?.find(i => i.index === index)?.imageFile
+  const formData = new FormData();
+  formData.append("file", imageDetails);
+  formData.append("upload_preset", "Travel2Kashmir")
+  axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
+    .then(response => {
+      const newData = imageData?.map((i) => {
+        if (i.index === index) {
+          i.image_link = response?.data?.secure_url
+        }
+        return i
+      })
+      setImageData(newData)
+    })
+    .catch(error => {
+      toast.error("Error uploading photo\n ", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+
+}
+
+/** Function to submit room images **/
+const submitRoomImages = () => {
+  const imagedata = imageData?.map((i => {
+    return {
+      property_id: currentProperty?.property_id,
+      image_link: i.image_link,
+      image_title: i.image_title,
+      image_description: i.image_description,
+      image_category: "outside"
+    }
+  }))
+ var result = validateRoomGallery(imagedata);
+ if (result === true) {
+    const finalImage = { "images": imagedata }
+    axios.post(`/api/gallery`, finalImage).then(response => {
+      const images = imageData?.map((i => {
+        return {
+          "image_id": response.data.image_id,
+          "package_id": packageId
+        }
+      }))
+      const final = { "package_image-link": images }
+      axios.post('/api/package/package_image-link', final, {
+        headers: { 'content-type': 'application/json'}
+      }).then(response => {
+        toast.success(JSON.stringify(response.data.message), {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setActionImage([]);
+        setError({});
+        setDisp(4);
+      })
+        .catch(error => {
+          toast.error("Gallery error.", {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        });
+    }).catch(error => {
+      toast.error("Gallery link error.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+  }
+  else {
+    setError(result)
+  }
+}
+
+/* Function for Package Property Credit */
+const submitPackageMeals= () => {
+ 
+  const current_data = [{
+    "package_id": packageId,
+    "meal_type": meals?.meal_type,
+    "included": meals?.included,
+    "buffet": meals?.buffet,
+    "in_room": meals?.in_room,
+    "in_private_space": meals?.in_private_space,
+
+  }]
+  const final_data= {"package_meals": current_data}
+  const url = '/api/package/package_meals'
+  axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
+    ((response) => {
+      toast.success("Package meals add success.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+       setAllPackageDetails([]);
+       setDisp(6);
+    })
+    .catch((error) => {
+      toast.error("Package meals add error! ", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+
+ }
   return (
     <>
     <Header Primary={english?.Side1}/>
@@ -1668,8 +1861,315 @@ const [programData, setProgramData] = useState([programTemplate]?.map((i, id) =>
           </div>
         </div>
               </div>
+       </div>
+
+         {/* Room Gallery */}
+          <div id='8' className={disp === 8 ? 'block' : 'hidden'}>
+            <div className={`${color?.whitebackground} shadow rounded-lg p-4 sm:p-6 xl:p-8 mt-4`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
+            </div>
+                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.miles}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+                {language?.package} {language?.services}
+                 </div>
+            </div>
+
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">7</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Additional Package Services</div>
+            </div>
+        </div> 
+              <div className="mx-4">
+                <div className="sm:flex">
+                  <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold `}>
+                   Package Gallery
+                  </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
+                  </div>
+                  {/* <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                    <Button Primary={language?.Add} onClick={addPhotos} />
+                  </div> */}
+                </div>
               </div>
-         
+
+              <div className="pt-6">
+                <div className=" md:px-2 mx-auto w-full">
+                  <div>
+                    {imageData?.map((imageData, index) => (
+                      <> 
+                      {/* <button
+                        className="float-right my-8 sm:inline-flex  text-gray-800  
+        font-semibold border  focus:ring-4 focus:ring-cyan-200 font-semibold bg-gray-200
+        rounded-lg text-sm px-1 py-1 text-center 
+        items-center mb-1 ml-16 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() => removeImage(imageData?.index)}>
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd">
+                        </path></svg>
+                      </button> */}
+                        <div className="p-6 space-y-6">
+                          <div className="grid grid-cols-6 gap-6">
+                            <div className="col-span-6 sm:col-span-3">
+                              <label
+                                className="text-sm font-medium text-gray-900 block mb-2"
+                                htmlFor="grid-password"
+                              >
+                                {language?.imageupload}
+                              </label>
+                              <div className="flex">
+                                <input
+                                  type="file" name="myImage" accept="image/png, image/gif, image/jpeg, image/jpg"
+                                  onChange={e => {
+                                    onChangePhoto(e, imageData?.index, 'imageFile')
+                                  }}
+                                  className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5"
+                                  defaultValue="" />
+                                 
+                              </div>
+                              <div className="col-span-6 mt-2 sm:col-span-3">
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.[index]?.image_link}</p>
+                                <Button Primary={language?.Upload} onClick={() => uploadImage(imageData?.index)} /></div>
+                            </div>
+                            <img className="py-2" src={imageData?.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
+                            <div className="col-span-6 sm:col-span-3">
+                              <label
+                                className="text-sm font-medium text-gray-900 block mb-2"
+                                htmlFor="grid-password"
+                              >
+                                {language?.image} {language?.titl}
+                              </label>
+                              <input
+                                type="text"
+                                onChange={e => onChangeImage(e, imageData?.index, 'image_title')}
+                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                                placeholder="Image Title" />
+                              <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.[index]?.image_title}</p>
+                            </div>
+                            <div className="col-span-6 sm:col-span-3">
+                              <label
+                                className="text-sm font-medium text-gray-900 block mb-2"
+                                htmlFor="grid-password"
+                              >
+                                {language?.image} {language?.description}
+                              </label>
+                              <textarea rows="2" columns="60"
+                                onChange={e => onChangeImage(e, imageData?.index, 'image_description')}
+                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
+                                defaultValue="" />
+                               <p className="text-sm text-sm text-red-700 font-light">
+                                {error?.[index]?.image_description}</p>
+                            
+                            </div>
+
+                          </div>
+                        </div></>
+                    ))}
+                    <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                      <Button Primary={language?.Submit} onClick={submitRoomImages} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+ 
+      {/* Package Meals */}
+      <div id='9' className={disp === 9 ? 'block' : 'hidden'}>
+            <div className={`${color?.whitebackground} mt-4 shadow rounded-lg p-4 sm:p-6 xl:p-8`}>
+            <div className="relative before:hidden  before:lg:block before:absolute before:w-[84%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 my-10 sm:px-20">
+             <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500  bg-slate-100  dark:bg-darkmode-400 dark:border-darkmode-400">1</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.packagedescription}</div>
+            </div>
+                <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">2</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400"> {language?.package} {language?.rooms} {language?.and} {language?.rates}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">3</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.package} {language?.miles}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">4</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.elite} {language?.membership}</div>
+            </div>
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">5</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">{language?.property} {language?.credit}</div>
+            </div>
+            
+            <div className="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400">6</button>
+                <div className="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">
+                {language?.package} {language?.services}
+                 </div>
+            </div>
+
+            <div className="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                <button className="w-10 h-10 rounded-full btn text-white bg-cyan-600 btn-primary">7</button>
+                <div className="lg:w-32 font-medium  text-base lg:mt-3 ml-3 lg:mx-auto"> Additional Package Services</div>
+            </div>
+        </div> 
+              <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold`}>
+                {language?.room} {language?.rates}
+              </h6>
+              <div className="pt-6">
+                <div className=" md:px-2 mx-auto w-full">
+                  <div className="flex flex-wrap">
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password"
+                        >
+                         Meal Type
+                        </label>
+                        <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setMeals({ ...meals, meal_type: e.target.value })
+                            )
+                          }>
+                          <option selected disabled>{language?.select}</option>
+                          <option value="breakfast">Breakfast</option>
+                          <option  value="dinner">Dinner</option>
+                         
+                        </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.meal_type}</p>
+                      </div>
+                    </div>
+
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password"
+                        >
+                         Included
+                        </label>
+                        <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setMeals({ ...meals, included: e.target.value })
+                            )
+                          }>
+                          <option selected disabled>{language?.select}</option>
+                          <option value={true}>Yes</option>
+                          <option  value={false}>No</option>
+                         
+                        </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.included}</p>
+                      </div>
+                    </div>
+
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password"
+                        >
+                         Buffet
+                        </label>
+                        <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setMeals({ ...meals,buffet: e.target.value })
+                            )
+                          }>
+                          <option selected disabled>{language?.select}</option>
+                          <option value={true}>Yes</option>
+                          <option  value={false}>No</option>
+                         
+                        </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.buffet}</p>
+                      </div>
+                    </div>
+
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password"
+                        >
+                         In Room
+                        </label>
+                        <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setMeals({ ...meals, in_room: e.target.value })
+                            )
+                          }>
+                          <option selected disabled>{language?.select}</option>
+                          <option value={true}>Yes</option>
+                          <option  value={false}>No</option>
+                         
+                        </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.in_room}</p>
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                        <label
+                          className={`text-sm font-medium ${color?.text} block mb-2`}
+                          htmlFor="grid-password"
+                        >
+                        Private Space
+                        </label>
+                        <select className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
+                          onChange={
+                            (e) => (
+                              setMeals({ ...meals, in_private_space: e.target.value })
+                            )
+                          }>
+                          <option selected disabled>{language?.select}</option>
+                          <option value={true}>Yes</option>
+                          <option  value={false}>No</option>
+                         
+                        </select>
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.in_private_space}</p>
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-6/12 px-4">
+                      <div className="relative w-full mb-3">
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                      <Button Primary={language?.Submit} onClick={submitPackageMeals} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+       </div>
+
       <ToastContainer position="top-center"
         autoClose={5000}
         hideProgressBar={false}

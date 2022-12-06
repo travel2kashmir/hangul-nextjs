@@ -45,6 +45,7 @@ function Room() {
   const [finalView, setFinalView] = useState([])
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
+  const [roomRates, setRoomRates] = useState([])
   const [roomimages, setRoomimages] = useState({})
   const [addImage, setAddImage] = useState(0)
   const [roomtypes, setRoomtypes] = useState([])
@@ -87,6 +88,96 @@ function Room() {
     }
     firstfun();
     Router.push("./room")
+  }, [])
+
+   // Fetch Room Details
+   const fetchDetails = async () => {
+    const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
+    axios.get(url)
+      .then((response) => {
+        setRoomDetails(response.data);
+        setAllRoomDetails(response.data);
+        setFinalView(response?.data?.views);
+        
+        setAllRoomRates(response.data?.unconditional_rates?.[i])
+        setRoomRates(
+          lang?.CurrencyData.filter(el => {
+          return response?.data?.unconditional_rates?.[i]?.find(element => {
+             return element.baserate_currency === el.currency_code;
+          });
+       })
+      );
+       
+        if(response.data.room_facilities !== undefined){
+        setServices(response.data.room_facilities);
+        }
+        setRoomDetails(response.data);
+        if(response.data.room_facilities == undefined){
+        fetchServices();
+        }
+        var genData = [];
+        {
+          response.data?.beds?.map((item) => {
+              var temp = {
+                  name: item.length,
+                  type: item.width,               
+                  id: item.bed_id
+              }
+              genData.push(temp)
+          })
+          setGen(genData);
+      }
+        logger.info("url  to fetch room hitted successfully");
+        setVisible(1);
+      })
+      .catch((error) => { logger.error("url to fetch room, failed") });
+  }
+
+  // Room Services
+  const fetchServices = async () => {
+    const url = `/api/all_room_services`
+    axios.get(url)
+    .then((response)=>{setServices(response.data);
+      logger.info("url  to fetch roomtypes hitted successfully")})
+      .catch((error)=>{logger.error("url to fetch roomtypes, failed")});  
+    }
+
+  // Room Images
+  const fetchImages = async () => {
+    const url = `/api/images/${currentProperty?.property_id}`
+    console.log("url " + url)
+    axios.get(url)
+      .then((response) => {
+        setRoomimages(response.data);
+        logger.info("url  to fetch room images hitted successfully")
+       
+      })
+
+      .catch((error) => { logger.error("url to fetch room images, failed") });
+  }
+
+// Room Types
+  const fetchRoomtypes = async () => {
+    const url = `/api/room-types`
+    console.log("url " + url)
+    axios.get(url)
+      .then((response) => {
+        setRoomtypes(response.data);
+        logger.info("url  to fetch room types hitted successfully")
+      })
+      .catch((error) => { logger.error("url to fetch roomtypes, failed") });
+  }
+
+  useEffect(()=>{ 
+    setColor(DarkModeLogic(darkModeSwitcher))
+   },[darkModeSwitcher])
+ 
+
+  /* Function to load Room Details when page loads */
+  useEffect(() => {
+    fetchRoomtypes();
+    fetchImages();
+    fetchDetails();
   }, [])
 
   const onChangePhoto = (e, i) => {
@@ -169,85 +260,6 @@ function Room() {
       })
   }
 
-  const fetchDetails = async () => {
-    const url = `/api/${currentProperty.address_province.replace(/\s+/g, '-')}/${currentProperty.address_city}/${currentProperty.property_category}s/${currentProperty.property_id}/${currentroom}`
-    axios.get(url)
-      .then((response) => {
-        setRoomDetails(response.data);
-        setAllRoomDetails(response.data);
-        setFinalView(response?.data?.views);
-        setAllRoomRates(response.data?.unconditional_rates?.[i])
-        if(response.data.room_facilities !== undefined){
-        setServices(response.data.room_facilities);
-        }
-        setRoomDetails(response.data);
-        if(response.data.room_facilities == undefined){
-        fetchServices();
-        }
-        var genData = [];
-        {
-          response.data?.beds?.map((item) => {
-              var temp = {
-                  name: item.length,
-                  type: item.width,               
-                  id: item.bed_id
-              }
-              genData.push(temp)
-          })
-          setGen(genData);
-      }
-        logger.info("url  to fetch room hitted successfully");
-        setVisible(1);
-      })
-      .catch((error) => { logger.error("url to fetch room, failed") });
-  }
-
-  // Room Services
-  const fetchServices = async () => {
-    const url = `/api/all_room_services`
-    axios.get(url)
-    .then((response)=>{setServices(response.data);
-      logger.info("url  to fetch roomtypes hitted successfully")})
-      .catch((error)=>{logger.error("url to fetch roomtypes, failed")});  
-    }
-// Room Images
-  const fetchImages = async () => {
-    const url = `/api/images/${currentProperty?.property_id}`
-    console.log("url " + url)
-    axios.get(url)
-      .then((response) => {
-        setRoomimages(response.data);
-        logger.info("url  to fetch room images hitted successfully")
-       
-      })
-
-      .catch((error) => { logger.error("url to fetch room images, failed") });
-  }
-
-// Room Types
-  const fetchRoomtypes = async () => {
-    const url = `/api/room-types`
-    console.log("url " + url)
-    axios.get(url)
-      .then((response) => {
-        setRoomtypes(response.data);
-        logger.info("url  to fetch room types hitted successfully")
-      })
-      .catch((error) => { logger.error("url to fetch roomtypes, failed") });
-  }
-
-  useEffect(()=>{ 
-    setColor(DarkModeLogic(darkModeSwitcher))
-   },[darkModeSwitcher])
- 
-
-  /* Function to load Room Details when page loads */
-  useEffect(() => {
-    fetchRoomtypes();
-    fetchImages();
-    fetchDetails();
-  }, [])
-
   /* Function to upload image */
   const uploadImage = () => {
     const imageDetails = image.imageFile
@@ -282,7 +294,7 @@ function Room() {
         property_id: currentProperty?.property_id,
         image_link: image?.image_link,
         image_title: actionImage?.image_title,
-        image_descripiton: actionImage?.image_description,
+        image_description: actionImage?.image_description,
         image_category: "room"
       }]
       const finalImage = { "images": imagedata }
@@ -572,7 +584,7 @@ function Room() {
       })
   }
 
- //Views
+ // Views
  const views = (viewData) => {
   setFinalView([]);
   var final_view_data = []
@@ -585,13 +597,11 @@ function Room() {
   setFinalView(final_view_data);
   setRoomView(1);
 }
+
 /* Function to edit additional services */
 const editBed = (props,noChange) => { 
   if(objChecker.isEqual(props,noChange)){
-
       toast.warn('No change in  Bed detected. ', {
-
-   
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -682,7 +692,7 @@ const submitBedUpdate = () => {
 
 }
 
-
+// Delete Bed
 const deleteBed = (props) => {
 const url = `/api/bed_details/${props}`
   axios.delete(url).then((response) => {
@@ -715,7 +725,6 @@ const url = `/api/bed_details/${props}`
  // Validate Room Description
  const validationRoomDescription = () => {
   var result = validateRoom(allRoomDetails,finalView)
-  alert(JSON.stringify(result))
   console.log("Result" + JSON.stringify(result))
   if (result === true) {
     submitRoomDescriptionEdit();
@@ -805,7 +814,7 @@ const validationBedDataAdd = () => {
   }
 }
 
-// Validate Beds Data
+// Validate Image
 const validationImage = () => {
   var result = validateRoomGallery(actionImage)
   console.log("Result" + JSON.stringify(result))
@@ -820,14 +829,14 @@ const validationImage = () => {
  // Validate Rates
  const validationRates = () => {
   var result = validateRoomRates(allRoomRates)
-  alert("Result" + JSON.stringify(result))
   if (result === true) {
-   submitRoomRatesEdit
+   submitRoomRatesEdit()
   }
   else {
     setError(result)
   }
 }
+
   return (
     <>
     <Header  Primary={english?.Side1}  color={color}/>
@@ -1674,7 +1683,7 @@ const validationImage = () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                         {language?.currency}
+                         {language?.currency} {JSON.stringify(roomRates)}
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1988,8 +1997,8 @@ const validationImage = () => {
           </div>
         </div>
 
-  {/* Modal Add Bed */}
-  <div className={view === 1 ? 'block' : 'hidden'}>
+        {/* Modal Add Bed */}
+         <div className={view === 1 ? 'block' : 'hidden'}>
 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
 <div className="relative w-full max-w-2xl px-4 h-full md:h-auto">
 <form id='asform'>
@@ -2040,7 +2049,7 @@ const validationImage = () => {
 </form>
 </div>
 </div>
-   </div>
+         </div>
 
         {/* Toast Container */}
         <ToastContainer position="top-center"

@@ -22,8 +22,10 @@ var currentLogged;
 
 function Packagerooms() {
   const [visible,setVisible]=useState(0) 
-    const [allRooms, setAllRooms] = useState([])
-    const[currentPackageRates,setCurrentPackageRates]= useState([])
+  const [allRooms, setAllRooms] = useState([])
+  const[currentPackageRates,setCurrentPackageRates]= useState([])
+  const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+  const [color, setColor] = useState({})
   
     /** Fetching language from the local storage **/
     useEffect(()=>{

@@ -362,7 +362,6 @@ function Addroom() {
     setSpinner(1);
       const finalImage = { "images": imagedata }
       axios.post(`/api/gallery`, finalImage).then(response => {
-        setSpinner(0)
         const images = imageData?.map((i => {
           return {
             "image_id": response.data.image_id,
@@ -469,7 +468,7 @@ function Addroom() {
   /* Function for Room Rates*/
   const submitRoomRates = () => {
     if (allRoomRates.length !== 0) {
-      setSpinner(1)
+      
       const final_data = {
         "room_id": roomId,
         "baserate_currency": allRoomRates?.currency,
@@ -479,10 +478,12 @@ function Addroom() {
         "otherfees_amount": allRoomRates?.otherfees_amount,
         "otherfees_currency": allRoomRates?.currency,
       }
+      alert(JSON.stringify(final_data))
+      setSpinner(1);
       const url = '/api/room_unconditional_rates'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
-          setSpinner(0)
+          setSpinner(0);
           toast.success("Room rates added successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -497,7 +498,7 @@ function Addroom() {
           Router.push("../rooms")
         })
         .catch((error) => {
-          setSpinner(0)
+          setSpinner(0);
           toast.error("Room rates  error! ", {
             position: "top-center",
             autoClose: 5000,
@@ -803,7 +804,7 @@ function Addroom() {
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
-                          Views from Room
+                         {language?.viewsfromroom}
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -828,7 +829,7 @@ function Addroom() {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.length}(in feet)
+                          {language?.room} {language?.length}({language?.infeet})
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <input
@@ -845,7 +846,7 @@ function Addroom() {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.breadth}(in feet)
+                          {language?.room} {language?.breadth}({language?.infeet})
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <input
@@ -863,7 +864,7 @@ function Addroom() {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.height}(in feet)
+                          {language?.room} {language?.height}({language?.infeet})
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <input
@@ -879,7 +880,7 @@ function Addroom() {
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
-                          Room Style
+                         {language?.roomstyle}
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -905,7 +906,7 @@ function Addroom() {
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
-                          Is Room Shared?
+                          {language?.isroomshared}
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -930,7 +931,7 @@ function Addroom() {
                       <div className="relative w-full mb-3">
                         <label className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password">
-                          Is Room?
+                          {language?.isroom}
                           <span style={{ color: "#ff0000" }}>*</span>
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -967,7 +968,7 @@ function Addroom() {
                        validationRoomDescription()}}/>
                     </div>
                     <div className={spinner === 1 ? 'block' : 'hidden'}>
-                  <Button Primary={language?.SpinnerUpdate} /></div>
+                  <Button Primary={language?.Spinnersubmit} /></div>
                   </>
                     }
          </div>
@@ -1030,7 +1031,7 @@ function Addroom() {
                                   className={`text-sm  font-medium ${color?.text} block mb-2`}
                                   htmlFor="grid-password"
                                 >
-                                  Bed {language?.Length}(in cm)
+                                  {language?.bed} {language?.Length}({language?.incm})
                                   <span style={{ color: "#ff0000" }}>*</span>
                                 </label>
                                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1050,7 +1051,7 @@ function Addroom() {
                               <div className="relative w-full mb-3">
                                 <label className={`text-sm font-medium ${color?.text} block mb-2`}
                                   htmlFor="grid-password">
-                                  Bed Width(in cm)
+                                  {language?.bed} {language?.width}({language?.incm})
                                   <span style={{ color: "#ff0000" }}>*</span>
                                 </label>
                                 <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1075,7 +1076,7 @@ function Addroom() {
                         }} />
                     </div>
                     <div className={spinner === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.SpinnerUpdate} />
+                      <Button Primary={language?.Spinnersubmit} />
                       </div>
                         
                         
@@ -1193,7 +1194,7 @@ function Addroom() {
                           <Button Primary={language?.Submit} onClick={() => { submitServices() }} />
                     </div>
                     <div className={spinner === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.SpinnerUpdate} />
+                      <Button Primary={language?.Spinnersubmit} />
                       </div>
 
               
@@ -1232,7 +1233,7 @@ function Addroom() {
               <div className="mx-4">
                 <div className="sm:flex">
                   <h6 className={`${color?.text} text-base  flex leading-none  pt-2 font-semibold `}>
-                    Room Gallery
+                   {language?.room}  {language?.gallery}
                   </h6> <div className="flex space-x-1 pl-0 sm:pl-2 mt-3 sm:mt-0">
                   </div>
                   {/* <div className="flex items-center space-x-2 sm:space-x-3 ml-auto">
@@ -1320,7 +1321,7 @@ function Addroom() {
                     <Button Primary={language?.Submit} onClick={submitRoomImages} />
                     </div>
                     <div className={spinner === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.SpinnerUpdate} />
+                      <Button Primary={language?.Spinnersubmit} />
                       </div>
                     </div>
                   </div>
@@ -1462,7 +1463,7 @@ function Addroom() {
                     <Button Primary={language?.Submit} onClick={validationRates} />
                     </div>
                     <div className={spinner === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.SpinnerUpdate} />
+                      <Button Primary={language?.Spinnersubmit} />
                       </div>
                    
                     </div>

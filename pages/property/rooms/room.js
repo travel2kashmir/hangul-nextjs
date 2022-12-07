@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import validateRoom from '../../../components/Validation/addroomdescription';
+import validateEditGallery from '../../../components/Validation/editGallery';
 import validateBedData from '../../../components/Validation/addroomBedData'
 import validateRoomRates from '../../../components/Validation/addroomRates';
 import validateRoomGallery from '../../../components/Validation/addroomGallery';
@@ -38,6 +39,7 @@ var i =0;
 
 function Room() {
   const [visible, setVisible] = useState(0)
+  const [spinner, setSpinner] = useState(0)
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [allRoomDetails, setAllRoomDetails] = useState([])
@@ -200,18 +202,20 @@ function Room() {
   /* Function for Edit Room Images*/
   const updateImageDetails = () => {
     console.log("Room Details:" + JSON.stringify(allRoomDetails));
-    if (allRoomDetails.length !== 0) {
+    
       const final_data = {
         "image_id": actionImage?.image_id,
-        "image_title": allRoomDetails.image_title,
-        "image_description": allRoomDetails.image_description,
-        "image_type": allRoomDetails.image_type
+        "image_title": actionImage.image_title,
+        "image_description": actionImage.image_description,
+        "image_type": "room"
       }
       console.log("Final Data" + JSON.stringify(final_data))
+      setSpinner(1)
       const url = '/api/images'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
           setEditImage(0);
+          setSpinner(0)
           toast.success("Room Image Details Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -222,10 +226,12 @@ function Room() {
             progress: undefined,
           });
           fetchDetails();
+          setActionImage([])
           Router.push("./room");
           setAllRoomDetails([])
         })
         .catch((error) => {
+          setSpinner(0)
           toast.error("Room Gallery Update Error!", {
             position: "top-center",
             autoClose: 5000,
@@ -237,14 +243,16 @@ function Room() {
           });
 
         })
-    }
+    
   }
 
   /* Function for Delete Room Images*/
   const submitDelete = () => {
+    setSpinner(1)
     const url = `/api/${actionImage.image_id}`
     axios.delete(url).then
       ((response) => {
+        setSpinner(0)
         setdeleteImage(0)
         toast.success("Image deleted successfully!", {
           position: "top-center",
@@ -260,6 +268,7 @@ function Room() {
         Router.push("./room");
       })
       .catch((error) => {
+        setSpinner(0)
         toast.error("Image delete error", {
           position: "top-center",
           autoClose: 5000,
@@ -282,7 +291,7 @@ function Room() {
 
     axios.post("https://api.cloudinary.com/v1_1/dvczoayyw/image/upload", formData)
       .then(response => {
-        setImage({ ...image, image_link: response?.data?.secure_url })
+        setActionImage({ ...actionImage, image_link: response?.data?.secure_url })
       })
       .catch(error => {
         toast.error("Image Upload Error! ", {
@@ -305,16 +314,16 @@ function Room() {
     if (actionImage.length !== 0) {
       const imagedata = [{
         property_id: currentProperty?.property_id,
-        image_link: image?.image_link,
+        image_link: actionImage?.image_link,
         image_title: actionImage?.image_title,
         image_description: actionImage?.image_description,
         image_category: "room"
       }]
       const finalImage = { "images": imagedata }
-      console.log(JSON.stringify(finalImage))
+      setSpinner(1);
       axios.post(`/api/gallery`, finalImage)
         .then(response => {
-
+          setSpinner(0)
           toast.success("Image Added Successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -329,6 +338,7 @@ function Room() {
           submitImageLink(response?.data?.image_id);
         })
         .catch(error => {
+          setSpinner(0)
           toast.error(" Gallery Error", {
             position: "top-center",
             autoClose: 5000,
@@ -348,9 +358,10 @@ function Room() {
       room_id: currentroom
     }]
     const finalImage = { "room_images": imagedata }
-
+    setSpinner(1)
     axios.post('/api/room-images', finalImage, { header: { "content-type": "application/json" } }).then
       ((response) => {
+        setSpinner(0);
         toast.success("Room Details Updated Successfully!", {
           position: "top-center",
           autoClose: 5000,
@@ -362,10 +373,13 @@ function Room() {
         });
         fetchImages();
         fetchDetails();
-
+        setActionImage([]);
+        setAddImage(0);
         Router.push("./room");
+        setDisp(2);
       })
       .catch((error) => {
+        setSpinner(0)
         toast.error("Room Description Update Error! ", {
           position: "top-center",
           autoClose: 5000,
@@ -398,9 +412,11 @@ function Room() {
         "room_width": allRoomDetails.room_width,
         "room_height": allRoomDetails.room_height
       }
+      setSpinner(1);
      const url = '/api/room'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
+          setSpinner(0);
           toast.success("Room Details Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -414,6 +430,7 @@ function Room() {
           setAllRoomDetails([])
         })
         .catch((error) => {
+          setSpinner(0)
           toast.error("Room Description Update Error! ", {
             position: "top-center",
             autoClose: 5000,
@@ -430,6 +447,7 @@ function Room() {
   /* Function for Update Room Rates*/
   const submitRoomRatesEdit = () => {
     if (allRoomRates.length !== 0) {
+
       const final_data = {
         "room_id": currentroom,
         "baserate_currency": allRoomRates?.currency,
@@ -440,10 +458,11 @@ function Room() {
         "otherfees_amount": allRoomRates?.otherfees_amount,
         "un_rate_id": roomDetails?.unconditional_rates?.[0]?.un_rate_id
       }
-
+      setSpinner(1)
       const url = '/api/unconditional_rates'
       axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
+          setSpinner(0)
           toast.success("Room Rates Updated Successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -459,6 +478,7 @@ function Room() {
 
         })
         .catch((error) => {
+          setSpinner(0)
           toast.error("Room Rates Update Error! ", {
             position: "top-center",
             autoClose: 5000,
@@ -531,10 +551,12 @@ function Room() {
              )}
          }
      )
+     setSpinner(1)
     var total = { "room_services": services }
      const url = '/api/room_facilities'
      axios.put(url, total, { header: { "content-type": "application/json" } }).then
        ((response) => {
+        setSpinner(0)
          toast.success("Room services update successfully!", {
            position: "top-center",
            autoClose: 5000,
@@ -547,6 +569,7 @@ function Room() {
          
        })
        .catch((error) => {
+        setSpinner(0)
          toast.error("Room Services update error! ", {
            position: "top-center",
            autoClose: 5000,
@@ -568,10 +591,12 @@ function Room() {
         "view": i?.view
       }
     }))
+    setSpinner(1);
     const final_data = { "room_views": data }
     const url = '/api/room_views'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
+        setSpinner(0);
         toast.success("View add success.", {
           position: "top-center",
           autoClose: 5000,
@@ -585,6 +610,7 @@ function Room() {
         setError({});
       })
       .catch((error) => {
+        setSpinner(0);
         toast.error("View add error.", {
           position: "top-center",
           autoClose: 5000,
@@ -829,10 +855,13 @@ const validationBedDataAdd = () => {
 
 // Validate Image
 const validationImage = () => {
-  var result = validateRoomGallery(actionImage)
-  console.log("Result" + JSON.stringify(result))
+  var result = validateEditGallery(actionImage)
+ alert("Result" + JSON.stringify(result))
   if (result === true) {
-    submitAddImage();
+    if(addImage === 1){
+    submitAddImage();}
+    if(addImage === 0){
+      updateImageDetails();}
   }
   else {
     setError(result)
@@ -1106,7 +1135,7 @@ const validationImage = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        Views from Room
+                        {language?.viewsfromroom}
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1133,7 +1162,7 @@ const validationImage = () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.length}(in feet)
+                          {language?.room} {language?.length}( {language?.infeet})
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1156,7 +1185,7 @@ const validationImage = () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.breadth}(in feet)
+                          {language?.room} {language?.breadth}( {language?.infeet})
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1180,7 +1209,7 @@ const validationImage = () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                          {language?.room} {language?.height}(in feet)
+                          {language?.room} {language?.height}( {language?.infeet})
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1234,7 +1263,7 @@ const validationImage = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        Room Style
+                         {language?.roomstyle}
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1260,7 +1289,7 @@ const validationImage = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        Is Room Shared?
+                         {language?.isroomshared}
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1285,7 +1314,7 @@ const validationImage = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        Is Room?
+                         {language?.isroom}
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1307,7 +1336,12 @@ const validationImage = () => {
                     </div>
                   </div>
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                   <Button Primary={language?.Update} onClick={() => {validationRoomDescription() }} />
+                    <div className={spinner === 0? 'block' : 'hidden'}>
+                    <Button Primary={language?.Update} onClick={() => {validationRoomDescription() }} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
                       <Button Primary={language?.Next} onClick={() => {
                          { roomDetails?.room_type_id === 'rt002' || roomDetails?.room_type_id === 'rt003'|| roomDetails?.room_type_id === 'rt004'
                          || roomDetails?.room_type_id === 'rt005' ?
@@ -1393,7 +1427,7 @@ const validationImage = () => {
                         className={`text-sm  font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                      Bed {language?.Length}(in cm)
+                      {language?.bed} {language?.Length}({language?.incm})
                        <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1417,7 +1451,7 @@ const validationImage = () => {
                     <div className="relative w-full mb-3">
                       <label className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password">
-                        Bed Width(in cm)
+                         {language?.bed}  {language?.width}( {language?.incm})
                         <span style={{ color: "#ff0000" }}>*</span>
                       </label>
                       <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
@@ -1442,8 +1476,16 @@ const validationImage = () => {
                   <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
                 <Button Primary={language?.Previous}    onClick={()=>{
                        setDisp(0)}}/> 
-                  <Button Primary={language?.Update}    onClick={()=>{
+
+                    <div className={spinner === 0? 'block' : 'hidden'}>
+                    <Button Primary={language?.Update}    onClick={()=>{
                      validationBedData()}}/>   
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
+
+                 
                    <Button Primary={language?.Next}    onClick={()=>{
                        setDisp(1)}}/>         
                  </div>
@@ -1552,8 +1594,14 @@ const validationImage = () => {
           </div>  
          <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
          <Button Primary={language?.Previous}  onClick={() => {setDisp(0)}}/> 
-                   <Button Primary={roomDetails?.room_facilities !== undefined ? language?.Update : language?.Submit}  
+         <div className={spinner === 0? 'block' : 'hidden'}>
+         <Button Primary={roomDetails?.room_facilities !== undefined ? language?.Update : language?.Submit}  
                    onClick={() => {roomDetails?.room_facilities !== undefined ? editServices() : submitServices()}}/> 
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                    <Button Primary={roomDetails?.room_facilities !== undefined ? language?.SpinnerUpdate : language?.SpinnerSubmit}  
+                  /> 
+                      </div>
                    <Button Primary={language?.Next}  onClick={() => {setDisp(2)}}/> 
           </div>
          </div>
@@ -1800,8 +1848,16 @@ const validationImage = () => {
 
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
                       <Button Primary={language?.Previous} onClick={()=>{setDisp(2)}}/>
+                      <div className={spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.Update} onClick={() => {
                         validationRates();}} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
+
+
+                      
                     </div>
                   </div>
                 </div>
@@ -1858,7 +1914,7 @@ const validationImage = () => {
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        Image Upload
+                       {language?.image} {language?.upload}
                       </label>
                       <div className="flex">
                         <input
@@ -1869,46 +1925,54 @@ const validationImage = () => {
                           }}
                           className={`${color?.greybackground} ${color?.text} shadow-sm  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full py-2 px-2.5`}
                           />
-
                       </div>
-                      <div className="col-span-6 sm:col-span-3">
-                        <button className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200  font-medium rounded-lg text-sm px-5 py-2 mt-2 text-center"
-                          onClick={uploadImage}>Upload</button></div>
+                      <div className="col-span-6 mt-2 sm:col-span-3">
+                      <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.image_link}</p>
+                      <Button Primary={language?.Upload}  onClick={uploadImage} />
+                      </div>
                     </div>
-                    <img className="py-2" src={image?.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
+                    <img className="py-2" src={actionImage?.image_link} alt='ImagePreview' style={{ height: "80px", width: "600px" }} />
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        Image Title
+                       {language?.image} {language?.titl}
                       </label>
                       <input
                         type="text"
                         onChange={(e) => (setActionImage({ ...actionImage, image_title: e.target.value }))}
                         className={`${color?.greybackground} ${color?.text} shadow-sm py-2  border border-gray-300  sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full px-2.5`}
                         placeholder="Image Title" />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.image_title}</p>
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
                       >
-                        Image Description
+                        {language?.image} {language?.description}
                       </label>
                       <textarea rows="2" columns="60"
                         onChange={(e) => (setActionImage({ ...actionImage, image_description: e.target.value }))}
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         defaultValue="" />
+                        <p className="text-sm text-sm text-red-700 font-light">
+                          {error?.image_description}</p>
                     </div>
 
                   </div>
                 </div>
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                  <button
-                    onClick={() => { validationImage(); }}
-                    className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    type="submit">Add image</button>
+                <div className={spinner === 0? 'block' : 'hidden'}>
+                          <Button Primary={language?.Add}  onClick={() => {validationImage(); }} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerAdd} />
+                      </div>
+               
                 </div>
               </div>
             </div>
@@ -1934,7 +1998,8 @@ const validationImage = () => {
                   <div className="grid grid-cols-6 gap-6">
                     <div className="col-span-6 sm:col-span-3">
                       <img src={actionImage?.image_link} alt='pic_room' style={{ height: "200px", width: "400px" }} />
-                    </div> <div className="col-span-6 sm:col-span-3">
+                    </div> 
+                    <div className="col-span-6 sm:col-span-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
@@ -1946,15 +2011,16 @@ const validationImage = () => {
                         className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                         onChange={
                           (e) => (
-                            setAllRoomDetails({
-                              ...allRoomDetails,
+                            setActionImage({
+                              ...actionImage,
                               image_description: e.target.value
                             })
                           )
                         }
                         defaultValue={actionImage?.image_description}
                       />
-                    </div> <div className="col-span-6 sm:col-span-3">
+                    </div> 
+                    <div className="col-span-6 sm:col-span-3">
                       <label
                         className={`text-sm font-medium ${color?.text} block mb-2`}
                         htmlFor="grid-password"
@@ -1966,8 +2032,8 @@ const validationImage = () => {
                         defaultValue={actionImage?.image_title}
                         onChange={
                           (e) => (
-                            setAllRoomDetails({
-                              ...allRoomDetails,
+                            setActionImage({
+                              ...actionImage,
                               image_title: e.target.value
                             })
                           )
@@ -1979,7 +2045,16 @@ const validationImage = () => {
                   </div>
                 </div>
                 <div className="items-center p-6 border-t border-gray-200 rounded-b">
-                  <Button Primary={language?.Update} onClick={updateImageDetails} />
+                <div className={spinner === 0? 'block' : 'hidden'}>
+                <Button Primary={language?.Update} onClick={validationImage} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
+
+
+
+               
                 </div>
               </div>
             </div>
@@ -2002,10 +2077,16 @@ const validationImage = () => {
                 <div className="p-6 pt-0 text-center">
                   <svg className="w-20 h-20 text-red-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                   <h3 className={`text-xl font-normal ${ color.deltext} mt-5 mb-6`}>
-                    Are you sure you want to delete {actionImage?.image_title} image?
+                    {language?. areyousureyouwanttodelete}
                   </h3>
-                  <Button Primary={language?.Delete} onClick={() => submitDelete()} />
-                  <Button Primary={language?.Cancel} onClick={() => setdeleteImage(0)} />
+
+                      {spinner === 0 ?
+                                <>
+                                <Button Primary={language?.Delete} onClick={() => submitDelete()}/>
+                                <Button Primary={language?.Cancel}   onClick={() => setdeleteImage(0)}/>
+                               </>
+                              :
+                               <Button Primary={language?.SpinnerDelete} />}
                 </div>
               </div>
             </div>
@@ -2055,9 +2136,14 @@ const validationImage = () => {
 </div>
 
 <div className="items-center p-6 border-t border-gray-200 rounded-b">
-
+<div className={spinner === 0? 'block' : 'hidden'}>
+<Button Primary={language?.Add} onClick={() => {validationBedDataAdd();  }} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerAdd} />
+                      </div>
         
-          <Button Primary={language?.Add} onClick={() => {validationBedDataAdd();  }} />
+          
          
 </div>
 </div>
@@ -2065,6 +2151,8 @@ const validationImage = () => {
 </div>
 </div>
          </div>
+
+
 
         {/* Toast Container */}
         <ToastContainer position="top-center"

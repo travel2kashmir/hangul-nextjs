@@ -362,7 +362,6 @@ function Addroom() {
     setSpinner(1);
       const finalImage = { "images": imagedata }
       axios.post(`/api/gallery`, finalImage).then(response => {
-        setSpinner(0)
         const images = imageData?.map((i => {
           return {
             "image_id": response.data.image_id,
@@ -469,7 +468,7 @@ function Addroom() {
   /* Function for Room Rates*/
   const submitRoomRates = () => {
     if (allRoomRates.length !== 0) {
-      setSpinner(1)
+      
       const final_data = {
         "room_id": roomId,
         "baserate_currency": allRoomRates?.currency,
@@ -479,10 +478,12 @@ function Addroom() {
         "otherfees_amount": allRoomRates?.otherfees_amount,
         "otherfees_currency": allRoomRates?.currency,
       }
+      alert(JSON.stringify(allRoomRates))
+      setSpinner(1);
       const url = '/api/room_unconditional_rates'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
-          setSpinner(0)
+          setSpinner(0);
           toast.success("Room rates added successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -497,7 +498,7 @@ function Addroom() {
           Router.push("../rooms")
         })
         .catch((error) => {
-          setSpinner(0)
+          setSpinner(0);
           toast.error("Room rates  error! ", {
             position: "top-center",
             autoClose: 5000,

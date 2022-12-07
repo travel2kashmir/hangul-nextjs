@@ -28,6 +28,7 @@ var currentLogged;
 
 function Addroom() {
   const [allRoomDetails, setAllRoomDetails] = useState([])
+  const [spinner, setSpinner] = useState(0)
   const [darkModeSwitcher, setDarkModeSwitcher] = useState()
   const [color, setColor] = useState({})
   const [visible, setVisible] = useState(0)
@@ -177,9 +178,12 @@ function Addroom() {
   function submitRoomDescription() {
     setError({});
     if (allRoomDes.length !== 0) {
+      setSpinner(1)
       const finalData = { ...allRoomDes, status: true, property_id:currentProperty?.property_id }
+      alert(JSON.stringify(finalData))
       axios.post('/api/room', JSON.stringify(finalData), { headers: { 'content-type': 'application/json' } })
         .then(response => {
+          setSpinner(0);
           toast.success("Room created successfully", {
             position: "top-center",
             autoClose: 5000,
@@ -190,13 +194,16 @@ function Addroom() {
             progress: undefined,
           });
           setRoomId(response.data.room_id)
-          submitBed(response.data.room_id)
+          if(allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'
+          || allRoomDes?.room_type_id === 'rt004' || allRoomDes?.room_type_id === 'rt005')
+          {submitBed(response.data.room_id)}
           submitView(response.data.room_id)
           setAllRoomDes([]);
           setDisp(2);
           setError({});
           })
           .catch(error => {
+            setSpinner(0);
            toast.error("Room Description Error! ", {
               position: "top-center",
               autoClose: 5000,
@@ -222,7 +229,6 @@ function Addroom() {
         }
       }
   
-    
 
   /** For Bed**/
   const BedTemplate = {
@@ -258,6 +264,7 @@ function Addroom() {
   const submitBed = (props) => {
     const current = new Date();
     const currentDateTime = current.toISOString();
+    setSpinner(1);
     const data = BedData?.map((i => {
       return {
         "room_id": props,
@@ -269,10 +276,10 @@ function Addroom() {
       }
     }))
     const final_data = { "beds": data }
-
     const url = '/api/bed_details'
     axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
+        setSpinner(0);
         toast.success("Bed add success", {
           position: "top-center",
           autoClose: 5000,
@@ -283,8 +290,10 @@ function Addroom() {
           progress: undefined,
         });
         setError({});
+        setBedData([BedTemplate]?.map((i, id) => { return { ...i, index: id } }));
       })
       .catch((error) => {
+        setSpinner(0); 
         toast.error("Bed add error", {
           position: "top-center",
           autoClose: 5000,
@@ -338,6 +347,7 @@ function Addroom() {
 
   /** Function to submit room images **/
   const submitRoomImages = () => {
+
     const imagedata = imageData?.map((i => {
       return {
         property_id: currentProperty?.property_id,
@@ -349,8 +359,10 @@ function Addroom() {
     }))
    var result = validateRoomGallery(imagedata);
    if (result === true) {
+    setSpinner(1);
       const finalImage = { "images": imagedata }
       axios.post(`/api/gallery`, finalImage).then(response => {
+        setSpinner(0)
         const images = imageData?.map((i => {
           return {
             "image_id": response.data.image_id,
@@ -361,6 +373,7 @@ function Addroom() {
         axios.post('/api/room-images', final, {
           headers: { 'content-type': 'application/json' }
         }).then(response => {
+          setSpinner(0)
           toast.success(JSON.stringify(response.data.message), {
             position: "top-center",
             autoClose: 5000,
@@ -375,6 +388,7 @@ function Addroom() {
           setDisp(4);
         })
           .catch(error => {
+            setSpinner(0)
             toast.error("Gallery error.", {
               position: "top-center",
               autoClose: 5000,
@@ -386,6 +400,7 @@ function Addroom() {
             });
           });
       }).catch(error => {
+        setSpinner(0)
         toast.error("Gallery link error.", {
           position: "top-center",
           autoClose: 5000,
@@ -405,6 +420,7 @@ function Addroom() {
 
   /*Function to add room service*/
   const submitServices = () => {
+    setSpinner(1);
     services.map(
       (i) => (i.room_id = roomId, i.status = i.service_value)
     )
@@ -423,6 +439,7 @@ function Addroom() {
     const url = '/api/room_facilities'
     axios.post(url, total, { header: { "content-type": "application/json" } }).then
       ((response) => {
+        setSpinner(0);
         toast.success("Room services add success.", {
           position: "top-center",
           autoClose: 5000,
@@ -435,6 +452,7 @@ function Addroom() {
         setDisp(3);
       })
       .catch((error) => {
+        setSpinner(0);
         toast.error("Room Services add error. ", {
           position: "top-center",
           autoClose: 5000,
@@ -451,6 +469,7 @@ function Addroom() {
   /* Function for Room Rates*/
   const submitRoomRates = () => {
     if (allRoomRates.length !== 0) {
+      setSpinner(1)
       const final_data = {
         "room_id": roomId,
         "baserate_currency": allRoomRates?.currency,
@@ -463,6 +482,7 @@ function Addroom() {
       const url = '/api/room_unconditional_rates'
       axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
         ((response) => {
+          setSpinner(0)
           toast.success("Room rates added successfully!", {
             position: "top-center",
             autoClose: 5000,
@@ -477,6 +497,7 @@ function Addroom() {
           Router.push("../rooms")
         })
         .catch((error) => {
+          setSpinner(0)
           toast.error("Room rates  error! ", {
             position: "top-center",
             autoClose: 5000,
@@ -674,7 +695,7 @@ function Addroom() {
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
                           <select
-                            onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type: e.target.value })}
+                            onClick={(e) => setAllRoomDes({ ...allRoomDes, room_type_id: e.target.value,room_type: e.target.value })}
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} >
                             {roomtypes.length === undefined ? <option value="loading">Loading values</option> :
                               <>
@@ -939,9 +960,16 @@ function Addroom() {
          {allRoomDes?.room_type_id === 'rt001' || allRoomDes?.room_type_id === 'rt002' || allRoomDes?.room_type_id === 'rt003'|| allRoomDes?.room_type_id === 'rt004'
            || allRoomDes?.room_type_id === 'rt005' ?
                 <Button Primary={language?.Next}    onClick={(e)=>{
-                     validationRoomDescription()}}/>   :   
-                       <Button Primary={language?.Submit} onClick={(e)=>{
-                       validationRoomDescription()}}/>}
+                     validationRoomDescription()}}/>   :  
+                     <>
+                     <div className={spinner === 0? 'block' : 'hidden'}>
+                     <Button Primary={language?.Submit} onClick={(e)=>{
+                       validationRoomDescription()}}/>
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                  <Button Primary={language?.SpinnerUpdate} /></div>
+                  </>
+                    }
          </div>
         </div>
        </div>
@@ -1041,9 +1069,16 @@ function Addroom() {
                           </div>
                         </>))}
                       <div className="flex items-center mt-2 justify-end space-x-2 sm:space-x-3 ml-auto">
-                        <Button Primary={language?.Submit} onClick={() => {
+                    <div className={spinner === 0? 'block' : 'hidden'}>
+                          <Button Primary={language?.Submit} onClick={() => {
                           validationBedData()
                         }} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
+                        
+                        
                       </div>
 
                     </div>
@@ -1154,7 +1189,14 @@ function Addroom() {
                 </div>
               </div>
               <div className="flex items-center mt-4 justify-end space-x-2 sm:space-x-3 ml-auto">
-                <Button Primary={language?.Submit} onClick={() => { submitServices() }} />
+              <div className={spinner === 0? 'block' : 'hidden'}>
+                          <Button Primary={language?.Submit} onClick={() => { submitServices() }} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
+
+              
               </div>
             </div>
 
@@ -1274,7 +1316,12 @@ function Addroom() {
                         </div></>
                     ))}
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <Button Primary={language?.Submit} onClick={submitRoomImages} />
+                    <div className={spinner === 0? 'block' : 'hidden'}>
+                    <Button Primary={language?.Submit} onClick={submitRoomImages} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1411,7 +1458,13 @@ function Addroom() {
                     </div>
 
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
-                      <Button Primary={language?.Submit} onClick={validationRates} />
+                    <div className={spinner === 0? 'block' : 'hidden'}>
+                    <Button Primary={language?.Submit} onClick={validationRates} />
+                    </div>
+                    <div className={spinner === 1 ? 'block' : 'hidden'}>
+                      <Button Primary={language?.SpinnerUpdate} />
+                      </div>
+                   
                     </div>
                   </div>
                 </div>

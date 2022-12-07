@@ -28,6 +28,9 @@ var language;
 var currentProperty;
 var currentroom;
 var room;
+var viewsData;
+var resView=[];
+var currency;
 import Router from 'next/router'
 const logger = require("../../../services/logger");
 var currentLogged;
@@ -46,7 +49,7 @@ function Room() {
   const [roomDetails, setRoomDetails] = useState([])
   const [allRoomRates, setAllRoomRates] = useState([])
   const [roomRates, setRoomRates] = useState([])
-  const [roomimages, setRoomimages] = useState({})
+  const [roomimages, setRoomimages] = useState([])
   const [addImage, setAddImage] = useState(0)
   const [roomtypes, setRoomtypes] = useState([])
   const [actionImage, setActionImage] = useState({})
@@ -97,17 +100,9 @@ function Room() {
       .then((response) => {
         setRoomDetails(response.data);
         setAllRoomDetails(response.data);
-        setFinalView(response?.data?.views);
-        
+       setFinalView(response?.data?.views);
         setAllRoomRates(response.data?.unconditional_rates?.[i])
-        setRoomRates(
-          lang?.CurrencyData.filter(el => {
-          return response?.data?.unconditional_rates?.[i]?.find(element => {
-             return element.baserate_currency === el.currency_code;
-          });
-       })
-      );
-       
+        filterCurrency(response.data?.unconditional_rates?.[i])
         if(response.data.room_facilities !== undefined){
         setServices(response.data.room_facilities);
         }
@@ -133,6 +128,24 @@ function Room() {
       .catch((error) => { logger.error("url to fetch room, failed") });
   }
 
+  const filterCurrency = (props)=>{
+    currency =  lang?.CurrencyData.filter(el => {
+         return props.baserate_currency.toUpperCase() === el.currency_code;
+      });
+      setAllRoomRates({ ...allRoomRates, currency: currency?.[i]?.currency_name })
+    }
+   
+    // const filterView = () => {
+    //   resView = lang?.Views.filter(el => {
+    //     return props.find(element => {
+    //       return element.view === el.view;
+    //    });
+       
+    // });
+    // setFinalView(resView)
+    // }
+
+    
   // Room Services
   const fetchServices = async () => {
     const url = `/api/all_room_services`
@@ -548,7 +561,7 @@ function Room() {
    }
 
   // View Submit
-  const submitView = (props) => {
+  const submitView = () => {
     const data = finalView?.map((i => {
       return {
         "room_id": currentroom,
@@ -557,7 +570,7 @@ function Room() {
     }))
     const final_data = { "room_views": data }
     const url = '/api/room_views'
-    axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
+    axios.post(url, final_data, { header: { "content-type": "application/json" } }).then
       ((response) => {
         toast.success("View add success.", {
           position: "top-center",
@@ -590,7 +603,7 @@ function Room() {
   var final_view_data = []
   viewData.map(item => {
     var temp = {
-      view: item?.view.replaceAll(" ","")
+      view: item?.view
     }
     final_view_data.push(temp)
   });
@@ -852,7 +865,9 @@ const validationImage = () => {
               <div className={`${color?.text} text-base font-medium  inline-flex items-center`}>
                 <svg className="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
                 <Link href={currentLogged?.id.match(/admin.[0-9]*/) ? "../../admin/AdminLanding" : "../landing"} 
-                className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}</a>
+                className={`${color?.text} text-base font-medium  inline-flex items-center`}><a>{language?.home}
+                
+                </a>
                 </Link></div>
               </li>
               <li>
@@ -1103,7 +1118,7 @@ const validationImage = () => {
                       options={lang?.Views}
                       onRemove={(event) => { views(event) }}
                             onSelect={(event) => { views(event) }}
-                      selectedValues={roomDetails?.views}
+                      selectedValues={finalView}
                      displayValue="view"
                     
                       />
@@ -1292,6 +1307,7 @@ const validationImage = () => {
                     </div>
                   </div>
                     <div className="flex items-center justify-end space-x-2 sm:space-x-3 ml-auto">
+                   <Button Primary={language?.Update} onClick={() => {validationRoomDescription() }} />
                       <Button Primary={language?.Next} onClick={() => {
                          { roomDetails?.room_type_id === 'rt002' || roomDetails?.room_type_id === 'rt003'|| roomDetails?.room_type_id === 'rt004'
                          || roomDetails?.room_type_id === 'rt005' ?
@@ -1300,7 +1316,6 @@ const validationImage = () => {
                         setDisp(5):
                       setDisp(1) }
                     }} />
-                      <Button Primary={language?.Update} onClick={() => {validationRoomDescription() }} />
                     </div>
                   </div>
                 </div>
@@ -1434,7 +1449,6 @@ const validationImage = () => {
                  </div>
               </div>
               </div>
-
 
           {/* Room Services */}
          <div id='1' className={disp===1?'block':'hidden'}>
@@ -1683,7 +1697,7 @@ const validationImage = () => {
                           className={`text-sm font-medium ${color?.text} block mb-2`}
                           htmlFor="grid-password"
                         >
-                         {language?.currency} {JSON.stringify(roomRates)}
+                         {language?.currency} 
                         </label>
                         <div className={visible === 0 ? 'block' : 'hidden'}><Lineloader /></div>
                         <div className={visible === 1 ? 'block' : 'hidden'}>
@@ -1693,9 +1707,10 @@ const validationImage = () => {
                                 setAllRoomRates({ ...allRoomRates, currency: e.target.value })
                               )
                             }>
+                              <option selected disabled>{allRoomRates?.currency}</option>
                             {lang?.CurrencyData?.map(i => {
                             return (
-
+                               
                               <option key={i.currency_code} value={i.currency_code}>{i?.currency_name}</option>)
                           }
                           )}

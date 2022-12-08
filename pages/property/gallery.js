@@ -139,7 +139,7 @@ function Gallery() {
                 property_id: currentProperty?.property_id,
                 image_link: image.image_link,
                 image_title: actionImage.image_title,
-                image_descripiton: actionImage.image_description,
+                image_description: actionImage.image_description,
                 image_category: "outside"
             }]
             const finalImage = { "images": imagedata }
@@ -279,8 +279,7 @@ function Gallery() {
  // Add Validation Gallery
   const validationGallery = () => {
     setError({});
-    var result = validateGallery(actionImage,image.image_link)
-    alert(JSON.stringify(result));
+    var result = validateGallery(actionImage,image.image_link);
        console.log("Result" +JSON.stringify(result))
        if(result===true)
        {
@@ -297,7 +296,6 @@ function Gallery() {
 const validationGalleryEdit = () => {
     setError({});
     var result = validateEditGallery(actionImage)
-    alert(JSON.stringify(result));
        console.log("Result" +JSON.stringify(result))
        if(result===true)
        {
@@ -502,7 +500,7 @@ const validationGalleryEdit = () => {
                                             defaultValue={actionImage?.image_description}
                                         />
                                          <p className="text-sm text-sm text-red-700 font-light">
-                                          {error?.image_descripiton}</p>
+                                          {error?.image_description}</p>
                                     </div>
                                      <div className="col-span-6 sm:col-span-3">
                                         <label
@@ -525,6 +523,8 @@ const validationGalleryEdit = () => {
                                             }
                                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                             placeholder="Image Title" />
+                                             <p className="text-sm text-sm text-red-700 font-light">
+                                                 {error?.image_title}</p>
                                     </div>
 
                                 </div>
@@ -534,7 +534,7 @@ const validationGalleryEdit = () => {
                             <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.UpdateDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Update} onClick={validateEditGallery} />
+                      <Button Primary={language?.Update} onClick={validationGalleryEdit}/>
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerUpdate} />
@@ -560,7 +560,8 @@ const validationGalleryEdit = () => {
                                         setImage({})
                                         document.getElementById('addgallery').reset();
                                         setAddImage(0);
-                                        setActionImage({})
+                                        setActionImage({});
+                                        setError({});
                                        
                                     } }
                                     className="text-gray-400 bg-transparent
@@ -606,7 +607,7 @@ const validationGalleryEdit = () => {
                                    </div>
                                    <div className="col-span-6 sm:col-span-3">
                                         <label
-                                            className={`text-sm ${color?.text} font-medium  block mb-2`}
+                                            className={`text-sm ${color?.text} capitalize font-medium  block mb-2`}
                                             htmlFor="grid-password"
                                         >
                                             {language?.image} {language?.titl}
@@ -637,7 +638,7 @@ const validationGalleryEdit = () => {
                                             focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`}
                                             defaultValue="" />
                                              <p className="text-sm text-sm text-red-700 font-light">
-                                            {error?.image_descripiton}</p>
+                                            {error?.image_description}</p>
                                     </div>
 
                                 </div>

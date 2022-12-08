@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import validateAdditionalServices from '../../components/Validation/additionalservices';
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
@@ -25,6 +26,7 @@ function AdditionalServices() {
         const [spinner, setSpinner] = useState(0)
         const [additionalServices, setAdditionalServices] = useState({})
         const [darkModeSwitcher, setDarkModeSwitcher] = useState()
+        const [error, setError] = useState({})
         const [color, setColor] = useState({})
         const [services, setServices] = useState([])
         const [flag, setFlag] = useState([])
@@ -257,6 +259,21 @@ useEffect(()=>{
 
     }
 
+     // Add Validation Gallery
+  const validationAdditionalServices = () => {
+    setError({});
+    var result = validateAdditionalServices(modified);
+       console.log("Result" +JSON.stringify(result))
+       if(result===true)
+       {
+         newAdditionalService()
+       
+       }
+       else
+       {
+        setError(result)
+       }
+}
     return (
         <>
         <Header color={color} Primary={english?.Side} />
@@ -317,6 +334,8 @@ useEffect(()=>{
                 </h3>
                 <button type="button" onClick={() =>{
                     document.getElementById('asform').reset();
+                    setError({})
+                    setModified([])
                     setView(0);
                 } } className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="add-user-modal">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
@@ -331,6 +350,8 @@ useEffect(()=>{
                             id="first-name"
                             className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                             focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
+                             <p className="text-sm text-sm text-red-700 font-light">
+                                          {error?.add_service_name}</p>
                     </div>
                     <div className="col-span-6 sm:col-span-3">
                         <label htmlFor="last-name" className={`text-sm ${color?.text} font-medium  block mb-2`}>{language?.service} {language?.description}</label>
@@ -338,6 +359,8 @@ useEffect(()=>{
                             onChange={(e) => { setModified({ ...modified, add_service_comment: e.target.value },setFlag(1)) }}
                             id="last-name" className={`shadow-sm ${color?.greybackground} border border-gray-300 ${color?.text} sm:text-sm rounded-lg 
                             focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5`} required />
+                             <p className="text-sm text-sm text-red-700 font-light">
+                                          {error?.add_service_comment}</p>
                     </div>
                 </div>
             </div>
@@ -346,7 +369,7 @@ useEffect(()=>{
             <div className={flag !== 1 && spinner === 0? 'block' : 'hidden'}>
                       <Button Primary={language?.AddDisabled}  /></div>
                     <div className={spinner === 0 && flag === 1 ? 'block' : 'hidden'}>
-                      <Button Primary={language?.Add} onClick={() => { newAdditionalService(); setAdd(0); }} />
+                      <Button Primary={language?.Add} onClick={() => { validationAdditionalServices() }} />
                      </div>
                      <div className={spinner === 1 && flag === 1? 'block' : 'hidden'}>
                    <Button Primary={language?.SpinnerAdd} />

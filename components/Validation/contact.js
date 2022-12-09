@@ -34,14 +34,23 @@ const validateContact = (data) =>{
     }
    
     if(data.contact_type !== "" && data.contact_type !== undefined){
-        if(data.contact_type === "toll free number"){  
-        if((!data.contact_data?.match(/^1[\s]?(800)?[\s\-]?\d{3}\-?\d{4}$/))){
+        if(data.contact_type === "tdd number"){  
+        if((!data?.contact_data?.match(/^([1-9]+[0-9]*)$/))){
             flag.push(false)
-            error.contact_data="App: The tollfree number is invalid."
+            error.type="App: The tdd number is invalid."
         }
     }
-    }
+        }
+     if(data.contact_type !== "" && data.contact_type !== undefined){
+            if(data.contact_type === "toll free number"){  
+            if((!data?.contact_data?.match(/^([1-9]+[0-9]*)$/))){
+                flag.push(false)
+                error.type="App: The toll free number is invalid."
+            }
+        }
+     }
 
+    
     for (let value in flag) {
      
         if(flag[value]=== false)

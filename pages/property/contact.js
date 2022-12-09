@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from "react";
 import axios from "axios";
 import validateContact from "../../components/Validation/contact";
+import validateContactEdit from "../../components/Validation/contactedit";
 import Sidebar from "../../components/Sidebar";
 import Button from "../../components/Button";
 import Table from "../../components/Table";
@@ -67,7 +68,7 @@ function Contact() {
   function submitContactAdd() {
     if(flag === 1){
     setSpinner(1)
-    e.preventDefault();
+   
     if (contact.contact_type!==undefined) {
       const contactdata = [{
         property_id: currentProperty?.property_id,
@@ -131,6 +132,12 @@ function Contact() {
       });
   }
   else{
+    setError({})
+    var result = validateContactEdit(props)
+       if(result===true)
+       {
+        submitContactAdd();
+      
   const final_data = {
     contact_id: props.id,
     contact_data: props.type,
@@ -164,6 +171,21 @@ function Contact() {
         progress: undefined,
       });
     });
+  }
+  else
+  {
+    toast.warn(result?.type, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    
+   setError(result)
+  }
   }
 };
 

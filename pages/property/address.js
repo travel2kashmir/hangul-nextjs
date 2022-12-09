@@ -155,6 +155,7 @@ function Address() {
     }
   };
 
+  // Filter Country
   const filterCountry = (props)=>{
   country =  lang?.CountryData.filter(el => {
        return props.address_country.toUpperCase() === el.country_code;
@@ -163,11 +164,8 @@ function Address() {
 
    // Add Validation Address
    const validationAddress = () => {
-    alert("1")
     setError({})
     var result = validateAddress(allHotelDetails)
-       console.log("Result" +JSON.stringify(result))
-       alert(JSON.stringify(result))
        if(result===true)
        {
        
@@ -186,7 +184,7 @@ function Address() {
      
     <div id="main-content"
     className={`${color?.greybackground} px-4 py-2 pt-24 relative overflow-y-auto lg:ml-64`}>
-      {/* Navbar */}
+      
        {/* Navbar */}
        <nav className="flex mb-5 ml-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-2">

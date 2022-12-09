@@ -4,6 +4,7 @@ import Router from 'next/router';
 const Table = (args) => {
    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [page, setPage] = useState(1);
+    const [error, setError] = useState({});
     const [viewDel, setViewDel] = useState(0);
     const [flag, setFlag] = useState([]);
 
@@ -207,7 +208,9 @@ const Table = (args) => {
 
                                                                 <input type="text"
                                                                     onChange={(e) => setEditContact({ ...editContact, type: e.target.value }, setFlag(1))} className={`shadow-sm capitalize ${args?.color?.whitebackground} border border-gray-300 ${args?.color?.text} sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-64 p-2.5`}
-                                                                    defaultValue={item?.type}></input> </td>
+                                                                    defaultValue={item?.type}></input> 
+                                                                      <p>{args?.error?.type}</p>
+                                                                    </td>
                                                             :
 
                                                             <td className="data text-left text-sm font-semibold  ">
@@ -220,6 +223,7 @@ const Table = (args) => {
                                                                                 <input type="checkbox" value={editContact?.type} checked={editContact.type === "yes"}
                                                                                     onChange={(e) => (setEditContact({ ...editContact, type: editContact.type === "yes" ? "no" : "yes" }), setFlag(1))}
                                                                                     id={`default-toggle${idx}`} className="sr-only peer" />
+                                                                                  
                                                                                 <div
                                                                                     className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 
                                                                              rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full 

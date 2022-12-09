@@ -180,6 +180,8 @@ function Gallery() {
 
     /* Function to edit images*/
     const updateImageDetails = () => {
+        alert(JSON.stringify(actionImage));
+        alert(JSON.stringify(updateImage))
         if (flag === 1) {
             if(objChecker.isEqual(actionImage,updateImage)){
                 toast.warn('No change in Image Details detected. ', {
@@ -199,8 +201,7 @@ function Gallery() {
             const final_data = {
                 "image_id": actionImage?.image_id,
                 "image_title": actionImage.image_title,
-                "image_description": actionImage.image_description,
-                "image_type": actionImage.image_type
+                "image_description": actionImage.image_description
             }
             const url = '/api/images'
             axios.put(url, final_data, { header: { "content-type": "application/json" } }).then
@@ -307,9 +308,13 @@ const validationGalleryEdit = () => {
        }
 }
     return (
-        <>   
+        <> 
+     {/* Header   */}
      <Header color={color} Primary={english.Side}/>
+     {/* Sidebar */}
      <Sidebar  color={color} Primary={english.Side} Type={currentLogged?.user_type}/>
+      
+         {/* Body */}
         <div id="main-content"
             className={`${color?.greybackground} px-4 pt-24 py-2 relative overflow-y-auto lg:ml-64`}>
             {/* Navbar */}
@@ -382,10 +387,8 @@ const validationGalleryEdit = () => {
                         </a>
                     </div>
                 </div>
+
                 {/* Gallery Form */}
-               
-                  
-              
                 <div className={visible===0?'block w-auto  h-auto m-6 flex':'hidden'}>
               <div className='mr-4'>  <Loader/></div>
                   <div className='mx-4'>  <Loader/></div>
@@ -430,6 +433,7 @@ const validationGalleryEdit = () => {
                 </div>
                 </div>
             </div>
+
             {/* Modal Image Enlarge */}
             <div className={enlargeImage === 1 ? 'block' : 'hidden'}>
                 <div className="overflow-x-hidden overflow-y-auto fixed top-4 left-0 right-0 backdrop-blur-xl sm:inset-0 bg-black/30 md:inset-0 z-50 flex justify-center items-center h-modal sm:h-full">
@@ -704,9 +708,10 @@ const validationGalleryEdit = () => {
                 draggable
                 pauseOnHover />
         </div>
+     {/* Footer */}
     <Footer  color={color} Primary={english.Side}/>  
      </>
-    )
+    ) 
 }
 
 export default Gallery

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import validateAdditionalServices from '../../components/Validation/additionalservices';
+import validateAdditionalServicesEdit from '../../components/Validation/additionalservicesedit';
 import axios from "axios";
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
@@ -142,6 +143,11 @@ useEffect(()=>{
               });
           }
  else{
+    var result = validateAdditionalServicesEdit(props)
+    alert(JSON.stringify(result))
+    if(result===true)
+    {
+
         const final_data = {
             "add_service_id": props.id,
             "add_service_name": props.name,
@@ -176,6 +182,28 @@ useEffect(()=>{
                     progress: undefined,
                 });
             })
+    }
+    else
+    {
+      toast.warn(result?.name, {
+        position: "top-center",
+        autoClose: 7000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      toast.warn(result?.type, {
+        position: "top-center",
+        autoClose: 7000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
         }
     }
 

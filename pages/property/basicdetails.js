@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+
+import Title from '../../components/title';
 import objChecker from "lodash";
 import DarkModeLogic from "../../components/darkmodelogic";
 import Lineloader from '../../components/loaders/lineloader';
@@ -184,7 +186,9 @@ export default function BasicDetails() {
 }
   return (
     <>
+    <Title name="Engage | Basic Details"/>
       <div>
+
         <Header color={color} Primary={english.Side} />
         <Sidebar color={color} Primary={english.Side} Type={currentLogged?.user_type} />
 

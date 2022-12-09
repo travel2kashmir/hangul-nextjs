@@ -1,9 +1,9 @@
-const validateAdditionalServices = (data,props) =>{
+const validateAdditionalServices = (data) =>{
     var error={};
      var flag=[]
      var final_flag=true;
 
-    if(data.add_service_name==="" || data.add_service_name===undefined)
+    if(data?.add_service_name==="" || data?.add_service_name===undefined)
     {
         flag.push(false)
         error.add_service_name="App: The service name is required"
@@ -11,13 +11,13 @@ const validateAdditionalServices = (data,props) =>{
 
   
    
-    if(data.add_service_comment==="" || data.add_service_comment===undefined)
+    if(data?.add_service_comment==="" || data?.add_service_comment===undefined)
     {
         flag.push(false)
         error.add_service_comment="App: The service description is required."
     }
 
-    
+   
     
 
   
